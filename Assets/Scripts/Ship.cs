@@ -20,11 +20,11 @@ public class Ship : MonoBehaviour {
 
     // input axes -1 to 1
     private float _throttle = 0;
+    private float _latV = 0;
+    private float _latH = 0;
     private float _pitch = 0;
     private float _yaw = 0;
     private float _roll = 0;
-    private float _latV = 0;
-    private float _latH = 0;
 
     private Transform _transformComponent;
     private Rigidbody _rigidBodyComponent;
