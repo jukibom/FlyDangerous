@@ -61,27 +61,27 @@ public class Ship : MonoBehaviour {
     }
 
     public void SetPitch(InputAction.CallbackContext context) {
-        _pitch = clampInput(context.ReadValue<float>());
+        _pitch = ClampInput(context.ReadValue<float>());
     }
 
     public void SetRoll(InputAction.CallbackContext context) {
-        _roll = clampInput(context.ReadValue<float>());
+        _roll = ClampInput(context.ReadValue<float>());
     }
 
     public void SetYaw(InputAction.CallbackContext context) {
-        _yaw = clampInput(context.ReadValue<float>());
+        _yaw = ClampInput(context.ReadValue<float>());
     }
 
     public void SetThrottle(InputAction.CallbackContext context) {
-        _throttle = clampInput(context.ReadValue<float>());
+        _throttle = ClampInput(context.ReadValue<float>());
     }
     
     public void SetLateralH(InputAction.CallbackContext context) {
-        _latH = clampInput(context.ReadValue<float>());
+        _latH = ClampInput(context.ReadValue<float>());
     }
     
     public void SetLateralV(InputAction.CallbackContext context) {
-        _latV = clampInput(context.ReadValue<float>());
+        _latV = ClampInput(context.ReadValue<float>());
     }
 
     public void Boost(InputAction.CallbackContext context) {
@@ -107,7 +107,7 @@ public class Ship : MonoBehaviour {
         // TODO: max thrust available to the system must be evenly split between the axes ?
         // otherwise we'll have the old goldeneye problem of travelling diagonally being the optimal play :|
         float thrustMultiplier = _isBoosting ? maxThrust * boostThrustMultiplier : maxThrust;
-        float torqueMultiplier = _isBoosting ? maxThrust / 5 : maxThrust / 10;
+        float torqueMultiplier = _isBoosting ? maxThrust / 50 : maxThrust / 100;
         
         if (_throttle != 0) {
             _rigidBodyComponent.AddForce(_transformComponent.forward * (_throttle * thrustMultiplier), ForceMode.Force);
@@ -119,27 +119,29 @@ public class Ship : MonoBehaviour {
             _rigidBodyComponent.AddForce(_transformComponent.up * (_latV * thrustMultiplier), ForceMode.Force);
         }
         if (_pitch != 0) {
-            _rigidBodyComponent.AddTorque(_transformComponent.right * (_pitch * torqueMultiplier / 10), ForceMode.Force);
+            _rigidBodyComponent.AddTorque(_transformComponent.right * (_pitch * torqueMultiplier), ForceMode.Force);
         }
         if (_yaw != 0) {
-            _rigidBodyComponent.AddTorque(_transformComponent.up * (_yaw * torqueMultiplier / 10), ForceMode.Force);
+            _rigidBodyComponent.AddTorque(_transformComponent.up * (_yaw * torqueMultiplier), ForceMode.Force);
         }
         if (_roll != 0) {
-            _rigidBodyComponent.AddTorque(_transformComponent.forward * (_roll * torqueMultiplier / 10 * -1), ForceMode.Force);
+            _rigidBodyComponent.AddTorque(_transformComponent.forward * (_roll * torqueMultiplier * -1), ForceMode.Force);
         }
         
-        calculateFlightAssist();
+        CalculateFlightAssist();
     }
 
     /**
      * All axis should be between -1 and 1. This clamps the value and adds a (very) small deadzone (0.05) 
      */
-    private float clampInput(float input) {
+    private float ClampInput(float input) {
         if (input < 0.05 & input > -0.05) input = 0;
         return Mathf.Min(Mathf.Max(input, -1), 1);
     }
 
-    private void calculateFlightAssist() {
+    private void CalculateFlightAssist() {
+        // TODO: Should this actually modify input instead of directly applying force?
+        
         if (_flightAssist) {
             // vector should be pushed back towards forward (apply force to cancel lateral motion)
             float hVelocity = Vector3.Dot(_transformComponent.right, _rigidBodyComponent.velocity);
@@ -162,12 +164,32 @@ public class Ship : MonoBehaviour {
             // TODO: Different throttle control for flight assist (throttle becomes a target with a max speed)
 
             // torque should be reduced to 0 on all axes
-            // TODO: How to calculate what's actually happening here and visually display boosters correcting?
-            // TODO: A better mechanism than applying drag, this is WAY faster than the player could correct without flight assist!
-            _rigidBodyComponent.angularDrag = 1;
+            float angularVelocityPitch = Vector3.Dot(_transformComponent.right, _rigidBodyComponent.angularVelocity);
+            float angularVelocityRoll = Vector3.Dot(_transformComponent.forward, _rigidBodyComponent.angularVelocity);
+            float angularVelocityYaw = Vector3.Dot(_transformComponent.up, _rigidBodyComponent.angularVelocity);
+
+            if (angularVelocityPitch > 0) {
+                _rigidBodyComponent.AddTorque(_transformComponent.right * (-0.5f * maxThrust / 100), ForceMode.Force);
+            }
+            else {
+                _rigidBodyComponent.AddTorque(_transformComponent.right * (0.5f * maxThrust / 100), ForceMode.Force);
+            }
+            
+            if (angularVelocityRoll > 0) {
+                _rigidBodyComponent.AddTorque(_transformComponent.forward * (-0.5f * maxThrust / 100), ForceMode.Force);
+            }
+            else {
+                _rigidBodyComponent.AddTorque(_transformComponent.forward * (0.5f * maxThrust / 100), ForceMode.Force);
+            }
+            
+            if (angularVelocityYaw > 0) {
+                _rigidBodyComponent.AddTorque(_transformComponent.up * (-0.5f * maxThrust / 100), ForceMode.Force);
+            }
+            else {
+                _rigidBodyComponent.AddTorque(_transformComponent.up * (0.5f * maxThrust / 100), ForceMode.Force);
+            }
+            
         }
-        else {
-            _rigidBodyComponent.angularDrag = 0;
-        }
+
     }
 }
