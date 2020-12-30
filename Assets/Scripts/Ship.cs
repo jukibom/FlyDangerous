@@ -86,6 +86,9 @@ public class Ship : MonoBehaviour {
 
     public void Boost(InputAction.CallbackContext context) {
         _isBoosting = context.ReadValueAsButton();
+        if (_isBoosting) {
+            Debug.Log("Boost!");
+        }
     }
 
     public void ToggleFlightAssist(InputAction.CallbackContext context) {

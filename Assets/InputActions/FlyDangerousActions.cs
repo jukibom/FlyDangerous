@@ -303,7 +303,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""1D Axis"",
+                    ""name"": ""hat axis"",
                     ""id"": ""473a7484-45f4-4487-974b-1c2217427e04"",
                     ""path"": ""1DAxis"",
                     ""interactions"": """",
@@ -369,7 +369,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""1D Axis"",
+                    ""name"": ""hat axis"",
                     ""id"": ""a9c40068-8436-4f06-81ac-0220d3b71ccc"",
                     ""path"": ""1DAxis"",
                     ""interactions"": """",
