@@ -10,7 +10,9 @@ public class Ship : MonoBehaviour {
     
     // TODO: split this into various thruster powers
     [SerializeField] private float maxThrust = 100;
-    [SerializeField] private float boostThrustMultiplier = 2;
+    [SerializeField] private float thrustBoostMultiplier = 2;
+    [SerializeField] private float torqueThrustDivider = 5;
+    [SerializeField] private float torqueBoostMultiplier = 1.2f;
     
     private FlyDangerousActions _shipActions;
     private bool _isBoosting = false;
@@ -109,8 +111,8 @@ public class Ship : MonoBehaviour {
 
         // TODO: max thrust available to the system must be evenly split between the axes ?
         // otherwise we'll have the old goldeneye problem of travelling diagonally being the optimal play :|
-        float thrustMultiplier = _isBoosting ? maxThrust * boostThrustMultiplier : maxThrust;
-        float torqueMultiplier = _isBoosting ? maxThrust / 50 : maxThrust / 100;
+        float thrustMultiplier = _isBoosting ? maxThrust * thrustBoostMultiplier : maxThrust;
+        float torqueMultiplier = _isBoosting ? torqueBoostMultiplier * maxThrust / torqueThrustDivider : maxThrust / torqueThrustDivider;
         
         if (_throttle != 0) {
             _rigidBodyComponent.AddForce(_transformComponent.forward * (_throttle * thrustMultiplier), ForceMode.Force);
@@ -172,24 +174,24 @@ public class Ship : MonoBehaviour {
             float angularVelocityYaw = Vector3.Dot(_transformComponent.up, _rigidBodyComponent.angularVelocity);
 
             if (angularVelocityPitch > 0) {
-                _rigidBodyComponent.AddTorque(_transformComponent.right * (-0.5f * maxThrust / 100), ForceMode.Force);
+                _rigidBodyComponent.AddTorque(_transformComponent.right * (-0.5f * maxThrust / torqueThrustDivider), ForceMode.Force);
             }
             else {
-                _rigidBodyComponent.AddTorque(_transformComponent.right * (0.5f * maxThrust / 100), ForceMode.Force);
+                _rigidBodyComponent.AddTorque(_transformComponent.right * (0.5f * maxThrust / torqueThrustDivider), ForceMode.Force);
             }
             
             if (angularVelocityRoll > 0) {
-                _rigidBodyComponent.AddTorque(_transformComponent.forward * (-0.5f * maxThrust / 100), ForceMode.Force);
+                _rigidBodyComponent.AddTorque(_transformComponent.forward * (-0.5f * maxThrust / torqueThrustDivider), ForceMode.Force);
             }
             else {
-                _rigidBodyComponent.AddTorque(_transformComponent.forward * (0.5f * maxThrust / 100), ForceMode.Force);
+                _rigidBodyComponent.AddTorque(_transformComponent.forward * (0.5f * maxThrust / torqueThrustDivider), ForceMode.Force);
             }
             
             if (angularVelocityYaw > 0) {
-                _rigidBodyComponent.AddTorque(_transformComponent.up * (-0.5f * maxThrust / 100), ForceMode.Force);
+                _rigidBodyComponent.AddTorque(_transformComponent.up * (-0.5f * maxThrust / torqueThrustDivider), ForceMode.Force);
             }
             else {
-                _rigidBodyComponent.AddTorque(_transformComponent.up * (0.5f * maxThrust / 100), ForceMode.Force);
+                _rigidBodyComponent.AddTorque(_transformComponent.up * (0.5f * maxThrust / torqueThrustDivider), ForceMode.Force);
             }
             
         }
