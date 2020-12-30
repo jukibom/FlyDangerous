@@ -58,27 +58,27 @@ public class Ship : MonoBehaviour {
     }
 
     public void SetPitch(InputAction.CallbackContext context) {
-        _pitch = context.ReadValue<float>();
+        _pitch = clampInput(context.ReadValue<float>());
     }
 
     public void SetRoll(InputAction.CallbackContext context) {
-        _roll = context.ReadValue<float>();
+        _roll = clampInput(context.ReadValue<float>());
     }
 
     public void SetYaw(InputAction.CallbackContext context) {
-        _yaw = context.ReadValue<float>();
+        _yaw = clampInput(context.ReadValue<float>());
     }
 
     public void SetThrottle(InputAction.CallbackContext context) {
-        _throttle = context.ReadValue<float>();
+        _throttle = clampInput(context.ReadValue<float>());
     }
     
     public void SetLateralH(InputAction.CallbackContext context) {
-        _latH = context.ReadValue<float>();
+        _latH = clampInput(context.ReadValue<float>());
     }
     
     public void SetLateralV(InputAction.CallbackContext context) {
-        _latV = context.ReadValue<float>();
+        _latV = clampInput(context.ReadValue<float>());
     }
 
     public void Boost(InputAction.CallbackContext context) {
@@ -117,5 +117,13 @@ public class Ship : MonoBehaviour {
         if (_roll != 0) {
             _rigidBodyComponent.AddTorque(_transformComponent.forward * (_roll * torqueMultiplier / 10 * -1), ForceMode.Force);
         }
+    }
+
+    /**
+     * All axis should be between -1 and 1. This clamps the value and adds a (very) small deadzone (0.05) 
+     */
+    private float clampInput(float input) {
+        if (input < 0.05 & input > -0.05) input = 0;
+        return Mathf.Min(Mathf.Max(input, -1), 1);
     }
 }
