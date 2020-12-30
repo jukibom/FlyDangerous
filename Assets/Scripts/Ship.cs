@@ -128,7 +128,7 @@ public class Ship : MonoBehaviour {
             _rigidBodyComponent.AddTorque(_transformComponent.forward * (_roll * torqueMultiplier / 10 * -1), ForceMode.Force);
         }
         
-        if (_flightAssist) calculateFlightAssist();
+        calculateFlightAssist();
     }
 
     /**
@@ -163,6 +163,7 @@ public class Ship : MonoBehaviour {
 
             // torque should be reduced to 0 on all axes
             // TODO: How to calculate what's actually happening here and visually display boosters correcting?
+            // TODO: A better mechanism than applying drag, this is WAY faster than the player could correct without flight assist!
             _rigidBodyComponent.angularDrag = 1;
         }
         else {
