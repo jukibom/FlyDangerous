@@ -82,6 +82,14 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""FlightAssistToggle"",
+                    ""type"": ""Button"",
+                    ""id"": ""ce9c21e5-76be-402d-beed-36b5b132f0ad"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -414,6 +422,28 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""action"": ""Boost"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cc747143-d180-4195-aa6c-e34a265716fc"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""keyboard + mouse"",
+                    ""action"": ""FlightAssistToggle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0c79d88a-9c6c-4284-9ec7-98990003e4e8"",
+                    ""path"": ""<Joystick>/button7"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""flight stick"",
+                    ""action"": ""FlightAssistToggle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -457,6 +487,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         m_Ship_LateralH = m_Ship.FindAction("LateralH", throwIfNotFound: true);
         m_Ship_LateralV = m_Ship.FindAction("LateralV", throwIfNotFound: true);
         m_Ship_Boost = m_Ship.FindAction("Boost", throwIfNotFound: true);
+        m_Ship_FlightAssistToggle = m_Ship.FindAction("FlightAssistToggle", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -523,6 +554,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Ship_LateralH;
     private readonly InputAction m_Ship_LateralV;
     private readonly InputAction m_Ship_Boost;
+    private readonly InputAction m_Ship_FlightAssistToggle;
     public struct ShipActions
     {
         private @FlyDangerousActions m_Wrapper;
@@ -534,6 +566,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         public InputAction @LateralH => m_Wrapper.m_Ship_LateralH;
         public InputAction @LateralV => m_Wrapper.m_Ship_LateralV;
         public InputAction @Boost => m_Wrapper.m_Ship_Boost;
+        public InputAction @FlightAssistToggle => m_Wrapper.m_Ship_FlightAssistToggle;
         public InputActionMap Get() { return m_Wrapper.m_Ship; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -564,6 +597,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @Boost.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnBoost;
                 @Boost.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnBoost;
                 @Boost.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnBoost;
+                @FlightAssistToggle.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnFlightAssistToggle;
+                @FlightAssistToggle.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnFlightAssistToggle;
+                @FlightAssistToggle.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnFlightAssistToggle;
             }
             m_Wrapper.m_ShipActionsCallbackInterface = instance;
             if (instance != null)
@@ -589,6 +625,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @Boost.started += instance.OnBoost;
                 @Boost.performed += instance.OnBoost;
                 @Boost.canceled += instance.OnBoost;
+                @FlightAssistToggle.started += instance.OnFlightAssistToggle;
+                @FlightAssistToggle.performed += instance.OnFlightAssistToggle;
+                @FlightAssistToggle.canceled += instance.OnFlightAssistToggle;
             }
         }
     }
@@ -620,5 +659,6 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         void OnLateralH(InputAction.CallbackContext context);
         void OnLateralV(InputAction.CallbackContext context);
         void OnBoost(InputAction.CallbackContext context);
+        void OnFlightAssistToggle(InputAction.CallbackContext context);
     }
 }
