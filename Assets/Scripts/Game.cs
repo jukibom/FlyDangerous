@@ -19,7 +19,7 @@ public class Game : MonoBehaviour
         this._menuCanvas = GetComponent<Canvas>();
         
         // TODO: can I attach this as a component instead of this bs?
-        this._gameActions = new FlyDangerousActions();
+        this._gameActions = FDInputSingleton.Instance.Actions;
 
         this._gameActions.Global.GameMenuToggle.performed += ToggleMenu;
         this._gameActions.Global.GameMenuToggle.canceled += ToggleMenu;
@@ -43,10 +43,11 @@ public class Game : MonoBehaviour
     // toggle ship controller input and timescales
     private void handlePauseGameState() {
         if (this.isGameMenuActive) {
-            // TODO: disable ship controls (must be same instance...)
+            this._gameActions.Ship.Disable();
             Time.timeScale = 0;
         }
         else {
+            this._gameActions.Ship.Enable();
             Time.timeScale = 1;
         }
     }

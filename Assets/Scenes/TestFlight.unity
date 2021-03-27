@@ -166,7 +166,7 @@ Transform:
   m_Children:
   - {fileID: 154524988}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &186123464
 MonoBehaviour:
@@ -736,7 +736,7 @@ Transform:
   - {fileID: 345686585}
   - {fileID: 600613281}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &600613280
 GameObject:
@@ -753,6 +753,7 @@ GameObject:
   - component: {fileID: 600613286}
   - component: {fileID: 600613285}
   - component: {fileID: 600613287}
+  - component: {fileID: 600613288}
   m_Layer: 0
   m_Name: PauseMenu
   m_TagString: Untagged
@@ -805,7 +806,7 @@ Canvas:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 600613280}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_RenderMode: 1
   m_Camera: {fileID: 345686584}
@@ -892,6 +893,81 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e597aaec929d0794d8ac7e58d4c8aaef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &600613288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 600613280}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: cdb424aa45592664faeac2ce28028bc8, type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e093ad87-fd61-4141-98b8-062ab69ceb77
+    m_ActionName: Global/Game Menu Toggle[/Keyboard/escape]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 8043ded1-0ef3-4f85-b28b-3e3139edb133
+    m_ActionName: Ship/Pitch[/Saitek Saitek X52 Pro Flight Control System/stick/y,/Logitech
+      Logitech Extreme 3D/stick/y,/Logitech G29 Driving Force Racing Wheel/stick/y,/Keyboard/upArrow,/Keyboard/downArrow]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 4fd269dd-a7ed-42d2-864e-e528e090bd09
+    m_ActionName: Ship/Roll[/Saitek Saitek X52 Pro Flight Control System/stick/x,/Logitech
+      Logitech Extreme 3D/stick/x,/Logitech G29 Driving Force Racing Wheel/stick/x,/Keyboard/rightArrow,/Keyboard/leftArrow]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: f1e682e9-2180-45dd-bf3e-cdefbee29575
+    m_ActionName: Ship/Yaw[/Saitek Saitek X52 Pro Flight Control System/rz,/Logitech
+      Logitech Extreme 3D/rz,/Logitech G29 Driving Force Racing Wheel/rz,/Keyboard/e,/Keyboard/q]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 725b3d83-6282-4fd3-8a1b-ad37029f5146
+    m_ActionName: Ship/Throttle[/Saitek Saitek X52 Pro Flight Control System/z,/Logitech
+      G29 Driving Force Racing Wheel/z,/Keyboard/w,/Keyboard/s]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 509f03a6-fbc1-428b-be5b-adef4a4a1d5f
+    m_ActionName: Ship/LateralH[/Keyboard/d,/Keyboard/a,/Saitek Saitek X52 Pro Flight
+      Control System/button25,/Saitek Saitek X52 Pro Flight Control System/button27]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: dbbf62a4-6b89-4ff1-b0c2-1399be3f5b1f
+    m_ActionName: Ship/LateralV[/Keyboard/space,/Keyboard/ctrl,/Saitek Saitek X52
+      Pro Flight Control System/button24,/Saitek Saitek X52 Pro Flight Control System/button26]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: ae9270a1-0fa9-4611-bb01-798738d7842c
+    m_ActionName: Ship/Boost[/Keyboard/shift,/Saitek Saitek X52 Pro Flight Control
+      System/button31]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: ce9c21e5-76be-402d-beed-36b5b132f0ad
+    m_ActionName: Ship/FlightAssistToggle[/Keyboard/f,/Saitek Saitek X52 Pro Flight
+      Control System/button7,/Logitech Logitech Extreme 3D/button7,/Logitech G29
+      Driving Force Racing Wheel/button7]
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Global
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1001 &706120783
 PrefabInstance:
   m_ObjectHideFlags: 0
