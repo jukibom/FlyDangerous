@@ -24,6 +24,33 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
     ""name"": ""FlyDangerousActions"",
     ""maps"": [
         {
+            ""name"": ""Global"",
+            ""id"": ""22f09618-a533-40a6-91ed-bb69dcf4b76b"",
+            ""actions"": [
+                {
+                    ""name"": ""Game Menu Toggle"",
+                    ""type"": ""Button"",
+                    ""id"": ""e093ad87-fd61-4141-98b8-062ab69ceb77"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""e9fcbdfd-c79d-46e0-b2c6-f2b7ec0baefc"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""keyboard + mouse"",
+                    ""action"": ""Game Menu Toggle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
             ""name"": ""Ship"",
             ""id"": ""319c08b3-97e0-4636-a79a-bb6bde0a90f7"",
             ""actions"": [
@@ -478,6 +505,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         }
     ]
 }");
+        // Global
+        m_Global = asset.FindActionMap("Global", throwIfNotFound: true);
+        m_Global_GameMenuToggle = m_Global.FindAction("Game Menu Toggle", throwIfNotFound: true);
         // Ship
         m_Ship = asset.FindActionMap("Ship", throwIfNotFound: true);
         m_Ship_Pitch = m_Ship.FindAction("Pitch", throwIfNotFound: true);
@@ -543,6 +573,39 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
     {
         return asset.FindBinding(bindingMask, out action);
     }
+
+    // Global
+    private readonly InputActionMap m_Global;
+    private IGlobalActions m_GlobalActionsCallbackInterface;
+    private readonly InputAction m_Global_GameMenuToggle;
+    public struct GlobalActions
+    {
+        private @FlyDangerousActions m_Wrapper;
+        public GlobalActions(@FlyDangerousActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @GameMenuToggle => m_Wrapper.m_Global_GameMenuToggle;
+        public InputActionMap Get() { return m_Wrapper.m_Global; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(GlobalActions set) { return set.Get(); }
+        public void SetCallbacks(IGlobalActions instance)
+        {
+            if (m_Wrapper.m_GlobalActionsCallbackInterface != null)
+            {
+                @GameMenuToggle.started -= m_Wrapper.m_GlobalActionsCallbackInterface.OnGameMenuToggle;
+                @GameMenuToggle.performed -= m_Wrapper.m_GlobalActionsCallbackInterface.OnGameMenuToggle;
+                @GameMenuToggle.canceled -= m_Wrapper.m_GlobalActionsCallbackInterface.OnGameMenuToggle;
+            }
+            m_Wrapper.m_GlobalActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @GameMenuToggle.started += instance.OnGameMenuToggle;
+                @GameMenuToggle.performed += instance.OnGameMenuToggle;
+                @GameMenuToggle.canceled += instance.OnGameMenuToggle;
+            }
+        }
+    }
+    public GlobalActions @Global => new GlobalActions(this);
 
     // Ship
     private readonly InputActionMap m_Ship;
@@ -649,6 +712,10 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
             if (m_flightstickSchemeIndex == -1) m_flightstickSchemeIndex = asset.FindControlSchemeIndex("flight stick");
             return asset.controlSchemes[m_flightstickSchemeIndex];
         }
+    }
+    public interface IGlobalActions
+    {
+        void OnGameMenuToggle(InputAction.CallbackContext context);
     }
     public interface IShipActions
     {
