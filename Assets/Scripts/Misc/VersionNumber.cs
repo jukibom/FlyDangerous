@@ -8,6 +8,6 @@ using UnityEngine.UI;
 public class VersionNumber : MonoBehaviour
 {
     public void Awake() {
-        GetComponent<Text>().text = $"FlyDangerous {Application.version} (feedback alpha)";
+        GetComponent<Text>().text = $"Fly Dangerous {Application.version}";
     }
 }
