@@ -6,9 +6,10 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Canvas))]
-public class PauseMenu : MonoBehaviour
-{
+public class PauseMenu : MonoBehaviour {
 
+    [Tooltip("Optional panel to animate on toggle")] [SerializeField]
+    private GameObject _mainPanel;
     private FlyDangerousActions _gameActions;
     private Canvas _menuCanvas;
 
@@ -66,5 +67,13 @@ public class PauseMenu : MonoBehaviour
             this._gameActions.Ship.Enable();
             Time.timeScale = 1;
         }
+
+        if (_mainPanel != null) {
+            Animator animator = _mainPanel.GetComponent<Animator>();
+            if (animator != null) {
+                animator.SetBool("Open", this.isGameMenuActive);
+            }
+        }
+        
     }
 }
