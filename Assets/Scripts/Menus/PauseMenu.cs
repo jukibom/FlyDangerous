@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Canvas))]
 public class PauseMenu : MonoBehaviour
@@ -21,8 +22,8 @@ public class PauseMenu : MonoBehaviour
         
         this._gameActions = GlobalGameState.Actions;
 
-        this._gameActions.Global.GameMenuToggle.performed += ToggleMenu;
-        this._gameActions.Global.GameMenuToggle.canceled += ToggleMenu;
+        this._gameActions.Global.GameMenuToggle.performed += ToggleMenuAction;
+        this._gameActions.Global.GameMenuToggle.canceled += ToggleMenuAction;
         
         this.HandlePauseGameState();
     }
@@ -35,8 +36,20 @@ public class PauseMenu : MonoBehaviour
         _gameActions.Global.Disable();
     }
 
+    public void ToggleMenu() {
+        this._menuCanvas.enabled = !this._menuCanvas.enabled;
+        this.HandlePauseGameState();
+    }
 
-    public void ToggleMenu(InputAction.CallbackContext context) {
+    public void Restart() {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void Quit() {
+        Application.Quit();
+    }
+    
+    private void ToggleMenuAction(InputAction.CallbackContext context) {
         if (context.ReadValueAsButton()) {
             this._menuCanvas.enabled = !this._menuCanvas.enabled;
             this.HandlePauseGameState();
