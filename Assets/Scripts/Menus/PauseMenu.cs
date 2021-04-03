@@ -19,7 +19,7 @@ namespace Menus {
         private GameObject pauseMenuCanvas;
 
         [SerializeField]
-        private GameObject mainPanel;
+        private MainMenu mainPanel;
 
         [SerializeField]
         private OptionsMenu optionsPanel;
@@ -52,6 +52,7 @@ namespace Menus {
 
         public void Pause() {
             this.MenuState = PauseMenuState.PausedMainMenu;
+            this.mainPanel.HighlightResume();
             this._panelAnimator.SetBool("Open", true);
         }
 
@@ -71,9 +72,11 @@ namespace Menus {
 
         public void CloseOptionsPanel() {
             this.MenuState = PauseMenuState.PausedMainMenu;
+            this.mainPanel.HighlightOptions();
         }
 
         public void Quit() {
+            // TODO: Confirmation dialog
             Application.Quit();
         }
 
@@ -105,12 +108,12 @@ namespace Menus {
                     this._menuCanvas.enabled = true;
                     this._gameActions.Ship.Disable();
                     this.optionsPanel.Hide();
-                    this.mainPanel.SetActive(true);
+                    this.mainPanel.Show();
                     Time.timeScale = 0;
                     break;
                 case PauseMenuState.PausedOptionsMenu:
                     this.optionsPanel.Show();
-                    this.mainPanel.SetActive(false);
+                    this.mainPanel.Hide();
                     break;
             }
         }
