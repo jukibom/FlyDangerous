@@ -391,6 +391,7 @@ GameObject:
   - component: {fileID: 172347133}
   - component: {fileID: 172347135}
   - component: {fileID: 172347136}
+  - component: {fileID: 172347137}
   m_Layer: 0
   m_Name: Main Menu
   m_TagString: Untagged
@@ -419,9 +420,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -430.00006}
+  m_AnchoredPosition: {x: 0, y: -266.00006}
   m_SizeDelta: {x: 300, y: 300}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &172347133
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -490,6 +491,25 @@ MonoBehaviour:
   pauseMenu: {fileID: 600613287}
   resumeButton: {fileID: 1876821685}
   optionsButton: {fileID: 611820159}
+--- !u!95 &172347137
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 172347131}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 8d800ab8930f0ad4d90771f55b03ffbf, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 2
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &186123462
 GameObject:
   m_ObjectHideFlags: 0
@@ -538,11 +558,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxThrust: 10000
-  boostThrust: 150000
   thrustBoostMultiplier: 15
   torqueThrustDivider: 2
   torqueBoostMultiplier: 3
-  thrusterDeadZone: 0.05
 --- !u!64 &186123465
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -582,9 +600,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 186123462}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f724a34c9a637724d990bdd4ee95bd50, type: 3}
+  m_Script: {fileID: 11500000, guid: 2b5f88ce50436be4cb85a1b27b135790, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxThrust: 100
+  thrustBoostMultiplier: 2
+  torqueThrustDivider: 5
+  torqueBoostMultiplier: 1.2
 --- !u!1001 &187808326
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -753,7 +775,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &277112923
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1322,7 +1344,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 154524988}
-  smoothSpeed: 0.02
+  smoothSpeed: 0.005
   offset: {x: 0, y: 3, z: -7.5}
 --- !u!4 &448790168
 Transform:
@@ -2285,7 +2307,7 @@ GameObject:
   - component: {fileID: 1401570356}
   - component: {fileID: 1401570358}
   m_Layer: 0
-  m_Name: Background
+  m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

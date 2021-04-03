@@ -8,19 +8,25 @@ namespace Menus {
         private PauseMenu pauseMenu;
 
         [SerializeField] private Button defaultSelectedButton;
-
+        
+        private Animator _animator;
+        
+        private void Awake() {
+            this._animator = this.GetComponent<Animator>();
+        }
         private void OnEnable() {
             defaultSelectedButton.Select();
         }
 
         public void Show() {
-            // TODO: Animation!
             gameObject.SetActive(true);
+            this._animator.SetBool("Open", true);
         }
 
         public void Hide() {
-            // TODO: Animation!
-            gameObject.SetActive(false);
+            this.gameObject.SetActive(false);
+            // TODO: Animate out and set active false on complete (how?!)
+            // this._animator.SetBool("Open", false);
         }
 
         public void Apply() {
