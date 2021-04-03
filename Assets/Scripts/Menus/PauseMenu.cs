@@ -22,7 +22,7 @@ namespace Menus {
         private GameObject mainPanel;
 
         [SerializeField]
-        private GameObject optionsPanel;
+        private OptionsMenu optionsPanel;
 
         private PauseMenuState _menuState = PauseMenuState.Unpaused;
         public PauseMenuState MenuState {
@@ -104,12 +104,12 @@ namespace Menus {
                 case PauseMenuState.PausedMainMenu: 
                     this._menuCanvas.enabled = true;
                     this._gameActions.Ship.Disable();
-                    this.optionsPanel.SetActive(false);
+                    this.optionsPanel.Hide();
                     this.mainPanel.SetActive(true);
                     Time.timeScale = 0;
                     break;
                 case PauseMenuState.PausedOptionsMenu:
-                    this.optionsPanel.SetActive(true);
+                    this.optionsPanel.Show();
                     this.mainPanel.SetActive(false);
                     break;
             }
