@@ -35,7 +35,7 @@ public class Ship : MonoBehaviour {
         _rigidBodyComponent = GetComponent<Rigidbody>();
 
         // TODO: revisit the canonical method of doing this junk with the preview package (sigh)
-        this._shipActions = FDInputSingleton.Instance.Actions;
+        this._shipActions = GlobalGameState.Actions;
         _shipActions.Ship.Pitch.performed += SetPitch;
         _shipActions.Ship.Pitch.canceled += SetPitch;
         _shipActions.Ship.Roll.performed += SetRoll;
