@@ -6,10 +6,13 @@ using UnityEngine;
 public class TabGroup : MonoBehaviour
 {
     public List<TabButton> tabButtons = new List<TabButton>();
+    public TabButton defaultTab;
 
-    public void Subscribe(TabButton button) {
-        tabButtons.Add(button);
-        OnTabSelected(button);
+    public void Start() {
+        tabButtons.ForEach(tab => tab.Subscribe(this));
+        if (this.defaultTab != null) {
+            this.OnTabSelected(this.defaultTab);
+        }
     }
 
     public void OnTabSelected(TabButton button) {

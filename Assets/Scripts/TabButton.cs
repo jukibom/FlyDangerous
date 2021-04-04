@@ -9,9 +9,6 @@ using UnityEngine.UI;
 
 [RequireComponent(typeof(Image))]
 public class TabButton : MonoBehaviour, ISubmitHandler, IPointerClickHandler {
-
-    [SerializeField]
-    private TabGroup tabGroup;
     
     [SerializeField]
     private GameObject tabPanel;
@@ -19,22 +16,31 @@ public class TabButton : MonoBehaviour, ISubmitHandler, IPointerClickHandler {
     [SerializeField]
     private Color selectedColor;
 
+    private TabGroup _tabGroup;
     private Image _background;
     private Color _defaultColor;
 
     private void Awake() {
         _background = GetComponent<Image>();
         this._defaultColor = _background.color;
-        tabGroup.Subscribe(this);
+    }
+
+    public void Subscribe(TabGroup tabGroup) {
+        this._tabGroup = tabGroup;
     }
 
     public void OnSubmit(BaseEventData eventData) {
-        tabGroup.OnTabSelected(this);
+        if (this._tabGroup != null) {
+            _tabGroup.OnTabSelected(this);
+        }
+
         AudioManager.Instance.Play("ui-dialog-open");
     }
 
     public void OnPointerClick(PointerEventData eventData) {
-        tabGroup.OnTabSelected(this);
+        if (this._tabGroup != null) {
+            _tabGroup.OnTabSelected(this);
+        }
         AudioManager.Instance.Play("ui-dialog-open");
     }
 
