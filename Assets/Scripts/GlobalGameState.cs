@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Audio;
 using UnityEngine;
 
 public class GlobalGameState {
@@ -10,6 +11,12 @@ public class GlobalGameState {
     public static FlyDangerousActions Actions {
         get {
             return TryCreateAndReturn(ref _actions);
+        }
+    }
+
+    public static AudioManager AudioManager {
+        get {
+            return AudioManager.Instance;
         }
     }
 
