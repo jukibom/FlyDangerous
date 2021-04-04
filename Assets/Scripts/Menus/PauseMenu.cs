@@ -46,7 +46,7 @@ namespace Menus {
         private Canvas _menuCanvas;
         private Animator _panelAnimator;
 
-        private void Awake() {
+        private void Start() {
             this._menuCanvas = GetComponent<Canvas>();
             this._panelAnimator = this.pauseMenuCanvas.GetComponent<Animator>();
             
