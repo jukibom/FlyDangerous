@@ -1,4 +1,5 @@
 ﻿using System;
+using Audio;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -32,10 +33,12 @@ namespace Menus {
         public void Apply() {
             // TODO: Store state here
             this.pauseMenu.CloseOptionsPanel();
+            AudioManager.Instance.Play("ui-confirm");
         }
 
         public void Cancel() {
             // TODO: Confirmation dialog (if there is state to commit)
+            AudioManager.Instance.Play("ui-cancel");
             this.pauseMenu.CloseOptionsPanel();
         }
     }

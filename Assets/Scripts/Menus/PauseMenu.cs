@@ -62,37 +62,36 @@ namespace Menus {
         }
 
         public void Pause() {
-            AudioManager.Instance.Play("ui-select");
+            AudioManager.Instance.Play("ui-dialog-open");
             this.MenuState = PauseMenuState.PausedMainMenu;
             this.mainPanel.HighlightResume();
             this._panelAnimator.SetBool("Open", true);
         }
 
         public void Resume() {
-            AudioManager.Instance.Play("ui-nav-secondary");
+            AudioManager.Instance.Play("ui-cancel");
             this.MenuState = PauseMenuState.Unpaused;
             this._panelAnimator.SetBool("Open", false);
             this._panelAnimator.Play("Standby");
         }
 
         public void Restart() {
-            AudioManager.Instance.Play("ui-select");
+            AudioManager.Instance.Play("ui-confirm");
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
         public void OpenOptionsPanel() {
-            AudioManager.Instance.Play("ui-select");
+            AudioManager.Instance.Play("ui-dialog-open");
             this.MenuState = PauseMenuState.PausedOptionsMenu;
         }
 
         public void CloseOptionsPanel() {
-            AudioManager.Instance.Play("ui-nav-secondary");
             this.MenuState = PauseMenuState.PausedMainMenu;
             this.mainPanel.HighlightOptions();
         }
 
         public void Quit() {
-            AudioManager.Instance.Play("ui-select");
+            AudioManager.Instance.Play("ui-confirm");
             // TODO: Confirmation dialog
             Application.Quit();
         }
@@ -107,7 +106,7 @@ namespace Menus {
                         Resume();
                         break;
                     case PauseMenuState.PausedOptionsMenu:
-                        CloseOptionsPanel();
+                        this.optionsPanel.Cancel();
                         break;
                 }
             }
