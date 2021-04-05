@@ -19,6 +19,6 @@ public class Ring : MonoBehaviour
 
     // Update is called once per frame
     void FixedUpdate() {
-        _transform.rotation = _transform.rotation * Quaternion.AngleAxis(rotationAmount, _transform.forward);
+        _transform.RotateAround(_transform.position, _transform.forward, rotationAmount);
     }
 }

@@ -29,7 +29,6 @@ public class ShipCamera : MonoBehaviour {
             
             Vector3 desiredPosition = target.position + targetRotation - accelerationDelta;
             thisTransform.position = Vector3.SmoothDamp(thisTransform.position, desiredPosition, ref _velocity, smoothSpeed);
-            // thisTransform.rotation = Quaternion.Slerp(thisTransform.rotation, targetRotation, 0.05f);
         }
 
         m_LastVelocity = target.velocity;
