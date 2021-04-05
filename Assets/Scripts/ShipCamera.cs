@@ -14,16 +14,22 @@ public class ShipCamera : MonoBehaviour {
     
     // Update is called once per frame
     void FixedUpdate() {
-        Quaternion targetRotation = target.rotation;
+
+        var angularVelocity = target.angularVelocity;
+        var angularMomentumModifier =
+            target.rotation * Quaternion.Euler(-angularVelocity.x / 2, -angularVelocity.y / 2, -angularVelocity.z / 2);
+        
+        Vector3 targetRotation = angularMomentumModifier * offset;
+        
         Transform thisTransform = transform;
-        thisTransform.rotation = targetRotation;
 
         if (m_LastVelocity != null) {
             var acceleration = (target.velocity - m_LastVelocity) / Time.fixedDeltaTime;
-            var accelerationDelta = acceleration / 50;
+            var accelerationDelta = acceleration / 500;
             
-            Vector3 desiredPosition = target.position + (targetRotation * offset) - accelerationDelta;
+            Vector3 desiredPosition = target.position + targetRotation - accelerationDelta;
             thisTransform.position = Vector3.SmoothDamp(thisTransform.position, desiredPosition, ref _velocity, smoothSpeed);
+            // thisTransform.rotation = Quaternion.Slerp(thisTransform.rotation, targetRotation, 0.05f);
         }
 
         m_LastVelocity = target.velocity;

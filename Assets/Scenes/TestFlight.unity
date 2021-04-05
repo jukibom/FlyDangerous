@@ -944,8 +944,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 154524988}
+  - {fileID: 448790168}
   m_Father: {fileID: 199139345}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &186123464
 MonoBehaviour:
@@ -1152,7 +1153,6 @@ Transform:
   m_Children:
   - {fileID: 1787523712}
   - {fileID: 990203217}
-  - {fileID: 448790168}
   - {fileID: 186123463}
   m_Father: {fileID: 0}
   m_RootOrder: 1
@@ -3326,7 +3326,7 @@ GameObject:
   - component: {fileID: 448790168}
   - component: {fileID: 448790167}
   m_Layer: 0
-  m_Name: User
+  m_Name: Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3344,9 +3344,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3030add162ea0f44fbedc340a6508026, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 154524988}
-  smoothSpeed: 0.005
-  offset: {x: 0, y: 3, z: -7.5}
+  target: {fileID: 186123466}
+  smoothSpeed: 0.6
+  offset: {x: 0, y: 2.23, z: 0.56}
 --- !u!4 &448790168
 Transform:
   m_ObjectHideFlags: 0
@@ -3355,13 +3355,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 448790166}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.5367974, y: -0.014050484, z: -1.7279844}
+  m_LocalPosition: {x: 0, y: 5.193, z: -7.653}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 345686585}
   - {fileID: 600613281}
-  m_Father: {fileID: 199139345}
-  m_RootOrder: 2
+  m_Father: {fileID: 186123463}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &480404145
 GameObject:
@@ -5398,7 +5398,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6291702348231333095, guid: 7f6395d7f158695469e04e970e119e8d, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.00024414062
+      value: 0.00012207031
       objectReference: {fileID: 0}
     - target: {fileID: 6291702348586179442, guid: 7f6395d7f158695469e04e970e119e8d, type: 3}
       propertyPath: m_AnchorMax.x
