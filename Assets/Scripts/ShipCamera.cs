@@ -7,6 +7,7 @@ public class ShipCamera : MonoBehaviour {
     public Rigidbody target;
     public float smoothSpeed = 0.5f;
     public Vector3 offset;
+    public float accelerationDampener = 500f;
 
     private Vector3 _velocity = Vector3.zero;
 
@@ -25,7 +26,7 @@ public class ShipCamera : MonoBehaviour {
 
         if (m_LastVelocity != null) {
             var acceleration = (target.velocity - m_LastVelocity) / Time.fixedDeltaTime;
-            var accelerationDelta = acceleration / 500;
+            var accelerationDelta = acceleration / accelerationDampener;
             
             Vector3 desiredPosition = target.position + targetRotation - accelerationDelta;
             thisTransform.position = Vector3.SmoothDamp(thisTransform.position, desiredPosition, ref _velocity, smoothSpeed);

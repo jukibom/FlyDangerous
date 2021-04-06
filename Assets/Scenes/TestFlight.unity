@@ -924,7 +924,6 @@ GameObject:
   - component: {fileID: 186123466}
   - component: {fileID: 186123465}
   - component: {fileID: 186123464}
-  - component: {fileID: 186123467}
   m_Layer: 0
   m_Name: Ship
   m_TagString: Untagged
@@ -960,8 +959,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b5f88ce50436be4cb85a1b27b135790, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxThrust: 10000
-  thrustBoostMultiplier: 15
+  maxThrust: 20000
+  thrustBoostMultiplier: 10
   torqueThrustDivider: 2
   torqueBoostMultiplier: 3
 --- !u!64 &186123465
@@ -994,22 +993,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 3
---- !u!114 &186123467
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 186123462}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b5f88ce50436be4cb85a1b27b135790, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxThrust: 100
-  thrustBoostMultiplier: 2
-  torqueThrustDivider: 5
-  torqueBoostMultiplier: 1.2
 --- !u!1001 &187808326
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2720,7 +2703,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 20000
-  field of view: 60
+  field of view: 80
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -3549,6 +3532,7 @@ MonoBehaviour:
   target: {fileID: 186123466}
   smoothSpeed: 0.6
   offset: {x: 0, y: 2.23, z: 0.56}
+  accelerationDampener: 600
 --- !u!4 &448790168
 Transform:
   m_ObjectHideFlags: 0
@@ -5847,7 +5831,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6291702348231333095, guid: 7f6395d7f158695469e04e970e119e8d, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00012207031
+      value: -0.00015258789
       objectReference: {fileID: 0}
     - target: {fileID: 6291702348586179442, guid: 7f6395d7f158695469e04e970e119e8d, type: 3}
       propertyPath: m_AnchorMax.x
