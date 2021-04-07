@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,31 +8,33 @@ public class ShipCamera : MonoBehaviour {
     public Rigidbody target;
     public float smoothSpeed = 0.5f;
     public Vector3 offset;
-    public float accelerationDampener = 500f;
+    public float accelerationDampener = 5f;
+    public float angularMomentumDampener = 5f;
 
     private Vector3 _velocity = Vector3.zero;
+    private Vector3 _lastVelocity;
+    private Transform _transform;
+    void Start() {
+        this._transform = this.transform;
+    }
 
-    private Vector3 m_LastVelocity;
-    
-    // Update is called once per frame
-    void FixedUpdate() {
+    void Update() {
 
         var angularVelocity = target.angularVelocity;
-        var angularMomentumModifier =
-            target.rotation * Quaternion.Euler(-angularVelocity.x / 2, -angularVelocity.y / 2, -angularVelocity.z / 2);
+        var angularMomentumModifier = target.rotation *
+            Quaternion.Euler(
+                angularVelocity.x / angularMomentumDampener, 
+                angularVelocity.y / angularMomentumDampener, 
+                angularVelocity.z / angularMomentumDampener
+            ); 
         
-        Vector3 targetRotation = angularMomentumModifier * offset;
+        Vector3 rotationModifier = angularMomentumModifier * offset;
+
+        var acceleration = (target.velocity - _lastVelocity) / Time.fixedDeltaTime;
+        var accelerationDelta = acceleration / accelerationDampener / 100f;
+        Vector3 desiredPosition = rotationModifier - accelerationDelta;
+        this._transform.position = Vector3.SmoothDamp(this._transform.position, desiredPosition, ref _velocity, smoothSpeed);
         
-        Transform thisTransform = transform;
-
-        if (m_LastVelocity != null) {
-            var acceleration = (target.velocity - m_LastVelocity) / Time.fixedDeltaTime;
-            var accelerationDelta = acceleration / accelerationDampener;
-            
-            Vector3 desiredPosition = target.position + targetRotation - accelerationDelta;
-            thisTransform.position = Vector3.SmoothDamp(thisTransform.position, desiredPosition, ref _velocity, smoothSpeed);
-        }
-
-        m_LastVelocity = target.velocity;
+        _lastVelocity = target.velocity;
     }
 }
