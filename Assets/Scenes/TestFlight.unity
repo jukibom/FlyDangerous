@@ -744,18 +744,18 @@ PrefabInstance:
     - target: {fileID: 609786914283039943, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 435670712}
     - target: {fileID: 609786914283039943, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 609786914283039943, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: 
+      value: StartInteractiveRebind
       objectReference: {fileID: 0}
     - target: {fileID: 609786914283039943, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: Menus.MainMenu, Assembly-CSharp
+      value: Menus.RebindAction, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 609786914283039943, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -4013,14 +4013,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e64f1f7d02ebba4caae2e12134d1f29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Action: {fileID: 7083545798489948982, guid: cdb424aa45592664faeac2ce28028bc8, type: 3}
-  m_BindingId: e9fcbdfd-c79d-46e0-b2c6-f2b7ec0baefc
+  m_Action: {fileID: -3781235865628855566, guid: cdb424aa45592664faeac2ce28028bc8, type: 3}
+  m_BindingId: 14aaf69e-25ad-48cb-9525-86177bca1162
   m_DisplayStringOptions: 0
-  m_ActionLabel: {fileID: 0}
-  m_BindingText: {fileID: 0}
+  m_ActionLabel: {fileID: 1768294972}
+  m_BindingText: {fileID: 2048214581}
   m_Protected: 1
-  m_RebindOverlay: {fileID: 0}
-  m_RebindText: {fileID: 0}
+  m_RebindOverlay: {fileID: 1954938483}
+  m_RebindText: {fileID: 954609877}
   m_UpdateBindingUIEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -8097,7 +8097,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6291702348231333095, guid: 7f6395d7f158695469e04e970e119e8d, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00018310547
+      value: 0.00012207031
       objectReference: {fileID: 0}
     - target: {fileID: 6291702348586179442, guid: 7f6395d7f158695469e04e970e119e8d, type: 3}
       propertyPath: m_AnchorMax.x
@@ -10886,7 +10886,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: LABEL
+  m_Text: Boost
 --- !u!222 &1768294973
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -11985,7 +11985,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1954938484
 RectTransform:
   m_ObjectHideFlags: 0
@@ -12324,6 +12324,30 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6291702347496066626, guid: 7f6395d7f158695469e04e970e119e8d, type: 3}
   m_PrefabInstance: {fileID: 1272263817}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2038734172
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2038734166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd6308dfcfcd453ebdd9013b475d184f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actions: {fileID: -944628639613478452, guid: cdb424aa45592664faeac2ce28028bc8, type: 3}
+--- !u!114 &2048214581 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 609786913693381189, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+  m_PrefabInstance: {fileID: 140421437}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2060042303
 GameObject:
   m_ObjectHideFlags: 0
