@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class FloatingOrigin : MonoBehaviour {
+    
     public GameObject focalObject;  // this should be the client player ship
     private Transform _worldTransform;
     private Transform _focalTransform;
