@@ -14,7 +14,7 @@ public class Ship : MonoBehaviour {
     [SerializeField] private float torqueThrustDivider = 5;
     [SerializeField] private float torqueBoostMultiplier = 1.2f;
     
-    private FlyDangerousActions _shipActions;
+    // private FlyDangerousActions _shipActions;
     private bool _isBoosting = false;
     private bool _flightAssist = false;
 
@@ -29,81 +29,46 @@ public class Ship : MonoBehaviour {
     private Transform _transformComponent;
     private Rigidbody _rigidBodyComponent;
     
-    // Start is called before the first frame update
-    private void Awake() {
+    public void Awake() {
         _transformComponent = GetComponent<Transform>();
         _rigidBodyComponent = GetComponent<Rigidbody>();
-
-        // TODO: revisit the canonical method of doing this junk with the preview package (sigh)
-        this._shipActions = GlobalGameState.Actions;
-        _shipActions.Ship.Pitch.performed += SetPitch;
-        _shipActions.Ship.Pitch.canceled += SetPitch;
-        _shipActions.Ship.Roll.performed += SetRoll;
-        _shipActions.Ship.Roll.canceled += SetRoll;
-        _shipActions.Ship.Yaw.performed += SetYaw;
-        _shipActions.Ship.Yaw.canceled += SetYaw;
-        _shipActions.Ship.Throttle.performed += SetThrottle;
-        _shipActions.Ship.Throttle.canceled += SetThrottle;
-        _shipActions.Ship.LateralH.performed += SetLateralH;
-        _shipActions.Ship.LateralH.canceled += SetLateralH;
-        _shipActions.Ship.LateralV.performed += SetLateralV;
-        _shipActions.Ship.LateralV.canceled += SetLateralV;
-        _shipActions.Ship.Boost.performed += Boost;
-        _shipActions.Ship.Boost.canceled += Boost;
-        _shipActions.Ship.FlightAssistToggle.performed += ToggleFlightAssist;
-        _shipActions.Ship.FlightAssistToggle.canceled += ToggleFlightAssist;
     }
 
-    private void OnEnable() {
-        _shipActions.Enable();
+    public void OnPitch(InputValue value) {
+        _pitch = ClampInput(value.Get<float>());
     }
 
-    private void OnDisable() {
-        _shipActions.Disable();
+    public void OnRoll(InputValue value) {
+        _roll = ClampInput(value.Get<float>());
     }
 
-    public void SetPitch(InputAction.CallbackContext context) {
-        _pitch = ClampInput(context.ReadValue<float>());
+    public void OnYaw(InputValue value) {
+        _yaw = ClampInput(value.Get<float>());
     }
 
-    public void SetRoll(InputAction.CallbackContext context) {
-        _roll = ClampInput(context.ReadValue<float>());
-    }
-
-    public void SetYaw(InputAction.CallbackContext context) {
-        _yaw = ClampInput(context.ReadValue<float>());
-    }
-
-    public void SetThrottle(InputAction.CallbackContext context) {
-        _throttle = ClampInput(context.ReadValue<float>());
+    public void OnThrottle(InputValue value) {
+        _throttle = ClampInput(value.Get<float>());
     }
     
-    public void SetLateralH(InputAction.CallbackContext context) {
-        _latH = ClampInput(context.ReadValue<float>());
+    public void OnLateralH(InputValue value) {
+        _latH = ClampInput(value.Get<float>());
     }
     
-    public void SetLateralV(InputAction.CallbackContext context) {
-        _latV = ClampInput(context.ReadValue<float>());
+    public void OnLateralV(InputValue value) {
+        _latV = ClampInput(value.Get<float>());
     }
 
-    public void Boost(InputAction.CallbackContext context) {
-        _isBoosting = context.ReadValueAsButton();
+    public void OnBoost(InputValue value) {
+        // TODO: change the action type to a button instead of an axis when proper timed boost mechanic is in
+        _isBoosting = value.Get<float>() != 0f;
         if (_isBoosting) {
             Debug.Log("Boost!");
         }
     }
 
-    public void ToggleFlightAssist(InputAction.CallbackContext context) {
-        if (context.ReadValueAsButton()) {
-            _flightAssist = !_flightAssist;
-            Debug.Log("Flight Assist " + (_flightAssist ? "ON" : "OFF"));
-        }
-    }
-
-    // Update is called once per frame - poll for input and game activity here (READ)
-    private void Update()
-    {
-
+    public void OnFlightAssistToggle(InputValue value) {
+        _flightAssist = !_flightAssist;
+        Debug.Log("Flight Assist " + (_flightAssist ? "ON" : "OFF"));
     }
 
     // Apply all physics updates in fixed intervals (WRITE)
@@ -115,7 +80,8 @@ public class Ship : MonoBehaviour {
         float torqueMultiplier = _isBoosting ? torqueBoostMultiplier * maxThrust / torqueThrustDivider : maxThrust / torqueThrustDivider;
         
         if (_throttle != 0) {
-            _rigidBodyComponent.AddForce(_transformComponent.forward * (_throttle * thrustMultiplier), ForceMode.Force);
+            // TODO: Input inverse axis toggle
+            _rigidBodyComponent.AddForce(_transformComponent.forward * (_throttle * thrustMultiplier * -1), ForceMode.Force);
         }
         if (_latH != 0) {
             _rigidBodyComponent.AddForce(_transformComponent.right * (_latH * thrustMultiplier), ForceMode.Force);

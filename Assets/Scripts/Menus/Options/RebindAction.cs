@@ -19,11 +19,13 @@ namespace Menus {
         }
 
         [SerializeField] private InputActionReference m_Action;
-        [SerializeField] private string m_BindingId;
+        [SerializeField] private string m_PrimaryBindingId;
+        [SerializeField] private string m_SecondaryBindingId;
         [SerializeField] private InputBinding.DisplayStringOptions m_DisplayStringOptions;
 
         [SerializeField] private Text m_ActionLabel;
-        [SerializeField] private Text m_BindingText;
+        [SerializeField] private Text m_PrimaryBindingText;
+        [SerializeField] private Text m_SecondaryBindingText;
         [SerializeField] private Boolean m_Protected;
         [SerializeField] private GameObject m_RebindOverlay;
         [SerializeField] private Text m_RebindText;
@@ -43,10 +45,18 @@ namespace Menus {
             }
         }
 
-        public string bindingId {
-            get => m_BindingId;
+        public string primaryBbindingId {
+            get => m_PrimaryBindingId;
             set {
-                m_BindingId = value;
+                m_PrimaryBindingId = value;
+                UpdateBindingDisplay();
+            }
+        }
+
+        public string secondaryBinding {
+            get => m_SecondaryBindingId;
+            set {
+                m_SecondaryBindingId = value;
                 UpdateBindingDisplay();
             }
         }
@@ -67,10 +77,17 @@ namespace Menus {
             }
         }
 
-        public Text bindingText {
-            get => m_BindingText;
+        public Text primaryBindingText {
+            get => m_PrimaryBindingText;
             set {
-                m_BindingText = value;
+                m_PrimaryBindingText = value;
+                UpdateBindingDisplay();
+            }
+        }
+        public Text secondaryBindingText {
+            get => m_SecondaryBindingText;
+            set {
+                m_SecondaryBindingText = value;
                 UpdateBindingDisplay();
             }
         }
@@ -111,22 +128,22 @@ namespace Menus {
 
         public InputActionRebindingExtensions.RebindingOperation ongoingRebind => m_RebindOperation;
 
-        public bool ResolveActionAndBinding(out InputAction action, out int bindingIndex) {
+        public bool ResolveActionAndBinding(string bindingId, out InputAction action, out int bindingIndex) {
             bindingIndex = -1;
 
             action = m_Action?.action;
             if (action == null)
                 return false;
 
-            if (string.IsNullOrEmpty(m_BindingId))
+            if (string.IsNullOrEmpty(bindingId))
                 return false;
 
             // Look up binding index.
-            var bindingId = new Guid(m_BindingId);
-            bindingIndex = action.bindings.IndexOf(x => x.id == bindingId);
+            var bindingIdGuid = new Guid(bindingId);
+            bindingIndex = action.bindings.IndexOf(x => x.id == bindingIdGuid);
             if (bindingIndex == -1)
             {
-                Debug.LogError($"Cannot find binding with ID '{bindingId}' on '{action}'", this);
+                Debug.LogError($"Cannot find binding with ID '{bindingIdGuid}' on '{action}'", this);
                 return false;
             }
 
@@ -134,46 +151,43 @@ namespace Menus {
         }
 
         public void UpdateBindingDisplay() {
-            var displayString = string.Empty;
-            var deviceLayoutName = default(string);
-            var controlPath = default(string);
-
-            // Get display string from action.
-            var action = m_Action?.action;
-            if (action != null)
-            {
-                var bindingIndex = action.bindings.IndexOf(x => x.id.ToString() == m_BindingId);
-                if (bindingIndex != -1)
-                    displayString = action.GetBindingDisplayString(bindingIndex, out deviceLayoutName, out controlPath, displayStringOptions);
-            }
-
-            // Set on label (if any).
-            if (m_BindingText != null)
-                m_BindingText.text = displayString;
-
-            // Give listeners a chance to configure UI in response.
-            m_UpdateBindingUIEvent?.Invoke(this, displayString, deviceLayoutName, controlPath);
+            UpdatePrimaryBindingDisplay();
+            UpdateSecondaryBindingDisplay();
         }
 
         public void ResetToDefault() {
-            if (!ResolveActionAndBinding(out var action, out var bindingIndex))
+            if (!ResolveActionAndBinding(m_PrimaryBindingId, out var primaryAction, out var primaryBindingIndex))
+                return;
+            
+            if (!ResolveActionAndBinding(m_SecondaryBindingId, out var secondaryAction, out var secondaryBindingIndex))
                 return;
 
-            if (action.bindings[bindingIndex].isComposite)
+            if (primaryAction.bindings[primaryBindingIndex].isComposite)
             {
                 // It's a composite. Remove overrides from part bindings.
-                for (var i = bindingIndex + 1; i < action.bindings.Count && action.bindings[i].isPartOfComposite; ++i)
-                    action.RemoveBindingOverride(i);
+                for (var i = primaryBindingIndex + 1; i < primaryAction.bindings.Count && primaryAction.bindings[i].isPartOfComposite; ++i)
+                    primaryAction.RemoveBindingOverride(i);
             }
             else
             {
-                action.RemoveBindingOverride(bindingIndex);
+                primaryAction.RemoveBindingOverride(primaryBindingIndex);
+            }
+            
+            if (secondaryAction.bindings[secondaryBindingIndex].isComposite)
+            {
+                // It's a composite. Remove overrides from part bindings.
+                for (var i = secondaryBindingIndex + 1; i < secondaryAction.bindings.Count && secondaryAction.bindings[i].isPartOfComposite; ++i)
+                    secondaryAction.RemoveBindingOverride(i);
+            }
+            else
+            {
+                secondaryAction.RemoveBindingOverride(secondaryBindingIndex);
             }
             UpdateBindingDisplay();
         }
 
-        public void StartInteractiveRebind() {
-            if (!ResolveActionAndBinding(out var action, out var bindingIndex))
+        public void StartInteractivePrimaryRebind() {
+            if (!ResolveActionAndBinding(m_PrimaryBindingId, out var action, out var bindingIndex))
                 return;
 
             // If the binding is a composite, we need to rebind each part in turn.
@@ -181,15 +195,32 @@ namespace Menus {
             {
                 var firstPartIndex = bindingIndex + 1;
                 if (firstPartIndex < action.bindings.Count && action.bindings[firstPartIndex].isPartOfComposite)
-                    PerformInteractiveRebind(action, firstPartIndex, allCompositeParts: true);
+                    PerformInteractiveRebind(m_PrimaryBindingText, action, firstPartIndex, allCompositeParts: true);
             }
             else
             {
-                PerformInteractiveRebind(action, bindingIndex);
+                PerformInteractiveRebind(m_PrimaryBindingText, action, bindingIndex);
+            }
+        }
+        
+        public void StartInteractiveSecondaryRebind() {
+            if (!ResolveActionAndBinding(m_SecondaryBindingId, out var action, out var bindingIndex))
+                return;
+
+            // If the binding is a composite, we need to rebind each part in turn.
+            if (action.bindings[bindingIndex].isComposite)
+            {
+                var firstPartIndex = bindingIndex + 1;
+                if (firstPartIndex < action.bindings.Count && action.bindings[firstPartIndex].isPartOfComposite)
+                    PerformInteractiveRebind(m_SecondaryBindingText, action, firstPartIndex, allCompositeParts: true);
+            }
+            else
+            {
+                PerformInteractiveRebind(m_SecondaryBindingText, action, bindingIndex);
             }
         }
 
-        private void PerformInteractiveRebind(InputAction action, int bindingIndex, bool allCompositeParts = false) {
+        private void PerformInteractiveRebind(Text bindingText, InputAction action, int bindingIndex, bool allCompositeParts = false) {
             m_RebindOperation?.Cancel(); // Will null out m_RebindOperation.
 
             Boolean shouldReEnable = action.enabled;
@@ -228,7 +259,7 @@ namespace Menus {
                         {
                             var nextBindingIndex = bindingIndex + 1;
                             if (nextBindingIndex < action.bindings.Count && action.bindings[nextBindingIndex].isPartOfComposite)
-                                PerformInteractiveRebind(action, nextBindingIndex, true);
+                                PerformInteractiveRebind(bindingText, action, nextBindingIndex, true);
                         }
                     });
 
@@ -249,13 +280,58 @@ namespace Menus {
 
             // If we have no rebind overlay and no callback but we have a binding text label,
             // temporarily set the binding text label to "<Waiting>".
-            if (m_RebindOverlay == null && m_RebindText == null && m_RebindStartEvent == null && m_BindingText != null)
-                m_BindingText.text = "<Waiting...>";
+            if (m_RebindOverlay == null && m_RebindText == null && m_RebindStartEvent == null && bindingText != null)
+                bindingText.text = "<Waiting...>";
 
             // Give listeners a chance to act on the rebind starting.
             m_RebindStartEvent?.Invoke(this, m_RebindOperation);
 
             m_RebindOperation.Start();
+        }
+        
+        
+        private void UpdatePrimaryBindingDisplay() {
+            var displayString = string.Empty;
+            var deviceLayoutName = default(string);
+            var controlPath = default(string);
+
+            // Get display string from action.
+            var action = m_Action?.action;
+            if (action != null)
+            {
+                var bindingIndex = action.bindings.IndexOf(x => x.id.ToString() == m_PrimaryBindingId);
+                if (bindingIndex != -1)
+                    displayString = action.GetBindingDisplayString(bindingIndex, out deviceLayoutName, out controlPath, displayStringOptions);
+            }
+
+            // Set on label (if any).
+            if (m_PrimaryBindingText != null)
+                m_PrimaryBindingText.text = displayString;
+
+            // Give listeners a chance to configure UI in response.
+            m_UpdateBindingUIEvent?.Invoke(this, displayString, deviceLayoutName, controlPath);
+        }
+        
+        private void UpdateSecondaryBindingDisplay() {
+            var displayString = string.Empty;
+            var deviceLayoutName = default(string);
+            var controlPath = default(string);
+
+            // Get display string from action.
+            var action = m_Action?.action;
+            if (action != null)
+            {
+                var bindingIndex = action.bindings.IndexOf(x => x.id.ToString() == m_SecondaryBindingId);
+                if (bindingIndex != -1)
+                    displayString = action.GetBindingDisplayString(bindingIndex, out deviceLayoutName, out controlPath, displayStringOptions);
+            }
+
+            // Set on label (if any).
+            if (m_SecondaryBindingText != null)
+                m_SecondaryBindingText.text = displayString;
+
+            // Give listeners a chance to configure UI in response.
+            m_UpdateBindingUIEvent?.Invoke(this, displayString, deviceLayoutName, controlPath);
         }
         
         protected void OnEnable()
@@ -320,7 +396,7 @@ namespace Menus {
 
         private void UpdateActionLabel()
         {
-            if (m_ActionLabel != null)
+            if (m_ActionLabel != null && m_ActionLabel.text == null || m_ActionLabel.text.Length == 0)
             {
                 var action = m_Action?.action;
                 m_ActionLabel.text = action != null ? action.name : string.Empty;

@@ -1,12 +1,8 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Audio;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace Menus {
     public enum PauseMenuState {
@@ -16,24 +12,19 @@ namespace Menus {
     }
     
     [RequireComponent(typeof(Canvas))]
+    [RequireComponent(typeof(PlayerInput))]
     public class PauseMenu : MonoBehaviour {
 
         [Tooltip("Used to animate the main panel")] [SerializeField]
         private GameObject pauseMenuCanvas;
 
-        [SerializeField]
-        private MainMenu mainPanel;
+        [SerializeField] private MainMenu mainPanel;
 
-        [SerializeField]
-        private OptionsMenu optionsPanel;
-
-        [SerializeField] 
-        private EventSystem eventSystem;
+        [SerializeField] private OptionsMenu optionsPanel;
+        
+        [SerializeField] private User user;
 
         private PauseMenuState _menuState = PauseMenuState.Unpaused;
-
-        private FlyDangerousActions.ShipActions _shipInput;
-        private InputActionAsset _uiInput;
         
         public PauseMenuState MenuState {
             get => this._menuState;
@@ -42,21 +33,25 @@ namespace Menus {
                 this.UpdatePauseGameState();
             }
         }
-        private FlyDangerousActions _gameActions;
         private Canvas _menuCanvas;
         private Animator _panelAnimator;
 
+        public void OnGameMenuToggle() {
+            Debug.Log("GAME MENU TOGGLE?!");
+            ToggleMenuAction();
+        }
+        
         private void Start() {
             this._menuCanvas = GetComponent<Canvas>();
             this._panelAnimator = this.pauseMenuCanvas.GetComponent<Animator>();
-            
-            this._gameActions = GlobalGameState.Actions;
-            this._gameActions.Global.Enable();
-            this._shipInput = this._gameActions.Ship;
-            this._uiInput = this.eventSystem.GetComponent<InputSystemUIInputModule>().actionsAsset;
 
-            this._gameActions.Global.GameMenuToggle.performed += ToggleMenuAction;
-            this._gameActions.Global.GameMenuToggle.canceled += ToggleMenuAction;
+            // TODO: Global VR Mode flag to turn the UI into a world space floating panel
+            var VRMODE = false;
+            if (VRMODE) {
+                GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
+                GetComponent<Image>().enabled = false;
+                // TODO: Detach from external camera? Maybe just keep the camera as-is but disable camera accel movements.
+            }
 
             this.UpdatePauseGameState();
         }
@@ -96,8 +91,8 @@ namespace Menus {
             Application.Quit();
         }
 
-        private void ToggleMenuAction(InputAction.CallbackContext context) {
-            if (context.ReadValueAsButton()) {
+        private void ToggleMenuAction() {
+            // if (context.ReadValueAsButton()) {
                 switch (this.MenuState) {
                     case PauseMenuState.Unpaused:
                         Pause();
@@ -109,7 +104,7 @@ namespace Menus {
                         this.optionsPanel.Cancel();
                         break;
                 }
-            }
+            // }
         }
 
         // toggle ship controller input and timescales
@@ -117,14 +112,12 @@ namespace Menus {
             switch (this.MenuState) {
                 case PauseMenuState.Unpaused:
                     this._menuCanvas.enabled = false;
-                    this._shipInput.Enable();
-                    this._uiInput.Disable();
+                    this.user.EnableGameInput();
                     Time.timeScale = 1;
                     break;
                 case PauseMenuState.PausedMainMenu: 
                     this._menuCanvas.enabled = true;
-                    this._shipInput.Disable();
-                    this._uiInput.Enable();
+                    this.user.DisableGameInput();
                     this.optionsPanel.Hide();
                     this.mainPanel.Show();
                     Time.timeScale = 0;

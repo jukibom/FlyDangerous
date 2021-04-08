@@ -17,9 +17,11 @@ namespace Menus {
         protected void OnEnable()
         {
             m_ActionProperty = serializedObject.FindProperty("m_Action");
-            m_BindingIdProperty = serializedObject.FindProperty("m_BindingId");
+            m_PrimaryBindingIdProperty = serializedObject.FindProperty("m_PrimaryBindingId");
+            m_SecondaryBindingIdProperty = serializedObject.FindProperty("m_SecondaryBindingId");
             m_ActionLabelProperty = serializedObject.FindProperty("m_ActionLabel");
-            m_BindingTextProperty = serializedObject.FindProperty("m_BindingText");
+            m_PrimaryBindingTextProperty = serializedObject.FindProperty("m_PrimaryBindingText");
+            m_SecondaryBindingTextProperty = serializedObject.FindProperty("m_SecondaryBindingText");
             m_ActionProtectedProperty = serializedObject.FindProperty("m_Protected");
             m_RebindOverlayProperty = serializedObject.FindProperty("m_RebindOverlay");
             m_RebindTextProperty = serializedObject.FindProperty("m_RebindText");
@@ -36,17 +38,25 @@ namespace Menus {
             EditorGUI.BeginChangeCheck();
 
             // Binding section.
-            EditorGUILayout.LabelField(m_BindingLabel, Styles.boldLabel);
+            EditorGUILayout.LabelField(m_PrimaryBindingLabel, Styles.boldLabel);
             using (new EditorGUI.IndentLevelScope())
             {
                 EditorGUILayout.PropertyField(m_ActionProperty);
 
-                var newSelectedBinding = EditorGUILayout.Popup(m_BindingLabel, m_SelectedBindingOption, m_BindingOptions);
-                if (newSelectedBinding != m_SelectedBindingOption)
+                var newSelectedPrimaryBinding = EditorGUILayout.Popup(m_PrimaryBindingLabel, m_SelectedPrimaryBindingOption, m_BindingOptions);
+                if (newSelectedPrimaryBinding != m_SelectedPrimaryBindingOption)
                 {
-                    var bindingId = m_BindingOptionValues[newSelectedBinding];
-                    m_BindingIdProperty.stringValue = bindingId;
-                    m_SelectedBindingOption = newSelectedBinding;
+                    var bindingId = m_BindingOptionValues[newSelectedPrimaryBinding];
+                    m_PrimaryBindingIdProperty.stringValue = bindingId;
+                    m_SelectedPrimaryBindingOption = newSelectedPrimaryBinding;
+                }
+                
+                var newSelectedSecondaryBinding = EditorGUILayout.Popup(m_SecondaryBindingLabel, m_SelectedSecondaryBindingOption, m_BindingOptions);
+                if (newSelectedSecondaryBinding != m_SelectedSecondaryBindingOption)
+                {
+                    var bindingId = m_BindingOptionValues[newSelectedSecondaryBinding];
+                    m_SecondaryBindingIdProperty.stringValue = bindingId;
+                    m_SelectedSecondaryBindingOption = newSelectedSecondaryBinding;
                 }
 
                 var optionsOld = (InputBinding.DisplayStringOptions)m_DisplayStringOptionsProperty.intValue;
@@ -64,7 +74,8 @@ namespace Menus {
             using (new EditorGUI.IndentLevelScope())
             {
                 EditorGUILayout.PropertyField(m_ActionLabelProperty);
-                EditorGUILayout.PropertyField(m_BindingTextProperty);
+                EditorGUILayout.PropertyField(m_PrimaryBindingTextProperty);
+                EditorGUILayout.PropertyField(m_SecondaryBindingTextProperty);
                 EditorGUILayout.PropertyField(m_RebindOverlayProperty);
                 EditorGUILayout.PropertyField(m_RebindTextProperty);
             }
@@ -95,7 +106,8 @@ namespace Menus {
             {
                 m_BindingOptions = new GUIContent[0];
                 m_BindingOptionValues = new string[0];
-                m_SelectedBindingOption = -1;
+                m_SelectedPrimaryBindingOption = -1;
+                m_SelectedSecondaryBindingOption = -1;
                 return;
             }
 
@@ -104,9 +116,11 @@ namespace Menus {
 
             m_BindingOptions = new GUIContent[bindingCount];
             m_BindingOptionValues = new string[bindingCount];
-            m_SelectedBindingOption = -1;
+            m_SelectedPrimaryBindingOption = -1;
+            m_SelectedSecondaryBindingOption = -1;
 
-            var currentBindingId = m_BindingIdProperty.stringValue;
+            var primaryBindingId = m_PrimaryBindingIdProperty.stringValue;
+            var secondaryBindingId = m_SecondaryBindingIdProperty.stringValue;
             for (var i = 0; i < bindingCount; ++i)
             {
                 var binding = bindings[i];
@@ -152,15 +166,21 @@ namespace Menus {
                 m_BindingOptions[i] = new GUIContent(displayString);
                 m_BindingOptionValues[i] = bindingId;
 
-                if (currentBindingId == bindingId)
-                    m_SelectedBindingOption = i;
+                if (primaryBindingId == bindingId)
+                    m_SelectedPrimaryBindingOption = i;
+                
+                if (secondaryBindingId == bindingId)
+                    m_SelectedSecondaryBindingOption = i;
+                
             }
         }
 
         private SerializedProperty m_ActionProperty;
-        private SerializedProperty m_BindingIdProperty;
+        private SerializedProperty m_PrimaryBindingIdProperty;
+        private SerializedProperty m_SecondaryBindingIdProperty;
         private SerializedProperty m_ActionLabelProperty;
-        private SerializedProperty m_BindingTextProperty;
+        private SerializedProperty m_PrimaryBindingTextProperty;
+        private SerializedProperty m_SecondaryBindingTextProperty;
         private SerializedProperty m_ActionProtectedProperty;
         private SerializedProperty m_RebindOverlayProperty;
         private SerializedProperty m_RebindTextProperty;
@@ -169,13 +189,15 @@ namespace Menus {
         private SerializedProperty m_UpdateBindingUIEventProperty;
         private SerializedProperty m_DisplayStringOptionsProperty;
 
-        private GUIContent m_BindingLabel = new GUIContent("Binding");
+        private GUIContent m_PrimaryBindingLabel = new GUIContent("Primary Binding");
+        private GUIContent m_SecondaryBindingLabel = new GUIContent("Secondary Binding");
         private GUIContent m_DisplayOptionsLabel = new GUIContent("Display Options");
         private GUIContent m_UILabel = new GUIContent("UI");
         private GUIContent m_EventsLabel = new GUIContent("Events");
         private GUIContent[] m_BindingOptions;
         private string[] m_BindingOptionValues;
-        private int m_SelectedBindingOption;
+        private int m_SelectedPrimaryBindingOption;
+        private int m_SelectedSecondaryBindingOption;
 
         private static class Styles
         {

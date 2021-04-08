@@ -24,91 +24,17 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
     ""name"": ""FlyDangerousActions"",
     ""maps"": [
         {
-            ""name"": ""Global"",
-            ""id"": ""22f09618-a533-40a6-91ed-bb69dcf4b76b"",
+            ""name"": ""Ship"",
+            ""id"": ""319c08b3-97e0-4636-a79a-bb6bde0a90f7"",
             ""actions"": [
                 {
                     ""name"": ""Game Menu Toggle"",
                     ""type"": ""Button"",
-                    ""id"": ""e093ad87-fd61-4141-98b8-062ab69ceb77"",
+                    ""id"": ""ee014b7d-ca3e-402c-9e90-1a308375b882"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
-                }
-            ],
-            ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""e9fcbdfd-c79d-46e0-b2c6-f2b7ec0baefc"",
-                    ""path"": ""<Keyboard>/escape"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Game Menu Toggle"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
                 },
-                {
-                    ""name"": """",
-                    ""id"": ""6c942cef-1876-4c1b-abe6-45c883956431"",
-                    ""path"": """",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Game Menu Toggle"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""6beb7c4a-dd30-4254-bf8f-7ba3cc2f5bb5"",
-                    ""path"": ""<Gamepad>/start"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Game Menu Toggle"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""373434a4-8291-4f43-b9dd-752bcad612a3"",
-                    ""path"": """",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Game Menu Toggle"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""b9d83e20-70fe-4fe9-b3fc-c6c081a87c3c"",
-                    ""path"": """",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Joystick"",
-                    ""action"": ""Game Menu Toggle"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""483ea599-7ae9-4b38-ac52-ecba2464ec2e"",
-                    ""path"": """",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Joystick"",
-                    ""action"": ""Game Menu Toggle"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                }
-            ]
-        },
-        {
-            ""name"": ""Ship"",
-            ""id"": ""319c08b3-97e0-4636-a79a-bb6bde0a90f7"",
-            ""actions"": [
                 {
                     ""name"": ""Pitch"",
                     ""type"": ""Value"",
@@ -159,7 +85,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Boost"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""ae9270a1-0fa9-4611-bb01-798738d7842c"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
@@ -178,10 +104,21 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""89d913f5-1c0b-4f48-ad2b-3bcf86512369"",
-                    ""path"": ""<Joystick>/stick/y"",
+                    ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Joystick"",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Pitch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cd8f9762-df2c-446a-8b38-da9eccf4f1c6"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
                     ""action"": ""Pitch"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -203,7 +140,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/upArrow"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
+                    ""groups"": ""Everything"",
                     ""action"": ""Pitch"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -214,7 +151,40 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/downArrow"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Pitch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""keyboard axis"",
+                    ""id"": ""9959874c-6b9a-44e5-b0a6-8c9bc5d80b95"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pitch"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""4072fb64-4a4e-4563-980c-b0a27a8fa645"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Pitch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""bc94ea84-316b-439d-9441-e1b1e3e3c77c"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
                     ""action"": ""Pitch"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -222,16 +192,27 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""d9365d2d-6058-4a31-b55d-b2b8fb28062c"",
-                    ""path"": ""<Joystick>/z"",
+                    ""path"": """",
                     ""interactions"": """",
                     ""processors"": ""Invert,Normalize(min=-1,max=0.722)"",
-                    ""groups"": ""Joystick"",
+                    ""groups"": ""Everything"",
                     ""action"": ""Throttle"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""keyboard axis"",
+                    ""name"": """",
+                    ""id"": ""10295127-affe-4080-8c23-1ec5195ecf17"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": ""Invert,Normalize(min=-1,max=0.722)"",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Throttle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""button axis 1"",
                     ""id"": ""63f29310-dc19-451f-94cc-4ad6e84f182b"",
                     ""path"": ""1DAxis"",
                     ""interactions"": """",
@@ -247,7 +228,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/w"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
+                    ""groups"": ""Everything"",
                     ""action"": ""Throttle"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -258,7 +239,40 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/s"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Throttle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""button axis 2"",
+                    ""id"": ""651c1246-8a9f-43b6-aca3-a840f1fb19a3"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Throttle"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""d298bde5-1750-40f3-8039-7896623c9112"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Throttle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""87c1e971-ce2e-4c3f-b6c4-3c070b9e972f"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
                     ""action"": ""Throttle"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -266,16 +280,27 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""7abb1e17-bf1a-4f18-bde7-9f3833f1f333"",
-                    ""path"": ""<Joystick>/stick/x"",
+                    ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Joystick"",
+                    ""groups"": ""Everything"",
                     ""action"": ""Roll"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""keyboard axis"",
+                    ""name"": """",
+                    ""id"": ""0fa455c4-00bf-4ffa-89c5-b2db32d9b3f0"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Roll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""button axis 1"",
                     ""id"": ""8120d13b-aea1-4179-993b-df84b0940b34"",
                     ""path"": ""1DAxis"",
                     ""interactions"": """",
@@ -291,7 +316,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/rightArrow"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
+                    ""groups"": ""Everything"",
                     ""action"": ""Roll"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -302,7 +327,40 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/leftArrow"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Roll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""button axis 2"",
+                    ""id"": ""2c809de6-b601-4356-a101-4d3899bf5311"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Roll"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""77de266c-1c09-49a2-8c89-03dd6259d1e9"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Roll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""346226f4-2b6f-4152-8233-1bf4fbb387ff"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
                     ""action"": ""Roll"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -310,16 +368,27 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""331ba9bf-d059-408b-9c90-91a373888d8b"",
-                    ""path"": ""<Joystick>/rz"",
+                    ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Joystick"",
+                    ""groups"": ""Everything"",
                     ""action"": ""Yaw"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""keyboard axis"",
+                    ""name"": """",
+                    ""id"": ""89473097-afdd-459b-988c-27a40e49a8ad"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Yaw"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""button axis 1"",
                     ""id"": ""e6ecec4c-37ac-4679-8d7d-5e761a20654f"",
                     ""path"": ""1DAxis"",
                     ""interactions"": """",
@@ -335,7 +404,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
+                    ""groups"": ""Everything"",
                     ""action"": ""Yaw"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -346,13 +415,68 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
+                    ""groups"": ""Everything"",
                     ""action"": ""Yaw"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""keyboard axis"",
+                    ""name"": ""button axis 2"",
+                    ""id"": ""56e843f9-96fa-4cec-99da-055b523aea92"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Yaw"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""c100028b-c728-4e3f-8d78-1313bbd868cd"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Yaw"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""89cc121b-8471-47e2-b891-72060e020a90"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Yaw"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9e1dd72a-05e2-49c6-9f65-3ddd13ca1e69"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""LateralH"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""dc064750-1e8b-4127-94b6-5aff0a8a3988"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""LateralH"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""button axis 1"",
                     ""id"": ""bcd22e4c-b938-4fe0-8fb0-b23cae25bd58"",
                     ""path"": ""1DAxis"",
                     ""interactions"": """",
@@ -368,7 +492,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/d"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
+                    ""groups"": ""Everything"",
                     ""action"": ""LateralH"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -379,13 +503,13 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/a"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
+                    ""groups"": ""Everything"",
                     ""action"": ""LateralH"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""hat axis"",
+                    ""name"": ""button axis 2"",
                     ""id"": ""473a7484-45f4-4487-974b-1c2217427e04"",
                     ""path"": ""1DAxis"",
                     ""interactions"": """",
@@ -398,10 +522,10 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": ""positive"",
                     ""id"": ""eba04c70-1cff-462b-bfd5-86e5c2d2a139"",
-                    ""path"": ""<HID::Saitek Saitek X52 Pro Flight Control System>/button25"",
+                    ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Joystick"",
+                    ""groups"": ""Everything"",
                     ""action"": ""LateralH"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -409,16 +533,38 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": ""negative"",
                     ""id"": ""5f43ec82-7fb8-466f-9ddd-fc08b5f72652"",
-                    ""path"": ""<HID::Saitek Saitek X52 Pro Flight Control System>/button27"",
+                    ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Joystick"",
+                    ""groups"": ""Everything"",
                     ""action"": ""LateralH"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""keyboard axis"",
+                    ""name"": """",
+                    ""id"": ""72ef87a3-80f5-4c79-a91f-a35cb8d509a5"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LateralV"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""31c82d37-3eda-4c1c-be6b-a05eabfb86c4"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LateralV"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""button axis 1"",
                     ""id"": ""78f6e3b5-17bb-458c-8b1c-3fa19d8b382b"",
                     ""path"": ""1DAxis"",
                     ""interactions"": """",
@@ -434,7 +580,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
+                    ""groups"": ""Everything"",
                     ""action"": ""LateralV"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -445,13 +591,13 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/ctrl"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
+                    ""groups"": ""Everything"",
                     ""action"": ""LateralV"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""hat axis"",
+                    ""name"": ""button axis 2"",
                     ""id"": ""a9c40068-8436-4f06-81ac-0220d3b71ccc"",
                     ""path"": ""1DAxis"",
                     ""interactions"": """",
@@ -464,10 +610,10 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": ""positive"",
                     ""id"": ""7a93a7bb-fd73-4963-b375-2e4713846ee7"",
-                    ""path"": ""<HID::Saitek Saitek X52 Pro Flight Control System>/button24"",
+                    ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Joystick"",
+                    ""groups"": ""Everything"",
                     ""action"": ""LateralV"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -475,10 +621,10 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": ""negative"",
                     ""id"": ""3570a57c-02f8-46fc-95c8-ea6f9b0dce14"",
-                    ""path"": ""<HID::Saitek Saitek X52 Pro Flight Control System>/button26"",
+                    ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Joystick"",
+                    ""groups"": ""Everything"",
                     ""action"": ""LateralV"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -489,7 +635,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/shift"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
+                    ""groups"": ""Everything"",
                     ""action"": ""Boost"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -497,10 +643,10 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""54866b4b-381b-451e-ae16-5b261fad8874"",
-                    ""path"": ""<Joystick>/button31"",
+                    ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Joystick"",
+                    ""groups"": ""Everything"",
                     ""action"": ""Boost"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -511,7 +657,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/f"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
+                    ""groups"": ""Everything"",
                     ""action"": ""FlightAssistToggle"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -519,11 +665,33 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""0c79d88a-9c6c-4284-9ec7-98990003e4e8"",
-                    ""path"": ""<Joystick>/button7"",
+                    ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Joystick"",
+                    ""groups"": ""Everything"",
                     ""action"": ""FlightAssistToggle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""431c7cb8-99a0-4346-a652-f0935d35dc1e"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Game Menu Toggle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0730b15e-e346-45d7-8c13-4941c78ef35b"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Game Menu Toggle"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -632,7 +800,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/leftStick/up"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";Gamepad"",
+                    ""groups"": ""Everything"",
                     ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -643,7 +811,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/rightStick/up"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";Gamepad"",
+                    ""groups"": ""Everything"",
                     ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -654,7 +822,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/leftStick/down"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";Gamepad"",
+                    ""groups"": ""Everything"",
                     ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -665,7 +833,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/rightStick/down"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";Gamepad"",
+                    ""groups"": ""Everything"",
                     ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -676,7 +844,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/leftStick/left"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";Gamepad"",
+                    ""groups"": ""Everything"",
                     ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -687,7 +855,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/rightStick/left"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";Gamepad"",
+                    ""groups"": ""Everything"",
                     ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -698,7 +866,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/leftStick/right"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";Gamepad"",
+                    ""groups"": ""Everything"",
                     ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -709,7 +877,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/rightStick/right"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";Gamepad"",
+                    ""groups"": ""Everything"",
                     ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -720,7 +888,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/dpad"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";Gamepad"",
+                    ""groups"": ""Everything"",
                     ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -742,7 +910,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Joystick>/stick/up"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Joystick"",
+                    ""groups"": ""Everything"",
                     ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -753,7 +921,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Joystick>/stick/down"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Joystick"",
+                    ""groups"": ""Everything"",
                     ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -764,7 +932,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Joystick>/stick/left"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Joystick"",
+                    ""groups"": ""Everything"",
                     ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -775,7 +943,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Joystick>/stick/right"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Joystick"",
+                    ""groups"": ""Everything"",
                     ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -797,7 +965,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/w"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
+                    ""groups"": ""Everything"",
                     ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -808,7 +976,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/upArrow"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
+                    ""groups"": ""Everything"",
                     ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -819,7 +987,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/s"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
+                    ""groups"": ""Everything"",
                     ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -830,7 +998,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/downArrow"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
+                    ""groups"": ""Everything"",
                     ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -841,7 +1009,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/a"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
+                    ""groups"": ""Everything"",
                     ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -852,7 +1020,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/leftArrow"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
+                    ""groups"": ""Everything"",
                     ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -863,7 +1031,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/d"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
+                    ""groups"": ""Everything"",
                     ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -874,7 +1042,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/rightArrow"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
+                    ""groups"": ""Everything"",
                     ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -907,7 +1075,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Mouse>/position"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
+                    ""groups"": ""Everything"",
                     ""action"": ""Point"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -918,7 +1086,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Pen>/position"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
+                    ""groups"": ""Everything"",
                     ""action"": ""Point"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -929,7 +1097,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Touchscreen>/touch*/position"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Touch"",
+                    ""groups"": ""Everything"",
                     ""action"": ""Point"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -940,7 +1108,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
+                    ""groups"": ""Everything"",
                     ""action"": ""Click"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -951,7 +1119,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Pen>/tip"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
+                    ""groups"": ""Everything"",
                     ""action"": ""Click"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -962,7 +1130,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Touchscreen>/touch*/press"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Touch"",
+                    ""groups"": ""Everything"",
                     ""action"": ""Click"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -973,7 +1141,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<XRController>/trigger"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""XR"",
+                    ""groups"": ""Everything"",
                     ""action"": ""Click"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -984,7 +1152,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Mouse>/scroll"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
+                    ""groups"": ""Everything"",
                     ""action"": ""ScrollWheel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -995,7 +1163,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Mouse>/middleButton"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
+                    ""groups"": ""Everything"",
                     ""action"": ""MiddleClick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -1006,7 +1174,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
+                    ""groups"": ""Everything"",
                     ""action"": ""RightClick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -1017,7 +1185,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<XRController>/devicePosition"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""XR"",
+                    ""groups"": ""Everything"",
                     ""action"": ""TrackedDevicePosition"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -1028,7 +1196,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<XRController>/deviceRotation"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""XR"",
+                    ""groups"": ""Everything"",
                     ""action"": ""TrackedDeviceOrientation"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -1096,14 +1264,38 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""isOR"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Everything"",
+            ""bindingGroup"": ""Everything"",
+            ""devices"": [
+                {
+                    ""devicePath"": ""<Joystick>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                },
+                {
+                    ""devicePath"": ""<Keyboard>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                },
+                {
+                    ""devicePath"": ""<Mouse>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                },
+                {
+                    ""devicePath"": ""<Gamepad>"",
+                    ""isOptional"": true,
+                    ""isOR"": false
+                }
+            ]
         }
     ]
 }");
-        // Global
-        m_Global = asset.FindActionMap("Global", throwIfNotFound: true);
-        m_Global_GameMenuToggle = m_Global.FindAction("Game Menu Toggle", throwIfNotFound: true);
         // Ship
         m_Ship = asset.FindActionMap("Ship", throwIfNotFound: true);
+        m_Ship_GameMenuToggle = m_Ship.FindAction("Game Menu Toggle", throwIfNotFound: true);
         m_Ship_Pitch = m_Ship.FindAction("Pitch", throwIfNotFound: true);
         m_Ship_Roll = m_Ship.FindAction("Roll", throwIfNotFound: true);
         m_Ship_Yaw = m_Ship.FindAction("Yaw", throwIfNotFound: true);
@@ -1180,42 +1372,10 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         return asset.FindBinding(bindingMask, out action);
     }
 
-    // Global
-    private readonly InputActionMap m_Global;
-    private IGlobalActions m_GlobalActionsCallbackInterface;
-    private readonly InputAction m_Global_GameMenuToggle;
-    public struct GlobalActions
-    {
-        private @FlyDangerousActions m_Wrapper;
-        public GlobalActions(@FlyDangerousActions wrapper) { m_Wrapper = wrapper; }
-        public InputAction @GameMenuToggle => m_Wrapper.m_Global_GameMenuToggle;
-        public InputActionMap Get() { return m_Wrapper.m_Global; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(GlobalActions set) { return set.Get(); }
-        public void SetCallbacks(IGlobalActions instance)
-        {
-            if (m_Wrapper.m_GlobalActionsCallbackInterface != null)
-            {
-                @GameMenuToggle.started -= m_Wrapper.m_GlobalActionsCallbackInterface.OnGameMenuToggle;
-                @GameMenuToggle.performed -= m_Wrapper.m_GlobalActionsCallbackInterface.OnGameMenuToggle;
-                @GameMenuToggle.canceled -= m_Wrapper.m_GlobalActionsCallbackInterface.OnGameMenuToggle;
-            }
-            m_Wrapper.m_GlobalActionsCallbackInterface = instance;
-            if (instance != null)
-            {
-                @GameMenuToggle.started += instance.OnGameMenuToggle;
-                @GameMenuToggle.performed += instance.OnGameMenuToggle;
-                @GameMenuToggle.canceled += instance.OnGameMenuToggle;
-            }
-        }
-    }
-    public GlobalActions @Global => new GlobalActions(this);
-
     // Ship
     private readonly InputActionMap m_Ship;
     private IShipActions m_ShipActionsCallbackInterface;
+    private readonly InputAction m_Ship_GameMenuToggle;
     private readonly InputAction m_Ship_Pitch;
     private readonly InputAction m_Ship_Roll;
     private readonly InputAction m_Ship_Yaw;
@@ -1228,6 +1388,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
     {
         private @FlyDangerousActions m_Wrapper;
         public ShipActions(@FlyDangerousActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @GameMenuToggle => m_Wrapper.m_Ship_GameMenuToggle;
         public InputAction @Pitch => m_Wrapper.m_Ship_Pitch;
         public InputAction @Roll => m_Wrapper.m_Ship_Roll;
         public InputAction @Yaw => m_Wrapper.m_Ship_Yaw;
@@ -1245,6 +1406,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         {
             if (m_Wrapper.m_ShipActionsCallbackInterface != null)
             {
+                @GameMenuToggle.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnGameMenuToggle;
+                @GameMenuToggle.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnGameMenuToggle;
+                @GameMenuToggle.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnGameMenuToggle;
                 @Pitch.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnPitch;
                 @Pitch.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnPitch;
                 @Pitch.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnPitch;
@@ -1273,6 +1437,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
             m_Wrapper.m_ShipActionsCallbackInterface = instance;
             if (instance != null)
             {
+                @GameMenuToggle.started += instance.OnGameMenuToggle;
+                @GameMenuToggle.performed += instance.OnGameMenuToggle;
+                @GameMenuToggle.canceled += instance.OnGameMenuToggle;
                 @Pitch.started += instance.OnPitch;
                 @Pitch.performed += instance.OnPitch;
                 @Pitch.canceled += instance.OnPitch;
@@ -1451,12 +1618,18 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
             return asset.controlSchemes[m_XRSchemeIndex];
         }
     }
-    public interface IGlobalActions
+    private int m_EverythingSchemeIndex = -1;
+    public InputControlScheme EverythingScheme
     {
-        void OnGameMenuToggle(InputAction.CallbackContext context);
+        get
+        {
+            if (m_EverythingSchemeIndex == -1) m_EverythingSchemeIndex = asset.FindControlSchemeIndex("Everything");
+            return asset.controlSchemes[m_EverythingSchemeIndex];
+        }
     }
     public interface IShipActions
     {
+        void OnGameMenuToggle(InputAction.CallbackContext context);
         void OnPitch(InputAction.CallbackContext context);
         void OnRoll(InputAction.CallbackContext context);
         void OnYaw(InputAction.CallbackContext context);
