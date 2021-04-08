@@ -37,7 +37,6 @@ namespace Menus {
         private Animator _panelAnimator;
 
         public void OnGameMenuToggle() {
-            Debug.Log("GAME MENU TOGGLE?!");
             ToggleMenuAction();
         }
         
