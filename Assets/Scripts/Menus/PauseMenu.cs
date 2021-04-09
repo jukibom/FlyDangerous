@@ -91,19 +91,17 @@ namespace Menus {
         }
 
         private void ToggleMenuAction() {
-            // if (context.ReadValueAsButton()) {
-                switch (this.MenuState) {
-                    case PauseMenuState.Unpaused:
-                        Pause();
-                        break;
-                    case PauseMenuState.PausedMainMenu: 
-                        Resume();
-                        break;
-                    case PauseMenuState.PausedOptionsMenu:
-                        this.optionsPanel.Cancel();
-                        break;
-                }
-            // }
+            switch (this.MenuState) {
+                case PauseMenuState.Unpaused:
+                    Pause();
+                    break;
+                case PauseMenuState.PausedMainMenu:
+                    Resume();
+                    break;
+                case PauseMenuState.PausedOptionsMenu:
+                    this.optionsPanel.Cancel();
+                    break;
+            }
         }
 
         // toggle ship controller input and timescales

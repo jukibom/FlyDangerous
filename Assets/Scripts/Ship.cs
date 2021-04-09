@@ -80,8 +80,7 @@ public class Ship : MonoBehaviour {
         float torqueMultiplier = _isBoosting ? torqueBoostMultiplier * maxThrust / torqueThrustDivider : maxThrust / torqueThrustDivider;
         
         if (_throttle != 0) {
-            // TODO: Input inverse axis toggle
-            _rigidBodyComponent.AddForce(_transformComponent.forward * (_throttle * thrustMultiplier * -1), ForceMode.Force);
+            _rigidBodyComponent.AddForce(_transformComponent.forward * (_throttle * thrustMultiplier), ForceMode.Force);
         }
         if (_latH != 0) {
             _rigidBodyComponent.AddForce(_transformComponent.right * (_latH * thrustMultiplier), ForceMode.Force);

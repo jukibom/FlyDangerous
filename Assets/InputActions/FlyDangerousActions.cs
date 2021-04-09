@@ -28,7 +28,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
             ""id"": ""319c08b3-97e0-4636-a79a-bb6bde0a90f7"",
             ""actions"": [
                 {
-                    ""name"": ""Game Menu Toggle"",
+                    ""name"": ""Show Game Menu"",
                     ""type"": ""Button"",
                     ""id"": ""ee014b7d-ca3e-402c-9e90-1a308375b882"",
                     ""expectedControlType"": ""Button"",
@@ -104,7 +104,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""89d913f5-1c0b-4f48-ad2b-3bcf86512369"",
-                    ""path"": """",
+                    ""path"": ""<Gamepad>/rightStick/y"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
@@ -194,7 +194,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""id"": ""d9365d2d-6058-4a31-b55d-b2b8fb28062c"",
                     ""path"": """",
                     ""interactions"": """",
-                    ""processors"": ""Invert,Normalize(min=-1,max=0.722)"",
+                    ""processors"": ""Normalize(min=-1,max=1)"",
                     ""groups"": ""Everything"",
                     ""action"": ""Throttle"",
                     ""isComposite"": false,
@@ -205,7 +205,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""id"": ""10295127-affe-4080-8c23-1ec5195ecf17"",
                     ""path"": """",
                     ""interactions"": """",
-                    ""processors"": ""Invert,Normalize(min=-1,max=0.722)"",
+                    ""processors"": ""Normalize(min=-1,max=1)"",
                     ""groups"": ""Everything"",
                     ""action"": ""Throttle"",
                     ""isComposite"": false,
@@ -278,9 +278,42 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""2559e3a9-a2d6-4c98-a1fd-4eaef9c61ba0"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Throttle"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""93640202-191f-43ce-bd91-b90c70143b73"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Throttle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""4b36445f-e8cd-4246-a4bf-81390e1b5c2c"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Throttle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
                     ""name"": """",
                     ""id"": ""7abb1e17-bf1a-4f18-bde7-9f3833f1f333"",
-                    ""path"": """",
+                    ""path"": ""<Gamepad>/dpad/x"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
@@ -434,7 +467,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": ""positive"",
                     ""id"": ""c100028b-c728-4e3f-8d78-1313bbd868cd"",
-                    ""path"": """",
+                    ""path"": ""<Gamepad>/rightShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
@@ -445,7 +478,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": ""negative"",
                     ""id"": ""89cc121b-8471-47e2-b891-72060e020a90"",
-                    ""path"": """",
+                    ""path"": ""<Gamepad>/leftShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
@@ -680,7 +713,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
-                    ""action"": ""Game Menu Toggle"",
+                    ""action"": ""Show Game Menu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -691,7 +724,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
-                    ""action"": ""Game Menu Toggle"",
+                    ""action"": ""Show Game Menu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1053,7 +1086,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""*/{Submit}"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Everything"",
                     ""action"": ""Submit"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -1295,7 +1328,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
 }");
         // Ship
         m_Ship = asset.FindActionMap("Ship", throwIfNotFound: true);
-        m_Ship_GameMenuToggle = m_Ship.FindAction("Game Menu Toggle", throwIfNotFound: true);
+        m_Ship_ShowGameMenu = m_Ship.FindAction("Show Game Menu", throwIfNotFound: true);
         m_Ship_Pitch = m_Ship.FindAction("Pitch", throwIfNotFound: true);
         m_Ship_Roll = m_Ship.FindAction("Roll", throwIfNotFound: true);
         m_Ship_Yaw = m_Ship.FindAction("Yaw", throwIfNotFound: true);
@@ -1375,7 +1408,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
     // Ship
     private readonly InputActionMap m_Ship;
     private IShipActions m_ShipActionsCallbackInterface;
-    private readonly InputAction m_Ship_GameMenuToggle;
+    private readonly InputAction m_Ship_ShowGameMenu;
     private readonly InputAction m_Ship_Pitch;
     private readonly InputAction m_Ship_Roll;
     private readonly InputAction m_Ship_Yaw;
@@ -1388,7 +1421,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
     {
         private @FlyDangerousActions m_Wrapper;
         public ShipActions(@FlyDangerousActions wrapper) { m_Wrapper = wrapper; }
-        public InputAction @GameMenuToggle => m_Wrapper.m_Ship_GameMenuToggle;
+        public InputAction @ShowGameMenu => m_Wrapper.m_Ship_ShowGameMenu;
         public InputAction @Pitch => m_Wrapper.m_Ship_Pitch;
         public InputAction @Roll => m_Wrapper.m_Ship_Roll;
         public InputAction @Yaw => m_Wrapper.m_Ship_Yaw;
@@ -1406,9 +1439,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         {
             if (m_Wrapper.m_ShipActionsCallbackInterface != null)
             {
-                @GameMenuToggle.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnGameMenuToggle;
-                @GameMenuToggle.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnGameMenuToggle;
-                @GameMenuToggle.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnGameMenuToggle;
+                @ShowGameMenu.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnShowGameMenu;
+                @ShowGameMenu.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnShowGameMenu;
+                @ShowGameMenu.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnShowGameMenu;
                 @Pitch.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnPitch;
                 @Pitch.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnPitch;
                 @Pitch.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnPitch;
@@ -1437,9 +1470,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
             m_Wrapper.m_ShipActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @GameMenuToggle.started += instance.OnGameMenuToggle;
-                @GameMenuToggle.performed += instance.OnGameMenuToggle;
-                @GameMenuToggle.canceled += instance.OnGameMenuToggle;
+                @ShowGameMenu.started += instance.OnShowGameMenu;
+                @ShowGameMenu.performed += instance.OnShowGameMenu;
+                @ShowGameMenu.canceled += instance.OnShowGameMenu;
                 @Pitch.started += instance.OnPitch;
                 @Pitch.performed += instance.OnPitch;
                 @Pitch.canceled += instance.OnPitch;
@@ -1629,7 +1662,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
     }
     public interface IShipActions
     {
-        void OnGameMenuToggle(InputAction.CallbackContext context);
+        void OnShowGameMenu(InputAction.CallbackContext context);
         void OnPitch(InputAction.CallbackContext context);
         void OnRoll(InputAction.CallbackContext context);
         void OnYaw(InputAction.CallbackContext context);
