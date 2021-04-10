@@ -11,12 +11,13 @@ namespace Menus {
         PausedOptionsMenu,
     }
     
-    [RequireComponent(typeof(Canvas))]
-    [RequireComponent(typeof(PlayerInput))]
     public class PauseMenu : MonoBehaviour {
 
         [Tooltip("Used to animate the main panel")] [SerializeField]
-        private GameObject pauseMenuCanvas;
+        private GameObject mainCanvas;
+        
+        [Tooltip("Used to show a background (if not VR)")] [SerializeField]
+        private GameObject backgroundCanvas;
 
         [SerializeField] private MainMenu mainPanel;
 
@@ -37,12 +38,22 @@ namespace Menus {
         private Animator _panelAnimator;
 
         public void OnGameMenuToggle() {
-            ToggleMenuAction();
+            switch (this.MenuState) {
+                case PauseMenuState.Unpaused:
+                    Pause();
+                    break;
+                case PauseMenuState.PausedMainMenu:
+                    Resume();
+                    break;
+                case PauseMenuState.PausedOptionsMenu:
+                    this.optionsPanel.Cancel();
+                    break;
+            }
         }
         
         private void Start() {
-            this._menuCanvas = GetComponent<Canvas>();
-            this._panelAnimator = this.pauseMenuCanvas.GetComponent<Animator>();
+            this._menuCanvas = this.backgroundCanvas.GetComponent<Canvas>();
+            this._panelAnimator = this.mainCanvas.GetComponent<Animator>();
 
             // TODO: Global VR Mode flag to turn the UI into a world space floating panel
             var VRMODE = false;
@@ -66,7 +77,6 @@ namespace Menus {
             AudioManager.Instance.Play("ui-cancel");
             this.MenuState = PauseMenuState.Unpaused;
             this._panelAnimator.SetBool("Open", false);
-            this._panelAnimator.Play("Standby");
         }
 
         public void Restart() {
@@ -89,31 +99,17 @@ namespace Menus {
             // TODO: Confirmation dialog
             Application.Quit();
         }
-
-        private void ToggleMenuAction() {
-            switch (this.MenuState) {
-                case PauseMenuState.Unpaused:
-                    Pause();
-                    break;
-                case PauseMenuState.PausedMainMenu:
-                    Resume();
-                    break;
-                case PauseMenuState.PausedOptionsMenu:
-                    this.optionsPanel.Cancel();
-                    break;
-            }
-        }
-
+        
         // toggle ship controller input and timescales
         private void UpdatePauseGameState() {
             switch (this.MenuState) {
                 case PauseMenuState.Unpaused:
-                    this._menuCanvas.enabled = false;
+                    this.backgroundCanvas.SetActive(false);
                     this.user.EnableGameInput();
                     Time.timeScale = 1;
                     break;
                 case PauseMenuState.PausedMainMenu: 
-                    this._menuCanvas.enabled = true;
+                    this.backgroundCanvas.SetActive(true);
                     this.user.DisableGameInput();
                     this.optionsPanel.Hide();
                     this.mainPanel.Show();
