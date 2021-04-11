@@ -310,7 +310,11 @@ namespace Menus {
             // Special protected status
             if (m_Protected) {
                 m_PrimaryBindingButton.interactable = false;
-                displayString = "<GLOBAL> " + displayString;
+                displayString = "<PROTECTED> " + displayString;
+            }
+
+            if (displayString.Length == 0) {
+                displayString = "<NOT SET>";
             }
             
             // Set on label (if any).
@@ -335,6 +339,10 @@ namespace Menus {
                     displayString = action.GetBindingDisplayString(bindingIndex, out deviceLayoutName, out controlPath, displayStringOptions);
             }
 
+            if (displayString.Length == 0) {
+                displayString = "<NOT SET>";
+            }
+            
             // Set on label (if any).
             if (m_SecondaryBindingText != null)
                 m_SecondaryBindingText.text = displayString;
