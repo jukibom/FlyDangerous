@@ -274,8 +274,8 @@ namespace Menus {
             if (m_RebindText != null)
             {
                 var text = !string.IsNullOrEmpty(m_RebindOperation.expectedControlType)
-                    ? $"{partName}Waiting for {m_RebindOperation.expectedControlType} input..."
-                    : $"{partName}Waiting for input...";
+                    ? $"{partName}\nWaiting for {m_RebindOperation.expectedControlType} input...\n\n(ESC to cancel)"
+                    : $"{partName}\nWaiting for input...\n\n(ESC to cancel)";
                 m_RebindText.text = text;
             }
 
