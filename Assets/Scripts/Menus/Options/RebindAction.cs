@@ -24,6 +24,7 @@ namespace Menus {
         [SerializeField] private InputBinding.DisplayStringOptions m_DisplayStringOptions;
 
         [SerializeField] private Text m_ActionLabel;
+        [SerializeField] private Button m_PrimaryBindingButton;
         [SerializeField] private Text m_PrimaryBindingText;
         [SerializeField] private Text m_SecondaryBindingText;
         [SerializeField] private Boolean m_Protected;
@@ -291,6 +292,8 @@ namespace Menus {
         
         
         private void UpdatePrimaryBindingDisplay() {
+            m_PrimaryBindingButton.interactable = true;
+
             var displayString = string.Empty;
             var deviceLayoutName = default(string);
             var controlPath = default(string);
@@ -304,6 +307,12 @@ namespace Menus {
                     displayString = action.GetBindingDisplayString(bindingIndex, out deviceLayoutName, out controlPath, displayStringOptions);
             }
 
+            // Special protected status
+            if (m_Protected) {
+                m_PrimaryBindingButton.interactable = false;
+                displayString = "<GLOBAL> " + displayString;
+            }
+            
             // Set on label (if any).
             if (m_PrimaryBindingText != null)
                 m_PrimaryBindingText.text = displayString;

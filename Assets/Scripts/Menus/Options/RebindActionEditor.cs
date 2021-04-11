@@ -1,4 +1,5 @@
 #if UNITY_EDITOR
+using System;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -20,6 +21,7 @@ namespace Menus {
             m_PrimaryBindingIdProperty = serializedObject.FindProperty("m_PrimaryBindingId");
             m_SecondaryBindingIdProperty = serializedObject.FindProperty("m_SecondaryBindingId");
             m_ActionLabelProperty = serializedObject.FindProperty("m_ActionLabel");
+            m_PrimaryBindingButton = serializedObject.FindProperty("m_PrimaryBindingButton");
             m_PrimaryBindingTextProperty = serializedObject.FindProperty("m_PrimaryBindingText");
             m_SecondaryBindingTextProperty = serializedObject.FindProperty("m_SecondaryBindingText");
             m_ActionProtectedProperty = serializedObject.FindProperty("m_Protected");
@@ -74,6 +76,7 @@ namespace Menus {
             using (new EditorGUI.IndentLevelScope())
             {
                 EditorGUILayout.PropertyField(m_ActionLabelProperty);
+                EditorGUILayout.PropertyField(m_PrimaryBindingButton);
                 EditorGUILayout.PropertyField(m_PrimaryBindingTextProperty);
                 EditorGUILayout.PropertyField(m_SecondaryBindingTextProperty);
                 EditorGUILayout.PropertyField(m_RebindOverlayProperty);
@@ -134,44 +137,51 @@ namespace Menus {
                     InputBinding.DisplayStringOptions.DontUseShortDisplayNames | InputBinding.DisplayStringOptions.IgnoreBindingOverrides;
                 if (!haveBindingGroups)
                     displayOptions |= InputBinding.DisplayStringOptions.DontOmitDevice;
-
+                
                 // Create display string.
-                var displayString = action.GetBindingDisplayString(i, displayOptions);
+                m_BindingOptions[i] = new GUIContent("Global Action (rebind not supported");
+                try {
+                    var displayString = action.GetBindingDisplayString(i, displayOptions);
+                    
+                    // Prevent duplicates being omitted (for primary and secondary unbound actions)
+                    displayString = $"{i.ToString()}: {displayString}";
                 
-                // Prevent duplicates being omitted (for primary and secondary unbound actions)
-                displayString = $"{i.ToString()}: {displayString}";
-                
-                // If binding is part of a composite, include the part name.
-                if (binding.isPartOfComposite)
-                    displayString = $"{ObjectNames.NicifyVariableName(binding.name)}: {displayString}";
+                    // If binding is part of a composite, include the part name.
+                    if (binding.isPartOfComposite)
+                        displayString = $"{ObjectNames.NicifyVariableName(binding.name)}: {displayString}";
 
-                // Some composites use '/' as a separator. When used in popup, this will lead to to submenus. Prevent
-                // by instead using a backlash.
-                displayString = displayString.Replace('/', '\\');
+                    // Some composites use '/' as a separator. When used in popup, this will lead to to submenus. Prevent
+                    // by instead using a backlash.
+                    displayString = displayString.Replace('/', '\\');
 
-                // If the binding is part of control schemes, mention them.
-                if (haveBindingGroups)
-                {
-                    var asset = action.actionMap?.asset;
-                    if (asset != null)
+                    // If the binding is part of control schemes, mention them.
+                    if (haveBindingGroups)
                     {
-                        var controlSchemes = string.Join(", ",
-                            binding.groups.Split(InputBinding.Separator)
-                                .Select(x => asset.controlSchemes.FirstOrDefault(c => c.bindingGroup == x).name));
+                        var asset = action.actionMap?.asset;
+                        if (asset != null)
+                        {
+                            var controlSchemes = string.Join(", ",
+                                binding.groups.Split(InputBinding.Separator)
+                                    .Select(x => asset.controlSchemes.FirstOrDefault(c => c.bindingGroup == x).name));
 
-                        displayString = $"{displayString} ({controlSchemes})";
+                            displayString = $"{displayString} ({controlSchemes})";
+                        }
                     }
+
+                    m_BindingOptions[i].text = displayString;
+                    m_BindingOptionValues[i] = bindingId;
+
+                    if (primaryBindingId == bindingId)
+                        m_SelectedPrimaryBindingOption = i;
+                
+                    if (secondaryBindingId == bindingId)
+                        m_SelectedSecondaryBindingOption = i;
+
                 }
-
-                m_BindingOptions[i] = new GUIContent(displayString);
-                m_BindingOptionValues[i] = bindingId;
-
-                if (primaryBindingId == bindingId)
-                    m_SelectedPrimaryBindingOption = i;
-                
-                if (secondaryBindingId == bindingId)
-                    m_SelectedSecondaryBindingOption = i;
-                
+                // Doesn't support global types (e.g. `./{Submit}`), so we just move on. 
+                catch {
+                    continue;
+                }
             }
         }
 
@@ -180,6 +190,7 @@ namespace Menus {
         private SerializedProperty m_SecondaryBindingIdProperty;
         private SerializedProperty m_ActionLabelProperty;
         private SerializedProperty m_PrimaryBindingTextProperty;
+        private SerializedProperty m_PrimaryBindingButton;
         private SerializedProperty m_SecondaryBindingTextProperty;
         private SerializedProperty m_ActionProtectedProperty;
         private SerializedProperty m_RebindOverlayProperty;
