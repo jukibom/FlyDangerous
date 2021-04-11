@@ -31,13 +31,19 @@ namespace Audio {
             }
         }
 
+        private void OnDestroy() {
+            sounds = new Sound[] {};
+        }
+
         public void Play(string name) {
             Sound sound = Array.Find(sounds, s => s.name == name);
-            if (sound != null && sound.source != null) {
-                sound.source.Play();
-            }
-            else {
-                Debug.LogWarning("Attempted to play missing sound " + name);
+            if (sound != null) {
+                if (sound.source != null) {
+                    sound.source.Play();
+                }
+                else {
+                    Debug.LogWarning("Attempted to play missing sound " + name);
+                }
             }
         }
     }
