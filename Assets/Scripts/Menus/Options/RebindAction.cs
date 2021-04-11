@@ -155,35 +155,10 @@ namespace Menus {
             UpdatePrimaryBindingDisplay();
             UpdateSecondaryBindingDisplay();
         }
-
+        
         public void ResetToDefault() {
-            if (!ResolveActionAndBinding(m_PrimaryBindingId, out var primaryAction, out var primaryBindingIndex))
-                return;
-            
-            if (!ResolveActionAndBinding(m_SecondaryBindingId, out var secondaryAction, out var secondaryBindingIndex))
-                return;
-
-            if (primaryAction.bindings[primaryBindingIndex].isComposite)
-            {
-                // It's a composite. Remove overrides from part bindings.
-                for (var i = primaryBindingIndex + 1; i < primaryAction.bindings.Count && primaryAction.bindings[i].isPartOfComposite; ++i)
-                    primaryAction.RemoveBindingOverride(i);
-            }
-            else
-            {
-                primaryAction.RemoveBindingOverride(primaryBindingIndex);
-            }
-            
-            if (secondaryAction.bindings[secondaryBindingIndex].isComposite)
-            {
-                // It's a composite. Remove overrides from part bindings.
-                for (var i = secondaryBindingIndex + 1; i < secondaryAction.bindings.Count && secondaryAction.bindings[i].isPartOfComposite; ++i)
-                    secondaryAction.RemoveBindingOverride(i);
-            }
-            else
-            {
-                secondaryAction.RemoveBindingOverride(secondaryBindingIndex);
-            }
+            ResetPrimaryBinding();
+            ResetSecondaryBinding();
             UpdateBindingDisplay();
         }
 
@@ -417,6 +392,38 @@ namespace Menus {
             {
                 var action = m_Action?.action;
                 m_ActionLabel.text = action != null ? action.name : string.Empty;
+            }
+        }
+        
+        private void ResetPrimaryBinding() {
+            if (!ResolveActionAndBinding(m_PrimaryBindingId, out var primaryAction, out var primaryBindingIndex))
+                return;
+            
+            if (primaryAction.bindings[primaryBindingIndex].isComposite)
+            {
+                // It's a composite. Remove overrides from part bindings.
+                for (var i = primaryBindingIndex + 1; i < primaryAction.bindings.Count && primaryAction.bindings[i].isPartOfComposite; ++i)
+                    primaryAction.RemoveBindingOverride(i);
+            }
+            else
+            {
+                primaryAction.RemoveBindingOverride(primaryBindingIndex);
+            }
+        }
+
+        private void ResetSecondaryBinding() {
+            if (!ResolveActionAndBinding(m_SecondaryBindingId, out var secondaryAction, out var secondaryBindingIndex))
+                return;
+            
+            if (secondaryAction.bindings[secondaryBindingIndex].isComposite)
+            {
+                // It's a composite. Remove overrides from part bindings.
+                for (var i = secondaryBindingIndex + 1; i < secondaryAction.bindings.Count && secondaryAction.bindings[i].isPartOfComposite; ++i)
+                    secondaryAction.RemoveBindingOverride(i);
+            }
+            else
+            {
+                secondaryAction.RemoveBindingOverride(secondaryBindingIndex);
             }
         }
     }
