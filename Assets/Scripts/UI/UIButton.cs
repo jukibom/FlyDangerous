@@ -4,7 +4,7 @@ using Audio;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class UIButton : MonoBehaviour, IPointerEnterHandler, ISelectHandler
+public class UIButton : MonoBehaviour, IPointerEnterHandler, ISelectHandler, IScrollHandler
 {
     public void OnPointerEnter(PointerEventData eventData) {
         PlaySound();
@@ -14,7 +14,13 @@ public class UIButton : MonoBehaviour, IPointerEnterHandler, ISelectHandler
         PlaySound();
     }
 
+    public void OnScroll(PointerEventData eventData) {
+        // propagate event further up
+        ExecuteEvents.ExecuteHierarchy(transform.parent.gameObject, eventData, ExecuteEvents.scrollHandler);
+    }
+
     private void PlaySound() {
         AudioManager.Instance?.Play("ui-nav");
     }
+
 }
