@@ -64,7 +64,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""type"": ""Value"",
                     ""id"": ""725b3d83-6282-4fd3-8a1b-ad37029f5146"",
                     ""expectedControlType"": ""Axis"",
-                    ""processors"": """",
+                    ""processors"": ""Invert"",
                     ""interactions"": """"
                 },
                 {
