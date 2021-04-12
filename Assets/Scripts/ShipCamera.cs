@@ -16,18 +16,13 @@ public class ShipCamera : MonoBehaviour {
 
     void Update() {
         var angularVelocity = target.angularVelocity;
-        var angularMomentumModifier = target.rotation *
-            Quaternion.Euler(
-                angularVelocity.x / angularMomentumDampener, 
-                angularVelocity.y / angularMomentumDampener, 
-                angularVelocity.z / angularMomentumDampener
-            ); 
-        
-        Vector3 rotationModifier = angularMomentumModifier * offset;
+
+        Vector3 rotationModifier = (angularMomentumDampener * angularVelocity) + offset;
+        Vector3 rotated = Quaternion.AngleAxis(90, Vector3.forward) * rotationModifier;
         
         var acceleration = (target.velocity - _lastVelocity) / Time.fixedDeltaTime;
         var accelerationDelta = acceleration / accelerationDampener / 100f;
-        Vector3 desiredPosition = rotationModifier - accelerationDelta;
+        Vector3 desiredPosition = rotated - accelerationDelta;
         this.transform.localPosition = Vector3.SmoothDamp(this.transform.localPosition, desiredPosition, ref _velocity, smoothSpeed);
         _lastVelocity = target.velocity;
     }
