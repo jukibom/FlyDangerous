@@ -81,7 +81,7 @@ namespace Menus {
 
         public void Restart() {
             AudioManager.Instance.Play("ui-confirm");
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            user.OnRestartTrack();
         }
 
         public void OpenOptionsPanel() {

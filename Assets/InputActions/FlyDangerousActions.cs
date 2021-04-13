@@ -36,6 +36,22 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""interactions"": """"
                 },
                 {
+                    ""name"": ""Restart Track"",
+                    ""type"": ""Button"",
+                    ""id"": ""7b7c5126-6685-4704-9219-dd6ddab798f2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Restart From Last Checkpoint"",
+                    ""type"": ""Button"",
+                    ""id"": ""3993f125-cf34-44e0-9b9f-32a99ebb6c23"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
                     ""name"": ""Pitch"",
                     ""type"": ""Value"",
                     ""id"": ""8043ded1-0ef3-4f85-b28b-3e3139edb133"",
@@ -727,6 +743,50 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""action"": ""Show Game Menu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""93cc2cbc-aa5f-4882-8c19-a68c6b2f66b4"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Restart Track"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""80cfc569-feb9-4e09-872d-61f839d95488"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Restart Track"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""46ee0833-d111-4756-96f7-d158da586e70"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Restart From Last Checkpoint"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8ea4d440-656d-4da9-9072-b1f9556e3dd3"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Restart From Last Checkpoint"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -1406,6 +1466,8 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         // Ship
         m_Ship = asset.FindActionMap("Ship", throwIfNotFound: true);
         m_Ship_ShowGameMenu = m_Ship.FindAction("Show Game Menu", throwIfNotFound: true);
+        m_Ship_RestartTrack = m_Ship.FindAction("Restart Track", throwIfNotFound: true);
+        m_Ship_RestartFromLastCheckpoint = m_Ship.FindAction("Restart From Last Checkpoint", throwIfNotFound: true);
         m_Ship_Pitch = m_Ship.FindAction("Pitch", throwIfNotFound: true);
         m_Ship_Roll = m_Ship.FindAction("Roll", throwIfNotFound: true);
         m_Ship_Yaw = m_Ship.FindAction("Yaw", throwIfNotFound: true);
@@ -1486,6 +1548,8 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Ship;
     private IShipActions m_ShipActionsCallbackInterface;
     private readonly InputAction m_Ship_ShowGameMenu;
+    private readonly InputAction m_Ship_RestartTrack;
+    private readonly InputAction m_Ship_RestartFromLastCheckpoint;
     private readonly InputAction m_Ship_Pitch;
     private readonly InputAction m_Ship_Roll;
     private readonly InputAction m_Ship_Yaw;
@@ -1499,6 +1563,8 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         private @FlyDangerousActions m_Wrapper;
         public ShipActions(@FlyDangerousActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @ShowGameMenu => m_Wrapper.m_Ship_ShowGameMenu;
+        public InputAction @RestartTrack => m_Wrapper.m_Ship_RestartTrack;
+        public InputAction @RestartFromLastCheckpoint => m_Wrapper.m_Ship_RestartFromLastCheckpoint;
         public InputAction @Pitch => m_Wrapper.m_Ship_Pitch;
         public InputAction @Roll => m_Wrapper.m_Ship_Roll;
         public InputAction @Yaw => m_Wrapper.m_Ship_Yaw;
@@ -1519,6 +1585,12 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @ShowGameMenu.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnShowGameMenu;
                 @ShowGameMenu.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnShowGameMenu;
                 @ShowGameMenu.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnShowGameMenu;
+                @RestartTrack.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnRestartTrack;
+                @RestartTrack.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnRestartTrack;
+                @RestartTrack.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnRestartTrack;
+                @RestartFromLastCheckpoint.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnRestartFromLastCheckpoint;
+                @RestartFromLastCheckpoint.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnRestartFromLastCheckpoint;
+                @RestartFromLastCheckpoint.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnRestartFromLastCheckpoint;
                 @Pitch.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnPitch;
                 @Pitch.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnPitch;
                 @Pitch.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnPitch;
@@ -1550,6 +1622,12 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @ShowGameMenu.started += instance.OnShowGameMenu;
                 @ShowGameMenu.performed += instance.OnShowGameMenu;
                 @ShowGameMenu.canceled += instance.OnShowGameMenu;
+                @RestartTrack.started += instance.OnRestartTrack;
+                @RestartTrack.performed += instance.OnRestartTrack;
+                @RestartTrack.canceled += instance.OnRestartTrack;
+                @RestartFromLastCheckpoint.started += instance.OnRestartFromLastCheckpoint;
+                @RestartFromLastCheckpoint.performed += instance.OnRestartFromLastCheckpoint;
+                @RestartFromLastCheckpoint.canceled += instance.OnRestartFromLastCheckpoint;
                 @Pitch.started += instance.OnPitch;
                 @Pitch.performed += instance.OnPitch;
                 @Pitch.canceled += instance.OnPitch;
@@ -1740,6 +1818,8 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
     public interface IShipActions
     {
         void OnShowGameMenu(InputAction.CallbackContext context);
+        void OnRestartTrack(InputAction.CallbackContext context);
+        void OnRestartFromLastCheckpoint(InputAction.CallbackContext context);
         void OnPitch(InputAction.CallbackContext context);
         void OnRoll(InputAction.CallbackContext context);
         void OnYaw(InputAction.CallbackContext context);

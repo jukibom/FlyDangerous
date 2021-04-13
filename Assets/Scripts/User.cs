@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
+using UnityEngine.SceneManagement;
 
 public class User : MonoBehaviour {
 
@@ -47,6 +48,15 @@ public class User : MonoBehaviour {
      */
     public void OnShowGameMenu() {
         pauseMenu.OnGameMenuToggle();
+    }
+
+    public void OnRestartFromLastCheckpoint() {
+        Debug.Log("Lol there are no checkpoints yet ^_^");
+    }
+
+    public void OnRestartTrack() {
+        // TODO: a saner way of doing this? (resetting timers etc etc game state fun)
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void OnPitch(InputValue value) {
