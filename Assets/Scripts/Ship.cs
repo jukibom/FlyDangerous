@@ -32,6 +32,8 @@ public class Ship : MonoBehaviour {
     public void Awake() {
         _transformComponent = GetComponent<Transform>();
         _rigidBodyComponent = GetComponent<Rigidbody>();
+        
+        _flightAssist = PlayerPrefs.GetInt("flight-assist") == 1;
     }
 
     public void OnPitch(InputValue value) {
