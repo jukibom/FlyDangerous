@@ -80,7 +80,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""type"": ""Value"",
                     ""id"": ""725b3d83-6282-4fd3-8a1b-ad37029f5146"",
                     ""expectedControlType"": ""Axis"",
-                    ""processors"": ""Invert"",
+                    ""processors"": """",
                     ""interactions"": """"
                 },
                 {
@@ -210,7 +210,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""id"": ""d9365d2d-6058-4a31-b55d-b2b8fb28062c"",
                     ""path"": """",
                     ""interactions"": """",
-                    ""processors"": ""Normalize(min=-1,max=1)"",
+                    ""processors"": ""Normalize(min=-1,max=1),Invert"",
                     ""groups"": ""Everything"",
                     ""action"": ""Throttle"",
                     ""isComposite"": false,
@@ -221,7 +221,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""id"": ""10295127-affe-4080-8c23-1ec5195ecf17"",
                     ""path"": """",
                     ""interactions"": """",
-                    ""processors"": ""Normalize(min=-1,max=1)"",
+                    ""processors"": ""Normalize(min=-1,max=1),Invert"",
                     ""groups"": ""Everything"",
                     ""action"": ""Throttle"",
                     ""isComposite"": false,
@@ -274,7 +274,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": ""positive"",
                     ""id"": ""d298bde5-1750-40f3-8039-7896623c9112"",
-                    ""path"": """",
+                    ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
@@ -285,7 +285,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": ""negative"",
                     ""id"": ""87c1e971-ce2e-4c3f-b6c4-3c070b9e972f"",
-                    ""path"": """",
+                    ""path"": ""<Gamepad>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",

@@ -285,11 +285,11 @@ namespace Menus {
             // Special protected status
             if (m_Protected) {
                 m_PrimaryBindingButton.interactable = false;
-                displayString = "<PROTECTED> " + displayString;
+                displayString = "(locked) " + displayString;
             }
 
             if (displayString.Length == 0) {
-                displayString = "<NOT SET>";
+                displayString = "(not bound)";
             }
             
             // Set on label (if any).
@@ -315,7 +315,7 @@ namespace Menus {
             }
 
             if (displayString.Length == 0) {
-                displayString = "<NOT SET>";
+                displayString = "(not bound)";
             }
             
             // Set on label (if any).
