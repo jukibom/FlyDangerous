@@ -6,7 +6,7 @@ using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-namespace Menus {
+namespace Menus.Options {
     public class RebindAction : MonoBehaviour {
 
         [Serializable]

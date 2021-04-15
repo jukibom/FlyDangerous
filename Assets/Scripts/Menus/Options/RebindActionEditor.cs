@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 
 ////TODO: support multi-object editing
 
-namespace Menus {
+namespace Menus.Options {
     /// <summary>
     /// A custom inspector for <see cref="RebindActionUI"/> which provides a more convenient way for
     /// picking the binding which to rebind.

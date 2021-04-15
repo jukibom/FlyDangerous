@@ -1,12 +1,14 @@
 ﻿using System;
 using Audio;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-namespace Menus {
+namespace Menus.Options {
     public class OptionsMenu : MonoBehaviour {
         [SerializeField] 
         private PauseMenu pauseMenu;
+        public InputActionAsset actions;
 
         [SerializeField] private Button defaultSelectedButton;
         
@@ -17,6 +19,7 @@ namespace Menus {
         }
         private void OnEnable() {
             defaultSelectedButton.Select();
+            LoadBindings();
         }
 
         public void Show() {
@@ -31,15 +34,28 @@ namespace Menus {
         }
 
         public void Apply() {
-            // TODO: Store state here
+            // TODO: Store preference state here
+            SaveBindings();
             this.pauseMenu.CloseOptionsPanel();
             AudioManager.Instance.Play("ui-confirm");
         }
 
         public void Cancel() {
             // TODO: Confirmation dialog (if there is state to commit)
+            LoadBindings();
             AudioManager.Instance.Play("ui-cancel");
             this.pauseMenu.CloseOptionsPanel();
+        }
+        
+        private void SaveBindings() {
+            var rebinds = actions.SaveBindingOverridesAsJson();
+            PlayerPrefs.SetString("rebinds", rebinds);
+        }
+        private void LoadBindings() {
+            var bindings = PlayerPrefs.GetString("rebinds");
+            if (!string.IsNullOrEmpty(bindings)) {
+                actions.LoadBindingOverridesFromJson(bindings);
+            }
         }
     }
 }
