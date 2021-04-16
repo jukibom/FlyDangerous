@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Audio;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -38,16 +39,17 @@ namespace UI {
         }
 
         private void Toggle() {
-            isChecked = !isChecked;
-            if (handler != null) {
-                if (isChecked) {
-                    handler.OnEnabled();
-                }
-                else {
-                    handler.OnDisabled();
-                }
-            }
             
+            isChecked = !isChecked;
+            if (isChecked) {
+                AudioManager.Instance.Play("ui-confirm");
+                handler?.OnEnabled();
+            }
+            else {
+                AudioManager.Instance.Play("ui-cancel");
+                handler?.OnDisabled();
+            }
+
             PlayerPrefs.SetInt(preference, isChecked ? 1 : 0);
         }
     }
