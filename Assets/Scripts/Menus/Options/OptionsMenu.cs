@@ -16,7 +16,7 @@ namespace Menus.Options {
         [SerializeField] private Button defaultSelectedButton;
         
         private Animator _animator;
-        private string _prefs;
+        private SaveData _previousPrefs;
         
         private void Awake() {
             this._animator = this.GetComponent<Animator>();
@@ -38,14 +38,20 @@ namespace Menus.Options {
         }
 
         public void Apply() {
-            // TODO: Store preference state here
             SavePreferences();
             this.pauseMenu.CloseOptionsPanel();
             AudioManager.Instance.Play("ui-confirm");
         }
 
         public void Cancel() {
-            // TODO: Confirmation dialog (if there is state to commit)
+            
+            // not sure about this - the hack here is to save the preferences, compare with previous and revert is the user chooses to discard.
+            SavePreferences();
+            if (_previousPrefs.ToJsonString() != Preferences.Instance.GetCurrent().ToJsonString()) {
+                Debug.Log("Discarded changed preferences! (TODO: confirmation dialog)");
+                // TODO: Confirmation dialog (if there is state to commit)
+            }
+            
             RevertPreferences();
             AudioManager.Instance.Play("ui-cancel");
             this.pauseMenu.CloseOptionsPanel();
@@ -58,9 +64,12 @@ namespace Menus.Options {
             foreach (var toggleOption in toggleOptions) {
                 toggleOption.IsEnabled = Preferences.Instance.GetBool(toggleOption.Preference);
             }
+
+            _previousPrefs = Preferences.Instance.GetCurrent().Clone();
         }
 
         private void RevertPreferences() {
+            Preferences.Instance.SetPreferences(_previousPrefs);
             LoadBindings();
         }
 

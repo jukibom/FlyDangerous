@@ -20,6 +20,11 @@ namespace Engine {
             s.stringPrefs = new Dictionary<string, string>(stringPrefs);
             return s;
         }
+
+        public string ToJsonString() {
+            // Tells Newtonsoft to convert this object to a JSON.
+            return JsonConvert.SerializeObject(this, Formatting.Indented);
+        }
     }
 
     public class Preferences : MonoBehaviour {
@@ -123,9 +128,8 @@ namespace Engine {
             if (directoryLoc != null) {
                 Directory.CreateDirectory(directoryLoc);
             }
-            
-            // Tells Newtonsoft to convert this object to a JSON.
-            var json = JsonConvert.SerializeObject(_saveData, Formatting.Indented);
+
+            var json = _saveData.ToJsonString();
             Debug.Log("Saving to " + saveLoc);
 
             /* A using statement is great if you plan on disposing of a stream within the same method.

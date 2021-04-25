@@ -15,6 +15,7 @@ public class AxisDropdown : MonoBehaviour, ISubmitHandler, IPointerClickHandler 
 
     void Start() {
         isOpen = false;
+        container.SetActive(false);
     }
 
     public void OnSubmit(BaseEventData eventData) {
