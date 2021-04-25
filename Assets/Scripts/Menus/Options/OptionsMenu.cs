@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace Menus.Options {
+
     public class OptionsMenu : MonoBehaviour {
         [SerializeField] 
         private PauseMenu pauseMenu;
@@ -13,13 +14,14 @@ namespace Menus.Options {
         [SerializeField] private Button defaultSelectedButton;
         
         private Animator _animator;
+        private string _prefs;
         
         private void Awake() {
             this._animator = this.GetComponent<Animator>();
         }
         private void OnEnable() {
             defaultSelectedButton.Select();
-            LoadBindings();
+            LoadPreferences();
         }
 
         public void Show() {
@@ -46,7 +48,16 @@ namespace Menus.Options {
             AudioManager.Instance.Play("ui-cancel");
             this.pauseMenu.CloseOptionsPanel();
         }
-        
+
+        private void LoadPreferences() {
+            // TODO: load preferences here (ideally from json ¬_¬)
+            LoadBindings();
+        }
+
+        private void RevertPreferences() {
+            LoadBindings();
+        }
+
         private void SaveBindings() {
             var rebinds = actions.SaveBindingOverridesAsJson();
             PlayerPrefs.SetString("rebinds", rebinds);
