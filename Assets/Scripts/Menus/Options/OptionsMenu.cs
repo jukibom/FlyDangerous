@@ -57,6 +57,7 @@ namespace Menus.Options {
             }
             
             RevertPreferences();
+            SavePreferences();
             AudioManager.Instance.Play("ui-cancel");
             this.pauseMenu.CloseOptionsPanel();
         }
