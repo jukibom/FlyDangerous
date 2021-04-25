@@ -22,7 +22,6 @@ namespace Menus.Options {
         [SerializeField] private string m_PrimaryBindingId;
         [SerializeField] private string m_SecondaryBindingId;
         [SerializeField] private InputBinding.DisplayStringOptions m_DisplayStringOptions;
-        [SerializeField] private AxisOptions m_AxisOptions;
 
         [SerializeField] private Text m_ActionLabel;
         [SerializeField] private Button m_PrimaryBindingButton;
@@ -155,8 +154,8 @@ namespace Menus.Options {
         public void UpdateBindingDisplay() {
             UpdatePrimaryBindingDisplay();
             UpdateSecondaryBindingDisplay();
-            UpdateAxisOptions();
-        }
+            UpdateAxisOptions(); 
+        } 
         
         public void ResetToDefault() {
             ResetPrimaryBinding();
@@ -180,7 +179,6 @@ namespace Menus.Options {
             // If we need more processors, make this an AxisOptions get call in a separate refresh function or something
             var binding = action.bindings[bindingIndex];
 
-            Debug.Log(binding.overrideProcessors);
             if (IsInverseEnabled(binding)) {
                 binding.overrideProcessors = null;
                 action.ChangeBinding(bindingIndex).To(binding); 
@@ -374,12 +372,12 @@ namespace Menus.Options {
         }
         
         protected void OnEnable() {
-            m_AxisOptions = GetComponent<AxisOptions>();
             if (s_RebindActions == null)
                 s_RebindActions = new List<RebindAction>();
             s_RebindActions.Add(this);
             if (s_RebindActions.Count == 1)
                 InputSystem.onActionChange += OnActionChange;
+            UpdateBindingDisplay();
         }
 
         protected void OnDisable()
