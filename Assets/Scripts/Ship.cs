@@ -33,7 +33,9 @@ public class Ship : MonoBehaviour {
     public void Awake() {
         _transformComponent = GetComponent<Transform>();
         _rigidBodyComponent = GetComponent<Rigidbody>();
-        
+    }
+
+    public void Start() {
         _flightAssist = Preferences.Instance.GetBool("flightAssistOnByDefault");
     }
 

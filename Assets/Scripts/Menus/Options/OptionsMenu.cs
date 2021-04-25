@@ -21,9 +21,13 @@ namespace Menus.Options {
         private void Awake() {
             this._animator = this.GetComponent<Animator>();
         }
+
+        private void Start() {
+            LoadPreferences();
+        }
+
         private void OnEnable() {
             defaultSelectedButton.Select();
-            LoadPreferences();
         }
 
         public void Show() {
