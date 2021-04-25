@@ -254,6 +254,17 @@ namespace Menus.Options {
                         UpdateBindingDisplay();
                         CleanUp();
                     })
+                .WithCancelingThrough("<Keyboard>/escape")
+                .OnPotentialMatch(operation => {
+                    // special case for delete key - unbind the binding!
+                    if (operation.selectedControl.path == "/Keyboard/delete") {
+                        var binding = operation.action.bindings[bindingIndex];
+                        binding.overridePath = "";
+                        operation.action.ChangeBinding(bindingIndex).To(binding);
+                        operation.Cancel();
+                    }
+                    operation.Complete();
+                })
                 .OnComplete(
                     operation =>
                     {
@@ -273,17 +284,17 @@ namespace Menus.Options {
                     });
 
             // If it's a part binding, show the name of the part in the UI.
-            var partName = default(string);
+            var partName = $"{action.name}";
             if (action.bindings[bindingIndex].isPartOfComposite)
-                partName = $"Binding '{action.bindings[bindingIndex].name}'. ";
+                partName = $"Binding '{action.name} : {action.bindings[bindingIndex].name}'. ";
 
             // Bring up rebind overlay, if we have one.
             m_RebindOverlay?.SetActive(true);
             if (m_RebindText != null)
             {
                 var text = !string.IsNullOrEmpty(m_RebindOperation.expectedControlType)
-                    ? $"{partName}\nWaiting for {m_RebindOperation.expectedControlType} input...\n\n(ESC to cancel)"
-                    : $"{partName}\nWaiting for input...\n\n(ESC to cancel)";
+                    ? $"{partName}\nWaiting for {m_RebindOperation.expectedControlType} input...\n\n-------------------------------------------\n\nESC to cancel\nDEL to unbind"
+                    : $"{partName}\nWaiting for input...\n\n-------------------------------------------\n\nESC to cancel\nDEL to unbind";
                 m_RebindText.text = text;
             }
 
