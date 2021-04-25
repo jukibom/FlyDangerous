@@ -154,7 +154,6 @@ namespace Menus.Options {
         public void UpdateBindingDisplay() {
             UpdatePrimaryBindingDisplay();
             UpdateSecondaryBindingDisplay();
-            UpdateAxisOptions(); 
         } 
         
         public void ResetToDefault() {
@@ -389,6 +388,7 @@ namespace Menus.Options {
             if (s_RebindActions.Count == 1)
                 InputSystem.onActionChange += OnActionChange;
             UpdateBindingDisplay();
+            UpdateAxisOptions();
         }
 
         protected void OnDisable()
