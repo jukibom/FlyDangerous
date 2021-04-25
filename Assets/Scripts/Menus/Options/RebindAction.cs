@@ -22,6 +22,7 @@ namespace Menus.Options {
         [SerializeField] private string m_PrimaryBindingId;
         [SerializeField] private string m_SecondaryBindingId;
         [SerializeField] private InputBinding.DisplayStringOptions m_DisplayStringOptions;
+        [SerializeField] private AxisOptions m_AxisOptions;
 
         [SerializeField] private Text m_ActionLabel;
         [SerializeField] private Button m_PrimaryBindingButton;
@@ -162,6 +163,39 @@ namespace Menus.Options {
             UpdateBindingDisplay();
         }
 
+        public void ToggleInverseAxisPrimary() {
+            
+            Debug.Log("Invert Axis 1");
+            if (!ResolveActionAndBinding(m_PrimaryBindingId, out var action, out var bindingIndex))
+                return;
+            
+            // If we need more processors, make this an AxisOptions get call in a separate refresh function or something
+            var binding = action.bindings[bindingIndex];
+            
+            Boolean shouldReEnable = action.enabled;
+            action.Disable();
+
+            Debug.Log(binding.processors);
+            if (binding.overrideProcessors != null) {
+                binding.overrideProcessors = null;
+                action.ChangeBinding(bindingIndex).To(binding); 
+                Debug.Log("Remove Invert");
+            }
+            else {
+                binding.overrideProcessors = "Invert";
+                action.ChangeBinding(bindingIndex).To(binding); 
+                Debug.Log("Add Invert");
+            }
+
+            if (shouldReEnable) {
+                action.Enable();
+            }
+        }
+        
+        public void ToggleInverseAxisSecondary() {
+            Debug.Log("Invert Axis 2");
+        }
+
         public void StartInteractivePrimaryRebind() {
             if (!ResolveActionAndBinding(m_PrimaryBindingId, out var action, out var bindingIndex))
                 return;
@@ -283,7 +317,7 @@ namespace Menus.Options {
             }
 
             // Special protected status
-            if (m_Protected) {
+            if (m_Protected) {  
                 m_PrimaryBindingButton.interactable = false;
                 displayString = "(locked) " + displayString;
             }
