@@ -1,53 +1,132 @@
-﻿using System.IO;
-// using Newtonsoft.Json;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Engine {
-    public struct SaveData {
-        public string inputBindings;
-        public bool flightAssistOnByDefault;
+    public class SaveData {
+        public Dictionary<string, string> stringPrefs;
+        public Dictionary<string, bool> boolPrefs;
+        
+        public SaveData() {
+            stringPrefs = new Dictionary<string, string>();
+            boolPrefs = new Dictionary<string, bool>();
+        }
+
+        public SaveData Clone() {
+            SaveData s = new SaveData();
+            s.boolPrefs = new Dictionary<string, bool>(boolPrefs);
+            s.stringPrefs = new Dictionary<string, string>(stringPrefs);
+            return s;
+        }
     }
 
-    public class Preferences {
+    public class Preferences : MonoBehaviour {
 
-        private static SaveData _saveData;
-        private bool _loaded = false;
+        public static Preferences Instance;
+        private SaveData _saveData;
 
-            public SaveData GetCurrent() {
-            // if already loaded, just return
-            if (_loaded) {
-                return _saveData; 
+        void Awake() {
+            // singleton shenanigans
+            if (Instance == null) {
+                Instance = this;
+            }
+            else {
+                Destroy(gameObject);
+                return;
             }
 
-            // setup defaults
-            SaveData defaults;
-            defaults.inputBindings = "";
-            defaults.flightAssistOnByDefault = true;
+            DontDestroyOnLoad(gameObject);
+        }
+
+        public bool GetDefaultBool(string key) {
+            switch (key) {
+                case "flightAssistOnByDefault": return false;
+                default: 
+                    Debug.LogWarning("Attempted to get preference " + key + " with no default specified");
+                    return false;
+            }
+        }
+         
+        public string GetDefaultString(string key) {
+            switch (key) {
+                case "inputBindings":
+                    return "";
+                default: 
+                    Debug.LogWarning("Attempted to get preference " + key + " with no default specified");
+                    return "";
+            }
+        }
+        
+        public bool GetBool(string key) {
+            
+            bool value;
+            return GetCurrent().boolPrefs.TryGetValue(key, out value)
+                ? value
+                : GetDefaultBool(key);
+        }
+        
+        public string GetString(string key) {
+            
+            string value;
+            return GetCurrent().stringPrefs.TryGetValue(key, out value)
+                ? value
+                : GetDefaultString(key);
+        }
+        
+        public void SetBool(string key, bool val) {
+            GetCurrent().boolPrefs[key] = val;
+        }
+        
+        public void SetString(string key, string val) { 
+            GetCurrent().stringPrefs[key] = val;
+        }
+
+        public SaveData GetCurrent() {
+            // if already loaded, just return
+            if (_saveData != null) {
+                return _saveData; 
+            }
 
             // try to find file at save location
             try {
                 var saveLoc = Path.Combine(Application.persistentDataPath, "Save", "Preferences.json");
+                Debug.Log("Loading from" + saveLoc);
                 using (var file = new FileStream(saveLoc, FileMode.Open, FileAccess.Read, FileShare.Read)) {
                     using (var reader = new StreamReader(file)) {
                         var json = reader.ReadToEnd();
-                        // return JsonConvert.DeserializeObject<SaveData>(json);
+                        var saveData = JsonConvert.DeserializeObject<SaveData>(json);
+                        _saveData = saveData;
                     }
                 }
             }
-            catch {
-                return defaults;
+            catch (Exception e) {
+                Debug.Log(e.Message);
+                // no save data or failed to load - setup defaults
+                Debug.Log("Loading default preferences");
+                SaveData defaults = new SaveData();
+                _saveData = defaults;
             }
 
-            return defaults;
-            }
+            return _saveData;
+        }
 
-        public static void Save(SaveData data) {
-            _saveData = data;
-            
-            // Creates the path to the save file.
+        public void SetPreferences(SaveData saveData) {
+            _saveData = saveData;
+        }
+
+        public void Save() {
+            // Creates the path to the save file (make dir if needed).
             var saveLoc = Path.Combine(Application.persistentDataPath, "Save", "Preferences.json");
+            var directoryLoc = Path.GetDirectoryName(saveLoc);
+            if (directoryLoc != null) {
+                Directory.CreateDirectory(directoryLoc);
+            }
+            
             // Tells Newtonsoft to convert this object to a JSON.
-            // var json = JsonConvert.SerializeObject(data);
+            var json = JsonConvert.SerializeObject(_saveData, Formatting.Indented);
+            Debug.Log("Saving to " + saveLoc);
 
             /* A using statement is great if you plan on disposing of a stream within the same method.
                A stream should always be disposed as to free up resources that are no longer needed.
@@ -60,7 +139,7 @@ namespace Engine {
                    Which means that it will need to be disposed of later. */
                 using (var writer = new StreamWriter(file)) {
                     // StreamWriter is able to write strings out to streams.
-                    // writer.Write(json);
+                    writer.Write(json);
                     // Flush the data within the underlaying buffer to it's end point.
                     writer.Flush();
                 }

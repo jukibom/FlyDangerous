@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Audio;
+using Engine;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -19,11 +20,6 @@ namespace UI {
         public bool isChecked;
         public Image statusImage;
         public ICheckboxHandler handler;
-
-        // Start is called before the first frame update
-        void Start() {
-            isChecked = PlayerPrefs.GetInt(preference) == 1;
-        }
 
         public void Update() {
             statusImage.enabled = isChecked;
@@ -49,8 +45,6 @@ namespace UI {
                 AudioManager.Instance.Play("ui-cancel");
                 handler?.OnDisabled();
             }
-
-            PlayerPrefs.SetInt(preference, isChecked ? 1 : 0);
         }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Engine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -33,7 +34,7 @@ public class Ship : MonoBehaviour {
         _transformComponent = GetComponent<Transform>();
         _rigidBodyComponent = GetComponent<Rigidbody>();
         
-        _flightAssist = PlayerPrefs.GetInt("flight-assist") == 1;
+        _flightAssist = Preferences.Instance.GetBool("flightAssistOnByDefault");
     }
 
     public void OnPitch(InputValue value) {

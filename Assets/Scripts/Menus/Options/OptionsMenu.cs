@@ -1,5 +1,7 @@
 ﻿using System;
 using Audio;
+using Engine;
+using UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -37,33 +39,44 @@ namespace Menus.Options {
 
         public void Apply() {
             // TODO: Store preference state here
-            SaveBindings();
+            SavePreferences();
             this.pauseMenu.CloseOptionsPanel();
             AudioManager.Instance.Play("ui-confirm");
         }
 
         public void Cancel() {
             // TODO: Confirmation dialog (if there is state to commit)
-            LoadBindings();
+            RevertPreferences();
             AudioManager.Instance.Play("ui-cancel");
             this.pauseMenu.CloseOptionsPanel();
         }
 
         private void LoadPreferences() {
-            // TODO: load preferences here (ideally from json ¬_¬)
             LoadBindings();
+            
+            var toggleOptions = GetComponentsInChildren<ToggleOption>(true);
+            foreach (var toggleOption in toggleOptions) {
+                toggleOption.IsEnabled = Preferences.Instance.GetBool(toggleOption.Preference);
+            }
         }
 
         private void RevertPreferences() {
             LoadBindings();
         }
 
-        private void SaveBindings() {
-            var rebinds = actions.SaveBindingOverridesAsJson();
-            PlayerPrefs.SetString("rebinds", rebinds);
+        private void SavePreferences() {
+
+            Preferences.Instance.SetString("inputBindings", actions.SaveBindingOverridesAsJson());
+
+            var toggleOptions = GetComponentsInChildren<ToggleOption>(true);
+            foreach (var toggleOption in toggleOptions) {
+                Preferences.Instance.SetBool(toggleOption.Preference, toggleOption.IsEnabled);
+            }
+            
+            Preferences.Instance.Save();
         }
         private void LoadBindings() {
-            var bindings = PlayerPrefs.GetString("rebinds");
+            var bindings = Preferences.Instance.GetString("inputBindings");
             if (!string.IsNullOrEmpty(bindings)) {
                 actions.LoadBindingOverridesFromJson(bindings);
             }
