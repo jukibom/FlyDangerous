@@ -155,6 +155,7 @@ namespace Menus.Options {
         public void UpdateBindingDisplay() {
             UpdatePrimaryBindingDisplay();
             UpdateSecondaryBindingDisplay();
+            UpdateAxisOptions();
         }
         
         public void ResetToDefault() {
@@ -164,36 +165,36 @@ namespace Menus.Options {
         }
 
         public void ToggleInverseAxisPrimary() {
-            
-            Debug.Log("Invert Axis 1");
             if (!ResolveActionAndBinding(m_PrimaryBindingId, out var action, out var bindingIndex))
                 return;
-            
+            ToggleInverseAxis(action, bindingIndex);
+        }
+        
+        public void ToggleInverseAxisSecondary() {
+            if (!ResolveActionAndBinding(m_SecondaryBindingId, out var action, out var bindingIndex))
+                return;
+            ToggleInverseAxis(action, bindingIndex);
+        }
+
+        private void ToggleInverseAxis(InputAction action, int bindingIndex) {
             // If we need more processors, make this an AxisOptions get call in a separate refresh function or something
             var binding = action.bindings[bindingIndex];
-            
-            Boolean shouldReEnable = action.enabled;
-            action.Disable();
 
-            Debug.Log(binding.processors);
-            if (binding.overrideProcessors != null) {
+            Debug.Log(binding.overrideProcessors);
+            if (IsInverseEnabled(binding)) {
                 binding.overrideProcessors = null;
                 action.ChangeBinding(bindingIndex).To(binding); 
-                Debug.Log("Remove Invert");
             }
             else {
                 binding.overrideProcessors = "Invert";
                 action.ChangeBinding(bindingIndex).To(binding); 
-                Debug.Log("Add Invert");
-            }
-
-            if (shouldReEnable) {
-                action.Enable();
             }
         }
-        
-        public void ToggleInverseAxisSecondary() {
-            Debug.Log("Invert Axis 2");
+
+        // TODO: make this more generic for other processors if we need them
+        private bool IsInverseEnabled(InputBinding binding) {
+            return (binding.overrideProcessors != null && binding.overrideProcessors.Length > 0);
+
         }
 
         public void StartInteractivePrimaryRebind() {
@@ -359,9 +360,21 @@ namespace Menus.Options {
             // Give listeners a chance to configure UI in response.
             m_UpdateBindingUIEvent?.Invoke(this, displayString, deviceLayoutName, controlPath);
         }
+
+        private void UpdateAxisOptions() {
+            var axisOptions = GetComponent<AxisOptions>();
+            if (axisOptions != null) {
+                if (ResolveActionAndBinding(m_PrimaryBindingId, out var action, out var bindingIndex)) {
+                    axisOptions.primaryInverseCheckbox.isChecked = IsInverseEnabled(action.bindings[bindingIndex]);
+                }
+                if (ResolveActionAndBinding(m_SecondaryBindingId, out action, out bindingIndex)) {
+                    axisOptions.secondaryInverseCheckbox.isChecked = IsInverseEnabled(action.bindings[bindingIndex]);
+                }
+            }
+        }
         
-        protected void OnEnable()
-        {
+        protected void OnEnable() {
+            m_AxisOptions = GetComponent<AxisOptions>();
             if (s_RebindActions == null)
                 s_RebindActions = new List<RebindAction>();
             s_RebindActions.Add(this);
