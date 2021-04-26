@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using Engine;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(Transform))]
 [RequireComponent(typeof(Rigidbody))]
@@ -14,6 +16,7 @@ public class Ship : MonoBehaviour {
     [SerializeField] private float thrustBoostMultiplier = 2;
     [SerializeField] private float torqueThrustDivider = 5;
     [SerializeField] private float torqueBoostMultiplier = 1.2f;
+    [SerializeField] private Text velocityIndicator;
     
     // private FlyDangerousActions _shipActions;
     private bool _isBoosting = false;
@@ -104,6 +107,13 @@ public class Ship : MonoBehaviour {
         }
         
         CalculateFlightAssist();
+        UpdateIndicators();
+    }
+
+    private void UpdateIndicators() {
+        if (velocityIndicator != null) {
+            velocityIndicator.text = Math.Floor(_rigidBodyComponent.velocity.magnitude).ToString(CultureInfo.InvariantCulture);
+        }
     }
 
     /**
