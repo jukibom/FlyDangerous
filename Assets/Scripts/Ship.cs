@@ -13,19 +13,23 @@ using UnityEngine.UI;
 public class Ship : MonoBehaviour {
     
     // TODO: split this into various thruster powers
+    [SerializeField] private float maxSpeed = 800;
+    [SerializeField] private float maxBoostSpeed = 932;
     [SerializeField] private float maxThrust = 100;
     [SerializeField] private float thrustBoostMultiplier = 2;
     [SerializeField] private float torqueThrustDivider = 5;
     [SerializeField] private float torqueBoostMultiplier = 1.2f;
     [SerializeField] private Text velocityIndicator;
+    [SerializeField] private float totalBoostTime = 4f;
+    [SerializeField] private float totalBoostRotationalTime = 5f;
+    [SerializeField] private float boostRechargeTime = 5f;
 
-    private bool _boostStarted = false;
+    private bool _boostReady = false;
     private bool _isBoosting = false;
     private float _currentBoostTime = 0f;
-    private float _totalBoostTime = 4f;
-    private float _totalBoostRotationalTime = 5f; 
-    
-    private bool _velocityLimit = false;
+
+    private bool _userVelocityLimit = false;
+    private float _velocityLimitCap = 0f; 
     private bool _flightAssist = false;
 
     // input axes -1 to 1
@@ -74,17 +78,20 @@ public class Ship : MonoBehaviour {
 
     public void OnBoost(InputValue value) {
         var boost = value.isPressed;
-        if (boost && !_boostStarted && !_isBoosting) {
-            _boostStarted = true;
+        if (boost && !_boostReady) {
+            _boostReady = true;
             Debug.Log("Boost Charge");
 
-            IEnumerator Buildup() {
+            IEnumerator Boost() {
+                AudioManager.Instance.Play("ship-boost");
                 yield return new WaitForSeconds(1);
                 Debug.Log("Boost!");
+                _currentBoostTime = 0f;
                 _isBoosting = true;
+                yield return new WaitForSeconds(boostRechargeTime);
+                _boostReady = false;
             }
-            AudioManager.Instance.Play("ship-boost");
-            StartCoroutine(Buildup());
+            StartCoroutine(Boost());
         }
     }
 
@@ -94,8 +101,9 @@ public class Ship : MonoBehaviour {
     }
 
     public void OnVelocityLimiter(InputValue value) {
-        _velocityLimit = value.isPressed;
-        Debug.Log("Velocity Limit " + (_velocityLimit ? "ON" : "OFF") + " (not implemented)");
+        _userVelocityLimit = value.isPressed;
+        _velocityLimitCap = Math.Max(_rigidBodyComponent.velocity.magnitude, maxBoostSpeed / 2);
+        Debug.Log("Velocity Limit " + (_userVelocityLimit ? "ON" : "OFF") + " (not implemented)");
     }
 
     // Apply all physics updates in fixed intervals (WRITE)
@@ -105,32 +113,34 @@ public class Ship : MonoBehaviour {
         float torqueMultiplier = maxThrust / torqueThrustDivider;
 
         _currentBoostTime += Time.fixedDeltaTime;
-        if (_isBoosting && _boostStarted) {
-            _boostStarted = false;
-            _currentBoostTime = 0f;
-        }
 
         if (_isBoosting) {
             // reduce boost potency over time period
-            thrustMultiplier *= Mathf.Lerp(thrustBoostMultiplier, 1, _currentBoostTime / _totalBoostTime);
-            torqueMultiplier *= Mathf.Lerp(torqueBoostMultiplier, 1, _currentBoostTime / _totalBoostRotationalTime);
+            // Ease-in (boost dropoff is more dramatic)
+            float tBoost = _currentBoostTime / totalBoostTime;
+            tBoost = 1f - Mathf.Cos(tBoost * Mathf.PI * 0.5f);
             
-            // cannot reverse while boosting! sorry mate 
-            _throttle = 1;
+            float tTorque = _currentBoostTime / totalBoostTime;
+            tTorque = 1f - Mathf.Cos(tTorque * Mathf.PI * 0.5f);
+
+            thrustMultiplier *= Mathf.Lerp(thrustBoostMultiplier, 1, tBoost);
+            torqueMultiplier *= Mathf.Lerp(torqueBoostMultiplier, 1, tTorque);
         }
         
-        if (_currentBoostTime > _totalBoostRotationalTime) {
+        if (_currentBoostTime > totalBoostRotationalTime) {
             _isBoosting = false; 
         }
-
-
+        
         // TODO: max thrust available to the system must be evenly split between the axes ?
         // otherwise we'll have the old goldeneye problem of travelling diagonally being the optimal play :|
-        // float thrustMultiplier = _isBoosting ? maxThrust * thrustBoostMultiplier : maxThrust;
-        // float torqueMultiplier = _isBoosting ? torqueBoostMultiplier * maxThrust / torqueThrustDivider : maxThrust / torqueThrustDivider;
         
-        if (_throttle != 0) {
-            _rigidBodyComponent.AddForce(_transformComponent.forward * (_throttle * thrustMultiplier), ForceMode.Force);
+        // special case for throttle - no reverse and full power while boosting! sorry mate 
+        var throttle = _isBoosting && _currentBoostTime < totalBoostTime
+            ? 1
+            : _throttle;
+        
+        if (throttle != 0) {
+            _rigidBodyComponent.AddForce(_transformComponent.forward * (throttle * thrustMultiplier), ForceMode.Force);
         }
         if (_latH != 0) {
             _rigidBodyComponent.AddForce(_transformComponent.right * (_latH * thrustMultiplier), ForceMode.Force);
@@ -147,6 +157,16 @@ public class Ship : MonoBehaviour {
         if (_roll != 0) {
             _rigidBodyComponent.AddTorque(_transformComponent.forward * (_roll * torqueMultiplier * -1), ForceMode.Force);
         }
+
+        // clamp max speed if user is holding the velocity limiter button down
+        if (_userVelocityLimit) {
+            _rigidBodyComponent.velocity = Vector3.ClampMagnitude(_rigidBodyComponent.velocity, _velocityLimitCap);
+        }
+
+        // clamp max speed in general (add 0.5f to prevent juddering - yes I know it's disgusting shut up)
+        _rigidBodyComponent.velocity = _isBoosting
+            ? Vector3.ClampMagnitude(_rigidBodyComponent.velocity, maxBoostSpeed + 0.5f)
+            : Vector3.ClampMagnitude(_rigidBodyComponent.velocity, maxSpeed + 0.5f);    // TODO: reduce this over time
         
         CalculateFlightAssist();
         UpdateIndicators();
