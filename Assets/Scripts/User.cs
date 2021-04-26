@@ -128,6 +128,10 @@ public class User : MonoBehaviour {
         playerShip.OnFlightAssistToggle(value);
     }
 
+    public void OnVelocityLimiter(InputValue value) {
+        playerShip.OnVelocityLimiter(value);
+    }
+
     public void OnAltFlightControlsToggle(InputValue value) {
         _alternateFlightControls = !_alternateFlightControls;
     }

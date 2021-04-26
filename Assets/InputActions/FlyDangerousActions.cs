@@ -156,6 +156,14 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""interactions"": """"
                 },
                 {
+                    ""name"": ""Velocity Limiter"",
+                    ""type"": ""Value"",
+                    ""id"": ""fd333179-1e8d-4ef5-878b-b20c724c87b6"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
                     ""name"": ""FlightAssistToggle"",
                     ""type"": ""Button"",
                     ""id"": ""ce9c21e5-76be-402d-beed-36b5b132f0ad"",
@@ -715,7 +723,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""54866b4b-381b-451e-ae16-5b261fad8874"",
-                    ""path"": """",
+                    ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
@@ -1358,6 +1366,28 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Everything"",
                     ""action"": ""Alt Flight Controls Toggle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1908f38c-c22f-4863-b106-cb0299e59d97"",
+                    ""path"": ""<Keyboard>/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Velocity Limiter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""93a653ea-2fe2-4db6-926a-09dbb6084480"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Velocity Limiter"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -2054,6 +2084,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         m_Ship_LateralV = m_Ship.FindAction("LateralV", throwIfNotFound: true);
         m_Ship_LateralVAlt = m_Ship.FindAction("LateralV Alt", throwIfNotFound: true);
         m_Ship_Boost = m_Ship.FindAction("Boost", throwIfNotFound: true);
+        m_Ship_VelocityLimiter = m_Ship.FindAction("Velocity Limiter", throwIfNotFound: true);
         m_Ship_FlightAssistToggle = m_Ship.FindAction("FlightAssistToggle", throwIfNotFound: true);
         m_Ship_AltFlightControlsToggle = m_Ship.FindAction("Alt Flight Controls Toggle", throwIfNotFound: true);
         // UI
@@ -2143,6 +2174,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Ship_LateralV;
     private readonly InputAction m_Ship_LateralVAlt;
     private readonly InputAction m_Ship_Boost;
+    private readonly InputAction m_Ship_VelocityLimiter;
     private readonly InputAction m_Ship_FlightAssistToggle;
     private readonly InputAction m_Ship_AltFlightControlsToggle;
     public struct ShipActions
@@ -2165,6 +2197,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         public InputAction @LateralV => m_Wrapper.m_Ship_LateralV;
         public InputAction @LateralVAlt => m_Wrapper.m_Ship_LateralVAlt;
         public InputAction @Boost => m_Wrapper.m_Ship_Boost;
+        public InputAction @VelocityLimiter => m_Wrapper.m_Ship_VelocityLimiter;
         public InputAction @FlightAssistToggle => m_Wrapper.m_Ship_FlightAssistToggle;
         public InputAction @AltFlightControlsToggle => m_Wrapper.m_Ship_AltFlightControlsToggle;
         public InputActionMap Get() { return m_Wrapper.m_Ship; }
@@ -2224,6 +2257,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @Boost.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnBoost;
                 @Boost.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnBoost;
                 @Boost.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnBoost;
+                @VelocityLimiter.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnVelocityLimiter;
+                @VelocityLimiter.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnVelocityLimiter;
+                @VelocityLimiter.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnVelocityLimiter;
                 @FlightAssistToggle.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnFlightAssistToggle;
                 @FlightAssistToggle.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnFlightAssistToggle;
                 @FlightAssistToggle.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnFlightAssistToggle;
@@ -2282,6 +2318,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @Boost.started += instance.OnBoost;
                 @Boost.performed += instance.OnBoost;
                 @Boost.canceled += instance.OnBoost;
+                @VelocityLimiter.started += instance.OnVelocityLimiter;
+                @VelocityLimiter.performed += instance.OnVelocityLimiter;
+                @VelocityLimiter.canceled += instance.OnVelocityLimiter;
                 @FlightAssistToggle.started += instance.OnFlightAssistToggle;
                 @FlightAssistToggle.performed += instance.OnFlightAssistToggle;
                 @FlightAssistToggle.canceled += instance.OnFlightAssistToggle;
@@ -2469,6 +2508,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         void OnLateralV(InputAction.CallbackContext context);
         void OnLateralVAlt(InputAction.CallbackContext context);
         void OnBoost(InputAction.CallbackContext context);
+        void OnVelocityLimiter(InputAction.CallbackContext context);
         void OnFlightAssistToggle(InputAction.CallbackContext context);
         void OnAltFlightControlsToggle(InputAction.CallbackContext context);
     }

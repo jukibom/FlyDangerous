@@ -20,6 +20,7 @@ public class Ship : MonoBehaviour {
     
     // private FlyDangerousActions _shipActions;
     private bool _isBoosting = false;
+    private bool _velocityLimit = false;
     private bool _flightAssist = false;
 
     // input axes -1 to 1
@@ -68,7 +69,7 @@ public class Ship : MonoBehaviour {
 
     public void OnBoost(InputValue value) {
         // TODO: change the action type to a button instead of an axis when proper timed boost mechanic is in
-        _isBoosting = value.Get<float>() != 0f;
+        _isBoosting = value.isPressed;
         if (_isBoosting) {
             Debug.Log("Boost!");
         }
@@ -76,7 +77,12 @@ public class Ship : MonoBehaviour {
 
     public void OnFlightAssistToggle(InputValue value) {
         _flightAssist = !_flightAssist;
-        Debug.Log("Flight Assist " + (_flightAssist ? "ON" : "OFF"));
+        Debug.Log("Flight Assist " + (_flightAssist ? "ON" : "OFF") + " (partially implemented)");
+    }
+
+    public void OnVelocityLimiter(InputValue value) {
+        _velocityLimit = value.isPressed;
+        Debug.Log("Velocity Limit " + (_velocityLimit ? "ON" : "OFF") + " (not implemented)");
     }
 
     // Apply all physics updates in fixed intervals (WRITE)
@@ -173,8 +179,6 @@ public class Ship : MonoBehaviour {
             else {
                 _rigidBodyComponent.AddTorque(_transformComponent.up * (0.5f * maxThrust / torqueThrustDivider), ForceMode.Force);
             }
-            
         }
-
     }
 }
