@@ -13,6 +13,7 @@ public class User : MonoBehaviour {
     [SerializeField] public PauseMenu pauseMenu;
     [SerializeField] public Ship playerShip;
     [SerializeField] public InputSystemUIInputModule pauseUIInputModule;
+    private bool _alternateFlightControls = false;
 
     private Action<InputAction.CallbackContext> _cancelAction;
 
@@ -60,27 +61,63 @@ public class User : MonoBehaviour {
     }
 
     public void OnPitch(InputValue value) {
-        playerShip.OnPitch(value);
+        if (!_alternateFlightControls)
+            playerShip.OnPitch(value);
+    }
+
+    public void OnPitchAlt(InputValue value) {
+        if (_alternateFlightControls)
+            playerShip.OnPitch(value);
     }
 
     public void OnRoll(InputValue value) {
-        playerShip.OnRoll(value);
+        if (!_alternateFlightControls)
+            playerShip.OnRoll(value);
+    }
+
+    public void OnRollAlt(InputValue value) {
+        if (_alternateFlightControls)
+            playerShip.OnRoll(value);
     }
 
     public void OnYaw(InputValue value) {
-        playerShip.OnYaw(value);
+        if (!_alternateFlightControls)
+            playerShip.OnYaw(value);
+    }
+
+    public void OnYawAlt(InputValue value) {
+        if (_alternateFlightControls)
+            playerShip.OnYaw(value);
     }
 
     public void OnThrottle(InputValue value) {
-        playerShip.OnThrottle(value);
+        if (!_alternateFlightControls)
+            playerShip.OnThrottle(value);
+    }
+
+    public void OnThrottleAlt(InputValue value) {
+        if (_alternateFlightControls)
+            playerShip.OnThrottle(value);
     }
     
     public void OnLateralH(InputValue value) {
-        playerShip.OnLateralH(value);
+        if (!_alternateFlightControls)
+            playerShip.OnLateralH(value);
+    }
+    
+    public void OnLateralHAlt(InputValue value) {
+        if (_alternateFlightControls)
+            playerShip.OnLateralH(value);
     }
     
     public void OnLateralV(InputValue value) {
-        playerShip.OnLateralV(value);
+        if (!_alternateFlightControls)
+            playerShip.OnLateralV(value);
+    }
+    
+    public void OnLateralVAlt(InputValue value) {
+        if (_alternateFlightControls)
+            playerShip.OnLateralV(value);
     }
 
     public void OnBoost(InputValue value) {
@@ -89,5 +126,9 @@ public class User : MonoBehaviour {
 
     public void OnFlightAssistToggle(InputValue value) {
         playerShip.OnFlightAssistToggle(value);
+    }
+
+    public void OnAltFlightControlsToggle(InputValue value) {
+        _alternateFlightControls = !_alternateFlightControls;
     }
 }

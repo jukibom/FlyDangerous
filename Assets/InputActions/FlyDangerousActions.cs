@@ -60,9 +60,25 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""interactions"": """"
                 },
                 {
+                    ""name"": ""Pitch Alt"",
+                    ""type"": ""Value"",
+                    ""id"": ""7550d24f-1c38-429f-ae21-28d6dd026dec"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
                     ""name"": ""Roll"",
                     ""type"": ""Value"",
                     ""id"": ""4fd269dd-a7ed-42d2-864e-e528e090bd09"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Roll Alt"",
+                    ""type"": ""Value"",
+                    ""id"": ""d4989653-06ea-477b-806e-678c29019e02"",
                     ""expectedControlType"": ""Axis"",
                     ""processors"": """",
                     ""interactions"": """"
@@ -76,9 +92,25 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""interactions"": """"
                 },
                 {
+                    ""name"": ""Yaw Alt"",
+                    ""type"": ""Value"",
+                    ""id"": ""ff81043c-abd0-4d70-ae27-e6a67dee432e"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
                     ""name"": ""Throttle"",
                     ""type"": ""Value"",
                     ""id"": ""725b3d83-6282-4fd3-8a1b-ad37029f5146"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Throttle Alt"",
+                    ""type"": ""Value"",
+                    ""id"": ""c31ac1b2-c5c6-48b5-a36e-a75da1c8065d"",
                     ""expectedControlType"": ""Axis"",
                     ""processors"": """",
                     ""interactions"": """"
@@ -92,9 +124,25 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""interactions"": """"
                 },
                 {
+                    ""name"": ""LateralH Alt"",
+                    ""type"": ""Value"",
+                    ""id"": ""e59fb6f7-ea65-4570-b095-16227a4607ff"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
                     ""name"": ""LateralV"",
                     ""type"": ""Value"",
                     ""id"": ""dbbf62a4-6b89-4ff1-b0c2-1399be3f5b1f"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""LateralV Alt"",
+                    ""type"": ""Value"",
+                    ""id"": ""d5173e9c-6486-4f67-94eb-a7dbc7bf0f0d"",
                     ""expectedControlType"": ""Axis"",
                     ""processors"": """",
                     ""interactions"": """"
@@ -111,6 +159,14 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""name"": ""FlightAssistToggle"",
                     ""type"": ""Button"",
                     ""id"": ""ce9c21e5-76be-402d-beed-36b5b132f0ad"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Alt Flight Controls Toggle"",
+                    ""type"": ""Button"",
+                    ""id"": ""3f4865cf-7469-487c-b73f-6b2f669985cd"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
@@ -752,6 +808,556 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Everything"",
                     ""action"": ""Restart From Last Checkpoint"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c80e8417-bf13-4bd9-8115-38889923b4ef"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Pitch Alt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""16070111-2edc-4f9d-82a3-efba17a6bdd6"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Pitch Alt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""keyboard axis"",
+                    ""id"": ""57c99347-fa3e-44db-a6b7-a4a746b4a3ba"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Pitch Alt"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""68940998-98e0-476c-9bfc-15ad4f01b73e"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Pitch Alt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""1dc5d03c-5322-4044-96d6-71fe526f1c34"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Pitch Alt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""keyboard axis"",
+                    ""id"": ""cd4db2f3-dc06-4d8f-8093-2a7e7edbba10"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Pitch Alt"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""f8fbb8b6-738b-46a9-bee1-c4a7ecfe03f8"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Pitch Alt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""e2a0aff6-ccdb-4dc0-b4c2-9e14ebd36c42"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Pitch Alt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""328a6090-521d-484f-b55e-f825f4e99343"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Roll Alt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d73784ef-a63b-4f46-8153-99cdb0f2a3ed"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Roll Alt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""button axis 1"",
+                    ""id"": ""a74d5e03-6e2d-4847-ab69-98848c2fecf4"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Roll Alt"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""a7dc0bb7-3271-494d-bef2-ea85fb1b3661"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Roll Alt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""08736676-5a5b-4a86-a610-826d058c5d71"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Roll Alt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""button axis 2"",
+                    ""id"": ""6cc5767b-8635-4bc0-b653-0d1a897a36b5"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Roll Alt"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""dfaef3f9-dc2e-4768-91ee-f019e09142d2"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Roll Alt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""ffa49b9b-f541-4f68-bf8f-6e73f226eba6"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Roll Alt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""aaef6a41-3d64-45c0-9489-5dee8e611207"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Yaw Alt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a2fd1317-b329-46d0-ba6c-557482df92f2"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Yaw Alt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""button axis 1"",
+                    ""id"": ""210c8200-75a0-4bae-ad6b-03d6fb0fad90"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Yaw Alt"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""ca18d7ed-9e23-4522-836b-19e4eb14349f"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Yaw Alt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""ae9d22b0-8807-439b-944b-e992234dbfee"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Yaw Alt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""button axis 2"",
+                    ""id"": ""55df084a-9d9d-4ba1-b251-b6a7982e229b"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Yaw Alt"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""a1e1465a-7856-4448-b0b1-9adc7dbb31d9"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Yaw Alt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""3da06bb4-8618-4f91-b883-abe842417a37"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Yaw Alt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""dcfadf66-f8c2-4f07-b28f-196eb5aa45a8"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": ""Normalize(min=-1,max=1)"",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Throttle Alt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f64800de-a65c-486a-8553-2baa06d11d5a"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": ""Normalize(min=-1,max=1)"",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Throttle Alt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""button axis 1"",
+                    ""id"": ""7de2f4d6-7cac-4c1e-a681-272f3e956cbd"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Throttle Alt"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""5abf0eba-6cee-4c2e-bd22-160023d187c8"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Throttle Alt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""88e9ebfa-486b-411b-86f6-61470276ec46"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Throttle Alt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""button axis 2"",
+                    ""id"": ""3964025c-469e-4a04-8fd6-bf1e5d1c2ea2"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Throttle Alt"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""c232bdc4-83b4-48f7-942b-cb1d1fed599a"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Throttle Alt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""2a94e115-a901-42b9-8822-d8a581fa77fa"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Throttle Alt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""988c4397-d34e-4dcc-b3a8-a0496b6212b1"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""LateralH Alt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9653c886-a67f-4e2d-973c-08564cd9ed4e"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""LateralH Alt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""button axis 1"",
+                    ""id"": ""8dbbd5c3-6cb1-44a2-9cc3-6a92449cbb13"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""LateralH Alt"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""16efc1ff-a321-4694-a428-7ea2971255c1"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""LateralH Alt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""02df94fe-7b1b-40f3-842a-c2650ca43f91"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""LateralH Alt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""button axis 2"",
+                    ""id"": ""9281548c-969c-4ab5-9882-d4c468a0c221"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""LateralH Alt"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""82aad1ea-30ab-4de9-92a7-1cad679aaf96"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""LateralH Alt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""c5b0c144-f90c-4b84-a702-0e1869175c4d"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""LateralH Alt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""972eb8dc-d9f8-4905-9d95-747677651286"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""LateralV Alt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3aa8879a-e534-4acb-b15d-ac2250a576d8"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""LateralV Alt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""button axis 1"",
+                    ""id"": ""6d718106-c462-4cf3-ac22-9691ad75b679"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""LateralV Alt"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""82f2c43d-d90b-4f6d-84ab-422218676916"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""LateralV Alt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""2f67ea2a-a287-494a-8817-9ef1afd9ebd5"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""LateralV Alt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""button axis 2"",
+                    ""id"": ""0bc0467a-9d5e-482f-9f29-38c5c44a05c2"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""LateralV Alt"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""aea79bf4-9711-4f85-923f-ef63039963ce"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""LateralV Alt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""97618c20-e6fb-4c9f-b02a-d061fd7e21b0"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""LateralV Alt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3f2e38b1-b2be-4a1f-a748-15ea635a2a2a"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Alt Flight Controls Toggle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""49194d03-5178-4aef-9f1b-91e116307642"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Alt Flight Controls Toggle"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1436,13 +2042,20 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         m_Ship_RestartTrack = m_Ship.FindAction("Restart Track", throwIfNotFound: true);
         m_Ship_RestartFromLastCheckpoint = m_Ship.FindAction("Restart From Last Checkpoint", throwIfNotFound: true);
         m_Ship_Pitch = m_Ship.FindAction("Pitch", throwIfNotFound: true);
+        m_Ship_PitchAlt = m_Ship.FindAction("Pitch Alt", throwIfNotFound: true);
         m_Ship_Roll = m_Ship.FindAction("Roll", throwIfNotFound: true);
+        m_Ship_RollAlt = m_Ship.FindAction("Roll Alt", throwIfNotFound: true);
         m_Ship_Yaw = m_Ship.FindAction("Yaw", throwIfNotFound: true);
+        m_Ship_YawAlt = m_Ship.FindAction("Yaw Alt", throwIfNotFound: true);
         m_Ship_Throttle = m_Ship.FindAction("Throttle", throwIfNotFound: true);
+        m_Ship_ThrottleAlt = m_Ship.FindAction("Throttle Alt", throwIfNotFound: true);
         m_Ship_LateralH = m_Ship.FindAction("LateralH", throwIfNotFound: true);
+        m_Ship_LateralHAlt = m_Ship.FindAction("LateralH Alt", throwIfNotFound: true);
         m_Ship_LateralV = m_Ship.FindAction("LateralV", throwIfNotFound: true);
+        m_Ship_LateralVAlt = m_Ship.FindAction("LateralV Alt", throwIfNotFound: true);
         m_Ship_Boost = m_Ship.FindAction("Boost", throwIfNotFound: true);
         m_Ship_FlightAssistToggle = m_Ship.FindAction("FlightAssistToggle", throwIfNotFound: true);
+        m_Ship_AltFlightControlsToggle = m_Ship.FindAction("Alt Flight Controls Toggle", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1518,13 +2131,20 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Ship_RestartTrack;
     private readonly InputAction m_Ship_RestartFromLastCheckpoint;
     private readonly InputAction m_Ship_Pitch;
+    private readonly InputAction m_Ship_PitchAlt;
     private readonly InputAction m_Ship_Roll;
+    private readonly InputAction m_Ship_RollAlt;
     private readonly InputAction m_Ship_Yaw;
+    private readonly InputAction m_Ship_YawAlt;
     private readonly InputAction m_Ship_Throttle;
+    private readonly InputAction m_Ship_ThrottleAlt;
     private readonly InputAction m_Ship_LateralH;
+    private readonly InputAction m_Ship_LateralHAlt;
     private readonly InputAction m_Ship_LateralV;
+    private readonly InputAction m_Ship_LateralVAlt;
     private readonly InputAction m_Ship_Boost;
     private readonly InputAction m_Ship_FlightAssistToggle;
+    private readonly InputAction m_Ship_AltFlightControlsToggle;
     public struct ShipActions
     {
         private @FlyDangerousActions m_Wrapper;
@@ -1533,13 +2153,20 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         public InputAction @RestartTrack => m_Wrapper.m_Ship_RestartTrack;
         public InputAction @RestartFromLastCheckpoint => m_Wrapper.m_Ship_RestartFromLastCheckpoint;
         public InputAction @Pitch => m_Wrapper.m_Ship_Pitch;
+        public InputAction @PitchAlt => m_Wrapper.m_Ship_PitchAlt;
         public InputAction @Roll => m_Wrapper.m_Ship_Roll;
+        public InputAction @RollAlt => m_Wrapper.m_Ship_RollAlt;
         public InputAction @Yaw => m_Wrapper.m_Ship_Yaw;
+        public InputAction @YawAlt => m_Wrapper.m_Ship_YawAlt;
         public InputAction @Throttle => m_Wrapper.m_Ship_Throttle;
+        public InputAction @ThrottleAlt => m_Wrapper.m_Ship_ThrottleAlt;
         public InputAction @LateralH => m_Wrapper.m_Ship_LateralH;
+        public InputAction @LateralHAlt => m_Wrapper.m_Ship_LateralHAlt;
         public InputAction @LateralV => m_Wrapper.m_Ship_LateralV;
+        public InputAction @LateralVAlt => m_Wrapper.m_Ship_LateralVAlt;
         public InputAction @Boost => m_Wrapper.m_Ship_Boost;
         public InputAction @FlightAssistToggle => m_Wrapper.m_Ship_FlightAssistToggle;
+        public InputAction @AltFlightControlsToggle => m_Wrapper.m_Ship_AltFlightControlsToggle;
         public InputActionMap Get() { return m_Wrapper.m_Ship; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1561,27 +2188,48 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @Pitch.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnPitch;
                 @Pitch.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnPitch;
                 @Pitch.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnPitch;
+                @PitchAlt.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnPitchAlt;
+                @PitchAlt.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnPitchAlt;
+                @PitchAlt.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnPitchAlt;
                 @Roll.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnRoll;
                 @Roll.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnRoll;
                 @Roll.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnRoll;
+                @RollAlt.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnRollAlt;
+                @RollAlt.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnRollAlt;
+                @RollAlt.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnRollAlt;
                 @Yaw.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnYaw;
                 @Yaw.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnYaw;
                 @Yaw.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnYaw;
+                @YawAlt.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnYawAlt;
+                @YawAlt.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnYawAlt;
+                @YawAlt.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnYawAlt;
                 @Throttle.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnThrottle;
                 @Throttle.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnThrottle;
                 @Throttle.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnThrottle;
+                @ThrottleAlt.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnThrottleAlt;
+                @ThrottleAlt.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnThrottleAlt;
+                @ThrottleAlt.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnThrottleAlt;
                 @LateralH.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnLateralH;
                 @LateralH.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnLateralH;
                 @LateralH.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnLateralH;
+                @LateralHAlt.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnLateralHAlt;
+                @LateralHAlt.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnLateralHAlt;
+                @LateralHAlt.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnLateralHAlt;
                 @LateralV.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnLateralV;
                 @LateralV.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnLateralV;
                 @LateralV.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnLateralV;
+                @LateralVAlt.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnLateralVAlt;
+                @LateralVAlt.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnLateralVAlt;
+                @LateralVAlt.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnLateralVAlt;
                 @Boost.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnBoost;
                 @Boost.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnBoost;
                 @Boost.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnBoost;
                 @FlightAssistToggle.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnFlightAssistToggle;
                 @FlightAssistToggle.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnFlightAssistToggle;
                 @FlightAssistToggle.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnFlightAssistToggle;
+                @AltFlightControlsToggle.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnAltFlightControlsToggle;
+                @AltFlightControlsToggle.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnAltFlightControlsToggle;
+                @AltFlightControlsToggle.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnAltFlightControlsToggle;
             }
             m_Wrapper.m_ShipActionsCallbackInterface = instance;
             if (instance != null)
@@ -1598,27 +2246,48 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @Pitch.started += instance.OnPitch;
                 @Pitch.performed += instance.OnPitch;
                 @Pitch.canceled += instance.OnPitch;
+                @PitchAlt.started += instance.OnPitchAlt;
+                @PitchAlt.performed += instance.OnPitchAlt;
+                @PitchAlt.canceled += instance.OnPitchAlt;
                 @Roll.started += instance.OnRoll;
                 @Roll.performed += instance.OnRoll;
                 @Roll.canceled += instance.OnRoll;
+                @RollAlt.started += instance.OnRollAlt;
+                @RollAlt.performed += instance.OnRollAlt;
+                @RollAlt.canceled += instance.OnRollAlt;
                 @Yaw.started += instance.OnYaw;
                 @Yaw.performed += instance.OnYaw;
                 @Yaw.canceled += instance.OnYaw;
+                @YawAlt.started += instance.OnYawAlt;
+                @YawAlt.performed += instance.OnYawAlt;
+                @YawAlt.canceled += instance.OnYawAlt;
                 @Throttle.started += instance.OnThrottle;
                 @Throttle.performed += instance.OnThrottle;
                 @Throttle.canceled += instance.OnThrottle;
+                @ThrottleAlt.started += instance.OnThrottleAlt;
+                @ThrottleAlt.performed += instance.OnThrottleAlt;
+                @ThrottleAlt.canceled += instance.OnThrottleAlt;
                 @LateralH.started += instance.OnLateralH;
                 @LateralH.performed += instance.OnLateralH;
                 @LateralH.canceled += instance.OnLateralH;
+                @LateralHAlt.started += instance.OnLateralHAlt;
+                @LateralHAlt.performed += instance.OnLateralHAlt;
+                @LateralHAlt.canceled += instance.OnLateralHAlt;
                 @LateralV.started += instance.OnLateralV;
                 @LateralV.performed += instance.OnLateralV;
                 @LateralV.canceled += instance.OnLateralV;
+                @LateralVAlt.started += instance.OnLateralVAlt;
+                @LateralVAlt.performed += instance.OnLateralVAlt;
+                @LateralVAlt.canceled += instance.OnLateralVAlt;
                 @Boost.started += instance.OnBoost;
                 @Boost.performed += instance.OnBoost;
                 @Boost.canceled += instance.OnBoost;
                 @FlightAssistToggle.started += instance.OnFlightAssistToggle;
                 @FlightAssistToggle.performed += instance.OnFlightAssistToggle;
                 @FlightAssistToggle.canceled += instance.OnFlightAssistToggle;
+                @AltFlightControlsToggle.started += instance.OnAltFlightControlsToggle;
+                @AltFlightControlsToggle.performed += instance.OnAltFlightControlsToggle;
+                @AltFlightControlsToggle.canceled += instance.OnAltFlightControlsToggle;
             }
         }
     }
@@ -1788,13 +2457,20 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         void OnRestartTrack(InputAction.CallbackContext context);
         void OnRestartFromLastCheckpoint(InputAction.CallbackContext context);
         void OnPitch(InputAction.CallbackContext context);
+        void OnPitchAlt(InputAction.CallbackContext context);
         void OnRoll(InputAction.CallbackContext context);
+        void OnRollAlt(InputAction.CallbackContext context);
         void OnYaw(InputAction.CallbackContext context);
+        void OnYawAlt(InputAction.CallbackContext context);
         void OnThrottle(InputAction.CallbackContext context);
+        void OnThrottleAlt(InputAction.CallbackContext context);
         void OnLateralH(InputAction.CallbackContext context);
+        void OnLateralHAlt(InputAction.CallbackContext context);
         void OnLateralV(InputAction.CallbackContext context);
+        void OnLateralVAlt(InputAction.CallbackContext context);
         void OnBoost(InputAction.CallbackContext context);
         void OnFlightAssistToggle(InputAction.CallbackContext context);
+        void OnAltFlightControlsToggle(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
