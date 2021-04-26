@@ -2091,15 +2091,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b5f88ce50436be4cb85a1b27b135790, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  velocityIndicator: {fileID: 690910989}
   maxSpeed: 800
   maxBoostSpeed: 932
   maxThrust: 40000
   thrustBoostMultiplier: 15
   torqueThrustDivider: 4
   torqueBoostMultiplier: 3
-  velocityIndicator: {fileID: 690910989}
-  totalBoostTime: 4
-  totalBoostRotationalTime: 5
+  totalBoostTime: 6
+  totalBoostRotationalTime: 7
+  boostRechargeTime: 5
+  minUserLimitedVelocity: 250
 --- !u!54 &186123466
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -13685,7 +13687,7 @@ Transform:
   m_GameObject: {fileID: 990203216}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.5367974, y: -3.1300504, z: 5.9250154}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_Children:
   - {fileID: 1188867380}
   - {fileID: 617108088}

@@ -13,23 +13,24 @@ using UnityEngine.UI;
 public class Ship : MonoBehaviour {
     
     // TODO: split this into various thruster powers
+    [SerializeField] private Text velocityIndicator;
     [SerializeField] private float maxSpeed = 800;
     [SerializeField] private float maxBoostSpeed = 932;
     [SerializeField] private float maxThrust = 100;
     [SerializeField] private float thrustBoostMultiplier = 2;
     [SerializeField] private float torqueThrustDivider = 5;
     [SerializeField] private float torqueBoostMultiplier = 1.2f;
-    [SerializeField] private Text velocityIndicator;
     [SerializeField] private float totalBoostTime = 4f;
     [SerializeField] private float totalBoostRotationalTime = 5f;
     [SerializeField] private float boostRechargeTime = 5f;
+    [SerializeField] private float minUserLimitedVelocity = 250f;
 
     private bool _boostReady = false;
     private bool _isBoosting = false;
     private float _currentBoostTime = 0f;
 
     private bool _userVelocityLimit = false;
-    private float _velocityLimitCap = 0f; 
+    private float _velocityLimitCap = 0f;
     private bool _flightAssist = false;
 
     // input axes -1 to 1
@@ -102,7 +103,7 @@ public class Ship : MonoBehaviour {
 
     public void OnVelocityLimiter(InputValue value) {
         _userVelocityLimit = value.isPressed;
-        _velocityLimitCap = Math.Max(_rigidBodyComponent.velocity.magnitude, maxBoostSpeed / 2);
+        _velocityLimitCap = Math.Max(_rigidBodyComponent.velocity.magnitude, minUserLimitedVelocity);
         Debug.Log("Velocity Limit " + (_userVelocityLimit ? "ON" : "OFF") + " (not implemented)");
     }
 
