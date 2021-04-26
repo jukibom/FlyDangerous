@@ -47,6 +47,7 @@ namespace Engine {
 
         public bool GetDefaultBool(string key) {
             switch (key) {
+                case "showSpaceDust":
                 case "enableMouseFlightControls":
                 case "showMouseWidget":
                     return true;
