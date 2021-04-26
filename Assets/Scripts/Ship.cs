@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using Audio;
 using Engine;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -17,9 +18,13 @@ public class Ship : MonoBehaviour {
     [SerializeField] private float torqueThrustDivider = 5;
     [SerializeField] private float torqueBoostMultiplier = 1.2f;
     [SerializeField] private Text velocityIndicator;
-    
-    // private FlyDangerousActions _shipActions;
+
+    private bool _boostStarted = false;
     private bool _isBoosting = false;
+    private float _currentBoostTime = 0f;
+    private float _totalBoostTime = 4f;
+    private float _totalBoostRotationalTime = 5f; 
+    
     private bool _velocityLimit = false;
     private bool _flightAssist = false;
 
@@ -68,10 +73,18 @@ public class Ship : MonoBehaviour {
     }
 
     public void OnBoost(InputValue value) {
-        // TODO: change the action type to a button instead of an axis when proper timed boost mechanic is in
-        _isBoosting = value.isPressed;
-        if (_isBoosting) {
-            Debug.Log("Boost!");
+        var boost = value.isPressed;
+        if (boost && !_boostStarted && !_isBoosting) {
+            _boostStarted = true;
+            Debug.Log("Boost Charge");
+
+            IEnumerator Buildup() {
+                yield return new WaitForSeconds(1);
+                Debug.Log("Boost!");
+                _isBoosting = true;
+            }
+            AudioManager.Instance.Play("ship-boost");
+            StartCoroutine(Buildup());
         }
     }
 
@@ -87,11 +100,34 @@ public class Ship : MonoBehaviour {
 
     // Apply all physics updates in fixed intervals (WRITE)
     private void FixedUpdate() {
+        
+        float thrustMultiplier = maxThrust;
+        float torqueMultiplier = maxThrust / torqueThrustDivider;
+
+        _currentBoostTime += Time.fixedDeltaTime;
+        if (_isBoosting && _boostStarted) {
+            _boostStarted = false;
+            _currentBoostTime = 0f;
+        }
+
+        if (_isBoosting) {
+            // reduce boost potency over time period
+            thrustMultiplier *= Mathf.Lerp(thrustBoostMultiplier, 1, _currentBoostTime / _totalBoostTime);
+            torqueMultiplier *= Mathf.Lerp(torqueBoostMultiplier, 1, _currentBoostTime / _totalBoostRotationalTime);
+            
+            // cannot reverse while boosting! sorry mate 
+            _throttle = 1;
+        }
+        
+        if (_currentBoostTime > _totalBoostRotationalTime) {
+            _isBoosting = false; 
+        }
+
 
         // TODO: max thrust available to the system must be evenly split between the axes ?
         // otherwise we'll have the old goldeneye problem of travelling diagonally being the optimal play :|
-        float thrustMultiplier = _isBoosting ? maxThrust * thrustBoostMultiplier : maxThrust;
-        float torqueMultiplier = _isBoosting ? torqueBoostMultiplier * maxThrust / torqueThrustDivider : maxThrust / torqueThrustDivider;
+        // float thrustMultiplier = _isBoosting ? maxThrust * thrustBoostMultiplier : maxThrust;
+        // float torqueMultiplier = _isBoosting ? torqueBoostMultiplier * maxThrust / torqueThrustDivider : maxThrust / torqueThrustDivider;
         
         if (_throttle != 0) {
             _rigidBodyComponent.AddForce(_transformComponent.forward * (_throttle * thrustMultiplier), ForceMode.Force);
