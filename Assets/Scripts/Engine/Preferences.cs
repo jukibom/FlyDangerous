@@ -47,7 +47,15 @@ namespace Engine {
 
         public bool GetDefaultBool(string key) {
             switch (key) {
-                case "flightAssistOnByDefault": return false;
+                case "enableMouseFlightControls":
+                case "showMouseWidget":
+                    return true;
+                
+                case "relativeMouseXAxis":
+                case "relativeMouseYAxis":
+                case "flightAssistOnByDefault": 
+                    return false;
+                
                 default: 
                     Debug.LogWarning("Attempted to get preference " + key + " with no default specified");
                     return false;
