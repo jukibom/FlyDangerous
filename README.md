@@ -5,3 +5,12 @@
 Yes, racing exists in Elite and yes it's awesome -- but accessible it is not. 
 
 This project aims to provide a ground-up reimplementation of the a similar-enough flight model to provide a training ground and common set of tools to track leaderboards, ghosts and general tom-foolery. Feedback is extremely welcome!
+
+
+## Building
+
+Unity build: 2020.2.1f1
+
+Relies on following assets downloaded into Assets/Asset Packs/:
+
+* Map Magic (Free) https://assetstore.unity.com/packages/tools/terrain/mapmagic-2-165180
