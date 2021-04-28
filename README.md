@@ -14,3 +14,4 @@ Unity build: 2020.2.1f1
 Relies on following assets downloaded into Assets/Asset Packs/:
 
 * Map Magic (Free) https://assetstore.unity.com/packages/tools/terrain/mapmagic-2-165180
+* Allsky https://assetstore.unity.com/packages/2d/textures-materials/sky/allsky-200-sky-skybox-set-10109
