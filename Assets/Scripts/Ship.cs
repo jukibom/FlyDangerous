@@ -60,6 +60,8 @@ public class Ship : MonoBehaviour {
 
     public void Start() {
         _flightAssist = Preferences.Instance.GetBool("flightAssistOnByDefault");
+        _rigidBodyComponent.centerOfMass = Vector3.zero;
+        _rigidBodyComponent.inertiaTensorRotation = Quaternion.identity;
     }
 
     public void OnPitch(InputValue value) {
@@ -148,25 +150,21 @@ public class Ship : MonoBehaviour {
         var throttle = _isBoosting && _currentBoostTime < totalBoostTime
             ? 1
             : _throttle;
+
+        var tThrust = new Vector3(
+            _latH * thrustMultiplier,
+            _latV * thrustMultiplier,
+            throttle * thrustMultiplier
+        );
+
+        var tRot = new Vector3(
+            _pitch * pitchMultiplier * torqueMultiplier,
+            _yaw * yawMultiplier * torqueMultiplier,
+            _roll * rollMultiplier * torqueMultiplier * -1
+        );
         
-        if (throttle != 0) {
-            _rigidBodyComponent.AddForce(_transformComponent.forward * (throttle * thrustMultiplier), ForceMode.Force);
-        }
-        if (_latH != 0) {
-            _rigidBodyComponent.AddForce(_transformComponent.right * (_latH * thrustMultiplier), ForceMode.Force);
-        }
-        if (_latV != 0) {
-            _rigidBodyComponent.AddForce(_transformComponent.up * (_latV * thrustMultiplier), ForceMode.Force);
-        }
-        if (_pitch != 0) {
-            _rigidBodyComponent.AddTorque(_transformComponent.right * (_pitch * pitchMultiplier * torqueMultiplier), ForceMode.Force);
-        }
-        if (_yaw != 0) {
-            _rigidBodyComponent.AddTorque(_transformComponent.up * (_yaw * yawMultiplier * torqueMultiplier), ForceMode.Force);
-        }
-        if (_roll != 0) {
-            _rigidBodyComponent.AddTorque(_transformComponent.forward * (_roll * rollMultiplier * torqueMultiplier * -1), ForceMode.Force);
-        }
+        _rigidBodyComponent.AddForce(transform.TransformDirection(tThrust));
+        _rigidBodyComponent.AddTorque(transform.TransformDirection(tRot));
 
         // clamp max speed if user is holding the velocity limiter button down
         if (_userVelocityLimit) {
