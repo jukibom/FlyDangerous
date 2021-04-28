@@ -17,6 +17,9 @@ public class Ship : MonoBehaviour {
     [SerializeField] private float maxSpeed = 800;
     [SerializeField] private float maxBoostSpeed = 932;
     [SerializeField] private float maxThrust = 100;
+    [SerializeField] private float pitchMultiplier = 1;
+    [SerializeField] private float rollMultiplier = 0.8f;
+    [SerializeField] private float yawMultiplier = 0.7f;
     [SerializeField] private float thrustBoostMultiplier = 2;
     [SerializeField] private float torqueThrustDivider = 5;
     [SerializeField] private float torqueBoostMultiplier = 1.2f;
@@ -43,6 +46,12 @@ public class Ship : MonoBehaviour {
 
     private Transform _transformComponent;
     private Rigidbody _rigidBodyComponent;
+    
+    public float Velocity {
+        get {
+            return Mathf.Round(_rigidBodyComponent.velocity.magnitude);
+        }
+    } 
     
     public void Awake() {
         _transformComponent = GetComponent<Transform>();
@@ -150,13 +159,13 @@ public class Ship : MonoBehaviour {
             _rigidBodyComponent.AddForce(_transformComponent.up * (_latV * thrustMultiplier), ForceMode.Force);
         }
         if (_pitch != 0) {
-            _rigidBodyComponent.AddTorque(_transformComponent.right * (_pitch * torqueMultiplier), ForceMode.Force);
+            _rigidBodyComponent.AddTorque(_transformComponent.right * (_pitch * pitchMultiplier * torqueMultiplier), ForceMode.Force);
         }
         if (_yaw != 0) {
-            _rigidBodyComponent.AddTorque(_transformComponent.up * (_yaw * torqueMultiplier), ForceMode.Force);
+            _rigidBodyComponent.AddTorque(_transformComponent.up * (_yaw * yawMultiplier * torqueMultiplier), ForceMode.Force);
         }
         if (_roll != 0) {
-            _rigidBodyComponent.AddTorque(_transformComponent.forward * (_roll * torqueMultiplier * -1), ForceMode.Force);
+            _rigidBodyComponent.AddTorque(_transformComponent.forward * (_roll * rollMultiplier * torqueMultiplier * -1), ForceMode.Force);
         }
 
         // clamp max speed if user is holding the velocity limiter button down
@@ -164,10 +173,10 @@ public class Ship : MonoBehaviour {
             _rigidBodyComponent.velocity = Vector3.ClampMagnitude(_rigidBodyComponent.velocity, _velocityLimitCap);
         }
 
-        // clamp max speed in general (add 0.5f to prevent juddering - yes I know it's disgusting shut up)
+        // clamp max speed in general
         _rigidBodyComponent.velocity = _isBoosting
-            ? Vector3.ClampMagnitude(_rigidBodyComponent.velocity, maxBoostSpeed + 0.5f)
-            : Vector3.ClampMagnitude(_rigidBodyComponent.velocity, maxSpeed + 0.5f);    // TODO: reduce this over time
+            ? Vector3.ClampMagnitude(_rigidBodyComponent.velocity, maxBoostSpeed)
+            : Vector3.ClampMagnitude(_rigidBodyComponent.velocity, maxSpeed);    // TODO: reduce this over time
         
         CalculateFlightAssist();
         UpdateIndicators();
@@ -175,7 +184,7 @@ public class Ship : MonoBehaviour {
 
     private void UpdateIndicators() {
         if (velocityIndicator != null) {
-            velocityIndicator.text = Math.Floor(_rigidBodyComponent.velocity.magnitude).ToString(CultureInfo.InvariantCulture);
+            velocityIndicator.text = Velocity.ToString(CultureInfo.InvariantCulture);
         }
     }
 
