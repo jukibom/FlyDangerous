@@ -135,4 +135,8 @@ public class User : MonoBehaviour {
     public void OnAltFlightControlsToggle(InputValue value) {
         _alternateFlightControls = !_alternateFlightControls;
     }
+
+    public void OnRawMouse(InputValue value) {
+        Debug.Log(value.Get<Vector2>().ToString());
+    }
 }

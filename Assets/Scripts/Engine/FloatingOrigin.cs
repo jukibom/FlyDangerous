@@ -23,7 +23,6 @@ public class FloatingOrigin : MonoBehaviour {
     void Start() {
         this._focalTransform = focalObject.transform;
         this._worldTransform = this.transform;
-        this._focalTransform.position = Vector3.zero;
     }
 
     void Update() {
