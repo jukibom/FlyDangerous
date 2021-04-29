@@ -156,6 +156,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "RawMouse",
+                    "type": "Value",
+                    "id": "dce3406a-73e3-4b55-b33b-f83da08b2116",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -1366,6 +1374,17 @@
                     "processors": "",
                     "groups": "Everything",
                     "action": "Velocity Limiter",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "44082d84-3fd6-458d-8e6d-a6469a71dabf",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Everything",
+                    "action": "RawMouse",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

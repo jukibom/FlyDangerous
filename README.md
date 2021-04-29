@@ -9,7 +9,7 @@ This project aims to provide a ground-up reimplementation of the a similar-enoug
 
 ## Building
 
-Unity build: 2020.2.1f1
+Unity build: 2021.1.5f1
 
 Relies on following assets downloaded into Assets/Asset Packs/:
 

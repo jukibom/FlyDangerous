@@ -178,6 +178,14 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""RawMouse"",
+                    ""type"": ""Value"",
+                    ""id"": ""dce3406a-73e3-4b55-b33b-f83da08b2116"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -1390,6 +1398,17 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""action"": ""Velocity Limiter"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""44082d84-3fd6-458d-8e6d-a6469a71dabf"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""RawMouse"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -2087,6 +2106,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         m_Ship_VelocityLimiter = m_Ship.FindAction("Velocity Limiter", throwIfNotFound: true);
         m_Ship_FlightAssistToggle = m_Ship.FindAction("FlightAssistToggle", throwIfNotFound: true);
         m_Ship_AltFlightControlsToggle = m_Ship.FindAction("Alt Flight Controls Toggle", throwIfNotFound: true);
+        m_Ship_RawMouse = m_Ship.FindAction("RawMouse", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -2177,6 +2197,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Ship_VelocityLimiter;
     private readonly InputAction m_Ship_FlightAssistToggle;
     private readonly InputAction m_Ship_AltFlightControlsToggle;
+    private readonly InputAction m_Ship_RawMouse;
     public struct ShipActions
     {
         private @FlyDangerousActions m_Wrapper;
@@ -2200,6 +2221,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         public InputAction @VelocityLimiter => m_Wrapper.m_Ship_VelocityLimiter;
         public InputAction @FlightAssistToggle => m_Wrapper.m_Ship_FlightAssistToggle;
         public InputAction @AltFlightControlsToggle => m_Wrapper.m_Ship_AltFlightControlsToggle;
+        public InputAction @RawMouse => m_Wrapper.m_Ship_RawMouse;
         public InputActionMap Get() { return m_Wrapper.m_Ship; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -2266,6 +2288,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @AltFlightControlsToggle.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnAltFlightControlsToggle;
                 @AltFlightControlsToggle.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnAltFlightControlsToggle;
                 @AltFlightControlsToggle.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnAltFlightControlsToggle;
+                @RawMouse.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnRawMouse;
+                @RawMouse.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnRawMouse;
+                @RawMouse.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnRawMouse;
             }
             m_Wrapper.m_ShipActionsCallbackInterface = instance;
             if (instance != null)
@@ -2327,6 +2352,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @AltFlightControlsToggle.started += instance.OnAltFlightControlsToggle;
                 @AltFlightControlsToggle.performed += instance.OnAltFlightControlsToggle;
                 @AltFlightControlsToggle.canceled += instance.OnAltFlightControlsToggle;
+                @RawMouse.started += instance.OnRawMouse;
+                @RawMouse.performed += instance.OnRawMouse;
+                @RawMouse.canceled += instance.OnRawMouse;
             }
         }
     }
@@ -2511,6 +2539,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         void OnVelocityLimiter(InputAction.CallbackContext context);
         void OnFlightAssistToggle(InputAction.CallbackContext context);
         void OnAltFlightControlsToggle(InputAction.CallbackContext context);
+        void OnRawMouse(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
