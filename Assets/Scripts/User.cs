@@ -137,6 +137,6 @@ public class User : MonoBehaviour {
     }
 
     public void OnRawMouse(InputValue value) {
-        Debug.Log(value.Get<Vector2>().ToString());
+        
     }
 }
