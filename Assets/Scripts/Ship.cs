@@ -32,6 +32,7 @@ public class Ship : MonoBehaviour {
     private bool _isBoosting = false;
     private float _currentBoostTime = 0f;
 
+    private float _prevVelocity = 0;
     private bool _userVelocityLimit = false;
     private float _velocityLimitCap = 0f;
     private bool _flightAssist = false;
@@ -114,7 +115,6 @@ public class Ship : MonoBehaviour {
 
     public void OnVelocityLimiter(InputValue value) {
         _userVelocityLimit = value.isPressed;
-        _velocityLimitCap = Math.Max(_rigidBodyComponent.velocity.magnitude, minUserLimitedVelocity);
         Debug.Log("Velocity Limit " + (_userVelocityLimit ? "ON" : "OFF") + " (not implemented)");
     }
 
@@ -168,6 +168,7 @@ public class Ship : MonoBehaviour {
 
         // clamp max speed if user is holding the velocity limiter button down
         if (_userVelocityLimit) {
+            _velocityLimitCap = Math.Max(_prevVelocity, minUserLimitedVelocity);
             _rigidBodyComponent.velocity = Vector3.ClampMagnitude(_rigidBodyComponent.velocity, _velocityLimitCap);
         }
 
@@ -175,7 +176,9 @@ public class Ship : MonoBehaviour {
         _rigidBodyComponent.velocity = _isBoosting
             ? Vector3.ClampMagnitude(_rigidBodyComponent.velocity, maxBoostSpeed)
             : Vector3.ClampMagnitude(_rigidBodyComponent.velocity, maxSpeed);    // TODO: reduce this over time
-        
+
+        _prevVelocity = _rigidBodyComponent.velocity.magnitude;
+            
         CalculateFlightAssist();
         UpdateIndicators();
     }
