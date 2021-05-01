@@ -1,34 +1,34 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class FloatingOrigin : MonoBehaviour {
-    
-    [SerializeField]
-    public GameObject focalObject;  // this should be the client player ship
-    
-    // Distance required to perform a correction. If 0, will occur every frame.
-    [SerializeField]
-    public float correctionDistance = 0.0f;
-    
-    private Transform _worldTransform;
-    private Transform _focalTransform;
 
-    public Vector3 focalObjectPosition {
-        get { return -this._worldTransform.position;  }
-    }
+    [SerializeField] public Transform focalTransform; // this should be the client player ship
+
+    // Distance required to perform a correction. If 0, will occur every frame.
+    [SerializeField] public float correctionDistance = 0.0f; 
     
-    // Start is called before the first frame update
-    void Start() {
-        this._focalTransform = focalObject.transform;
-        this._worldTransform = this.transform;
+    // The target world transform to manipulate
+     private Transform _worldTransform;
+
+     public Vector3 FocalObjectPosition => -this._worldTransform.position;
+
+    void OnEnable() {
+        _worldTransform = GameObject.Find("World")?.transform;
+        if (!_worldTransform) {
+            Debug.LogWarning("Floating Origin failed to find target World! Is one loaded?");
+        }
     }
 
     void Update() {
-        if (_focalTransform.position.magnitude > correctionDistance) {
-            this._worldTransform.position -= _focalTransform.position;
-            this._focalTransform.position = Vector3.zero;
+        if (_worldTransform && focalTransform.position.magnitude > correctionDistance) {
+            _worldTransform.position -= focalTransform.position;
+            focalTransform.position = Vector3.zero;
         }
     }
+
 }
