@@ -3,14 +3,16 @@ using Audio;
 using Engine;
 using UI;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace Menus.Options {
-
+    
     public class OptionsMenu : MonoBehaviour {
         [SerializeField] 
-        private PauseMenu pauseMenu;
+        private UnityEvent returnToParentMenu;
+        
         public InputActionAsset actions;
 
         [SerializeField] private Button defaultSelectedButton;
@@ -43,7 +45,7 @@ namespace Menus.Options {
 
         public void Apply() {
             SavePreferences();
-            this.pauseMenu.CloseOptionsPanel();
+            returnToParentMenu.Invoke();
             AudioManager.Instance.Play("ui-confirm");
         }
 
@@ -59,7 +61,7 @@ namespace Menus.Options {
             RevertPreferences();
             SavePreferences();
             AudioManager.Instance.Play("ui-cancel");
-            this.pauseMenu.CloseOptionsPanel();
+            returnToParentMenu.Invoke();
         }
 
         private void LoadPreferences() {

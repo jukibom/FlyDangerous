@@ -1,58 +1,59 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using System.Collections;
+using System.Collections.Generic;
+using Audio;
+using Menus.Options;
+using UnityEngine;
 
 namespace Menus {
     public class MainMenu : MonoBehaviour {
-        
-        [SerializeField]
-        private PauseMenu pauseMenu;
 
         [SerializeField]
-        private Button resumeButton;
+        private TopMenu topMenu;
         
         [SerializeField]
-        private Button optionsButton;
-
-        private Animator _animator;
+        private OptionsMenu optionsMenu;
         
-        private void Awake() {
-            this._animator = this.GetComponent<Animator>();
-        }
-        public void Show() {
-            // TODO: Animation?
-            this.gameObject.SetActive(true);
-            this._animator.SetBool("Open", true);
+        private Transform _transform;
+
+        // Start is called before the first frame update
+        void Start() {
+            _transform = transform;
         }
 
-        public void Hide() {
-            this.gameObject.SetActive(false);
-            // TODO: Animate out and set active false on complete (how?!)
-            // this._animator.SetBool("Open", false);
+        // Update is called once per frame
+        void FixedUpdate() {
+            // move along at a fixed rate to animate the stars
+            // dirty hack job but who cares it's a menu screen
+            _transform.Translate(0.1f, 0, 0.5f);
         }
 
-        public void Resume() {
-            this.pauseMenu.Resume();
+        public void Race() {
+            AudioManager.Instance.Play("ui-confirm");
         }
 
-        public void Restart() {
-            this.pauseMenu.Restart();
+        public void Freeplay() {
+            AudioManager.Instance.Play("ui-confirm");
         }
 
-        public void Options() {
-            this.pauseMenu.OpenOptionsPanel();
+        public void OpenOptionsPanel() {
+            AudioManager.Instance.Play("ui-dialog-open");
+            topMenu.Hide();
+            optionsMenu.Show();
+        }
+
+        public void CloseOptionsPanel() {
+            optionsMenu.Hide();
+            topMenu.Show();
+        }
+        
+        public void OpenDiscordLink() {
+            AudioManager.Instance.Play("ui-dialog-open");
+            Application.OpenURL("https://discord.gg/4daSEUKZ6A");
         }
 
         public void Quit() {
-            this.pauseMenu.Quit();
-        }
-        
-        // This is gross but I'm not spending more time on this nonsense than I have to
-        public void HighlightResume() {
-            this.resumeButton.Select();
-        }
-
-        public void HighlightOptions() {
-            this.optionsButton.Select();
+            Application.Quit();
+            AudioManager.Instance.Play("ui-cancel");
         }
     }
 }

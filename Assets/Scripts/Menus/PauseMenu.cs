@@ -20,7 +20,7 @@ namespace Menus {
         [Tooltip("Used to show a background (if not VR)")] [SerializeField]
         private GameObject backgroundCanvas;
 
-        [SerializeField] private MainMenu mainPanel;
+        [SerializeField] private PauseMainMenu mainPanel;
 
         [SerializeField] private OptionsMenu optionsPanel;
         

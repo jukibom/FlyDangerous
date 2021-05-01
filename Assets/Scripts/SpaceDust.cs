@@ -5,16 +5,19 @@ using Engine;
 using UnityEngine;
 using UnityEngine.VFX;
 
-public class SpaceDust : MonoBehaviour
-{
-    private VisualEffect m_VFX;
+public class SpaceDust : MonoBehaviour {
+    [SerializeField]
+    private bool forceOn;
+    private VisualEffect _VFX;
 
     private void Start() {
-        m_VFX = GetComponent<VisualEffect>();
+        _VFX = GetComponent<VisualEffect>();
     }
 
     // Update is called once per frame
     void Update() {
-        m_VFX.enabled = Preferences.Instance.GetBool("showSpaceDust");
+        if (!forceOn) {
+            _VFX.enabled = Preferences.Instance.GetBool("showSpaceDust");
+        }
     }
 }
