@@ -349,6 +349,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dfb77f012b69cab428a7cea7e684a956, type: 3}
+--- !u!1 &283474670 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 177074050465568752, guid: 6dfae0ad47b80844caf683dce03ecaf1, type: 3}
+  m_PrefabInstance: {fileID: 1268495820}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &326786715 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
@@ -380,7 +385,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 339787320}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 500, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 579945050}
@@ -423,7 +428,7 @@ MonoBehaviour:
   topMenu: {fileID: 941453839}
   optionsMenu: {fileID: 815904693}
   crossfade: {fileID: 1870072580}
-  shipMeshTransform: {fileID: 1463592068}
+  shipMesh: {fileID: 283474670}
   alphaMessage: {fileID: 1640954995}
 --- !u!1 &495656921
 GameObject:
@@ -566,7 +571,7 @@ VisualEffect:
       m_Array: []
     m_Vector3f:
       m_Array:
-      - m_Value: {x: 0, y: 0, z: 0}
+      - m_Value: {x: 0, y: 500, z: 0}
         m_Name: Camera_position
         m_Overridden: 1
     m_Vector4f:
@@ -1052,7 +1057,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 493.67, y: 200}
+  m_SizeDelta: {x: 600, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &716626780
 MonoBehaviour:
@@ -1087,9 +1092,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "To say this game is in Alpha is some sort of ABSURD understatement.\n\nAll
-    assets are placeholder or WIP, nothing is optimised and everything is subject
-    to change.\n\nExpect bugs and have fun \u2665\U0001F602\U0001F923\U0001F923\U0001F923\U0001F603\U0001F603"
+  m_Text: "To say that this game is in an alpha state would be some sort of ABSURD
+    understatement.\n\nAll assets are placeholder, nothing is optimised and everything
+    is subject to change.\n\n~\nExpect bugs and have fun \u2665\U0001F602\U0001F923\U0001F923\U0001F923\U0001F603\U0001F603"
 --- !u!222 &716626781
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1648,7 +1653,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
+  far clip plane: 100000
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -2074,7 +2079,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1640954996
 RectTransform:
   m_ObjectHideFlags: 0
