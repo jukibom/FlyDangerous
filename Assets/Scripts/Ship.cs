@@ -226,25 +226,37 @@ public class Ship : MonoBehaviour {
             float angularVelocityRoll = Vector3.Dot(_transformComponent.forward, _rigidBodyComponent.angularVelocity);
             float angularVelocityYaw = Vector3.Dot(_transformComponent.up, _rigidBodyComponent.angularVelocity);
 
-            if (angularVelocityPitch > 0) {
-                _rigidBodyComponent.AddTorque(_transformComponent.right * (-0.5f * maxThrust / torqueThrustDivider), ForceMode.Force);
+            if (Math.Abs(_pitch) < 0.05) {
+                if (angularVelocityPitch > 0) {
+                    _rigidBodyComponent.AddTorque(
+                        _transformComponent.right * (-0.25f * maxThrust / torqueThrustDivider), ForceMode.Force);
+                }
+                else {
+                    _rigidBodyComponent.AddTorque(_transformComponent.right * (0.25f * maxThrust / torqueThrustDivider),
+                        ForceMode.Force);
+                }
             }
-            else {
-                _rigidBodyComponent.AddTorque(_transformComponent.right * (0.5f * maxThrust / torqueThrustDivider), ForceMode.Force);
+
+            if (Math.Abs(_roll) < 0.05) {
+                if (angularVelocityRoll > 0) {
+                    _rigidBodyComponent.AddTorque(
+                        _transformComponent.forward * (-0.25f * maxThrust / torqueThrustDivider), ForceMode.Force);
+                }
+                else {
+                    _rigidBodyComponent.AddTorque(
+                        _transformComponent.forward * (0.25f * maxThrust / torqueThrustDivider), ForceMode.Force);
+                }
             }
-            
-            if (angularVelocityRoll > 0) {
-                _rigidBodyComponent.AddTorque(_transformComponent.forward * (-0.5f * maxThrust / torqueThrustDivider), ForceMode.Force);
-            }
-            else {
-                _rigidBodyComponent.AddTorque(_transformComponent.forward * (0.5f * maxThrust / torqueThrustDivider), ForceMode.Force);
-            }
-            
-            if (angularVelocityYaw > 0) {
-                _rigidBodyComponent.AddTorque(_transformComponent.up * (-0.5f * maxThrust / torqueThrustDivider), ForceMode.Force);
-            }
-            else {
-                _rigidBodyComponent.AddTorque(_transformComponent.up * (0.5f * maxThrust / torqueThrustDivider), ForceMode.Force);
+
+            if (Math.Abs(_yaw) < 0.05) {
+                if (angularVelocityYaw > 0) {
+                    _rigidBodyComponent.AddTorque(_transformComponent.up * (-0.25f * maxThrust / torqueThrustDivider),
+                        ForceMode.Force);
+                }
+                else {
+                    _rigidBodyComponent.AddTorque(_transformComponent.up * (0.25f * maxThrust / torqueThrustDivider),
+                        ForceMode.Force);
+                }
             }
         }
     }
