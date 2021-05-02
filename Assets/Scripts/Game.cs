@@ -1,13 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using Den.Tools;
 using MapMagic.Core;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Game : MonoBehaviour {
 
     public static Game Instance;
+
+    public int seed = 123456;
     
     [SerializeField] private Animator crossfade;
 
@@ -43,15 +47,15 @@ public class Game : MonoBehaviour {
             
             // load loading screen (lol)
             var load = SceneManager.LoadSceneAsync("Loading", LoadSceneMode.Single);
-            while (load.isDone) {
-                yield return null; 
-            }
+            yield return load;
+
+            var loadText = GameObject.FindGameObjectWithTag("DynamicLoadingText").GetComponent<Text>();
 
             // now we can finally start the level load
             scenesLoading.Add(SceneManager.LoadSceneAsync(mapScene, LoadSceneMode.Additive));
             scenesLoading.Add(SceneManager.LoadSceneAsync("Player", LoadSceneMode.Additive));
             scenesLoading.ForEach(scene => scene.allowSceneActivation = false);
-            StartCoroutine(LoadGameScenes());
+            StartCoroutine(LoadGameScenes(loadText));
         }
         
         StartCoroutine(SwitchToLoadingScreen());
@@ -93,17 +97,24 @@ public class Game : MonoBehaviour {
         crossfade.SetTrigger("FadeFromBlack");
     }
     
-    IEnumerator LoadGameScenes() {
+    IEnumerator LoadGameScenes(Text loadingText) {
         
-        // float progress = 0;
+        float progress = 0;
+        float totalProgress = 0;
         for (int i = 0; i < scenesLoading.Count; ++i) {
             while (scenesLoading[i].progress < 0.9f) { // this is literally what the unity docs recommend
                 yield return null;
                     
-                // TODO: loading bar (eventually - not really necessary yet)
-                // progress += scenesLoading[i].progress;
-                // totalProgress = progress / scenesLoading.Count;
-                // Debug.Log(i + " " + scenesLoading[i].progress);
+                progress += scenesLoading[i].progress;
+                totalProgress = progress / scenesLoading.Count;
+
+                var progressPercent = Mathf.Round(totalProgress * 100);
+                
+                // set loading text (last scene is always the engine)
+                loadingText.text = i == scenesLoading.Count
+                    ? $"Loading Engine ({progressPercent}%)"
+                    : $"Loading Assets ({progressPercent}%)";
+                
                 yield return null;
             }
         }
@@ -119,7 +130,14 @@ public class Game : MonoBehaviour {
         // if terrain needs to generate, wait for that too
         var terrainLoader = FindObjectOfType<MapMagicObject>();
         if (terrainLoader) {
-            while (terrainLoader.IsGenerating()) yield return null;
+            terrainLoader.graph.random = new Noise(seed, 32768);
+            terrainLoader.StartGenerate();
+            while (terrainLoader.IsGenerating()) {
+                var progressPercent = Mathf.Round(terrainLoader.GetProgress() * 100);
+                loadingText.text = $"Generating terrain from seed \"{seed}\" ({progressPercent}%)";
+
+                yield return null;
+            }
         }
         
         // unload the loading screen
