@@ -132,7 +132,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 609786913693381189, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
       propertyPath: m_Text
-      value: FREEPLAY
+      value: FREE ROAM
       objectReference: {fileID: 0}
     - target: {fileID: 609786914283039943, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
@@ -172,7 +172,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
       propertyPath: m_AnchorMax.x
@@ -630,7 +630,7 @@ GameObject:
   - component: {fileID: 579945052}
   - component: {fileID: 579945051}
   m_Layer: 0
-  m_Name: UI Event System
+  m_Name: UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -690,7 +690,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FirstSelected: {fileID: 1714882989}
+  m_FirstSelected: {fileID: 2060628389}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
 --- !u!1001 &589133296
@@ -835,7 +835,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 609786913693381189, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
       propertyPath: m_Text
-      value: RACE
+      value: RACE TEST
       objectReference: {fileID: 0}
     - target: {fileID: 609786914283039943, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
@@ -875,7 +875,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
       propertyPath: m_AnchorMax.x
@@ -1108,7 +1108,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 600, y: 300}
+  m_SizeDelta: {x: 750, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &716626780
 MonoBehaviour:
@@ -1142,10 +1142,11 @@ MonoBehaviour:
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
-    m_LineSpacing: 1
-  m_Text: "To say that this game is in an alpha state would be some sort of ABSURD
-    understatement.\n\nAll assets are placeholder, nothing is optimised and everything
-    is subject to change.\n\n~\nExpect bugs and have fun \u2665\U0001F602\U0001F923\U0001F923\U0001F923\U0001F603\U0001F603"
+    m_LineSpacing: 1.2
+  m_Text: "To say this game is unfinished would be an absurd understatement. \n\nAll
+    assets are placeholder, nothing is optimised and everything is subject to change.
+    It's barely even a game.\n\nExpect bugs, report them and have fun \u2665\U0001F602\U0001F923\U0001F923\U0001F923\U0001F603\U0001F603\n-
+    Juki"
 --- !u!222 &716626781
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1419,8 +1420,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1421881485}
   - {fileID: 1750966506}
+  - {fileID: 1421881485}
   - {fileID: 326786715}
   - {fileID: 827617455}
   m_Father: {fileID: 941453837}
@@ -2130,7 +2131,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1640954996
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2152,11 +2153,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &1714882989 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 609786914283039947, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
-  m_PrefabInstance: {fileID: 628786389}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &1750966506 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
@@ -4966,3 +4962,8 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2044689289}
   m_CullTransparentMesh: 1
+--- !u!1 &2060628389 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 609786914283039947, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+  m_PrefabInstance: {fileID: 149994269}
+  m_PrefabAsset: {fileID: 0}
