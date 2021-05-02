@@ -13,6 +13,7 @@ public class User : MonoBehaviour {
     [SerializeField] public PauseMenu pauseMenu;
     [SerializeField] public Ship playerShip;
     [SerializeField] public InputSystemUIInputModule pauseUIInputModule;
+    [SerializeField] public MouseWidget mouseWidget;
     private bool _alternateFlightControls = false;
 
     private Action<InputAction.CallbackContext> _cancelAction;
@@ -140,6 +141,6 @@ public class User : MonoBehaviour {
     }
 
     public void OnRawMouse(InputValue value) {
-        
+        mouseWidget.SetMousePositionScreen(value.Get<Vector2>());
     }
 }
