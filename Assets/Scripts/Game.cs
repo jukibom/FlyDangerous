@@ -35,6 +35,8 @@ public class Game : MonoBehaviour {
     }
 
     public void StartGame(string mapScene) {
+        HideCursor();
+        
         // This is a separate action so that we can safely move to a new active loading scene and fully unload everything before moving to any other map
         IEnumerator SwitchToLoadingScreen() {
             
@@ -82,6 +84,7 @@ public class Game : MonoBehaviour {
             SceneManager.LoadScene("Main Menu");
             ResetGameState();
             FadeFromBlack();
+            ShowCursor();
         }
 
         StartCoroutine(LoadMenu());
@@ -96,6 +99,16 @@ public class Game : MonoBehaviour {
         StartCoroutine(Quit());
     }
 
+    public void ShowCursor() {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+    }
+
+    public void HideCursor() {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Confined;
+    }
+    
     public void FadeToBlack() {
         crossfade.SetTrigger("FadeToBlack");
     }
@@ -149,6 +162,7 @@ public class Game : MonoBehaviour {
         var terrainLoader = FindObjectOfType<MapMagicObject>();
         if (terrainLoader) {
             terrainLoader.StopGenerate();
+            terrainLoader.ClearAll();
             terrainLoader.graph.random = new Noise(seed.GetHashCode(), 32768);
             terrainLoader.StartGenerate();
             while (terrainLoader.IsGenerating()) {

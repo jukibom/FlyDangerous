@@ -51,7 +51,6 @@ public class MouseWidget : MonoBehaviour {
         var arrowImageColor = _arrowImage.color;
         var crosshairImageColor = _crosshairImage.color;
         var normalisedMagnitude = arrow.transform.localPosition.magnitude / maxDistanceUnits;
-        Debug.Log(normalisedMagnitude);
         arrowImageColor.a = Mathf.Pow(normalisedMagnitude, 2);
         crosshairImageColor.a = Mathf.Pow(1f - normalisedMagnitude, 2);
 
@@ -60,6 +59,8 @@ public class MouseWidget : MonoBehaviour {
     }
     
     public void SetMousePositionScreen(Vector2 mousePos) {
-        mousePositionScreen = mousePos;
+        if (mousePos != Vector2.zero) {
+            mousePositionScreen = mousePos;
+        }
     }
 }

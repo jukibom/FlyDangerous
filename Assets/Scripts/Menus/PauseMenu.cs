@@ -106,12 +106,14 @@ namespace Menus {
         private void UpdatePauseGameState() {
             switch (MenuState) {
                 case PauseMenuState.Unpaused:
+                    Game.Instance.HideCursor();
                     backgroundCanvas.SetActive(false);
                     user.EnableGameInput();
                     user.DisableUIInput();
                     Time.timeScale = 1;
                     break;
                 case PauseMenuState.PausedMainMenu: 
+                    Game.Instance.ShowCursor();
                     backgroundCanvas.SetActive(true);
                     user.DisableGameInput();
                     user.EnableUIInput();
