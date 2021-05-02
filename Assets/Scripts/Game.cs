@@ -64,10 +64,12 @@ public class Game : MonoBehaviour {
 
     public void RestartLevel() {
         // Todo: record player initial state and load it here instead of this scene juggling farce which takes ages to load
+        StopTerrainGeneration();
         StartGame(SceneManager.GetActiveScene().name);
     }
 
     public void QuitToMenu() {
+        StopTerrainGeneration();
         var user = FindObjectOfType<User>();
         user.DisableGameInput();
         
@@ -99,6 +101,13 @@ public class Game : MonoBehaviour {
         crossfade.SetTrigger("FadeFromBlack");
     }
 
+    private void StopTerrainGeneration() {
+        var terrainLoader = FindObjectOfType<MapMagicObject>();
+        if (terrainLoader) {
+            terrainLoader.StopGenerate();
+        }
+    }
+    
     private void ResetGameState() {
         isTerrainMap = false;
     }
@@ -114,7 +123,7 @@ public class Game : MonoBehaviour {
                 progress += scenesLoading[i].progress;
                 totalProgress = progress / scenesLoading.Count;
 
-                var progressPercent = Mathf.Round(totalProgress * 100);
+                var progressPercent = Mathf.Min(100, Mathf.Round(totalProgress * 100));
                 
                 // set loading text (last scene is always the engine)
                 loadingText.text = i == scenesLoading.Count
@@ -136,10 +145,11 @@ public class Game : MonoBehaviour {
         // if terrain needs to generate, toggle special logic and wait for it to load all primary tiles
         var terrainLoader = FindObjectOfType<MapMagicObject>();
         if (terrainLoader) {
+            terrainLoader.StopGenerate();
             terrainLoader.graph.random = new Noise(seed.GetHashCode(), 32768);
             terrainLoader.StartGenerate();
             while (terrainLoader.IsGenerating()) {
-                var progressPercent = Mathf.Round(terrainLoader.GetProgress() * 100);
+                var progressPercent = Mathf.Min(100, Mathf.Round(terrainLoader.GetProgress() * 100));
                 loadingText.text = $"Generating terrain ({progressPercent}%)\n\n\nSeed: \"{seed}\"";
 
                 yield return null;
