@@ -35,10 +35,10 @@ public class User : MonoBehaviour {
      * This prevents conflicts between the two, especially when rebinding keys...
      */
     public void EnableGameInput() {
-        GetComponent<PlayerInput>().enabled = true;
+        GetComponent<PlayerInput>().ActivateInput();
     }
     public void DisableGameInput() {
-        GetComponent<PlayerInput>().enabled = false;
+        GetComponent<PlayerInput>().DeactivateInput();
     }
     public void EnableUIInput() {
         pauseUIInputModule.enabled = true;

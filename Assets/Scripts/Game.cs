@@ -136,7 +136,7 @@ public class Game : MonoBehaviour {
         }
         
         FadeFromBlack();
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.6f);
 
         // enable user input
         if (user != null) {
