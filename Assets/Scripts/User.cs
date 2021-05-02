@@ -55,6 +55,10 @@ public class User : MonoBehaviour {
         pauseMenu.OnGameMenuToggle();
     }
 
+    public void OnRestartTrack() {
+        Game.Instance.RestartLevel();
+    }
+
     public void OnRestartFromLastCheckpoint() {
         Debug.Log("Lol there are no checkpoints yet ^_^");
     }
