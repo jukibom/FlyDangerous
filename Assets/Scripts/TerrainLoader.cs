@@ -6,14 +6,10 @@ using UnityEngine;
 
 public class TerrainLoader : MonoBehaviour {
     [SerializeField] private GameObject mapMagicObject;
-    
-    private void Awake() {
-        // mapMagicObject.SetActive(false);
-    }
 
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start() {
+        Game.Instance.isTerrainMap = true;
     }
 
     // Update is called once per frame

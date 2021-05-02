@@ -11,15 +11,8 @@ public class Game : MonoBehaviour {
 
     public static Game Instance;
 
-    private string _seed = "123456";
-    public string seed {
-        get { return _seed;  }
-    }
-
-    private bool _isTerrainMap = false;
-    public bool isTerrainMap {
-        get { return _isTerrainMap;  }
-    }
+    public string seed = "123456";
+    public bool isTerrainMap = false;
     
     [SerializeField] private Animator crossfade;
 
@@ -107,7 +100,7 @@ public class Game : MonoBehaviour {
     }
 
     private void ResetGameState() {
-        _isTerrainMap = false;
+        isTerrainMap = false;
     }
     
     IEnumerator LoadGameScenes(Text loadingText) {
@@ -143,7 +136,6 @@ public class Game : MonoBehaviour {
         // if terrain needs to generate, toggle special logic and wait for it to load all primary tiles
         var terrainLoader = FindObjectOfType<MapMagicObject>();
         if (terrainLoader) {
-            _isTerrainMap = true;
             terrainLoader.graph.random = new Noise(seed.GetHashCode(), 32768);
             terrainLoader.StartGenerate();
             while (terrainLoader.IsGenerating()) {
