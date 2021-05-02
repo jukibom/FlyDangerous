@@ -82,7 +82,8 @@ namespace Menus {
 
         public void Restart() {
             AudioManager.Instance.Play("ui-confirm");
-            user.OnRestartTrack();
+            Resume();
+            Game.Instance.RestartLevel();
         }
 
         public void OpenOptionsPanel() {
@@ -97,8 +98,8 @@ namespace Menus {
 
         public void Quit() {
             AudioManager.Instance.Play("ui-confirm");
-            // TODO: Confirmation dialog
-            Application.Quit();
+            Resume();
+            Game.Instance.QuitToMenu();
         }
         
         // toggle ship controller input and timescales

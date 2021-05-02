@@ -16,11 +16,8 @@ namespace Menus {
         [SerializeField]
         private OptionsMenu optionsMenu;
 
-        [SerializeField] private Animator crossfade;
         [SerializeField] private GameObject shipMesh;
         [SerializeField] private GameObject alphaMessage;
-
-        private List<AsyncOperation> scenesLoading = new List<AsyncOperation>();
         
         // Start is called before the first frame update
         void Awake() {
@@ -39,13 +36,15 @@ namespace Menus {
         }
 
         public void Race() {
-            scenesLoading.Add(SceneManager.LoadSceneAsync("MapTest", LoadSceneMode.Additive));
-            StartGame();
+            AudioManager.Instance.Play("ui-confirm");
+            Game.Instance.StartGame("MapTest");
+            topMenu.Hide();
         }
 
-        public void Freeplay() {
-            scenesLoading.Add(SceneManager.LoadSceneAsync("TerrainTest", LoadSceneMode.Additive));
-            StartGame();
+        public void FreePlay() {
+            AudioManager.Instance.Play("ui-confirm");
+            Game.Instance.StartGame("Terrain");
+            topMenu.Hide();
         }
 
         public void OpenOptionsPanel() {
@@ -65,73 +64,20 @@ namespace Menus {
         }
 
         public void Quit() {
-            Application.Quit();
+            Game.Instance.QuitGame();
             AudioManager.Instance.Play("ui-cancel");
         }
 
-        private void StartGame() {
-            AudioManager.Instance.Play("ui-confirm");
-            scenesLoading.Add(SceneManager.LoadSceneAsync("Player", LoadSceneMode.Additive));
-            scenesLoading.ForEach(scene => scene.allowSceneActivation = false);
-            topMenu.Hide();
-            StartCoroutine(LoadScenes());
-        }
-        
         IEnumerator ShowAlphaMessage() {
             // if it's disabled in the editor don't show this fade animation
             if (alphaMessage.activeSelf) {
                 shipMesh.SetActive(false);
                 yield return new WaitForSeconds(6);
-                crossfade.SetTrigger("FadeToBlack");
+                Game.Instance.FadeToBlack();
                 yield return new WaitForSeconds(1);
                 alphaMessage.SetActive(false);
-                crossfade.SetTrigger("FadeFromBlack");
+                Game.Instance.FadeFromBlack();
                 shipMesh.SetActive(true);
-            }
-        }
-
-        IEnumerator LoadScenes() {
-            
-            // disable event system and audio listener (camera) here - may only have one of each active and cannot unload a scene until others are loaded
-            var eventSystems = FindObjectsOfType<EventSystem>();
-            var audioListeners = FindObjectsOfType<AudioListener>();
-            foreach (var eventSystem in eventSystems) {
-                eventSystem.enabled = false;
-            }
-            foreach (var audioListener in audioListeners) {
-                audioListener.enabled = false;
-            }
-            
-            crossfade.SetTrigger("FadeToBlack");
-            yield return new WaitForSeconds(1);
-            Scene currentScene = SceneManager.GetActiveScene();
-            
-            // float progress = 0;
-            for (int i = 0; i < scenesLoading.Count; ++i) {
-                while (scenesLoading[i].progress < 0.9f) { // this is literally what the unity docs recommend
-                    yield return null;
-                    
-                    // TODO: loading bar (eventually - not really necessary yet)
-                    // progress += scenesLoading[i].progress;
-                    // totalProgress = progress / scenesLoading.Count;
-                    // Debug.Log(i + " " + scenesLoading[i].progress);
-                    yield return null;
-                }
-            }
-            
-            // all scenes have loaded as far as they can without activation, allow them to activate
-            for (int i = 0; i < scenesLoading.Count; ++i) {
-                scenesLoading[i].allowSceneActivation = true;
-                while (!scenesLoading[i].isDone) {
-                    yield return null;
-                }
-            }
-
-            // unload current scene
-            AsyncOperation unload = SceneManager.UnloadSceneAsync(currentScene);
-
-            while (!unload.isDone) {
-                yield return null;
             }
         }
     }

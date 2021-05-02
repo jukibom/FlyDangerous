@@ -24,6 +24,10 @@ public class FloatingOrigin : MonoBehaviour {
         }
     }
 
+    private void OnDisable() {
+        _worldTransform = null;
+    }
+
     void Update() {
         if (_worldTransform && focalTransform.position.magnitude > correctionDistance) {
             _worldTransform.position -= focalTransform.position;

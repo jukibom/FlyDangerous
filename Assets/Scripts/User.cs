@@ -55,11 +55,6 @@ public class User : MonoBehaviour {
         Debug.Log("Lol there are no checkpoints yet ^_^");
     }
 
-    public void OnRestartTrack() {
-        // TODO: a saner way of doing this? (resetting timers etc etc game state fun)
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
-
     public void OnPitch(InputValue value) {
         if (!_alternateFlightControls)
             playerShip.OnPitch(value);
