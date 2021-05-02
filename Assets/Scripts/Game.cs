@@ -16,6 +16,9 @@ public class Game : MonoBehaviour {
     
     [SerializeField] private Animator crossfade;
 
+    // show certain things if first time hitting the menu
+    private bool _menuFirstRun = true;
+    public bool menuFirstRun => _menuFirstRun;
     private List<AsyncOperation> scenesLoading = new List<AsyncOperation>();
 
     void Awake() {
@@ -32,7 +35,6 @@ public class Game : MonoBehaviour {
     }
 
     public void StartGame(string mapScene) {
-
         // This is a separate action so that we can safely move to a new active loading scene and fully unload everything before moving to any other map
         IEnumerator SwitchToLoadingScreen() {
             
@@ -69,6 +71,7 @@ public class Game : MonoBehaviour {
     }
 
     public void QuitToMenu() {
+        _menuFirstRun = false;
         StopTerrainGeneration();
         var user = FindObjectOfType<User>();
         user.DisableGameInput();
