@@ -36,11 +36,15 @@ public class User : MonoBehaviour {
      */
     public void EnableGameInput() {
         GetComponent<PlayerInput>().enabled = true;
-        pauseUIInputModule.enabled = false;
     }
     public void DisableGameInput() {
         GetComponent<PlayerInput>().enabled = false;
+    }
+    public void EnableUIInput() {
         pauseUIInputModule.enabled = true;
+    }
+    public void DisableUIInput() {
+        pauseUIInputModule.enabled = false;
     }
     
     /**

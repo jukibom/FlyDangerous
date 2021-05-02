@@ -35,6 +35,7 @@ public class Game : MonoBehaviour {
             var user = FindObjectOfType<User>();
             if (user != null) {
                 user.DisableGameInput();
+                user.DisableUIInput();
             }
             
             crossfade.SetTrigger("FadeToBlack");
@@ -127,11 +128,17 @@ public class Game : MonoBehaviour {
             yield return null;
         }
         
+        // disable user input while fading back out (pause screen can pause fade animation!)
+        var user = FindObjectOfType<User>();
+        if (user != null) {
+            user.DisableGameInput();
+            user.DisableUIInput();
+        }
+        
         FadeFromBlack();
         yield return new WaitForSeconds(0.5f);
 
         // enable user input
-        var user = FindObjectOfType<User>();
         if (user != null) {
             user.EnableGameInput();
         }

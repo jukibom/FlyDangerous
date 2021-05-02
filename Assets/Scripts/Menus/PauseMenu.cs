@@ -29,17 +29,17 @@ namespace Menus {
         private PauseMenuState _menuState = PauseMenuState.Unpaused;
         
         public PauseMenuState MenuState {
-            get => this._menuState;
+            get => _menuState;
             private set {
                 _menuState = value;
-                this.UpdatePauseGameState();
+                UpdatePauseGameState();
             }
         }
         private Canvas _menuCanvas;
         private Animator _panelAnimator;
 
         public void OnGameMenuToggle() {
-            switch (this.MenuState) {
+            switch (MenuState) {
                 case PauseMenuState.Unpaused:
                     Pause();
                     break;
@@ -47,14 +47,14 @@ namespace Menus {
                     Resume();
                     break;
                 case PauseMenuState.PausedOptionsMenu:
-                    this.optionsPanel.Cancel();
+                    optionsPanel.Cancel();
                     break;
             }
         }
         
         private void Start() {
-            this._menuCanvas = this.backgroundCanvas.GetComponent<Canvas>();
-            this._panelAnimator = this.mainCanvas.GetComponent<Animator>();
+            _menuCanvas = backgroundCanvas.GetComponent<Canvas>();
+            _panelAnimator = mainCanvas.GetComponent<Animator>();
 
             // TODO: Global VR Mode flag to turn the UI into a world space floating panel
             var VRMODE = false;
@@ -64,20 +64,20 @@ namespace Menus {
                 // TODO: Detach from external camera? Maybe just keep the camera as-is but disable camera accel movements.
             }
 
-            this.UpdatePauseGameState();
+            UpdatePauseGameState();
         }
 
         public void Pause() {
             AudioManager.Instance.Play("ui-dialog-open");
-            this.MenuState = PauseMenuState.PausedMainMenu;
-            this.mainPanel.HighlightResume();
-            this._panelAnimator.SetBool("Open", true);
+            MenuState = PauseMenuState.PausedMainMenu;
+            mainPanel.HighlightResume();
+            _panelAnimator.SetBool("Open", true);
         }
 
         public void Resume() {
             AudioManager.Instance.Play("ui-cancel");
-            this.MenuState = PauseMenuState.Unpaused;
-            this._panelAnimator.SetBool("Open", false);
+            MenuState = PauseMenuState.Unpaused;
+            _panelAnimator.SetBool("Open", false);
         }
 
         public void Restart() {
@@ -88,12 +88,12 @@ namespace Menus {
 
         public void OpenOptionsPanel() {
             AudioManager.Instance.Play("ui-dialog-open");
-            this.MenuState = PauseMenuState.PausedOptionsMenu;
+            MenuState = PauseMenuState.PausedOptionsMenu;
         }
 
         public void CloseOptionsPanel() {
-            this.MenuState = PauseMenuState.PausedMainMenu;
-            this.mainPanel.HighlightOptions();
+            MenuState = PauseMenuState.PausedMainMenu;
+            mainPanel.HighlightOptions();
         }
 
         public void Quit() {
@@ -104,22 +104,24 @@ namespace Menus {
         
         // toggle ship controller input and timescales
         private void UpdatePauseGameState() {
-            switch (this.MenuState) {
+            switch (MenuState) {
                 case PauseMenuState.Unpaused:
-                    this.backgroundCanvas.SetActive(false);
-                    this.user.EnableGameInput();
+                    backgroundCanvas.SetActive(false);
+                    user.EnableGameInput();
+                    user.DisableUIInput();
                     Time.timeScale = 1;
                     break;
                 case PauseMenuState.PausedMainMenu: 
-                    this.backgroundCanvas.SetActive(true);
-                    this.user.DisableGameInput();
-                    this.optionsPanel.Hide();
-                    this.mainPanel.Show();
+                    backgroundCanvas.SetActive(true);
+                    user.DisableGameInput();
+                    user.EnableUIInput();
+                    optionsPanel.Hide();
+                    mainPanel.Show();
                     Time.timeScale = 0;
                     break;
                 case PauseMenuState.PausedOptionsMenu:
-                    this.optionsPanel.Show();
-                    this.mainPanel.Hide();
+                    optionsPanel.Show();
+                    mainPanel.Hide();
                     break;
             }
         }
