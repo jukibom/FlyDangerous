@@ -72,7 +72,7 @@ namespace Menus {
             // if it's disabled in the editor don't show this fade animation
             if (alphaMessage.activeSelf) {
                 shipMesh.SetActive(false);
-                yield return new WaitForSeconds(6);
+                yield return new WaitForSeconds(8);
                 Game.Instance.FadeToBlack();
                 yield return new WaitForSeconds(1);
                 alphaMessage.SetActive(false);

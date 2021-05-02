@@ -55,6 +55,7 @@ namespace Engine {
                 case "relativeMouseXAxis":
                 case "relativeMouseYAxis":
                 case "flightAssistOnByDefault": 
+                case "enableTerrainScaling":
                     return false;
                 
                 default: 
