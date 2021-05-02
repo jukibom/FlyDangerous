@@ -12,15 +12,10 @@ namespace Menus {
         
         [SerializeField]
         private Button optionsButton;
-
-        private Animator _animator;
         
-        private void Awake() {
-            this._animator = this.GetComponent<Animator>();
-        }
         public void Show() {
             this.gameObject.SetActive(true);
-            this._animator.SetBool("Open", true);
+            this.GetComponent<Animator>().SetBool("Open", true);
         }
 
         public void Hide() {

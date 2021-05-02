@@ -20,7 +20,7 @@ namespace Menus {
         [SerializeField] private GameObject alphaMessage;
         
         // Start is called before the first frame update
-        void Awake() {
+        void OnEnable() {
             StartCoroutine(ShowAlphaMessage());
         }
 
@@ -69,7 +69,7 @@ namespace Menus {
         }
 
         IEnumerator ShowAlphaMessage() {
-            if (Game.Instance.menuFirstRun) {
+            if (Game.Instance?.menuFirstRun ?? true) {
                 // if it's disabled in the editor don't show this fade animation
                 if (alphaMessage.activeSelf) {
                     shipMesh.SetActive(false);
