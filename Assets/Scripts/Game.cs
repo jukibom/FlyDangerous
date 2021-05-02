@@ -11,7 +11,15 @@ public class Game : MonoBehaviour {
 
     public static Game Instance;
 
-    public int seed = 123456;
+    private string _seed = "123456";
+    public string seed {
+        get { return _seed;  }
+    }
+
+    private bool _isTerrainMap = false;
+    public bool isTerrainMap {
+        get { return _isTerrainMap;  }
+    }
     
     [SerializeField] private Animator crossfade;
 
@@ -74,6 +82,7 @@ public class Game : MonoBehaviour {
             FadeToBlack();
             yield return new WaitForSeconds(0.5f);
             SceneManager.LoadScene("Main Menu");
+            ResetGameState();
             FadeFromBlack();
         }
 
@@ -95,6 +104,10 @@ public class Game : MonoBehaviour {
 
     public void FadeFromBlack() {
         crossfade.SetTrigger("FadeFromBlack");
+    }
+
+    private void ResetGameState() {
+        _isTerrainMap = false;
     }
     
     IEnumerator LoadGameScenes(Text loadingText) {
@@ -126,15 +139,16 @@ public class Game : MonoBehaviour {
                 yield return null;
             }
         }
-
-        // if terrain needs to generate, wait for that too
+        
+        // if terrain needs to generate, toggle special logic and wait for it to load all primary tiles
         var terrainLoader = FindObjectOfType<MapMagicObject>();
         if (terrainLoader) {
-            terrainLoader.graph.random = new Noise(seed, 32768);
+            _isTerrainMap = true;
+            terrainLoader.graph.random = new Noise(seed.GetHashCode(), 32768);
             terrainLoader.StartGenerate();
             while (terrainLoader.IsGenerating()) {
                 var progressPercent = Mathf.Round(terrainLoader.GetProgress() * 100);
-                loadingText.text = $"Generating terrain from seed \"{seed}\" ({progressPercent}%)";
+                loadingText.text = $"Generating terrain ({progressPercent}%)\n\n\nSeed: \"{seed}\"";
 
                 yield return null;
             }
