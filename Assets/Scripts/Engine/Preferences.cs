@@ -6,17 +6,20 @@ using UnityEngine;
 
 namespace Engine {
     public class SaveData {
-        public Dictionary<string, string> stringPrefs;
         public Dictionary<string, bool> boolPrefs;
+        public Dictionary<string, float> floatPrefs;
+        public Dictionary<string, string> stringPrefs;
         
         public SaveData() {
-            stringPrefs = new Dictionary<string, string>();
             boolPrefs = new Dictionary<string, bool>();
+            floatPrefs = new Dictionary<string, float>();
+            stringPrefs = new Dictionary<string, string>();
         }
 
         public SaveData Clone() {
             SaveData s = new SaveData();
             s.boolPrefs = new Dictionary<string, bool>(boolPrefs);
+            s.floatPrefs = new Dictionary<string, float>(floatPrefs);
             s.stringPrefs = new Dictionary<string, string>(stringPrefs);
             return s;
         }
@@ -63,6 +66,16 @@ namespace Engine {
                     return false;
             }
         }
+        
+        public float GetDefaultFloat(string key) {
+            switch (key) {
+                case "mouseSensitivity":
+                    return 1f;
+                default: 
+                    Debug.LogWarning("Attempted to get preference " + key + " with no default specified");
+                    return 0;
+            }
+        }
          
         public string GetDefaultString(string key) {
             switch (key) {
@@ -77,17 +90,23 @@ namespace Engine {
                     return "";
             }
         }
+
         
         public bool GetBool(string key) {
-            
             bool value;
             return GetCurrent().boolPrefs.TryGetValue(key, out value)
                 ? value
                 : GetDefaultBool(key);
         }
         
+        public float GetFloat(string key) {
+            float value;
+            return GetCurrent().floatPrefs.TryGetValue(key, out value)
+                ? value
+                : GetDefaultFloat(key);
+        }
+        
         public string GetString(string key) {
-            
             string value;
             return GetCurrent().stringPrefs.TryGetValue(key, out value)
                 ? value
@@ -96,6 +115,10 @@ namespace Engine {
         
         public void SetBool(string key, bool val) {
             GetCurrent().boolPrefs[key] = val;
+        }
+        
+        public void SetFloat(string key, float val) {
+            GetCurrent().floatPrefs[key] = val;
         }
         
         public void SetString(string key, string val) { 

@@ -89,6 +89,11 @@ namespace Menus.Options {
                 Preferences.Instance.SetBool(toggleOption.Preference, toggleOption.IsEnabled);
             }
             
+            // TODO: Mouse axis drop-down + sensitivity (save defaults here so it writes to config for now)
+            Preferences.Instance.SetString("mouseYAxis", Preferences.Instance.GetString("mouseYAxis"));
+            Preferences.Instance.SetString("mouseXAxis", Preferences.Instance.GetString("mouseXAxis"));
+            Preferences.Instance.SetFloat("mouseSensitivity", Preferences.Instance.GetFloat("mouseSensitivity"));
+            
             Preferences.Instance.Save();
         }
         private void LoadBindings() {

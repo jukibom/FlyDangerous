@@ -39,7 +39,7 @@ public class User : MonoBehaviour {
     public void Update() {
         // handle mouse input
         if (!pauseMenu.IsPaused && Preferences.Instance.GetBool("enableMouseFlightControls")) {
-            // TODO: mouse sensitivity / scaling here (multiply normalised values by scaling factor);
+            float sensitivity = Preferences.Instance.GetFloat("mouseSensitivity");
             
             Action<string, float> setInput = (axis, amount) => {
                 switch (axis) {
@@ -56,8 +56,8 @@ public class User : MonoBehaviour {
             var xAxis = Preferences.Instance.GetString("mouseXAxis");
             var yAxis = Preferences.Instance.GetString("mouseYAxis");
 
-            setInput(xAxis, _mousePositionNormalisedToSquare.x);
-            setInput(yAxis, _mousePositionNormalisedToSquare.y);
+            setInput(xAxis, _mousePositionNormalisedToSquare.x * sensitivity);
+            setInput(yAxis, _mousePositionNormalisedToSquare.y * sensitivity);
 
             // relative mouse means reset after input
             if (Preferences.Instance.GetBool("relativeMouseXAxis")) {
