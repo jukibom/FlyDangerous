@@ -19,7 +19,8 @@ public class User : MonoBehaviour {
     private bool _alternateFlightControls = false;
 
     private Vector2 _mousePositionScreen;
-    private Vector2 _mousePositionNormalisedToSquare;
+    private Vector2 _mousePositionNormalized;
+    private Vector2 _mousePositionNormalizedDelta;
 
     private Action<InputAction.CallbackContext> _cancelAction;
 
@@ -37,10 +38,17 @@ public class User : MonoBehaviour {
     }
 
     public void Update() {
-        // handle mouse input
+
         if (!pauseMenu.IsPaused && Preferences.Instance.GetBool("enableMouseFlightControls")) {
-            float sensitivity = Preferences.Instance.GetFloat("mouseSensitivity");
             
+            var relativeX = Preferences.Instance.GetBool("relativeMouseXAxis");
+            var relativeY = Preferences.Instance.GetBool("relativeMouseYAxis");
+            var mouseXAxisBind = Preferences.Instance.GetString("mouseXAxis");
+            var mouseYAxisBind = Preferences.Instance.GetString("mouseYAxis");
+            
+            float sensitivityX = Preferences.Instance.GetFloat("mouseXSensitivity");
+            float sensitivityY = Preferences.Instance.GetFloat("mouseYSensitivity");
+                
             Action<string, float> setInput = (axis, amount) => {
                 switch (axis) {
                     // TODO: mouse axis invert (fml)
@@ -52,31 +60,27 @@ public class User : MonoBehaviour {
                         break;
                 }
             };
-            
-            var xAxis = Preferences.Instance.GetString("mouseXAxis");
-            var yAxis = Preferences.Instance.GetString("mouseYAxis");
 
-            setInput(xAxis, _mousePositionNormalisedToSquare.x * sensitivity);
-            setInput(yAxis, _mousePositionNormalisedToSquare.y * sensitivity);
-
-            // relative mouse means reset after input
-            if (Preferences.Instance.GetBool("relativeMouseXAxis")) {
-                _mousePositionScreen.x = Screen.width / 2f;
-                _mousePositionNormalisedToSquare.x = 0;
-                Mouse.current.WarpCursorPosition(_mousePositionScreen);
+            if (relativeX) {
+                setInput(mouseXAxisBind, _mousePositionNormalizedDelta.x * sensitivityX);
             }
             else {
-                mouseWidget.mousePositionNormalised.x = _mousePositionNormalisedToSquare.x;
+                setInput(mouseXAxisBind, _mousePositionNormalized.x * sensitivityX);
             }
 
-            if (Preferences.Instance.GetBool("relativeMouseYAxis")) {
-                _mousePositionScreen.y = Screen.height / 2f;
-                _mousePositionNormalisedToSquare.y = 0;
-                Mouse.current.WarpCursorPosition(_mousePositionScreen);
+            if (relativeY) {
+                setInput(mouseYAxisBind, _mousePositionNormalizedDelta.y * sensitivityY);
             }
             else {
-                mouseWidget.mousePositionNormalised.y = _mousePositionNormalisedToSquare.y;
+                setInput(mouseYAxisBind, _mousePositionNormalized.y * sensitivityY);
             }
+
+            Vector2 widgetPosition = new Vector2(
+                relativeX ? (_mousePositionNormalizedDelta.x * 0.01f) : _mousePositionNormalized.x,
+                relativeY ? (_mousePositionNormalizedDelta.y * 0.01f) : _mousePositionNormalized.y
+            );
+            mouseWidget.UpdateWidgetSprites(widgetPosition);
+
         }
     }
 
@@ -192,16 +196,15 @@ public class User : MonoBehaviour {
         _alternateFlightControls = !_alternateFlightControls;
     }
 
-    public void OnRawMouse(InputValue value) {
+    public void OnMouseRaw(InputValue value) {
         _mousePositionScreen = value.Get<Vector2>();
+        _mousePositionNormalized = new Vector2(
+            ((_mousePositionScreen.x / Screen.width * 2) - 1),
+            (_mousePositionScreen.y / Screen.height * 2 - 1)
+        );
+    }
 
-        if (_mousePositionScreen != Vector2.zero) {
-            _mousePositionNormalisedToSquare = new Vector2(
-                ((_mousePositionScreen.x / Screen.width * 2) - 1),
-                (_mousePositionScreen.y / Screen.height * 2 - 1)
-            );
-
-            mouseWidget.UpdateWidgetSprites(_mousePositionNormalisedToSquare);
-        }
+    public void OnMouseRawNormalizedDelta(InputValue value) {
+        _mousePositionNormalizedDelta = value.Get<Vector2>();
     }
 }

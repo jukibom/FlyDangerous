@@ -69,7 +69,8 @@ namespace Engine {
         
         public float GetDefaultFloat(string key) {
             switch (key) {
-                case "mouseSensitivity":
+                case "mouseXSensitivity":
+                case "mouseYSensitivity":
                     return 1f;
                 default: 
                     Debug.LogWarning("Attempted to get preference " + key + " with no default specified");

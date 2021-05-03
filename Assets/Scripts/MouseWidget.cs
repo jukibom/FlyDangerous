@@ -27,7 +27,7 @@ public class MouseWidget : MonoBehaviour {
     void Update() {
         
         // pref determines draw active
-        var shouldShow = Preferences.Instance.GetBool("showMouseWidget");
+        var shouldShow = Preferences.Instance.GetBool("showMouseWidget") && Preferences.Instance.GetBool("enableMouseFlightControls");
         crosshair.SetActive(shouldShow);
         arrow.SetActive(shouldShow);
 
@@ -37,7 +37,7 @@ public class MouseWidget : MonoBehaviour {
             mousePositionNormalised.y * maxDistanceUnits,
             0
         ), maxDistanceUnits);
-        
+
         // rotation
         if (mousePositionNormalised != Vector2.zero) {
             var dir = arrow.transform.localPosition;
@@ -50,6 +50,9 @@ public class MouseWidget : MonoBehaviour {
         var normalisedMagnitude = arrow.transform.localPosition.magnitude / maxDistanceUnits;
         arrowImageColor.a = normalisedMagnitude;
         crosshairImageColor.a = Mathf.Pow(1f - normalisedMagnitude, 2);
+        
+        _crosshairImage.transform.localScale = Vector3.one *  (2 * Math.Min(0.4f, normalisedMagnitude) + 1);
+        _arrowImage.transform.localScale = Vector3.one * (normalisedMagnitude + 0.5f);
 
         _arrowImage.color = arrowImageColor;
         _crosshairImage.color = crosshairImageColor;

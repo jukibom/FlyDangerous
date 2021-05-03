@@ -158,9 +158,17 @@
                     "interactions": ""
                 },
                 {
-                    "name": "RawMouse",
+                    "name": "Mouse Raw",
                     "type": "Value",
-                    "id": "dce3406a-73e3-4b55-b33b-f83da08b2116",
+                    "id": "3c92b5b8-5661-4b92-b1f7-fbbe87d73044",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Mouse Raw Normalized Delta",
+                    "type": "Value",
+                    "id": "3c8df1e4-b47c-4b6e-b763-2d56ec05e701",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": ""
@@ -377,9 +385,9 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "positive",
-                    "id": "60058f84-5d0d-4c06-aa72-4365a03feda5",
-                    "path": "<Keyboard>/rightArrow",
+                    "name": "negative",
+                    "id": "acb04a75-4a54-43b8-83cf-d9966afa224b",
+                    "path": "<Keyboard>/leftArrow",
                     "interactions": "",
                     "processors": "",
                     "groups": "Everything",
@@ -388,9 +396,9 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "negative",
-                    "id": "acb04a75-4a54-43b8-83cf-d9966afa224b",
-                    "path": "<Keyboard>/leftArrow",
+                    "name": "positive",
+                    "id": "60058f84-5d0d-4c06-aa72-4365a03feda5",
+                    "path": "<Keyboard>/rightArrow",
                     "interactions": "",
                     "processors": "",
                     "groups": "Everything",
@@ -1379,12 +1387,23 @@
                 },
                 {
                     "name": "",
-                    "id": "44082d84-3fd6-458d-8e6d-a6469a71dabf",
-                    "path": "<Mouse>/position",
+                    "id": "a2b484e5-8ca9-441f-9da5-2bd5686f3086",
+                    "path": "<Pointer>/position",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Everything",
-                    "action": "RawMouse",
+                    "groups": "",
+                    "action": "Mouse Raw",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "38875558-1f4b-42f1-910c-b5593a60f015",
+                    "path": "<Pointer>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Mouse Raw Normalized Delta",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
