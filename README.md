@@ -10,6 +10,19 @@ Interested in getting involved with the dev process? Come join the discord and ~
 
 https://discord.gg/4daSEUKZ6A
 
+## Planned Features
+
+* Flight sticks of all shapes and sizes (done!)
+* Basic time trial map types
+  * Sprint: 1 start, checkpoints, 1 end
+  * Laps 1 start block, checkpoints, lap counter
+* Leaderboards with automatic replay / ghost upload via Steam
+* Basic Multiplayer
+* VR Support
+* Infinite terrain generation
+  * Freeplay flight, seed generation
+  * Record + share racetracks
+
 ## Building
 
 Unity build: 2021.1.5f1
