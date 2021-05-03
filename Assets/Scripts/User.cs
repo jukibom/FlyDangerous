@@ -1,14 +1,9 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using Engine;
 using Menus;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.InputSystem.UI;
-using UnityEngine.SceneManagement;
 
 public class User : MonoBehaviour {
 
@@ -21,6 +16,11 @@ public class User : MonoBehaviour {
     private Vector2 _mousePositionScreen;
     private Vector2 _mousePositionNormalized;
     private Vector2 _mousePositionNormalizedDelta;
+
+    private float _pitch;
+    private float _roll;
+    private float _yaw;
+
 
     private Action<InputAction.CallbackContext> _cancelAction;
 
@@ -39,6 +39,10 @@ public class User : MonoBehaviour {
 
     public void Update() {
 
+        var pitch = _pitch;
+        var roll = _roll;
+        var yaw = _yaw;
+
         if (!pauseMenu.IsPaused && Preferences.Instance.GetBool("enableMouseFlightControls")) {
             
             var relativeX = Preferences.Instance.GetBool("relativeMouseXAxis");
@@ -48,15 +52,15 @@ public class User : MonoBehaviour {
             
             float sensitivityX = Preferences.Instance.GetFloat("mouseXSensitivity");
             float sensitivityY = Preferences.Instance.GetFloat("mouseYSensitivity");
-                
+
             Action<string, float> setInput = (axis, amount) => {
                 switch (axis) {
                     // TODO: mouse axis invert (fml)
-                    case "pitch": playerShip.OnPitch(amount * -1);
+                    case "pitch": pitch += amount * -1;
                         break;
-                    case "roll": playerShip.OnRoll(amount);
+                    case "roll": roll += amount;
                         break;
-                    case "yaw": playerShip.OnYaw(amount);
+                    case "yaw": yaw += amount;
                         break;
                 }
             };
@@ -80,8 +84,11 @@ public class User : MonoBehaviour {
                 relativeY ? (_mousePositionNormalizedDelta.y * 0.01f) : _mousePositionNormalized.y
             );
             mouseWidget.UpdateWidgetSprites(widgetPosition);
-
         }
+        
+        playerShip.SetPitch(pitch);
+        playerShip.SetRoll(roll);
+        playerShip.SetYaw(yaw);
     }
 
     /**
@@ -98,10 +105,15 @@ public class User : MonoBehaviour {
 
     public void EnableUIInput() {
         pauseUIInputModule.enabled = true;
+        ResetMouseToCentre();
     }
 
     public void DisableUIInput() {
         pauseUIInputModule.enabled = false;
+    }
+
+    public void ResetMouseToCentre() {
+        Mouse.current.WarpCursorPosition(new Vector2(Screen.width / 2f, Screen.height / 2f));
     }
 
     /**
@@ -121,75 +133,69 @@ public class User : MonoBehaviour {
     }
 
     public void OnPitch(InputValue value) {
-        if (!_alternateFlightControls)
-            playerShip.OnPitch(value.Get<float>());
+        if (!_alternateFlightControls) _pitch = value.Get<float>();
     }
 
     public void OnPitchAlt(InputValue value) {
-        if (_alternateFlightControls)
-            playerShip.OnPitch(value.Get<float>());
+        if (_alternateFlightControls) _pitch = value.Get<float>();
     }
 
     public void OnRoll(InputValue value) {
-        if (!_alternateFlightControls)
-            playerShip.OnRoll(value.Get<float>());
+        if (!_alternateFlightControls) _roll = value.Get<float>();
     }
 
     public void OnRollAlt(InputValue value) {
-        if (_alternateFlightControls)
-            playerShip.OnRoll(value.Get<float>());
+        if (_alternateFlightControls) _roll = value.Get<float>();
     }
 
     public void OnYaw(InputValue value) {
-        if (!_alternateFlightControls)
-            playerShip.OnYaw(value.Get<float>());
+        if (!_alternateFlightControls) _yaw = value.Get<float>();
     }
 
     public void OnYawAlt(InputValue value) {
-        if (_alternateFlightControls)
-            playerShip.OnYaw(value.Get<float>());
+        if (_alternateFlightControls) _yaw = value.Get<float>();
     }
 
     public void OnThrottle(InputValue value) {
         if (!_alternateFlightControls)
-            playerShip.OnThrottle(value.Get<float>());
+            playerShip.SetThrottle(value.Get<float>());
     }
 
     public void OnThrottleAlt(InputValue value) {
         if (_alternateFlightControls)
-            playerShip.OnThrottle(value.Get<float>());
+            playerShip.SetThrottle(value.Get<float>());
     }
 
     public void OnLateralH(InputValue value) {
         if (!_alternateFlightControls)
-            playerShip.OnLateralH(value.Get<float>());
+            playerShip.SetLateralH(value.Get<float>());
     }
 
     public void OnLateralHAlt(InputValue value) {
         if (_alternateFlightControls)
-            playerShip.OnLateralH(value.Get<float>());
+            playerShip.SetLateralH(value.Get<float>());
     }
 
     public void OnLateralV(InputValue value) {
         if (!_alternateFlightControls)
-            playerShip.OnLateralV(value.Get<float>());
+            playerShip.SetLateralV(value.Get<float>());
     }
 
     public void OnLateralVAlt(InputValue value) {
         if (_alternateFlightControls)
-            playerShip.OnLateralV(value.Get<float>());
+            playerShip.SetLateralV(value.Get<float>());
     }
 
     public void OnBoost(InputValue value) {
-        playerShip.OnBoost(value.isPressed);
+        playerShip.Boost(value.isPressed);
     }
 
     public void OnFlightAssistToggle(InputValue value) {
-        playerShip.OnFlightAssistToggle();
+        playerShip.FlightAssistToggle();
     }
 
     public void OnVelocityLimiter(InputValue value) {
-        playerShip.OnVelocityLimiter(value.isPressed);
+        playerShip.VelocityLimiterIsPressed(value.isPressed);
     }
 
     public void OnAltFlightControlsToggle(InputValue value) {

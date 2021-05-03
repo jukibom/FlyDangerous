@@ -100,7 +100,8 @@ namespace Menus.Options {
             }
             
             // TODO: mouse sensitivity (save defaults here so it writes to config for now)
-            Preferences.Instance.SetFloat("mouseSensitivity", Preferences.Instance.GetFloat("mouseSensitivity"));
+            Preferences.Instance.SetFloat("mouseXSensitivity", Preferences.Instance.GetFloat("mouseXSensitivity"));
+            Preferences.Instance.SetFloat("mouseYSensitivity", Preferences.Instance.GetFloat("mouseYSensitivity"));
             
             Preferences.Instance.Save();
         }

@@ -63,37 +63,37 @@ public class Ship : MonoBehaviour {
         _rigidBodyComponent.inertiaTensorRotation = Quaternion.identity;
     }
 
-    public void OnPitch(float value) {
+    public void SetPitch(float value) {
         _pitch = ClampInput(value);
     }
 
-    public void OnRoll(float value) {
+    public void SetRoll(float value) {
         _roll = ClampInput(value);
     }
 
-    public void OnYaw(float value) {
+    public void SetYaw(float value) {
         _yaw = ClampInput(value);
     }
 
-    public void OnThrottle(float value) {
+    public void SetThrottle(float value) {
         _throttle = ClampInput(value);
     }
     
-    public void OnLateralH(float value) {
+    public void SetLateralH(float value) {
         _latH = ClampInput(value);
     }
     
-    public void OnLateralV(float value) {
+    public void SetLateralV(float value) {
         _latV = ClampInput(value);
     }
 
-    public void OnBoost(bool isPressed) {
+    public void Boost(bool isPressed) {
         var boost = isPressed;
         if (boost && !_boostReady) {
             _boostReady = true;
             Debug.Log("Boost Charge");
 
-            IEnumerator Boost() {
+            IEnumerator DoBoost() {
                 AudioManager.Instance.Play("ship-boost");
                 yield return new WaitForSeconds(1);
                 Debug.Log("Boost!");
@@ -102,16 +102,16 @@ public class Ship : MonoBehaviour {
                 yield return new WaitForSeconds(boostRechargeTime);
                 _boostReady = false;
             }
-            StartCoroutine(Boost());
+            StartCoroutine(DoBoost());
         }
     }
 
-    public void OnFlightAssistToggle() {
+    public void FlightAssistToggle() {
         _flightAssist = !_flightAssist;
         Debug.Log("Flight Assist " + (_flightAssist ? "ON" : "OFF") + " (partially implemented)");
     }
 
-    public void OnVelocityLimiter(bool isPressed) {
+    public void VelocityLimiterIsPressed(bool isPressed) {
         _userVelocityLimit = isPressed;
         Debug.Log("Velocity Limit " + (_userVelocityLimit ? "ON" : "OFF") + " (not implemented)");
     }

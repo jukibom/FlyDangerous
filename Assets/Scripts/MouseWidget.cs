@@ -52,7 +52,7 @@ public class MouseWidget : MonoBehaviour {
         crosshairImageColor.a = Mathf.Pow(1f - normalisedMagnitude, 2);
         
         _crosshairImage.transform.localScale = Vector3.one *  (2 * Math.Min(0.4f, normalisedMagnitude) + 1);
-        _arrowImage.transform.localScale = Vector3.one * (normalisedMagnitude + 0.5f);
+        _arrowImage.transform.localScale = Vector3.one * Mathf.Min(1, normalisedMagnitude + 0.5f);
 
         _arrowImage.color = arrowImageColor;
         _crosshairImage.color = crosshairImageColor;
