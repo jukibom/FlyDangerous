@@ -71,6 +71,11 @@ namespace Menus.Options {
             foreach (var toggleOption in toggleOptions) {
                 toggleOption.IsEnabled = Preferences.Instance.GetBool(toggleOption.Preference);
             }
+            
+            var dropdownOptions = GetComponentsInChildren<DropdownOption>(true);
+            foreach (var dropdownOption in dropdownOptions) {
+                dropdownOption.Value = Preferences.Instance.GetString(dropdownOption.Preference);
+            }
 
             _previousPrefs = Preferences.Instance.GetCurrent().Clone();
         }
@@ -88,10 +93,13 @@ namespace Menus.Options {
             foreach (var toggleOption in toggleOptions) {
                 Preferences.Instance.SetBool(toggleOption.Preference, toggleOption.IsEnabled);
             }
+
+            var dropdownOptions = GetComponentsInChildren<DropdownOption>(true);
+            foreach (var dropdownOption in dropdownOptions) {
+                Preferences.Instance.SetString(dropdownOption.Preference, dropdownOption.Value);
+            }
             
-            // TODO: Mouse axis drop-down + sensitivity (save defaults here so it writes to config for now)
-            Preferences.Instance.SetString("mouseYAxis", Preferences.Instance.GetString("mouseYAxis"));
-            Preferences.Instance.SetString("mouseXAxis", Preferences.Instance.GetString("mouseXAxis"));
+            // TODO: mouse sensitivity (save defaults here so it writes to config for now)
             Preferences.Instance.SetFloat("mouseSensitivity", Preferences.Instance.GetFloat("mouseSensitivity"));
             
             Preferences.Instance.Save();

@@ -161,10 +161,17 @@ public class Game : MonoBehaviour {
         // if terrain needs to generate, toggle special logic and wait for it to load all primary tiles
         var terrainLoader = FindObjectOfType<MapMagicObject>();
         if (terrainLoader) {
+            
+            // Stop auto-loading with default seed
             terrainLoader.StopGenerate();
             terrainLoader.ClearAll();
+            Den.Tools.Tasks.ThreadManager.Abort();
+            
+            // replace with user seed
             terrainLoader.graph.random = new Noise(seed.GetHashCode(), 32768);
             terrainLoader.StartGenerate();
+            
+            // wait for fully loaded local terrain
             while (terrainLoader.IsGenerating()) {
                 var progressPercent = Mathf.Min(100, Mathf.Round(terrainLoader.GetProgress() * 100));
                 loadingText.text = $"Generating terrain ({progressPercent}%)\n\n\nSeed: \"{seed}\"";
