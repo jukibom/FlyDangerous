@@ -27,7 +27,8 @@ namespace Menus {
         [SerializeField] private User user;
 
         private PauseMenuState _menuState = PauseMenuState.Unpaused;
-        
+
+        public bool IsPaused => _menuState != PauseMenuState.Unpaused;
         public PauseMenuState MenuState {
             get => _menuState;
             private set {

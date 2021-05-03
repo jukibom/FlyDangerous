@@ -1,11 +1,9 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Globalization;
 using Audio;
 using Engine;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Transform))]
@@ -28,22 +26,22 @@ public class Ship : MonoBehaviour {
     [SerializeField] private float boostRechargeTime = 5f;
     [SerializeField] private float minUserLimitedVelocity = 250f;
 
-    private bool _boostReady = false;
-    private bool _isBoosting = false;
-    private float _currentBoostTime = 0f;
+    private bool _boostReady;
+    private bool _isBoosting;
+    private float _currentBoostTime;
 
-    private float _prevVelocity = 0;
-    private bool _userVelocityLimit = false;
-    private float _velocityLimitCap = 0f;
-    private bool _flightAssist = false;
+    private float _prevVelocity;
+    private bool _userVelocityLimit;
+    private float _velocityLimitCap;
+    private bool _flightAssist;
 
     // input axes -1 to 1
-    private float _throttle = 0;
-    private float _latV = 0;
-    private float _latH = 0;
-    private float _pitch = 0;
-    private float _yaw = 0;
-    private float _roll = 0;
+    private float _throttle ;
+    private float _latV;
+    private float _latH;
+    private float _pitch;
+    private float _yaw;
+    private float _roll;
 
     private Transform _transformComponent;
     private Rigidbody _rigidBodyComponent;
@@ -65,32 +63,32 @@ public class Ship : MonoBehaviour {
         _rigidBodyComponent.inertiaTensorRotation = Quaternion.identity;
     }
 
-    public void OnPitch(InputValue value) {
-        _pitch = ClampInput(value.Get<float>());
+    public void OnPitch(float value) {
+        _pitch = ClampInput(value);
     }
 
-    public void OnRoll(InputValue value) {
-        _roll = ClampInput(value.Get<float>());
+    public void OnRoll(float value) {
+        _roll = ClampInput(value);
     }
 
-    public void OnYaw(InputValue value) {
-        _yaw = ClampInput(value.Get<float>());
+    public void OnYaw(float value) {
+        _yaw = ClampInput(value);
     }
 
-    public void OnThrottle(InputValue value) {
-        _throttle = ClampInput(value.Get<float>());
+    public void OnThrottle(float value) {
+        _throttle = ClampInput(value);
     }
     
-    public void OnLateralH(InputValue value) {
-        _latH = ClampInput(value.Get<float>());
+    public void OnLateralH(float value) {
+        _latH = ClampInput(value);
     }
     
-    public void OnLateralV(InputValue value) {
-        _latV = ClampInput(value.Get<float>());
+    public void OnLateralV(float value) {
+        _latV = ClampInput(value);
     }
 
-    public void OnBoost(InputValue value) {
-        var boost = value.isPressed;
+    public void OnBoost(bool isPressed) {
+        var boost = isPressed;
         if (boost && !_boostReady) {
             _boostReady = true;
             Debug.Log("Boost Charge");
@@ -108,13 +106,13 @@ public class Ship : MonoBehaviour {
         }
     }
 
-    public void OnFlightAssistToggle(InputValue value) {
+    public void OnFlightAssistToggle() {
         _flightAssist = !_flightAssist;
         Debug.Log("Flight Assist " + (_flightAssist ? "ON" : "OFF") + " (partially implemented)");
     }
 
-    public void OnVelocityLimiter(InputValue value) {
-        _userVelocityLimit = value.isPressed;
+    public void OnVelocityLimiter(bool isPressed) {
+        _userVelocityLimit = isPressed;
         Debug.Log("Velocity Limit " + (_userVelocityLimit ? "ON" : "OFF") + " (not implemented)");
     }
 

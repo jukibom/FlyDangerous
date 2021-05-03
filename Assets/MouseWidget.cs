@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Engine;
@@ -5,13 +6,14 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class MouseWidget : MonoBehaviour {
-
-    public Vector2 mousePositionScreen = Vector2.zero;
+    
     public GameObject crosshair;
     public GameObject arrow;
 
     private RawImage _crosshairImage;
     private RawImage _arrowImage;
+
+    public Vector2 mousePositionNormalised = Vector2.zero;
     
     public float maxDistanceUnits = 60f;
     
@@ -30,11 +32,6 @@ public class MouseWidget : MonoBehaviour {
         arrow.SetActive(shouldShow);
 
         // position
-        var mousePositionNormalised = new Vector2(
-            (mousePositionScreen.x / Screen.width * 2) - 1,
-            (mousePositionScreen.y / Screen.height * 2 - 1)
-        );
-        
         arrow.transform.localPosition = Vector3.ClampMagnitude(new Vector3(
             mousePositionNormalised.x * maxDistanceUnits,
             mousePositionNormalised.y * maxDistanceUnits,
@@ -51,16 +48,16 @@ public class MouseWidget : MonoBehaviour {
         var arrowImageColor = _arrowImage.color;
         var crosshairImageColor = _crosshairImage.color;
         var normalisedMagnitude = arrow.transform.localPosition.magnitude / maxDistanceUnits;
-        arrowImageColor.a = Mathf.Pow(normalisedMagnitude, 2);
+        arrowImageColor.a = normalisedMagnitude;
         crosshairImageColor.a = Mathf.Pow(1f - normalisedMagnitude, 2);
 
         _arrowImage.color = arrowImageColor;
         _crosshairImage.color = crosshairImageColor;
     }
-    
-    public void SetMousePositionScreen(Vector2 mousePos) {
-        if (mousePos != Vector2.zero) {
-            mousePositionScreen = mousePos;
+
+    public void UpdateWidgetSprites(Vector2 mousePositionNormalised) {
+        if (mousePositionNormalised != Vector2.zero) {
+            this.mousePositionNormalised = mousePositionNormalised;
         }
     }
 }

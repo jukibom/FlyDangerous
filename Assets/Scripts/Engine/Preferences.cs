@@ -68,6 +68,10 @@ namespace Engine {
             switch (key) {
                 case "inputBindings":
                     return "";
+                case "mouseXAxis":
+                    return "roll";
+                case "mouseYAxis":
+                    return "pitch";
                 default: 
                     Debug.LogWarning("Attempted to get preference " + key + " with no default specified");
                     return "";
