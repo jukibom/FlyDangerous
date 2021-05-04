@@ -111,6 +111,7 @@ namespace Menus {
                     backgroundCanvas.SetActive(false);
                     user.EnableGameInput();
                     user.DisableUIInput();
+                    user.ResetMouseToCentre();
                     Time.timeScale = 1;
                     break;
                 case PauseMenuState.PausedMainMenu: 
@@ -118,6 +119,7 @@ namespace Menus {
                     backgroundCanvas.SetActive(true);
                     user.DisableGameInput();
                     user.EnableUIInput();
+                    user.ResetMouseToCentre();
                     optionsPanel.Hide();
                     mainPanel.Show();
                     Time.timeScale = 0;

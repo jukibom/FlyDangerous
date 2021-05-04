@@ -3,6 +3,7 @@ using Engine;
 using Menus;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.InputSystem.UI;
 
 public class User : MonoBehaviour {
@@ -27,10 +28,12 @@ public class User : MonoBehaviour {
     /** Boostrap global ESC / cancel action in UI */
     public void Awake() {
         _cancelAction = (context) => { OnShowGameMenu(); };
+        ResetMouseToCentre();
     }
 
     public void OnEnable() {
         pauseUIInputModule.cancel.action.performed += _cancelAction;
+        ResetMouseToCentre();
     }
 
     public void OnDisable() {
@@ -105,7 +108,6 @@ public class User : MonoBehaviour {
 
     public void EnableUIInput() {
         pauseUIInputModule.enabled = true;
-        ResetMouseToCentre();
     }
 
     public void DisableUIInput() {
@@ -113,7 +115,12 @@ public class User : MonoBehaviour {
     }
 
     public void ResetMouseToCentre() {
-        Mouse.current.WarpCursorPosition(new Vector2(Screen.width / 2f, Screen.height / 2f));
+        var warpedPosition = new Vector2(Screen.width / 2f, Screen.height / 2f);
+        Mouse.current.WarpCursorPosition(warpedPosition);
+        InputState.Change(Mouse.current.position, warpedPosition);
+        _mousePositionScreen = warpedPosition;
+        _mousePositionNormalized = new Vector2(0, 0);
+        _mousePositionNormalizedDelta = new Vector2(0, 0); 
     }
 
     /**

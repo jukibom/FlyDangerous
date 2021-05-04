@@ -191,6 +191,7 @@ public class Game : MonoBehaviour {
         if (user != null) {
             user.DisableGameInput();
             user.DisableUIInput();
+            user.ResetMouseToCentre();
         }
         
         FadeFromBlack();
