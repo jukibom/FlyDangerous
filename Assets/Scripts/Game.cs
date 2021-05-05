@@ -183,9 +183,9 @@ public class Game : MonoBehaviour {
             
             // Stop auto-loading with default seed
             terrainLoader.StopGenerate();
-            terrainLoader.ClearAll();
             Den.Tools.Tasks.ThreadManager.Abort();
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForEndOfFrame();
+            terrainLoader.ClearAll();
             
             // replace with user seed
             terrainLoader.graph.random = new Noise(_levelData.terrainSeed.GetHashCode(), 32768);
