@@ -14,7 +14,10 @@ public class Game : MonoBehaviour {
     public static Game Instance;
     
     private LevelData _levelData = new LevelData();
-    public bool isTerrainMap => _levelData.location == Location.Terrain;
+    public LevelData LevelDataLoaded => _levelData;
+    public LevelData LevelDataCurrent => GenerateLevelData();
+    public bool IsTerrainMap => _levelData.location == Location.Terrain;
+    public string Seed => _levelData.terrainSeed;
     
     [SerializeField] private Animator crossfade;
 
@@ -36,7 +39,7 @@ public class Game : MonoBehaviour {
         DontDestroyOnLoad(gameObject);
     }
 
-    public void StartGame(LevelData levelData) {
+    public void StartGame(LevelData levelData, bool dynamicPlacementStart = false) {
         _levelData = levelData;
         HideCursor();
 
@@ -70,7 +73,7 @@ public class Game : MonoBehaviour {
             scenesLoading.Add(SceneManager.LoadSceneAsync(mapScene, LoadSceneMode.Additive));
             scenesLoading.Add(SceneManager.LoadSceneAsync("Player", LoadSceneMode.Additive));
             scenesLoading.ForEach(scene => scene.allowSceneActivation = false);
-            StartCoroutine(LoadGameScenes(loadText));
+            StartCoroutine(LoadGameScenes(loadText, dynamicPlacementStart));
         }
         
         StartCoroutine(SwitchToLoadingScreen());
@@ -137,8 +140,41 @@ public class Game : MonoBehaviour {
     private void ResetGameState() {
         _levelData = new LevelData();
     }
+
+    // Return a new level data object hydrated with all the information of the current game state
+    private LevelData GenerateLevelData() {
+        var levelData = new LevelData();
+        levelData.raceType = _levelData.raceType;
+        levelData.location = _levelData.location;
+        levelData.terrainSeed = _levelData.terrainSeed;
+        levelData.start = _levelData.start;
+        levelData.end = _levelData.end;
+        levelData.checkpoints = _levelData.checkpoints;
+
+        var ship = FindObjectOfType<Ship>();
+        var floatingOrigin = FindObjectOfType<FloatingOrigin>();
+        if (ship) {
+            var position = ship.transform.position;
+            var rotation = ship.transform.rotation.eulerAngles;
+            levelData.startPosition.x = position.x;
+            levelData.startPosition.y = position.y;
+            levelData.startPosition.z = position.z;
+            levelData.startRotation.x = rotation.x;
+            levelData.startRotation.y = rotation.y;
+            levelData.startRotation.z = rotation.z;
+
+            // if floating origin fix is active, overwrite position with corrected world space
+            if (floatingOrigin) {
+                var origin = floatingOrigin.FocalObjectPosition;
+                levelData.startPosition.x = origin.x;
+                levelData.startPosition.y = origin.y;
+                levelData.startPosition.z = origin.z;
+            }
+        }
+        return levelData;
+    }
     
-    IEnumerator LoadGameScenes(Text loadingText) {
+    IEnumerator LoadGameScenes(Text loadingText, bool dynamicPlacement) {
         
         // disable all game interactions
         Time.timeScale = 0;
@@ -176,6 +212,22 @@ public class Game : MonoBehaviour {
             user.DisableUIInput();
             user.ResetMouseToCentre();
         }
+        
+        // ship placement
+        var ship = FindObjectOfType<Ship>();
+        if (ship && !dynamicPlacement) {
+            var t = _levelData.startPosition.x;
+            ship.transform.position = new Vector3(
+                _levelData.startPosition.x,
+                _levelData.startPosition.y,
+                _levelData.startPosition.z
+            );
+            ship.transform.rotation = Quaternion.Euler(
+                _levelData.startRotation.x,    
+                _levelData.startRotation.y,    
+                _levelData.startRotation.z    
+            );
+        }
 
         // if terrain needs to generate, toggle special logic and wait for it to load all primary tiles
         var terrainLoader = FindObjectOfType<MapMagicObject>();
@@ -198,24 +250,15 @@ public class Game : MonoBehaviour {
 
                 yield return null;
             }
+            
+            // terrain loaded, if we need to dynamically place the ship let's do that now
+            if (dynamicPlacement) {
+                // move the player up high and perform 5 raycasts - one from each corner of the ship and one from the centre.
+                // move the player to the closest one, height-wise.
+                
+            }
         }
-        
-        // ship placement
-        var ship = FindObjectOfType<Ship>();
-        if (ship) {
-            var t = _levelData.startPosition.x;
-            ship.transform.position = new Vector3(
-                _levelData.startPosition.x,
-                _levelData.startPosition.y,
-                _levelData.startPosition.z
-            );
-            ship.transform.rotation = Quaternion.Euler(
-                _levelData.startRotation.x,    
-                _levelData.startRotation.y,    
-                _levelData.startRotation.z    
-            );
-        }
-        
+
         // unload the loading screen
         var unload = SceneManager.UnloadSceneAsync("Loading");
         while (!unload.isDone) {

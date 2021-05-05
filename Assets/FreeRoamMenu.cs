@@ -39,35 +39,42 @@ public class FreeRoamMenu : MonoBehaviour {
             seedInput.text = Guid.NewGuid().ToString();
         }
 
-        saveInput.text = "";
+        if (_levelData != null && _levelData.terrainSeed != seedInput.text) {
+            saveInput.text = "";
+        }
+
         OnSaveInputFieldChanged("");
     }
 
     public void OnSaveInputFieldChanged(string levelString) {
-        
-        // TODO: parse save data here
-            // if error set warning text
-            // if not, replace seed in text field
-        if (saveInput.text.Length != 0) {
-            saveWarning.gameObject.SetActive(true);
-            goButton.enabled = false;
-        }
-        else {
-            saveWarning.gameObject.SetActive(false);
-            goButton.enabled = true;
+        var text = saveInput.text;
+        saveWarning.gameObject.SetActive(false);
+        goButton.enabled = true;
+
+        if (text.Length > 0) {
+            _levelData = LevelData.FromJsonString(text);
+
+            if (_levelData == null) {
+                saveWarning.enabled = true;
+                saveWarning.gameObject.SetActive(true);
+                goButton.enabled = false;
+            }
+            else {
+                seedInput.text = _levelData.terrainSeed;
+            }
         }
     }
 
     public void StartFreeRoam() {
+        bool dynamicPlacementStart = _levelData == null;
         var levelData = _levelData != null ? _levelData : new LevelData();
         levelData.location = Location.Terrain;
+        levelData.raceType = RaceType.FreeRoam;
         levelData.terrainSeed = seedInput.text;
-            
-        // TODO: get data from dialog
-            
+
         // TODO: some better initial placement system for terrain
         levelData.startPosition.y = levelData.startPosition.y == 0 ? 2100 : levelData.startPosition.y;
             
-        Game.Instance.StartGame(levelData);
+        Game.Instance.StartGame(levelData, dynamicPlacementStart);
     }    
 }

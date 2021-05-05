@@ -15,7 +15,7 @@ public class FloatingOrigin : MonoBehaviour {
     // The target world transform to manipulate
      private Transform _worldTransform;
 
-     public Vector3 FocalObjectPosition => -this._worldTransform.position;
+     public Vector3 FocalObjectPosition => focalTransform.position + (_worldTransform.position * -1);
 
     void OnEnable() {
         _worldTransform = GameObject.Find("World")?.transform;

@@ -1,3 +1,4 @@
+using System.Collections;
 using Audio;
 using Menus.Options;
 using UnityEngine;
@@ -23,6 +24,9 @@ namespace Menus {
         [SerializeField] private PauseMainMenu mainPanel;
 
         [SerializeField] private OptionsMenu optionsPanel;
+
+        [SerializeField] private Text copyConfirmationText;
+        [SerializeField] private Text seedText;
         
         [SerializeField] private User user;
 
@@ -54,6 +58,7 @@ namespace Menus {
         }
         
         private void Start() {
+            seedText.text = Game.Instance.IsTerrainMap ? "SEED: " + Game.Instance.Seed : "";
             _menuCanvas = backgroundCanvas.GetComponent<Canvas>();
             _panelAnimator = mainCanvas.GetComponent<Animator>();
 
@@ -101,6 +106,29 @@ namespace Menus {
             AudioManager.Instance.Play("ui-confirm");
             Resume();
             Game.Instance.QuitToMenu();
+        }
+
+        public void CopyLocationToClipboard() {
+            AudioManager.Instance.Play("ui-confirm");
+            GUIUtility.systemCopyBuffer = Game.Instance.LevelDataCurrent.ToJsonString();
+            var copyConfirmTransform = copyConfirmationText.transform;
+            copyConfirmTransform.localPosition = new Vector3(copyConfirmTransform.localPosition.x, 55, copyConfirmTransform.position.z);
+            copyConfirmationText.color = new Color(1f, 1f, 1f, 1f);
+            
+            IEnumerator FadeText() {
+                while (copyConfirmationText.color.a > 0.0f) {
+                    copyConfirmationText.color = new Color(1f, 1f, 1f, copyConfirmationText.color.a - Time.unscaledDeltaTime);
+                    
+                    copyConfirmTransform.localPosition = new Vector3(
+                        copyConfirmTransform.localPosition.x, 
+                        copyConfirmationText.gameObject.transform.localPosition.y + (Time.unscaledDeltaTime * 20), 
+                        copyConfirmTransform.position.z
+                    );
+                    yield return null;
+                }
+            }
+            
+            StartCoroutine(FadeText());
         }
         
         // toggle ship controller input and timescales

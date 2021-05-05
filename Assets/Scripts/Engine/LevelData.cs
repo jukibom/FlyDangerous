@@ -1,5 +1,8 @@
+using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using Newtonsoft.Json;
+using UnityEngine;
 
 namespace Engine {
     public class LevelDataVector2<T> {
@@ -14,11 +17,13 @@ namespace Engine {
     }
 
     public enum Location {
+        NullSpace,
         TestSpaceStation,
         Terrain,
     }
     
     public enum RaceType {
+        None,
         Sprint,
         Laps,
         FreeRoam,
@@ -32,12 +37,26 @@ namespace Engine {
     public class LevelData {
         public Location location;
         public string terrainSeed;
-        public LevelDataVector2<int> terrainTile = new LevelDataVector2<int>();
         public LevelDataVector3<float> startPosition = new LevelDataVector3<float>();
         public LevelDataVector3<float> startRotation = new LevelDataVector3<float>();
         public RaceType raceType;
         [CanBeNull] public Checkpoint start;
         [CanBeNull] public List<Checkpoint> checkpoints;
         [CanBeNull] public Checkpoint end;
+        
+        public string ToJsonString() {
+            return JsonConvert.SerializeObject(this, Formatting.Indented);
+        }
+
+        [CanBeNull]
+        public static LevelData FromJsonString(string json) {
+            try {
+                return JsonConvert.DeserializeObject<LevelData>(json);
+            }
+            catch (Exception e){
+                Debug.LogWarning(e.Message);
+                return null;
+            }
+        }
     }
 }
