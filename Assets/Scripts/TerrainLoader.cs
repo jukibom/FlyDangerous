@@ -17,16 +17,8 @@ public class TerrainLoader : MonoBehaviour {
 
     private Ship _ship;
     
-    private MapMagicObject _mapMagicObject;
-
-    // Start is called before the first frame update
-    void Start() {
-        Game.Instance.isTerrainMap = true;
-    }
-
     private void OnEnable() {
         _ship = FindObjectOfType<Ship>();
-        _mapMagicObject = GetComponent<MapMagicObject>();
         MapMagic.Terrains.TerrainTile.OnTileApplied += OnTileApplied;
     }
 

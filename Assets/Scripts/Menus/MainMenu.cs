@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Audio;
+using Engine;
 using Menus.Options;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -15,6 +16,9 @@ namespace Menus {
         
         [SerializeField]
         private OptionsMenu optionsMenu;
+        
+        [SerializeField]
+        private FreeRoamMenu freeRoamMenu;
 
         [SerializeField] private GameObject shipMesh;
         [SerializeField] private GameObject alphaMessage;
@@ -37,14 +41,23 @@ namespace Menus {
 
         public void Race() {
             AudioManager.Instance.Play("ui-confirm");
-            Game.Instance.StartGame("MapTest");
+            
+            var levelData = new LevelData();
+            levelData.location = Location.TestSpaceStation;
+            Game.Instance.StartGame(levelData);
+            
             topMenu.Hide();
         }
 
-        public void FreePlay() {
-            AudioManager.Instance.Play("ui-confirm");
-            Game.Instance.StartGame("Terrain");
+        public void OpenFreeRoamPanel() {
+            AudioManager.Instance.Play("ui-dialog-open");
+            freeRoamMenu.Show();
             topMenu.Hide();
+        }
+        
+        public void CloseFreeRoamPanel() {
+            freeRoamMenu.Hide();
+            topMenu.Show();
         }
 
         public void OpenOptionsPanel() {

@@ -22,6 +22,7 @@ public class User : MonoBehaviour {
     private float _roll;
     private float _yaw;
 
+    private bool _inputEnabled = true;
 
     private Action<InputAction.CallbackContext> _cancelAction;
 
@@ -41,6 +42,10 @@ public class User : MonoBehaviour {
     }
 
     public void Update() {
+
+        if (!_inputEnabled) {
+            return;
+        }
 
         var pitch = _pitch;
         var roll = _roll;
@@ -100,10 +105,12 @@ public class User : MonoBehaviour {
      */
     public void EnableGameInput() {
         GetComponent<PlayerInput>().ActivateInput();
+        _inputEnabled = true;
     }
 
     public void DisableGameInput() {
         GetComponent<PlayerInput>().DeactivateInput();
+        _inputEnabled = false;
     }
 
     public void EnableUIInput() {

@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Den.Tools;
+using Engine;
 using MapMagic.Core;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -10,9 +12,9 @@ using UnityEngine.UI;
 public class Game : MonoBehaviour {
 
     public static Game Instance;
-
-    public string seed = "123456";
-    public bool isTerrainMap = false;
+    
+    private LevelData _levelData = new LevelData();
+    public bool isTerrainMap => _levelData.location == Location.Terrain;
     
     [SerializeField] private Animator crossfade;
 
@@ -34,8 +36,16 @@ public class Game : MonoBehaviour {
         DontDestroyOnLoad(gameObject);
     }
 
-    public void StartGame(string mapScene) {
+    public void StartGame(LevelData levelData) {
+        _levelData = levelData;
         HideCursor();
+
+        string mapScene;
+        switch (levelData.location) {
+            case Location.TestSpaceStation: mapScene = "MapTest"; break;
+            case Location.Terrain: mapScene = "Terrain"; break;
+            default: throw new Exception("Supplied map type (" + levelData.location + ") is not a valid scene.");
+        }
         
         // This is a separate action so that we can safely move to a new active loading scene and fully unload everything before moving to any other map
         IEnumerator SwitchToLoadingScreen() {
@@ -46,7 +56,7 @@ public class Game : MonoBehaviour {
                 user.DisableGameInput();
                 user.DisableUIInput();
             }
-            
+
             crossfade.SetTrigger("FadeToBlack");
             yield return new WaitForSeconds(0.5f);
             
@@ -69,7 +79,7 @@ public class Game : MonoBehaviour {
     public void RestartLevel() {
         // Todo: record player initial state and load it here instead of this scene juggling farce which takes ages to load
         StopTerrainGeneration();
-        StartGame(SceneManager.GetActiveScene().name);
+        StartGame(_levelData);
     }
 
     public void QuitToMenu() {
@@ -125,20 +135,21 @@ public class Game : MonoBehaviour {
     }
     
     private void ResetGameState() {
-        isTerrainMap = false;
+        _levelData = new LevelData();
     }
     
     IEnumerator LoadGameScenes(Text loadingText) {
         
+        // disable all game interactions
+        Time.timeScale = 0;
+        
         float progress = 0;
-        float totalProgress = 0;
         for (int i = 0; i < scenesLoading.Count; ++i) {
             while (scenesLoading[i].progress < 0.9f) { // this is literally what the unity docs recommend
                 yield return null;
                     
                 progress += scenesLoading[i].progress;
-                totalProgress = progress / scenesLoading.Count;
-
+                var totalProgress = progress / scenesLoading.Count;
                 var progressPercent = Mathf.Min(100, Mathf.Round(totalProgress * 100));
                 
                 // set loading text (last scene is always the engine)
@@ -158,26 +169,51 @@ public class Game : MonoBehaviour {
             }
         }
         
+        // disable user input now that a valid user has loaded
+        var user = FindObjectOfType<User>();
+        if (user != null) {
+            user.DisableGameInput();
+            user.DisableUIInput();
+            user.ResetMouseToCentre();
+        }
+
         // if terrain needs to generate, toggle special logic and wait for it to load all primary tiles
         var terrainLoader = FindObjectOfType<MapMagicObject>();
-        if (terrainLoader) {
+        if (_levelData.location == Location.Terrain && terrainLoader) {
             
             // Stop auto-loading with default seed
             terrainLoader.StopGenerate();
             terrainLoader.ClearAll();
             Den.Tools.Tasks.ThreadManager.Abort();
+            yield return new WaitForSeconds(0.1f);
             
             // replace with user seed
-            terrainLoader.graph.random = new Noise(seed.GetHashCode(), 32768);
+            terrainLoader.graph.random = new Noise(_levelData.terrainSeed.GetHashCode(), 32768);
             terrainLoader.StartGenerate();
             
             // wait for fully loaded local terrain
             while (terrainLoader.IsGenerating()) {
                 var progressPercent = Mathf.Min(100, Mathf.Round(terrainLoader.GetProgress() * 100));
-                loadingText.text = $"Generating terrain ({progressPercent}%)\n\n\nSeed: \"{seed}\"";
+                loadingText.text = $"Generating terrain ({progressPercent}%)\n\n\nSeed: \"{_levelData.terrainSeed}\"";
 
                 yield return null;
             }
+        }
+        
+        // ship placement
+        var ship = FindObjectOfType<Ship>();
+        if (ship) {
+            var t = _levelData.startPosition.x;
+            ship.transform.position = new Vector3(
+                _levelData.startPosition.x,
+                _levelData.startPosition.y,
+                _levelData.startPosition.z
+            );
+            ship.transform.rotation = Quaternion.Euler(
+                _levelData.startRotation.x,    
+                _levelData.startRotation.y,    
+                _levelData.startRotation.z    
+            );
         }
         
         // unload the loading screen
@@ -185,17 +221,11 @@ public class Game : MonoBehaviour {
         while (!unload.isDone) {
             yield return null;
         }
-        
-        // disable user input while fading back out (pause screen can pause fade animation!)
-        var user = FindObjectOfType<User>();
-        if (user != null) {
-            user.DisableGameInput();
-            user.DisableUIInput();
-            user.ResetMouseToCentre();
-        }
-        
+
+        // resume the game
+        Time.timeScale = 1;
         FadeFromBlack();
-        yield return new WaitForSeconds(0.6f);
+        yield return new WaitForSeconds(0.7f);
 
         // enable user input
         if (user != null) {
