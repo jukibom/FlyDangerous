@@ -46,6 +46,19 @@ public class DevPanelFlightParams : MonoBehaviour {
         UpdateTextFields(Ship.ShipParameterDefaults);
     }
 
+    public void CopyToClipboard() {
+        GUIUtility.systemCopyBuffer = GetFlightParams().ToJsonString();
+    }
+
+    public void LoadFromClipboard() {
+        string data = GUIUtility.systemCopyBuffer;
+        Debug.Log(data);
+        var parameters = ShipParameters.FromJsonString(data);
+        if (parameters != null) {
+            UpdateTextFields(parameters);
+        }
+    }
+
     // Update is called once per frame
     public void UpdateTextFields(ShipParameters parameters) {
         maxSpeedTextField.text = parameters.maxSpeed.ToString();
