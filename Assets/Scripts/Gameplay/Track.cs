@@ -9,6 +9,7 @@ public class Track : MonoBehaviour {
     public List<Checkpoint> hitCheckpoints;
     private Checkpoint[] _totalCheckpoints;
     private Text timeText;
+    private bool _started;
     private bool _complete;
     private User _user;
     
@@ -18,6 +19,17 @@ public class Track : MonoBehaviour {
     
     public void Awake() {
         _totalCheckpoints = GetComponentsInChildren<Checkpoint>();
+    }
+
+    public void ResetTimer() {
+        _started = false;
+        _complete = false;
+        timeMs = 0;
+    }
+
+    public void StartTimer() {
+        ResetTimer();
+        _started = true;
     }
 
     public void CheckpointHit(Checkpoint checkpoint) {
@@ -54,9 +66,13 @@ public class Track : MonoBehaviour {
     
     private void FixedUpdate() {
         // failing to get user in early stages due to modular loading? 
-        if (!_user) _user = FindObjectOfType<User>();
+        if (!_user) {
+            _user = FindObjectOfType<User>();
+            return;
+        }
 
-        if (!_complete && _user.totalTimeDisplay != null) {
+        if (_started && !_complete && _user.totalTimeDisplay != null) {
+            _user.totalTimeDisplay.textBox.color = new Color(1f, 1f, 1f, 1f);
             timeMs += Time.fixedDeltaTime;
             _user.totalTimeDisplay.SetTimeMs(timeMs);
         }

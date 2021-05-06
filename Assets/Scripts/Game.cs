@@ -270,6 +270,12 @@ public class Game : MonoBehaviour {
         Time.timeScale = 1;
         FadeFromBlack();
         yield return new WaitForSeconds(0.7f);
+        
+        // if there's a track in the game world, set the timer going
+        var track = FindObjectOfType<Track>();
+        if (track) {
+            track.StartTimer();
+        }
 
         // enable user input
         if (user != null) {
