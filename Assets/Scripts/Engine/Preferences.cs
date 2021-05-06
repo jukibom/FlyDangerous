@@ -53,11 +53,11 @@ namespace Engine {
                 case "showSpaceDust":
                 case "enableMouseFlightControls":
                 case "showMouseWidget":
+                case "flightAssistOnByDefault": 
                     return true;
                 
                 case "relativeMouseXAxis":
                 case "relativeMouseYAxis":
-                case "flightAssistOnByDefault": 
                 case "enableTerrainScaling":
                     return false;
                 
