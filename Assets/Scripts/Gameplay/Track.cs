@@ -37,6 +37,11 @@ public class Track : MonoBehaviour {
 
         if (hitCheckpoint && hitCheckpoint.type == CheckpointType.End) {
             _user.totalTimeDisplay.GetComponent<Text>().color = new Color(0, 1, 0, 1);
+
+            if (!FindObjectOfType<Game>().ShipParameters.ToJsonString().Equals(Ship.ShipParameterDefaults.ToJsonString())) {
+                // you dirty debug cheater!
+                _user.totalTimeDisplay.GetComponent<Text>().color = new Color(1, 1, 0, 1);
+            }
             _complete = true;
         }
         

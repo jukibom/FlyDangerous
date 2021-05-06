@@ -45,6 +45,7 @@ namespace Menus.Options {
 
         public void Apply() {
             SavePreferences();
+            SetDebugFlightParameters();
             returnToParentMenu.Invoke();
             AudioManager.Instance.Play("ui-confirm");
         }
@@ -104,6 +105,13 @@ namespace Menus.Options {
             Preferences.Instance.SetFloat("mouseYSensitivity", Preferences.Instance.GetFloat("mouseYSensitivity"));
             
             Preferences.Instance.Save();
+        }
+
+        private void SetDebugFlightParameters() {
+            var debugFlightOptions = GetComponent<DevPanelFlightParams>();
+            if (debugFlightOptions) {
+                Game.Instance.ShipParameters = debugFlightOptions.GetFlightParams();
+            }
         }
         private void LoadBindings() {
             var bindings = Preferences.Instance.GetString("inputBindings");

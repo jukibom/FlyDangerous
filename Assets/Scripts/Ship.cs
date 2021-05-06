@@ -3,12 +3,100 @@ using System.Collections;
 using System.Globalization;
 using Audio;
 using Engine;
+using JetBrains.Annotations;
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UI;
+
+public class ShipParameters {
+    public float maxSpeed;
+    public float maxBoostSpeed;
+    public float maxThrust;
+    public float torqueThrustMultiplier;
+    public float pitchMultiplier;
+    public float rollMultiplier;
+    public float yawMultiplier;
+    public float thrustBoostMultiplier;
+    public float torqueBoostMultiplier;
+    public float totalBoostTime;
+    public float totalBoostRotationalTime;
+    public float boostRechargeTime;
+    public float minUserLimitedVelocity;
+
+    public string ToJsonString() {
+        return JsonConvert.SerializeObject(this, Formatting.Indented);
+    }
+
+    [CanBeNull]
+    public static ShipParameters FromJsonString(string json) {
+        try {
+            return JsonConvert.DeserializeObject<ShipParameters>(json);
+        }
+        catch (Exception e){
+            Debug.LogWarning(e.Message);
+            return null;
+        }
+    }
+}
 
 [RequireComponent(typeof(Transform))]
 [RequireComponent(typeof(Rigidbody))]
 public class Ship : MonoBehaviour {
+    
+    // TODO: remove this stuff once params are finalised (this is for debug panel in release)
+    public static ShipParameters ShipParameterDefaults {
+        get {
+            var shipDefaults = new ShipParameters();
+            shipDefaults.maxSpeed = 800;
+            shipDefaults.maxBoostSpeed = 932;
+            shipDefaults.maxThrust = 100000;
+            shipDefaults.torqueThrustMultiplier = 0.2f;
+            shipDefaults.pitchMultiplier = 1;
+            shipDefaults.rollMultiplier = 0.3f;
+            shipDefaults.yawMultiplier = 0.5f;
+            shipDefaults.thrustBoostMultiplier = 5;
+            shipDefaults.torqueBoostMultiplier = 2f;
+            shipDefaults.totalBoostTime = 6f;
+            shipDefaults.totalBoostRotationalTime = 7f;
+            shipDefaults.boostRechargeTime = 5f;
+            shipDefaults.minUserLimitedVelocity = 250f;
+            return shipDefaults;
+        }
+    }
+    public ShipParameters Parameters {
+        get {
+            var parameters = new ShipParameters();
+            parameters.maxSpeed = maxSpeed; 
+            parameters.maxBoostSpeed = maxBoostSpeed;
+            parameters.maxThrust = maxThrust;
+            parameters.torqueThrustMultiplier = torqueThrustMultiplier;
+            parameters.pitchMultiplier = pitchMultiplier;
+            parameters.rollMultiplier = rollMultiplier;
+            parameters.yawMultiplier = yawMultiplier;
+            parameters.thrustBoostMultiplier = thrustBoostMultiplier;
+            parameters.torqueBoostMultiplier = torqueBoostMultiplier;
+            parameters.totalBoostTime = totalBoostTime;
+            parameters.totalBoostRotationalTime = totalBoostRotationalTime;
+            parameters.boostRechargeTime = boostRechargeTime;
+            parameters.minUserLimitedVelocity = minUserLimitedVelocity;
+            return parameters;
+        }
+        set {
+            maxSpeed = value.maxSpeed;
+            maxBoostSpeed = value.maxBoostSpeed;
+            maxThrust = value.maxThrust;
+            torqueThrustMultiplier = value.torqueThrustMultiplier;
+            pitchMultiplier = value.pitchMultiplier;
+            rollMultiplier = value.rollMultiplier;
+            yawMultiplier = value.yawMultiplier;
+            thrustBoostMultiplier = value.thrustBoostMultiplier;
+            torqueBoostMultiplier = value.torqueBoostMultiplier;
+            totalBoostTime = value.totalBoostTime;
+            totalBoostRotationalTime = value.totalBoostRotationalTime;
+            boostRechargeTime = value.boostRechargeTime;
+            minUserLimitedVelocity = value.minUserLimitedVelocity;
+        }
+    }
     
     // TODO: split this into various thruster powers
     [SerializeField] private Text velocityIndicator;

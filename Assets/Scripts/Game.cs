@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Den.Tools;
 using Engine;
+using JetBrains.Annotations;
 using MapMagic.Core;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -16,6 +17,19 @@ public class Game : MonoBehaviour {
     private LevelData _levelData = new LevelData();
     public LevelData LevelDataLoaded => _levelData;
     public LevelData LevelDataCurrent => GenerateLevelData();
+
+    [CanBeNull] private ShipParameters _shipParameters;
+    public ShipParameters ShipParameters {
+        get => _shipParameters == null 
+            ? FindObjectOfType<Ship>()?.Parameters ?? Ship.ShipParameterDefaults
+            : _shipParameters;
+        set {
+            _shipParameters = value;
+            var ship = FindObjectOfType<Ship>();
+            if (ship) ship.Parameters = _shipParameters;
+        }
+    }
+
     public bool IsTerrainMap => _levelData.location == Location.Terrain;
     public string Seed => _levelData.terrainSeed;
     
@@ -228,6 +242,9 @@ public class Game : MonoBehaviour {
                 _levelData.startRotation.y,    
                 _levelData.startRotation.z    
             );
+            
+            // debug flight params
+            ship.Parameters = ShipParameters;
         }
 
         // if terrain needs to generate, toggle special logic and wait for it to load all primary tiles
@@ -256,7 +273,7 @@ public class Game : MonoBehaviour {
             if (dynamicPlacement) {
                 // move the player up high and perform 5 raycasts - one from each corner of the ship and one from the centre.
                 // move the player to the closest one, height-wise.
-                
+                // TODO :| (and remove the set of 2100 from the free roam menu class! You're welcome, future me!)
             }
         }
 
