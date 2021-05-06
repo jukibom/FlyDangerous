@@ -73,7 +73,10 @@ public class FreeRoamMenu : MonoBehaviour {
         levelData.terrainSeed = seedInput.text;
 
         // TODO: some better initial placement system for terrain
-        levelData.startPosition.y = levelData.startPosition.y == 0 ? 2100 : levelData.startPosition.y;
+        if (dynamicPlacementStart) {
+            levelData.startPosition.y = levelData.startPosition.y == 0 ? 2100 : levelData.startPosition.y;
+            dynamicPlacementStart = false;
+        }
             
         Game.Instance.StartGame(levelData, dynamicPlacementStart);
     }    

@@ -45,6 +45,7 @@ public class Game : MonoBehaviour {
 
         string mapScene;
         switch (levelData.location) {
+            case Location.NullSpace: mapScene = "MapTest"; break;   // used when loading without going via the menu
             case Location.TestSpaceStation: mapScene = "MapTest"; break;
             case Location.Terrain: mapScene = "Terrain"; break;
             default: throw new Exception("Supplied map type (" + levelData.location + ") is not a valid scene.");

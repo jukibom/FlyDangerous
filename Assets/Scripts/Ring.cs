@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Engine;
 using UnityEngine;
 
 public class Ring : MonoBehaviour
@@ -11,6 +12,9 @@ public class Ring : MonoBehaviour
         
     // Start is called before the first frame update
     void Start() {
+        if (Game.Instance.LevelDataLoaded.raceType != RaceType.FreeRoam) {
+            gameObject.SetActive(false);
+        }
         _transform = transform;
         if (rotationAmount == 0) {
             rotationAmount = Random.Range(-0.5f, 0.5f);

@@ -116,6 +116,13 @@ public class Ship : MonoBehaviour {
         Debug.Log("Velocity Limit " + (_userVelocityLimit ? "ON" : "OFF") + " (not implemented)");
     }
 
+    private void OnTriggerEnter(Collider other) {
+        var checkpoint = other.GetComponentInParent<Checkpoint>();
+        if (checkpoint) {
+            checkpoint.Hit();
+        }
+    }
+
     // Apply all physics updates in fixed intervals (WRITE)
     private void FixedUpdate() {
         
