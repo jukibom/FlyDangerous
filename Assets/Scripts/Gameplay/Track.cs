@@ -9,36 +9,56 @@ public class Track : MonoBehaviour {
     public List<Checkpoint> hitCheckpoints;
     private Checkpoint[] _totalCheckpoints;
     private Text timeText;
-    private TimeDisplay _timeDisplay;
     private bool _complete;
+    private User _user;
     
     public bool IsEndCheckpointValid => hitCheckpoints.Count >= _totalCheckpoints.Length - 1;
 
     private float timeMs = 0;
     
-    public void Start() {
+    public void Awake() {
         _totalCheckpoints = GetComponentsInChildren<Checkpoint>();
-        _timeDisplay = FindObjectOfType<TimeDisplay>();
     }
 
     public void CheckpointHit(Checkpoint checkpoint) {
         var hitCheckpoint = hitCheckpoints.Find(c => c.id == checkpoint.id);
 
         if (hitCheckpoint && hitCheckpoint.type == CheckpointType.End) {
-            _timeDisplay.GetComponent<Text>().color = new Color(0, 1, 0, 1);
+            _user.totalTimeDisplay.GetComponent<Text>().color = new Color(0, 1, 0, 1);
             _complete = true;
         }
         
         if (!hitCheckpoint) {
             // new checkpoint, record it and split timer
             hitCheckpoints.Add(checkpoint);
+
+            // update split display and fade out
+            if (checkpoint.type == CheckpointType.Check) {
+                _user.splitTimeDisplay.SetTimeMs(timeMs);
+                
+                // TODO: make this fade-out generic and reuse across the copy notification in pause menu
+                _user.splitTimeDisplay.textBox.color = new Color(1f, 1f, 1f, 1f);
+
+                IEnumerator FadeText() {
+                    while (_user.splitTimeDisplay.textBox.color.a > 0.0f) {
+                        _user.splitTimeDisplay.textBox.color = new Color(1f, 1f, 1f,
+                        _user.splitTimeDisplay.textBox.color.a - (Time.unscaledDeltaTime / 2));
+                        yield return null;
+                    }
+                }
+
+                StartCoroutine(FadeText());
+            }
         }
     }
-
+    
     private void FixedUpdate() {
-        if (!_complete && _timeDisplay != null) {
+        // failing to get user in early stages due to modular loading? 
+        if (!_user) _user = FindObjectOfType<User>();
+
+        if (!_complete && _user.totalTimeDisplay != null) {
             timeMs += Time.fixedDeltaTime;
-            _timeDisplay.SetTimeMs(timeMs);
+            _user.totalTimeDisplay.SetTimeMs(timeMs);
         }
     }
 }

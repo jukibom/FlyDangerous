@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class TimeDisplay : MonoBehaviour {
-    private Text textBox;
+    public Text textBox;
 
     public void Start() {
         textBox = GetComponent<Text>();

@@ -12,6 +12,8 @@ public class User : MonoBehaviour {
     [SerializeField] public Ship playerShip;
     [SerializeField] public InputSystemUIInputModule pauseUIInputModule;
     [SerializeField] public MouseWidget mouseWidget;
+    [SerializeField] public TimeDisplay totalTimeDisplay;
+    [SerializeField] public TimeDisplay splitTimeDisplay;
     private bool _alternateFlightControls = false;
 
     private Vector2 _mousePositionScreen;
