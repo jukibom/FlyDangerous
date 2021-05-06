@@ -35,7 +35,6 @@ public class Checkpoint : MonoBehaviour {
     }
 
     public void Hit() {
-        Debug.Log(type + " " + _track.IsEndCheckpointValid);
         if (type == CheckpointType.End && !_track.IsEndCheckpointValid) {
             return;
         }
