@@ -27,6 +27,7 @@ public class FreeRoamMenu : MonoBehaviour {
 
     public void Show() {
         this.gameObject.SetActive(true);
+        goButton.Select();
         this._animator.SetBool("Open", true);
     }
     
@@ -68,6 +69,7 @@ public class FreeRoamMenu : MonoBehaviour {
     public void StartFreeRoam() {
         bool dynamicPlacementStart = _levelData == null;
         var levelData = _levelData != null ? _levelData : new LevelData();
+        // TODO: this should come from the data really, implications?
         levelData.location = Location.Terrain;
         levelData.raceType = RaceType.FreeRoam;
         levelData.terrainSeed = seedInput.text;
