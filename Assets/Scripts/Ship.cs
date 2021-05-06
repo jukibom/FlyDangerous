@@ -14,15 +14,15 @@ public class Ship : MonoBehaviour {
     [SerializeField] private Text velocityIndicator;
     [SerializeField] private float maxSpeed = 800;
     [SerializeField] private float maxBoostSpeed = 932;
-    [SerializeField] private float maxThrust = 100;
+    [SerializeField] private float maxThrust = 100000;
+    [SerializeField] private float torqueThrustMultiplier = 0.2f;
     [SerializeField] private float pitchMultiplier = 1;
-    [SerializeField] private float rollMultiplier = 0.8f;
-    [SerializeField] private float yawMultiplier = 0.7f;
-    [SerializeField] private float thrustBoostMultiplier = 2;
-    [SerializeField] private float torqueThrustDivider = 5;
-    [SerializeField] private float torqueBoostMultiplier = 1.2f;
-    [SerializeField] private float totalBoostTime = 4f;
-    [SerializeField] private float totalBoostRotationalTime = 5f;
+    [SerializeField] private float rollMultiplier = 0.3f;
+    [SerializeField] private float yawMultiplier = 0.5f;
+    [SerializeField] private float thrustBoostMultiplier = 5;
+    [SerializeField] private float torqueBoostMultiplier = 2f;
+    [SerializeField] private float totalBoostTime = 6f;
+    [SerializeField] private float totalBoostRotationalTime = 7f;
     [SerializeField] private float boostRechargeTime = 5f;
     [SerializeField] private float minUserLimitedVelocity = 250f;
 
@@ -127,7 +127,7 @@ public class Ship : MonoBehaviour {
     private void FixedUpdate() {
         
         float thrustMultiplier = maxThrust;
-        float torqueMultiplier = maxThrust / torqueThrustDivider;
+        float torqueMultiplier = maxThrust * torqueThrustMultiplier;
 
         _currentBoostTime += Time.fixedDeltaTime;
 
@@ -195,10 +195,9 @@ public class Ship : MonoBehaviour {
     }
 
     /**
-     * All axis should be between -1 and 1. This clamps the value and adds a (very) small deadzone (0.05) 
+     * All axis should be between -1 and 1. 
      */
     private float ClampInput(float input) {
-        if (input < 0.05 & input > -0.05) input = 0;
         return Mathf.Min(Mathf.Max(input, -1), 1);
     }
 
@@ -234,10 +233,10 @@ public class Ship : MonoBehaviour {
             if (Math.Abs(_pitch) < 0.05) {
                 if (angularVelocityPitch > 0) {
                     _rigidBodyComponent.AddTorque(
-                        _transformComponent.right * (-0.25f * maxThrust / torqueThrustDivider), ForceMode.Force);
+                        _transformComponent.right * (-0.25f * maxThrust * torqueThrustMultiplier), ForceMode.Force);
                 }
                 else {
-                    _rigidBodyComponent.AddTorque(_transformComponent.right * (0.25f * maxThrust / torqueThrustDivider),
+                    _rigidBodyComponent.AddTorque(_transformComponent.right * (0.25f * maxThrust * torqueThrustMultiplier),
                         ForceMode.Force);
                 }
             }
@@ -245,21 +244,21 @@ public class Ship : MonoBehaviour {
             if (Math.Abs(_roll) < 0.05) {
                 if (angularVelocityRoll > 0) {
                     _rigidBodyComponent.AddTorque(
-                        _transformComponent.forward * (-0.25f * maxThrust / torqueThrustDivider), ForceMode.Force);
+                        _transformComponent.forward * (-0.25f * maxThrust * torqueThrustMultiplier), ForceMode.Force);
                 }
                 else {
                     _rigidBodyComponent.AddTorque(
-                        _transformComponent.forward * (0.25f * maxThrust / torqueThrustDivider), ForceMode.Force);
+                        _transformComponent.forward * (0.25f * maxThrust * torqueThrustMultiplier), ForceMode.Force);
                 }
             }
 
             if (Math.Abs(_yaw) < 0.05) {
                 if (angularVelocityYaw > 0) {
-                    _rigidBodyComponent.AddTorque(_transformComponent.up * (-0.25f * maxThrust / torqueThrustDivider),
+                    _rigidBodyComponent.AddTorque(_transformComponent.up * (-0.25f * maxThrust * torqueThrustMultiplier),
                         ForceMode.Force);
                 }
                 else {
-                    _rigidBodyComponent.AddTorque(_transformComponent.up * (0.25f * maxThrust / torqueThrustDivider),
+                    _rigidBodyComponent.AddTorque(_transformComponent.up * (0.25f * maxThrust * torqueThrustMultiplier),
                         ForceMode.Force);
                 }
             }
