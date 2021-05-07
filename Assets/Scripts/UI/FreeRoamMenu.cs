@@ -33,6 +33,8 @@ public class FreeRoamMenu : MonoBehaviour {
     
     private void OnEnable() {
         seedInput.text = Guid.NewGuid().ToString();
+        saveInput.text = "";
+        _levelData = null;
     }
     
     public void OnSeedInputFieldChanged(string seed) {
