@@ -216,6 +216,9 @@ public class User : MonoBehaviour {
     }
 
     public void OnAltFlightControlsToggle(InputValue value) {
+        _pitch = 0;
+        _roll = 0;
+        _yaw = 0;
         _alternateFlightControls = !_alternateFlightControls;
         if (_alternateFlightControls) {
             AudioManager.Instance.Play("ship-alternate-flight-on");
