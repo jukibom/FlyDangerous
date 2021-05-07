@@ -202,6 +202,13 @@ public class Ship : MonoBehaviour {
     public void VelocityLimiterIsPressed(bool isPressed) {
         _userVelocityLimit = isPressed;
         Debug.Log("Velocity Limit " + (_userVelocityLimit ? "ON" : "OFF") + " (not implemented)");
+        
+        if (_userVelocityLimit) {
+            AudioManager.Instance.Play("ship-velocity-limit-on");
+        }
+        else {
+            AudioManager.Instance.Play("ship-velocity-limit-off");
+        }
     }
 
     private void OnTriggerEnter(Collider other) {

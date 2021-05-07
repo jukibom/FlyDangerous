@@ -1,4 +1,5 @@
 using System;
+using Audio;
 using Engine;
 using Menus;
 using UnityEngine;
@@ -216,6 +217,12 @@ public class User : MonoBehaviour {
 
     public void OnAltFlightControlsToggle(InputValue value) {
         _alternateFlightControls = !_alternateFlightControls;
+        if (_alternateFlightControls) {
+            AudioManager.Instance.Play("ship-alternate-flight-on");
+        }
+        else {
+            AudioManager.Instance.Play("ship-alternate-flight-off");
+        }
     }
 
     public void OnMouseRaw(InputValue value) {
