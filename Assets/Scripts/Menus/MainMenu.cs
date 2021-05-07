@@ -44,6 +44,7 @@ namespace Menus {
             
             var levelData = new LevelData();
             levelData.location = Location.TestSpaceStation;
+            levelData.raceType = RaceType.Sprint;
             Game.Instance.StartGame(levelData);
             
             topMenu.Hide();

@@ -6,16 +6,17 @@ using Engine;
 using JetBrains.Annotations;
 using MapMagic.Core;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Game : MonoBehaviour {
 
     public static Game Instance;
+
+    public GameObject checkpointPrefab;
     
-    private LevelData _levelData = new LevelData();
-    public LevelData LevelDataLoaded => _levelData;
+    private LevelData _levelDataAs = new LevelData();
+    public LevelData LevelDataAsLoaded => _levelDataAs;
     public LevelData LevelDataCurrent => GenerateLevelData();
 
     [CanBeNull] private ShipParameters _shipParameters;
@@ -30,8 +31,8 @@ public class Game : MonoBehaviour {
         }
     }
 
-    public bool IsTerrainMap => _levelData.location == Location.Terrain;
-    public string Seed => _levelData.terrainSeed;
+    public bool IsTerrainMap => _levelDataAs.location == Location.Terrain;
+    public string Seed => _levelDataAs.terrainSeed;
     
     [SerializeField] private Animator crossfade;
 
@@ -54,7 +55,7 @@ public class Game : MonoBehaviour {
     }
 
     public void StartGame(LevelData levelData, bool dynamicPlacementStart = false) {
-        _levelData = levelData;
+        _levelDataAs = levelData;
         HideCursor();
 
         string mapScene;
@@ -97,7 +98,7 @@ public class Game : MonoBehaviour {
     public void RestartLevel() {
         // Todo: record player initial state and load it here instead of this scene juggling farce which takes ages to load
         StopTerrainGeneration();
-        StartGame(_levelData);
+        StartGame(_levelDataAs);
     }
 
     public void QuitToMenu() {
@@ -153,18 +154,16 @@ public class Game : MonoBehaviour {
     }
     
     private void ResetGameState() {
-        _levelData = new LevelData();
+        _levelDataAs = new LevelData();
     }
 
     // Return a new level data object hydrated with all the information of the current game state
     private LevelData GenerateLevelData() {
         var levelData = new LevelData();
-        levelData.raceType = _levelData.raceType;
-        levelData.location = _levelData.location;
-        levelData.terrainSeed = _levelData.terrainSeed;
-        levelData.start = _levelData.start;
-        levelData.end = _levelData.end;
-        levelData.checkpoints = _levelData.checkpoints;
+        levelData.raceType = _levelDataAs.raceType;
+        levelData.location = _levelDataAs.location;
+        levelData.terrainSeed = _levelDataAs.terrainSeed;
+        levelData.checkpoints = _levelDataAs.checkpoints;
 
         var ship = FindObjectOfType<Ship>();
         var floatingOrigin = FindObjectOfType<FloatingOrigin>();
@@ -184,6 +183,28 @@ public class Game : MonoBehaviour {
                 levelData.startPosition.x = origin.x;
                 levelData.startPosition.y = origin.y;
                 levelData.startPosition.z = origin.z;
+            }
+        }
+
+        var track = FindObjectOfType<Track>();
+        if (track) {
+            var checkpoints = track.Checkpoints;
+            levelData.checkpoints = new List<CheckpointLocation>();
+            foreach (var checkpoint in checkpoints) {
+                var checkpointLocation = new CheckpointLocation();
+                checkpointLocation.type = checkpoint.type;
+                checkpointLocation.position = new LevelDataVector3<float>();
+                checkpointLocation.rotation = new LevelDataVector3<float>();
+                
+                var position = checkpoint.transform.localPosition;
+                var rotation = checkpoint.transform.rotation.eulerAngles;
+                checkpointLocation.position.x = position.x;
+                checkpointLocation.position.y = position.y;
+                checkpointLocation.position.z = position.z;
+                checkpointLocation.rotation.x = rotation.x;
+                checkpointLocation.rotation.y = rotation.y;
+                checkpointLocation.rotation.z = rotation.z;
+                levelData.checkpoints.Add(checkpointLocation);
             }
         }
         return levelData;
@@ -231,25 +252,50 @@ public class Game : MonoBehaviour {
         // ship placement
         var ship = FindObjectOfType<Ship>();
         if (ship && !dynamicPlacement) {
-            var t = _levelData.startPosition.x;
+            var t = _levelDataAs.startPosition.x;
             ship.transform.position = new Vector3(
-                _levelData.startPosition.x,
-                _levelData.startPosition.y,
-                _levelData.startPosition.z
+                _levelDataAs.startPosition.x,
+                _levelDataAs.startPosition.y,
+                _levelDataAs.startPosition.z
             );
             ship.transform.rotation = Quaternion.Euler(
-                _levelData.startRotation.x,    
-                _levelData.startRotation.y,    
-                _levelData.startRotation.z    
+                _levelDataAs.startRotation.x,    
+                _levelDataAs.startRotation.y,    
+                _levelDataAs.startRotation.z    
             );
             
             // debug flight params
             ship.Parameters = ShipParameters;
         }
+        
+        // checkpoint placement
+        var track = FindObjectOfType<Track>();
+        if (track && _levelDataAs.checkpoints?.Count > 0) {
+            List<Checkpoint> checkpoints = new List<Checkpoint>();
+            _levelDataAs.checkpoints.ForEach(c => {
+                var checkpointObject = Instantiate(checkpointPrefab, track.transform);
+                var checkpoint = checkpointObject.GetComponent<Checkpoint>();
+                checkpoint.type = c.type;
+                var transform = checkpointObject.transform;
+                transform.position = new Vector3(
+                    c.position.x,
+                    c.position.y,
+                    c.position.z
+                );
+                transform.rotation = Quaternion.Euler(
+                    c.rotation.x,
+                    c.rotation.y,
+                    c.rotation.z
+                );
+                checkpoints.Add(checkpoint);
+            });
+
+            track.Checkpoints = checkpoints;
+        }
 
         // if terrain needs to generate, toggle special logic and wait for it to load all primary tiles
         var terrainLoader = FindObjectOfType<MapMagicObject>();
-        if (_levelData.location == Location.Terrain && terrainLoader) {
+        if (_levelDataAs.location == Location.Terrain && terrainLoader) {
             
             // Stop auto-loading with default seed
             terrainLoader.StopGenerate();
@@ -258,13 +304,13 @@ public class Game : MonoBehaviour {
             terrainLoader.ClearAll();
             
             // replace with user seed
-            terrainLoader.graph.random = new Noise(_levelData.terrainSeed.GetHashCode(), 32768);
+            terrainLoader.graph.random = new Noise(_levelDataAs.terrainSeed.GetHashCode(), 32768);
             terrainLoader.StartGenerate();
             
             // wait for fully loaded local terrain
             while (terrainLoader.IsGenerating()) {
                 var progressPercent = Mathf.Min(100, Mathf.Round(terrainLoader.GetProgress() * 100));
-                loadingText.text = $"Generating terrain ({progressPercent}%)\n\n\nSeed: \"{_levelData.terrainSeed}\"";
+                loadingText.text = $"Generating terrain ({progressPercent}%)\n\n\nSeed: \"{_levelDataAs.terrainSeed}\"";
 
                 yield return null;
             }
@@ -288,10 +334,9 @@ public class Game : MonoBehaviour {
         FadeFromBlack();
         yield return new WaitForSeconds(0.7f);
         
-        // if there's a track in the game world, set the timer going
-        var track = FindObjectOfType<Track>();
+        // if there's a track in the game world, start it (prevent collision starting timer during load for laps)
         if (track) {
-            track.StartTimer();
+            track.TrackReady();
         }
 
         // enable user input

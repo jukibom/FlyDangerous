@@ -29,7 +29,8 @@ namespace Engine {
         FreeRoam,
     }
 
-    public class Checkpoint {
+    public class CheckpointLocation {
+        public CheckpointType type;
         public LevelDataVector3<float> position;
         public LevelDataVector3<float> rotation;
     }
@@ -41,9 +42,7 @@ namespace Engine {
         public LevelDataVector3<float> startPosition = new LevelDataVector3<float>();
         public LevelDataVector3<float> startRotation = new LevelDataVector3<float>();
         public RaceType raceType;
-        [CanBeNull] public Checkpoint start;
-        [CanBeNull] public List<Checkpoint> checkpoints;
-        [CanBeNull] public Checkpoint end;
+        [CanBeNull] public List<CheckpointLocation> checkpoints;
         
         public string ToJsonString() {
             return JsonConvert.SerializeObject(this, Formatting.Indented);
