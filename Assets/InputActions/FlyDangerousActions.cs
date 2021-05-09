@@ -53,7 +53,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Pitch"",
-                    ""type"": ""Value"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""8043ded1-0ef3-4f85-b28b-3e3139edb133"",
                     ""expectedControlType"": ""Axis"",
                     ""processors"": """",
@@ -61,7 +61,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Pitch Alt"",
-                    ""type"": ""Value"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""7550d24f-1c38-429f-ae21-28d6dd026dec"",
                     ""expectedControlType"": ""Axis"",
                     ""processors"": """",
@@ -69,7 +69,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Roll"",
-                    ""type"": ""Value"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""4fd269dd-a7ed-42d2-864e-e528e090bd09"",
                     ""expectedControlType"": ""Axis"",
                     ""processors"": """",
@@ -77,7 +77,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Roll Alt"",
-                    ""type"": ""Value"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""d4989653-06ea-477b-806e-678c29019e02"",
                     ""expectedControlType"": ""Axis"",
                     ""processors"": """",
@@ -85,7 +85,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Yaw"",
-                    ""type"": ""Value"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""f1e682e9-2180-45dd-bf3e-cdefbee29575"",
                     ""expectedControlType"": ""Axis"",
                     ""processors"": """",
@@ -93,7 +93,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Yaw Alt"",
-                    ""type"": ""Value"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""ff81043c-abd0-4d70-ae27-e6a67dee432e"",
                     ""expectedControlType"": ""Axis"",
                     ""processors"": """",
@@ -101,7 +101,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Throttle"",
-                    ""type"": ""Value"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""725b3d83-6282-4fd3-8a1b-ad37029f5146"",
                     ""expectedControlType"": ""Axis"",
                     ""processors"": """",
@@ -109,7 +109,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Throttle Alt"",
-                    ""type"": ""Value"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""c31ac1b2-c5c6-48b5-a36e-a75da1c8065d"",
                     ""expectedControlType"": ""Axis"",
                     ""processors"": """",
@@ -117,7 +117,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""LateralH"",
-                    ""type"": ""Value"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""509f03a6-fbc1-428b-be5b-adef4a4a1d5f"",
                     ""expectedControlType"": ""Axis"",
                     ""processors"": """",
@@ -125,7 +125,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""LateralH Alt"",
-                    ""type"": ""Value"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""e59fb6f7-ea65-4570-b095-16227a4607ff"",
                     ""expectedControlType"": ""Axis"",
                     ""processors"": """",
@@ -133,7 +133,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""LateralV"",
-                    ""type"": ""Value"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""dbbf62a4-6b89-4ff1-b0c2-1399be3f5b1f"",
                     ""expectedControlType"": ""Axis"",
                     ""processors"": """",
@@ -141,7 +141,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""LateralV Alt"",
-                    ""type"": ""Value"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""d5173e9c-6486-4f67-94eb-a7dbc7bf0f0d"",
                     ""expectedControlType"": ""Axis"",
                     ""processors"": """",
@@ -149,7 +149,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Boost"",
-                    ""type"": ""Value"",
+                    ""type"": ""Button"",
                     ""id"": ""ae9270a1-0fa9-4611-bb01-798738d7842c"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
@@ -194,6 +194,14 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Toggle Console"",
+                    ""type"": ""Button"",
+                    ""id"": ""0fe6c9f9-0cee-4004-ba47-06e9efdf8dbc"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -211,7 +219,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""cd8f9762-df2c-446a-8b38-da9eccf4f1c6"",
-                    ""path"": """",
+                    ""path"": ""<HID::Logitech G29 Driving Force Racing Wheel>/stick/x"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
@@ -1428,6 +1436,17 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""action"": ""Mouse Raw Normalized Delta"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a997f199-43ef-4ae8-857c-835082a7740e"",
+                    ""path"": ""<Keyboard>/backquote"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Toggle Console"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -2072,6 +2091,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         m_Ship_AltFlightControlsToggle = m_Ship.FindAction("Alt Flight Controls Toggle", throwIfNotFound: true);
         m_Ship_MouseRaw = m_Ship.FindAction("Mouse Raw", throwIfNotFound: true);
         m_Ship_MouseRawNormalizedDelta = m_Ship.FindAction("Mouse Raw Normalized Delta", throwIfNotFound: true);
+        m_Ship_ToggleConsole = m_Ship.FindAction("Toggle Console", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -2164,6 +2184,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Ship_AltFlightControlsToggle;
     private readonly InputAction m_Ship_MouseRaw;
     private readonly InputAction m_Ship_MouseRawNormalizedDelta;
+    private readonly InputAction m_Ship_ToggleConsole;
     public struct ShipActions
     {
         private @FlyDangerousActions m_Wrapper;
@@ -2189,6 +2210,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         public InputAction @AltFlightControlsToggle => m_Wrapper.m_Ship_AltFlightControlsToggle;
         public InputAction @MouseRaw => m_Wrapper.m_Ship_MouseRaw;
         public InputAction @MouseRawNormalizedDelta => m_Wrapper.m_Ship_MouseRawNormalizedDelta;
+        public InputAction @ToggleConsole => m_Wrapper.m_Ship_ToggleConsole;
         public InputActionMap Get() { return m_Wrapper.m_Ship; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -2261,6 +2283,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @MouseRawNormalizedDelta.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnMouseRawNormalizedDelta;
                 @MouseRawNormalizedDelta.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnMouseRawNormalizedDelta;
                 @MouseRawNormalizedDelta.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnMouseRawNormalizedDelta;
+                @ToggleConsole.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnToggleConsole;
+                @ToggleConsole.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnToggleConsole;
+                @ToggleConsole.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnToggleConsole;
             }
             m_Wrapper.m_ShipActionsCallbackInterface = instance;
             if (instance != null)
@@ -2328,6 +2353,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @MouseRawNormalizedDelta.started += instance.OnMouseRawNormalizedDelta;
                 @MouseRawNormalizedDelta.performed += instance.OnMouseRawNormalizedDelta;
                 @MouseRawNormalizedDelta.canceled += instance.OnMouseRawNormalizedDelta;
+                @ToggleConsole.started += instance.OnToggleConsole;
+                @ToggleConsole.performed += instance.OnToggleConsole;
+                @ToggleConsole.canceled += instance.OnToggleConsole;
             }
         }
     }
@@ -2514,6 +2542,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         void OnAltFlightControlsToggle(InputAction.CallbackContext context);
         void OnMouseRaw(InputAction.CallbackContext context);
         void OnMouseRawNormalizedDelta(InputAction.CallbackContext context);
+        void OnToggleConsole(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
