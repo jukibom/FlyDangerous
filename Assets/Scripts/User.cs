@@ -42,6 +42,7 @@ public class User : MonoBehaviour {
     public void OnEnable() {
         pauseUIInputModule.cancel.action.performed += _cancelAction;
         ResetMouseToCentre();
+        Console.Instance.Clear();
     }
 
     public void OnDisable() {

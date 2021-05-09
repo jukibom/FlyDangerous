@@ -58,4 +58,8 @@ public class Console : MonoBehaviour {
         _logEntry.text = _logEntry.text + "\n" + message;
         Debug.Log(message);
     }
+
+    public void Clear() {
+        _logEntry.text = "";
+    }
 }
