@@ -25,6 +25,9 @@ public class User : MonoBehaviour {
     private float _pitch;
     private float _roll;
     private float _yaw;
+    private float _throttle;
+    private float _lateralH;
+    private float _lateralV;
 
     private bool _inputEnabled = true;
 
@@ -54,6 +57,9 @@ public class User : MonoBehaviour {
         var pitch = _pitch;
         var roll = _roll;
         var yaw = _yaw;
+        var throttle = _throttle;
+        var lateralH = _lateralH;
+        var lateralV = _lateralV;
 
         if (!pauseMenu.IsPaused && Preferences.Instance.GetBool("enableMouseFlightControls")) {
             
@@ -101,6 +107,9 @@ public class User : MonoBehaviour {
         playerShip.SetPitch(pitch);
         playerShip.SetRoll(roll);
         playerShip.SetYaw(yaw);
+        playerShip.SetThrottle(throttle);
+        playerShip.SetLateralH(lateralH);
+        playerShip.SetLateralV(lateralV);
     }
 
     /**
@@ -189,33 +198,27 @@ public class User : MonoBehaviour {
     }
 
     public void OnThrottle(InputValue value) {
-        if (!_alternateFlightControls)
-            playerShip.SetThrottle(value.Get<float>());
+        if (!_alternateFlightControls) _throttle = value.Get<float>();
     }
 
     public void OnThrottleAlt(InputValue value) {
-        if (_alternateFlightControls)
-            playerShip.SetThrottle(value.Get<float>());
+        if (_alternateFlightControls) _throttle = value.Get<float>();
     }
 
     public void OnLateralH(InputValue value) {
-        if (!_alternateFlightControls)
-            playerShip.SetLateralH(value.Get<float>());
+        if (!_alternateFlightControls) _lateralH = value.Get<float>();
     }
 
     public void OnLateralHAlt(InputValue value) {
-        if (_alternateFlightControls)
-            playerShip.SetLateralH(value.Get<float>());
+        if (_alternateFlightControls) _lateralH = value.Get<float>();
     }
 
     public void OnLateralV(InputValue value) {
-        if (!_alternateFlightControls)
-            playerShip.SetLateralV(value.Get<float>());
+        if (!_alternateFlightControls) _lateralV = value.Get<float>();
     }
 
     public void OnLateralVAlt(InputValue value) {
-        if (_alternateFlightControls)
-            playerShip.SetLateralV(value.Get<float>());
+        if (_alternateFlightControls) _lateralV = value.Get<float>();
     }
 
     public void OnBoost(InputValue value) {

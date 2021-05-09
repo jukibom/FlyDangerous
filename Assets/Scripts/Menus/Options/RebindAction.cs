@@ -245,15 +245,7 @@ namespace Menus.Options {
 
             // Configure the rebind.
             m_RebindOperation = action.PerformInteractiveRebinding(bindingIndex)
-                .OnCancel(
-                    operation =>
-                    {
-                        m_RebindStopEvent?.Invoke(this, operation);
-                        m_RebindOverlay?.SetActive(false);
-                        UpdateBindingDisplay();
-                        CleanUp();
-                    })
-                .WithCancelingThrough("<Keyboard>/escape")
+                .WithoutGeneralizingPathOfSelectedControl()
                 .OnPotentialMatch(operation => {
                     // special case for delete key - unbind the binding!
                     if (operation.selectedControl.path == "/Keyboard/delete") {
@@ -262,11 +254,11 @@ namespace Menus.Options {
                         operation.action.ChangeBinding(bindingIndex).To(binding);
                         operation.Cancel();
                     }
+
                     operation.Complete();
                 })
                 .OnComplete(
-                    operation =>
-                    {
+                    operation => {
                         m_RebindOverlay?.SetActive(false);
                         m_RebindStopEvent?.Invoke(this, operation);
                         UpdateBindingDisplay();
@@ -274,12 +266,20 @@ namespace Menus.Options {
 
                         // If there's more composite parts we should bind, initiate a rebind
                         // for the next part.
-                        if (allCompositeParts)
-                        {
+                        if (allCompositeParts) {
                             var nextBindingIndex = bindingIndex + 1;
-                            if (nextBindingIndex < action.bindings.Count && action.bindings[nextBindingIndex].isPartOfComposite)
+                            if (nextBindingIndex < action.bindings.Count &&
+                                action.bindings[nextBindingIndex].isPartOfComposite)
                                 PerformInteractiveRebind(bindingText, action, nextBindingIndex, true);
                         }
+                    })
+                .WithCancelingThrough("<Keyboard>/escape")
+                .OnCancel(
+                    operation => {
+                        m_RebindStopEvent?.Invoke(this, operation);
+                        m_RebindOverlay?.SetActive(false);
+                        UpdateBindingDisplay();
+                        CleanUp();
                     });
 
             // If it's a part binding, show the name of the part in the UI.
