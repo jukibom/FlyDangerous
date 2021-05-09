@@ -239,4 +239,13 @@ public class User : MonoBehaviour {
     public void OnMouseRawNormalizedDelta(InputValue value) {
         _mousePositionNormalizedDelta = value.Get<Vector2>();
     }
+
+    public void OnToggleConsole(InputValue value) {
+        if (Console.Instance.Visible) {
+            Console.Instance.Hide();
+        }
+        else {
+            Console.Instance.Show();
+        }
+    }
 }
