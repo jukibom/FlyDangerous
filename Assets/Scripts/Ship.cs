@@ -9,6 +9,10 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class ShipParameters {
+    public float mass;
+    public float drag;
+    public float angularDrag;
+    public float inertiaTensorMultiplier;
     public float maxSpeed;
     public float maxBoostSpeed;
     public float maxThrust;
@@ -47,9 +51,13 @@ public class Ship : MonoBehaviour {
     public static ShipParameters ShipParameterDefaults {
         get {
             var shipDefaults = new ShipParameters();
-            shipDefaults.maxSpeed = 800;
-            shipDefaults.maxBoostSpeed = 932;
-            shipDefaults.maxThrust = 100000;
+            shipDefaults.mass = 1000f;
+            shipDefaults.drag = 0f;
+            shipDefaults.angularDrag = 0f;
+            shipDefaults.inertiaTensorMultiplier = 125f;
+            shipDefaults.maxSpeed = 800f;
+            shipDefaults.maxBoostSpeed = 932f;
+            shipDefaults.maxThrust = 100000f;
             shipDefaults.torqueThrustMultiplier = 0.2f;
             shipDefaults.pitchMultiplier = 1;
             shipDefaults.rollMultiplier = 0.3f;
@@ -66,6 +74,10 @@ public class Ship : MonoBehaviour {
     public ShipParameters Parameters {
         get {
             var parameters = new ShipParameters();
+            parameters.mass = Mathf.Round(_rigidBodyComponent.mass);
+            parameters.drag = _rigidBodyComponent.drag;
+            parameters.angularDrag = _rigidBodyComponent.angularDrag;
+            parameters.inertiaTensorMultiplier = inertialTensorMultiplier;
             parameters.maxSpeed = maxSpeed; 
             parameters.maxBoostSpeed = maxBoostSpeed;
             parameters.maxThrust = maxThrust;
@@ -82,6 +94,12 @@ public class Ship : MonoBehaviour {
             return parameters;
         }
         set {
+            _rigidBodyComponent.mass = value.mass;
+            _rigidBodyComponent.drag = value.drag;
+            _rigidBodyComponent.angularDrag = value.drag;
+            _rigidBodyComponent.inertiaTensor = _initialInertiaTensor * value.inertiaTensorMultiplier;
+            inertialTensorMultiplier = value.inertiaTensorMultiplier;
+            
             maxSpeed = value.maxSpeed;
             maxBoostSpeed = value.maxBoostSpeed;
             maxThrust = value.maxThrust;
@@ -112,7 +130,10 @@ public class Ship : MonoBehaviour {
     [SerializeField] private float totalBoostTime = 6f;
     [SerializeField] private float totalBoostRotationalTime = 7f;
     [SerializeField] private float boostRechargeTime = 5f;
+    [SerializeField] private float inertialTensorMultiplier = 125f;
     [SerializeField] private float minUserLimitedVelocity = 250f;
+
+    private Vector3 _initialInertiaTensor;
 
     private bool _boostReady;
     private bool _isBoosting;
@@ -149,6 +170,10 @@ public class Ship : MonoBehaviour {
         _flightAssist = Preferences.Instance.GetBool("flightAssistOnByDefault");
         _rigidBodyComponent.centerOfMass = Vector3.zero;
         _rigidBodyComponent.inertiaTensorRotation = Quaternion.identity;
+
+        // setup angular momentum for collisions (higher multiplier = less spin)
+        _initialInertiaTensor = _rigidBodyComponent.inertiaTensor;
+        _rigidBodyComponent.inertiaTensor *= inertialTensorMultiplier;
     }
 
     public void SetPitch(float value) {
@@ -261,7 +286,7 @@ public class Ship : MonoBehaviour {
             _pitch * pitchMultiplier * torqueMultiplier,
             _yaw * yawMultiplier * torqueMultiplier,
             _roll * rollMultiplier * torqueMultiplier * -1
-        );
+        ) * inertialTensorMultiplier;   // if we don't counteract the inertial tensor of the rigidbody, the rotation spin would increase in lockstep
         
         _rigidBodyComponent.AddForce(transform.TransformDirection(tThrust));
         _rigidBodyComponent.AddTorque(transform.TransformDirection(tRot));

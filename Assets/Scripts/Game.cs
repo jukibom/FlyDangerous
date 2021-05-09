@@ -244,6 +244,7 @@ public class Game : MonoBehaviour {
         // disable user input now that a valid user has loaded
         var user = FindObjectOfType<User>();
         if (user != null) {
+            // TODO: make these start with input disabled, add some saftey net for not calling LoadGameScenes when developing :(
             user.DisableGameInput();
             user.DisableUIInput();
             user.ResetMouseToCentre();
