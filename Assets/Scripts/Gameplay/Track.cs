@@ -83,9 +83,9 @@ public class Track : MonoBehaviour {
 
                 // reset start location
                 if (Game.Instance.LevelDataCurrent.raceType != RaceType.Sprint) {
-                    var c = _checkpoints.Find(c => c.type == CheckpointType.Start);
-                    if (c) {
-                        c.ShowOverlay();
+                    var startCheckpoint = _checkpoints.Find(c => c.type == CheckpointType.Start);
+                    if (startCheckpoint) {
+                        startCheckpoint.ShowOverlay();
                     }
                 }
             }

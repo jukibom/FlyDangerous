@@ -10,8 +10,8 @@ using UnityEngine.UI;
 namespace UI {
 
     public interface ICheckboxHandler {
-        public void OnEnabled();
-        public void OnDisabled();
+        void OnEnabled();
+        void OnDisabled();
     }
     
     public class Checkbox : MonoBehaviour, ISubmitHandler, IPointerClickHandler {
