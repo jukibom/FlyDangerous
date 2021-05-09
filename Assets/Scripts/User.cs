@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.InputSystem.UI;
+using UnityEngine.InputSystem.Users;
 
 public class User : MonoBehaviour {
 
@@ -107,13 +108,27 @@ public class User : MonoBehaviour {
      * This prevents conflicts between the two, especially when rebinding keys...
      */
     public void EnableGameInput() {
-        GetComponent<PlayerInput>().ActivateInput();
+        var playerInput = GetComponent<PlayerInput>();
+        playerInput.ActivateInput();
         _inputEnabled = true;
+        
+        Console.Instance.LogMessage("** USER INPUT ENABLED **");
+        foreach (var inputDevice in InputSystem.devices) {
+            Console.Instance.LogMessage(inputDevice.name + " detected");
+            InputUser.PerformPairingWithDevice(inputDevice, playerInput.user);
+        }
+
+        Console.Instance.LogMessage("---");
+        foreach (var playerInputDevice in playerInput.devices) {
+            Console.Instance.LogMessage(playerInputDevice.displayName + " paired");
+        }
     }
 
     public void DisableGameInput() {
         GetComponent<PlayerInput>().DeactivateInput();
         _inputEnabled = false;
+        
+        Console.Instance.LogMessage("** USER INPUT DISABLED **");
     }
 
     public void EnableUIInput() {
