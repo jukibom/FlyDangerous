@@ -219,7 +219,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""cd8f9762-df2c-446a-8b38-da9eccf4f1c6"",
-                    ""path"": ""<HID::Logitech G29 Driving Force Racing Wheel>/stick/x"",
+                    ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
