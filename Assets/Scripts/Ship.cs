@@ -73,6 +73,9 @@ public class Ship : MonoBehaviour {
     }
     public ShipParameters Parameters {
         get {
+            if (!_rigidBodyComponent) {
+                return ShipParameterDefaults; 
+            }
             var parameters = new ShipParameters();
             parameters.mass = Mathf.Round(_rigidBodyComponent.mass);
             parameters.drag = _rigidBodyComponent.drag;
