@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Audio;
 using Engine;
 using Menus;
@@ -124,13 +125,16 @@ public class User : MonoBehaviour {
         
         Console.Instance.LogMessage("** USER INPUT ENABLED **");
         foreach (var inputDevice in InputSystem.devices) {
-            Console.Instance.LogMessage(inputDevice.name + " detected");
-            InputUser.PerformPairingWithDevice(inputDevice, playerInput.user);
+            Console.Instance.LogMessage(inputDevice.name + " with path <" + inputDevice.device.path + ">" + " detected");
+            if (!playerInput.devices.Contains(inputDevice)) {
+                Console.Instance.LogMessage(inputDevice.name + " not paired to user! Pairing ...");
+                InputUser.PerformPairingWithDevice(inputDevice, playerInput.user);
+            }
         }
 
         Console.Instance.LogMessage("---");
         foreach (var playerInputDevice in playerInput.devices) {
-            Console.Instance.LogMessage(playerInputDevice.displayName + " paired");
+            Console.Instance.LogMessage(playerInputDevice.name + " paired");
         }
     }
 
