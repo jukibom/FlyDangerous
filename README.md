@@ -25,7 +25,7 @@ https://discord.gg/4daSEUKZ6A
 
 ## Building
 
-Unity build: 2021.1.5f1
+Unity build: 2021.1.6f1
 
 Relies on following assets downloaded into Assets/Asset Packs/:
 
