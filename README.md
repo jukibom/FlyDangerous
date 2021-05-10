@@ -4,7 +4,7 @@
 
 Yes, racing exists in Elite and yes it's awesome -- but accessible it is not. 
 
-This project aims to provide a ground-up reimplementation of the a similar-enough flight model to provide a training ground and common set of tools to track leaderboards, ghosts and general tom-foolery. Feedback is extremely welcome!
+This project aims to provide a ground-up reimplementation of a similar-enough flight model to provide a training ground and common set of tools to track leaderboards, ghosts and general tom-foolery. Feedback is extremely welcome!
 
 Interested in getting involved with the dev process? Come join the discord and ~yell at me about how wrong I am~ discuss where we should take this!
 
