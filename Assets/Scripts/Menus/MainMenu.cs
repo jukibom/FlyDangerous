@@ -19,6 +19,8 @@ namespace Menus {
         
         [SerializeField]
         private FreeRoamMenu freeRoamMenu;
+        [SerializeField]
+        private LoadCustomMenu loadCustomMenu;
 
         [SerializeField] private GameObject shipMesh;
         [SerializeField] private GameObject alphaMessage;
@@ -58,6 +60,17 @@ namespace Menus {
         
         public void CloseFreeRoamPanel() {
             freeRoamMenu.Hide();
+            topMenu.Show();
+        }
+
+        public void OpenLoadCustomPanel() {
+            AudioManager.Instance.Play("ui-dialog-open");
+            loadCustomMenu.Show();
+            topMenu.Hide();
+        }
+
+        public void CloseLoadCustomPanel() {
+            loadCustomMenu.Hide();
             topMenu.Show();
         }
 

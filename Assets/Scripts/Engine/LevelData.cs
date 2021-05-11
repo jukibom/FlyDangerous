@@ -37,6 +37,7 @@ namespace Engine {
     
     public class LevelData {
         public int version = 1;     // does nothing right now but allows us to maintain compatibility with terrain later
+        public string name = "";
         public Location location;
         public string terrainSeed;
         public LevelDataVector3<float> startPosition = new LevelDataVector3<float>();
