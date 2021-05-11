@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Engine;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -54,7 +55,8 @@ public class FreeRoamMenu : MonoBehaviour {
         saveWarning.gameObject.SetActive(false);
         goButton.enabled = true;
 
-        if (text.Length > 0) {
+        // simple fast checks to prevent it parsing for every character in a large paste operation
+        if (text.Length > 0 && text.FirstOrDefault() == '{' && text.Last() == '}') {
             _levelData = LevelData.FromJsonString(text);
 
             if (_levelData == null) {
