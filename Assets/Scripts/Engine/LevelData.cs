@@ -53,8 +53,10 @@ namespace Engine {
             try {
                 return JsonConvert.DeserializeObject<LevelData>(json);
             }
-            catch (Exception e){
-                Debug.LogWarning(e.Message);
+            catch (Exception e) {
+                #if UNITY_EDITOR
+                    Debug.LogWarning(e.Message);
+                #endif
                 return null;
             }
         }
