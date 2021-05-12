@@ -46,5 +46,17 @@ namespace Audio {
                 }
             }
         }
+
+        public void Stop(string name) {
+            Sound sound = Array.Find(sounds, s => s.name == name);
+            if (sound != null) {
+                if (sound.source != null) {
+                    sound.source.Stop();
+                }
+                else {
+                    Debug.LogWarning("Attempted to stop missing sound " + name);
+                }
+            }
+        }
     }
 }

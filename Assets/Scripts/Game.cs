@@ -70,40 +70,78 @@ public class Game : MonoBehaviour {
             case Location.Terrain: mapScene = "Terrain"; break;
             default: throw new Exception("Supplied map type (" + levelData.location + ") is not a valid scene.");
         }
-        
-        // This is a separate action so that we can safely move to a new active loading scene and fully unload everything before moving to any other map
-        IEnumerator SwitchToLoadingScreen() {
-            
-            // disable user input if we're in-game while handling everything else
-            var user = FindObjectOfType<User>();
-            if (user != null) {
-                user.DisableGameInput();
-                user.DisableUIInput();
-            }
 
-            crossfade.SetTrigger("FadeToBlack");
-            yield return new WaitForSeconds(0.5f);
-            
-            // load loading screen (lol)
-            var load = SceneManager.LoadSceneAsync("Loading", LoadSceneMode.Single);
-            yield return load;
-
-            var loadText = GameObject.FindGameObjectWithTag("DynamicLoadingText").GetComponent<Text>();
-
+        StartCoroutine(SwitchToLoadingScreen(loadText => {
             // now we can finally start the level load
             scenesLoading.Add(SceneManager.LoadSceneAsync(mapScene, LoadSceneMode.Additive));
             scenesLoading.Add(SceneManager.LoadSceneAsync("Player", LoadSceneMode.Additive));
             scenesLoading.ForEach(scene => scene.allowSceneActivation = false);
+            
             StartCoroutine(LoadGameScenes(loadText, dynamicPlacementStart));
-        }
-        
-        StartCoroutine(SwitchToLoadingScreen());
+        }));
     }
 
     public void RestartLevel() {
         // Todo: record player initial state and load it here instead of this scene juggling farce which takes ages to load
-        StopTerrainGeneration();
-        StartGame(_levelDataAs);
+
+        var user = FindObjectOfType<User>();
+        var ship = FindObjectOfType<Ship>();
+
+        Action DoReset = () => {
+            var world = GameObject.Find("World")?.transform;
+            if (world != null) {
+                world.position = Vector3.zero;
+            }
+
+            ship.transform.position = new Vector3
+                {x = _levelData.startPosition.x, y = _levelData.startPosition.y, z = _levelData.startPosition.z};
+            ship.transform.rotation = Quaternion.Euler(_levelData.startRotation.x, _levelData.startRotation.y,
+                _levelData.startRotation.z);
+            ship.Reset();
+        };
+        
+        // first let's check if this is a terrain world and handle that appropriately
+        var mapMagic = FindObjectOfType<MapMagicObject>();
+        if (mapMagic && ship) {
+            ship.AbsoluteWorldPosition(out var shipPosition, out var shipRotation);
+            var distanceToStart = Vector3.Distance(shipPosition, new Vector3
+                { x = _levelData.startPosition.x, y = _levelData.startPosition.y, z = _levelData.startPosition.z }) ;
+
+            Debug.Log(distanceToStart);
+            // where do we get this from?
+            if (distanceToStart > 20000) {
+                // the terrain will not be loaded if we teleport there, we need to fade to black, wait for terrain to load, then fade back. This should still be faster than full reload.
+                IEnumerator LoadTerrainAndReset(Text loadingText) {
+                    DoReset();
+                    yield return new WaitForSeconds(0.5f);
+                    
+                    // wait for fully loaded local terrain
+                    while (mapMagic.IsGenerating()) {
+                        var progressPercent = Mathf.Min(100, Mathf.Round(mapMagic.GetProgress() * 100));
+                        loadingText.text = $"Regenerating terrain at start position ({progressPercent}%)";
+
+                        yield return null;
+                    }
+                    
+                    // unload the loading screen
+                    var unload = SceneManager.UnloadSceneAsync("Loading");
+                    while (!unload.isDone) {
+                        yield return null;
+                    }
+                    
+                    FadeFromBlack();
+                    yield return new WaitForSeconds(0.7f);
+                    user.EnableGameInput();
+                }
+
+                StartCoroutine(SwitchToLoadingScreen(loadText => {
+                    StartCoroutine(LoadTerrainAndReset(loadText));
+                }, true));
+                return;
+            }
+        }
+
+        DoReset();
     }
 
     public void QuitToMenu() {
@@ -281,22 +319,22 @@ public class Game : MonoBehaviour {
         }
 
         // if terrain needs to generate, toggle special logic and wait for it to load all primary tiles
-        var terrainLoader = FindObjectOfType<MapMagicObject>();
-        if (_levelData.location == Location.Terrain && terrainLoader) {
+        var mapMagic = FindObjectOfType<MapMagicObject>();
+        if (_levelData.location == Location.Terrain && mapMagic) {
             
             // Stop auto-loading with default seed
-            terrainLoader.StopGenerate();
+            mapMagic.StopGenerate();
             Den.Tools.Tasks.ThreadManager.Abort();
             yield return new WaitForEndOfFrame();
-            terrainLoader.ClearAll();
+            mapMagic.ClearAll();
             
             // replace with user seed
-            terrainLoader.graph.random = new Noise(_levelData.terrainSeed.GetHashCode(), 32768);
-            terrainLoader.StartGenerate();
+            mapMagic.graph.random = new Noise(_levelData.terrainSeed.GetHashCode(), 32768);
+            mapMagic.StartGenerate();
             
             // wait for fully loaded local terrain
-            while (terrainLoader.IsGenerating()) {
-                var progressPercent = Mathf.Min(100, Mathf.Round(terrainLoader.GetProgress() * 100));
+            while (mapMagic.IsGenerating()) {
+                var progressPercent = Mathf.Min(100, Mathf.Round(mapMagic.GetProgress() * 100));
                 loadingText.text = $"Generating terrain ({progressPercent}%)\n\n\nSeed: \"{_levelData.terrainSeed}\"";
 
                 yield return null;
@@ -333,5 +371,29 @@ public class Game : MonoBehaviour {
             user.ResetMouseToCentre();
         }
         scenesLoading.Clear();
+    }
+    
+    // This is a separate action so that we can safely move to a new active loading scene and fully unload everything
+    // before moving to any other map or whatever we need to do.
+    // On completion it executes callback `then` with a reference to the loading text.
+    IEnumerator SwitchToLoadingScreen(Action<Text> then, bool keepScene = false) {
+            
+        // disable user input if we're in-game while handling everything else
+        var user = FindObjectOfType<User>();
+        if (user != null) {
+            user.DisableGameInput();
+            user.DisableUIInput();
+        }
+
+        crossfade.SetTrigger("FadeToBlack");
+        yield return new WaitForSeconds(0.5f);
+            
+        // load loading screen (lol)
+        var loadMode = keepScene ? LoadSceneMode.Additive : LoadSceneMode.Single;
+        var load = SceneManager.LoadSceneAsync("Loading", loadMode);
+        yield return load;
+
+        var loadText = GameObject.FindGameObjectWithTag("DynamicLoadingText").GetComponent<Text>();
+        then(loadText);
     }
 }

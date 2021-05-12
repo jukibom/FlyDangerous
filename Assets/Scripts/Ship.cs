@@ -138,7 +138,7 @@ public class Ship : MonoBehaviour {
 
     private Vector3 _initialInertiaTensor;
 
-    private bool _boostReady;
+    private bool _boostCharging;
     private bool _isBoosting;
     private float _currentBoostTime;
 
@@ -154,6 +154,8 @@ public class Ship : MonoBehaviour {
     private float _pitch;
     private float _yaw;
     private float _roll;
+
+    [CanBeNull] private Coroutine _boostCoroutine;
 
     private Transform _transformComponent;
     private Rigidbody _rigidBodyComponent;
@@ -177,6 +179,30 @@ public class Ship : MonoBehaviour {
         // setup angular momentum for collisions (higher multiplier = less spin)
         _initialInertiaTensor = _rigidBodyComponent.inertiaTensor;
         _rigidBodyComponent.inertiaTensor *= inertialTensorMultiplier;
+    }
+
+    public void Reset() {
+        _rigidBodyComponent.velocity = Vector3.zero;
+        _rigidBodyComponent.angularVelocity = Vector3.zero;
+        _pitch = 0;
+        _roll = 0;
+        _yaw = 0;
+        _throttle = 0;
+        _latH = 0;
+        _latV = 0;
+        _boostCharging = false;
+        _isBoosting = false;
+        _prevVelocity = 0;
+        var shipCamera = GetComponentInChildren<ShipCamera>();
+        if (shipCamera) {
+            shipCamera.Reset();
+        }
+
+        if (_boostCoroutine != null) {
+            StopCoroutine(_boostCoroutine);
+        }
+
+        AudioManager.Instance.Stop("ship-boost");
     }
 
     public void SetPitch(float value) {
@@ -205,8 +231,8 @@ public class Ship : MonoBehaviour {
 
     public void Boost(bool isPressed) {
         var boost = isPressed;
-        if (boost && !_boostReady) {
-            _boostReady = true;
+        if (boost && !_boostCharging) {
+            _boostCharging = true;
 
             IEnumerator DoBoost() {
                 AudioManager.Instance.Play("ship-boost");
@@ -214,9 +240,9 @@ public class Ship : MonoBehaviour {
                 _currentBoostTime = 0f;
                 _isBoosting = true;
                 yield return new WaitForSeconds(boostRechargeTime);
-                _boostReady = false;
+                _boostCharging = false;
             }
-            StartCoroutine(DoBoost());
+            _boostCoroutine = StartCoroutine(DoBoost());
         }
     }
 

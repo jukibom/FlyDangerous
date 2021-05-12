@@ -13,6 +13,11 @@ public class ShipCamera : MonoBehaviour {
     private Vector3 _velocity = Vector3.zero;
     private Vector3 _lastVelocity;
 
+    public void Reset() {
+        _lastVelocity = Vector3.zero;
+        _lastVelocity = Vector3.zero;
+    }
+    
     void FixedUpdate() {
         
         var angularVelocity = target.angularVelocity;
