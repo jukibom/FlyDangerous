@@ -99,7 +99,7 @@ public class Ship : MonoBehaviour {
         set {
             _rigidBodyComponent.mass = value.mass;
             _rigidBodyComponent.drag = value.drag;
-            _rigidBodyComponent.angularDrag = value.drag;
+            _rigidBodyComponent.angularDrag = value.angularDrag;
             _rigidBodyComponent.inertiaTensor = _initialInertiaTensor * value.inertiaTensorMultiplier;
             inertialTensorMultiplier = value.inertiaTensorMultiplier;
             

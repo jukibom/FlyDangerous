@@ -95,7 +95,7 @@ public class DevPanelFlightParams : MonoBehaviour {
         parameters.maxSpeed = float.Parse(maxSpeedTextField.text);
         parameters.maxBoostSpeed = float.Parse(maxBoostSpeedTextField.text);
         parameters.maxThrust = float.Parse(maxThrustTextField.text);
-        parameters.drag = float.Parse(massTextField.text);
+        parameters.drag = float.Parse(dragTextField.text);
         parameters.angularDrag = float.Parse(angularDragTextField.text);
         parameters.torqueThrustMultiplier = float.Parse(torqueThrustMultiplierTextField.text);
         parameters.pitchMultiplier = float.Parse(pitchMultiplierTextField.text);
