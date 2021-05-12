@@ -162,8 +162,8 @@ public class Ship : MonoBehaviour {
         get {
             return Mathf.Round(_rigidBodyComponent.velocity.magnitude);
         }
-    } 
-    
+    }
+
     public void Awake() {
         _transformComponent = GetComponent<Transform>();
         _rigidBodyComponent = GetComponent<Rigidbody>();
@@ -233,6 +233,26 @@ public class Ship : MonoBehaviour {
         }
         else {
             AudioManager.Instance.Play("ship-velocity-limit-off");
+        }
+    }
+    
+    // Get the position and rotation of the ship within the world, taking into account floating origin fix
+    public void AbsoluteWorldPosition(out Vector3 position, out Quaternion rotation) {
+        var t = transform; 
+        var p = t.position; 
+        var r = t.rotation.eulerAngles;
+        position.x = p.x;
+        position.y = p.y;
+        position.z = p.z;
+        rotation = Quaternion.Euler(r.x, r.y, r.z);
+
+        // if floating origin fix is active, overwrite position with corrected world space
+        var floatingOrigin = FindObjectOfType<FloatingOrigin>();
+        if (floatingOrigin) {
+            var origin = floatingOrigin.FocalObjectPosition;
+            position.x = origin.x;
+            position.y = origin.y;
+            position.z = origin.z;
         }
     }
 

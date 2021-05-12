@@ -15,8 +15,8 @@ public class Game : MonoBehaviour {
 
     public GameObject checkpointPrefab;
     
-    private LevelData _levelDataAs = new LevelData();
-    public LevelData LevelDataAsLoaded => _levelDataAs;
+    private LevelData _levelData = new LevelData();
+    public LevelData LevelDataAsLoaded => _levelData;
     public LevelData LevelDataCurrent => GenerateLevelData();
 
     [CanBeNull] private ShipParameters _shipParameters;
@@ -31,8 +31,8 @@ public class Game : MonoBehaviour {
         }
     }
 
-    public bool IsTerrainMap => _levelDataAs.location == Location.Terrain;
-    public string Seed => _levelDataAs.terrainSeed;
+    public bool IsTerrainMap => _levelData.location == Location.Terrain;
+    public string Seed => _levelData.terrainSeed;
     
     [SerializeField] private Animator crossfade;
 
@@ -60,7 +60,7 @@ public class Game : MonoBehaviour {
     }
 
     public void StartGame(LevelData levelData, bool dynamicPlacementStart = false) {
-        _levelDataAs = levelData;
+        _levelData = levelData;
         HideCursor();
 
         string mapScene;
@@ -159,36 +159,26 @@ public class Game : MonoBehaviour {
     }
     
     private void ResetGameState() {
-        _levelDataAs = new LevelData();
+        _levelData = new LevelData();
     }
 
     // Return a new level data object hydrated with all the information of the current game state
     private LevelData GenerateLevelData() {
         var levelData = new LevelData();
-        levelData.raceType = _levelDataAs.raceType;
-        levelData.location = _levelDataAs.location;
-        levelData.terrainSeed = _levelDataAs.terrainSeed;
-        levelData.checkpoints = _levelDataAs.checkpoints;
+        levelData.raceType = _levelData.raceType;
+        levelData.location = _levelData.location;
+        levelData.terrainSeed = _levelData.terrainSeed;
+        levelData.checkpoints = _levelData.checkpoints;
 
         var ship = FindObjectOfType<Ship>();
-        var floatingOrigin = FindObjectOfType<FloatingOrigin>();
         if (ship) {
-            var position = ship.transform.position;
-            var rotation = ship.transform.rotation.eulerAngles;
-            levelData.startPosition.x = position.x;
-            levelData.startPosition.y = position.y;
-            levelData.startPosition.z = position.z;
-            levelData.startRotation.x = rotation.x;
-            levelData.startRotation.y = rotation.y;
-            levelData.startRotation.z = rotation.z;
-
-            // if floating origin fix is active, overwrite position with corrected world space
-            if (floatingOrigin) {
-                var origin = floatingOrigin.FocalObjectPosition;
-                levelData.startPosition.x = origin.x;
-                levelData.startPosition.y = origin.y;
-                levelData.startPosition.z = origin.z;
-            }
+            ship.AbsoluteWorldPosition(out var outPosition, out var outRotation);
+            levelData.startPosition.x = outPosition.x;
+            levelData.startPosition.y = outPosition.y;
+            levelData.startPosition.z = outPosition.z;
+            levelData.startRotation.x = outRotation.eulerAngles.x;
+            levelData.startRotation.y = outRotation.eulerAngles.y;
+            levelData.startRotation.z = outRotation.eulerAngles.z;
         }
 
         var track = FindObjectOfType<Track>();
@@ -249,16 +239,16 @@ public class Game : MonoBehaviour {
         // ship placement
         var ship = FindObjectOfType<Ship>();
         if (ship && !dynamicPlacement) {
-            var t = _levelDataAs.startPosition.x;
+            var t = _levelData.startPosition.x;
             ship.transform.position = new Vector3(
-                _levelDataAs.startPosition.x,
-                _levelDataAs.startPosition.y,
-                _levelDataAs.startPosition.z
+                _levelData.startPosition.x,
+                _levelData.startPosition.y,
+                _levelData.startPosition.z
             );
             ship.transform.rotation = Quaternion.Euler(
-                _levelDataAs.startRotation.x,    
-                _levelDataAs.startRotation.y,    
-                _levelDataAs.startRotation.z    
+                _levelData.startRotation.x,    
+                _levelData.startRotation.y,    
+                _levelData.startRotation.z    
             );
             
             // debug flight params
@@ -267,9 +257,9 @@ public class Game : MonoBehaviour {
         
         // checkpoint placement
         var track = FindObjectOfType<Track>();
-        if (track && _levelDataAs.checkpoints?.Count > 0) {
+        if (track && _levelData.checkpoints?.Count > 0) {
             List<Checkpoint> checkpoints = new List<Checkpoint>();
-            _levelDataAs.checkpoints.ForEach(c => {
+            _levelData.checkpoints.ForEach(c => {
                 var checkpointObject = Instantiate(checkpointPrefab, track.transform);
                 var checkpoint = checkpointObject.GetComponent<Checkpoint>();
                 checkpoint.type = c.type;
@@ -292,7 +282,7 @@ public class Game : MonoBehaviour {
 
         // if terrain needs to generate, toggle special logic and wait for it to load all primary tiles
         var terrainLoader = FindObjectOfType<MapMagicObject>();
-        if (_levelDataAs.location == Location.Terrain && terrainLoader) {
+        if (_levelData.location == Location.Terrain && terrainLoader) {
             
             // Stop auto-loading with default seed
             terrainLoader.StopGenerate();
@@ -301,13 +291,13 @@ public class Game : MonoBehaviour {
             terrainLoader.ClearAll();
             
             // replace with user seed
-            terrainLoader.graph.random = new Noise(_levelDataAs.terrainSeed.GetHashCode(), 32768);
+            terrainLoader.graph.random = new Noise(_levelData.terrainSeed.GetHashCode(), 32768);
             terrainLoader.StartGenerate();
             
             // wait for fully loaded local terrain
             while (terrainLoader.IsGenerating()) {
                 var progressPercent = Mathf.Min(100, Mathf.Round(terrainLoader.GetProgress() * 100));
-                loadingText.text = $"Generating terrain ({progressPercent}%)\n\n\nSeed: \"{_levelDataAs.terrainSeed}\"";
+                loadingText.text = $"Generating terrain ({progressPercent}%)\n\n\nSeed: \"{_levelData.terrainSeed}\"";
 
                 yield return null;
             }
