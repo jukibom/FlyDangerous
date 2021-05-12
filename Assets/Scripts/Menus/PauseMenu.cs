@@ -55,8 +55,6 @@ namespace Menus {
                     optionsPanel.Cancel();
                     break;
             }
-
-            UpdatePauseGameState();
         }
         
         private void Start() {

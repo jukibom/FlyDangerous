@@ -39,7 +39,7 @@ public class User : MonoBehaviour {
 
     /** Boostrap global ESC / cancel action in UI */
     public void Awake() {
-        _cancelAction = (context) => { OnShowGameMenu(); };
+        _cancelAction = context => { pauseMenu.OnGameMenuToggle(); };
         ResetMouseToCentre();
     }
 
@@ -182,7 +182,9 @@ public class User : MonoBehaviour {
      *  UI Requires additional bootstrap as above because UI events in Unity are fucking bonkers.
      */
     public void OnShowGameMenu() {
-        pauseMenu.OnGameMenuToggle();
+        if (inputEnabled) {
+            pauseMenu.OnGameMenuToggle();
+        }
     }
 
     public void OnRestartTrack() {
