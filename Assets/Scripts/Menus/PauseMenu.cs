@@ -55,6 +55,8 @@ namespace Menus {
                     optionsPanel.Cancel();
                     break;
             }
+
+            UpdatePauseGameState();
         }
         
         private void Start() {
@@ -69,8 +71,11 @@ namespace Menus {
                 GetComponent<Image>().enabled = false;
                 // TODO: Detach from external camera? Maybe just keep the camera as-is but disable camera accel movements.
             }
-
-            UpdatePauseGameState();
+            
+            // basic non-paused without enabling input or playing sounds etc
+            Game.Instance.HideCursor();
+            backgroundCanvas.SetActive(false);
+            user.DisableUIInput();
         }
 
         public void Pause() {

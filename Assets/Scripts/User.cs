@@ -29,8 +29,11 @@ public class User : MonoBehaviour {
     private float _throttle;
     private float _lateralH;
     private float _lateralV;
+    private bool _boost;
+    private bool _velLimiter;
 
-    private bool _inputEnabled = true;
+    [SerializeField]
+    private bool inputEnabled = true;
 
     private Action<InputAction.CallbackContext> _cancelAction;
 
@@ -38,6 +41,13 @@ public class User : MonoBehaviour {
     public void Awake() {
         _cancelAction = (context) => { OnShowGameMenu(); };
         ResetMouseToCentre();
+    }
+
+    public void Start() {
+        // if there's no controlling gamestate loaded, enable own input (usually in editor) 
+        if (!FindObjectOfType<Game>()) {
+            EnableGameInput();
+        }
     }
 
     public void OnEnable() {
@@ -51,67 +61,72 @@ public class User : MonoBehaviour {
     }
 
     public void Update() {
+        if (inputEnabled) {
+            var pitch = _pitch;
+            var roll = _roll;
+            var yaw = _yaw;
+            var throttle = _throttle;
+            var lateralH = _lateralH;
+            var lateralV = _lateralV;
 
-        if (!_inputEnabled) {
-            return;
-        }
+            if (!pauseMenu.IsPaused && Preferences.Instance.GetBool("enableMouseFlightControls")) {
 
-        var pitch = _pitch;
-        var roll = _roll;
-        var yaw = _yaw;
-        var throttle = _throttle;
-        var lateralH = _lateralH;
-        var lateralV = _lateralV;
+                var relativeX = Preferences.Instance.GetBool("relativeMouseXAxis");
+                var relativeY = Preferences.Instance.GetBool("relativeMouseYAxis");
+                var mouseXAxisBind = Preferences.Instance.GetString("mouseXAxis");
+                var mouseYAxisBind = Preferences.Instance.GetString("mouseYAxis");
 
-        if (!pauseMenu.IsPaused && Preferences.Instance.GetBool("enableMouseFlightControls")) {
-            
-            var relativeX = Preferences.Instance.GetBool("relativeMouseXAxis");
-            var relativeY = Preferences.Instance.GetBool("relativeMouseYAxis");
-            var mouseXAxisBind = Preferences.Instance.GetString("mouseXAxis");
-            var mouseYAxisBind = Preferences.Instance.GetString("mouseYAxis");
-            
-            float sensitivityX = Preferences.Instance.GetFloat("mouseXSensitivity");
-            float sensitivityY = Preferences.Instance.GetFloat("mouseYSensitivity");
+                float sensitivityX = Preferences.Instance.GetFloat("mouseXSensitivity");
+                float sensitivityY = Preferences.Instance.GetFloat("mouseYSensitivity");
 
-            Action<string, float> setInput = (axis, amount) => {
-                switch (axis) {
-                    // TODO: mouse axis invert (fml)
-                    case "pitch": pitch += amount * -1;
-                        break;
-                    case "roll": roll += amount;
-                        break;
-                    case "yaw": yaw += amount;
-                        break;
+                Action<string, float> setInput = (axis, amount) => {
+                    switch (axis) {
+                        // TODO: mouse axis invert (fml)
+                        case "pitch":
+                            pitch += amount * -1;
+                            break;
+                        case "roll":
+                            roll += amount;
+                            break;
+                        case "yaw":
+                            yaw += amount;
+                            break;
+                    }
+                };
+
+                if (relativeX) {
+                    setInput(mouseXAxisBind, _mousePositionNormalizedDelta.x * sensitivityX);
                 }
-            };
+                else {
+                    setInput(mouseXAxisBind, _mousePositionNormalized.x * sensitivityX);
+                }
 
-            if (relativeX) {
-                setInput(mouseXAxisBind, _mousePositionNormalizedDelta.x * sensitivityX);
-            }
-            else {
-                setInput(mouseXAxisBind, _mousePositionNormalized.x * sensitivityX);
+                if (relativeY) {
+                    setInput(mouseYAxisBind, _mousePositionNormalizedDelta.y * sensitivityY);
+                }
+                else {
+                    setInput(mouseYAxisBind, _mousePositionNormalized.y * sensitivityY);
+                }
+
+                Vector2 widgetPosition = new Vector2(
+                    relativeX ? (_mousePositionNormalizedDelta.x * 0.01f) : _mousePositionNormalized.x,
+                    relativeY ? (_mousePositionNormalizedDelta.y * 0.01f) : _mousePositionNormalized.y
+                );
+                mouseWidget.UpdateWidgetSprites(widgetPosition);
             }
 
-            if (relativeY) {
-                setInput(mouseYAxisBind, _mousePositionNormalizedDelta.y * sensitivityY);
-            }
-            else {
-                setInput(mouseYAxisBind, _mousePositionNormalized.y * sensitivityY);
-            }
+            playerShip.SetPitch(pitch);
+            playerShip.SetRoll(roll);
+            playerShip.SetYaw(yaw);
+            playerShip.SetThrottle(throttle);
+            playerShip.SetLateralH(lateralH);
+            playerShip.SetLateralV(lateralV);
+            playerShip.Boost(_boost);
+            playerShip.VelocityLimiterIsPressed(_velLimiter);
 
-            Vector2 widgetPosition = new Vector2(
-                relativeX ? (_mousePositionNormalizedDelta.x * 0.01f) : _mousePositionNormalized.x,
-                relativeY ? (_mousePositionNormalizedDelta.y * 0.01f) : _mousePositionNormalized.y
-            );
-            mouseWidget.UpdateWidgetSprites(widgetPosition);
+            // don't allow holding down boost (except at the start, when input is disabled anyway
+            _boost = false;
         }
-        
-        playerShip.SetPitch(pitch);
-        playerShip.SetRoll(roll);
-        playerShip.SetYaw(yaw);
-        playerShip.SetThrottle(throttle);
-        playerShip.SetLateralH(lateralH);
-        playerShip.SetLateralV(lateralV);
     }
 
     /**
@@ -121,7 +136,7 @@ public class User : MonoBehaviour {
     public void EnableGameInput() {
         var playerInput = GetComponent<PlayerInput>();
         playerInput.ActivateInput();
-        _inputEnabled = true;
+        inputEnabled = true;
         
         Console.Instance.LogMessage("** USER INPUT ENABLED **");
         foreach (var inputDevice in InputSystem.devices) {
@@ -140,7 +155,7 @@ public class User : MonoBehaviour {
 
     public void DisableGameInput() {
         GetComponent<PlayerInput>().DeactivateInput();
-        _inputEnabled = false;
+        inputEnabled = false;
         
         Console.Instance.LogMessage("** USER INPUT DISABLED **");
     }
@@ -227,7 +242,7 @@ public class User : MonoBehaviour {
     }
 
     public void OnBoost(InputValue value) {
-        playerShip.Boost(value.isPressed);
+        _boost = value.isPressed;
     }
 
     public void OnFlightAssistToggle(InputValue value) {
@@ -235,7 +250,7 @@ public class User : MonoBehaviour {
     }
 
     public void OnVelocityLimiter(InputValue value) {
-        playerShip.VelocityLimiterIsPressed(value.isPressed);
+        _velLimiter = value.isPressed;
     }
 
     public void OnAltFlightControlsToggle(InputValue value) {

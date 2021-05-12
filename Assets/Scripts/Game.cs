@@ -54,6 +54,11 @@ public class Game : MonoBehaviour {
         DontDestroyOnLoad(gameObject);
     }
 
+    public void Start() {
+        // if there's a user object when the game starts, enable input (usually in the editor!)
+        FindObjectOfType<User>()?.EnableGameInput();
+    }
+
     public void StartGame(LevelData levelData, bool dynamicPlacementStart = false) {
         _levelDataAs = levelData;
         HideCursor();
@@ -240,16 +245,7 @@ public class Game : MonoBehaviour {
                 yield return null;
             }
         }
-        
-        // disable user input now that a valid user has loaded
-        var user = FindObjectOfType<User>();
-        if (user != null) {
-            // TODO: make user start with input disabled, add some saftey net for not calling LoadGameScenes when developing :(
-            user.DisableGameInput();
-            user.DisableUIInput();
-            user.ResetMouseToCentre();
-        }
-        
+
         // ship placement
         var ship = FindObjectOfType<Ship>();
         if (ship && !dynamicPlacement) {
@@ -341,8 +337,10 @@ public class Game : MonoBehaviour {
         }
 
         // enable user input
+        var user = FindObjectOfType<User>();
         if (user != null) {
             user.EnableGameInput();
+            user.ResetMouseToCentre();
         }
         scenesLoading.Clear();
     }

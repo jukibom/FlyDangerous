@@ -207,12 +207,10 @@ public class Ship : MonoBehaviour {
         var boost = isPressed;
         if (boost && !_boostReady) {
             _boostReady = true;
-            Debug.Log("Boost Charge");
 
             IEnumerator DoBoost() {
                 AudioManager.Instance.Play("ship-boost");
                 yield return new WaitForSeconds(1);
-                Debug.Log("Boost!");
                 _currentBoostTime = 0f;
                 _isBoosting = true;
                 yield return new WaitForSeconds(boostRechargeTime);
@@ -229,7 +227,6 @@ public class Ship : MonoBehaviour {
 
     public void VelocityLimiterIsPressed(bool isPressed) {
         _userVelocityLimit = isPressed;
-        Debug.Log("Velocity Limit " + (_userVelocityLimit ? "ON" : "OFF") + " (not implemented)");
         
         if (_userVelocityLimit) {
             AudioManager.Instance.Play("ship-velocity-limit-on");

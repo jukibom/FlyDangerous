@@ -93,7 +93,6 @@ public class Track : MonoBehaviour {
             if (!hitCheckpoint) {
                 // new checkpoint, record it and split timer
                 hitCheckpoints.Add(checkpoint);
-                Debug.Log("HIT");
                 // update split display and fade out
                 if (checkpoint.type == CheckpointType.Check) {
                     _user.splitTimeDisplay.SetTimeMs(timeMs);
