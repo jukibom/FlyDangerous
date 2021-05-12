@@ -651,7 +651,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/rightStick/y"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Everything"",
                     ""action"": ""LateralV"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -662,7 +662,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Everything"",
                     ""action"": ""LateralV"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -1421,7 +1421,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Pointer>/position"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Everything"",
                     ""action"": ""Mouse Raw"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -1432,7 +1432,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Pointer>/delta"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Everything"",
                     ""action"": ""Mouse Raw Normalized Delta"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
