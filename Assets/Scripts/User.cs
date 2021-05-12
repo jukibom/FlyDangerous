@@ -30,7 +30,6 @@ public class User : MonoBehaviour {
     private float _lateralH;
     private float _lateralV;
     private bool _boost;
-    private bool _velLimiter;
 
     [SerializeField]
     private bool inputEnabled = true;
@@ -122,7 +121,6 @@ public class User : MonoBehaviour {
             playerShip.SetLateralH(lateralH);
             playerShip.SetLateralV(lateralV);
             playerShip.Boost(_boost);
-            playerShip.VelocityLimiterIsPressed(_velLimiter);
 
             // don't allow holding down boost (except at the start, when input is disabled anyway
             _boost = false;
@@ -252,7 +250,9 @@ public class User : MonoBehaviour {
     }
 
     public void OnVelocityLimiter(InputValue value) {
-        _velLimiter = value.isPressed;
+        if (inputEnabled) {
+            playerShip.VelocityLimiterIsPressed(value.isPressed);
+        }
     }
 
     public void OnAltFlightControlsToggle(InputValue value) {
