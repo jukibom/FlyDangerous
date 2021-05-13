@@ -9,6 +9,8 @@ public class Console : MonoBehaviour {
 
     [SerializeField] private Text _logEntry;
     
+    // TODO: make this log entry an array and trim as we go
+    
     private bool _show;
     public bool Visible { get => _show; }
 

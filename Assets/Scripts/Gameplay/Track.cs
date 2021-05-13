@@ -24,7 +24,7 @@ public class Track : MonoBehaviour {
     
     public bool IsEndCheckpointValid => hitCheckpoints.Count >= _checkpoints.Count - 1;
 
-    private float timeMs = 0;
+    private float timeMs;
     
     public void Awake() {
         _checkpoints = GetComponentsInChildren<Checkpoint>().ToList();

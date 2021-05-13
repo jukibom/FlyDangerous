@@ -118,6 +118,7 @@ namespace Menus {
             copyConfirmTransform.localPosition = new Vector3(copyConfirmTransform.localPosition.x, 55, copyConfirmTransform.position.z);
             copyConfirmationText.color = new Color(1f, 1f, 1f, 1f);
             
+            // TODO: Why is this sometimes off-centre? wtf?
             IEnumerator FadeText() {
                 while (copyConfirmationText.color.a > 0.0f) {
                     copyConfirmationText.color = new Color(1f, 1f, 1f, copyConfirmationText.color.a - Time.unscaledDeltaTime);
