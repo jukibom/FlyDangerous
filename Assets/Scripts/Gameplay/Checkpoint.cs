@@ -9,7 +9,15 @@ public enum CheckpointType {
     End,
 }
 public class Checkpoint : MonoBehaviour {
-    public CheckpointType type = CheckpointType.Check;
+    private CheckpointType _type = CheckpointType.Check;
+
+    public CheckpointType Type {
+        get => _type;
+        set {
+            _type = value;
+            Reset();
+        }
+    }
 
     [SerializeField] private MeshRenderer overlay;
     [SerializeField] private Material checkMaterial;
@@ -20,19 +28,23 @@ public class Checkpoint : MonoBehaviour {
 
     private void OnEnable() {
         _track = GetComponentInParent<Track>();
-        if (type == CheckpointType.Start) {
-            overlay.material = checkMaterial;
-        }
+    }
 
-        if (type == CheckpointType.Check) {
+    public void Reset() {
+        ShowOverlay();
+        if (Type == CheckpointType.Start) {
             HideOverlay();
         }
 
-        if (type == CheckpointType.End) {
+        if (Type == CheckpointType.Check) {
+            overlay.material = checkMaterial;
+        }
+
+        if (Type == CheckpointType.End) {
             overlay.material = invalidEndMaterial;
         }
     }
-
+    
     public void ShowOverlay() {
         overlay.enabled = true;
     }
@@ -42,7 +54,10 @@ public class Checkpoint : MonoBehaviour {
     }
 
     public void Hit() {
-        if (type == CheckpointType.End && !_track.IsEndCheckpointValid) {
+        if (Type == CheckpointType.Start) {
+            return;
+        }
+        if (Type == CheckpointType.End && !_track.IsEndCheckpointValid) {
             return;
         }
         _track.CheckpointHit(this);
@@ -50,7 +65,7 @@ public class Checkpoint : MonoBehaviour {
     }
 
     public void Update() {
-        if (type == CheckpointType.End) {
+        if (Type == CheckpointType.End) {
             overlay.material = _track.IsEndCheckpointValid ? validEndMaterial : invalidEndMaterial;
         }
     }

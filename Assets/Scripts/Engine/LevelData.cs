@@ -26,7 +26,7 @@ namespace Engine {
         None,
         Sprint,
         Laps,
-        FreeRoam,
+        Editor
     }
 
     public class CheckpointLocation {

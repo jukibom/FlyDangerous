@@ -44,7 +44,7 @@ public class FreeRoamMenu : MonoBehaviour {
     public void StartFreeRoam() {
         var levelData = _levelData != null ? _levelData : new LevelData();
         levelData.location = Location.Terrain;
-        levelData.raceType = RaceType.FreeRoam;
+        levelData.raceType = RaceType.None;
         levelData.terrainSeed = seedInput.text;
 
         // TODO: some better initial placement system for terrain in Game class (need to know when terrain has loaded)

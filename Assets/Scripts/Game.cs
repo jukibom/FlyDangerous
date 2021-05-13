@@ -114,7 +114,6 @@ public class Game : MonoBehaviour {
             var distanceToStart = Vector3.Distance(shipPosition, new Vector3
                 { x = _levelData.startPosition.x, y = _levelData.startPosition.y, z = _levelData.startPosition.z }) ;
 
-            Debug.Log(distanceToStart);
             // where do we get this from?
             if (distanceToStart > 20000) {
                 // the terrain will not be loaded if we teleport there, we need to fade to black, wait for terrain to load, then fade back. This should still be faster than full reload.
@@ -232,7 +231,7 @@ public class Game : MonoBehaviour {
             levelData.checkpoints = new List<CheckpointLocation>();
             foreach (var checkpoint in checkpoints) {
                 var checkpointLocation = new CheckpointLocation();
-                checkpointLocation.type = checkpoint.type;
+                checkpointLocation.type = checkpoint.Type;
                 checkpointLocation.position = new LevelDataVector3<float>();
                 checkpointLocation.rotation = new LevelDataVector3<float>();
                 
@@ -284,7 +283,6 @@ public class Game : MonoBehaviour {
         // ship placement
         var ship = FindObjectOfType<Ship>();
         if (ship && !dynamicPlacement) {
-            var t = _levelData.startPosition.x;
             ship.transform.position = new Vector3(
                 _levelData.startPosition.x,
                 _levelData.startPosition.y,
@@ -307,7 +305,7 @@ public class Game : MonoBehaviour {
             _levelData.checkpoints.ForEach(c => {
                 var checkpointObject = Instantiate(checkpointPrefab, track.transform);
                 var checkpoint = checkpointObject.GetComponent<Checkpoint>();
-                checkpoint.type = c.type;
+                checkpoint.Type = c.type;
                 var transform = checkpointObject.transform;
                 transform.position = new Vector3(
                     c.position.x,
@@ -366,9 +364,9 @@ public class Game : MonoBehaviour {
         FadeFromBlack();
         yield return new WaitForSeconds(0.7f);
         
-        // if there's a track in the game world, start it (prevent collision starting timer during load for laps)
+        // if there's a track in the game world, start it
         if (track) {
-            track.TrackReady();
+            track.StartTimer();
         }
 
         // enable user input

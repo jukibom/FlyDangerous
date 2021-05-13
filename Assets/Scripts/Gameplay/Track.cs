@@ -16,13 +16,12 @@ public class Track : MonoBehaviour {
         get => _checkpoints;
         set => ReplaceCheckpoints(value);
     }
-    private Text timeText;
-    private bool _ready;
-    private bool _started;
+    // Set to true by the level loader but may be overridden for testing
+    [SerializeField] private bool ready;
     private bool _complete;
     private User _user;
     
-    public bool IsEndCheckpointValid => hitCheckpoints.Count >= _checkpoints.Count - 1;
+    public bool IsEndCheckpointValid => hitCheckpoints.Count >= _checkpoints.Count - 2; // remove start and end
 
     private float timeMs;
     
@@ -30,47 +29,59 @@ public class Track : MonoBehaviour {
         _checkpoints = GetComponentsInChildren<Checkpoint>().ToList();
     }
 
-    public void TrackReady() {
-        _ready = true;
-        var start = _checkpoints.Find(c => c.type == CheckpointType.Start);
+    private void OnEnable() {
+        Game.OnRestart += ResetTrack;
+    }
+
+    private void OnDisable() {
+        Game.OnRestart -= ResetTrack;
+    }
+
+    public void ResetTrack() {
+        var start = _checkpoints.Find(c => c.Type == CheckpointType.Start);
         if (start) {
-            start.ShowOverlay();
+            var ship = FindObjectOfType<Ship>();
+            if (ship) {
+                var startTransform = start.transform;
+                ship.transform.position = new Vector3 {
+                    x = startTransform.position.x,
+                    y = startTransform.position.y,
+                    z = startTransform.position.z
+                };
+            }
         }
+        else {
+            Debug.LogWarning("Checkpoints loaded with no start block! Is this intentional?");
+        }
+        
+        _checkpoints.ForEach(c => {
+            c.Reset();
+        });
+        
+        hitCheckpoints = new List<Checkpoint>();
+        ResetTimer();
     }
 
     public void ResetTimer() {
-        _started = false;
         _complete = false;
         timeMs = 0;
     }
 
     public void StartTimer() {
         ResetTimer();
-        _started = true;
+        ready = true;
         _complete = false;
     }
 
     public void FinishTimer() {
-        _started = false;
         _complete = true;
     }
 
     public void CheckpointHit(Checkpoint checkpoint) {
-        if (_ready) {
+        if (ready) {
             var hitCheckpoint = hitCheckpoints.Find(c => c == checkpoint);
 
-            if (checkpoint.type == CheckpointType.Start) {
-                if (!_started) {
-                    hitCheckpoints = new List<Checkpoint>();
-                    foreach (var c in _checkpoints) {
-                        c.ShowOverlay();
-                    }
-
-                    StartTimer();
-                }
-            }
-
-            if (hitCheckpoint && hitCheckpoint.type == CheckpointType.End) {
+            if (hitCheckpoint && hitCheckpoint.Type == CheckpointType.End) {
                 _user.totalTimeDisplay.GetComponent<Text>().color = new Color(0, 1, 0, 1);
 
                 if (!FindObjectOfType<Game>().ShipParameters.ToJsonString()
@@ -80,21 +91,13 @@ public class Track : MonoBehaviour {
                 }
 
                 FinishTimer();
-
-                // reset start location
-                if (Game.Instance.LevelDataCurrent.raceType != RaceType.Sprint) {
-                    var startCheckpoint = _checkpoints.Find(c => c.type == CheckpointType.Start);
-                    if (startCheckpoint) {
-                        startCheckpoint.ShowOverlay();
-                    }
-                }
             }
 
             if (!hitCheckpoint) {
                 // new checkpoint, record it and split timer
                 hitCheckpoints.Add(checkpoint);
                 // update split display and fade out
-                if (checkpoint.type == CheckpointType.Check) {
+                if (checkpoint.Type == CheckpointType.Check) {
                     _user.splitTimeDisplay.SetTimeMs(timeMs);
 
                     // TODO: make this fade-out generic and reuse across the copy notification in pause menu
@@ -121,6 +124,7 @@ public class Track : MonoBehaviour {
 
         hitCheckpoints = new List<Checkpoint>();
         _checkpoints = checkpoints;
+        ResetTrack();
     }
     
     private void FixedUpdate() {
@@ -130,7 +134,7 @@ public class Track : MonoBehaviour {
             return;
         }
 
-        if (_ready && _started && !_complete && _user.totalTimeDisplay != null) {
+        if (ready && !_complete && _user.totalTimeDisplay != null) {
             _user.totalTimeDisplay.textBox.color = new Color(1f, 1f, 1f, 1f);
             timeMs += Time.fixedDeltaTime;
             _user.totalTimeDisplay.SetTimeMs(timeMs);

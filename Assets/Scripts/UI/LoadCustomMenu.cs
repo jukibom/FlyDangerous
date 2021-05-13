@@ -39,7 +39,6 @@ public class LoadCustomMenu : MonoBehaviour {
     }
 
     public void OnSaveInputFieldChanged(string levelString) {
-        Debug.Log("TEXT CHANGE");
         _levelData = null;
         saveWarning.enabled = false;
         goButton.enabled = false;
@@ -70,7 +69,6 @@ public class LoadCustomMenu : MonoBehaviour {
     }
 
     private void SetValidState() {
-        Debug.Log("VALID");
         if (_levelData?.name.Length > 0 || _levelData?.terrainSeed.Length > 0) {
             mapInfo.text = _levelData.name;
             mapInfo.text += _levelData.terrainSeed.Length > 0 ? "    < SEED: " + _levelData.terrainSeed + " >" : "";
@@ -82,7 +80,6 @@ public class LoadCustomMenu : MonoBehaviour {
         goButton.enabled = true;
     }
     private void SetInvalidState() {
-        Debug.Log("INVALID");
         mapInfo.text = "";
         saveWarning.enabled = true;
         goButton.enabled = false;
