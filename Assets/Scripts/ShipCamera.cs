@@ -16,6 +16,7 @@ public class ShipCamera : MonoBehaviour {
     public void Reset() {
         _lastVelocity = Vector3.zero;
         _lastVelocity = Vector3.zero;
+        transform.localPosition = Vector3.zero;
     }
     
     void FixedUpdate() {
@@ -28,7 +29,7 @@ public class ShipCamera : MonoBehaviour {
         
         Vector3 desiredPosition = accelerationCameraDelta - rotationCameraModifier;
 
-        this.transform.localPosition = Vector3.SmoothDamp(this.transform.localPosition, desiredPosition, ref _velocity, smoothSpeed);
+        transform.localPosition = Vector3.SmoothDamp(transform.localPosition, desiredPosition, ref _velocity, smoothSpeed);
         _lastVelocity = target.velocity;
     }
 }
