@@ -13,6 +13,9 @@ public class Game : MonoBehaviour {
 
     public static Game Instance;
 
+    public delegate void RestartLevelAction();
+    public static event RestartLevelAction OnRestart;
+
     public GameObject checkpointPrefab;
     
     private LevelData _levelData = new LevelData();
@@ -98,6 +101,10 @@ public class Game : MonoBehaviour {
             ship.transform.rotation = Quaternion.Euler(_levelData.startRotation.x, _levelData.startRotation.y,
                 _levelData.startRotation.z);
             ship.Reset();
+
+            if (OnRestart != null) {
+                OnRestart();
+            }
         };
         
         // first let's check if this is a terrain world and handle that appropriately
