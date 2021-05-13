@@ -259,6 +259,9 @@ public class User : MonoBehaviour {
         _pitch = 0;
         _roll = 0;
         _yaw = 0;
+        _throttle = 0;
+        _lateralH = 0;
+        _lateralV = 0;
         _alternateFlightControls = !_alternateFlightControls;
         if (_alternateFlightControls) {
             AudioManager.Instance.Play("ship-alternate-flight-on");
