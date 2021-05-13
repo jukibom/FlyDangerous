@@ -10,10 +10,9 @@ using UnityEngine.UI;
 public class Track : MonoBehaviour {
 
     public List<Checkpoint> hitCheckpoints;
-    [SerializeField] private List<Checkpoint> _checkpoints;
 
     public List<Checkpoint> Checkpoints {
-        get => _checkpoints;
+        get => GetComponentsInChildren<Checkpoint>().ToList();
         set => ReplaceCheckpoints(value);
     }
     // Set to true by the level loader but may be overridden for testing
@@ -21,24 +20,20 @@ public class Track : MonoBehaviour {
     private bool _complete;
     private User _user;
     
-    public bool IsEndCheckpointValid => hitCheckpoints.Count >= _checkpoints.Count - 2; // remove start and end
+    public bool IsEndCheckpointValid => hitCheckpoints.Count >= Checkpoints.Count - 2; // remove start and end
 
     private float timeMs;
-    
-    public void Awake() {
-        _checkpoints = GetComponentsInChildren<Checkpoint>().ToList();
-    }
 
     private void OnEnable() {
-        Game.OnRestart += ResetTrack;
+        Game.OnRestart += InitialiseTrack;
     }
 
     private void OnDisable() {
-        Game.OnRestart -= ResetTrack;
+        Game.OnRestart -= InitialiseTrack;
     }
 
-    public void ResetTrack() {
-        var start = _checkpoints.Find(c => c.Type == CheckpointType.Start);
+    public void InitialiseTrack() {
+        var start = Checkpoints.Find(c => c.Type == CheckpointType.Start);
         if (start) {
             var ship = FindObjectOfType<Ship>();
             if (ship) {
@@ -54,7 +49,7 @@ public class Track : MonoBehaviour {
             Debug.LogWarning("Checkpoints loaded with no start block! Is this intentional?");
         }
         
-        _checkpoints.ForEach(c => {
+        Checkpoints.ForEach(c => {
             c.Reset();
         });
         
@@ -118,13 +113,12 @@ public class Track : MonoBehaviour {
     }
 
     private void ReplaceCheckpoints(List<Checkpoint> checkpoints) {
-        foreach (var checkpoint in _checkpoints) {
+        foreach (var checkpoint in Checkpoints) {
             Destroy(checkpoint.gameObject);
         }
 
         hitCheckpoints = new List<Checkpoint>();
-        _checkpoints = checkpoints;
-        ResetTrack();
+        InitialiseTrack();
     }
     
     private void FixedUpdate() {

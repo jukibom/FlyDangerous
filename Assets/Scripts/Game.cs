@@ -301,7 +301,6 @@ public class Game : MonoBehaviour {
         // checkpoint placement
         var track = FindObjectOfType<Track>();
         if (track && _levelData.checkpoints?.Count > 0) {
-            List<Checkpoint> checkpoints = new List<Checkpoint>();
             _levelData.checkpoints.ForEach(c => {
                 var checkpointObject = Instantiate(checkpointPrefab, track.transform);
                 var checkpoint = checkpointObject.GetComponent<Checkpoint>();
@@ -317,10 +316,10 @@ public class Game : MonoBehaviour {
                     c.rotation.y,
                     c.rotation.z
                 );
-                checkpoints.Add(checkpoint);
+                checkpoint.transform.parent = track.transform;
             });
-
-            track.Checkpoints = checkpoints;
+            // position the player at the start and initialise all the checkpoints
+            track.InitialiseTrack();
         }
 
         // if terrain needs to generate, toggle special logic and wait for it to load all primary tiles
