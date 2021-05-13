@@ -20,6 +20,7 @@ public class DevPanelFlightParams : MonoBehaviour {
     [SerializeField] private InputField torqueBoostMultiplierTextField;
     [SerializeField] private InputField totalBoostTimeTextField;
     [SerializeField] private InputField totalBoostRotationalTimeTextField;
+    [SerializeField] private InputField boostMaxSpeedDropOffTimeTextField;
     [SerializeField] private InputField boostRechargeTimeTextField;
     [SerializeField] private InputField intertialTensorMultiplierTextField;
     [SerializeField] private InputField minUserLimitedVelocityTextField;
@@ -43,6 +44,7 @@ public class DevPanelFlightParams : MonoBehaviour {
         torqueBoostMultiplierTextField.placeholder.GetComponent<Text>().text = defaults.torqueBoostMultiplier.ToString();
         totalBoostTimeTextField.placeholder.GetComponent<Text>().text = defaults.totalBoostTime.ToString();
         totalBoostRotationalTimeTextField.placeholder.GetComponent<Text>().text = defaults.totalBoostRotationalTime.ToString();
+        boostMaxSpeedDropOffTimeTextField.placeholder.GetComponent<Text>().text = defaults.boostMaxSpeedDropOffTime.ToString();
         boostRechargeTimeTextField.placeholder.GetComponent<Text>().text = defaults.boostRechargeTime.ToString();
         intertialTensorMultiplierTextField.placeholder.GetComponent<Text>().text = defaults.inertiaTensorMultiplier.ToString();
         minUserLimitedVelocityTextField.placeholder.GetComponent<Text>().text = defaults.minUserLimitedVelocity.ToString();
@@ -83,32 +85,32 @@ public class DevPanelFlightParams : MonoBehaviour {
         torqueBoostMultiplierTextField.text = parameters.torqueBoostMultiplier.ToString();
         totalBoostTimeTextField.text = parameters.totalBoostTime.ToString();
         totalBoostRotationalTimeTextField.text = parameters.totalBoostRotationalTime.ToString();
+        boostMaxSpeedDropOffTimeTextField.text = parameters.boostMaxSpeedDropOffTime.ToString();
         boostRechargeTimeTextField.text = parameters.boostRechargeTime.ToString();
         intertialTensorMultiplierTextField.text = parameters.inertiaTensorMultiplier.ToString();
         minUserLimitedVelocityTextField.text = parameters.minUserLimitedVelocity.ToString();
     }
 
     public ShipParameters GetFlightParams() {
-        var parameters = new ShipParameters();
-
-        parameters.mass = float.Parse(massTextField.text);
-        parameters.maxSpeed = float.Parse(maxSpeedTextField.text);
-        parameters.maxBoostSpeed = float.Parse(maxBoostSpeedTextField.text);
-        parameters.maxThrust = float.Parse(maxThrustTextField.text);
-        parameters.drag = float.Parse(dragTextField.text);
-        parameters.angularDrag = float.Parse(angularDragTextField.text);
-        parameters.torqueThrustMultiplier = float.Parse(torqueThrustMultiplierTextField.text);
-        parameters.pitchMultiplier = float.Parse(pitchMultiplierTextField.text);
-        parameters.rollMultiplier = float.Parse(rollMultiplierTextField.text);
-        parameters.yawMultiplier = float.Parse(yawMultiplierTextField.text);
-        parameters.thrustBoostMultiplier = float.Parse(thrustBoostMultiplierTextField.text);
-        parameters.torqueBoostMultiplier = float.Parse(torqueBoostMultiplierTextField.text);
-        parameters.totalBoostTime = float.Parse(totalBoostTimeTextField.text);
-        parameters.totalBoostRotationalTime = float.Parse(totalBoostRotationalTimeTextField.text);
-        parameters.boostRechargeTime = float.Parse(boostRechargeTimeTextField.text);
-        parameters.inertiaTensorMultiplier = float.Parse(intertialTensorMultiplierTextField.text);
-        parameters.minUserLimitedVelocity = float.Parse(minUserLimitedVelocityTextField.text);
-        
-        return parameters;
+        return new ShipParameters {
+            mass = float.Parse(massTextField.text),
+            maxSpeed = float.Parse(maxSpeedTextField.text),
+            maxBoostSpeed = float.Parse(maxBoostSpeedTextField.text),
+            maxThrust = float.Parse(maxThrustTextField.text),
+            drag = float.Parse(dragTextField.text),
+            angularDrag = float.Parse(angularDragTextField.text),
+            torqueThrustMultiplier = float.Parse(torqueThrustMultiplierTextField.text),
+            pitchMultiplier = float.Parse(pitchMultiplierTextField.text),
+            rollMultiplier = float.Parse(rollMultiplierTextField.text),
+            yawMultiplier = float.Parse(yawMultiplierTextField.text),
+            thrustBoostMultiplier = float.Parse(thrustBoostMultiplierTextField.text),
+            torqueBoostMultiplier = float.Parse(torqueBoostMultiplierTextField.text),
+            totalBoostTime = float.Parse(totalBoostTimeTextField.text),
+            totalBoostRotationalTime = float.Parse(totalBoostRotationalTimeTextField.text),
+            boostMaxSpeedDropOffTime = float.Parse(boostMaxSpeedDropOffTimeTextField.text),
+            boostRechargeTime = float.Parse(boostRechargeTimeTextField.text),
+            inertiaTensorMultiplier = float.Parse(intertialTensorMultiplierTextField.text),
+            minUserLimitedVelocity = float.Parse(minUserLimitedVelocityTextField.text),
+        };
     }
 }

@@ -24,6 +24,7 @@ public class ShipParameters {
     public float torqueBoostMultiplier;
     public float totalBoostTime;
     public float totalBoostRotationalTime;
+    public float boostMaxSpeedDropOffTime;
     public float boostRechargeTime;
     public float minUserLimitedVelocity;
 
@@ -49,27 +50,26 @@ public class Ship : MonoBehaviour {
     
     // TODO: remove this stuff once params are finalised (this is for debug panel in release)
     public static ShipParameters ShipParameterDefaults {
-        get {
-            var shipDefaults = new ShipParameters();
-            shipDefaults.mass = 1000f;
-            shipDefaults.drag = 0f;
-            shipDefaults.angularDrag = 0f;
-            shipDefaults.inertiaTensorMultiplier = 125f;
-            shipDefaults.maxSpeed = 800f;
-            shipDefaults.maxBoostSpeed = 932f;
-            shipDefaults.maxThrust = 100000f;
-            shipDefaults.torqueThrustMultiplier = 0.2f;
-            shipDefaults.pitchMultiplier = 1;
-            shipDefaults.rollMultiplier = 0.3f;
-            shipDefaults.yawMultiplier = 0.5f;
-            shipDefaults.thrustBoostMultiplier = 5;
-            shipDefaults.torqueBoostMultiplier = 2f;
-            shipDefaults.totalBoostTime = 6f;
-            shipDefaults.totalBoostRotationalTime = 7f;
-            shipDefaults.boostRechargeTime = 5f;
-            shipDefaults.minUserLimitedVelocity = 250f;
-            return shipDefaults;
-        }
+        get => new ShipParameters {
+            mass = 1000f,
+            drag = 0f,
+            angularDrag = 0f,
+            inertiaTensorMultiplier = 125f,
+            maxSpeed = 800f,
+            maxBoostSpeed = 932f,
+            maxThrust = 100000f,
+            torqueThrustMultiplier = 0.2f,
+            pitchMultiplier = 1,
+            rollMultiplier = 0.3f,
+            yawMultiplier = 0.5f,
+            thrustBoostMultiplier = 5,
+            torqueBoostMultiplier = 2f,
+            totalBoostTime = 6f,
+            totalBoostRotationalTime = 7f,
+            boostMaxSpeedDropOffTime = 12f,
+            boostRechargeTime = 5f,
+            minUserLimitedVelocity = 250f,
+        };
     }
     public ShipParameters Parameters {
         get {
@@ -92,6 +92,7 @@ public class Ship : MonoBehaviour {
             parameters.torqueBoostMultiplier = torqueBoostMultiplier;
             parameters.totalBoostTime = totalBoostTime;
             parameters.totalBoostRotationalTime = totalBoostRotationalTime;
+            parameters.boostMaxSpeedDropOffTime = boostMaxSpeedDropOffTime;
             parameters.boostRechargeTime = boostRechargeTime;
             parameters.minUserLimitedVelocity = minUserLimitedVelocity;
             return parameters;
@@ -114,6 +115,7 @@ public class Ship : MonoBehaviour {
             torqueBoostMultiplier = value.torqueBoostMultiplier;
             totalBoostTime = value.totalBoostTime;
             totalBoostRotationalTime = value.totalBoostRotationalTime;
+            boostMaxSpeedDropOffTime = value.boostMaxSpeedDropOffTime;
             boostRechargeTime = value.boostRechargeTime;
             minUserLimitedVelocity = value.minUserLimitedVelocity;
         }
@@ -132,6 +134,7 @@ public class Ship : MonoBehaviour {
     [SerializeField] private float torqueBoostMultiplier = 2f;
     [SerializeField] private float totalBoostTime = 6f;
     [SerializeField] private float totalBoostRotationalTime = 7f;
+    [SerializeField] private float boostMaxSpeedDropOffTime = 12f;
     [SerializeField] private float boostRechargeTime = 5f;
     [SerializeField] private float inertialTensorMultiplier = 125f;
     [SerializeField] private float minUserLimitedVelocity = 250f;
@@ -141,6 +144,7 @@ public class Ship : MonoBehaviour {
     private bool _boostCharging;
     private bool _isBoosting;
     private float _currentBoostTime;
+    private float _boostedMaxSpeedDelta;
 
     private float _prevVelocity;
     private bool _userVelocityLimit;
@@ -238,6 +242,7 @@ public class Ship : MonoBehaviour {
                 AudioManager.Instance.Play("ship-boost");
                 yield return new WaitForSeconds(1);
                 _currentBoostTime = 0f;
+                _boostedMaxSpeedDelta = maxBoostSpeed - maxSpeed;
                 _isBoosting = true;
                 yield return new WaitForSeconds(boostRechargeTime);
                 _boostCharging = false;
@@ -294,24 +299,37 @@ public class Ship : MonoBehaviour {
         
         float thrustMultiplier = maxThrust;
         float torqueMultiplier = maxThrust * torqueThrustMultiplier;
+        float boostedMaxSpeedDelta = _boostedMaxSpeedDelta;
 
         _currentBoostTime += Time.fixedDeltaTime;
 
+        // reduce boost potency over time period
         if (_isBoosting) {
-            // reduce boost potency over time period
             // Ease-in (boost dropoff is more dramatic)
-            float tBoost = _currentBoostTime / totalBoostTime;
-            tBoost = 1f - Mathf.Cos(tBoost * Mathf.PI * 0.5f);
-            
-            float tTorque = _currentBoostTime / totalBoostTime;
-            tTorque = 1f - Mathf.Cos(tTorque * Mathf.PI * 0.5f);
+            float t = _currentBoostTime / totalBoostTime;
+            float tBoost = 1f - Mathf.Cos(t * Mathf.PI * 0.5f);
+            float tTorque = 1f - Mathf.Cos(t * Mathf.PI * 0.5f);
 
             thrustMultiplier *= Mathf.Lerp(thrustBoostMultiplier, 1, tBoost);
             torqueMultiplier *= Mathf.Lerp(torqueBoostMultiplier, 1, tTorque);
         }
+
+        // reduce max speed over time until we're back at 0
+        if (_boostedMaxSpeedDelta > 0) {
+            float t = _currentBoostTime / boostMaxSpeedDropOffTime;
+            // TODO: an actual curve rather than this ... idk what this is
+            // clamp at 1 as it's being used as a multiplier and the first ~2 seconds are at max speed 
+            float tBoostVelocityMax =  Math.Min(1, 0.15f - (Mathf.Cos(t * Mathf.PI * 0.6f) * -1));
+            Debug.Log(tBoostVelocityMax);
+            boostedMaxSpeedDelta *= tBoostVelocityMax;
+            
+            if (tBoostVelocityMax < 0) {
+                _boostedMaxSpeedDelta = 0;
+            }
+        }
         
         if (_currentBoostTime > totalBoostRotationalTime) {
-            _isBoosting = false; 
+            _isBoosting = false;
         }
         
         // TODO: max thrust available to the system must be evenly split between the axes ?
@@ -343,10 +361,8 @@ public class Ship : MonoBehaviour {
             _rigidBodyComponent.velocity = Vector3.ClampMagnitude(_rigidBodyComponent.velocity, _velocityLimitCap);
         }
 
-        // clamp max speed in general
-        _rigidBodyComponent.velocity = _isBoosting
-            ? Vector3.ClampMagnitude(_rigidBodyComponent.velocity, maxBoostSpeed)
-            : Vector3.ClampMagnitude(_rigidBodyComponent.velocity, maxSpeed);    // TODO: reduce this over time
+        // clamp max speed in general including boost variance (max boost speed minus max speed)
+        _rigidBodyComponent.velocity = Vector3.ClampMagnitude(_rigidBodyComponent.velocity, maxSpeed + boostedMaxSpeedDelta);
 
         _prevVelocity = _rigidBodyComponent.velocity.magnitude;
             
@@ -374,7 +390,9 @@ public class Ship : MonoBehaviour {
             // vector should be pushed back towards forward (apply force to cancel lateral motion)
             float hVelocity = Vector3.Dot(_transformComponent.right, _rigidBodyComponent.velocity);
             float vVelocity = Vector3.Dot(_transformComponent.up, _rigidBodyComponent.velocity);
-            float fVelocity = Vector3.Dot(_transformComponent.forward, _rigidBodyComponent.velocity);
+            
+            // TODO: Different throttle control for flight assist (throttle becomes a target max speed)
+            // float fVelocity = Vector3.Dot(_transformComponent.forward, _rigidBodyComponent.velocity);
             
             if (hVelocity > 0) {
                 _rigidBodyComponent.AddForce(_transformComponent.right * (-0.5f * maxThrust), ForceMode.Force);
@@ -389,7 +407,6 @@ public class Ship : MonoBehaviour {
                 _rigidBodyComponent.AddForce(_transformComponent.up * (0.5f * maxThrust), ForceMode.Force);
             }
             
-            // TODO: Different throttle control for flight assist (throttle becomes a target with a max speed)
 
             // torque should be reduced to 0 on all axes
             float angularVelocityPitch = Vector3.Dot(_transformComponent.right, _rigidBodyComponent.angularVelocity);
