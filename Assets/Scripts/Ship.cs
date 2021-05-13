@@ -320,7 +320,6 @@ public class Ship : MonoBehaviour {
             // TODO: an actual curve rather than this ... idk what this is
             // clamp at 1 as it's being used as a multiplier and the first ~2 seconds are at max speed 
             float tBoostVelocityMax =  Math.Min(1, 0.15f - (Mathf.Cos(t * Mathf.PI * 0.6f) * -1));
-            Debug.Log(tBoostVelocityMax);
             boostedMaxSpeedDelta *= tBoostVelocityMax;
             
             if (tBoostVelocityMax < 0) {
