@@ -70,7 +70,7 @@ public class Game : MonoBehaviour {
         switch (levelData.location) {
             case Location.NullSpace: mapScene = "MapTest"; break;   // used when loading without going via the menu
             case Location.TestSpaceStation: mapScene = "MapTest"; break;
-            case Location.Terrain: mapScene = "Terrain"; break;
+            case Location.Terrain: mapScene = "TerrainV1"; break;
             default: throw new Exception("Supplied map type (" + levelData.location + ") is not a valid scene.");
         }
 
