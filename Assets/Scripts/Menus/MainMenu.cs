@@ -99,12 +99,14 @@ namespace Menus {
             if (Game.Instance?.menuFirstRun ?? true) {
                 // if it's disabled in the editor don't show this fade animation
                 if (alphaMessage.activeSelf) {
+                    topMenu.Hide();
                     shipMesh.SetActive(false);
                     yield return new WaitForSeconds(8);
                     Game.Instance.FadeToBlack();
                     yield return new WaitForSeconds(1);
                     alphaMessage.SetActive(false);
                     Game.Instance.FadeFromBlack();
+                    topMenu.Show();
                     shipMesh.SetActive(true);
                 }
             }
