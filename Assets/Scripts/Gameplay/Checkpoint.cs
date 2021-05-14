@@ -9,12 +9,13 @@ public enum CheckpointType {
     End,
 }
 public class Checkpoint : MonoBehaviour {
-    private CheckpointType _type = CheckpointType.Check;
+    
+    [SerializeField] private CheckpointType type = CheckpointType.Check;
 
     public CheckpointType Type {
-        get => _type;
+        get => type;
         set {
-            _type = value;
+            type = value;
             Reset();
         }
     }

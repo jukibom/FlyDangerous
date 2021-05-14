@@ -5,11 +5,6 @@ using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Engine {
-    public class LevelDataVector2<T> {
-        public T x;
-        public T y;
-    }
-    
     public class LevelDataVector3<T> {
         public T x;
         public T y;
