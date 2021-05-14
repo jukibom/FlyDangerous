@@ -365,7 +365,7 @@ public class Game : MonoBehaviour {
         
         // if there's a track in the game world, start it
         if (track) {
-            track.StartTimer();
+            track.StartTrack();
         }
 
         // enable user input

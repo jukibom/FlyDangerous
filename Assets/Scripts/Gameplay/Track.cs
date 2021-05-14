@@ -62,10 +62,12 @@ public class Track : MonoBehaviour {
         timeMs = 0;
     }
 
-    public void StartTimer() {
-        ResetTimer();
-        ready = true;
-        _complete = false;
+    public void StartTrack() {
+        if (Checkpoints.Count > 0) {
+            ResetTimer();
+            ready = true;
+            _complete = false;
+        }
     }
 
     public void FinishTimer() {
