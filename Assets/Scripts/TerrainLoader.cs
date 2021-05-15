@@ -26,6 +26,10 @@ public class TerrainLoader : MonoBehaviour {
         MapMagic.Terrains.TerrainTile.OnTileApplied -= OnTileApplied;
     }
 
+    void LoadTerrain() {
+        // set a terrain here
+    }
+
     private void OnTileApplied(MapMagic.Terrains.TerrainTile tile, MapMagic.Products.TileData tileData, MapMagic.Products.StopToken token) {
         if (Preferences.Instance.GetBool("enableTerrainScaling")) {
             StartCoroutine(GrowTerrainTile(tile));

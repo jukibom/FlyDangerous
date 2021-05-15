@@ -13,6 +13,7 @@ public class FreeRoamMenu : MonoBehaviour {
     public Button goButton;
 
     [CanBeNull] private LevelData _levelData;
+    [SerializeField] private Dropdown conditionsSelector;
 
     private Animator _animator;
         
@@ -53,7 +54,12 @@ public class FreeRoamMenu : MonoBehaviour {
             levelData.startPosition.y = levelData.startPosition.y == 0 ? 2100 : levelData.startPosition.y;
             dynamicPlacementStart = false;
         }
-            
+
+        switch (conditionsSelector.value) {
+            case 0: levelData.conditions = Conditions.NoonClear; break;
+            case 1: levelData.conditions = Conditions.NightClear; break;
+        }
+
         Game.Instance.StartGame(levelData, dynamicPlacementStart);
     }    
 }

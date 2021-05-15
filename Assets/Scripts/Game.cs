@@ -5,6 +5,7 @@ using Den.Tools;
 using Engine;
 using JetBrains.Annotations;
 using MapMagic.Core;
+using MapMagic.Nodes;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -22,6 +23,9 @@ public class Game : MonoBehaviour {
     public LevelData LevelDataAsLoaded => _levelData;
     public LevelData LevelDataCurrent => GenerateLevelData();
 
+    [SerializeField] private MapMagic.Nodes.Graph terrainGraphV1;
+    [SerializeField] private MapMagic.Nodes.Graph terrainGraphV2;
+    
     [CanBeNull] private ShipParameters _shipParameters;
     public ShipParameters ShipParameters {
         get => _shipParameters == null 
@@ -67,11 +71,22 @@ public class Game : MonoBehaviour {
         HideCursor();
 
         string mapScene;
+        
+        // main location loader 
         switch (levelData.location) {
             case Location.NullSpace: mapScene = "MapTest"; break;   // used when loading without going via the menu
             case Location.TestSpaceStation: mapScene = "MapTest"; break;
-            case Location.Terrain: mapScene = "TerrainV1"; break;
+            case Location.Terrain: mapScene = "Terrain"; break;
             default: throw new Exception("Supplied map type (" + levelData.location + ") is not a valid scene.");
+        }
+        
+        // if terrain, include conditions
+        if (levelData.location == Location.Terrain) {
+            switch (levelData.conditions) {
+                case Conditions.NoonClear: mapScene += "_Noon_Clear"; break;
+                case Conditions.NightClear: mapScene += "_Night_Clear"; break;
+                default: mapScene += "_Noon_Clear"; break;
+            }
         }
 
         StartCoroutine(SwitchToLoadingScreen(loadText => {
@@ -85,8 +100,6 @@ public class Game : MonoBehaviour {
     }
 
     public void RestartLevel() {
-        // Todo: record player initial state and load it here instead of this scene juggling farce which takes ages to load
-
         var user = FindObjectOfType<User>();
         var ship = FindObjectOfType<Ship>();
 
@@ -325,13 +338,30 @@ public class Game : MonoBehaviour {
         // if terrain needs to generate, toggle special logic and wait for it to load all primary tiles
         var mapMagic = FindObjectOfType<MapMagicObject>();
         if (_levelData.location == Location.Terrain && mapMagic) {
+            Debug.Log("LEVEL VER " + _levelData.version);
+
+            // set parameters based on version (this may be expanded later to be serializable specific biomes)
+            switch (_levelData.version) {
+                case 2: 
+                    mapMagic.graph = terrainGraphV2;
+                    mapMagic.globals.height = 8000;
+                    break;
+                case 1:
+                default:
+                    mapMagic.graph = terrainGraphV1;
+                    mapMagic.globals.height = 2000;
+                    break;
+            }
+
+            // our terrain gen starts disabled to prevent painful threading fun
+            mapMagic.enabled = true;
             
             // Stop auto-loading with default seed
             mapMagic.StopGenerate();
             Den.Tools.Tasks.ThreadManager.Abort();
             yield return new WaitForEndOfFrame();
             mapMagic.ClearAll();
-            
+
             // replace with user seed
             mapMagic.graph.random = new Noise(_levelData.terrainSeed.GetHashCode(), 32768);
             mapMagic.StartGenerate();

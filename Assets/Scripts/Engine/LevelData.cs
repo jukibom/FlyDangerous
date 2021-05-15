@@ -16,6 +16,11 @@ namespace Engine {
         TestSpaceStation,
         Terrain,
     }
+
+    public enum Conditions {
+        NoonClear,
+        NightClear,
+    }
     
     public enum RaceType {
         None,
@@ -31,9 +36,10 @@ namespace Engine {
     }
     
     public class LevelData {
-        public int version = 1;     // does nothing right now but allows us to maintain compatibility with terrain later
+        public int version = 2;     // if the version is not this then we'll use the legacy terrain
         public string name = "";
         public Location location = Location.NullSpace;
+        public Conditions conditions = Conditions.NoonClear;
         public string terrainSeed = "";
         public LevelDataVector3<float> startPosition = new LevelDataVector3<float>();
         public LevelDataVector3<float> startRotation = new LevelDataVector3<float>();
