@@ -56,8 +56,13 @@ public class FreeRoamMenu : MonoBehaviour {
         }
 
         switch (conditionsSelector.value) {
-            case 0: levelData.conditions = Conditions.NoonClear; break;
-            case 1: levelData.conditions = Conditions.NightClear; break;
+            case 0: levelData.conditions = Conditions.SunriseClear; break;
+            case 1: levelData.conditions = Conditions.NoonClear; break;
+            case 2: levelData.conditions = Conditions.NoonCloudy; break;
+            case 3: levelData.conditions = Conditions.NoonStormy; break;
+            case 4: levelData.conditions = Conditions.SunsetClear; break;
+            case 5: levelData.conditions = Conditions.NightClear; break;
+            case 6: levelData.conditions = Conditions.NightCloudy; break;
         }
 
         Game.Instance.StartGame(levelData, dynamicPlacementStart);

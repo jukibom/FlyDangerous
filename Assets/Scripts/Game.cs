@@ -83,8 +83,13 @@ public class Game : MonoBehaviour {
         // if terrain, include conditions
         if (levelData.location == Location.Terrain) {
             switch (levelData.conditions) {
+                case Conditions.SunriseClear: mapScene += "_Sunrise_Clear"; break;
                 case Conditions.NoonClear: mapScene += "_Noon_Clear"; break;
+                case Conditions.NoonCloudy: mapScene += "_Noon_Cloudy"; break;
+                case Conditions.NoonStormy: mapScene += "_Noon_Stormy"; break;
+                case Conditions.SunsetClear: mapScene += "_Sunset_Clear"; break;
                 case Conditions.NightClear: mapScene += "_Night_Clear"; break;
+                case Conditions.NightCloudy: mapScene += "_Night_Cloudy"; break;
                 default: mapScene += "_Noon_Clear"; break;
             }
         }
@@ -224,6 +229,7 @@ public class Game : MonoBehaviour {
         var levelData = new LevelData();
         levelData.raceType = _levelData.raceType;
         levelData.location = _levelData.location;
+        levelData.conditions = _levelData.conditions;
         levelData.terrainSeed = _levelData.terrainSeed;
         levelData.checkpoints = _levelData.checkpoints;
 
@@ -338,7 +344,6 @@ public class Game : MonoBehaviour {
         // if terrain needs to generate, toggle special logic and wait for it to load all primary tiles
         var mapMagic = FindObjectOfType<MapMagicObject>();
         if (_levelData.location == Location.Terrain && mapMagic) {
-            Debug.Log("LEVEL VER " + _levelData.version);
 
             // set parameters based on version (this may be expanded later to be serializable specific biomes)
             switch (_levelData.version) {

@@ -18,8 +18,13 @@ namespace Engine {
     }
 
     public enum Conditions {
+        SunriseClear,
         NoonClear,
+        NoonCloudy,
+        NoonStormy,
+        SunsetClear,
         NightClear,
+        NightCloudy,
     }
     
     public enum RaceType {
