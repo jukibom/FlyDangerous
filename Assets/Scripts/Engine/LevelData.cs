@@ -14,15 +14,19 @@ namespace Engine {
     public enum Location {
         NullSpace,
         TestSpaceStation,
-        Terrain,
+        TerrainV1,
+        TerrainV2
     }
 
-    public enum Conditions {
+    public enum Environment {
+        MainMenu,
+        PlanetOrbit,
         SunriseClear,
         NoonClear,
         NoonCloudy,
         NoonStormy,
         SunsetClear,
+        SunsetCloudy,
         NightClear,
         NightCloudy,
     }
@@ -41,10 +45,10 @@ namespace Engine {
     }
     
     public class LevelData {
-        public int version = 2;     // if the version is not this then we'll use the legacy terrain
+        public int version = 1;     // if the version is not this then we'll use the legacy terrain
         public string name = "";
         public Location location = Location.NullSpace;
-        public Conditions conditions = Conditions.NoonClear;
+        public Environment environment = Environment.NoonClear;
         public string terrainSeed = "";
         public LevelDataVector3<float> startPosition = new LevelDataVector3<float>();
         public LevelDataVector3<float> startRotation = new LevelDataVector3<float>();

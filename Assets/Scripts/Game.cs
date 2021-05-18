@@ -9,6 +9,7 @@ using MapMagic.Nodes;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Environment = Engine.Environment;
 
 public class Game : MonoBehaviour {
 
@@ -38,7 +39,7 @@ public class Game : MonoBehaviour {
         }
     }
 
-    public bool IsTerrainMap => _levelData.location == Location.Terrain;
+    public bool IsTerrainMap => _levelData.location == Location.TerrainV1 || _levelData.location == Location.TerrainV2;
     public string Seed => _levelData.terrainSeed;
     
     [SerializeField] private Animator crossfade;
@@ -70,33 +71,35 @@ public class Game : MonoBehaviour {
         _levelData = levelData;
         HideCursor();
 
-        string mapScene;
+        string location;
+        string environment;
         
         // main location loader 
         switch (levelData.location) {
-            case Location.NullSpace: mapScene = "MapTest"; break;   // used when loading without going via the menu
-            case Location.TestSpaceStation: mapScene = "MapTest"; break;
-            case Location.Terrain: mapScene = "Terrain"; break;
+            case Location.NullSpace: location = "MapTest"; break;   // used when loading without going via the menu
+            case Location.TestSpaceStation: location = "MapTest"; break;
+            case Location.TerrainV1: location = "TerrainV1"; break;
+            case Location.TerrainV2: location = "TerrainV2"; break;
             default: throw new Exception("Supplied map type (" + levelData.location + ") is not a valid scene.");
         }
         
         // if terrain, include conditions
-        if (levelData.location == Location.Terrain) {
-            switch (levelData.conditions) {
-                case Conditions.SunriseClear: mapScene += "_Sunrise_Clear"; break;
-                case Conditions.NoonClear: mapScene += "_Noon_Clear"; break;
-                case Conditions.NoonCloudy: mapScene += "_Noon_Cloudy"; break;
-                case Conditions.NoonStormy: mapScene += "_Noon_Stormy"; break;
-                case Conditions.SunsetClear: mapScene += "_Sunset_Clear"; break;
-                case Conditions.NightClear: mapScene += "_Night_Clear"; break;
-                case Conditions.NightCloudy: mapScene += "_Night_Cloudy"; break;
-                default: mapScene += "_Noon_Clear"; break;
-            }
+        switch (levelData.environment) {
+            case Environment.SunriseClear: environment = "Environment_Sunrise_Clear"; break;
+            case Environment.NoonClear: environment = "Environment_Noon_Clear"; break;
+            case Environment.NoonCloudy: environment = "Environment_Noon_Cloudy"; break;
+            case Environment.NoonStormy: environment = "Environment_Noon_Stormy"; break;
+            case Environment.SunsetClear: environment = "Environment_Sunset_Clear"; break;
+            case Environment.SunsetCloudy: environment = "Environment_Sunset_Cloudy"; break;
+            case Environment.NightClear: environment = "Environment_Night_Clear"; break;
+            case Environment.NightCloudy: environment = "Environment_Night_Cloudy"; break;
+            default: environment = "Environment_Sunrise_Clear"; break;
         }
 
         StartCoroutine(SwitchToLoadingScreen(loadText => {
             // now we can finally start the level load
-            scenesLoading.Add(SceneManager.LoadSceneAsync(mapScene, LoadSceneMode.Additive));
+            scenesLoading.Add(SceneManager.LoadSceneAsync(environment, LoadSceneMode.Additive));
+            scenesLoading.Add(SceneManager.LoadSceneAsync(location, LoadSceneMode.Additive));
             scenesLoading.Add(SceneManager.LoadSceneAsync("Player", LoadSceneMode.Additive));
             scenesLoading.ForEach(scene => scene.allowSceneActivation = false);
             
@@ -229,7 +232,7 @@ public class Game : MonoBehaviour {
         var levelData = new LevelData();
         levelData.raceType = _levelData.raceType;
         levelData.location = _levelData.location;
-        levelData.conditions = _levelData.conditions;
+        levelData.environment = _levelData.environment;
         levelData.terrainSeed = _levelData.terrainSeed;
         levelData.checkpoints = _levelData.checkpoints;
 
@@ -343,22 +346,8 @@ public class Game : MonoBehaviour {
 
         // if terrain needs to generate, toggle special logic and wait for it to load all primary tiles
         var mapMagic = FindObjectOfType<MapMagicObject>();
-        if (_levelData.location == Location.Terrain && mapMagic) {
-
-            // set parameters based on version (this may be expanded later to be serializable specific biomes)
-            switch (_levelData.version) {
-                case 2: 
-                    mapMagic.graph = terrainGraphV2;
-                    mapMagic.globals.height = 8000;
-                    break;
-                case 1:
-                default:
-                    mapMagic.graph = terrainGraphV1;
-                    mapMagic.globals.height = 2000;
-                    break;
-            }
-
-            // our terrain gen starts disabled to prevent painful threading fun
+        if (mapMagic) {
+            // our terrain gen may start disabled to prevent painful threading fun
             mapMagic.enabled = true;
             
             // Stop auto-loading with default seed

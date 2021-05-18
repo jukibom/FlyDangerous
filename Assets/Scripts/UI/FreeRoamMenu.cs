@@ -7,6 +7,7 @@ using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using Environment = Engine.Environment;
 
 public class FreeRoamMenu : MonoBehaviour {
     public InputField seedInput;
@@ -56,13 +57,14 @@ public class FreeRoamMenu : MonoBehaviour {
         }
 
         switch (conditionsSelector.value) {
-            case 0: levelData.conditions = Conditions.SunriseClear; break;
-            case 1: levelData.conditions = Conditions.NoonClear; break;
-            case 2: levelData.conditions = Conditions.NoonCloudy; break;
-            case 3: levelData.conditions = Conditions.NoonStormy; break;
-            case 4: levelData.conditions = Conditions.SunsetClear; break;
-            case 5: levelData.conditions = Conditions.NightClear; break;
-            case 6: levelData.conditions = Conditions.NightCloudy; break;
+            case 0: levelData.environment = Environment.SunriseClear; break;
+            case 1: levelData.environment = Environment.NoonClear; break;
+            case 2: levelData.environment = Environment.NoonCloudy; break;
+            case 3: levelData.environment = Environment.NoonStormy; break;
+            case 4: levelData.environment = Environment.SunsetClear; break;
+            case 5: levelData.environment = Environment.SunsetCloudy; break;
+            case 6: levelData.environment = Environment.NightClear; break;
+            case 7: levelData.environment = Environment.NightCloudy; break;
         }
 
         Game.Instance.StartGame(levelData, dynamicPlacementStart);
