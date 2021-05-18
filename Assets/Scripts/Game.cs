@@ -77,7 +77,7 @@ public class Game : MonoBehaviour {
         // main location loader 
         switch (levelData.location) {
             case Location.NullSpace: location = "MapTest"; break;   // used when loading without going via the menu
-            case Location.TestSpaceStation: location = "MapTest"; break;
+            case Location.TestSpaceStation: location = "SpaceStation"; break;
             case Location.TerrainV1: location = "TerrainV1"; break;
             case Location.TerrainV2: location = "TerrainV2"; break;
             default: throw new Exception("Supplied map type (" + levelData.location + ") is not a valid scene.");
@@ -85,15 +85,17 @@ public class Game : MonoBehaviour {
         
         // if terrain, include conditions
         switch (levelData.environment) {
-            case Environment.SunriseClear: environment = "Environment_Sunrise_Clear"; break;
-            case Environment.NoonClear: environment = "Environment_Noon_Clear"; break;
-            case Environment.NoonCloudy: environment = "Environment_Noon_Cloudy"; break;
-            case Environment.NoonStormy: environment = "Environment_Noon_Stormy"; break;
-            case Environment.SunsetClear: environment = "Environment_Sunset_Clear"; break;
-            case Environment.SunsetCloudy: environment = "Environment_Sunset_Cloudy"; break;
-            case Environment.NightClear: environment = "Environment_Night_Clear"; break;
-            case Environment.NightCloudy: environment = "Environment_Night_Cloudy"; break;
-            default: environment = "Environment_Sunrise_Clear"; break;
+            case Environment.PlanetOrbitBottom: environment = "Planet_Orbit_Bottom"; break;
+            case Environment.PlanetOrbitTop: environment = "Planet_Orbit_Top"; break;
+            case Environment.SunriseClear: environment = "Sunrise_Clear"; break;
+            case Environment.NoonClear: environment = "Noon_Clear"; break;
+            case Environment.NoonCloudy: environment = "Noon_Cloudy"; break;
+            case Environment.NoonStormy: environment = "Noon_Stormy"; break;
+            case Environment.SunsetClear: environment = "Sunset_Clear"; break;
+            case Environment.SunsetCloudy: environment = "Sunset_Cloudy"; break;
+            case Environment.NightClear: environment = "Night_Clear"; break;
+            case Environment.NightCloudy: environment = "Night_Cloudy"; break;
+            default: environment = "Sunrise_Clear"; break;
         }
 
         StartCoroutine(SwitchToLoadingScreen(loadText => {

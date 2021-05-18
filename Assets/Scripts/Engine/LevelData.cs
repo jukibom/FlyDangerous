@@ -19,8 +19,8 @@ namespace Engine {
     }
 
     public enum Environment {
-        MainMenu,
-        PlanetOrbit,
+        PlanetOrbitBottom,
+        PlanetOrbitTop,
         SunriseClear,
         NoonClear,
         NoonCloudy,

@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 2100000, guid: 131aa6d213d394bb7a90a9e0f87922f0, type: 2}
+  m_SkyboxMaterial: {fileID: 0}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -37,8 +37,8 @@ RenderSettings:
   m_ReflectionBounces: 1
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
-  m_Sun: {fileID: 1285859030}
-  m_IndirectSpecularColor: {r: 0.20557077, g: 0.20894302, b: 0.27758127, a: 1}
+  m_Sun: {fileID: 0}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -97,8 +97,8 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000002, guid: d32ada2c4840b1341a80927060dfccc5, type: 2}
-  m_LightingSettings: {fileID: 4890085278179872738, guid: 534bc00ceed313445ba485a7a36f64d8, type: 2}
+  m_LightingDataAsset: {fileID: 0}
+  m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -200,7 +200,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7396383272003386590, guid: c0b7bacf2512c374c8dee16628889c8c, type: 3}
       propertyPath: m_Options.m_Options.Array.size
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 7396383272003386590, guid: c0b7bacf2512c374c8dee16628889c8c, type: 3}
       propertyPath: m_Options.m_Options.Array.data[0].m_Text
@@ -224,10 +224,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7396383272003386590, guid: c0b7bacf2512c374c8dee16628889c8c, type: 3}
       propertyPath: m_Options.m_Options.Array.data[5].m_Text
-      value: Night, Clear
+      value: Sunset, Cloudy
       objectReference: {fileID: 0}
     - target: {fileID: 7396383272003386590, guid: c0b7bacf2512c374c8dee16628889c8c, type: 3}
       propertyPath: m_Options.m_Options.Array.data[6].m_Text
+      value: Night, Clear
+      objectReference: {fileID: 0}
+    - target: {fileID: 7396383272003386590, guid: c0b7bacf2512c374c8dee16628889c8c, type: 3}
+      propertyPath: m_Options.m_Options.Array.data[7].m_Text
       value: Night, Cloudy
       objectReference: {fileID: 0}
     - target: {fileID: 7646927877870711281, guid: c0b7bacf2512c374c8dee16628889c8c, type: 3}
@@ -1257,7 +1261,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 501630636}
-  - component: {fileID: 501630637}
   m_Layer: 0
   m_Name: World
   m_TagString: Untagged
@@ -1279,23 +1282,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &501630637
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 501630635}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isGlobal: 1
-  priority: 0
-  blendDistance: 0
-  weight: 1
-  sharedProfile: {fileID: 11400000, guid: a73ac062e76a7a24c91dfe59de06c894, type: 2}
 --- !u!1 &505994558
 GameObject:
   m_ObjectHideFlags: 0
