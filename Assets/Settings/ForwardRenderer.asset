@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_RendererFeatures:
   - {fileID: 5161890783807516584}
-  m_RendererFeatureMap: a8af35aa51b8a247
+  - {fileID: 8516901034684235656}
+  m_RendererFeatureMap: a8af35aa51b8a24788bf82d75d1c3276
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
   shaders:
@@ -63,3 +64,42 @@ MonoBehaviour:
     DirectLightingStrength: 0.175
     Radius: 2
     SampleCount: 6
+--- !u!114 &5748824053371312092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7b05fc1dfd54667b40ffd24df20506c, type: 3}
+  m_Name: '[SCPE] CausticsRenderer'
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    injectionPoint: 550
+    alwaysEnable: 0
+    allowInSceneView: 1
+    allowedCameraTypes: 0
+    skipTransparents: 0
+--- !u!114 &8516901034684235656
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f58c0e0fb1b4c7549b2b50948300b0e5, type: 3}
+  m_Name: Screen Space Fog
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  testing: 0
+  settings:
+    injectionPoint: 550
+    alwaysEnable: 0
+    allowInSceneView: 1
+    allowedCameraTypes: 2
+    skipTransparents: 0
