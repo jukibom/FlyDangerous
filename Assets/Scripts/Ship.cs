@@ -6,6 +6,7 @@ using Engine;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 using UnityEngine.UI;
 
 public class ShipParameters {
@@ -121,8 +122,10 @@ public class Ship : MonoBehaviour {
         }
     }
     
-    // TODO: split this into various thruster powers
     [SerializeField] private Text velocityIndicator;
+    [SerializeField] private Light shipLights;
+    
+    // TODO: split this into various thruster powers
     [SerializeField] private float maxSpeed = 800;
     [SerializeField] private float maxBoostSpeed = 932;
     [SerializeField] private float maxThrust = 100000;
@@ -254,6 +257,19 @@ public class Ship : MonoBehaviour {
     public void FlightAssistToggle() {
         _flightAssist = !_flightAssist;
         Debug.Log("Flight Assist " + (_flightAssist ? "ON" : "OFF") + " (partially implemented)");
+        
+        // TODO: proper flight assist sounds
+        if (_flightAssist) {
+            AudioManager.Instance.Play("ship-alternate-flight-on");
+        }
+        else {
+            AudioManager.Instance.Play("ship-alternate-flight-off");
+        }
+    }
+
+    public void ShipLightsToggle() {
+        AudioManager.Instance.Play("ui-nav");
+        shipLights.enabled = !shipLights.enabled;
     }
 
     public void VelocityLimiterIsPressed(bool isPressed) {

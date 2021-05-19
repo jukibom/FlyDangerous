@@ -245,14 +245,18 @@ public class User : MonoBehaviour {
         _boost = value.isPressed;
     }
 
-    public void OnFlightAssistToggle(InputValue value) {
-        playerShip.FlightAssistToggle();
-    }
-
     public void OnVelocityLimiter(InputValue value) {
         if (inputEnabled) {
             playerShip.VelocityLimiterIsPressed(value.isPressed);
         }
+    }
+
+    public void OnFlightAssistToggle(InputValue value) {
+        playerShip.FlightAssistToggle();
+    }
+    
+    public void OnShipLightsToggle(InputValue value) {
+        playerShip.ShipLightsToggle();
     }
 
     public void OnAltFlightControlsToggle(InputValue value) {
