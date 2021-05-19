@@ -45,7 +45,7 @@ public class FreeRoamMenu : MonoBehaviour {
 
     public void StartFreeRoam() {
         var levelData = _levelData != null ? _levelData : new LevelData();
-        levelData.location = Location.Terrain;
+        levelData.location = Preferences.Instance.GetBool("enableExperimentalTerrain") ? Location.TerrainV2 : Location.TerrainV1;
         levelData.raceType = RaceType.None;
         levelData.terrainSeed = seedInput.text;
 

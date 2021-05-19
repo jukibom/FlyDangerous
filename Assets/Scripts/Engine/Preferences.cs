@@ -58,6 +58,7 @@ namespace Engine {
                 
                 case "relativeMouseXAxis":
                 case "relativeMouseYAxis":
+                case "enableExperimentalTerrain":
                 case "enableTerrainScaling":
                     return false;
                 

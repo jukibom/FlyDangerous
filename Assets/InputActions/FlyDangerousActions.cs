@@ -164,9 +164,17 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""FlightAssistToggle"",
+                    ""name"": ""Flight Assist Toggle"",
                     ""type"": ""Button"",
                     ""id"": ""ce9c21e5-76be-402d-beed-36b5b132f0ad"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""ShipLightsToggle"",
+                    ""type"": ""Button"",
+                    ""id"": ""1f75d6cb-59c2-45e8-9859-131c53953c5a"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
@@ -762,7 +770,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
-                    ""action"": ""FlightAssistToggle"",
+                    ""action"": ""Flight Assist Toggle"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -773,7 +781,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
-                    ""action"": ""FlightAssistToggle"",
+                    ""action"": ""Flight Assist Toggle"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1447,6 +1455,28 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""action"": ""Toggle Console"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ac3c8db0-3135-4ee3-b07c-9bc98f011f33"",
+                    ""path"": ""<Keyboard>/l"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""ShipLightsToggle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0320387c-8eec-4715-af11-e020d209fa17"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""ShipLightsToggle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -2087,7 +2117,8 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         m_Ship_LateralVAlt = m_Ship.FindAction("LateralV Alt", throwIfNotFound: true);
         m_Ship_Boost = m_Ship.FindAction("Boost", throwIfNotFound: true);
         m_Ship_VelocityLimiter = m_Ship.FindAction("Velocity Limiter", throwIfNotFound: true);
-        m_Ship_FlightAssistToggle = m_Ship.FindAction("FlightAssistToggle", throwIfNotFound: true);
+        m_Ship_FlightAssistToggle = m_Ship.FindAction("Flight Assist Toggle", throwIfNotFound: true);
+        m_Ship_ShipLightsToggle = m_Ship.FindAction("ShipLightsToggle", throwIfNotFound: true);
         m_Ship_AltFlightControlsToggle = m_Ship.FindAction("Alt Flight Controls Toggle", throwIfNotFound: true);
         m_Ship_MouseRaw = m_Ship.FindAction("Mouse Raw", throwIfNotFound: true);
         m_Ship_MouseRawNormalizedDelta = m_Ship.FindAction("Mouse Raw Normalized Delta", throwIfNotFound: true);
@@ -2181,6 +2212,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Ship_Boost;
     private readonly InputAction m_Ship_VelocityLimiter;
     private readonly InputAction m_Ship_FlightAssistToggle;
+    private readonly InputAction m_Ship_ShipLightsToggle;
     private readonly InputAction m_Ship_AltFlightControlsToggle;
     private readonly InputAction m_Ship_MouseRaw;
     private readonly InputAction m_Ship_MouseRawNormalizedDelta;
@@ -2207,6 +2239,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         public InputAction @Boost => m_Wrapper.m_Ship_Boost;
         public InputAction @VelocityLimiter => m_Wrapper.m_Ship_VelocityLimiter;
         public InputAction @FlightAssistToggle => m_Wrapper.m_Ship_FlightAssistToggle;
+        public InputAction @ShipLightsToggle => m_Wrapper.m_Ship_ShipLightsToggle;
         public InputAction @AltFlightControlsToggle => m_Wrapper.m_Ship_AltFlightControlsToggle;
         public InputAction @MouseRaw => m_Wrapper.m_Ship_MouseRaw;
         public InputAction @MouseRawNormalizedDelta => m_Wrapper.m_Ship_MouseRawNormalizedDelta;
@@ -2274,6 +2307,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @FlightAssistToggle.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnFlightAssistToggle;
                 @FlightAssistToggle.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnFlightAssistToggle;
                 @FlightAssistToggle.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnFlightAssistToggle;
+                @ShipLightsToggle.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnShipLightsToggle;
+                @ShipLightsToggle.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnShipLightsToggle;
+                @ShipLightsToggle.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnShipLightsToggle;
                 @AltFlightControlsToggle.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnAltFlightControlsToggle;
                 @AltFlightControlsToggle.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnAltFlightControlsToggle;
                 @AltFlightControlsToggle.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnAltFlightControlsToggle;
@@ -2344,6 +2380,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @FlightAssistToggle.started += instance.OnFlightAssistToggle;
                 @FlightAssistToggle.performed += instance.OnFlightAssistToggle;
                 @FlightAssistToggle.canceled += instance.OnFlightAssistToggle;
+                @ShipLightsToggle.started += instance.OnShipLightsToggle;
+                @ShipLightsToggle.performed += instance.OnShipLightsToggle;
+                @ShipLightsToggle.canceled += instance.OnShipLightsToggle;
                 @AltFlightControlsToggle.started += instance.OnAltFlightControlsToggle;
                 @AltFlightControlsToggle.performed += instance.OnAltFlightControlsToggle;
                 @AltFlightControlsToggle.canceled += instance.OnAltFlightControlsToggle;
@@ -2539,6 +2578,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         void OnBoost(InputAction.CallbackContext context);
         void OnVelocityLimiter(InputAction.CallbackContext context);
         void OnFlightAssistToggle(InputAction.CallbackContext context);
+        void OnShipLightsToggle(InputAction.CallbackContext context);
         void OnAltFlightControlsToggle(InputAction.CallbackContext context);
         void OnMouseRaw(InputAction.CallbackContext context);
         void OnMouseRawNormalizedDelta(InputAction.CallbackContext context);
