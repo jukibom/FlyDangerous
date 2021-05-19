@@ -14,14 +14,14 @@ This project aims to provide a ground-up reimplementation of a similar-enough fl
 
 * Flight sticks of all shapes and sizes (done!)
 * Basic time trial map types
-  * Sprint: 1 start, checkpoints, 1 end
+  * Sprint: 1 start, checkpoints, 1 end (done!)
   * Laps 1 start block, checkpoints, lap counter
 * Leaderboards with automatic replay / ghost upload via Steam
 * Basic Multiplayer
 * VR Support
-* Infinite terrain generation
-  * Freeplay flight, seed generation
-  * Record + share racetracks
+* Infinite terrain generation (done!)
+  * Freeplay flight, seed generation (done!)
+  * Record + share racetracks (format supports it)
 
 ## Building
 
