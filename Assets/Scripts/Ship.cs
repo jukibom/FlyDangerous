@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Globalization;
+using System.Linq;
 using Audio;
 using Engine;
 using JetBrains.Annotations;
@@ -155,12 +156,20 @@ public class Ship : MonoBehaviour {
     private bool _flightAssist;
 
     // input axes -1 to 1
-    private float _throttle ;
+    private float _throttle;
     private float _latV;
     private float _latH;
     private float _pitch;
     private float _yaw;
     private float _roll;
+    
+    // flight assist targets
+    private float _throttleTargetFactor;
+    private float _latHTargetFactor;
+    private float _latVTargetFactor;
+    private float _pitchTargetFactor;
+    private float _rollTargetFactor;
+    private float _yawTargetFactor;
 
     [CanBeNull] private Coroutine _boostCoroutine;
 
@@ -213,27 +222,57 @@ public class Ship : MonoBehaviour {
     }
 
     public void SetPitch(float value) {
-        _pitch = ClampInput(value);
+        if (_flightAssist) {
+            _pitchTargetFactor = ClampInput(value);
+        }
+        else {
+            _pitch = ClampInput(value);
+        }
     }
 
     public void SetRoll(float value) {
-        _roll = ClampInput(value);
+        if (_flightAssist) {
+            _rollTargetFactor = ClampInput(value);
+        }
+        else {
+            _roll = ClampInput(value);
+        }
     }
 
     public void SetYaw(float value) {
-        _yaw = ClampInput(value);
+        if (_flightAssist) {
+            _yawTargetFactor = ClampInput(value);
+        }
+        else {
+            _yaw = ClampInput(value);
+        }
     }
 
     public void SetThrottle(float value) {
-        _throttle = ClampInput(value);
+        if (_flightAssist) {
+            _throttleTargetFactor = ClampInput(value);
+        }
+        else {
+            _throttle = ClampInput(value);
+        }
     }
     
     public void SetLateralH(float value) {
-        _latH = ClampInput(value);
+        if (_flightAssist) {
+            _latHTargetFactor = ClampInput(value);
+        }
+        else {
+            _latH = ClampInput(value);
+        }
     }
     
     public void SetLateralV(float value) {
-        _latV = ClampInput(value);
+        if (_flightAssist) {
+            _latVTargetFactor = ClampInput(value);
+        }
+        else {
+            _latV = ClampInput(value);
+        }
     }
 
     public void Boost(bool isPressed) {
@@ -312,11 +351,32 @@ public class Ship : MonoBehaviour {
 
     // Apply all physics updates in fixed intervals (WRITE)
     private void FixedUpdate() {
+        CalculateBoost(out var maxThrustWithBoost, out var maxTorqueWithBoost, out var boostedMaxSpeedDelta);
+        CalculateFlight(maxThrustWithBoost, maxTorqueWithBoost);
         
-        float thrustMultiplier = maxThrust;
-        float torqueMultiplier = maxThrust * torqueThrustMultiplier;
-        float boostedMaxSpeedDelta = _boostedMaxSpeedDelta;
+        // TODO: clamping should be based on input rather than modifying the rigid body - if gravity pulls you down then that's fine, similar to if a collision yeets you into a spinning mess.
+        ClampMaxSpeed(boostedMaxSpeedDelta);
+        UpdateIndicators();
+    }
 
+    private void UpdateIndicators() {
+        if (velocityIndicator != null) {
+            velocityIndicator.text = Velocity.ToString(CultureInfo.InvariantCulture);
+        }
+    }
+    
+    /**
+     * All axis should be between -1 and 1. 
+     */
+    private float ClampInput(float input) {
+        return Mathf.Min(Mathf.Max(input, -1), 1);
+    }
+
+    private void CalculateBoost(out float maxThrustWithBoost, out float maxTorqueWithBoost, out float boostedMaxSpeedDelta) {
+        maxThrustWithBoost = maxThrust;
+        maxTorqueWithBoost = maxThrust * torqueThrustMultiplier;
+        boostedMaxSpeedDelta = _boostedMaxSpeedDelta;
+        
         _currentBoostTime += Time.fixedDeltaTime;
 
         // reduce boost potency over time period
@@ -326,8 +386,8 @@ public class Ship : MonoBehaviour {
             float tBoost = 1f - Mathf.Cos(t * Mathf.PI * 0.5f);
             float tTorque = 1f - Mathf.Cos(t * Mathf.PI * 0.5f);
 
-            thrustMultiplier *= Mathf.Lerp(thrustBoostMultiplier, 1, tBoost);
-            torqueMultiplier *= Mathf.Lerp(torqueBoostMultiplier, 1, tTorque);
+            maxThrustWithBoost *= Mathf.Lerp(thrustBoostMultiplier, 1, tBoost);
+            maxTorqueWithBoost *= Mathf.Lerp(torqueBoostMultiplier, 1, tTorque);
         }
 
         // reduce max speed over time until we're back at 0
@@ -346,30 +406,136 @@ public class Ship : MonoBehaviour {
         if (_currentBoostTime > totalBoostRotationalTime) {
             _isBoosting = false;
         }
+    }
+
+    private void CalculateFlight(float maxThrustWithBoost, float maxTorqueWithBoost) {
+        if (_flightAssist) {
+            CalculateFlightAssist(maxThrustWithBoost, maxTorqueWithBoost);
+        }
         
-        // TODO: max thrust available to the system must be evenly split between the axes ?
-        // otherwise we'll have the old goldeneye problem of travelling diagonally being the optimal play :|
-        
-        // special case for throttle - no reverse and full power while boosting! sorry mate 
+        // special case for throttle - no reverse while boosting! sorry mate 
         var throttle = _isBoosting && _currentBoostTime < totalBoostTime
             ? 1
             : _throttle;
 
         var tThrust = new Vector3(
-            _latH * thrustMultiplier,
-            _latV * thrustMultiplier,
-            throttle * thrustMultiplier
+            _latH * maxThrustWithBoost,
+            _latV * maxThrustWithBoost,
+            throttle * maxThrustWithBoost
         );
 
         var tRot = new Vector3(
-            _pitch * pitchMultiplier * torqueMultiplier,
-            _yaw * yawMultiplier * torqueMultiplier,
-            _roll * rollMultiplier * torqueMultiplier * -1
+            _pitch * pitchMultiplier * maxTorqueWithBoost,
+            _yaw * yawMultiplier * maxTorqueWithBoost,
+            _roll * rollMultiplier * maxTorqueWithBoost * -1
         ) * inertialTensorMultiplier;   // if we don't counteract the inertial tensor of the rigidbody, the rotation spin would increase in lockstep
         
         _rigidBodyComponent.AddForce(transform.TransformDirection(tThrust));
         _rigidBodyComponent.AddTorque(transform.TransformDirection(tRot));
+    }
 
+    private void CalculateFlightAssist(float maxThrustWithBoost, float maxTorqueWithBoost) {
+
+        var targetZVelocity = maxSpeed * _throttleTargetFactor;
+        var currentZVelocity = _rigidBodyComponent.velocity.z;
+        var interpolatePercent = 0.1f;
+
+        if (currentZVelocity - targetZVelocity < 0) {
+            _throttle = 1;
+        }
+        else {
+            _throttle = -1;
+        }
+
+        var velocityInterpolateRange = maxSpeed * interpolatePercent;
+        
+        if (currentZVelocity < targetZVelocity && currentZVelocity > targetZVelocity - velocityInterpolateRange) {
+            var startInterpolate = targetZVelocity - velocityInterpolateRange;
+            _throttle *= Mathf.InverseLerp(targetZVelocity, startInterpolate, currentZVelocity);
+
+            // Debug.Log("INTERPOLATE " + startInterpolate + " " + targetZVelocity + " " + currentZVelocity + " " + _throttle);
+        }
+
+        if (currentZVelocity > targetZVelocity && currentZVelocity < targetZVelocity + velocityInterpolateRange) {
+            var startInterpolate = targetZVelocity + velocityInterpolateRange;
+            _throttle *= Mathf.InverseLerp(targetZVelocity, startInterpolate, currentZVelocity);
+            // Debug.Log("INTERPOLATE but the other way");
+        } 
+        
+        Debug.Log(currentZVelocity + " " + targetZVelocity + " " + _throttle);
+        
+        // target 200
+        // current 150
+        // interpolate range 93.2
+        // start interpolate at target minus range (106.8)
+        // InverseLerp(106.8, 200, currentZVelocity)
+
+
+        // // TODO: Should this actually modify input instead of directly applying force?
+        //
+        // if (_flightAssist) {
+        //     // vector should be pushed back towards forward (apply force to cancel lateral motion)
+        //     float hVelocity = Vector3.Dot(_transformComponent.right, _rigidBodyComponent.velocity);
+        //     float vVelocity = Vector3.Dot(_transformComponent.up, _rigidBodyComponent.velocity);
+        //     
+        //     // TODO: Different throttle control for flight assist (throttle becomes a target max speed)
+        //     // float fVelocity = Vector3.Dot(_transformComponent.forward, _rigidBodyComponent.velocity);
+        //     
+        //     if (hVelocity > 0) {
+        //         _rigidBodyComponent.AddForce(_transformComponent.right * (-0.5f * maxThrustWithBoost), ForceMode.Force);
+        //     }
+        //     else {
+        //         _rigidBodyComponent.AddForce(_transformComponent.right * (0.5f * maxThrustWithBoost), ForceMode.Force);
+        //     }
+        //     if (vVelocity > 0) {
+        //         _rigidBodyComponent.AddForce(_transformComponent.up * (-0.5f * maxThrustWithBoost), ForceMode.Force);
+        //     }
+        //     else {
+        //         _rigidBodyComponent.AddForce(_transformComponent.up * (0.5f * maxThrustWithBoost), ForceMode.Force);
+        //     }
+        //     
+        //
+        //     // torque should be reduced to 0 on all axes
+        //     float angularVelocityPitch = Vector3.Dot(_transformComponent.right, _rigidBodyComponent.angularVelocity);
+        //     float angularVelocityRoll = Vector3.Dot(_transformComponent.forward, _rigidBodyComponent.angularVelocity);
+        //     float angularVelocityYaw = Vector3.Dot(_transformComponent.up, _rigidBodyComponent.angularVelocity);
+        //
+        //     if (Math.Abs(_pitch) < 0.05) {
+        //         if (angularVelocityPitch > 0) {
+        //             _rigidBodyComponent.AddTorque(
+        //                 _transformComponent.right * (-0.25f * maxThrustWithBoost * torqueThrustMultiplier), ForceMode.Force);
+        //         }
+        //         else {
+        //             _rigidBodyComponent.AddTorque(_transformComponent.right * (0.25f * maxThrustWithBoost * torqueThrustMultiplier),
+        //                 ForceMode.Force);
+        //         }
+        //     }
+        //
+        //     if (Math.Abs(_roll) < 0.05) {
+        //         if (angularVelocityRoll > 0) {
+        //             _rigidBodyComponent.AddTorque(
+        //                 _transformComponent.forward * (-0.25f * maxThrustWithBoost * torqueThrustMultiplier), ForceMode.Force);
+        //         }
+        //         else {
+        //             _rigidBodyComponent.AddTorque(
+        //                 _transformComponent.forward * (0.25f * maxThrustWithBoost * torqueThrustMultiplier), ForceMode.Force);
+        //         }
+        //     }
+        //
+        //     if (Math.Abs(_yaw) < 0.05) {
+        //         if (angularVelocityYaw > 0) {
+        //             _rigidBodyComponent.AddTorque(_transformComponent.up * (-0.25f * maxThrust * torqueThrustMultiplier),
+        //                 ForceMode.Force);
+        //         }
+        //         else {
+        //             _rigidBodyComponent.AddTorque(_transformComponent.up * (0.25f * maxThrust * torqueThrustMultiplier),
+        //                 ForceMode.Force);
+        //         }
+        //     }
+        // }
+    }
+
+    private void ClampMaxSpeed(float boostedMaxSpeedDelta) {
         // clamp max speed if user is holding the velocity limiter button down
         if (_userVelocityLimit) {
             _velocityLimitCap = Math.Max(_prevVelocity, minUserLimitedVelocity);
@@ -378,88 +544,6 @@ public class Ship : MonoBehaviour {
 
         // clamp max speed in general including boost variance (max boost speed minus max speed)
         _rigidBodyComponent.velocity = Vector3.ClampMagnitude(_rigidBodyComponent.velocity, maxSpeed + boostedMaxSpeedDelta);
-
         _prevVelocity = _rigidBodyComponent.velocity.magnitude;
-            
-        CalculateFlightAssist();
-        UpdateIndicators();
-    }
-
-    private void UpdateIndicators() {
-        if (velocityIndicator != null) {
-            velocityIndicator.text = Velocity.ToString(CultureInfo.InvariantCulture);
-        }
-    }
-
-    /**
-     * All axis should be between -1 and 1. 
-     */
-    private float ClampInput(float input) {
-        return Mathf.Min(Mathf.Max(input, -1), 1);
-    }
-
-    private void CalculateFlightAssist() {
-        // TODO: Should this actually modify input instead of directly applying force?
-        
-        if (_flightAssist) {
-            // vector should be pushed back towards forward (apply force to cancel lateral motion)
-            float hVelocity = Vector3.Dot(_transformComponent.right, _rigidBodyComponent.velocity);
-            float vVelocity = Vector3.Dot(_transformComponent.up, _rigidBodyComponent.velocity);
-            
-            // TODO: Different throttle control for flight assist (throttle becomes a target max speed)
-            // float fVelocity = Vector3.Dot(_transformComponent.forward, _rigidBodyComponent.velocity);
-            
-            if (hVelocity > 0) {
-                _rigidBodyComponent.AddForce(_transformComponent.right * (-0.5f * maxThrust), ForceMode.Force);
-            }
-            else {
-                _rigidBodyComponent.AddForce(_transformComponent.right * (0.5f * maxThrust), ForceMode.Force);
-            }
-            if (vVelocity > 0) {
-                _rigidBodyComponent.AddForce(_transformComponent.up * (-0.5f * maxThrust), ForceMode.Force);
-            }
-            else {
-                _rigidBodyComponent.AddForce(_transformComponent.up * (0.5f * maxThrust), ForceMode.Force);
-            }
-            
-
-            // torque should be reduced to 0 on all axes
-            float angularVelocityPitch = Vector3.Dot(_transformComponent.right, _rigidBodyComponent.angularVelocity);
-            float angularVelocityRoll = Vector3.Dot(_transformComponent.forward, _rigidBodyComponent.angularVelocity);
-            float angularVelocityYaw = Vector3.Dot(_transformComponent.up, _rigidBodyComponent.angularVelocity);
-
-            if (Math.Abs(_pitch) < 0.05) {
-                if (angularVelocityPitch > 0) {
-                    _rigidBodyComponent.AddTorque(
-                        _transformComponent.right * (-0.25f * maxThrust * torqueThrustMultiplier), ForceMode.Force);
-                }
-                else {
-                    _rigidBodyComponent.AddTorque(_transformComponent.right * (0.25f * maxThrust * torqueThrustMultiplier),
-                        ForceMode.Force);
-                }
-            }
-
-            if (Math.Abs(_roll) < 0.05) {
-                if (angularVelocityRoll > 0) {
-                    _rigidBodyComponent.AddTorque(
-                        _transformComponent.forward * (-0.25f * maxThrust * torqueThrustMultiplier), ForceMode.Force);
-                }
-                else {
-                    _rigidBodyComponent.AddTorque(
-                        _transformComponent.forward * (0.25f * maxThrust * torqueThrustMultiplier), ForceMode.Force);
-                }
-            }
-
-            if (Math.Abs(_yaw) < 0.05) {
-                if (angularVelocityYaw > 0) {
-                    _rigidBodyComponent.AddTorque(_transformComponent.up * (-0.25f * maxThrust * torqueThrustMultiplier),
-                        ForceMode.Force);
-                }
-                else {
-                    _rigidBodyComponent.AddTorque(_transformComponent.up * (0.25f * maxThrust * torqueThrustMultiplier),
-                        ForceMode.Force);
-                }
-            }
-        }
     }
 }
