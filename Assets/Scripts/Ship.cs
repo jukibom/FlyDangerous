@@ -59,7 +59,7 @@ public class Ship : MonoBehaviour {
             maxSpeed = 800f,
             maxBoostSpeed = 932f,
             maxThrust = 100000f,
-            torqueThrustMultiplier = 0.2f,
+            torqueThrustMultiplier = 0.1f,
             pitchMultiplier = 1,
             rollMultiplier = 0.3f,
             yawMultiplier = 0.5f,
@@ -129,7 +129,7 @@ public class Ship : MonoBehaviour {
     [SerializeField] private float maxSpeed = 800;
     [SerializeField] private float maxBoostSpeed = 932;
     [SerializeField] private float maxThrust = 100000;
-    [SerializeField] private float torqueThrustMultiplier = 0.2f;
+    [SerializeField] private float torqueThrustMultiplier = 0.1f;
     [SerializeField] private float pitchMultiplier = 1;
     [SerializeField] private float rollMultiplier = 0.3f;
     [SerializeField] private float yawMultiplier = 0.5f;
