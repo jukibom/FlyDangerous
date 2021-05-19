@@ -8,7 +8,7 @@ This project aims to provide a ground-up reimplementation of a similar-enough fl
 
 [Download on itch.io](https://jukibom.itch.io/fly-dangerous)
 
-[Join the discord] (https://discord.gg/4daSEUKZ6A)
+[Join the discord](https://discord.gg/4daSEUKZ6A)
 
 ## Planned Features
 
