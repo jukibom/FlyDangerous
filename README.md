@@ -27,7 +27,8 @@ This project aims to provide a ground-up reimplementation of a similar-enough fl
 
 Unity build: 2021.1.6f1
 
-Relies on following assets downloaded into Assets/Asset Packs/:
+Relies on following assets downloaded into Assets/:
 
-* Map Magic (Free) https://assetstore.unity.com/packages/tools/terrain/mapmagic-2-165180
-* Allsky https://assetstore.unity.com/packages/2d/textures-materials/sky/allsky-200-sky-skybox-set-10109
+* Map Magic 2 - https://assetstore.unity.com/packages/tools/terrain/mapmagic-2-165180
+* Allsky - https://assetstore.unity.com/packages/2d/textures-materials/sky/allsky-200-sky-skybox-set-10109
+* SC Post Effects - https://assetstore.unity.com/packages/vfx/shaders/fullscreen-camera-effects/sc-post-effects-pack-108753
