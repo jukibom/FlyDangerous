@@ -72,7 +72,12 @@ namespace Engine {
             switch (key) {
                 case "mouseXSensitivity":
                 case "mouseYSensitivity":
-                    return 1f;
+                    return 0.5f;
+                case "mouseDeadzone":
+                case "mousePowerCurve":
+                case "mouseXRelativeRate":
+                case "mouseYRelativeRate":
+                    return 0.0f;
                 default: 
                     Debug.LogWarning("Attempted to get preference " + key + " with no default specified");
                     return 0;

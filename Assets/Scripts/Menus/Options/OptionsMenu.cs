@@ -77,6 +77,11 @@ namespace Menus.Options {
             foreach (var dropdownOption in dropdownOptions) {
                 dropdownOption.Value = Preferences.Instance.GetString(dropdownOption.Preference);
             }
+            
+            var sliderOptions = GetComponentsInChildren<SliderOption>(true);
+            foreach (var sliderOption in sliderOptions) {
+                sliderOption.Value = Preferences.Instance.GetFloat(sliderOption.preference);
+            }
 
             _previousPrefs = Preferences.Instance.GetCurrent().Clone();
         }
@@ -100,6 +105,11 @@ namespace Menus.Options {
                 Preferences.Instance.SetString(dropdownOption.Preference, dropdownOption.Value);
             }
             
+            var sliderOptions = GetComponentsInChildren<SliderOption>(true);
+            foreach (var sliderOption in sliderOptions) {
+                Preferences.Instance.SetFloat(sliderOption.preference, sliderOption.Value);
+            }
+
             // TODO: mouse sensitivity (save defaults here so it writes to config for now)
             Preferences.Instance.SetFloat("mouseXSensitivity", Preferences.Instance.GetFloat("mouseXSensitivity"));
             Preferences.Instance.SetFloat("mouseYSensitivity", Preferences.Instance.GetFloat("mouseYSensitivity"));
