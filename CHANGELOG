@@ -1,0 +1,45 @@
+﻿ALPHA 3
+-------
+
+New:
+	* Added multiple environment types and separated from map geometry (additive scene management).
+	* Added ship spotlight + associated input binding for night maps (Default 'L' on keyboard).
+	* Added experimental terrain (see Developer options in options menu!)
+		* This terrain will take a while to load, here to gauge feedback.
+	* Lighting pass - baked lights, per-environment volume lighting and dramatically improved in-cockpit shadows
+	* Flight Assist rewrite - now functions like ED
+	* Added placeholder sfx for flight assist toggle (reuses the alternate flight toggle)
+	* Reduced rotational torque by 50% - it was uncontrollable under boost
+	* Flight model changes
+		* Added thruster multipliers to ship parameters
+		* Mass reduced by 30% (results in gain of thrust and torque)
+		* Overall torque reduced by 50%
+		* Yaw torque increased by 60%
+		* Horizontal lateral thrust reduced by 50%
+		* Vertical lateral thrust reduced by 20%
+		* Boost recharge time reduced by 1 second (20%)
+	* Added mouse sensitivity setting
+
+Fixes: 
+    * Shadow cascading now operates between two extremes - 0-1m and 1-2000m. This means an entire shadow map is dedicated to the cockpit and massively sharpens the texture while eliminating awful shadow flicker.
+
+ALPHA 2
+-------
+
+New:
+    * Immediate restart: the game will endeavour to place the ship back at the starting location (either from custom level, race or regular free play) with as little loading time as possible. This I feel was especially important given the nature of the race tracks - short and difficult.
+    * Changes to race mechanics: the ship now starts at the initial checkpoint and you can no longer re-run the race. This is to make sure races are entirely fair and cannot be gamed with timing the boost when entering the start point or waiting for moving features in the race track to pass.
+    * Boost mechanic improvements: the velocity max speed no longer suddenly jumps from 932m/s to 800m/s, it gradually reduces (see the devlog video for more info on this)
+    * Physics adjustments - ship less likely to get into an insane uncontrollable spin when clipping terrain
+    * Level loader split from free roam, now respects locations (e.g. Space station custom maps)
+    * Additional ship physics and mechanics parameters exposed in dev panel
+    * Added an in-game console (use the ` key) to quickly debug input issues in release builds
+
+Bug fixes:
+    * Huge amount of input changes, should support far more devices. Let me know how you get on, virpil sticks still don't work, sorry! I'm trying :(
+    * Fixed errant inputs on load (level starts with ship already in motion)
+    * Fixed thrusters remaining on after alt flight control toggle (this still needs more work but it's uhm... broken in a slightly better way? Sorry, Nova!)
+
+ALPHA 1
+-------
+{ Initial release }
