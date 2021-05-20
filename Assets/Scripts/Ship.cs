@@ -75,13 +75,13 @@ public class Ship : MonoBehaviour {
     }
     public ShipParameters Parameters {
         get {
-            if (!_rigidBodyComponent) {
+            if (!_rigidBody) {
                 return ShipParameterDefaults; 
             }
             var parameters = new ShipParameters();
-            parameters.mass = Mathf.Round(_rigidBodyComponent.mass);
-            parameters.drag = _rigidBodyComponent.drag;
-            parameters.angularDrag = _rigidBodyComponent.angularDrag;
+            parameters.mass = Mathf.Round(_rigidBody.mass);
+            parameters.drag = _rigidBody.drag;
+            parameters.angularDrag = _rigidBody.angularDrag;
             parameters.inertiaTensorMultiplier = inertialTensorMultiplier;
             parameters.maxSpeed = maxSpeed; 
             parameters.maxBoostSpeed = maxBoostSpeed;
@@ -100,10 +100,10 @@ public class Ship : MonoBehaviour {
             return parameters;
         }
         set {
-            _rigidBodyComponent.mass = value.mass;
-            _rigidBodyComponent.drag = value.drag;
-            _rigidBodyComponent.angularDrag = value.angularDrag;
-            _rigidBodyComponent.inertiaTensor = _initialInertiaTensor * value.inertiaTensorMultiplier;
+            _rigidBody.mass = value.mass;
+            _rigidBody.drag = value.drag;
+            _rigidBody.angularDrag = value.angularDrag;
+            _rigidBody.inertiaTensor = _initialInertiaTensor * value.inertiaTensorMultiplier;
             inertialTensorMultiplier = value.inertiaTensorMultiplier;
             
             maxSpeed = value.maxSpeed;
@@ -174,32 +174,32 @@ public class Ship : MonoBehaviour {
     [CanBeNull] private Coroutine _boostCoroutine;
 
     private Transform _transformComponent;
-    private Rigidbody _rigidBodyComponent;
+    private Rigidbody _rigidBody;
     
     public float Velocity {
         get {
-            return Mathf.Round(_rigidBodyComponent.velocity.magnitude);
+            return Mathf.Round(_rigidBody.velocity.magnitude);
         }
     }
 
     public void Awake() {
         _transformComponent = GetComponent<Transform>();
-        _rigidBodyComponent = GetComponent<Rigidbody>();
+        _rigidBody = GetComponent<Rigidbody>();
     }
 
     public void Start() {
         _flightAssist = Preferences.Instance.GetBool("flightAssistOnByDefault");
-        _rigidBodyComponent.centerOfMass = Vector3.zero;
-        _rigidBodyComponent.inertiaTensorRotation = Quaternion.identity;
+        _rigidBody.centerOfMass = Vector3.zero;
+        _rigidBody.inertiaTensorRotation = Quaternion.identity;
 
         // setup angular momentum for collisions (higher multiplier = less spin)
-        _initialInertiaTensor = _rigidBodyComponent.inertiaTensor;
-        _rigidBodyComponent.inertiaTensor *= inertialTensorMultiplier;
+        _initialInertiaTensor = _rigidBody.inertiaTensor;
+        _rigidBody.inertiaTensor *= inertialTensorMultiplier;
     }
 
     public void Reset() {
-        _rigidBodyComponent.velocity = Vector3.zero;
-        _rigidBodyComponent.angularVelocity = Vector3.zero;
+        _rigidBody.velocity = Vector3.zero;
+        _rigidBody.angularVelocity = Vector3.zero;
         _pitch = 0;
         _roll = 0;
         _yaw = 0;
@@ -410,7 +410,7 @@ public class Ship : MonoBehaviour {
 
     private void CalculateFlight(float maxThrustWithBoost, float maxTorqueWithBoost) {
         if (_flightAssist) {
-            CalculateFlightAssist(maxThrustWithBoost, maxTorqueWithBoost);
+            CalculateFlightAssist();
         }
         
         // special case for throttle - no reverse while boosting! sorry mate 
@@ -430,43 +430,51 @@ public class Ship : MonoBehaviour {
             _roll * rollMultiplier * maxTorqueWithBoost * -1
         ) * inertialTensorMultiplier;   // if we don't counteract the inertial tensor of the rigidbody, the rotation spin would increase in lockstep
         
-        _rigidBodyComponent.AddForce(transform.TransformDirection(tThrust));
-        _rigidBodyComponent.AddTorque(transform.TransformDirection(tRot));
+        _rigidBody.AddForce(transform.TransformDirection(tThrust));
+        _rigidBody.AddTorque(transform.TransformDirection(tRot));
     }
 
-    private void CalculateFlightAssist(float maxThrustWithBoost, float maxTorqueWithBoost) {
+    private void CalculateFlightAssist() {
+        // convert global rigid body velocities into local space
+        Vector3 localVelocity = transform.InverseTransformDirection(_rigidBody.velocity);
+        Vector3 localAngularVelocity = transform.InverseTransformDirection(_rigidBody.angularVelocity);
         
-        CalculateAssistedThrustAxis(_latHTargetFactor, _rigidBodyComponent.velocity.x, 0.1f, out _latH);
-        CalculateAssistedThrustAxis(_latVTargetFactor, _rigidBodyComponent.velocity.y, 0.1f, out _latV);
-        CalculateAssistedThrustAxis(_throttleTargetFactor, _rigidBodyComponent.velocity.z, 0.1f, out _throttle);
+        // thrust
+        CalculateAssistedAxis(_latHTargetFactor, localVelocity.x, 0.1f, maxSpeed, out _latH);
+        CalculateAssistedAxis(_latVTargetFactor, localVelocity.y, 0.1f, maxSpeed, out _latV);
+        CalculateAssistedAxis(_throttleTargetFactor, localVelocity.z, 0.1f, maxSpeed, out _throttle);
 
-        // TODO: Rotational axes!
+        // rotation
+        CalculateAssistedAxis(_pitchTargetFactor, localAngularVelocity.x, 0.1f, 1, out _pitch);
+        CalculateAssistedAxis(_yawTargetFactor, localAngularVelocity.y, 0.1f, 1, out _yaw);
+        CalculateAssistedAxis(_rollTargetFactor, localAngularVelocity.z * -1, 0.1f, 1, out _roll);
     }
     
-    private void CalculateAssistedThrustAxis(
+    private void CalculateAssistedAxis(
         float targetFactor, 
         float currentAxisVelocity, 
         float interpolateAtPercent,
+        float max,
         out float axis
     ) {
-        var targetVelocity = maxSpeed * targetFactor;
+        var targetRate = max * targetFactor;
 
         // basic max or min
-        axis = currentAxisVelocity - targetVelocity < 0 ? 1 : -1;
+        axis = currentAxisVelocity - targetRate < 0 ? 1 : -1;
 
         // interpolation over final range (interpolateAtPercent)
-        var velocityInterpolateRange = maxSpeed * interpolateAtPercent;
+        var velocityInterpolateRange = max * interpolateAtPercent;
         
         // positive motion
-        if (currentAxisVelocity < targetVelocity && currentAxisVelocity > targetVelocity - velocityInterpolateRange) {
-            var startInterpolate = targetVelocity - velocityInterpolateRange;
-            axis *= Mathf.InverseLerp(targetVelocity, startInterpolate, currentAxisVelocity);
+        if (currentAxisVelocity < targetRate && currentAxisVelocity > targetRate - velocityInterpolateRange) {
+            var startInterpolate = targetRate - velocityInterpolateRange;
+            axis *= Mathf.InverseLerp(targetRate, startInterpolate, currentAxisVelocity);
         }
 
         // negative motion
-        if (currentAxisVelocity > targetVelocity && currentAxisVelocity < targetVelocity + velocityInterpolateRange) {
-            var startInterpolate = targetVelocity + velocityInterpolateRange;
-            axis *= Mathf.InverseLerp(targetVelocity, startInterpolate, currentAxisVelocity);
+        if (currentAxisVelocity > targetRate && currentAxisVelocity < targetRate + velocityInterpolateRange) {
+            var startInterpolate = targetRate + velocityInterpolateRange;
+            axis *= Mathf.InverseLerp(targetRate, startInterpolate, currentAxisVelocity);
         }
     }
 
@@ -474,11 +482,11 @@ public class Ship : MonoBehaviour {
         // clamp max speed if user is holding the velocity limiter button down
         if (_userVelocityLimit) {
             _velocityLimitCap = Math.Max(_prevVelocity, minUserLimitedVelocity);
-            _rigidBodyComponent.velocity = Vector3.ClampMagnitude(_rigidBodyComponent.velocity, _velocityLimitCap);
+            _rigidBody.velocity = Vector3.ClampMagnitude(_rigidBody.velocity, _velocityLimitCap);
         }
 
         // clamp max speed in general including boost variance (max boost speed minus max speed)
-        _rigidBodyComponent.velocity = Vector3.ClampMagnitude(_rigidBodyComponent.velocity, maxSpeed + boostedMaxSpeedDelta);
-        _prevVelocity = _rigidBodyComponent.velocity.magnitude;
+        _rigidBody.velocity = Vector3.ClampMagnitude(_rigidBody.velocity, maxSpeed + boostedMaxSpeedDelta);
+        _prevVelocity = _rigidBody.velocity.magnitude;
     }
 }
