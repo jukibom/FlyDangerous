@@ -13,6 +13,9 @@ public class DevPanelFlightParams : MonoBehaviour {
     [SerializeField] private InputField dragTextField;
     [SerializeField] private InputField angularDragTextField;
     [SerializeField] private InputField torqueThrustMultiplierTextField;
+    [SerializeField] private InputField throttleMultiplierTextField;
+    [SerializeField] private InputField latHMultiplierTextField;
+    [SerializeField] private InputField latVMultiplierTextField;
     [SerializeField] private InputField pitchMultiplierTextField;
     [SerializeField] private InputField rollMultiplierTextField;
     [SerializeField] private InputField yawMultiplierTextField;
@@ -37,6 +40,9 @@ public class DevPanelFlightParams : MonoBehaviour {
         dragTextField.placeholder.GetComponent<Text>().text = defaults.drag.ToString();
         angularDragTextField.placeholder.GetComponent<Text>().text = defaults.angularDrag.ToString();
         torqueThrustMultiplierTextField.placeholder.GetComponent<Text>().text = defaults.torqueThrustMultiplier.ToString();
+        throttleMultiplierTextField.placeholder.GetComponent<Text>().text = defaults.throttleMultiplier.ToString();
+        latHMultiplierTextField.placeholder.GetComponent<Text>().text = defaults.latHMultiplier.ToString();
+        latVMultiplierTextField.placeholder.GetComponent<Text>().text = defaults.latVMultiplier.ToString();
         pitchMultiplierTextField.placeholder.GetComponent<Text>().text = defaults.pitchMultiplier.ToString();
         rollMultiplierTextField.placeholder.GetComponent<Text>().text = defaults.rollMultiplier.ToString();
         yawMultiplierTextField.placeholder.GetComponent<Text>().text = defaults.yawMultiplier.ToString();
@@ -78,6 +84,9 @@ public class DevPanelFlightParams : MonoBehaviour {
         dragTextField.text = parameters.drag.ToString();
         angularDragTextField.text = parameters.angularDrag.ToString();
         torqueThrustMultiplierTextField.text = parameters.torqueThrustMultiplier.ToString();
+        throttleMultiplierTextField.text = parameters.throttleMultiplier.ToString();
+        latHMultiplierTextField.text = parameters.latHMultiplier.ToString();
+        latVMultiplierTextField.text = parameters.latVMultiplier.ToString();
         pitchMultiplierTextField.text = parameters.pitchMultiplier.ToString();
         rollMultiplierTextField.text = parameters.rollMultiplier.ToString();
         yawMultiplierTextField.text = parameters.yawMultiplier.ToString();
@@ -100,6 +109,9 @@ public class DevPanelFlightParams : MonoBehaviour {
             drag = float.Parse(dragTextField.text),
             angularDrag = float.Parse(angularDragTextField.text),
             torqueThrustMultiplier = float.Parse(torqueThrustMultiplierTextField.text),
+            throttleMultiplier = float.Parse(throttleMultiplierTextField.text),
+            latHMultiplier = float.Parse(latHMultiplierTextField.text),
+            latVMultiplier = float.Parse(latVMultiplierTextField.text),
             pitchMultiplier = float.Parse(pitchMultiplierTextField.text),
             rollMultiplier = float.Parse(rollMultiplierTextField.text),
             yawMultiplier = float.Parse(yawMultiplierTextField.text),

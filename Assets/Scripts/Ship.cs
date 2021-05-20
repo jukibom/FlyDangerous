@@ -19,6 +19,9 @@ public class ShipParameters {
     public float maxBoostSpeed;
     public float maxThrust;
     public float torqueThrustMultiplier;
+    public float throttleMultiplier;
+    public float latHMultiplier;
+    public float latVMultiplier;
     public float pitchMultiplier;
     public float rollMultiplier;
     public float yawMultiplier;
@@ -53,7 +56,7 @@ public class Ship : MonoBehaviour {
     // TODO: remove this stuff once params are finalised (this is for debug panel in release)
     public static ShipParameters ShipParameterDefaults {
         get => new ShipParameters {
-            mass = 1000f,
+            mass = 700f,
             drag = 0f,
             angularDrag = 0f,
             inertiaTensorMultiplier = 125f,
@@ -61,10 +64,13 @@ public class Ship : MonoBehaviour {
             maxBoostSpeed = 932f,
             maxThrust = 100000f,
             torqueThrustMultiplier = 0.1f,
-            pitchMultiplier = 1,
+            throttleMultiplier = 1f,
+            latHMultiplier = 0.5f,
+            latVMultiplier = 0.8f,
+            pitchMultiplier = 1f,
             rollMultiplier = 0.3f,
-            yawMultiplier = 0.5f,
-            thrustBoostMultiplier = 5,
+            yawMultiplier = 0.8f,
+            thrustBoostMultiplier = 5f,
             torqueBoostMultiplier = 2f,
             totalBoostTime = 6f,
             totalBoostRotationalTime = 7f,
@@ -87,6 +93,9 @@ public class Ship : MonoBehaviour {
             parameters.maxBoostSpeed = maxBoostSpeed;
             parameters.maxThrust = maxThrust;
             parameters.torqueThrustMultiplier = torqueThrustMultiplier;
+            parameters.throttleMultiplier = throttleMultiplier;
+            parameters.latHMultiplier = latHMultiplier;
+            parameters.latVMultiplier = latVMultiplier;
             parameters.pitchMultiplier = pitchMultiplier;
             parameters.rollMultiplier = rollMultiplier;
             parameters.yawMultiplier = yawMultiplier;
@@ -110,6 +119,9 @@ public class Ship : MonoBehaviour {
             maxBoostSpeed = value.maxBoostSpeed;
             maxThrust = value.maxThrust;
             torqueThrustMultiplier = value.torqueThrustMultiplier;
+            throttleMultiplier = value.throttleMultiplier;
+            latHMultiplier = value.latHMultiplier;
+            latVMultiplier = value.latVMultiplier;
             pitchMultiplier = value.pitchMultiplier;
             rollMultiplier = value.rollMultiplier;
             yawMultiplier = value.yawMultiplier;
@@ -131,9 +143,12 @@ public class Ship : MonoBehaviour {
     [SerializeField] private float maxBoostSpeed = 932;
     [SerializeField] private float maxThrust = 100000;
     [SerializeField] private float torqueThrustMultiplier = 0.1f;
-    [SerializeField] private float pitchMultiplier = 1;
+    [SerializeField] private float throttleMultiplier = 1f;
+    [SerializeField] private float latHMultiplier = 0.5f;
+    [SerializeField] private float latVMultiplier = 0.8f;
+    [SerializeField] private float pitchMultiplier = 1f;
     [SerializeField] private float rollMultiplier = 0.3f;
-    [SerializeField] private float yawMultiplier = 0.5f;
+    [SerializeField] private float yawMultiplier = 0.8f;
     [SerializeField] private float thrustBoostMultiplier = 5;
     [SerializeField] private float torqueBoostMultiplier = 2f;
     [SerializeField] private float totalBoostTime = 6f;
@@ -352,7 +367,7 @@ public class Ship : MonoBehaviour {
     // Apply all physics updates in fixed intervals (WRITE)
     private void FixedUpdate() {
         CalculateBoost(out var maxThrustWithBoost, out var maxTorqueWithBoost, out var boostedMaxSpeedDelta);
-        CalculateFlight(maxThrustWithBoost, maxTorqueWithBoost);
+        CalculateFlightForces(maxThrustWithBoost, maxTorqueWithBoost);
         
         // TODO: clamping should be based on input rather than modifying the rigid body - if gravity pulls you down then that's fine, similar to if a collision yeets you into a spinning mess.
         ClampMaxSpeed(boostedMaxSpeedDelta);
@@ -408,7 +423,7 @@ public class Ship : MonoBehaviour {
         }
     }
 
-    private void CalculateFlight(float maxThrustWithBoost, float maxTorqueWithBoost) {
+    private void CalculateFlightForces(float maxThrustWithBoost, float maxTorqueWithBoost) {
         if (_flightAssist) {
             CalculateFlightAssist();
         }
@@ -419,9 +434,9 @@ public class Ship : MonoBehaviour {
             : _throttle;
 
         var tThrust = new Vector3(
-            _latH * maxThrustWithBoost,
-            _latV * maxThrustWithBoost,
-            throttle * maxThrustWithBoost
+            _latH * latHMultiplier * maxThrustWithBoost,
+            _latV * latVMultiplier * maxThrustWithBoost,
+            throttle * throttleMultiplier * maxThrustWithBoost
         );
 
         var tRot = new Vector3(
@@ -445,9 +460,9 @@ public class Ship : MonoBehaviour {
         CalculateAssistedAxis(_throttleTargetFactor, localVelocity.z, 0.1f, maxSpeed, out _throttle);
 
         // rotation
-        CalculateAssistedAxis(_pitchTargetFactor, localAngularVelocity.x, 0.1f, 1, out _pitch);
-        CalculateAssistedAxis(_yawTargetFactor, localAngularVelocity.y, 0.1f, 1, out _yaw);
-        CalculateAssistedAxis(_rollTargetFactor, localAngularVelocity.z * -1, 0.1f, 1, out _roll);
+        CalculateAssistedAxis(_pitchTargetFactor, localAngularVelocity.x, 0.3f, 2, out _pitch);
+        CalculateAssistedAxis(_yawTargetFactor, localAngularVelocity.y, 0.3f, 1.5f, out _yaw);
+        CalculateAssistedAxis(_rollTargetFactor, localAngularVelocity.z * -1, 0.3f, 1, out _roll);
     }
     
     private void CalculateAssistedAxis(
