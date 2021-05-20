@@ -435,104 +435,39 @@ public class Ship : MonoBehaviour {
     }
 
     private void CalculateFlightAssist(float maxThrustWithBoost, float maxTorqueWithBoost) {
-
-        var targetZVelocity = maxSpeed * _throttleTargetFactor;
-        var currentZVelocity = _rigidBodyComponent.velocity.z;
-        var interpolatePercent = 0.1f;
-
-        if (currentZVelocity - targetZVelocity < 0) {
-            _throttle = 1;
-        }
-        else {
-            _throttle = -1;
-        }
-
-        var velocityInterpolateRange = maxSpeed * interpolatePercent;
         
-        if (currentZVelocity < targetZVelocity && currentZVelocity > targetZVelocity - velocityInterpolateRange) {
-            var startInterpolate = targetZVelocity - velocityInterpolateRange;
-            _throttle *= Mathf.InverseLerp(targetZVelocity, startInterpolate, currentZVelocity);
+        CalculateAssistedThrustAxis(_latHTargetFactor, _rigidBodyComponent.velocity.x, 0.1f, out _latH);
+        CalculateAssistedThrustAxis(_latVTargetFactor, _rigidBodyComponent.velocity.y, 0.1f, out _latV);
+        CalculateAssistedThrustAxis(_throttleTargetFactor, _rigidBodyComponent.velocity.z, 0.1f, out _throttle);
 
-            // Debug.Log("INTERPOLATE " + startInterpolate + " " + targetZVelocity + " " + currentZVelocity + " " + _throttle);
+        // TODO: Rotational axes!
+    }
+    
+    private void CalculateAssistedThrustAxis(
+        float targetFactor, 
+        float currentAxisVelocity, 
+        float interpolateAtPercent,
+        out float axis
+    ) {
+        var targetVelocity = maxSpeed * targetFactor;
+
+        // basic max or min
+        axis = currentAxisVelocity - targetVelocity < 0 ? 1 : -1;
+
+        // interpolation over final range (interpolateAtPercent)
+        var velocityInterpolateRange = maxSpeed * interpolateAtPercent;
+        
+        // positive motion
+        if (currentAxisVelocity < targetVelocity && currentAxisVelocity > targetVelocity - velocityInterpolateRange) {
+            var startInterpolate = targetVelocity - velocityInterpolateRange;
+            axis *= Mathf.InverseLerp(targetVelocity, startInterpolate, currentAxisVelocity);
         }
 
-        if (currentZVelocity > targetZVelocity && currentZVelocity < targetZVelocity + velocityInterpolateRange) {
-            var startInterpolate = targetZVelocity + velocityInterpolateRange;
-            _throttle *= Mathf.InverseLerp(targetZVelocity, startInterpolate, currentZVelocity);
-            // Debug.Log("INTERPOLATE but the other way");
-        } 
-        
-        Debug.Log(currentZVelocity + " " + targetZVelocity + " " + _throttle);
-        
-        // target 200
-        // current 150
-        // interpolate range 93.2
-        // start interpolate at target minus range (106.8)
-        // InverseLerp(106.8, 200, currentZVelocity)
-
-
-        // // TODO: Should this actually modify input instead of directly applying force?
-        //
-        // if (_flightAssist) {
-        //     // vector should be pushed back towards forward (apply force to cancel lateral motion)
-        //     float hVelocity = Vector3.Dot(_transformComponent.right, _rigidBodyComponent.velocity);
-        //     float vVelocity = Vector3.Dot(_transformComponent.up, _rigidBodyComponent.velocity);
-        //     
-        //     // TODO: Different throttle control for flight assist (throttle becomes a target max speed)
-        //     // float fVelocity = Vector3.Dot(_transformComponent.forward, _rigidBodyComponent.velocity);
-        //     
-        //     if (hVelocity > 0) {
-        //         _rigidBodyComponent.AddForce(_transformComponent.right * (-0.5f * maxThrustWithBoost), ForceMode.Force);
-        //     }
-        //     else {
-        //         _rigidBodyComponent.AddForce(_transformComponent.right * (0.5f * maxThrustWithBoost), ForceMode.Force);
-        //     }
-        //     if (vVelocity > 0) {
-        //         _rigidBodyComponent.AddForce(_transformComponent.up * (-0.5f * maxThrustWithBoost), ForceMode.Force);
-        //     }
-        //     else {
-        //         _rigidBodyComponent.AddForce(_transformComponent.up * (0.5f * maxThrustWithBoost), ForceMode.Force);
-        //     }
-        //     
-        //
-        //     // torque should be reduced to 0 on all axes
-        //     float angularVelocityPitch = Vector3.Dot(_transformComponent.right, _rigidBodyComponent.angularVelocity);
-        //     float angularVelocityRoll = Vector3.Dot(_transformComponent.forward, _rigidBodyComponent.angularVelocity);
-        //     float angularVelocityYaw = Vector3.Dot(_transformComponent.up, _rigidBodyComponent.angularVelocity);
-        //
-        //     if (Math.Abs(_pitch) < 0.05) {
-        //         if (angularVelocityPitch > 0) {
-        //             _rigidBodyComponent.AddTorque(
-        //                 _transformComponent.right * (-0.25f * maxThrustWithBoost * torqueThrustMultiplier), ForceMode.Force);
-        //         }
-        //         else {
-        //             _rigidBodyComponent.AddTorque(_transformComponent.right * (0.25f * maxThrustWithBoost * torqueThrustMultiplier),
-        //                 ForceMode.Force);
-        //         }
-        //     }
-        //
-        //     if (Math.Abs(_roll) < 0.05) {
-        //         if (angularVelocityRoll > 0) {
-        //             _rigidBodyComponent.AddTorque(
-        //                 _transformComponent.forward * (-0.25f * maxThrustWithBoost * torqueThrustMultiplier), ForceMode.Force);
-        //         }
-        //         else {
-        //             _rigidBodyComponent.AddTorque(
-        //                 _transformComponent.forward * (0.25f * maxThrustWithBoost * torqueThrustMultiplier), ForceMode.Force);
-        //         }
-        //     }
-        //
-        //     if (Math.Abs(_yaw) < 0.05) {
-        //         if (angularVelocityYaw > 0) {
-        //             _rigidBodyComponent.AddTorque(_transformComponent.up * (-0.25f * maxThrust * torqueThrustMultiplier),
-        //                 ForceMode.Force);
-        //         }
-        //         else {
-        //             _rigidBodyComponent.AddTorque(_transformComponent.up * (0.25f * maxThrust * torqueThrustMultiplier),
-        //                 ForceMode.Force);
-        //         }
-        //     }
-        // }
+        // negative motion
+        if (currentAxisVelocity > targetVelocity && currentAxisVelocity < targetVelocity + velocityInterpolateRange) {
+            var startInterpolate = targetVelocity + velocityInterpolateRange;
+            axis *= Mathf.InverseLerp(targetVelocity, startInterpolate, currentAxisVelocity);
+        }
     }
 
     private void ClampMaxSpeed(float boostedMaxSpeedDelta) {
