@@ -60,8 +60,10 @@ namespace Engine {
                 case "relativeMouseYAxis":
                 case "enableExperimentalTerrain":
                 case "enableTerrainScaling":
+                case "mouseInvertXAxis:":
+                case "mouseInvertYAxis:":
                     return false;
-                
+
                 default: 
                     Debug.LogWarning("Attempted to get preference " + key + " with no default specified");
                     return false;
