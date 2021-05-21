@@ -306,7 +306,7 @@ public class Game : MonoBehaviour {
 
         // ship placement
         var ship = FindObjectOfType<Ship>();
-        if (ship && !dynamicPlacement) {
+        if (ship) {
             ship.transform.position = new Vector3(
                 _levelData.startPosition.x,
                 _levelData.startPosition.y,
@@ -371,10 +371,28 @@ public class Game : MonoBehaviour {
             }
             
             // terrain loaded, if we need to dynamically place the ship let's do that now
-            if (dynamicPlacement) {
+            if (ship && dynamicPlacement) {
+                // TODO: make this iterate over the corners of the ship:
                 // move the player up high and perform 5 raycasts - one from each corner of the ship and one from the centre.
                 // move the player to the closest one, height-wise.
-                // TODO :| (and remove the set of 2100 from the free roam menu class! You're welcome, future me!)
+                // Additionally, move the ship around in a spiral and perform this operation a number of times.
+                // Move the ship to the lowest position.
+
+                var shipTransform = ship.transform;
+
+                shipTransform.position = new Vector3(
+                    shipTransform.position.x,
+                    10000,
+                    shipTransform.position.z
+                );
+                
+                if (Physics.Raycast(ship.transform.position, Vector3.down, out var hit, 10000)) {
+                    shipTransform.position = hit.point;
+                    shipTransform.Translate(0, 25, 0);
+                    _levelData.startPosition.x = shipTransform.position.x;
+                    _levelData.startPosition.y = shipTransform.position.y;
+                    _levelData.startPosition.z = shipTransform.position.z;
+                }
             }
         }
 

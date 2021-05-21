@@ -48,14 +48,7 @@ public class FreeRoamMenu : MonoBehaviour {
         levelData.location = Preferences.Instance.GetBool("enableExperimentalTerrain") ? Location.TerrainV2 : Location.TerrainV1;
         levelData.raceType = RaceType.None;
         levelData.terrainSeed = seedInput.text;
-
-        // TODO: some better initial placement system for terrain in Game class (need to know when terrain has loaded)
-        bool dynamicPlacementStart = true;
-        if (dynamicPlacementStart) {
-            levelData.startPosition.y = levelData.startPosition.y == 0 ? 2100 : levelData.startPosition.y;
-            dynamicPlacementStart = false;
-        }
-
+        
         switch (conditionsSelector.value) {
             case 0: levelData.environment = Environment.SunriseClear; break;
             case 1: levelData.environment = Environment.NoonClear; break;
@@ -67,6 +60,6 @@ public class FreeRoamMenu : MonoBehaviour {
             case 7: levelData.environment = Environment.NightCloudy; break;
         }
 
-        Game.Instance.StartGame(levelData, dynamicPlacementStart);
+        Game.Instance.StartGame(levelData, true);
     }    
 }
