@@ -283,8 +283,8 @@ public class User : MonoBehaviour {
 
         // calculate continuous input including deadzone and sensitivity
         // TODO: power curve??
-        var continuousMouseX = 0f; //= _mousePositionNormalized.x * sensitivityX;
-        var continuousMouseY = 0f; //= _mousePositionNormalized.y * sensitivityY;
+        var continuousMouseX = 0f;
+        var continuousMouseY = 0f;
         if (_mousePositionNormalized.x > mouseDeadzoneX) {
             continuousMouseX = (_mousePositionNormalized.x - mouseDeadzone) * sensitivityX;
         }

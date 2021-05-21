@@ -59,8 +59,6 @@ public class MouseWidget : MonoBehaviour {
     }
 
     public void UpdateWidgetSprites(Vector2 mousePositionNormalised) {
-        if (mousePositionNormalised != Vector2.zero) {
-            this.mousePositionNormalised = mousePositionNormalised;
-        }
+        this.mousePositionNormalised = mousePositionNormalised;
     }
 }
