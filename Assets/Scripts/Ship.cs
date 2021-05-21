@@ -221,6 +221,12 @@ public class Ship : MonoBehaviour {
         _throttle = 0;
         _latH = 0;
         _latV = 0;
+        _throttleTargetFactor = 0;
+        _latHTargetFactor = 0;
+        _latVTargetFactor = 0;
+        _pitchTargetFactor = 0;
+        _rollTargetFactor = 0;
+        _yawTargetFactor = 0;
         _boostCharging = false;
         _isBoosting = false;
         _prevVelocity = 0;
@@ -474,6 +480,12 @@ public class Ship : MonoBehaviour {
     ) {
         var targetRate = max * targetFactor;
 
+        // prevent tiny noticeable movement on restart (floating point comparison, really only ever true when both are zero) 
+        if (currentAxisVelocity == targetRate) {
+            axis = 0;
+            return;
+        }
+        
         // basic max or min
         axis = currentAxisVelocity - targetRate < 0 ? 1 : -1;
 
