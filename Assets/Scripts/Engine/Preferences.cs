@@ -60,8 +60,8 @@ namespace Engine {
                 case "relativeMouseYAxis":
                 case "enableExperimentalTerrain":
                 case "enableTerrainScaling":
-                case "mouseInvertXAxis:":
-                case "mouseInvertYAxis:":
+                case "mouseXInvert:":
+                case "mouseYInvert:":
                     return false;
 
                 default: 

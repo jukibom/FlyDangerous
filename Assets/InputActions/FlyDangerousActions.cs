@@ -188,15 +188,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Mouse Raw"",
-                    ""type"": ""Value"",
-                    ""id"": ""3c92b5b8-5661-4b92-b1f7-fbbe87d73044"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""Mouse Raw Normalized Delta"",
+                    ""name"": ""Mouse Raw Delta"",
                     ""type"": ""Value"",
                     ""id"": ""3c8df1e4-b47c-4b6e-b763-2d56ec05e701"",
                     ""expectedControlType"": ""Vector2"",
@@ -1425,23 +1417,12 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""a2b484e5-8ca9-441f-9da5-2bd5686f3086"",
-                    ""path"": ""<Pointer>/position"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Everything"",
-                    ""action"": ""Mouse Raw"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""38875558-1f4b-42f1-910c-b5593a60f015"",
                     ""path"": ""<Pointer>/delta"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
-                    ""action"": ""Mouse Raw Normalized Delta"",
+                    ""action"": ""Mouse Raw Delta"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -2120,8 +2101,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         m_Ship_FlightAssistToggle = m_Ship.FindAction("Flight Assist Toggle", throwIfNotFound: true);
         m_Ship_ShipLightsToggle = m_Ship.FindAction("ShipLightsToggle", throwIfNotFound: true);
         m_Ship_AltFlightControlsToggle = m_Ship.FindAction("Alt Flight Controls Toggle", throwIfNotFound: true);
-        m_Ship_MouseRaw = m_Ship.FindAction("Mouse Raw", throwIfNotFound: true);
-        m_Ship_MouseRawNormalizedDelta = m_Ship.FindAction("Mouse Raw Normalized Delta", throwIfNotFound: true);
+        m_Ship_MouseRawDelta = m_Ship.FindAction("Mouse Raw Delta", throwIfNotFound: true);
         m_Ship_ToggleConsole = m_Ship.FindAction("Toggle Console", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
@@ -2214,8 +2194,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Ship_FlightAssistToggle;
     private readonly InputAction m_Ship_ShipLightsToggle;
     private readonly InputAction m_Ship_AltFlightControlsToggle;
-    private readonly InputAction m_Ship_MouseRaw;
-    private readonly InputAction m_Ship_MouseRawNormalizedDelta;
+    private readonly InputAction m_Ship_MouseRawDelta;
     private readonly InputAction m_Ship_ToggleConsole;
     public struct ShipActions
     {
@@ -2241,8 +2220,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         public InputAction @FlightAssistToggle => m_Wrapper.m_Ship_FlightAssistToggle;
         public InputAction @ShipLightsToggle => m_Wrapper.m_Ship_ShipLightsToggle;
         public InputAction @AltFlightControlsToggle => m_Wrapper.m_Ship_AltFlightControlsToggle;
-        public InputAction @MouseRaw => m_Wrapper.m_Ship_MouseRaw;
-        public InputAction @MouseRawNormalizedDelta => m_Wrapper.m_Ship_MouseRawNormalizedDelta;
+        public InputAction @MouseRawDelta => m_Wrapper.m_Ship_MouseRawDelta;
         public InputAction @ToggleConsole => m_Wrapper.m_Ship_ToggleConsole;
         public InputActionMap Get() { return m_Wrapper.m_Ship; }
         public void Enable() { Get().Enable(); }
@@ -2313,12 +2291,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @AltFlightControlsToggle.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnAltFlightControlsToggle;
                 @AltFlightControlsToggle.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnAltFlightControlsToggle;
                 @AltFlightControlsToggle.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnAltFlightControlsToggle;
-                @MouseRaw.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnMouseRaw;
-                @MouseRaw.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnMouseRaw;
-                @MouseRaw.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnMouseRaw;
-                @MouseRawNormalizedDelta.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnMouseRawNormalizedDelta;
-                @MouseRawNormalizedDelta.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnMouseRawNormalizedDelta;
-                @MouseRawNormalizedDelta.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnMouseRawNormalizedDelta;
+                @MouseRawDelta.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnMouseRawDelta;
+                @MouseRawDelta.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnMouseRawDelta;
+                @MouseRawDelta.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnMouseRawDelta;
                 @ToggleConsole.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnToggleConsole;
                 @ToggleConsole.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnToggleConsole;
                 @ToggleConsole.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnToggleConsole;
@@ -2386,12 +2361,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @AltFlightControlsToggle.started += instance.OnAltFlightControlsToggle;
                 @AltFlightControlsToggle.performed += instance.OnAltFlightControlsToggle;
                 @AltFlightControlsToggle.canceled += instance.OnAltFlightControlsToggle;
-                @MouseRaw.started += instance.OnMouseRaw;
-                @MouseRaw.performed += instance.OnMouseRaw;
-                @MouseRaw.canceled += instance.OnMouseRaw;
-                @MouseRawNormalizedDelta.started += instance.OnMouseRawNormalizedDelta;
-                @MouseRawNormalizedDelta.performed += instance.OnMouseRawNormalizedDelta;
-                @MouseRawNormalizedDelta.canceled += instance.OnMouseRawNormalizedDelta;
+                @MouseRawDelta.started += instance.OnMouseRawDelta;
+                @MouseRawDelta.performed += instance.OnMouseRawDelta;
+                @MouseRawDelta.canceled += instance.OnMouseRawDelta;
                 @ToggleConsole.started += instance.OnToggleConsole;
                 @ToggleConsole.performed += instance.OnToggleConsole;
                 @ToggleConsole.canceled += instance.OnToggleConsole;
@@ -2580,8 +2552,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         void OnFlightAssistToggle(InputAction.CallbackContext context);
         void OnShipLightsToggle(InputAction.CallbackContext context);
         void OnAltFlightControlsToggle(InputAction.CallbackContext context);
-        void OnMouseRaw(InputAction.CallbackContext context);
-        void OnMouseRawNormalizedDelta(InputAction.CallbackContext context);
+        void OnMouseRawDelta(InputAction.CallbackContext context);
         void OnToggleConsole(InputAction.CallbackContext context);
     }
     public interface IUIActions

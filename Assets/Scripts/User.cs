@@ -21,7 +21,7 @@ public class User : MonoBehaviour {
 
     private Vector2 _mousePositionScreen;
     private Vector2 _mousePositionNormalized;
-    private Vector2 _mousePositionNormalizedDelta;
+    private Vector2 _mousePositionDelta;
 
     private float _pitch;
     private float _roll;
@@ -69,49 +69,10 @@ public class User : MonoBehaviour {
             var lateralV = _lateralV;
 
             if (!pauseMenu.IsPaused && Preferences.Instance.GetBool("enableMouseFlightControls")) {
-
-                var relativeX = Preferences.Instance.GetBool("relativeMouseXAxis");
-                var relativeY = Preferences.Instance.GetBool("relativeMouseYAxis");
-                var mouseXAxisBind = Preferences.Instance.GetString("mouseXAxis");
-                var mouseYAxisBind = Preferences.Instance.GetString("mouseYAxis");
-
-                float sensitivityX = Preferences.Instance.GetFloat("mouseXSensitivity");
-                float sensitivityY = Preferences.Instance.GetFloat("mouseYSensitivity");
-
-                Action<string, float> setInput = (axis, amount) => {
-                    switch (axis) {
-                        // TODO: mouse axis invert (fml)
-                        case "pitch":
-                            pitch += amount * -1;
-                            break;
-                        case "roll":
-                            roll += amount;
-                            break;
-                        case "yaw":
-                            yaw += amount;
-                            break;
-                    }
-                };
-
-                if (relativeX) {
-                    setInput(mouseXAxisBind, _mousePositionNormalizedDelta.x * sensitivityX);
-                }
-                else {
-                    setInput(mouseXAxisBind, _mousePositionNormalized.x * sensitivityX);
-                }
-
-                if (relativeY) {
-                    setInput(mouseYAxisBind, _mousePositionNormalizedDelta.y * sensitivityY);
-                }
-                else {
-                    setInput(mouseYAxisBind, _mousePositionNormalized.y * sensitivityY);
-                }
-
-                Vector2 widgetPosition = new Vector2(
-                    relativeX ? (_mousePositionNormalizedDelta.x * 0.01f) : _mousePositionNormalized.x,
-                    relativeY ? (_mousePositionNormalizedDelta.y * 0.01f) : _mousePositionNormalized.y
-                );
-                mouseWidget.UpdateWidgetSprites(widgetPosition);
+                CalculateMouseInput(out var mousePitch, out var mouseRoll, out var mouseYaw);
+                pitch += mousePitch;
+                roll += mouseRoll;
+                yaw += mouseYaw;
             }
 
             playerShip.SetPitch(pitch);
@@ -172,7 +133,7 @@ public class User : MonoBehaviour {
         InputState.Change(Mouse.current.position, warpedPosition);
         _mousePositionScreen = warpedPosition;
         _mousePositionNormalized = new Vector2(0, 0);
-        _mousePositionNormalizedDelta = new Vector2(0, 0); 
+        _mousePositionDelta = new Vector2(0, 0); 
     }
 
     /**
@@ -275,16 +236,14 @@ public class User : MonoBehaviour {
         }
     }
 
-    public void OnMouseRaw(InputValue value) {
-        _mousePositionScreen = value.Get<Vector2>();
+    public void OnMouseRawDelta(InputValue value) {
+        _mousePositionDelta = value.Get<Vector2>();
+        _mousePositionScreen.x += _mousePositionDelta.x;
+        _mousePositionScreen.y += _mousePositionDelta.y;
         _mousePositionNormalized = new Vector2(
             ((_mousePositionScreen.x / Screen.width * 2) - 1),
             (_mousePositionScreen.y / Screen.height * 2 - 1)
         );
-    }
-
-    public void OnMouseRawNormalizedDelta(InputValue value) {
-        _mousePositionNormalizedDelta = value.Get<Vector2>();
     }
 
     public void OnToggleConsole(InputValue value) {
@@ -294,5 +253,75 @@ public class User : MonoBehaviour {
         else {
             Console.Instance.Show();
         }
+    }
+
+    private void CalculateMouseInput(out float pitchMouseInput, out float rollMouseInput, out float yawMouseInput) {
+
+        float pitch = 0, roll = 0, yaw = 0;
+        
+        var mouseXAxisBind = Preferences.Instance.GetString("mouseXAxis");
+        var mouseYAxisBind = Preferences.Instance.GetString("mouseYAxis");
+
+        float sensitivityX = Preferences.Instance.GetFloat("mouseXSensitivity");
+        float sensitivityY = Preferences.Instance.GetFloat("mouseYSensitivity");
+
+        bool mouseXInvert = Preferences.Instance.GetBool("mouseXInvert");
+        bool mouseYInvert = Preferences.Instance.GetBool("mouseXInvert");
+        
+        var mouseXIsRelative = Preferences.Instance.GetBool("relativeMouseXAxis");
+        var mouseYIsRelative = Preferences.Instance.GetBool("relativeMouseYAxis");
+
+        float mouseXRelativeRate = Preferences.Instance.GetFloat("mouseXRelativeRate");
+        float mouseYRelativeRate = Preferences.Instance.GetFloat("mouseYRelativeRate");
+
+        float mouseDeadzone = Preferences.Instance.GetFloat("mouseDeadzone");
+        float mousePowerCurve = Preferences.Instance.GetFloat("mousePowerCurve");
+
+        Action<string, float, bool> setInput = (axis, amount, shouldInvert) => {
+            var invert = shouldInvert ? -1 : 1;
+            
+            switch (axis) {
+                case "pitch":
+                    pitch += amount * -1 * invert;
+                    break;
+                case "roll":
+                    roll += amount * invert;
+                    break;
+                case "yaw":
+                    yaw += amount * invert;
+                    break;
+            }
+        };
+
+        if (mouseXIsRelative) {
+            setInput(mouseXAxisBind, _mousePositionDelta.x * sensitivityX, mouseXInvert);
+        }
+        else {
+            setInput(mouseXAxisBind, _mousePositionNormalized.x * sensitivityX, mouseXInvert);
+        }
+
+        if (mouseYIsRelative) {
+            setInput(mouseYAxisBind, _mousePositionDelta.y * sensitivityY, mouseYInvert);
+        }
+        else {
+            setInput(mouseYAxisBind, _mousePositionNormalized.y * sensitivityY, mouseYInvert);
+        }
+
+        // update widget graphics
+        Vector2 widgetPosition = new Vector2(
+            mouseXIsRelative ? (_mousePositionDelta.x * 0.01f) : _mousePositionNormalized.x * sensitivityX,
+            mouseYIsRelative ? (_mousePositionDelta.y * 0.01f) : _mousePositionNormalized.y * sensitivityY
+        );
+        mouseWidget.UpdateWidgetSprites(widgetPosition);
+        
+        // clamp to virtual screen 
+        var extentsX = Screen.width * Mathf.Pow(sensitivityX, -1);
+        var extentsY = Screen.height * Mathf.Pow(sensitivityY, -1);
+        _mousePositionScreen.x = Math.Max(-extentsX, Math.Min(extentsX, _mousePositionScreen.x));
+        _mousePositionScreen.y = Math.Max(-extentsY, Math.Min(extentsY, _mousePositionScreen.y));
+
+        pitchMouseInput = pitch;
+        rollMouseInput = roll;
+        yawMouseInput = yaw;
     }
 }
