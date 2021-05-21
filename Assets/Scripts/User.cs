@@ -277,6 +277,33 @@ public class User : MonoBehaviour {
         float mouseDeadzone = Preferences.Instance.GetFloat("mouseDeadzone");
         float mousePowerCurve = Preferences.Instance.GetFloat("mousePowerCurve");
 
+        // // get deadzone as a pixel value including sensitivity change
+        var mouseDeadzoneX = mouseDeadzone * Mathf.Pow(sensitivityX, -1);
+        var mouseDeadzoneY = mouseDeadzone * Mathf.Pow(sensitivityY, -1);
+
+        // calculate continuous input including deadzone and sensitivity
+        // TODO: power curve??
+        var continuousMouseX = 0f; //= _mousePositionNormalized.x * sensitivityX;
+        var continuousMouseY = 0f; //= _mousePositionNormalized.y * sensitivityY;
+        if (_mousePositionNormalized.x > mouseDeadzoneX) {
+            continuousMouseX = (_mousePositionNormalized.x - mouseDeadzone) * sensitivityX;
+        }
+        if (_mousePositionNormalized.x < -mouseDeadzoneX) {
+            continuousMouseX = (_mousePositionNormalized.x + mouseDeadzone) * sensitivityX;
+        }
+        if (_mousePositionNormalized.y > mouseDeadzoneY) {
+            continuousMouseY = (_mousePositionNormalized.y - mouseDeadzone) * sensitivityY;
+        }
+        if (_mousePositionNormalized.y < -mouseDeadzoneY) {
+            continuousMouseY = (_mousePositionNormalized.y + mouseDeadzone) * sensitivityY;
+        }
+
+        // calculate relative input from deltas including sensitivity
+        // TODO: relative rate
+        var relativeMouseX = _mousePositionDelta.x * sensitivityX;
+        var relativeMouseY = _mousePositionDelta.y * sensitivityY;
+        
+        // set the input for a given axis 
         Action<string, float, bool> setInput = (axis, amount, shouldInvert) => {
             var invert = shouldInvert ? -1 : 1;
             
@@ -293,24 +320,25 @@ public class User : MonoBehaviour {
             }
         };
 
+        // send input depending on mouse mode
         if (mouseXIsRelative) {
-            setInput(mouseXAxisBind, _mousePositionDelta.x * sensitivityX, mouseXInvert);
+            setInput(mouseXAxisBind, relativeMouseX, mouseXInvert);
         }
         else {
-            setInput(mouseXAxisBind, _mousePositionNormalized.x * sensitivityX, mouseXInvert);
+            setInput(mouseXAxisBind, continuousMouseX, mouseXInvert);
         }
 
         if (mouseYIsRelative) {
-            setInput(mouseYAxisBind, _mousePositionDelta.y * sensitivityY, mouseYInvert);
+            setInput(mouseYAxisBind, relativeMouseY, mouseYInvert);
         }
         else {
-            setInput(mouseYAxisBind, _mousePositionNormalized.y * sensitivityY, mouseYInvert);
+            setInput(mouseYAxisBind, continuousMouseY, mouseYInvert);
         }
 
         // update widget graphics
         Vector2 widgetPosition = new Vector2(
-            mouseXIsRelative ? (_mousePositionDelta.x * 0.01f) : _mousePositionNormalized.x * sensitivityX,
-            mouseYIsRelative ? (_mousePositionDelta.y * 0.01f) : _mousePositionNormalized.y * sensitivityY
+            mouseXIsRelative ? (_mousePositionDelta.x * 0.01f) : continuousMouseX,
+            mouseYIsRelative ? (_mousePositionDelta.y * 0.01f) : continuousMouseY
         );
         mouseWidget.UpdateWidgetSprites(widgetPosition);
         
@@ -320,6 +348,7 @@ public class User : MonoBehaviour {
         _mousePositionScreen.x = Math.Max(-extentsX, Math.Min(extentsX, _mousePositionScreen.x));
         _mousePositionScreen.y = Math.Max(-extentsY, Math.Min(extentsY, _mousePositionScreen.y));
 
+        // we're done
         pitchMouseInput = pitch;
         rollMouseInput = roll;
         yawMouseInput = yaw;
