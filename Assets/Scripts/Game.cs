@@ -16,7 +16,9 @@ public class Game : MonoBehaviour {
     public static Game Instance;
 
     public delegate void RestartLevelAction();
+    public delegate void RestartLevelCompleteAction();
     public static event RestartLevelAction OnRestart;
+    public static event RestartLevelCompleteAction OnRestartComplete;
 
     public GameObject checkpointPrefab;
     
@@ -139,6 +141,7 @@ public class Game : MonoBehaviour {
 
             // where do we get this from?
             if (distanceToStart > 20000) {
+                
                 // the terrain will not be loaded if we teleport there, we need to fade to black, wait for terrain to load, then fade back. This should still be faster than full reload.
                 IEnumerator LoadTerrainAndReset(Text loadingText) {
                     DoReset();
@@ -160,17 +163,25 @@ public class Game : MonoBehaviour {
                     
                     FadeFromBlack();
                     yield return new WaitForSeconds(0.7f);
+                    if (OnRestartComplete != null) {
+                        OnRestartComplete();
+                    }
                     user.EnableGameInput();
                 }
 
                 StartCoroutine(SwitchToLoadingScreen(loadText => {
                     StartCoroutine(LoadTerrainAndReset(loadText));
                 }, true));
+                
+                // loading enumerator started, early return (gross)
                 return;
             }
         }
 
         DoReset();
+        if (OnRestartComplete != null) {
+            OnRestartComplete();
+        }
     }
 
     public void QuitToMenu() {

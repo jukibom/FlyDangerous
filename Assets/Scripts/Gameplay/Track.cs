@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Den.Tools;
 using Engine;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,7 +19,7 @@ public class Track : MonoBehaviour {
     // Set to true by the level loader but may be overridden for testing
     [SerializeField] private bool ready;
     private bool _complete;
-    private User _user;
+    [CanBeNull] private User _user;
     
     public bool IsEndCheckpointValid => hitCheckpoints.Count >= Checkpoints.Count - 2; // remove start and end
 
@@ -26,10 +27,12 @@ public class Track : MonoBehaviour {
 
     private void OnEnable() {
         Game.OnRestart += InitialiseTrack;
+        Game.OnRestartComplete += StartTrack;
     }
 
     private void OnDisable() {
         Game.OnRestart -= InitialiseTrack;
+        Game.OnRestartComplete -= StartTrack;
     }
 
     public void InitialiseTrack() {
@@ -55,11 +58,23 @@ public class Track : MonoBehaviour {
         
         hitCheckpoints = new List<Checkpoint>();
         ResetTimer();
+        StopTimer();
     }
 
     public void ResetTimer() {
         _complete = false;
         timeMs = 0;
+        
+        // reset timer text to 0, hide split timer
+        if (_user) {
+            _user.totalTimeDisplay.SetTimeMs(0);
+            _user.splitTimeDisplay.textBox.color = new Color(1f, 1f, 1f, 0);
+        }
+    }
+
+    public void StopTimer() {
+        ready = false;
+        _complete = false;
     }
 
     public void StartTrack() {
