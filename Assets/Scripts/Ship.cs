@@ -75,7 +75,7 @@ public class Ship : MonoBehaviour {
             totalBoostTime = 6f,
             totalBoostRotationalTime = 7f,
             boostMaxSpeedDropOffTime = 12f,
-            boostRechargeTime = 5f,
+            boostRechargeTime = 4f,
             minUserLimitedVelocity = 250f,
         };
     }
@@ -154,7 +154,7 @@ public class Ship : MonoBehaviour {
     [SerializeField] private float totalBoostTime = 6f;
     [SerializeField] private float totalBoostRotationalTime = 7f;
     [SerializeField] private float boostMaxSpeedDropOffTime = 12f;
-    [SerializeField] private float boostRechargeTime = 5f;
+    [SerializeField] private float boostRechargeTime = 4f;
     [SerializeField] private float inertialTensorMultiplier = 125f;
     [SerializeField] private float minUserLimitedVelocity = 250f;
 
