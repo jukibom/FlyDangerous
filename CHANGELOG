@@ -1,4 +1,15 @@
-﻿ALPHA 3
+﻿(v0.1.5))
+-------
+
+Fixes:
+    * Ship configuration default was not correct (boost time wrong by 1 second)
+        * This should not affect times, but the end timer will be green if not changed ship params
+    * Timer now correctly resets if terrain load is required
+    * Ultrawide resolution fixes
+        * Timer now displays clamped to top of screen
+        * Options menu now fully scrolls to the bottom 
+
+ALPHA 3 (v0.1.4)
 -------
 
 New:
@@ -27,7 +38,7 @@ Fixes:
     * Shadow cascading now operates between two extremes - 0-1m and 1-2000m. This means an entire shadow map is dedicated to the cockpit and massively sharpens the texture while eliminating awful shadow flicker.
     * Updated to latest preview of the input system which now supports VJoy - you can now pipe any device through a VJoy driver and have it work in-game. It's not great but it's better than nothing if your device doesn't work :|
 
-ALPHA 2
+ALPHA 2 (v0.1.3)
 -------
 
 New:
@@ -44,6 +55,6 @@ Bug fixes:
     * Fixed errant inputs on load (level starts with ship already in motion)
     * Fixed thrusters remaining on after alt flight control toggle (this still needs more work but it's uhm... broken in a slightly better way? Sorry, Nova!)
 
-ALPHA 1
+ALPHA 1 (v0.1.1)
 -------
 { Initial release }

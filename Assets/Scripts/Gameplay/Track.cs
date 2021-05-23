@@ -68,6 +68,7 @@ public class Track : MonoBehaviour {
         // reset timer text to 0, hide split timer
         if (_user) {
             _user.totalTimeDisplay.SetTimeMs(0);
+            _user.totalTimeDisplay.textBox.color = new Color(1f, 1f, 1f, 1);
             _user.splitTimeDisplay.textBox.color = new Color(1f, 1f, 1f, 0);
         }
     }
