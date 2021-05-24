@@ -25,7 +25,7 @@ This project aims to provide a ground-up reimplementation of a similar-enough fl
 
 ## Building
 
-Unity build: 2021.1.6f1
+Unity build: 2021.1.7f1
 
 Relies on following assets downloaded into Assets/:
 
