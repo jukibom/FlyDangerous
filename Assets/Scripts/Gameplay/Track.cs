@@ -17,7 +17,7 @@ public class Track : MonoBehaviour {
         set => ReplaceCheckpoints(value);
     }
     // Set to true by the level loader but may be overridden for testing
-    [SerializeField] private bool ready;
+    [SerializeField] private bool isActive;
     private bool _complete;
     [CanBeNull] private User _user;
     
@@ -57,8 +57,10 @@ public class Track : MonoBehaviour {
         });
         
         hitCheckpoints = new List<Checkpoint>();
-        ResetTimer();
-        StopTimer();
+        if (isActive) {
+            ResetTimer();
+            StopTimer();
+        }
     }
 
     public void ResetTimer() {
@@ -74,14 +76,14 @@ public class Track : MonoBehaviour {
     }
 
     public void StopTimer() {
-        ready = false;
+        isActive = false;
         _complete = false;
     }
 
     public void StartTrack() {
         if (Checkpoints.Count > 0) {
             ResetTimer();
-            ready = true;
+            isActive = true;
             _complete = false;
         }
     }
@@ -91,7 +93,7 @@ public class Track : MonoBehaviour {
     }
 
     public void CheckpointHit(Checkpoint checkpoint) {
-        if (ready) {
+        if (isActive) {
             var hitCheckpoint = hitCheckpoints.Find(c => c == checkpoint);
 
             if (hitCheckpoint && hitCheckpoint.Type == CheckpointType.End) {
@@ -146,7 +148,7 @@ public class Track : MonoBehaviour {
             return;
         }
 
-        if (ready && !_complete && _user.totalTimeDisplay != null) {
+        if (isActive && !_complete && _user.totalTimeDisplay != null) {
             _user.totalTimeDisplay.textBox.color = new Color(1f, 1f, 1f, 1f);
             timeMs += Time.fixedDeltaTime;
             _user.totalTimeDisplay.SetTimeMs(timeMs);
