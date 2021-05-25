@@ -390,16 +390,22 @@ public class Game : MonoBehaviour {
                 // Move the ship to the lowest position.
 
                 var shipTransform = ship.transform;
-
+                
+                // move ship above terrain max
                 shipTransform.position = new Vector3(
                     shipTransform.position.x,
                     10000,
                     shipTransform.position.z
                 );
                 
+                // cast down to get terrain height at this position
                 if (Physics.Raycast(ship.transform.position, Vector3.down, out var hit, 10000)) {
                     shipTransform.position = hit.point;
+                    
+                    // move ship 25 meters up to compensate for rocks and other crap
                     shipTransform.Translate(0, 25, 0);
+                    
+                    // store new position in game level data for restarts
                     _levelData.startPosition.x = shipTransform.position.x;
                     _levelData.startPosition.y = shipTransform.position.y;
                     _levelData.startPosition.z = shipTransform.position.z;

@@ -196,6 +196,14 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""interactions"": """"
                 },
                 {
+                    ""name"": ""Reset HMD View"",
+                    ""type"": ""Button"",
+                    ""id"": ""211e77d7-642f-4d4f-b706-ddca8db27596"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
                     ""name"": ""Toggle Console"",
                     ""type"": ""Button"",
                     ""id"": ""0fe6c9f9-0cee-4004-ba47-06e9efdf8dbc"",
@@ -1458,6 +1466,28 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""action"": ""ShipLightsToggle"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""580073eb-65f5-4917-a590-2452618fdea0"",
+                    ""path"": ""<Keyboard>/f11"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Reset HMD View"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cf2bfefb-022b-4855-8ba5-f96aec096bfa"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Reset HMD View"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -2102,6 +2132,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         m_Ship_ShipLightsToggle = m_Ship.FindAction("ShipLightsToggle", throwIfNotFound: true);
         m_Ship_AltFlightControlsToggle = m_Ship.FindAction("Alt Flight Controls Toggle", throwIfNotFound: true);
         m_Ship_MouseRawDelta = m_Ship.FindAction("Mouse Raw Delta", throwIfNotFound: true);
+        m_Ship_ResetHMDView = m_Ship.FindAction("Reset HMD View", throwIfNotFound: true);
         m_Ship_ToggleConsole = m_Ship.FindAction("Toggle Console", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
@@ -2195,6 +2226,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Ship_ShipLightsToggle;
     private readonly InputAction m_Ship_AltFlightControlsToggle;
     private readonly InputAction m_Ship_MouseRawDelta;
+    private readonly InputAction m_Ship_ResetHMDView;
     private readonly InputAction m_Ship_ToggleConsole;
     public struct ShipActions
     {
@@ -2221,6 +2253,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         public InputAction @ShipLightsToggle => m_Wrapper.m_Ship_ShipLightsToggle;
         public InputAction @AltFlightControlsToggle => m_Wrapper.m_Ship_AltFlightControlsToggle;
         public InputAction @MouseRawDelta => m_Wrapper.m_Ship_MouseRawDelta;
+        public InputAction @ResetHMDView => m_Wrapper.m_Ship_ResetHMDView;
         public InputAction @ToggleConsole => m_Wrapper.m_Ship_ToggleConsole;
         public InputActionMap Get() { return m_Wrapper.m_Ship; }
         public void Enable() { Get().Enable(); }
@@ -2294,6 +2327,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @MouseRawDelta.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnMouseRawDelta;
                 @MouseRawDelta.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnMouseRawDelta;
                 @MouseRawDelta.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnMouseRawDelta;
+                @ResetHMDView.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnResetHMDView;
+                @ResetHMDView.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnResetHMDView;
+                @ResetHMDView.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnResetHMDView;
                 @ToggleConsole.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnToggleConsole;
                 @ToggleConsole.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnToggleConsole;
                 @ToggleConsole.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnToggleConsole;
@@ -2364,6 +2400,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @MouseRawDelta.started += instance.OnMouseRawDelta;
                 @MouseRawDelta.performed += instance.OnMouseRawDelta;
                 @MouseRawDelta.canceled += instance.OnMouseRawDelta;
+                @ResetHMDView.started += instance.OnResetHMDView;
+                @ResetHMDView.performed += instance.OnResetHMDView;
+                @ResetHMDView.canceled += instance.OnResetHMDView;
                 @ToggleConsole.started += instance.OnToggleConsole;
                 @ToggleConsole.performed += instance.OnToggleConsole;
                 @ToggleConsole.canceled += instance.OnToggleConsole;
@@ -2553,6 +2592,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         void OnShipLightsToggle(InputAction.CallbackContext context);
         void OnAltFlightControlsToggle(InputAction.CallbackContext context);
         void OnMouseRawDelta(InputAction.CallbackContext context);
+        void OnResetHMDView(InputAction.CallbackContext context);
         void OnToggleConsole(InputAction.CallbackContext context);
     }
     public interface IUIActions

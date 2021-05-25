@@ -3,16 +3,25 @@ using System.Linq;
 using Audio;
 using Engine;
 using Menus;
+using UnityEditor.XR.LegacyInputHelpers;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.InputSystem.Users;
+using UnityEngine.InputSystem.XR;
+using UnityEngine.XR;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class User : MonoBehaviour {
-
-    [SerializeField] public PauseMenu pauseMenu;
+    
     [SerializeField] public Ship playerShip;
+    
+    [SerializeField] public PauseMenu pauseMenu;
+    [SerializeField] public Camera flatScreenCamera;
+    [SerializeField] public Camera uiCamera;
+    [SerializeField] public XRRig xrRig;
+
     [SerializeField] public InputSystemUIInputModule pauseUIInputModule;
     [SerializeField] public MouseWidget mouseWidget;
     [SerializeField] public TimeDisplay totalTimeDisplay;
@@ -125,6 +134,22 @@ public class User : MonoBehaviour {
 
     public void DisableUIInput() {
         pauseUIInputModule.enabled = false;
+    }
+
+    public void EnableVR() {
+        var pauseMenuCanvas = pauseMenu.GetComponent<Canvas>();
+        pauseMenuCanvas.renderMode = RenderMode.WorldSpace;
+        flatScreenCamera.enabled = false;
+        uiCamera.enabled = false;
+        xrRig.gameObject.SetActive(true);
+    }
+
+    public void DisableVR() {
+        var pauseMenuCanvas = pauseMenu.GetComponent<Canvas>();
+        pauseMenuCanvas.renderMode = RenderMode.ScreenSpaceCamera;
+        flatScreenCamera.enabled = true;
+        uiCamera.enabled = true;
+        xrRig.gameObject.SetActive(false);
     }
 
     public void ResetMouseToCentre() {
@@ -244,6 +269,15 @@ public class User : MonoBehaviour {
             ((_mousePositionScreen.x / Screen.width * 2) - 1),
             (_mousePositionScreen.y / Screen.height * 2 - 1)
         );
+    }
+
+    public void OnResetHMDView(InputValue value) {
+        var xrRig = gameObject.GetComponentInChildren<XRRig>();
+        if (xrRig) {
+            xrRig.MoveCameraToWorldLocation(transform.position);
+            xrRig.MatchRigUpCameraForward(transform.up, transform.forward);
+        }
+        
     }
 
     public void OnToggleConsole(InputValue value) {
