@@ -102,22 +102,19 @@ namespace Engine {
 
         
         public bool GetBool(string key) {
-            bool value;
-            return GetCurrent().boolPrefs.TryGetValue(key, out value)
+            return GetCurrent().boolPrefs.TryGetValue(key, out bool value)
                 ? value
                 : GetDefaultBool(key);
         }
         
         public float GetFloat(string key) {
-            float value;
-            return GetCurrent().floatPrefs.TryGetValue(key, out value)
+            return GetCurrent().floatPrefs.TryGetValue(key, out float value)
                 ? value
                 : GetDefaultFloat(key);
         }
         
         public string GetString(string key) {
-            string value;
-            return GetCurrent().stringPrefs.TryGetValue(key, out value)
+            return GetCurrent().stringPrefs.TryGetValue(key, out string value)
                 ? value
                 : GetDefaultString(key);
         }
