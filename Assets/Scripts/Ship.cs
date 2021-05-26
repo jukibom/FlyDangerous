@@ -168,7 +168,8 @@ public class Ship : MonoBehaviour {
     private float _prevVelocity;
     private bool _userVelocityLimit;
     private float _velocityLimitCap;
-    private bool _flightAssist;
+    private bool _flightAssistVectorControl;
+    private bool _flightAssistRotationalDampening;
 
     // input axes -1 to 1
     private float _throttle;
@@ -203,7 +204,8 @@ public class Ship : MonoBehaviour {
     }
 
     public void Start() {
-        _flightAssist = Preferences.Instance.GetBool("flightAssistOnByDefault");
+        _flightAssistVectorControl = Preferences.Instance.GetBool("flightAssistOnByDefault");
+        _flightAssistRotationalDampening = Preferences.Instance.GetBool("flightAssistOnByDefault");
         _rigidBody.centerOfMass = Vector3.zero;
         _rigidBody.inertiaTensorRotation = Quaternion.identity;
 
@@ -243,7 +245,7 @@ public class Ship : MonoBehaviour {
     }
 
     public void SetPitch(float value) {
-        if (_flightAssist) {
+        if (_flightAssistRotationalDampening) {
             _pitchTargetFactor = ClampInput(value);
         }
         else {
@@ -252,7 +254,7 @@ public class Ship : MonoBehaviour {
     }
 
     public void SetRoll(float value) {
-        if (_flightAssist) {
+        if (_flightAssistRotationalDampening) {
             _rollTargetFactor = ClampInput(value);
         }
         else {
@@ -261,7 +263,7 @@ public class Ship : MonoBehaviour {
     }
 
     public void SetYaw(float value) {
-        if (_flightAssist) {
+        if (_flightAssistRotationalDampening) {
             _yawTargetFactor = ClampInput(value);
         }
         else {
@@ -270,7 +272,7 @@ public class Ship : MonoBehaviour {
     }
 
     public void SetThrottle(float value) {
-        if (_flightAssist) {
+        if (_flightAssistVectorControl) {
             _throttleTargetFactor = ClampInput(value);
         }
         else {
@@ -279,7 +281,7 @@ public class Ship : MonoBehaviour {
     }
     
     public void SetLateralH(float value) {
-        if (_flightAssist) {
+        if (_flightAssistVectorControl) {
             _latHTargetFactor = ClampInput(value);
         }
         else {
@@ -288,7 +290,7 @@ public class Ship : MonoBehaviour {
     }
     
     public void SetLateralV(float value) {
-        if (_flightAssist) {
+        if (_flightAssistVectorControl) {
             _latVTargetFactor = ClampInput(value);
         }
         else {
@@ -314,12 +316,48 @@ public class Ship : MonoBehaviour {
         }
     }
 
-    public void FlightAssistToggle() {
-        _flightAssist = !_flightAssist;
-        Debug.Log("Flight Assist " + (_flightAssist ? "ON" : "OFF") + " (partially implemented)");
+    public void AllFlightAssistToggle() {
+        // if any flight assist is enabled, deactivate (any on = all off)
+        var isEnabled = !(_flightAssistVectorControl | _flightAssistRotationalDampening);
+        
+        // if user has flight assists on by default, flip that logic on its head (any off = all on)
+        if (Preferences.Instance.GetBool("flightAssistOnByDefault")) {
+            isEnabled = !(_flightAssistVectorControl & _flightAssistRotationalDampening);
+        }
+
+        _flightAssistVectorControl = isEnabled;
+        _flightAssistRotationalDampening = isEnabled;
+        
+        Debug.Log("All Flight Assists " + (isEnabled ? "ON" : "OFF"));
         
         // TODO: proper flight assist sounds
-        if (_flightAssist) {
+        if (isEnabled) {
+            AudioManager.Instance.Play("ship-alternate-flight-on");
+        }
+        else {
+            AudioManager.Instance.Play("ship-alternate-flight-off");
+        }
+    }
+
+    public void FlightAssistVectorControlToggle() {
+        _flightAssistVectorControl = !_flightAssistVectorControl;
+        Debug.Log("Vector Control Flight Assist " + (_flightAssistVectorControl ? "ON" : "OFF"));
+        
+        // TODO: proper flight assist sounds
+        if (_flightAssistVectorControl) {
+            AudioManager.Instance.Play("ship-alternate-flight-on");
+        }
+        else {
+            AudioManager.Instance.Play("ship-alternate-flight-off");
+        }
+    }
+
+    public void FlightAssistRotationalDampeningToggle() {
+        _flightAssistRotationalDampening = !_flightAssistRotationalDampening;
+        Debug.Log("Rotational Dampening Flight Assist " + (_flightAssistRotationalDampening ? "ON" : "OFF"));
+        
+        // TODO: proper flight assist sounds
+        if (_flightAssistRotationalDampening) {
             AudioManager.Instance.Play("ship-alternate-flight-on");
         }
         else {
@@ -430,8 +468,12 @@ public class Ship : MonoBehaviour {
     }
 
     private void CalculateFlightForces(float maxThrustWithBoost, float maxTorqueWithBoost) {
-        if (_flightAssist) {
-            CalculateFlightAssist();
+        if (_flightAssistVectorControl) {
+            CalculateVectorControlFlightAssist();
+        }
+
+        if (_flightAssistRotationalDampening) {
+            CalculateRotationalDampeningFlightAssist();
         }
         
         // special case for throttle - no reverse while boosting! sorry mate 
@@ -455,17 +497,20 @@ public class Ship : MonoBehaviour {
         _rigidBody.AddTorque(transform.TransformDirection(tRot));
     }
 
-    private void CalculateFlightAssist() {
-        // convert global rigid body velocities into local space
+    private void CalculateVectorControlFlightAssist() {
+        // convert global rigid body velocity into local space
         Vector3 localVelocity = transform.InverseTransformDirection(_rigidBody.velocity);
-        Vector3 localAngularVelocity = transform.InverseTransformDirection(_rigidBody.angularVelocity);
-        
-        // thrust
+
         CalculateAssistedAxis(_latHTargetFactor, localVelocity.x, 0.1f, maxSpeed, out _latH);
         CalculateAssistedAxis(_latVTargetFactor, localVelocity.y, 0.1f, maxSpeed, out _latV);
         CalculateAssistedAxis(_throttleTargetFactor, localVelocity.z, 0.1f, maxSpeed, out _throttle);
 
-        // rotation
+    }
+    
+    private void CalculateRotationalDampeningFlightAssist() {
+        // convert global rigid body velocity into local space
+        Vector3 localAngularVelocity = transform.InverseTransformDirection(_rigidBody.angularVelocity);
+
         CalculateAssistedAxis(_pitchTargetFactor, localAngularVelocity.x, 0.3f, 2, out _pitch);
         CalculateAssistedAxis(_yawTargetFactor, localAngularVelocity.y, 0.3f, 1.5f, out _yaw);
         CalculateAssistedAxis(_rollTargetFactor, localAngularVelocity.z * -1, 0.3f, 1, out _roll);
