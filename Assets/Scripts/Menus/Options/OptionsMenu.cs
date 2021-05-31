@@ -66,8 +66,6 @@ namespace Menus.Options {
         }
 
         private void LoadPreferences() {
-            LoadBindings();
-            
             var toggleOptions = GetComponentsInChildren<ToggleOption>(true);
             foreach (var toggleOption in toggleOptions) {
                 toggleOption.IsEnabled = Preferences.Instance.GetBool(toggleOption.Preference);
@@ -88,7 +86,7 @@ namespace Menus.Options {
 
         private void RevertPreferences() {
             Preferences.Instance.SetPreferences(_previousPrefs);
-            LoadBindings();
+            Game.Instance.LoadBindings();
         }
 
         private void SavePreferences() {
@@ -123,11 +121,6 @@ namespace Menus.Options {
                 Game.Instance.ShipParameters = debugFlightOptions.GetFlightParams();
             }
         }
-        private void LoadBindings() {
-            var bindings = Preferences.Instance.GetString("inputBindings");
-            if (!string.IsNullOrEmpty(bindings)) {
-                actions.LoadBindingOverridesFromJson(bindings);
-            }
-        }
+
     }
 }

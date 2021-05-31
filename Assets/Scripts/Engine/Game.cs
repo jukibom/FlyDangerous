@@ -7,6 +7,7 @@ using JetBrains.Annotations;
 using MapMagic.Core;
 using MapMagic.Nodes;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Environment = Engine.Environment;
@@ -25,10 +26,9 @@ public class Game : MonoBehaviour {
     private LevelData _levelData = new LevelData();
     public LevelData LevelDataAsLoaded => _levelData;
     public LevelData LevelDataCurrent => GenerateLevelData();
-
-    [SerializeField] private MapMagic.Nodes.Graph terrainGraphV1;
-    [SerializeField] private MapMagic.Nodes.Graph terrainGraphV2;
     
+    public InputActionAsset playerBindings;
+
     [CanBeNull] private ShipParameters _shipParameters;
     public ShipParameters ShipParameters {
         get => _shipParameters == null 
@@ -67,6 +67,15 @@ public class Game : MonoBehaviour {
     public void Start() {
         // if there's a user object when the game starts, enable input (usually in the editor!)
         FindObjectOfType<User>()?.EnableGameInput();
+
+        LoadBindings();
+    }
+    
+    public void LoadBindings() {
+        var bindings = Preferences.Instance.GetString("inputBindings");
+        if (!string.IsNullOrEmpty(bindings)) {
+            playerBindings.LoadBindingOverridesFromJson(bindings);
+        }
     }
 
     public void StartGame(LevelData levelData, bool dynamicPlacementStart = false) {
