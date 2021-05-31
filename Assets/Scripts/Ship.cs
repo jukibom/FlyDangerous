@@ -56,17 +56,17 @@ public class Ship : MonoBehaviour {
     // TODO: remove this stuff once params are finalised (this is for debug panel in release)
     public static ShipParameters ShipParameterDefaults {
         get => new ShipParameters {
-            mass = 700f,
+            mass = 550f,
             drag = 0f,
             angularDrag = 0f,
             inertiaTensorMultiplier = 125f,
             maxSpeed = 800f,
             maxBoostSpeed = 932f,
-            maxThrust = 100000f,
+            maxThrust = 120000f,
             torqueThrustMultiplier = 0.1f,
             throttleMultiplier = 1f,
-            latHMultiplier = 0.5f,
-            latVMultiplier = 0.8f,
+            latHMultiplier = 0.7f,
+            latVMultiplier = 0.9f,
             pitchMultiplier = 1f,
             rollMultiplier = 0.3f,
             yawMultiplier = 0.8f,
@@ -141,11 +141,11 @@ public class Ship : MonoBehaviour {
     // TODO: split this into various thruster powers
     [SerializeField] private float maxSpeed = 800;
     [SerializeField] private float maxBoostSpeed = 932;
-    [SerializeField] private float maxThrust = 100000;
+    [SerializeField] private float maxThrust = 120000;
     [SerializeField] private float torqueThrustMultiplier = 0.1f;
     [SerializeField] private float throttleMultiplier = 1f;
-    [SerializeField] private float latHMultiplier = 0.5f;
-    [SerializeField] private float latVMultiplier = 0.8f;
+    [SerializeField] private float latHMultiplier = 0.7f;
+    [SerializeField] private float latVMultiplier = 0.9f;
     [SerializeField] private float pitchMultiplier = 1f;
     [SerializeField] private float rollMultiplier = 0.3f;
     [SerializeField] private float yawMultiplier = 0.8f;
@@ -476,25 +476,38 @@ public class Ship : MonoBehaviour {
             CalculateRotationalDampeningFlightAssist();
         }
         
-        // special case for throttle - no reverse while boosting! sorry mate 
+        // special case for throttle - no reverse while boosting but, while always going forward, the ship will change vector less harshly while holding back
         var throttle = _isBoosting && _currentBoostTime < totalBoostTime
-            ? 1
+            ? Math.Max(1f, _throttle + 1.6f)
             : _throttle;
 
-        var tThrust = new Vector3(
-            _latH * latHMultiplier * maxThrustWithBoost,
-            _latV * latVMultiplier * maxThrustWithBoost,
-            throttle * throttleMultiplier * maxThrustWithBoost
+        // When applying the actual thrust to the rigidbody, we only have a limited amount of thrust (maxThrustWithBoost).
+        // To avoid applying max thrust in multiple directions (e.g. faster than a single direction), we need to combine
+        // all our directions and divide our result thrust vector by the base input total requested.
+        // e.g. if two axes are held down fully then our request is 2 (ignoring multipliers). Therefore, both axes
+        // will receive 0.5x their respective thrust. 
+        var thrustInput = new Vector3(
+            _latH * latHMultiplier,
+            _latV * latVMultiplier,
+            throttle * throttleMultiplier
         );
+        
+        // Sum the total absolute requested thrust to divide each axis with.
+        // Clamp this to 1 as a lower bound otherwise small forces are amplified (divide by fraction). We only care
+        // if the combined axes are greater than 1.
+        var totalRequestedThrustInput = Math.Max(1f, Math.Abs(thrustInput.x) + Math.Abs(thrustInput.y) + Math.Abs(thrustInput.z));
 
-        var tRot = new Vector3(
+        // final thrust calculated from raw input * available thrust and divided by the total requested from three axes
+        var thrust = (thrustInput * maxThrustWithBoost) / totalRequestedThrustInput ;
+        
+        var torque = new Vector3(
             _pitch * pitchMultiplier * maxTorqueWithBoost,
             _yaw * yawMultiplier * maxTorqueWithBoost,
             _roll * rollMultiplier * maxTorqueWithBoost * -1
         ) * inertialTensorMultiplier;   // if we don't counteract the inertial tensor of the rigidbody, the rotation spin would increase in lockstep
         
-        _rigidBody.AddForce(transform.TransformDirection(tThrust));
-        _rigidBody.AddTorque(transform.TransformDirection(tRot));
+        _rigidBody.AddForce(transform.TransformDirection(thrust));
+        _rigidBody.AddTorque(transform.TransformDirection(torque));
     }
 
     private void CalculateVectorControlFlightAssist() {
@@ -516,6 +529,19 @@ public class Ship : MonoBehaviour {
         CalculateAssistedAxis(_rollTargetFactor, localAngularVelocity.z * -1, 0.3f, 1, out _roll);
     }
     
+    /**
+     * Given a target factor between 0 and 1 for a given axis, the current gross value and the maximum, calculate a
+     * new axis value to apply as input.
+     * @param targetFactor value between 0 and 1 (effectively the users' input)
+     * @param currentAxisVelocity the non-normalised raw value of the current motion of the axis
+     * @param interpolateAtPercent the point at which to begin linearly interpolating the acceleration
+     *      (e.g. 0.1 = at 10% of the MAXIMUM velocity of the axis away from the target, interpolate the axis -
+     *      if the current speed is 0, the target is 0.5 and this value is 0.1, this means that at 40% of the maximum
+     *      speed -- when the axis is at 0.4 -- decrease the output linearly such that it moves from 1 to 0 and slowly
+     *      decelerates.
+     * @param max the maximum non-normalised value for this axis e.g. the maximum speed or maximum rotation in radians etc
+     * @param out axis the value to apply the calculated new axis of input to
+     */
     private void CalculateAssistedAxis(
         float targetFactor, 
         float currentAxisVelocity, 
