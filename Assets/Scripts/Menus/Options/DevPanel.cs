@@ -24,10 +24,11 @@ public class DevPanel : MonoBehaviour {
     [SerializeField] private InputField boostRechargeTimeTextField;
     [SerializeField] private InputField intertialTensorMultiplierTextField;
     [SerializeField] private InputField minUserLimitedVelocityTextField;
+
+    private bool _inialised = false;
     
     // Start is called before the first frame update
-    void OnEnable() {
-        var game = FindObjectOfType<Game>();
+    void Start() {
         var defaults = Ship.ShipParameterDefaults;
 
         massTextField.placeholder.GetComponent<Text>().text = defaults.mass.ToString();
@@ -52,7 +53,7 @@ public class DevPanel : MonoBehaviour {
         intertialTensorMultiplierTextField.placeholder.GetComponent<Text>().text = defaults.inertiaTensorMultiplier.ToString();
         minUserLimitedVelocityTextField.placeholder.GetComponent<Text>().text = defaults.minUserLimitedVelocity.ToString();
         
-        UpdateTextFields(game.ShipParameters);
+        UpdateTextFields(Game.Instance.ShipParameters);
     }
 
     public void RestoreDefaults() {
@@ -95,9 +96,17 @@ public class DevPanel : MonoBehaviour {
         boostRechargeTimeTextField.text = parameters.boostRechargeTime.ToString();
         intertialTensorMultiplierTextField.text = parameters.inertiaTensorMultiplier.ToString();
         minUserLimitedVelocityTextField.text = parameters.minUserLimitedVelocity.ToString();
+
+        _inialised = true;
     }
 
     public ShipParameters GetFlightParams() {
+        if (!_inialised) {
+            return Ship.ShipParameterDefaults;
+        }
+
+        Debug.Log(massTextField.text);
+        
         return new ShipParameters {
             mass = float.Parse(massTextField.text),
             maxSpeed = float.Parse(maxSpeedTextField.text),
