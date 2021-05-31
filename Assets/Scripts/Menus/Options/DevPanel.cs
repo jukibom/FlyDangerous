@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
 
-public class DevPanelFlightParams : MonoBehaviour {
+public class DevPanel : MonoBehaviour {
 
     [SerializeField] private InputField massTextField;
     [SerializeField] private InputField maxSpeedTextField;
