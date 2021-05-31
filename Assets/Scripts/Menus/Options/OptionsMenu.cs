@@ -116,7 +116,7 @@ namespace Menus.Options {
         }
 
         private void SetDebugFlightParameters() {
-            var debugFlightOptions = GetComponent<DevPanelFlightParams>();
+            var debugFlightOptions = GetComponentInChildren<DevPanelFlightParams>(true);
             if (debugFlightOptions) {
                 Game.Instance.ShipParameters = debugFlightOptions.GetFlightParams();
             }
