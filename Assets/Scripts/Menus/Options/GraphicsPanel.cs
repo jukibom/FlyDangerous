@@ -10,9 +10,12 @@ public class GraphicsPanel : MonoBehaviour {
     [SerializeField] private Dropdown screenModeDropdown;
 
     private Resolution[] _resolutions;
+    private FullScreenMode _screenMode;
 
     private void OnEnable() {
         _resolutions = Screen.resolutions;
+        _screenMode = Screen.fullScreenMode;
+        
         resolutionDropdown.ClearOptions();
 
         var options = new List<string>();
@@ -20,7 +23,7 @@ public class GraphicsPanel : MonoBehaviour {
         
         for (int i = 0; i < _resolutions.Length; i++) {
             var resolution = _resolutions[i];
-            var option = resolution.width + " x " + resolution.height;
+            var option = resolution.width + " x " + resolution.height + " @ " + resolution.refreshRate + "Hz";
             options.Add(option);
 
             if (resolution.width == Screen.currentResolution.width &&
@@ -34,9 +37,22 @@ public class GraphicsPanel : MonoBehaviour {
         resolutionDropdown.RefreshShownValue();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public void OnResolutionChange(int resolutionIndex) {
+        Screen.SetResolution(_resolutions[resolutionIndex].width, _resolutions[resolutionIndex].height, _screenMode);
+    }
+
+    public void OnScreenModeChange(int screenModeIndex) {
+        switch (screenModeIndex) {
+            case 0: _screenMode = FullScreenMode.FullScreenWindow;
+                break;
+            case 1: _screenMode = FullScreenMode.ExclusiveFullScreen;
+                break;
+            case 2: _screenMode = FullScreenMode.Windowed;
+                break;
+            default: _screenMode = FullScreenMode.FullScreenWindow;
+                break;
+        }
+
+        Screen.fullScreenMode = _screenMode;
     }
 }
