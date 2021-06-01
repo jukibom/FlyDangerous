@@ -88,6 +88,19 @@ public class Game : MonoBehaviour {
         
         var urp = (UniversalRenderPipelineAsset)GraphicsSettings.currentRenderPipeline;
         urp.renderScale = Preferences.Instance.GetFloat("graphics-render-scale");
+        var msaa = Preferences.Instance.GetString("graphics-render-scale");
+        switch (msaa) {
+            case "8x": urp.msaaSampleCount = 8;
+                break;
+            case "4x": urp.msaaSampleCount = 4;
+                break;
+            case "2x": urp.msaaSampleCount = 2;
+                break;
+            case "none":
+            case "default":
+                urp.msaaSampleCount = 0;
+                break;
+        }
     }
 
     public void StartGame(LevelData levelData, bool dynamicPlacementStart = false) {
