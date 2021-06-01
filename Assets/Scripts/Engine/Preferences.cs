@@ -53,7 +53,8 @@ namespace Engine {
                 case "showSpaceDust":
                 case "enableMouseFlightControls":
                 case "showMouseWidget":
-                case "flightAssistOnByDefault": 
+                case "flightAssistOnByDefault":
+                case "graphics-ssao":
                     return true;
                 
                 case "relativeMouseXAxis":
@@ -72,6 +73,16 @@ namespace Engine {
         
         public float GetDefaultFloat(string key) {
             switch (key) {
+                case "graphics-terrain-geometry-lod":
+                    return 10.0f;
+                case "graphics-terrain-texture-distance":
+                    return 5000.0f;
+                case "graphics-terrain-chunks":
+                    return 1.0f;
+                case "graphics-fog-draw-distance":
+                    return 8000.0f;
+                case "graphics-field-of-view":
+                    return 80.0f;
                 case "mouseXSensitivity":
                 case "mouseYSensitivity":
                     return 0.5f;
@@ -94,6 +105,10 @@ namespace Engine {
                     return "roll";
                 case "mouseYAxis":
                     return "pitch";
+                case "screen-mode":
+                    return "borderless window";
+                case "graphics-anti-aliasing":
+                    return "none";
                 default: 
                     Debug.LogWarning("Attempted to get preference " + key + " with no default specified");
                     return "";
