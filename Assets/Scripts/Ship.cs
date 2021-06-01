@@ -62,7 +62,7 @@ public class Ship : MonoBehaviour {
             inertiaTensorMultiplier = 125f,
             maxSpeed = 800f,
             maxBoostSpeed = 932f,
-            maxThrust = 120000f,
+            maxThrust = 110000f,
             torqueThrustMultiplier = 0.1f,
             throttleMultiplier = 1f,
             latHMultiplier = 0.7f,
@@ -70,7 +70,7 @@ public class Ship : MonoBehaviour {
             pitchMultiplier = 1f,
             rollMultiplier = 0.3f,
             yawMultiplier = 0.8f,
-            thrustBoostMultiplier = 5f,
+            thrustBoostMultiplier = 6.5f,
             torqueBoostMultiplier = 2f,
             totalBoostTime = 6f,
             totalBoostRotationalTime = 7f,
@@ -139,9 +139,9 @@ public class Ship : MonoBehaviour {
     [SerializeField] private Light shipLights;
     
     // TODO: split this into various thruster powers
-    [SerializeField] private float maxSpeed = 800;
-    [SerializeField] private float maxBoostSpeed = 932;
-    [SerializeField] private float maxThrust = 120000;
+    [SerializeField] private float maxSpeed = 800f;
+    [SerializeField] private float maxBoostSpeed = 932f;
+    [SerializeField] private float maxThrust = 110000f;
     [SerializeField] private float torqueThrustMultiplier = 0.1f;
     [SerializeField] private float throttleMultiplier = 1f;
     [SerializeField] private float latHMultiplier = 0.7f;
@@ -149,7 +149,7 @@ public class Ship : MonoBehaviour {
     [SerializeField] private float pitchMultiplier = 1f;
     [SerializeField] private float rollMultiplier = 0.3f;
     [SerializeField] private float yawMultiplier = 0.8f;
-    [SerializeField] private float thrustBoostMultiplier = 5;
+    [SerializeField] private float thrustBoostMultiplier = 6.5f;
     [SerializeField] private float torqueBoostMultiplier = 2f;
     [SerializeField] private float totalBoostTime = 6f;
     [SerializeField] private float totalBoostRotationalTime = 7f;
