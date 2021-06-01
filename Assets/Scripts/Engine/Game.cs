@@ -5,9 +5,10 @@ using Den.Tools;
 using Engine;
 using JetBrains.Annotations;
 using MapMagic.Core;
-using MapMagic.Nodes;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Environment = Engine.Environment;
@@ -84,6 +85,9 @@ public class Game : MonoBehaviour {
         if (OnGraphicsSettingsApplied != null) {
             OnGraphicsSettingsApplied();
         }
+        
+        var urp = (UniversalRenderPipelineAsset)GraphicsSettings.currentRenderPipeline;
+        urp.renderScale = Preferences.Instance.GetFloat("graphics-render-scale");
     }
 
     public void StartGame(LevelData levelData, bool dynamicPlacementStart = false) {
