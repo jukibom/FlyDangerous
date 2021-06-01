@@ -46,6 +46,7 @@ namespace Menus.Options {
         public void Apply() {
             SavePreferences();
             SetDebugFlightParameters();
+            Game.Instance.ApplyGraphicsOptions();
             returnToParentMenu.Invoke();
             AudioManager.Instance.Play("ui-confirm");
         }
@@ -121,6 +122,5 @@ namespace Menus.Options {
                 Game.Instance.ShipParameters = debugFlightOptions.GetFlightParams();
             }
         }
-
     }
 }

@@ -60,12 +60,18 @@ public class User : MonoBehaviour {
 
     public void OnEnable() {
         pauseUIInputModule.cancel.action.performed += _cancelAction;
+        Game.OnGraphicsSettingsApplied += OnGraphicsSettingsApplied;
         ResetMouseToCentre();
         Console.Instance.Clear();
     }
 
     public void OnDisable() {
         pauseUIInputModule.cancel.action.performed -= _cancelAction;
+        Game.OnGraphicsSettingsApplied -= OnGraphicsSettingsApplied;
+    }
+
+    public void OnGraphicsSettingsApplied() {
+        flatScreenCamera.fieldOfView = Preferences.Instance.GetFloat("graphics-field-of-view");
     }
 
     public void Update() {
@@ -237,8 +243,16 @@ public class User : MonoBehaviour {
         }
     }
 
-    public void OnFlightAssistToggle(InputValue value) {
-        playerShip.FlightAssistToggle();
+    public void OnAllFlightAssistToggle(InputValue value) {
+        playerShip.AllFlightAssistToggle();
+    }
+
+    public void OnVectorFlightAssistToggle(InputValue value) {
+        playerShip.FlightAssistVectorControlToggle();   
+    }
+
+    public void OnRotationalFlightAssistToggle(InputValue value) {
+        playerShip.FlightAssistRotationalDampeningToggle();
     }
     
     public void OnShipLightsToggle(InputValue value) {

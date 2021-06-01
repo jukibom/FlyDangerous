@@ -66,7 +66,6 @@ public class DevPanel : MonoBehaviour {
 
     public void LoadFromClipboard() {
         string data = GUIUtility.systemCopyBuffer;
-        Debug.Log(data);
         var parameters = ShipParameters.FromJsonString(data);
         if (parameters != null) {
             UpdateTextFields(parameters);

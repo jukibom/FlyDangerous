@@ -18,8 +18,10 @@ public class Game : MonoBehaviour {
 
     public delegate void RestartLevelAction();
     public delegate void RestartLevelCompleteAction();
+    public delegate void GraphicsSettingsApplyAction();
     public static event RestartLevelAction OnRestart;
     public static event RestartLevelCompleteAction OnRestartComplete;
+    public static event GraphicsSettingsApplyAction OnGraphicsSettingsApplied;
 
     public GameObject checkpointPrefab;
     
@@ -67,14 +69,20 @@ public class Game : MonoBehaviour {
     public void Start() {
         // if there's a user object when the game starts, enable input (usually in the editor!)
         FindObjectOfType<User>()?.EnableGameInput();
-
         LoadBindings();
+        ApplyGraphicsOptions();
     }
     
     public void LoadBindings() {
         var bindings = Preferences.Instance.GetString("inputBindings");
         if (!string.IsNullOrEmpty(bindings)) {
             playerBindings.LoadBindingOverridesFromJson(bindings);
+        }
+    }
+
+    public void ApplyGraphicsOptions() {
+        if (OnGraphicsSettingsApplied != null) {
+            OnGraphicsSettingsApplied();
         }
     }
 
@@ -204,6 +212,7 @@ public class Game : MonoBehaviour {
             yield return new WaitForSeconds(0.5f);
             SceneManager.LoadScene("Main Menu");
             ResetGameState();
+            ApplyGraphicsOptions();
             FadeFromBlack();
             ShowCursor();
         }
@@ -252,6 +261,7 @@ public class Game : MonoBehaviour {
     // Return a new level data object hydrated with all the information of the current game state
     private LevelData GenerateLevelData() {
         var levelData = new LevelData();
+        levelData.name = _levelData.name;
         levelData.raceType = _levelData.raceType;
         levelData.location = _levelData.location;
         levelData.environment = _levelData.environment;
@@ -421,6 +431,9 @@ public class Game : MonoBehaviour {
                 }
             }
         }
+        
+        // set up graphics settings (e.g. camera FoV)
+        ApplyGraphicsOptions();
 
         // unload the loading screen
         var unload = SceneManager.UnloadSceneAsync("Loading");
