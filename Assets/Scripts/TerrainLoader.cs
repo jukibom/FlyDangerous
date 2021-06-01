@@ -4,11 +4,14 @@ using System.Collections.Generic;
 using Den.Tools;
 using Engine;
 using MapMagic.Core;
+using Misc;
 using UnityEngine;
 using UnityEngine.Events;
 
+[RequireComponent(typeof(MapMagicObject))]
 public class TerrainLoader : MonoBehaviour {
-    
+
+    private MapMagicObject _mapMagicTerrain;
     public float terrainGrowFrom = -2000f;
     public float minGrowthRate = 5f;
     public float maxGrowthRate = 100f;
@@ -16,14 +19,34 @@ public class TerrainLoader : MonoBehaviour {
     public float minDistanceFromPlayer = 10000f;
 
     private Ship _ship;
-    
+
+    public void Start() {
+        _mapMagicTerrain = GetComponent<MapMagicObject>();
+    }
+
     private void OnEnable() {
         _ship = FindObjectOfType<Ship>();
+        Game.OnGraphicsSettingsApplied += OnGraphicsOptionsApplied;
         MapMagic.Terrains.TerrainTile.OnTileApplied += OnTileApplied;
     }
 
     void OnDisable() {
+        Game.OnGraphicsSettingsApplied -= OnGraphicsOptionsApplied;
         MapMagic.Terrains.TerrainTile.OnTileApplied -= OnTileApplied;
+    }
+
+    void OnGraphicsOptionsApplied() {
+        var terrainLOD = Preferences.Instance.GetFloat("graphics-terrain-geometry-lod");
+        var pixelError = MathfExtensions.Remap(10, 100, 50, 0, terrainLOD);
+        
+        // set map magic preferences
+        _mapMagicTerrain.terrainSettings.pixelError = (int) pixelError;
+        
+        // update all existing terrain too
+        foreach (var terrainTile in _mapMagicTerrain.tiles.All()) {
+            _mapMagicTerrain.terrainSettings.ApplySettings(terrainTile.GetTerrain(false));
+        }
+        
     }
 
     void LoadTerrain() {
