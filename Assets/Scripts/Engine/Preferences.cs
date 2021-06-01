@@ -55,6 +55,7 @@ namespace Engine {
                 case "showMouseWidget":
                 case "flightAssistOnByDefault":
                 case "graphics-ssao":
+                case "graphics-terrain-details":
                     return true;
                 
                 case "relativeMouseXAxis":

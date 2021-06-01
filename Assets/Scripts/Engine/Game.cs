@@ -32,6 +32,8 @@ public class Game : MonoBehaviour {
     
     public InputActionAsset playerBindings;
 
+    [SerializeField] private ScriptableRendererFeature ssao;
+
     [CanBeNull] private ShipParameters _shipParameters;
     public ShipParameters ShipParameters {
         get => _shipParameters == null 
@@ -101,6 +103,7 @@ public class Game : MonoBehaviour {
                 urp.msaaSampleCount = 0;
                 break;
         }
+        ssao.SetActive(Preferences.Instance.GetBool("graphics-ssao"));
     }
 
     public void StartGame(LevelData levelData, bool dynamicPlacementStart = false) {
