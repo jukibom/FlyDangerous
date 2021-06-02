@@ -75,7 +75,7 @@ namespace Engine {
         public float GetDefaultFloat(string key) {
             switch (key) {
                 case "graphics-terrain-geometry-lod":
-                    return 10.0f;
+                    return 70.0f;
                 case "graphics-terrain-texture-distance":
                     return 5000.0f;
                 case "graphics-terrain-chunks":
@@ -84,6 +84,8 @@ namespace Engine {
                     return 8000.0f;
                 case "graphics-field-of-view":
                     return 80.0f;
+                case "graphics-render-scale":
+                    return 1.0f;
                 case "mouseXSensitivity":
                 case "mouseYSensitivity":
                     return 0.5f;
