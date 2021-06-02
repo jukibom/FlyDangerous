@@ -8,37 +8,38 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.XR.Interaction.Toolkit;
 using Random = UnityEngine.Random;
 
 namespace Menus {
     public class MainMenu : MonoBehaviour {
 
-        [SerializeField]
-        private TopMenu topMenu;
-        
-        [SerializeField]
-        private OptionsMenu optionsMenu;
-        
-        [SerializeField]
-        private FreeRoamMenu freeRoamMenu;
-        [SerializeField]
-        private LoadCustomMenu loadCustomMenu;
-
+        [SerializeField] private Canvas canvas;
+        [SerializeField] private TopMenu topMenu;
+        [SerializeField] private OptionsMenu optionsMenu;
+        [SerializeField] private FreeRoamMenu freeRoamMenu;
+        [SerializeField] private LoadCustomMenu loadCustomMenu;
         [SerializeField] private GameObject shipMesh;
         [SerializeField] private GameObject alphaMessage;
+
+        [SerializeField] private Camera flatScreenCamera;
+        [SerializeField] private Camera uiCamera;
+        [SerializeField] private XRRig xrRig;
 
         public static bool FirstRun => Game.Instance?.menuFirstRun ?? true;
 
         void OnEnable() {
             SceneManager.sceneLoaded += OnEnvironmentLoadComplete;
+            Game.OnVRStatus += OnVRStatus;
             StartCoroutine(MenuLoad());
         }
 
         private void OnDisable() {
             SceneManager.sceneLoaded -= OnEnvironmentLoadComplete;
+            Game.OnVRStatus -= OnVRStatus;
         }
 
-        void FixedUpdate() {
+        private void FixedUpdate() {
             // move along at a fixed rate to animate the stars
             // dirty hack job but who cares it's a menu screen
             transform.Translate(0.1f, 0, 0.5f);
@@ -46,6 +47,22 @@ namespace Menus {
             // gently rock the ship mesh back and forth
             var rotationAmount = (0.25f - Mathf.PingPong(Time.time / 20, 0.5f)) / 5;
             shipMesh.transform.Rotate(Vector3.forward, rotationAmount);
+        }
+
+        public void OnVRStatus(bool isVREnabled) {
+            // if VR is enabled, we need to swap our active cameras and make UI panels operate in world space
+            if (isVREnabled) {
+                canvas.renderMode = RenderMode.WorldSpace;
+                flatScreenCamera.enabled = false;
+                uiCamera.enabled = false;
+                xrRig.gameObject.SetActive(true);
+            }
+            else {
+                canvas.renderMode = RenderMode.ScreenSpaceCamera;
+                flatScreenCamera.enabled = true;
+                uiCamera.enabled = true;
+                xrRig.gameObject.SetActive(false);
+            }
         }
 
         public void Race() {

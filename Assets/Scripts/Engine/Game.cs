@@ -278,9 +278,10 @@ public class Game : MonoBehaviour {
         IEnumerator LoadMenu() {
             FadeToBlack();
             yield return new WaitForSeconds(0.5f);
-            SceneManager.LoadScene("Main Menu");
+            yield return SceneManager.LoadSceneAsync("Main Menu");
             ResetGameState();
             ApplyGraphicsOptions();
+            NotifyVRStatus();
             FadeFromBlack();
             FreeCursor();
         }
