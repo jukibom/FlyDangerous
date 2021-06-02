@@ -15,15 +15,16 @@ public class SliderOption : MonoBehaviour {
     public float Value {
         get => slider.value;
         set {
+            UpdateSliderConstraints();
             slider.value = Math.Min(Math.Max(value, minValue), maxValue);
-            // Apparently this doesn't trigger if the value us ONE?! SERIOUSLY? 
+
+            // Apparently this doesn't trigger if the value is ONE?! SERIOUSLY? 
             OnSliderChanged();
         }
     }
 
     public void OnEnable() {
-        slider.minValue = minValue;
-        slider.maxValue = maxValue;
+        UpdateSliderConstraints();
     }
 
     public void OnSliderChanged() {
@@ -44,5 +45,10 @@ public class SliderOption : MonoBehaviour {
             slider.value = 0;
             numberTextBox.text = "0";
         }
+    }
+
+    private void UpdateSliderConstraints() {
+        slider.minValue = minValue;
+        slider.maxValue = maxValue;
     }
 }
