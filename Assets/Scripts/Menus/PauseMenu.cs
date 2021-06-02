@@ -2,6 +2,7 @@ using System.Collections;
 using Audio;
 using Menus.Options;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -13,7 +14,7 @@ namespace Menus {
         PausedOptionsMenu,
     }
     
-    public class PauseMenu : MonoBehaviour {
+    public class PauseMenu : MonoBehaviour, IPointerMoveHandler {
 
         [Tooltip("Used to animate the main panel")] [SerializeField]
         private GameObject mainCanvas;
@@ -22,13 +23,11 @@ namespace Menus {
         private GameObject backgroundCanvas;
 
         [SerializeField] private PauseMainMenu mainPanel;
-
         [SerializeField] private OptionsMenu optionsPanel;
-
         [SerializeField] private Text copyConfirmationText;
         [SerializeField] private Text seedText;
-        
         [SerializeField] private User user;
+        [SerializeField] private CursorIcon cursor;
 
         private PauseMenuState _menuState = PauseMenuState.Unpaused;
 
@@ -42,7 +41,20 @@ namespace Menus {
         }
         private Canvas _menuCanvas;
         private Animator _panelAnimator;
+        private RectTransform _rectTransform;
 
+        private void Start() {
+            seedText.text = Game.Instance.IsTerrainMap ? "SEED: " + Game.Instance.Seed : "";
+            _menuCanvas = backgroundCanvas.GetComponent<Canvas>();
+            _panelAnimator = mainCanvas.GetComponent<Animator>();
+            _rectTransform = GetComponent<RectTransform>();
+            
+            // basic non-paused without enabling input or playing sounds etc
+            Game.Instance.LockCursor();
+            backgroundCanvas.SetActive(false);
+            user.DisableUIInput();
+        }
+        
         public void OnGameMenuToggle() {
             switch (MenuState) {
                 case PauseMenuState.Unpaused:
@@ -56,24 +68,17 @@ namespace Menus {
                     break;
             }
         }
-        
-        private void Start() {
-            seedText.text = Game.Instance.IsTerrainMap ? "SEED: " + Game.Instance.Seed : "";
-            _menuCanvas = backgroundCanvas.GetComponent<Canvas>();
-            _panelAnimator = mainCanvas.GetComponent<Animator>();
 
-            // TODO: Global VR Mode flag to turn the UI into a world space floating panel
-            var VRMODE = false;
-            if (VRMODE) {
-                GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
-                GetComponent<Image>().enabled = false;
-                // TODO: Detach from external camera? Maybe just keep the camera as-is but disable camera accel movements.
+        public void OnPointerMove(PointerEventData eventData) {
+            if (
+                RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                    _rectTransform, 
+                    eventData.position, 
+                    eventData.enterEventCamera, 
+                    out var canvasPosition)
+                ) {
+                cursor.OnPointerMove(canvasPosition);
             }
-            
-            // basic non-paused without enabling input or playing sounds etc
-            Game.Instance.HideCursor();
-            backgroundCanvas.SetActive(false);
-            user.DisableUIInput();
         }
 
         public void Pause() {
@@ -139,7 +144,7 @@ namespace Menus {
         private void UpdatePauseGameState() {
             switch (MenuState) {
                 case PauseMenuState.Unpaused:
-                    Game.Instance.HideCursor();
+                    Game.Instance.LockCursor();
                     backgroundCanvas.SetActive(false);
                     user.EnableGameInput();
                     user.DisableUIInput();
@@ -147,7 +152,8 @@ namespace Menus {
                     Time.timeScale = 1;
                     break;
                 case PauseMenuState.PausedMainMenu: 
-                    Game.Instance.ShowCursor();
+                    Game.Instance.FreeCursor();
+                    cursor.OnPointerMove(Vector2.zero);
                     backgroundCanvas.SetActive(true);
                     user.DisableGameInput();
                     user.EnableUIInput();

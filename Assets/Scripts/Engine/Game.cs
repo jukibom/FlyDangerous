@@ -85,6 +85,9 @@ public class Game : MonoBehaviour {
         FindObjectOfType<User>()?.EnableGameInput();
         LoadBindings();
         ApplyGraphicsOptions();
+        
+        // We use a custom canvas cursor to work in VR and pancake
+        Cursor.visible = false;
 
         // check for command line args
         var args = System.Environment.GetCommandLineArgs();
@@ -135,8 +138,8 @@ public class Game : MonoBehaviour {
         IEnumerator StartXR() {
             yield return UnityEngine.XR.Management.XRGeneralSettings.Instance.Manager.InitializeLoader();
             UnityEngine.XR.Management.XRGeneralSettings.Instance.Manager.StartSubsystems();
-            NotifyVRStatus();
             _isVREnabled = true;
+            NotifyVRStatus();
         }
 
         StartCoroutine(StartXR());
@@ -146,14 +149,14 @@ public class Game : MonoBehaviour {
         if (IsVREnabled) {
             UnityEngine.XR.Management.XRGeneralSettings.Instance.Manager.StopSubsystems();
             UnityEngine.XR.Management.XRGeneralSettings.Instance.Manager.DeinitializeLoader();
-            NotifyVRStatus();
             _isVREnabled = false;
+            NotifyVRStatus();
         }
     }
 
     public void StartGame(LevelData levelData, bool dynamicPlacementStart = false) {
         _levelData = levelData;
-        HideCursor();
+        LockCursor();
 
         string location;
         string environment;
@@ -279,7 +282,7 @@ public class Game : MonoBehaviour {
             ResetGameState();
             ApplyGraphicsOptions();
             FadeFromBlack();
-            ShowCursor();
+            FreeCursor();
         }
 
         StartCoroutine(LoadMenu());
@@ -294,13 +297,11 @@ public class Game : MonoBehaviour {
         StartCoroutine(Quit());
     }
 
-    public void ShowCursor() {
-        Cursor.visible = true;
+    public void FreeCursor() {
         Cursor.lockState = CursorLockMode.None;
     }
 
-    public void HideCursor() {
-        Cursor.visible = false;
+    public void LockCursor() {
         Cursor.lockState = CursorLockMode.Confined;
     }
     
