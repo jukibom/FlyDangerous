@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class DropdownOption : MonoBehaviour {
     public string Preference = "default-preference";
+    public bool savePreference = true;
     [SerializeField]
     private UnityEngine.UI.Dropdown dropdown;
 

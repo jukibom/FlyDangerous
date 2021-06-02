@@ -74,7 +74,9 @@ namespace Menus.Options {
             
             var dropdownOptions = GetComponentsInChildren<DropdownOption>(true);
             foreach (var dropdownOption in dropdownOptions) {
-                dropdownOption.Value = Preferences.Instance.GetString(dropdownOption.Preference);
+                if (dropdownOption.savePreference) {
+                    dropdownOption.Value = Preferences.Instance.GetString(dropdownOption.Preference);
+                }
             }
             
             var sliderOptions = GetComponentsInChildren<SliderOption>(true);
@@ -101,7 +103,9 @@ namespace Menus.Options {
 
             var dropdownOptions = GetComponentsInChildren<DropdownOption>(true);
             foreach (var dropdownOption in dropdownOptions) {
-                Preferences.Instance.SetString(dropdownOption.Preference, dropdownOption.Value);
+                if (dropdownOption.savePreference) {
+                    Preferences.Instance.SetString(dropdownOption.Preference, dropdownOption.Value);
+                }
             }
             
             var sliderOptions = GetComponentsInChildren<SliderOption>(true);
