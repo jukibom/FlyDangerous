@@ -123,15 +123,14 @@ namespace Menus {
             copyConfirmTransform.localPosition = new Vector3(copyConfirmTransform.localPosition.x, 55, copyConfirmTransform.position.z);
             copyConfirmationText.color = new Color(1f, 1f, 1f, 1f);
             
-            // TODO: Why is this sometimes off-centre? wtf?
             IEnumerator FadeText() {
                 while (copyConfirmationText.color.a > 0.0f) {
                     copyConfirmationText.color = new Color(1f, 1f, 1f, copyConfirmationText.color.a - Time.unscaledDeltaTime);
                     
                     copyConfirmTransform.localPosition = new Vector3(
-                        copyConfirmTransform.localPosition.x, 
+                        gameObject.transform.localPosition.x + 160, 
                         copyConfirmationText.gameObject.transform.localPosition.y + (Time.unscaledDeltaTime * 20), 
-                        copyConfirmTransform.position.z
+                        gameObject.transform.localPosition.z
                     );
                     yield return null;
                 }
@@ -160,6 +159,7 @@ namespace Menus {
                     user.ResetMouseToCentre();
                     optionsPanel.Hide();
                     mainPanel.Show();
+                    copyConfirmationText.color = new Color(1f, 1f, 1f, 0f);
                     Time.timeScale = 0;
                     break;
                 case PauseMenuState.PausedOptionsMenu:
