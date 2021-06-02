@@ -1,10 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Den.Tools;
 using Engine;
 using JetBrains.Annotations;
 using MapMagic.Core;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
@@ -20,9 +22,12 @@ public class Game : MonoBehaviour {
     public delegate void RestartLevelAction();
     public delegate void RestartLevelCompleteAction();
     public delegate void GraphicsSettingsApplyAction();
+
+    public delegate void VRToggledAction(bool enabled);
     public static event RestartLevelAction OnRestart;
     public static event RestartLevelCompleteAction OnRestartComplete;
     public static event GraphicsSettingsApplyAction OnGraphicsSettingsApplied;
+    public static event VRToggledAction OnVRStatus;
 
     public GameObject checkpointPrefab;
     
@@ -33,8 +38,14 @@ public class Game : MonoBehaviour {
     public InputActionAsset playerBindings;
 
     [SerializeField] private ScriptableRendererFeature ssao;
-
+    
     [CanBeNull] private ShipParameters _shipParameters;
+    
+    private bool _isVREnabled = false;
+    public bool IsVREnabled {
+        get => _isVREnabled;
+    }
+
     public ShipParameters ShipParameters {
         get => _shipParameters == null 
             ? FindObjectOfType<Ship>()?.Parameters ?? Ship.ShipParameterDefaults
@@ -74,8 +85,22 @@ public class Game : MonoBehaviour {
         FindObjectOfType<User>()?.EnableGameInput();
         LoadBindings();
         ApplyGraphicsOptions();
+
+        // check for command line args
+        var args = System.Environment.GetCommandLineArgs();
+        if (args.ToList().Contains("-vr")) {
+            EnableVR();
+        }
     }
-    
+
+    private void OnDestroy() {
+        DisableVRIfNeeded();
+    }
+
+    private void OnApplicationQuit() {
+        DisableVRIfNeeded();
+    }
+
     public void LoadBindings() {
         var bindings = Preferences.Instance.GetString("inputBindings");
         if (!string.IsNullOrEmpty(bindings)) {
@@ -104,6 +129,26 @@ public class Game : MonoBehaviour {
                 break;
         }
         ssao.SetActive(Preferences.Instance.GetBool("graphics-ssao"));
+    }
+
+    public void EnableVR() {
+        IEnumerator StartXR() {
+            yield return UnityEngine.XR.Management.XRGeneralSettings.Instance.Manager.InitializeLoader();
+            UnityEngine.XR.Management.XRGeneralSettings.Instance.Manager.StartSubsystems();
+            NotifyVRStatus();
+            _isVREnabled = true;
+        }
+
+        StartCoroutine(StartXR());
+    }
+
+    public void DisableVRIfNeeded() {
+        if (IsVREnabled) {
+            UnityEngine.XR.Management.XRGeneralSettings.Instance.Manager.StopSubsystems();
+            UnityEngine.XR.Management.XRGeneralSettings.Instance.Manager.DeinitializeLoader();
+            NotifyVRStatus();
+            _isVREnabled = false;
+        }
     }
 
     public void StartGame(LevelData levelData, bool dynamicPlacementStart = false) {
@@ -452,8 +497,9 @@ public class Game : MonoBehaviour {
             }
         }
         
-        // set up graphics settings (e.g. camera FoV)
+        // set up graphics settings (e.g. camera FoV) + VR status (cameras etc)
         ApplyGraphicsOptions();
+        NotifyVRStatus();
 
         // unload the loading screen
         var unload = SceneManager.UnloadSceneAsync("Loading");
@@ -502,5 +548,11 @@ public class Game : MonoBehaviour {
 
         var loadText = GameObject.FindGameObjectWithTag("DynamicLoadingText").GetComponent<Text>();
         then(loadText);
+    }
+
+    private void NotifyVRStatus() {
+        if (OnVRStatus != null) {
+            OnVRStatus(IsVREnabled);
+        }
     }
 }

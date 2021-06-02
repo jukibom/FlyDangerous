@@ -61,6 +61,7 @@ public class User : MonoBehaviour {
     public void OnEnable() {
         pauseUIInputModule.cancel.action.performed += _cancelAction;
         Game.OnGraphicsSettingsApplied += OnGraphicsSettingsApplied;
+        Game.OnVRStatus += SetVRStatus;
         ResetMouseToCentre();
         Console.Instance.Clear();
     }
@@ -68,6 +69,7 @@ public class User : MonoBehaviour {
     public void OnDisable() {
         pauseUIInputModule.cancel.action.performed -= _cancelAction;
         Game.OnGraphicsSettingsApplied -= OnGraphicsSettingsApplied;
+        Game.OnVRStatus -= SetVRStatus;
     }
 
     public void OnGraphicsSettingsApplied() {
@@ -142,20 +144,22 @@ public class User : MonoBehaviour {
         pauseUIInputModule.enabled = false;
     }
 
-    public void EnableVR() {
-        var pauseMenuCanvas = pauseMenu.GetComponent<Canvas>();
-        pauseMenuCanvas.renderMode = RenderMode.WorldSpace;
-        flatScreenCamera.enabled = false;
-        uiCamera.enabled = false;
-        xrRig.gameObject.SetActive(true);
-    }
-
-    public void DisableVR() {
-        var pauseMenuCanvas = pauseMenu.GetComponent<Canvas>();
-        pauseMenuCanvas.renderMode = RenderMode.ScreenSpaceCamera;
-        flatScreenCamera.enabled = true;
-        uiCamera.enabled = true;
-        xrRig.gameObject.SetActive(false);
+    public void SetVRStatus(bool isVREnabled) {
+        // if VR is enabled, we need to swap our active cameras and make UI panels operate in world space
+        if (isVREnabled) {
+            var pauseMenuCanvas = pauseMenu.GetComponent<Canvas>();
+            pauseMenuCanvas.renderMode = RenderMode.WorldSpace;
+            flatScreenCamera.enabled = false;
+            uiCamera.enabled = false;
+            xrRig.gameObject.SetActive(true);
+        }
+        else {
+            var pauseMenuCanvas = pauseMenu.GetComponent<Canvas>();
+            pauseMenuCanvas.renderMode = RenderMode.ScreenSpaceCamera;
+            flatScreenCamera.enabled = true;
+            uiCamera.enabled = true;
+            xrRig.gameObject.SetActive(false);
+        }
     }
 
     public void ResetMouseToCentre() {
@@ -288,8 +292,10 @@ public class User : MonoBehaviour {
     public void OnResetHMDView(InputValue value) {
         var xrRig = gameObject.GetComponentInChildren<XRRig>();
         if (xrRig) {
+            Debug.Log("Before " + xrRig.transform.position);
             xrRig.MoveCameraToWorldLocation(transform.position);
             xrRig.MatchRigUpCameraForward(transform.up, transform.forward);
+            Debug.Log("After " + xrRig.transform.position);
         }
         
     }
