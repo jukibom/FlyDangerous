@@ -149,6 +149,7 @@ public class User : MonoBehaviour {
         if (isVREnabled) {
             var pauseMenuCanvas = pauseMenu.GetComponent<Canvas>();
             pauseMenuCanvas.renderMode = RenderMode.WorldSpace;
+            pauseMenuCanvas.GetComponent<RectTransform>().sizeDelta = new Vector2(1280, 1000); 
             flatScreenCamera.enabled = false;
             uiCamera.enabled = false;
             xrRig.gameObject.SetActive(true);
@@ -297,7 +298,6 @@ public class User : MonoBehaviour {
             xrRig.MatchRigUpCameraForward(transform.up, transform.forward);
             Debug.Log("After " + xrRig.transform.position);
         }
-        
     }
 
     public void OnToggleConsole(InputValue value) {
