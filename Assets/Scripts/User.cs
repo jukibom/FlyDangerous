@@ -103,9 +103,6 @@ public class User : MonoBehaviour {
             playerShip.SetLateralH(lateralH);
             playerShip.SetLateralV(lateralV);
             playerShip.Boost(_boost);
-
-            // don't allow holding down boost (except at the start, when input is disabled anyway
-            _boost = false;
         }
 
         if (boostButtonEnabledOverride) {
@@ -265,6 +262,7 @@ public class User : MonoBehaviour {
 
     public void OnBoost(InputValue value) {
         _boost = value.isPressed;
+        Debug.Log(_boost);
     }
 
     public void OnVelocityLimiter(InputValue value) {

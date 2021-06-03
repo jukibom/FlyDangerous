@@ -149,7 +149,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Boost"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""ae9270a1-0fa9-4611-bb01-798738d7842c"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",

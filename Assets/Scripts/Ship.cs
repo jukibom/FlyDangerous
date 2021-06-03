@@ -32,6 +32,8 @@ public class ShipParameters {
     public float totalBoostRotationalTime;
     public float boostMaxSpeedDropOffTime;
     public float boostRechargeTime;
+    public float boostCapacitorPercentCost;
+    public float boostCapacityPercentChargeRate;
     public float minUserLimitedVelocity;
 
     public string ToJsonString() {
@@ -77,6 +79,8 @@ public class Ship : MonoBehaviour {
             totalBoostRotationalTime = 7f,
             boostMaxSpeedDropOffTime = 12f,
             boostRechargeTime = 4f,
+            boostCapacitorPercentCost = 70f,
+            boostCapacityPercentChargeRate = 10f,
             minUserLimitedVelocity = 250f,
         };
     }
@@ -106,6 +110,8 @@ public class Ship : MonoBehaviour {
             parameters.totalBoostRotationalTime = totalBoostRotationalTime;
             parameters.boostMaxSpeedDropOffTime = boostMaxSpeedDropOffTime;
             parameters.boostRechargeTime = boostRechargeTime;
+            parameters.boostCapacitorPercentCost = boostCapacitorPercentCost;
+            parameters.boostCapacityPercentChargeRate = boostCapacityPercentChargeRate;
             parameters.minUserLimitedVelocity = minUserLimitedVelocity;
             return parameters;
         }
@@ -132,12 +138,16 @@ public class Ship : MonoBehaviour {
             totalBoostRotationalTime = value.totalBoostRotationalTime;
             boostMaxSpeedDropOffTime = value.boostMaxSpeedDropOffTime;
             boostRechargeTime = value.boostRechargeTime;
+            boostCapacitorPercentCost = value.boostCapacitorPercentCost;
+            boostCapacityPercentChargeRate = value.boostCapacityPercentChargeRate;
             minUserLimitedVelocity = value.minUserLimitedVelocity;
         }
     }
     
     [SerializeField] private Text velocityIndicator;
     [SerializeField] private Image accelerationBar;
+    [SerializeField] private Text boostIndicator;
+    [SerializeField] private Image boostCapacitorBar;
     [SerializeField] private Light shipLights;
     
     // TODO: split this into various thruster powers
@@ -157,6 +167,8 @@ public class Ship : MonoBehaviour {
     [SerializeField] private float totalBoostRotationalTime = 7f;
     [SerializeField] private float boostMaxSpeedDropOffTime = 12f;
     [SerializeField] private float boostRechargeTime = 4f;
+    [SerializeField] private float boostCapacitorPercentCost = 75f;
+    [SerializeField] private float boostCapacityPercentChargeRate = 10f;
     [SerializeField] private float inertialTensorMultiplier = 125f;
     [SerializeField] private float minUserLimitedVelocity = 250f;
 
@@ -166,6 +178,7 @@ public class Ship : MonoBehaviour {
     private bool _isBoosting;
     private float _currentBoostTime;
     private float _boostedMaxSpeedDelta;
+    private float _boostCapacitorPercent = 100f;
 
     private float _prevVelocity;
     private bool _userVelocityLimit;
@@ -191,7 +204,6 @@ public class Ship : MonoBehaviour {
 
     [CanBeNull] private Coroutine _boostCoroutine;
 
-    private Transform _transformComponent;
     private Rigidbody _rigidBody;
     
     public float Velocity {
@@ -201,7 +213,6 @@ public class Ship : MonoBehaviour {
     }
 
     public void Awake() {
-        _transformComponent = GetComponent<Transform>();
         _rigidBody = GetComponent<Rigidbody>();
     }
 
@@ -233,6 +244,7 @@ public class Ship : MonoBehaviour {
         _yawTargetFactor = 0;
         _boostCharging = false;
         _isBoosting = false;
+        _boostCapacitorPercent = 100f;
         _prevVelocity = 0;
         var shipCamera = GetComponentInChildren<ShipCamera>();
         if (shipCamera) {
@@ -302,7 +314,8 @@ public class Ship : MonoBehaviour {
 
     public void Boost(bool isPressed) {
         var boost = isPressed;
-        if (boost && !_boostCharging) {
+        if (boost && !_boostCharging && _boostCapacitorPercent > boostCapacitorPercentCost) {
+            _boostCapacitorPercent -= boostCapacitorPercentCost;
             _boostCharging = true;
 
             IEnumerator DoBoost() {
@@ -430,6 +443,15 @@ public class Ship : MonoBehaviour {
             accelerationBar.fillAmount = MathfExtensions.Remap(0, 1, 0, 0.755f, acceleration);
             accelerationBar.color = Color.Lerp(Color.green, Color.red, acceleration);
         }
+        
+        if (boostIndicator != null) {
+            boostIndicator.text = ((int)_boostCapacitorPercent).ToString(CultureInfo.InvariantCulture) + "%";
+        }
+
+        if (boostCapacitorBar != null) {
+            boostCapacitorBar.fillAmount = MathfExtensions.Remap(0, 100, 0, 0.775f, _boostCapacitorPercent);
+            boostCapacitorBar.color = Color.Lerp(Color.red, Color.green, _boostCapacitorPercent / 100);
+        }
     }
     
     /**
@@ -440,6 +462,10 @@ public class Ship : MonoBehaviour {
     }
 
     private void CalculateBoost(out float maxThrustWithBoost, out float maxTorqueWithBoost, out float boostedMaxSpeedDelta) {
+
+        _boostCapacitorPercent = Mathf.Min(100,
+            _boostCapacitorPercent + boostCapacityPercentChargeRate * Time.fixedDeltaTime);
+        
         maxThrustWithBoost = maxThrust;
         maxTorqueWithBoost = maxThrust * torqueThrustMultiplier;
         boostedMaxSpeedDelta = _boostedMaxSpeedDelta;
@@ -534,9 +560,9 @@ public class Ship : MonoBehaviour {
         // convert global rigid body velocity into local space
         Vector3 localAngularVelocity = transform.InverseTransformDirection(_rigidBody.angularVelocity);
 
-        CalculateAssistedAxis(_pitchTargetFactor, localAngularVelocity.x, 0.3f, 2, out _pitch);
+        CalculateAssistedAxis(_pitchTargetFactor, localAngularVelocity.x, 0.3f, 1.5f, out _pitch);
         CalculateAssistedAxis(_yawTargetFactor, localAngularVelocity.y, 0.3f, 1.5f, out _yaw);
-        CalculateAssistedAxis(_rollTargetFactor, localAngularVelocity.z * -1, 0.3f, 1, out _roll);
+        CalculateAssistedAxis(_rollTargetFactor, localAngularVelocity.z * -1, 0.3f, 1.5f, out _roll);
     }
     
     /**
