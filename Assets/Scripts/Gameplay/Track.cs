@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Audio;
 using Den.Tools;
 using Engine;
 using JetBrains.Annotations;
@@ -89,9 +90,12 @@ public class Track : MonoBehaviour {
                 // enable user input but disable actual movement
                 _user.EnableGameInput();
                 _user.movementEnabled = false;
-
-                // first beep
+                
+                // half a second (2.5 second total) before countdown
                 yield return new WaitForSeconds(0.5f);
+                
+                // start countdown sounds
+                AudioManager.Instance.Play("tt-countdown");
                 
                 // second beep (boost available here)
                 yield return new WaitForSeconds(1);
