@@ -5,6 +5,7 @@ using System.Linq;
 using Audio;
 using Engine;
 using JetBrains.Annotations;
+using Misc;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Experimental.GlobalIllumination;
@@ -136,6 +137,7 @@ public class Ship : MonoBehaviour {
     }
     
     [SerializeField] private Text velocityIndicator;
+    [SerializeField] private Image accelerationBar;
     [SerializeField] private Light shipLights;
     
     // TODO: split this into various thruster powers
@@ -411,16 +413,22 @@ public class Ship : MonoBehaviour {
     // Apply all physics updates in fixed intervals (WRITE)
     private void FixedUpdate() {
         CalculateBoost(out var maxThrustWithBoost, out var maxTorqueWithBoost, out var boostedMaxSpeedDelta);
-        CalculateFlightForces(maxThrustWithBoost, maxTorqueWithBoost);
+        CalculateFlightForces(maxThrustWithBoost, maxTorqueWithBoost, out var thrust);
         
         // TODO: clamping should be based on input rather than modifying the rigid body - if gravity pulls you down then that's fine, similar to if a collision yeets you into a spinning mess.
         ClampMaxSpeed(boostedMaxSpeedDelta);
-        UpdateIndicators();
+        UpdateIndicators(thrust);
     }
 
-    private void UpdateIndicators() {
+    private void UpdateIndicators(float thrust) {
         if (velocityIndicator != null) {
             velocityIndicator.text = Velocity.ToString(CultureInfo.InvariantCulture);
+        }
+
+        if (accelerationBar != null) {
+            var acceleration = thrust / maxThrust;
+            accelerationBar.fillAmount = MathfExtensions.Remap(0, 1, 0, 0.755f, acceleration);
+            accelerationBar.color = Color.Lerp(Color.green, Color.red, acceleration);
         }
     }
     
@@ -467,7 +475,7 @@ public class Ship : MonoBehaviour {
         }
     }
 
-    private void CalculateFlightForces(float maxThrustWithBoost, float maxTorqueWithBoost) {
+    private void CalculateFlightForces(float maxThrustWithBoost, float maxTorqueWithBoost, out float calculatedThrust) {
         if (_flightAssistVectorControl) {
             CalculateVectorControlFlightAssist();
         }
@@ -508,6 +516,8 @@ public class Ship : MonoBehaviour {
         
         _rigidBody.AddForce(transform.TransformDirection(thrust));
         _rigidBody.AddTorque(transform.TransformDirection(torque));
+
+        calculatedThrust = Math.Abs(thrust.x) + Math.Abs(thrust.y) + Math.Abs(thrust.z);
     }
 
     private void CalculateVectorControlFlightAssist() {
