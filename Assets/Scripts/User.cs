@@ -149,7 +149,9 @@ public class User : MonoBehaviour {
         if (isVREnabled) {
             var pauseMenuCanvas = pauseMenu.GetComponent<Canvas>();
             pauseMenuCanvas.renderMode = RenderMode.WorldSpace;
-            pauseMenuCanvas.GetComponent<RectTransform>().sizeDelta = new Vector2(1280, 1000); 
+            var pauseMenuRect = pauseMenuCanvas.GetComponent<RectTransform>();
+            pauseMenuRect.sizeDelta = new Vector2(1280, 1000);
+            pauseMenuRect.localScale /= 2;
             flatScreenCamera.enabled = false;
             uiCamera.enabled = false;
             xrRig.gameObject.SetActive(true);
@@ -157,6 +159,9 @@ public class User : MonoBehaviour {
         else {
             var pauseMenuCanvas = pauseMenu.GetComponent<Canvas>();
             pauseMenuCanvas.renderMode = RenderMode.ScreenSpaceCamera;
+            var pauseMenuRect = pauseMenuCanvas.GetComponent<RectTransform>();
+            pauseMenuRect.sizeDelta = new Vector2(1920, 1080);
+            pauseMenuRect.localScale *= 2;
             flatScreenCamera.enabled = true;
             uiCamera.enabled = true;
             xrRig.gameObject.SetActive(false);
@@ -291,12 +296,8 @@ public class User : MonoBehaviour {
     }
 
     public void OnResetHMDView(InputValue value) {
-        var xrRig = gameObject.GetComponentInChildren<XRRig>();
         if (xrRig) {
-            Debug.Log("Before " + xrRig.transform.position);
-            xrRig.MoveCameraToWorldLocation(transform.position);
-            xrRig.MatchRigUpCameraForward(transform.up, transform.forward);
-            Debug.Log("After " + xrRig.transform.position);
+            Game.Instance.ResetHMDView(xrRig, transform.position, transform.forward);
         }
     }
 

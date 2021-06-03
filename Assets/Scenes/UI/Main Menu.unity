@@ -1030,6 +1030,7 @@ GameObject:
   m_Component:
   - component: {fileID: 339787321}
   - component: {fileID: 339787323}
+  - component: {fileID: 339787324}
   - component: {fileID: 339787322}
   m_Layer: 0
   m_Name: Main Menu
@@ -1097,6 +1098,36 @@ MonoBehaviour:
   flatScreenCamera: {fileID: 1275474031}
   uiCamera: {fileID: 1841434655}
   xrRig: {fileID: 956907116}
+--- !u!114 &339787324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 339787320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: cdb424aa45592664faeac2ce28028bc8, type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 1
+  m_DefaultControlScheme: Everything
+  m_DefaultActionMap: Ship
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &495656921
 GameObject:
   m_ObjectHideFlags: 0
@@ -1679,7 +1710,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MoveRepeatDelay: 0
+  m_MoveRepeatDelay: 0.5
   m_MoveRepeatRate: 0.1
   m_XRTrackingOrigin: {fileID: 0}
   m_ActionsAsset: {fileID: -944628639613478452, guid: cdb424aa45592664faeac2ce28028bc8, type: 3}
@@ -3134,7 +3165,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 956907114}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: -17.73949}
+  m_LocalPosition: {x: 0, y: 0.3861678, z: -17.73949}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1755688315}

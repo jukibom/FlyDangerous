@@ -6,6 +6,7 @@ using Engine;
 using Menus.Options;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
@@ -49,6 +50,12 @@ namespace Menus {
             shipMesh.transform.Rotate(Vector3.forward, rotationAmount);
         }
 
+        public void OnResetHMDView(InputValue inputValue) {
+            if (xrRig) {
+                Game.Instance.ResetHMDView(xrRig, flatScreenCamera.transform.position, transform.forward);
+            }
+        }
+        
         public void OnVRStatus(bool isVREnabled) {
             // if VR is enabled, we need to swap our active cameras and make UI panels operate in world space
             if (isVREnabled) {

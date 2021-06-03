@@ -13,6 +13,7 @@ using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.XR.Interaction.Toolkit;
 using Environment = Engine.Environment;
 
 public class Game : MonoBehaviour {
@@ -22,7 +23,6 @@ public class Game : MonoBehaviour {
     public delegate void RestartLevelAction();
     public delegate void RestartLevelCompleteAction();
     public delegate void GraphicsSettingsApplyAction();
-
     public delegate void VRToggledAction(bool enabled);
     public static event RestartLevelAction OnRestart;
     public static event RestartLevelCompleteAction OnRestartComplete;
@@ -30,16 +30,14 @@ public class Game : MonoBehaviour {
     public static event VRToggledAction OnVRStatus;
 
     public GameObject checkpointPrefab;
-    
     private LevelData _levelData = new LevelData();
     public LevelData LevelDataAsLoaded => _levelData;
     public LevelData LevelDataCurrent => GenerateLevelData();
-    
     public InputActionAsset playerBindings;
-
     [SerializeField] private ScriptableRendererFeature ssao;
-    
     [CanBeNull] private ShipParameters _shipParameters;
+    private Vector3 _hmdPosition;
+    private Quaternion _hmdRotation; 
     
     private bool _isVREnabled = false;
     public bool IsVREnabled {
@@ -152,6 +150,14 @@ public class Game : MonoBehaviour {
             _isVREnabled = false;
             NotifyVRStatus();
         }
+    }
+
+    public void ResetHMDView(XRRig xrRig, Vector3 targetPositionWorld, Vector3 targetForwardRotation) {
+        var before = xrRig.transform.position;
+        xrRig.MoveCameraToWorldLocation(targetPositionWorld);
+        xrRig.MatchRigUpCameraForward(Vector3.up, targetForwardRotation);
+        _hmdRotation = xrRig.transform.rotation;
+        _hmdPosition = xrRig.transform.position - before;
     }
 
     public void StartGame(LevelData levelData, bool dynamicPlacementStart = false) {
@@ -555,6 +561,15 @@ public class Game : MonoBehaviour {
     private void NotifyVRStatus() {
         if (OnVRStatus != null) {
             OnVRStatus(IsVREnabled);
+
+            // if user has previously applied a HMD position, reapply
+            if (IsVREnabled) {
+                var xrRig = FindObjectOfType<XRRig>();
+                if (xrRig) {
+                    xrRig.transform.rotation = _hmdRotation;
+                    xrRig.transform.localPosition = xrRig.transform.localPosition + _hmdPosition;
+                }
+            }
         }
     }
 }
