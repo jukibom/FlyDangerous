@@ -11,13 +11,17 @@ New:
         * MSAA
         * SSAO
         * Various terrain settings
+    * Boost now has a recharge mechanic - holding the button will always boost when available, but repeated boosts are punished with drained capacitor.
+        * Added values to dev options
     * Throttle no longer effectively max under boost - there is up to 40% draw back which can be achieved by pulling back.
     * Ship lateral thrusters no longer act on independent max thrusts - they share the same max thrust pool and therefore may be bled off.
         * Some ship agility re-balancing has occured due to this change, see Changes below
     * Time Trial start timer with sound
         * Counts down from 2.5 seconds (beep on 2, 1, 0)
         * Boost is available 1 second before start, holding the button beforehand works
-    * Added thrust indicator
+    * Added thrust + boost indicators
+    * Added binding to use lateral vs rotational flight assists
+        * Toggling both will defer to default preference (e.g. if usually on, will enable both if only one is active and disable if both active)
     
 Changes:
     * Buffed ship agility 
@@ -26,12 +30,14 @@ Changes:
         * Boost thrust multiplier increased by 40%
         * Vertical thruster multiplier increased by ~12%
         * Horizontal thruster multiplier increased by ~30%
-    * Removed placeholder UI elements in cockpit and replaced them with ... absolutely nothing ^_^
+    * Removed placeholder display UI elements in cockpit and replaced them with ... absolutely nothing ^_^
+    * Renamed input option "flight assist on by default" to "prefer flight assists on" (now multiple assists)
         
 Fixes:
     * Timer no longer displays when restarting a free roam session
     * User preferences are now applied on startup by the Game class rather than User in-game
     * Track name is now serialised when copied to json
+    * Fixed some binding options not displaying device name
 
 (v0.1.5)
 -------

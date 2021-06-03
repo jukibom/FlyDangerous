@@ -22,6 +22,8 @@ public class DevPanel : MonoBehaviour {
     [SerializeField] private InputField totalBoostRotationalTimeTextField;
     [SerializeField] private InputField boostMaxSpeedDropOffTimeTextField;
     [SerializeField] private InputField boostRechargeTimeTextField;
+    [SerializeField] private InputField boostCapacitorCostTextField;
+    [SerializeField] private InputField boostCapacitorRechargeRateTextField;
     [SerializeField] private InputField intertialTensorMultiplierTextField;
     [SerializeField] private InputField minUserLimitedVelocityTextField;
 
@@ -50,6 +52,8 @@ public class DevPanel : MonoBehaviour {
         totalBoostRotationalTimeTextField.placeholder.GetComponent<Text>().text = defaults.totalBoostRotationalTime.ToString();
         boostMaxSpeedDropOffTimeTextField.placeholder.GetComponent<Text>().text = defaults.boostMaxSpeedDropOffTime.ToString();
         boostRechargeTimeTextField.placeholder.GetComponent<Text>().text = defaults.boostRechargeTime.ToString();
+        boostCapacitorCostTextField.placeholder.GetComponent<Text>().text = defaults.boostCapacitorPercentCost.ToString();
+        boostCapacitorRechargeRateTextField.placeholder.GetComponent<Text>().text = defaults.boostCapacityPercentChargeRate.ToString();
         intertialTensorMultiplierTextField.placeholder.GetComponent<Text>().text = defaults.inertiaTensorMultiplier.ToString();
         minUserLimitedVelocityTextField.placeholder.GetComponent<Text>().text = defaults.minUserLimitedVelocity.ToString();
         
@@ -93,6 +97,8 @@ public class DevPanel : MonoBehaviour {
         totalBoostRotationalTimeTextField.text = parameters.totalBoostRotationalTime.ToString();
         boostMaxSpeedDropOffTimeTextField.text = parameters.boostMaxSpeedDropOffTime.ToString();
         boostRechargeTimeTextField.text = parameters.boostRechargeTime.ToString();
+        boostCapacitorCostTextField.text = parameters.boostCapacitorPercentCost.ToString();
+        boostCapacitorRechargeRateTextField.text = parameters.boostCapacityPercentChargeRate.ToString();
         intertialTensorMultiplierTextField.text = parameters.inertiaTensorMultiplier.ToString();
         minUserLimitedVelocityTextField.text = parameters.minUserLimitedVelocity.ToString();
 
@@ -126,6 +132,8 @@ public class DevPanel : MonoBehaviour {
             totalBoostRotationalTime = float.Parse(totalBoostRotationalTimeTextField.text),
             boostMaxSpeedDropOffTime = float.Parse(boostMaxSpeedDropOffTimeTextField.text),
             boostRechargeTime = float.Parse(boostRechargeTimeTextField.text),
+            boostCapacitorPercentCost = float.Parse(boostCapacitorCostTextField.text),
+            boostCapacityPercentChargeRate = float.Parse(boostCapacitorRechargeRateTextField.text),
             inertiaTensorMultiplier = float.Parse(intertialTensorMultiplierTextField.text),
             minUserLimitedVelocity = float.Parse(minUserLimitedVelocityTextField.text),
         };
