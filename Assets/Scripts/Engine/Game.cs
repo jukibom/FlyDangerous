@@ -90,9 +90,6 @@ public class Game : MonoBehaviour {
         if (args.ToList().Contains("-vr")) {
             EnableVR();
         }
-        
-        // TODO: not this ^_^
-        // EnableVR();
     }
 
     private void OnDestroy() {

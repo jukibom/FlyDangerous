@@ -1,9 +1,22 @@
 ﻿ALPHA 4 (v0.1.6)
 -------
 New: 
+    * VR Mode: Set the `-vr` flag parameter when launching the exe to use OpenXR.
+    * Custom cursor drawn in-scene on the UI canvases - this allows mouse operation in VR.
+    * Graphics options!
+        * Resolution [Applied instantly]
+        * Screen mode (borderless / fullscreen / windowed) [Applied instantly]
+        * Camera Field of View
+        * Render scale 
+        * MSAA
+        * SSAO
+        * Various terrain settings
     * Throttle no longer effectively max under boost - there is up to 40% draw back which can be achieved by pulling back.
     * Ship lateral thrusters no longer act on independent max thrusts - they share the same max thrust pool and therefore may be bled off.
         * Some ship agility re-balancing has occured due to this change, see Changes below
+    * Time Trial start timer with sound
+        * Counts down from 2.5 seconds (beep on 2, 1, 0)
+        * Boost is available 1 second before start, holding the button beforehand works
     
 Changes:
     * Buffed ship agility 
@@ -12,8 +25,11 @@ Changes:
         * Boost thrust multiplier increased by 40%
         * Vertical thruster multiplier increased by ~12%
         * Horizontal thruster multiplier increased by ~30%
+    * Removed placeholder UI elements in cockpit and replaced them with ... absolutely nothing ^_^
         
 Fixes:
+    * Timer no longer displays when restarting a free roam session
+    * User preferences are now applied on startup by the Game class rather than User in-game
     * Track name is now serialised when copied to json
 
 (v0.1.5)
