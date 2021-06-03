@@ -93,26 +93,26 @@ public class Ship : MonoBehaviour {
             parameters.mass = Mathf.Round(_rigidBody.mass);
             parameters.drag = _rigidBody.drag;
             parameters.angularDrag = _rigidBody.angularDrag;
-            parameters.inertiaTensorMultiplier = inertialTensorMultiplier;
-            parameters.maxSpeed = maxSpeed; 
-            parameters.maxBoostSpeed = maxBoostSpeed;
-            parameters.maxThrust = maxThrust;
-            parameters.torqueThrustMultiplier = torqueThrustMultiplier;
-            parameters.throttleMultiplier = throttleMultiplier;
-            parameters.latHMultiplier = latHMultiplier;
-            parameters.latVMultiplier = latVMultiplier;
-            parameters.pitchMultiplier = pitchMultiplier;
-            parameters.rollMultiplier = rollMultiplier;
-            parameters.yawMultiplier = yawMultiplier;
-            parameters.thrustBoostMultiplier = thrustBoostMultiplier;
-            parameters.torqueBoostMultiplier = torqueBoostMultiplier;
-            parameters.totalBoostTime = totalBoostTime;
-            parameters.totalBoostRotationalTime = totalBoostRotationalTime;
-            parameters.boostMaxSpeedDropOffTime = boostMaxSpeedDropOffTime;
-            parameters.boostRechargeTime = boostRechargeTime;
-            parameters.boostCapacitorPercentCost = boostCapacitorPercentCost;
-            parameters.boostCapacityPercentChargeRate = boostCapacityPercentChargeRate;
-            parameters.minUserLimitedVelocity = minUserLimitedVelocity;
+            parameters.inertiaTensorMultiplier = _inertialTensorMultiplier;
+            parameters.maxSpeed = _maxSpeed; 
+            parameters.maxBoostSpeed = _maxBoostSpeed;
+            parameters.maxThrust = _maxThrust;
+            parameters.torqueThrustMultiplier = _torqueThrustMultiplier;
+            parameters.throttleMultiplier = _throttleMultiplier;
+            parameters.latHMultiplier = _latHMultiplier;
+            parameters.latVMultiplier = _latVMultiplier;
+            parameters.pitchMultiplier = _pitchMultiplier;
+            parameters.rollMultiplier = _rollMultiplier;
+            parameters.yawMultiplier = _yawMultiplier;
+            parameters.thrustBoostMultiplier = _thrustBoostMultiplier;
+            parameters.torqueBoostMultiplier = _torqueBoostMultiplier;
+            parameters.totalBoostTime = _totalBoostTime;
+            parameters.totalBoostRotationalTime = _totalBoostRotationalTime;
+            parameters.boostMaxSpeedDropOffTime = _boostMaxSpeedDropOffTime;
+            parameters.boostRechargeTime = _boostRechargeTime;
+            parameters.boostCapacitorPercentCost = _boostCapacitorPercentCost;
+            parameters.boostCapacityPercentChargeRate = _boostCapacityPercentChargeRate;
+            parameters.minUserLimitedVelocity = _minUserLimitedVelocity;
             return parameters;
         }
         set {
@@ -120,27 +120,27 @@ public class Ship : MonoBehaviour {
             _rigidBody.drag = value.drag;
             _rigidBody.angularDrag = value.angularDrag;
             _rigidBody.inertiaTensor = _initialInertiaTensor * value.inertiaTensorMultiplier;
-            inertialTensorMultiplier = value.inertiaTensorMultiplier;
+            _inertialTensorMultiplier = value.inertiaTensorMultiplier;
             
-            maxSpeed = value.maxSpeed;
-            maxBoostSpeed = value.maxBoostSpeed;
-            maxThrust = value.maxThrust;
-            torqueThrustMultiplier = value.torqueThrustMultiplier;
-            throttleMultiplier = value.throttleMultiplier;
-            latHMultiplier = value.latHMultiplier;
-            latVMultiplier = value.latVMultiplier;
-            pitchMultiplier = value.pitchMultiplier;
-            rollMultiplier = value.rollMultiplier;
-            yawMultiplier = value.yawMultiplier;
-            thrustBoostMultiplier = value.thrustBoostMultiplier;
-            torqueBoostMultiplier = value.torqueBoostMultiplier;
-            totalBoostTime = value.totalBoostTime;
-            totalBoostRotationalTime = value.totalBoostRotationalTime;
-            boostMaxSpeedDropOffTime = value.boostMaxSpeedDropOffTime;
-            boostRechargeTime = value.boostRechargeTime;
-            boostCapacitorPercentCost = value.boostCapacitorPercentCost;
-            boostCapacityPercentChargeRate = value.boostCapacityPercentChargeRate;
-            minUserLimitedVelocity = value.minUserLimitedVelocity;
+            _maxSpeed = value.maxSpeed;
+            _maxBoostSpeed = value.maxBoostSpeed;
+            _maxThrust = value.maxThrust;
+            _torqueThrustMultiplier = value.torqueThrustMultiplier;
+            _throttleMultiplier = value.throttleMultiplier;
+            _latHMultiplier = value.latHMultiplier;
+            _latVMultiplier = value.latVMultiplier;
+            _pitchMultiplier = value.pitchMultiplier;
+            _rollMultiplier = value.rollMultiplier;
+            _yawMultiplier = value.yawMultiplier;
+            _thrustBoostMultiplier = value.thrustBoostMultiplier;
+            _torqueBoostMultiplier = value.torqueBoostMultiplier;
+            _totalBoostTime = value.totalBoostTime;
+            _totalBoostRotationalTime = value.totalBoostRotationalTime;
+            _boostMaxSpeedDropOffTime = value.boostMaxSpeedDropOffTime;
+            _boostRechargeTime = value.boostRechargeTime;
+            _boostCapacitorPercentCost = value.boostCapacitorPercentCost;
+            _boostCapacityPercentChargeRate = value.boostCapacityPercentChargeRate;
+            _minUserLimitedVelocity = value.minUserLimitedVelocity;
         }
     }
     
@@ -150,27 +150,26 @@ public class Ship : MonoBehaviour {
     [SerializeField] private Image boostCapacitorBar;
     [SerializeField] private Light shipLights;
     
-    // TODO: split this into various thruster powers
-    [SerializeField] private float maxSpeed = 800f;
-    [SerializeField] private float maxBoostSpeed = 932f;
-    [SerializeField] private float maxThrust = 110000f;
-    [SerializeField] private float torqueThrustMultiplier = 0.1f;
-    [SerializeField] private float throttleMultiplier = 1f;
-    [SerializeField] private float latHMultiplier = 0.7f;
-    [SerializeField] private float latVMultiplier = 0.9f;
-    [SerializeField] private float pitchMultiplier = 1f;
-    [SerializeField] private float rollMultiplier = 0.3f;
-    [SerializeField] private float yawMultiplier = 0.8f;
-    [SerializeField] private float thrustBoostMultiplier = 6.5f;
-    [SerializeField] private float torqueBoostMultiplier = 2f;
-    [SerializeField] private float totalBoostTime = 6f;
-    [SerializeField] private float totalBoostRotationalTime = 7f;
-    [SerializeField] private float boostMaxSpeedDropOffTime = 12f;
-    [SerializeField] private float boostRechargeTime = 4f;
-    [SerializeField] private float boostCapacitorPercentCost = 75f;
-    [SerializeField] private float boostCapacityPercentChargeRate = 10f;
-    [SerializeField] private float inertialTensorMultiplier = 125f;
-    [SerializeField] private float minUserLimitedVelocity = 250f;
+    private float _maxSpeed = ShipParameterDefaults.maxSpeed;
+    private float _maxBoostSpeed = ShipParameterDefaults.maxBoostSpeed;
+    private float _maxThrust = ShipParameterDefaults.maxThrust;
+    private float _torqueThrustMultiplier = ShipParameterDefaults.torqueThrustMultiplier;
+    private float _throttleMultiplier = ShipParameterDefaults.throttleMultiplier;
+    private float _latHMultiplier = ShipParameterDefaults.latHMultiplier;
+    private float _latVMultiplier = ShipParameterDefaults.latVMultiplier;
+    private float _pitchMultiplier = ShipParameterDefaults.pitchMultiplier;
+    private float _rollMultiplier = ShipParameterDefaults.rollMultiplier;
+    private float _yawMultiplier = ShipParameterDefaults.yawMultiplier;
+    private float _thrustBoostMultiplier = ShipParameterDefaults.thrustBoostMultiplier;
+    private float _torqueBoostMultiplier = ShipParameterDefaults.torqueBoostMultiplier;
+    private float _totalBoostTime = ShipParameterDefaults.totalBoostTime;
+    private float _totalBoostRotationalTime = ShipParameterDefaults.totalBoostRotationalTime;
+    private float _boostMaxSpeedDropOffTime = ShipParameterDefaults.boostMaxSpeedDropOffTime;
+    private float _boostRechargeTime = ShipParameterDefaults.boostRechargeTime;
+    private float _boostCapacitorPercentCost = ShipParameterDefaults.boostCapacitorPercentCost;
+    private float _boostCapacityPercentChargeRate = ShipParameterDefaults.boostCapacityPercentChargeRate;
+    private float _inertialTensorMultiplier = ShipParameterDefaults.inertiaTensorMultiplier;
+    private float _minUserLimitedVelocity = ShipParameterDefaults.minUserLimitedVelocity;
 
     private Vector3 _initialInertiaTensor;
 
@@ -224,7 +223,7 @@ public class Ship : MonoBehaviour {
 
         // setup angular momentum for collisions (higher multiplier = less spin)
         _initialInertiaTensor = _rigidBody.inertiaTensor;
-        _rigidBody.inertiaTensor *= inertialTensorMultiplier;
+        _rigidBody.inertiaTensor *= _inertialTensorMultiplier;
     }
 
     public void Reset() {
@@ -314,17 +313,17 @@ public class Ship : MonoBehaviour {
 
     public void Boost(bool isPressed) {
         var boost = isPressed;
-        if (boost && !_boostCharging && _boostCapacitorPercent > boostCapacitorPercentCost) {
-            _boostCapacitorPercent -= boostCapacitorPercentCost;
+        if (boost && !_boostCharging && _boostCapacitorPercent > _boostCapacitorPercentCost) {
+            _boostCapacitorPercent -= _boostCapacitorPercentCost;
             _boostCharging = true;
 
             IEnumerator DoBoost() {
                 AudioManager.Instance.Play("ship-boost");
                 yield return new WaitForSeconds(1);
                 _currentBoostTime = 0f;
-                _boostedMaxSpeedDelta = maxBoostSpeed - maxSpeed;
+                _boostedMaxSpeedDelta = _maxBoostSpeed - _maxSpeed;
                 _isBoosting = true;
-                yield return new WaitForSeconds(boostRechargeTime);
+                yield return new WaitForSeconds(_boostRechargeTime);
                 _boostCharging = false;
             }
             _boostCoroutine = StartCoroutine(DoBoost());
@@ -439,7 +438,7 @@ public class Ship : MonoBehaviour {
         }
 
         if (accelerationBar != null) {
-            var acceleration = thrust / maxThrust;
+            var acceleration = thrust / _maxThrust;
             accelerationBar.fillAmount = MathfExtensions.Remap(0, 1, 0, 0.755f, acceleration);
             accelerationBar.color = Color.Lerp(Color.green, Color.red, acceleration);
         }
@@ -464,10 +463,10 @@ public class Ship : MonoBehaviour {
     private void CalculateBoost(out float maxThrustWithBoost, out float maxTorqueWithBoost, out float boostedMaxSpeedDelta) {
 
         _boostCapacitorPercent = Mathf.Min(100,
-            _boostCapacitorPercent + boostCapacityPercentChargeRate * Time.fixedDeltaTime);
+            _boostCapacitorPercent + _boostCapacityPercentChargeRate * Time.fixedDeltaTime);
         
-        maxThrustWithBoost = maxThrust;
-        maxTorqueWithBoost = maxThrust * torqueThrustMultiplier;
+        maxThrustWithBoost = _maxThrust;
+        maxTorqueWithBoost = _maxThrust * _torqueThrustMultiplier;
         boostedMaxSpeedDelta = _boostedMaxSpeedDelta;
         
         _currentBoostTime += Time.fixedDeltaTime;
@@ -475,17 +474,17 @@ public class Ship : MonoBehaviour {
         // reduce boost potency over time period
         if (_isBoosting) {
             // Ease-in (boost dropoff is more dramatic)
-            float t = _currentBoostTime / totalBoostTime;
+            float t = _currentBoostTime / _totalBoostTime;
             float tBoost = 1f - Mathf.Cos(t * Mathf.PI * 0.5f);
             float tTorque = 1f - Mathf.Cos(t * Mathf.PI * 0.5f);
 
-            maxThrustWithBoost *= Mathf.Lerp(thrustBoostMultiplier, 1, tBoost);
-            maxTorqueWithBoost *= Mathf.Lerp(torqueBoostMultiplier, 1, tTorque);
+            maxThrustWithBoost *= Mathf.Lerp(_thrustBoostMultiplier, 1, tBoost);
+            maxTorqueWithBoost *= Mathf.Lerp(_torqueBoostMultiplier, 1, tTorque);
         }
 
         // reduce max speed over time until we're back at 0
         if (_boostedMaxSpeedDelta > 0) {
-            float t = _currentBoostTime / boostMaxSpeedDropOffTime;
+            float t = _currentBoostTime / _boostMaxSpeedDropOffTime;
             // TODO: an actual curve rather than this ... idk what this is
             // clamp at 1 as it's being used as a multiplier and the first ~2 seconds are at max speed 
             float tBoostVelocityMax =  Math.Min(1, 0.15f - (Mathf.Cos(t * Mathf.PI * 0.6f) * -1));
@@ -496,7 +495,7 @@ public class Ship : MonoBehaviour {
             }
         }
         
-        if (_currentBoostTime > totalBoostRotationalTime) {
+        if (_currentBoostTime > _totalBoostRotationalTime) {
             _isBoosting = false;
         }
     }
@@ -511,7 +510,7 @@ public class Ship : MonoBehaviour {
         }
         
         // special case for throttle - no reverse while boosting but, while always going forward, the ship will change vector less harshly while holding back
-        var throttle = _isBoosting && _currentBoostTime < totalBoostTime
+        var throttle = _isBoosting && _currentBoostTime < _totalBoostTime
             ? Math.Max(1f, _throttle + 1.6f)
             : _throttle;
 
@@ -521,9 +520,9 @@ public class Ship : MonoBehaviour {
         // e.g. if two axes are held down fully then our request is 2 (ignoring multipliers). Therefore, both axes
         // will receive 0.5x their respective thrust. 
         var thrustInput = new Vector3(
-            _latH * latHMultiplier,
-            _latV * latVMultiplier,
-            throttle * throttleMultiplier
+            _latH * _latHMultiplier,
+            _latV * _latVMultiplier,
+            throttle * _throttleMultiplier
         );
         
         // Sum the total absolute requested thrust to divide each axis with.
@@ -535,10 +534,10 @@ public class Ship : MonoBehaviour {
         var thrust = (thrustInput * maxThrustWithBoost) / totalRequestedThrustInput ;
         
         var torque = new Vector3(
-            _pitch * pitchMultiplier * maxTorqueWithBoost,
-            _yaw * yawMultiplier * maxTorqueWithBoost,
-            _roll * rollMultiplier * maxTorqueWithBoost * -1
-        ) * inertialTensorMultiplier;   // if we don't counteract the inertial tensor of the rigidbody, the rotation spin would increase in lockstep
+            _pitch * _pitchMultiplier * maxTorqueWithBoost,
+            _yaw * _yawMultiplier * maxTorqueWithBoost,
+            _roll * _rollMultiplier * maxTorqueWithBoost * -1
+        ) * _inertialTensorMultiplier;   // if we don't counteract the inertial tensor of the rigidbody, the rotation spin would increase in lockstep
         
         _rigidBody.AddForce(transform.TransformDirection(thrust));
         _rigidBody.AddTorque(transform.TransformDirection(torque));
@@ -550,9 +549,9 @@ public class Ship : MonoBehaviour {
         // convert global rigid body velocity into local space
         Vector3 localVelocity = transform.InverseTransformDirection(_rigidBody.velocity);
 
-        CalculateAssistedAxis(_latHTargetFactor, localVelocity.x, 0.1f, maxSpeed, out _latH);
-        CalculateAssistedAxis(_latVTargetFactor, localVelocity.y, 0.1f, maxSpeed, out _latV);
-        CalculateAssistedAxis(_throttleTargetFactor, localVelocity.z, 0.1f, maxSpeed, out _throttle);
+        CalculateAssistedAxis(_latHTargetFactor, localVelocity.x, 0.1f, _maxSpeed, out _latH);
+        CalculateAssistedAxis(_latVTargetFactor, localVelocity.y, 0.1f, _maxSpeed, out _latV);
+        CalculateAssistedAxis(_throttleTargetFactor, localVelocity.z, 0.1f, _maxSpeed, out _throttle);
 
     }
     
@@ -615,12 +614,12 @@ public class Ship : MonoBehaviour {
     private void ClampMaxSpeed(float boostedMaxSpeedDelta) {
         // clamp max speed if user is holding the velocity limiter button down
         if (_userVelocityLimit) {
-            _velocityLimitCap = Math.Max(_prevVelocity, minUserLimitedVelocity);
+            _velocityLimitCap = Math.Max(_prevVelocity, _minUserLimitedVelocity);
             _rigidBody.velocity = Vector3.ClampMagnitude(_rigidBody.velocity, _velocityLimitCap);
         }
 
         // clamp max speed in general including boost variance (max boost speed minus max speed)
-        _rigidBody.velocity = Vector3.ClampMagnitude(_rigidBody.velocity, maxSpeed + boostedMaxSpeedDelta);
+        _rigidBody.velocity = Vector3.ClampMagnitude(_rigidBody.velocity, _maxSpeed + boostedMaxSpeedDelta);
         _prevVelocity = _rigidBody.velocity.magnitude;
     }
 }
