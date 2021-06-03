@@ -18,6 +18,7 @@ public class User : MonoBehaviour {
     [SerializeField] public Ship playerShip;
     
     [SerializeField] public PauseMenu pauseMenu;
+    [SerializeField] public Canvas uiCanvas;
     [SerializeField] public Camera flatScreenCamera;
     [SerializeField] public Camera uiCamera;
     [SerializeField] public XRRig xrRig;
@@ -149,6 +150,7 @@ public class User : MonoBehaviour {
         if (isVREnabled) {
             var pauseMenuCanvas = pauseMenu.GetComponent<Canvas>();
             pauseMenuCanvas.renderMode = RenderMode.WorldSpace;
+            uiCanvas.renderMode = RenderMode.WorldSpace;
             var pauseMenuRect = pauseMenuCanvas.GetComponent<RectTransform>();
             pauseMenuRect.sizeDelta = new Vector2(1280, 1000);
             pauseMenuRect.localScale /= 2;
@@ -159,6 +161,7 @@ public class User : MonoBehaviour {
         else {
             var pauseMenuCanvas = pauseMenu.GetComponent<Canvas>();
             pauseMenuCanvas.renderMode = RenderMode.ScreenSpaceCamera;
+            uiCanvas.renderMode = RenderMode.ScreenSpaceCamera;
             var pauseMenuRect = pauseMenuCanvas.GetComponent<RectTransform>();
             pauseMenuRect.sizeDelta = new Vector2(1920, 1080);
             pauseMenuRect.localScale *= 2;
