@@ -27,12 +27,10 @@ public class Track : MonoBehaviour {
 
     private void OnEnable() {
         Game.OnRestart += InitialiseTrack;
-        Game.OnRestartComplete += StartTrack;
     }
 
     private void OnDisable() {
         Game.OnRestart -= InitialiseTrack;
-        Game.OnRestartComplete -= StartTrack;
     }
 
     public void InitialiseTrack() {
@@ -80,12 +78,31 @@ public class Track : MonoBehaviour {
         _complete = false;
     }
 
-    public void StartTrack() {
-        if (Checkpoints.Count > 0) {
-            ResetTimer();
-            isActive = true;
-            _complete = false;
+    public IEnumerator StartTrackWithCountdown() {
+        if (_user != null) {
+            if (Checkpoints.Count > 0) {
+                ResetTimer();
+                timeMs = -2.5f;
+                isActive = true;
+                _complete = false;
+                
+                // enable user input but disable actual movement
+                _user.EnableGameInput();
+                _user.movementEnabled = false;
+
+                // first beep
+                yield return new WaitForSeconds(0.5f);
+                
+                // second beep (boost available here)
+                yield return new WaitForSeconds(1);
+                _user.boostButtonEnabledOverride = true;
+                
+                // GO!
+                yield return new WaitForSeconds(1);
+                _user.movementEnabled = true;
+            }
         }
+        yield return new WaitForEndOfFrame();
     }
 
     public void FinishTimer() {
@@ -151,7 +168,7 @@ public class Track : MonoBehaviour {
         if (isActive && !_complete && _user.totalTimeDisplay != null) {
             _user.totalTimeDisplay.textBox.color = new Color(1f, 1f, 1f, 1f);
             timeMs += Time.fixedDeltaTime;
-            _user.totalTimeDisplay.SetTimeMs(timeMs);
+            _user.totalTimeDisplay.SetTimeMs(Math.Abs(timeMs));
         }
     }
 }

@@ -42,13 +42,16 @@ public class User : MonoBehaviour {
     private bool _boost;
 
     [SerializeField]
-    private bool inputEnabled = true;
+    public bool movementEnabled = false;
+    public bool pauseMenuEnabled = true;
+    public bool boostButtonEnabledOverride = false;
 
     private Action<InputAction.CallbackContext> _cancelAction;
 
     /** Boostrap global ESC / cancel action in UI */
     public void Awake() {
         _cancelAction = context => { pauseMenu.OnGameMenuToggle(); };
+        DisableGameInput();
         ResetMouseToCentre();
     }
 
@@ -78,7 +81,7 @@ public class User : MonoBehaviour {
     }
 
     public void Update() {
-        if (inputEnabled) {
+        if (movementEnabled) {
             var pitch = _pitch;
             var roll = _roll;
             var yaw = _yaw;
@@ -104,6 +107,10 @@ public class User : MonoBehaviour {
             // don't allow holding down boost (except at the start, when input is disabled anyway
             _boost = false;
         }
+
+        if (boostButtonEnabledOverride) {
+            playerShip.Boost(_boost);
+        }
     }
 
     /**
@@ -113,7 +120,9 @@ public class User : MonoBehaviour {
     public void EnableGameInput() {
         var playerInput = GetComponent<PlayerInput>();
         playerInput.ActivateInput();
-        inputEnabled = true;
+        movementEnabled = true;
+        pauseMenuEnabled = true;
+        boostButtonEnabledOverride = false;
         
         Console.Instance.LogMessage("** USER INPUT ENABLED **");
         foreach (var inputDevice in InputSystem.devices) {
@@ -128,12 +137,16 @@ public class User : MonoBehaviour {
         foreach (var playerInputDevice in playerInput.devices) {
             Console.Instance.LogMessage(playerInputDevice.name + " paired");
         }
+
+        ResetMouseToCentre();
     }
 
     public void DisableGameInput() {
         GetComponent<PlayerInput>().DeactivateInput();
-        inputEnabled = false;
-        
+        movementEnabled = false;
+        pauseMenuEnabled = false;
+        boostButtonEnabledOverride = false;
+
         Console.Instance.LogMessage("** USER INPUT DISABLED **");
     }
 
@@ -185,17 +198,21 @@ public class User : MonoBehaviour {
      *  UI Requires additional bootstrap as above because UI events in Unity are fucking bonkers.
      */
     public void OnShowGameMenu() {
-        if (inputEnabled) {
+        if (pauseMenuEnabled) {
             pauseMenu.OnGameMenuToggle();
         }
     }
 
     public void OnRestartTrack() {
-        Game.Instance.RestartLevel();
+        if (movementEnabled) {
+            Game.Instance.RestartLevel();
+        }
     }
 
     public void OnRestartFromLastCheckpoint() {
-        Debug.Log("Lol there are no checkpoints yet ^_^");
+        if (movementEnabled) {
+            Debug.Log("Lol there are no checkpoints yet ^_^");
+        }
     }
 
     public void OnPitch(InputValue value) {
@@ -251,9 +268,7 @@ public class User : MonoBehaviour {
     }
 
     public void OnVelocityLimiter(InputValue value) {
-        if (inputEnabled) {
-            playerShip.VelocityLimiterIsPressed(value.isPressed);
-        }
+        playerShip.VelocityLimiterIsPressed(value.isPressed);
     }
 
     public void OnAllFlightAssistToggle(InputValue value) {

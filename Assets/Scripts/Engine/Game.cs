@@ -21,11 +21,9 @@ public class Game : MonoBehaviour {
     public static Game Instance;
 
     public delegate void RestartLevelAction();
-    public delegate void RestartLevelCompleteAction();
     public delegate void GraphicsSettingsApplyAction();
     public delegate void VRToggledAction(bool enabled);
     public static event RestartLevelAction OnRestart;
-    public static event RestartLevelCompleteAction OnRestartComplete;
     public static event GraphicsSettingsApplyAction OnGraphicsSettingsApplied;
     public static event VRToggledAction OnVRStatus;
 
@@ -222,6 +220,18 @@ public class Game : MonoBehaviour {
                 OnRestart();
             }
         };
+
+        IEnumerator ResetTrackIfNeeded() {
+            // if there's a track in the game world, start it
+            var track = FindObjectOfType<Track>();
+            if (track) {
+                yield return track.StartTrackWithCountdown();
+            }
+
+            if (user) {
+                user.EnableGameInput();
+            }
+        }
         
         // first let's check if this is a terrain world and handle that appropriately
         var mapMagic = FindObjectOfType<MapMagicObject>();
@@ -254,10 +264,8 @@ public class Game : MonoBehaviour {
                     
                     FadeFromBlack();
                     yield return new WaitForSeconds(0.7f);
-                    if (OnRestartComplete != null) {
-                        OnRestartComplete();
-                    }
-                    user.EnableGameInput();
+
+                    yield return ResetTrackIfNeeded();
                 }
 
                 StartCoroutine(SwitchToLoadingScreen(loadText => {
@@ -269,10 +277,9 @@ public class Game : MonoBehaviour {
             }
         }
 
+        // don't need to wait for full scene reload, just reset state and notify subscribers
         DoReset();
-        if (OnRestartComplete != null) {
-            OnRestartComplete();
-        }
+        StartCoroutine(ResetTrackIfNeeded());
     }
 
     public void QuitToMenu() {
@@ -406,7 +413,7 @@ public class Game : MonoBehaviour {
                 yield return null;
             }
         }
-
+        
         // ship placement
         var ship = FindObjectOfType<Ship>();
         if (ship) {
@@ -522,15 +529,15 @@ public class Game : MonoBehaviour {
         
         // if there's a track in the game world, start it
         if (track) {
-            track.StartTrack();
+            yield return track.StartTrackWithCountdown();
         }
-
+        
         // enable user input
         var user = FindObjectOfType<User>();
         if (user != null) {
             user.EnableGameInput();
-            user.ResetMouseToCentre();
         }
+
         scenesLoading.Clear();
     }
     
