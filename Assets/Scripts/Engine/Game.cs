@@ -114,7 +114,7 @@ public class Game : MonoBehaviour {
         
         var urp = (UniversalRenderPipelineAsset)GraphicsSettings.currentRenderPipeline;
         urp.renderScale = Preferences.Instance.GetFloat("graphics-render-scale");
-        var msaa = Preferences.Instance.GetString("graphics-render-scale");
+        var msaa = Preferences.Instance.GetString("graphics-anti-aliasing");
         switch (msaa) {
             case "8x": urp.msaaSampleCount = 8;
                 break;
