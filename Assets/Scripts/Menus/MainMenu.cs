@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Audio;
@@ -52,7 +52,7 @@ namespace Menus {
 
         public void OnResetHMDView(InputValue inputValue) {
             if (xrRig) {
-                Game.Instance.ResetHMDView(xrRig, flatScreenCamera.transform.position, transform.forward);
+                Game.Instance.ResetHMDView(xrRig, flatScreenCamera.transform);
             }
         }
         
@@ -156,7 +156,7 @@ namespace Menus {
                     case 4: sceneEnvironment = "Sunset_Clear"; break;
                 }
             }
-            SceneManager.LoadScene(sceneEnvironment, LoadSceneMode.Additive); ;
+            yield return SceneManager.LoadSceneAsync(sceneEnvironment, LoadSceneMode.Additive);
         }
 
         private void OnEnvironmentLoadComplete(Scene scene, LoadSceneMode mode) {

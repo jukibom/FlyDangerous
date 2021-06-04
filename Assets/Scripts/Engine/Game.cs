@@ -150,10 +150,10 @@ public class Game : MonoBehaviour {
         }
     }
 
-    public void ResetHMDView(XRRig xrRig, Vector3 targetPositionWorld, Vector3 targetForwardRotation) {
+    public void ResetHMDView(XRRig xrRig, Transform targetTransform) {
         var before = xrRig.transform.position;
-        xrRig.MoveCameraToWorldLocation(targetPositionWorld);
-        xrRig.MatchRigUpCameraForward(Vector3.up, targetForwardRotation);
+        xrRig.MoveCameraToWorldLocation(targetTransform.position);
+        xrRig.MatchRigUpCameraForward(targetTransform.up, targetTransform.forward);
         _hmdRotation = xrRig.transform.rotation;
         _hmdPosition += xrRig.transform.position - before;
     }

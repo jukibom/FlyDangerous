@@ -313,7 +313,7 @@ public class User : MonoBehaviour {
 
     public void OnResetHMDView(InputValue value) {
         if (xrRig) {
-            Game.Instance.ResetHMDView(xrRig, transform.position, transform.forward);
+            Game.Instance.ResetHMDView(xrRig, transform);
         }
     }
 
