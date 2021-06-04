@@ -155,7 +155,7 @@ public class Game : MonoBehaviour {
         xrRig.MoveCameraToWorldLocation(targetPositionWorld);
         xrRig.MatchRigUpCameraForward(Vector3.up, targetForwardRotation);
         _hmdRotation = xrRig.transform.rotation;
-        _hmdPosition = xrRig.transform.position - before;
+        _hmdPosition += xrRig.transform.position - before;
     }
 
     public void StartGame(LevelData levelData, bool dynamicPlacementStart = false) {
@@ -511,16 +511,16 @@ public class Game : MonoBehaviour {
                 }
             }
         }
-        
-        // set up graphics settings (e.g. camera FoV) + VR status (cameras etc)
-        ApplyGraphicsOptions();
-        NotifyVRStatus();
 
         // unload the loading screen
         var unload = SceneManager.UnloadSceneAsync("Loading");
         while (!unload.isDone) {
             yield return null;
         }
+        
+        // set up graphics settings (e.g. camera FoV) + VR status (cameras, radial fog etc)
+        ApplyGraphicsOptions();
+        NotifyVRStatus();
 
         // resume the game
         Time.timeScale = 1;
@@ -568,14 +568,14 @@ public class Game : MonoBehaviour {
     private void NotifyVRStatus() {
         if (OnVRStatus != null) {
             OnVRStatus(IsVREnabled);
-
-            // if user has previously applied a HMD position, reapply
-            if (IsVREnabled) {
-                var xrRig = FindObjectOfType<XRRig>();
-                if (xrRig) {
-                    xrRig.transform.rotation = _hmdRotation;
-                    xrRig.transform.localPosition = xrRig.transform.localPosition + _hmdPosition;
-                }
+        }
+        
+        // if user has previously applied a HMD position, reapply
+        if (IsVREnabled) {
+            var xrRig = FindObjectOfType<XRRig>();
+            if (xrRig) {
+                xrRig.transform.rotation = _hmdRotation;
+                xrRig.transform.localPosition = xrRig.transform.localPosition + _hmdPosition;
             }
         }
     }
