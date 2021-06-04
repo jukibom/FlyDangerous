@@ -90,6 +90,7 @@ public class Track : MonoBehaviour {
                 // enable user input but disable actual movement
                 _user.EnableGameInput();
                 _user.movementEnabled = false;
+                _user.pauseMenuEnabled = false;
                 
                 // half a second (2.5 second total) before countdown
                 yield return new WaitForSeconds(0.5f);
@@ -104,6 +105,7 @@ public class Track : MonoBehaviour {
                 // GO!
                 yield return new WaitForSeconds(1);
                 _user.movementEnabled = true;
+                _user.pauseMenuEnabled = true;
             }
         }
         yield return new WaitForEndOfFrame();
