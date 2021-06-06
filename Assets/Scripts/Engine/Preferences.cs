@@ -53,7 +53,6 @@ namespace Engine {
                 case "showSpaceDust":
                 case "enableMouseFlightControls":
                 case "showMouseWidget":
-                case "flightAssistOnByDefault":
                 case "graphics-ssao":
                 case "graphics-terrain-details":
                     return true;
@@ -103,6 +102,8 @@ namespace Engine {
          
         public string GetDefaultString(string key) {
             switch (key) {
+                case "flightAssistDefault":
+                    return "all on";
                 case "inputBindings":
                     return "";
                 case "mouseXAxis":

@@ -216,8 +216,22 @@ public class Ship : MonoBehaviour {
     }
 
     public void Start() {
-        _flightAssistVectorControl = Preferences.Instance.GetBool("flightAssistOnByDefault");
-        _flightAssistRotationalDampening = Preferences.Instance.GetBool("flightAssistOnByDefault");
+        switch (Preferences.Instance.GetString("flightAssistDefault")) {
+            case "vector assist only": 
+                _flightAssistVectorControl = true;
+                break;
+            case "rotational assist only": 
+                _flightAssistRotationalDampening = true;
+                break;
+            case "all off":
+                _flightAssistVectorControl = false;
+                _flightAssistRotationalDampening = false;
+                break;
+            default:
+                _flightAssistVectorControl = true;
+                _flightAssistRotationalDampening = true;
+                break;
+        }
         _rigidBody.centerOfMass = Vector3.zero;
         _rigidBody.inertiaTensorRotation = Quaternion.identity;
 
@@ -334,8 +348,8 @@ public class Ship : MonoBehaviour {
         // if any flight assist is enabled, deactivate (any on = all off)
         var isEnabled = !(_flightAssistVectorControl | _flightAssistRotationalDampening);
         
-        // if user has flight assists on by default, flip that logic on its head (any off = all on)
-        if (Preferences.Instance.GetBool("flightAssistOnByDefault")) {
+        // if user has all flight assists on by default, flip that logic on its head (any off = all on)
+        if (Preferences.Instance.GetString("flightAssistDefault") == "all on") {
             isEnabled = !(_flightAssistVectorControl & _flightAssistRotationalDampening);
         }
 
