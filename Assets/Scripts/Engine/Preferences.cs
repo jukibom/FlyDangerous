@@ -60,10 +60,11 @@ namespace Engine {
                 
                 case "relativeMouseXAxis":
                 case "relativeMouseYAxis":
-                case "enableExperimentalTerrain":
-                case "enableTerrainScaling":
                 case "mouseXInvert:":
                 case "mouseYInvert:":
+                case "enableExperimentalTerrain":
+                case "enableTerrainScaling":
+                case "enableExperimentalTrichording":
                     return false;
 
                 default: 

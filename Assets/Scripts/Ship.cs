@@ -526,23 +526,31 @@ public class Ship : MonoBehaviour {
             _latVInput * _latVMultiplier,
             throttle * _throttleMultiplier
         );
-        
-        // When applying the actual thrust to the rigidbody, we only have a limited amount of engine thrust passed in
-        // - maxThrustWithBoost is precalculated to include any additional thrust the boost is currently generating.
-        
-        // To avoid applying max thrust in multiple directions (e.g. faster than a single direction), we need to combine
-        // all our directions and divide our result thrust vector by the base input total requested.
-        // e.g. if two axes are held down fully then our request is 2 (ignoring multipliers). Therefore, both axes
-        // will receive 0.5x their respective thrust. 
-        
-        // First, sum the total absolute requested thrust to divide each axis with.
-        // We only care if the combined axes are greater than 1 as that is over-extending the maximum thrust.
-        var totalRequestedThrustInput = Math.Max(1f, Math.Abs(thrustInput.x) + Math.Abs(thrustInput.y) + Math.Abs(thrustInput.z));
 
-        // final thrust calculated from raw input * available thrust and divided by the total requested from three axes
-        var thrust = (thrustInput * maxThrustWithBoost) / totalRequestedThrustInput;
-        _rigidBody.AddForce(transform.TransformDirection(thrust));
+        // standard thrust calculated per-axis
+        var thrust = thrustInput * maxThrustWithBoost;
         
+        // new approach - shared across axis
+        if (!Preferences.Instance.GetBool("enableExperimentalTrichording")) {
+            // When applying the actual thrust to the rigidbody, we only have a limited amount of engine thrust passed in
+            // - maxThrustWithBoost is precalculated to include any additional thrust the boost is currently generating.
+
+            // To avoid applying max thrust in multiple directions (e.g. faster than a single direction), we need to combine
+            // all our directions and divide our result thrust vector by the base input total requested.
+            // e.g. if two axes are held down fully then our request is 2 (ignoring multipliers). Therefore, both axes
+            // will receive 0.5x their respective thrust. 
+
+            // First, sum the total absolute requested thrust to divide each axis with.
+            // We only care if the combined axes are greater than 1 as that is over-extending the maximum thrust.
+            var totalRequestedThrustInput = Math.Max(1f,
+                Math.Abs(thrustInput.x) + Math.Abs(thrustInput.y) + Math.Abs(thrustInput.z));
+
+            // final thrust calculated from raw input * available thrust and divided by the total requested from three axes
+            thrust = (thrustInput * maxThrustWithBoost) / totalRequestedThrustInput;
+        }
+
+        _rigidBody.AddForce(transform.TransformDirection(thrust));
+
         // torque is applied entirely independently, this may be looked at later.
         var torque = new Vector3(
             _pitchInput * _pitchMultiplier * maxTorqueWithBoost,
@@ -550,6 +558,7 @@ public class Ship : MonoBehaviour {
             _rollInput * _rollMultiplier * maxTorqueWithBoost * -1
         ) * _inertialTensorMultiplier;   // if we don't counteract the inertial tensor of the rigidbody, the rotation spin would increase in lockstep
 
+        
         _rigidBody.AddTorque(transform.TransformDirection(torque));
 
         calculatedThrust = Math.Abs(thrust.x) + Math.Abs(thrust.y) + Math.Abs(thrust.z);
