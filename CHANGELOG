@@ -1,4 +1,18 @@
-﻿ALPHA 4 (v0.2.0)
+﻿0.2.1
+
+New:
+    * Added dev flag for additive thrusters ("trichording") which effectively re-enables old behaviour WRT thrust sharing.
+        * This allows each axis to operate with it's own max thrust amount and the flight params are now balanced for shared thrust. Feedback purposes only, Use at your own peril.
+
+Changes: 
+    * Swapped default flight assist for a drop-down of 4 possible options (all on, rotational only, vector only, all off). 
+    
+Fixes:
+    * Fixed FA On boost drop-off being too harsh.
+    * Fixed incorrect throttle assignment under boost (max forward should be 1, it was 1 + 1.6!).
+        * This fixes the laterals being completely ineffective under boost.
+
+ALPHA 4 (v0.2.0)
 -------
 New: 
     * VR Mode: Set the `-vr` flag parameter when launching the exe to use OpenXR. Do this either with steam or by making a shortcut to the exe.
