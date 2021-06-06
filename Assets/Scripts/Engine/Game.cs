@@ -87,7 +87,7 @@ public class Game : MonoBehaviour {
 
         // check for command line args
         var args = System.Environment.GetCommandLineArgs();
-        if (args.ToList().Contains("-vr")) {
+        if (args.ToList().Contains("-vr") || args.ToList().Contains("-VR")) {
             EnableVR();
         }
     }
