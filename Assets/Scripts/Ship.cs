@@ -186,12 +186,12 @@ public class Ship : MonoBehaviour {
     private bool _flightAssistRotationalDampening;
 
     // input axes -1 to 1
-    private float _throttle;
-    private float _latV;
-    private float _latH;
-    private float _pitch;
-    private float _yaw;
-    private float _roll;
+    private float _throttleInput;
+    private float _latVInput;
+    private float _latHInput;
+    private float _pitchInput;
+    private float _yawInput;
+    private float _rollInput;
     
     // flight assist targets
     private float _throttleTargetFactor;
@@ -229,12 +229,12 @@ public class Ship : MonoBehaviour {
     public void Reset() {
         _rigidBody.velocity = Vector3.zero;
         _rigidBody.angularVelocity = Vector3.zero;
-        _pitch = 0;
-        _roll = 0;
-        _yaw = 0;
-        _throttle = 0;
-        _latH = 0;
-        _latV = 0;
+        _pitchInput = 0;
+        _rollInput = 0;
+        _yawInput = 0;
+        _throttleInput = 0;
+        _latHInput = 0;
+        _latVInput = 0;
         _throttleTargetFactor = 0;
         _latHTargetFactor = 0;
         _latVTargetFactor = 0;
@@ -262,7 +262,7 @@ public class Ship : MonoBehaviour {
             _pitchTargetFactor = ClampInput(value);
         }
         else {
-            _pitch = ClampInput(value);
+            _pitchInput = ClampInput(value);
         }
     }
 
@@ -271,7 +271,7 @@ public class Ship : MonoBehaviour {
             _rollTargetFactor = ClampInput(value);
         }
         else {
-            _roll = ClampInput(value);
+            _rollInput = ClampInput(value);
         }
     }
 
@@ -280,7 +280,7 @@ public class Ship : MonoBehaviour {
             _yawTargetFactor = ClampInput(value);
         }
         else {
-            _yaw = ClampInput(value);
+            _yawInput = ClampInput(value);
         }
     }
 
@@ -289,7 +289,7 @@ public class Ship : MonoBehaviour {
             _throttleTargetFactor = ClampInput(value);
         }
         else {
-            _throttle = ClampInput(value);
+            _throttleInput = ClampInput(value);
         }
     }
     
@@ -298,7 +298,7 @@ public class Ship : MonoBehaviour {
             _latHTargetFactor = ClampInput(value);
         }
         else {
-            _latH = ClampInput(value);
+            _latHInput = ClampInput(value);
         }
     }
     
@@ -307,7 +307,7 @@ public class Ship : MonoBehaviour {
             _latVTargetFactor = ClampInput(value);
         }
         else {
-            _latV = ClampInput(value);
+            _latVInput = ClampInput(value);
         }
     }
 
@@ -425,7 +425,11 @@ public class Ship : MonoBehaviour {
     // Apply all physics updates in fixed intervals (WRITE)
     private void FixedUpdate() {
         CalculateBoost(out var maxThrustWithBoost, out var maxTorqueWithBoost, out var boostedMaxSpeedDelta);
-        CalculateFlightForces(maxThrustWithBoost, maxTorqueWithBoost, out var thrust);
+        CalculateFlightForces(
+            maxThrustWithBoost,
+            maxTorqueWithBoost,
+           _maxSpeed + boostedMaxSpeedDelta, 
+           out var thrust);
         
         // TODO: clamping should be based on input rather than modifying the rigid body - if gravity pulls you down then that's fine, similar to if a collision yeets you into a spinning mess.
         ClampMaxSpeed(boostedMaxSpeedDelta);
@@ -500,58 +504,64 @@ public class Ship : MonoBehaviour {
         }
     }
 
-    private void CalculateFlightForces(float maxThrustWithBoost, float maxTorqueWithBoost, out float calculatedThrust) {
+    private void CalculateFlightForces(float maxThrustWithBoost, float maxTorqueWithBoost, float maxSpeedWithBoost, out float calculatedThrust) {
         if (_flightAssistVectorControl) {
-            CalculateVectorControlFlightAssist();
+            CalculateVectorControlFlightAssist(maxSpeedWithBoost);
         }
 
         if (_flightAssistRotationalDampening) {
             CalculateRotationalDampeningFlightAssist();
         }
         
-        // special case for throttle - no reverse while boosting but, while always going forward, the ship will change vector less harshly while holding back
+        // special case for throttle - no reverse while boosting but, while always going forward, the ship will change
+        // vector less harshly while holding back (up to 40%)
         var throttle = _isBoosting && _currentBoostTime < _totalBoostTime
-            ? Math.Max(1f, _throttle + 1.6f)
-            : _throttle;
+            ? Math.Min(1f, _throttleInput + 1.6f)
+            : _throttleInput;
 
-        // When applying the actual thrust to the rigidbody, we only have a limited amount of thrust (maxThrustWithBoost).
+        // Get the raw inputs multiplied by the ship params multipliers as a vector3.
+        // All components are between -1 and 1.
+        var thrustInput = new Vector3(
+            _latHInput * _latHMultiplier,
+            _latVInput * _latVMultiplier,
+            throttle * _throttleMultiplier
+        );
+        
+        // When applying the actual thrust to the rigidbody, we only have a limited amount of engine thrust passed in
+        // - maxThrustWithBoost is precalculated to include any additional thrust the boost is currently generating.
+        
         // To avoid applying max thrust in multiple directions (e.g. faster than a single direction), we need to combine
         // all our directions and divide our result thrust vector by the base input total requested.
         // e.g. if two axes are held down fully then our request is 2 (ignoring multipliers). Therefore, both axes
         // will receive 0.5x their respective thrust. 
-        var thrustInput = new Vector3(
-            _latH * _latHMultiplier,
-            _latV * _latVMultiplier,
-            throttle * _throttleMultiplier
-        );
         
-        // Sum the total absolute requested thrust to divide each axis with.
-        // Clamp this to 1 as a lower bound otherwise small forces are amplified (divide by fraction). We only care
-        // if the combined axes are greater than 1.
+        // First, sum the total absolute requested thrust to divide each axis with.
+        // We only care if the combined axes are greater than 1 as that is over-extending the maximum thrust.
         var totalRequestedThrustInput = Math.Max(1f, Math.Abs(thrustInput.x) + Math.Abs(thrustInput.y) + Math.Abs(thrustInput.z));
 
         // final thrust calculated from raw input * available thrust and divided by the total requested from three axes
-        var thrust = (thrustInput * maxThrustWithBoost) / totalRequestedThrustInput ;
-        
-        var torque = new Vector3(
-            _pitch * _pitchMultiplier * maxTorqueWithBoost,
-            _yaw * _yawMultiplier * maxTorqueWithBoost,
-            _roll * _rollMultiplier * maxTorqueWithBoost * -1
-        ) * _inertialTensorMultiplier;   // if we don't counteract the inertial tensor of the rigidbody, the rotation spin would increase in lockstep
-        
+        var thrust = (thrustInput * maxThrustWithBoost) / totalRequestedThrustInput;
         _rigidBody.AddForce(transform.TransformDirection(thrust));
+        
+        // torque is applied entirely independently, this may be looked at later.
+        var torque = new Vector3(
+            _pitchInput * _pitchMultiplier * maxTorqueWithBoost,
+            _yawInput * _yawMultiplier * maxTorqueWithBoost,
+            _rollInput * _rollMultiplier * maxTorqueWithBoost * -1
+        ) * _inertialTensorMultiplier;   // if we don't counteract the inertial tensor of the rigidbody, the rotation spin would increase in lockstep
+
         _rigidBody.AddTorque(transform.TransformDirection(torque));
 
         calculatedThrust = Math.Abs(thrust.x) + Math.Abs(thrust.y) + Math.Abs(thrust.z);
     }
 
-    private void CalculateVectorControlFlightAssist() {
+    private void CalculateVectorControlFlightAssist(float maxSpeedWithBoost) {
         // convert global rigid body velocity into local space
         Vector3 localVelocity = transform.InverseTransformDirection(_rigidBody.velocity);
 
-        CalculateAssistedAxis(_latHTargetFactor, localVelocity.x, 0.1f, _maxSpeed, out _latH);
-        CalculateAssistedAxis(_latVTargetFactor, localVelocity.y, 0.1f, _maxSpeed, out _latV);
-        CalculateAssistedAxis(_throttleTargetFactor, localVelocity.z, 0.1f, _maxSpeed, out _throttle);
+        CalculateAssistedAxis(_latHTargetFactor, localVelocity.x, 0.1f, maxSpeedWithBoost, out _latHInput);
+        CalculateAssistedAxis(_latVTargetFactor, localVelocity.y, 0.1f, maxSpeedWithBoost, out _latVInput);
+        CalculateAssistedAxis(_throttleTargetFactor, localVelocity.z, 0.1f, maxSpeedWithBoost, out _throttleInput);
 
     }
     
@@ -559,9 +569,9 @@ public class Ship : MonoBehaviour {
         // convert global rigid body velocity into local space
         Vector3 localAngularVelocity = transform.InverseTransformDirection(_rigidBody.angularVelocity);
 
-        CalculateAssistedAxis(_pitchTargetFactor, localAngularVelocity.x, 0.3f, 1.5f, out _pitch);
-        CalculateAssistedAxis(_yawTargetFactor, localAngularVelocity.y, 0.3f, 1.5f, out _yaw);
-        CalculateAssistedAxis(_rollTargetFactor, localAngularVelocity.z * -1, 0.3f, 1.5f, out _roll);
+        CalculateAssistedAxis(_pitchTargetFactor, localAngularVelocity.x, 0.3f, 1.5f, out _pitchInput);
+        CalculateAssistedAxis(_yawTargetFactor, localAngularVelocity.y, 0.3f, 1.5f, out _yawInput);
+        CalculateAssistedAxis(_rollTargetFactor, localAngularVelocity.z * -1, 0.3f, 1.5f, out _rollInput);
     }
     
     /**
