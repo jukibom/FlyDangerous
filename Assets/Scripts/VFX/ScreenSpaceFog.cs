@@ -22,11 +22,13 @@ public class ScreenSpaceFog : MonoBehaviour {
     }
 
     private void OnGraphicsSettingsApplied() {
-        if (_volume.profile.TryGet<SCPE.Fog>(out var fog)) {
-            var distance = Preferences.Instance.GetFloat("graphics-fog-draw-distance");
-            fog.fogStartDistance.Override(distance - 4000f);
-            fog.fogEndDistance.Override(distance);
-        }
+        #if (NO_PAID_ASSETS == false)
+            if (_volume.profile.TryGet<SCPE.Fog>(out var fog)) {
+                var distance = Preferences.Instance.GetFloat("graphics-fog-draw-distance");
+                fog.fogStartDistance.Override(distance - 4000f);
+                fog.fogEndDistance.Override(distance);
+            }
+        #endif
     }
 
     private void OnVRStatus(bool vrEnabled) {
@@ -34,8 +36,10 @@ public class ScreenSpaceFog : MonoBehaviour {
     }
 
     private void UseRadialFog(bool useRadialFog) {
-        if (_volume && _volume.profile.TryGet<SCPE.Fog>(out var fog)) {
-            fog.useRadialDistance.Override(useRadialFog);
-        }
+        #if (NO_PAID_ASSETS == false)
+            if (_volume && _volume.profile.TryGet<SCPE.Fog>(out var fog)) {
+                fog.useRadialDistance.Override(useRadialFog);
+            }
+        #endif
     }
 }

@@ -1,12 +1,9 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using Den.Tools;
 using Engine;
 using MapMagic.Core;
 using Misc;
 using UnityEngine;
-using UnityEngine.Events;
 
 [RequireComponent(typeof(MapMagicObject))]
 public class TerrainLoader : MonoBehaviour {
