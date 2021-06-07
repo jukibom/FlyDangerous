@@ -32,3 +32,9 @@ Relies on following assets downloaded into Assets/:
 * Map Magic 2 - https://assetstore.unity.com/packages/tools/terrain/mapmagic-2-165180
 * Allsky - https://assetstore.unity.com/packages/2d/textures-materials/sky/allsky-200-sky-skybox-set-10109
 * SC Post Effects - https://assetstore.unity.com/packages/vfx/shaders/fullscreen-camera-effects/sc-post-effects-pack-108753
+
+## License
+
+All code is distributed under the GPLv3 license (see LICENSE).
+All models, textures and materials which are developed solely for this project (e.g. are not third party assets) are distributed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International license (see ASSET-LICENSE)
+Permission to reuse the logo and name is not permitted.
