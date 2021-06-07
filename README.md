@@ -27,11 +27,24 @@ This project aims to provide a ground-up reimplementation of a similar-enough fl
 
 Unity build: 2021.1.7f1
 
-Relies on following assets downloaded into Assets/:
+Relies on following assets:
 
-* Map Magic 2 - https://assetstore.unity.com/packages/tools/terrain/mapmagic-2-165180
+* Map Magic 2 Bundle - https://assetstore.unity.com/packages/tools/terrain/mapmagic-2-bundle-178682 
 * Allsky - https://assetstore.unity.com/packages/2d/textures-materials/sky/allsky-200-sky-skybox-set-10109
 * SC Post Effects - https://assetstore.unity.com/packages/vfx/shaders/fullscreen-camera-effects/sc-post-effects-pack-108753
+
+IF YOU DO NOT HAVE THESE ASSETS (and, why would you?) and do not wish to buy them, follow these instructions to build:
+
+* Ensure you have https://assetstore.unity.com/packages/tools/terrain/mapmagic-2-165180 in your account (the free version of map magic will suffice, although you will miss some features and may not be able to load some terrains).
+ 
+* Clone the repository
+
+* Find the forward renderer asset in `Assets/Settings` and remove the missing renderer feature in the inspector. This is the SC Post fog effect.
+
+* Go to Edit > Project Settings > Player > Other Settings > Scripting Define Symbols. Add a new define, call it `NO_PAID_ASSETS`. This will disable any code references to non-free assets.
+
+![image](https://user-images.githubusercontent.com/5649179/121093848-8eabe400-c7e5-11eb-83a4-ba646ec68ffe.png)
+
 
 ## License
 
