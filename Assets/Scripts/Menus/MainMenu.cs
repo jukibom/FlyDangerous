@@ -21,7 +21,6 @@ namespace Menus {
         [SerializeField] private FreeRoamMenu freeRoamMenu;
         [SerializeField] private LoadCustomMenu loadCustomMenu;
         [SerializeField] private GameObject shipMesh;
-        [SerializeField] private GameObject alphaMessage;
 
         [SerializeField] private Camera flatScreenCamera;
         [SerializeField] private Camera uiCamera;
@@ -128,24 +127,7 @@ namespace Menus {
         IEnumerator MenuLoad() {
             string sceneEnvironment = "Planet_Orbit_Bottom";
             
-            if (FirstRun) {
-                // ALPHA MESSAGE
-                // if it's disabled in the editor don't show this fade animation
-                if (alphaMessage.activeSelf) {
-                    topMenu.Hide();
-                    shipMesh.SetActive(false);
-                    yield return new WaitForSeconds(8);
-                    Game.Instance.FadeToBlack();
-                    yield return new WaitForSeconds(1);
-                    alphaMessage.SetActive(false);
-                    Game.Instance.FadeFromBlack();
-                    topMenu.Show();
-                    shipMesh.SetActive(true);
-                }
-            }
-            else {
-                alphaMessage.SetActive(false);
-                
+            if (!FirstRun) {
                 // If it's not the first run, switch up the title screen :D
                 int environmentIndex = Random.Range(0, 5);
                 switch (environmentIndex) {
@@ -157,6 +139,7 @@ namespace Menus {
                 }
             }
             yield return SceneManager.LoadSceneAsync(sceneEnvironment, LoadSceneMode.Additive);
+            Game.Instance.FadeFromBlack();
         }
 
         private void OnEnvironmentLoadComplete(Scene scene, LoadSceneMode mode) {
