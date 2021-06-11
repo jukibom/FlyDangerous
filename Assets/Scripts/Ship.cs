@@ -59,24 +59,24 @@ public class Ship : MonoBehaviour {
     // TODO: remove this stuff once params are finalised (this is for debug panel in release)
     public static ShipParameters ShipParameterDefaults {
         get => new ShipParameters {
-            mass = 550f,
+            mass = 1300f,
             drag = 0f,
             angularDrag = 0f,
-            inertiaTensorMultiplier = 125f,
+            inertiaTensorMultiplier = 175f,
             maxSpeed = 800f,
             maxBoostSpeed = 932f,
             maxThrust = 110000f,
-            torqueThrustMultiplier = 0.1f,
+            torqueThrustMultiplier = 0.075f,
             throttleMultiplier = 1f,
-            latHMultiplier = 0.7f,
-            latVMultiplier = 0.9f,
+            latHMultiplier = 0.5f,
+            latVMultiplier = 0.7f,
             pitchMultiplier = 1f,
             rollMultiplier = 0.3f,
             yawMultiplier = 0.8f,
             thrustBoostMultiplier = 6.5f,
             torqueBoostMultiplier = 2f,
-            totalBoostTime = 6f,
-            totalBoostRotationalTime = 7f,
+            totalBoostTime = 5f,
+            totalBoostRotationalTime = 6f,
             boostMaxSpeedDropOffTime = 12f,
             boostRechargeTime = 4f,
             boostCapacitorPercentCost = 70f,
@@ -577,9 +577,9 @@ public class Ship : MonoBehaviour {
         // convert global rigid body velocity into local space
         Vector3 localAngularVelocity = transform.InverseTransformDirection(_rigidBody.angularVelocity);
 
-        CalculateAssistedAxis(_pitchTargetFactor, localAngularVelocity.x, 0.3f, 1.5f, out _pitchInput);
-        CalculateAssistedAxis(_yawTargetFactor, localAngularVelocity.y, 0.3f, 1.5f, out _yawInput);
-        CalculateAssistedAxis(_rollTargetFactor, localAngularVelocity.z * -1, 0.3f, 1.5f, out _rollInput);
+        CalculateAssistedAxis(_pitchTargetFactor, localAngularVelocity.x, 0.3f, 2.0f, out _pitchInput);
+        CalculateAssistedAxis(_yawTargetFactor, localAngularVelocity.y, 0.3f, 2.0f, out _yawInput);
+        CalculateAssistedAxis(_rollTargetFactor, localAngularVelocity.z * -1, 0.3f, 2.0f, out _rollInput);
     }
     
     /**
