@@ -79,8 +79,6 @@ namespace Engine {
                     return 5000.0f;
                 case "graphics-terrain-chunks":
                     return 1.0f;
-                case "graphics-fog-draw-distance":
-                    return 8000.0f;
                 case "graphics-field-of-view":
                     return 80.0f;
                 case "graphics-render-scale":

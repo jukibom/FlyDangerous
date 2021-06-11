@@ -1,4 +1,5 @@
 using Engine;
+using MapMagic.Core;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -23,10 +24,13 @@ public class ScreenSpaceFog : MonoBehaviour {
 
     private void OnGraphicsSettingsApplied() {
         #if (NO_PAID_ASSETS == false)
-            if (_volume.profile.TryGet<SCPE.Fog>(out var fog)) {
-                var distance = Preferences.Instance.GetFloat("graphics-fog-draw-distance");
-                fog.fogStartDistance.Override(distance - 4000f);
-                fog.fogEndDistance.Override(distance);
+            var mapMagic = FindObjectOfType<MapMagicObject>();
+            if (mapMagic && _volume.profile.TryGet<SCPE.Fog>(out var fog)) {
+                var tileChunkCount = Preferences.Instance.GetFloat("graphics-terrain-chunks");
+                var tileSize = mapMagic.tileSize.x;
+                var fogDistance = (tileSize * tileChunkCount) - tileSize / 2;
+                fog.fogStartDistance.Override(Mathf.Max(1000f, fogDistance - fogDistance/2));
+                fog.fogEndDistance.Override(fogDistance);
             }
         #endif
     }
