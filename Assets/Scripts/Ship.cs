@@ -519,6 +519,8 @@ public class Ship : MonoBehaviour {
     }
 
     private void CalculateFlightForces(float maxThrustWithBoost, float maxTorqueWithBoost, float maxSpeedWithBoost, out float calculatedThrust) {
+        
+        /* FLIGHT ASSISTS */
         if (_flightAssistVectorControl) {
             CalculateVectorControlFlightAssist(maxSpeedWithBoost);
         }
@@ -527,6 +529,7 @@ public class Ship : MonoBehaviour {
             CalculateRotationalDampeningFlightAssist();
         }
         
+        /* INPUTS */
         // special case for throttle - no reverse while boosting but, while always going forward, the ship will change
         // vector less harshly while holding back (up to 40%)
         var throttle = _isBoosting && _currentBoostTime < _totalBoostTime
@@ -541,41 +544,23 @@ public class Ship : MonoBehaviour {
             throttle * _throttleMultiplier
         );
 
-        // standard thrust calculated per-axis
+        /* THRUST */
+        // standard thrust calculated per-axis (each axis has it's own max thrust component including boost)
+        var baseThrust = thrustInput * _maxThrust;
         var thrust = thrustInput * maxThrustWithBoost;
-        
-        // new approach - shared across axis
-        if (!Preferences.Instance.GetBool("enableExperimentalTrichording")) {
-            // When applying the actual thrust to the rigidbody, we only have a limited amount of engine thrust passed in
-            // - maxThrustWithBoost is precalculated to include any additional thrust the boost is currently generating.
-
-            // To avoid applying max thrust in multiple directions (e.g. faster than a single direction), we need to combine
-            // all our directions and divide our result thrust vector by the base input total requested.
-            // e.g. if two axes are held down fully then our request is 2 (ignoring multipliers). Therefore, both axes
-            // will receive 0.5x their respective thrust. 
-
-            // First, sum the total absolute requested thrust to divide each axis with.
-            // We only care if the combined axes are greater than 1 as that is over-extending the maximum thrust.
-            var totalRequestedThrustInput = Math.Max(1f,
-                Math.Abs(thrustInput.x) + Math.Abs(thrustInput.y) + Math.Abs(thrustInput.z));
-
-            // final thrust calculated from raw input * available thrust and divided by the total requested from three axes
-            thrust = (thrustInput * maxThrustWithBoost) / totalRequestedThrustInput;
-        }
-
         _rigidBody.AddForce(transform.TransformDirection(thrust));
-
+        // output var for indicators
+        calculatedThrust = Math.Abs(baseThrust.x) + Math.Abs(baseThrust.y) + Math.Abs(baseThrust.z);
+        
+        /* TORQUE */
         // torque is applied entirely independently, this may be looked at later.
         var torque = new Vector3(
             _pitchInput * _pitchMultiplier * maxTorqueWithBoost,
             _yawInput * _yawMultiplier * maxTorqueWithBoost,
             _rollInput * _rollMultiplier * maxTorqueWithBoost * -1
         ) * _inertialTensorMultiplier;   // if we don't counteract the inertial tensor of the rigidbody, the rotation spin would increase in lockstep
-
         
         _rigidBody.AddTorque(transform.TransformDirection(torque));
-
-        calculatedThrust = Math.Abs(thrust.x) + Math.Abs(thrust.y) + Math.Abs(thrust.z);
     }
 
     private void CalculateVectorControlFlightAssist(float maxSpeedWithBoost) {

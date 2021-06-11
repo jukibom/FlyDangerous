@@ -62,8 +62,6 @@ namespace Engine {
                 case "mouseXInvert:":
                 case "mouseYInvert:":
                 case "enableExperimentalTerrain":
-                case "enableTerrainScaling":
-                case "enableExperimentalTrichording":
                     return false;
 
                 default: 
