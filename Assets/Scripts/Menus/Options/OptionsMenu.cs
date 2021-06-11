@@ -43,6 +43,15 @@ namespace Menus.Options {
             // this._animator.SetBool("Open", false);
         }
 
+        public void ToggleVR() {
+            if (Game.Instance.IsVREnabled) {
+                Game.Instance.DisableVRIfNeeded();
+            }
+            else {
+                Game.Instance.EnableVR();
+            }
+        }
+
         public void Apply() {
             SavePreferences();
             SetDebugFlightParameters();
