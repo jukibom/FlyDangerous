@@ -1,4 +1,8 @@
-﻿0.2.2
+﻿0.2.2b
+Fixes:
+    * Apply rigidbody physics along with specialised ship param defaults on load. Sigh.
+
+0.2.2
 New:
     * Added VR toggle button in options (using param -vr still works but this is much simpler to toggle at runtime)
     * Added experimental high resolution terrain toggle - this MUST be used in conjunction with terrain LOD graphics option or you're going to have a bad time as it renders about 20 million triangles at max quality! Set to about 70-80% for a good balance. Looking for feedback.
@@ -7,7 +11,7 @@ New:
     
 Changes:
     * Ship physics changes - scrapped shared thrust pool changes, thank you to everyone who gave feedback!
-        * Increased mass to 1300Kg
+        * Increased mass to 1100Kg
         * Increased tensor multiplier to 175 to reduce spin on collision
         * Decreased torque by 25% (this is to balance a change to the ship mesh - size affects rotation!)
         * Decreased lateral thrust multipliers (lats by 28%, verts by 22%)

@@ -59,7 +59,7 @@ public class Ship : MonoBehaviour {
     // TODO: remove this stuff once params are finalised (this is for debug panel in release)
     public static ShipParameters ShipParameterDefaults {
         get => new ShipParameters {
-            mass = 1300f,
+            mass = 1100f,
             drag = 0f,
             angularDrag = 0f,
             inertiaTensorMultiplier = 175f,
@@ -234,6 +234,11 @@ public class Ship : MonoBehaviour {
         }
         _rigidBody.centerOfMass = Vector3.zero;
         _rigidBody.inertiaTensorRotation = Quaternion.identity;
+
+        // rigidbody defaults
+        _rigidBody.mass = ShipParameterDefaults.mass;
+        _rigidBody.drag = ShipParameterDefaults.drag;
+        _rigidBody.angularDrag = ShipParameterDefaults.angularDrag;
 
         // setup angular momentum for collisions (higher multiplier = less spin)
         _initialInertiaTensor = _rigidBody.inertiaTensor;
