@@ -34,8 +34,8 @@ public class TerrainLoader : MonoBehaviour {
         _mapMagicTerrain.terrainSettings.pixelError = (int) pixelError;
         _mapMagicTerrain.terrainSettings.baseMapDist = (int) textureHQDistance;
         if (terrainHighRes) {
-            _mapMagicTerrain.tileResolution = MapMagicObject.Resolution._1025;
-            _mapMagicTerrain.tileMargins = 2;
+            _mapMagicTerrain.tileResolution = MapMagicObject.Resolution._513;
+            _mapMagicTerrain.tileMargins = 6;
         }
         
         _mapMagicTerrain.mainRange = (int) terrainChunks;

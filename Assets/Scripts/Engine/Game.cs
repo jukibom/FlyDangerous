@@ -457,6 +457,7 @@ public class Game : MonoBehaviour {
         }
 
         // if terrain needs to generate, toggle special logic and wait for it to load all primary tiles
+        // TODO: shift this crap to the TerrainLoader, it makes way more sense over there
         var mapMagic = FindObjectOfType<MapMagicObject>();
         if (mapMagic) {
             // our terrain gen may start disabled to prevent painful threading fun
