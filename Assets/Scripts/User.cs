@@ -262,7 +262,6 @@ public class User : MonoBehaviour {
 
     public void OnBoost(InputValue value) {
         _boost = value.isPressed;
-        Debug.Log(_boost);
     }
 
     public void OnVelocityLimiter(InputValue value) {

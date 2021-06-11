@@ -12,6 +12,7 @@ public class TerrainLoader : MonoBehaviour {
 
     public void Start() {
         _mapMagicTerrain = GetComponent<MapMagicObject>();
+        OnGraphicsOptionsApplied();
     }
 
     private void OnEnable() {
@@ -27,10 +28,15 @@ public class TerrainLoader : MonoBehaviour {
         var pixelError = MathfExtensions.Remap(10, 100, 50, 0, terrainLOD);
         var textureHQDistance = Preferences.Instance.GetFloat("graphics-terrain-texture-distance");
         var terrainChunks = Preferences.Instance.GetFloat("graphics-terrain-chunks");
+        var terrainHighRes = Preferences.Instance.GetBool("enableExperimentalHighResTerrain");
 
         // set map magic preferences
         _mapMagicTerrain.terrainSettings.pixelError = (int) pixelError;
         _mapMagicTerrain.terrainSettings.baseMapDist = (int) textureHQDistance;
+        if (terrainHighRes) {
+            _mapMagicTerrain.tileResolution = MapMagicObject.Resolution._1025;
+            _mapMagicTerrain.tileMargins = 2;
+        }
         
         _mapMagicTerrain.mainRange = (int) terrainChunks;
         _mapMagicTerrain.tiles.generateRange = (int) terrainChunks;
