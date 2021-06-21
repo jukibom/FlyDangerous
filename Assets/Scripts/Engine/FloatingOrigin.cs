@@ -1,38 +1,44 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class FloatingOrigin : MonoBehaviour {
 
-    [SerializeField] public Transform focalTransform; // this should be the client player ship
-
-    // Distance required to perform a correction. If 0, will occur every frame.
-    [SerializeField] public float correctionDistance = 0.0f; 
+    public static FloatingOrigin Instance { get; private set; }
+    public delegate void FloatingOriginCorrectionAction(Vector3 offset);
+    public static event FloatingOriginCorrectionAction OnFloatingOriginCorrection;
     
-    // The target world transform to manipulate
-     private Transform _worldTransform;
+    // The object to track - this should be the local client player
+    [SerializeField] public Transform focalTransform; 
+    
+    // Distance required to perform a correction. If 0, will occur every frame.
+    [SerializeField] public float correctionDistance = 100.0f;
 
-     public Vector3 FocalObjectPosition => focalTransform.position + (_worldTransform.position * -1);
+    public Vector3 Origin { get; private set; }
+    public Vector3 FocalObjectPosition => focalTransform.position + Origin;
 
-    void OnEnable() {
-        _worldTransform = GameObject.Find("World")?.transform;
-        if (!_worldTransform) {
-            Debug.LogWarning("Floating Origin failed to find target World! Is one loaded?");
+    void Awake() {
+        // singleton shenanigans
+        if (Instance == null) {
+            Instance = this;
         }
-    }
+        else {
+            Destroy(gameObject);
+            return;
+        }
 
-    private void OnDisable() {
-        _worldTransform = null;
+        DontDestroyOnLoad(gameObject);
     }
 
     void Update() {
-        if (_worldTransform && focalTransform.position.magnitude > correctionDistance) {
-            _worldTransform.position -= focalTransform.position;
+        
+        // if we have a focal object, perform the floating origin fix
+        if (focalTransform && focalTransform.position.magnitude > correctionDistance) {
+            var focalPosition = focalTransform.position;
+            Origin += focalPosition;
+
+            OnFloatingOriginCorrection?.Invoke(focalPosition);
+
+            // reset focal object (local player) to 0,0,0
             focalTransform.position = Vector3.zero;
         }
     }
-
 }

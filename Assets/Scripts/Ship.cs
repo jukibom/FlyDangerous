@@ -213,6 +213,7 @@ public class Ship : MonoBehaviour {
 
     public void Awake() {
         _rigidBody = GetComponent<Rigidbody>();
+        FloatingOrigin.Instance.focalTransform = transform;
     }
 
     public void Start() {
@@ -425,13 +426,10 @@ public class Ship : MonoBehaviour {
         rotation = Quaternion.Euler(r.x, r.y, r.z);
 
         // if floating origin fix is active, overwrite position with corrected world space
-        var floatingOrigin = FindObjectOfType<FloatingOrigin>();
-        if (floatingOrigin) {
-            var origin = floatingOrigin.FocalObjectPosition;
-            position.x = origin.x;
-            position.y = origin.y;
-            position.z = origin.z;
-        }
+        var origin = FloatingOrigin.Instance.FocalObjectPosition;
+        position.x = origin.x;
+        position.y = origin.y;
+        position.z = origin.z;
     }
 
     private void OnTriggerEnter(Collider other) {
