@@ -213,10 +213,12 @@ public class Ship : MonoBehaviour {
 
     public void Awake() {
         _rigidBody = GetComponent<Rigidbody>();
-        FloatingOrigin.Instance.focalTransform = transform;
     }
 
     public void Start() {
+        // register self as floating origin focus
+        FloatingOrigin.Instance.focalTransform = transform;
+        
         switch (Preferences.Instance.GetString("flightAssistDefault")) {
             case "vector assist only": 
                 _flightAssistVectorControl = true;
