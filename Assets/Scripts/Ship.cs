@@ -5,6 +5,7 @@ using System.Linq;
 using Audio;
 using Engine;
 using JetBrains.Annotations;
+using Mirror;
 using Misc;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -54,7 +55,7 @@ public class ShipParameters {
 
 [RequireComponent(typeof(Transform))]
 [RequireComponent(typeof(Rigidbody))]
-public class Ship : MonoBehaviour {
+public class Ship : NetworkBehaviour {
     
     // TODO: remove this stuff once params are finalised (this is for debug panel in release)
     public static ShipParameters ShipParameterDefaults {
@@ -217,6 +218,7 @@ public class Ship : MonoBehaviour {
 
     public void Start() {
         // register self as floating origin focus
+        // TODO Move this to client local start for multiplayer
         FloatingOrigin.Instance.focalTransform = transform;
         
         switch (Preferences.Instance.GetString("flightAssistDefault")) {
