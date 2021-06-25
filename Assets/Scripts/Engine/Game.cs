@@ -193,7 +193,7 @@ public class Game : MonoBehaviour {
             // now we can finally start the level load
             scenesLoading.Add(SceneManager.LoadSceneAsync(environment, LoadSceneMode.Additive));
             scenesLoading.Add(SceneManager.LoadSceneAsync(location, LoadSceneMode.Additive));
-            scenesLoading.Add(SceneManager.LoadSceneAsync("Player", LoadSceneMode.Additive));
+            scenesLoading.Add(SceneManager.LoadSceneAsync("Engine", LoadSceneMode.Additive));
             scenesLoading.ForEach(scene => scene.allowSceneActivation = false);
             
             StartCoroutine(LoadGameScenes(loadText, dynamicPlacementStart));
