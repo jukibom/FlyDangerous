@@ -31,6 +31,7 @@ namespace Menus {
         void OnEnable() {
             SceneManager.sceneLoaded += OnEnvironmentLoadComplete;
             Game.OnVRStatus += OnVRStatus;
+            FloatingOrigin.Instance.focalTransform = transform;
             StartCoroutine(MenuLoad());
         }
 
