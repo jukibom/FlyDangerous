@@ -54,21 +54,10 @@ namespace Menus.Main_Menu {
             Hide();
         }
 
-        public void CloseFreeRoamPanel() {
-            freeRoamMenu.Hide();
-            Show();
-        }
-
         public void OpenLoadCustomPanel() {
             AudioManager.Instance.Play("ui-dialog-open");
             loadCustomMenu.Show();
             Hide();
         }
-
-        public void CloseLoadCustomPanel() {
-            loadCustomMenu.Hide();
-            Show();
-        }
-
     }
 }
