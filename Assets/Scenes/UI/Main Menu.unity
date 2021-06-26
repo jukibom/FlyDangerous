@@ -10344,6 +10344,7 @@ GameObject:
   - component: {fileID: 1542853086}
   - component: {fileID: 1542853085}
   - component: {fileID: 1542853084}
+  - component: {fileID: 1542853087}
   m_Layer: 0
   m_Name: '@NetworkManagerLobby'
   m_TagString: Untagged
@@ -10401,11 +10402,11 @@ MonoBehaviour:
   disconnectInactiveConnections: 0
   disconnectInactiveTimeout: 60
   authenticator: {fileID: 0}
-  playerPrefab: {fileID: 0}
-  autoCreatePlayer: 0
+  playerPrefab: {fileID: 1767139775458680011, guid: 28f3c96dd6aab644ab0a02156a3f779a, type: 3}
+  autoCreatePlayer: 1
   playerSpawnMethod: 0
   spawnPrefabs: []
-  menuScene: 
+  menuScene: Assets/Scenes/UI/Main Menu.unity
   lobbyPlayerPrefabContainer: {fileID: 1045544569}
   lobbyPlayerPrefab: {fileID: 3907440634423962403, guid: 399e53ad1d254b14e8928b0a1b081736, type: 3}
 --- !u!4 &1542853086
@@ -10422,6 +10423,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1542853087
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1542853083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6442dc8070ceb41f094e44de0bf87274, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  showGUI: 1
+  offsetX: 0
+  offsetY: 0
 --- !u!224 &1550950700 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}

@@ -21,33 +21,30 @@ namespace Engine {
         public KcpTransport networkTransport => GetComponent<KcpTransport>();
 
         public override void OnClientConnect(NetworkConnection conn) {
+            Debug.Log("CLIENT CONNECT");
             base.OnClientConnect(conn);
             OnClientConnected?.Invoke();
         }
         
         public override void OnClientDisconnect(NetworkConnection conn) {
+            Debug.Log("CLIENT DISCONNECT");
             base.OnClientDisconnect(conn);
             OnClientDisconnected?.Invoke();
         }
 
         public override void OnServerConnect(NetworkConnection conn) {
+            Debug.Log("SERVER CONNECT" + " (" + numPlayers + " / " + maxConnections + " players)");
             if (numPlayers >= maxConnections) {
-                conn.Disconnect();
-                return;
-            }
-
-            // TODO: allow clients to connect mid-game here
-            if (SceneManager.GetActiveScene().path != menuScene) {
                 conn.Disconnect();
                 return;
             }
         }
 
         public override void OnServerAddPlayer(NetworkConnection conn) {
-            if (SceneManager.GetActiveScene().path == menuScene) {
-                LobbyPlayer lobbyPlayer = Instantiate(lobbyPlayerPrefab, lobbyPlayerPrefabContainer, true);
-                NetworkServer.AddPlayerForConnection(conn, lobbyPlayer.gameObject);
-            }
+            Debug.Log("PLAYER ADDED");
+            // TODO: Handle joining in-game (this assumes we're in a lobby!)
+            LobbyPlayer lobbyPlayer = Instantiate(lobbyPlayerPrefab, lobbyPlayerPrefabContainer, false);
+            NetworkServer.AddPlayerForConnection(conn, lobbyPlayer.gameObject);
         }
     }
 }
