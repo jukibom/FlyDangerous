@@ -2959,7 +2959,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 424086c46269f9a4cbfd58a3b1c0b220, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultActiveButton: {fileID: 1444420200}
+  networkManagerLobby: {fileID: 1542853085}
+  lobbyMenu: {fileID: 1954131159}
+  joinButton: {fileID: 1444420200}
   topMenu: {fileID: 1597574603}
   playerName: {fileID: 1832190185}
   serverIPAddress: {fileID: 178815633}
@@ -4760,10 +4762,22 @@ PrefabInstance:
       propertyPath: sounds.Array.data[1].volume
       value: 0.1
       objectReference: {fileID: 0}
+    - target: {fileID: 6925106524373447586, guid: 165dc8298f618aa4e8451c78af25d6bd, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6964111538621428578, guid: 165dc8298f618aa4e8451c78af25d6bd, type: 3}
       propertyPath: focalTransform
       value: 
       objectReference: {fileID: 339787321}
+    - target: {fileID: 8361102878264447051, guid: 165dc8298f618aa4e8451c78af25d6bd, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8477922917375829853, guid: 165dc8298f618aa4e8451c78af25d6bd, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 165dc8298f618aa4e8451c78af25d6bd, type: 3}
 --- !u!1001 &652801881
@@ -6313,18 +6327,18 @@ PrefabInstance:
     - target: {fileID: 609786914283039943, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 467718859}
     - target: {fileID: 609786914283039943, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 609786914283039943, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ClosePanel
+      value: Join
       objectReference: {fileID: 0}
     - target: {fileID: 609786914283039943, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: Menus.Main_Menu.MultiPlayerMenu, Assembly-CSharp
+      value: Menus.Main_Menu.JoinMenu, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 609786914283039943, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -10137,6 +10151,22 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 5406349707295731392, guid: 7979c4c410718cc4a8e1307f7cf5175b, type: 3}
+      propertyPath: m_ContentType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5406349707295731392, guid: 7979c4c410718cc4a8e1307f7cf5175b, type: 3}
+      propertyPath: m_KeyboardType
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5406349707295731392, guid: 7979c4c410718cc4a8e1307f7cf5175b, type: 3}
+      propertyPath: m_CharacterLimit
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5406349707295731392, guid: 7979c4c410718cc4a8e1307f7cf5175b, type: 3}
+      propertyPath: m_CharacterValidation
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5406349707295731392, guid: 7979c4c410718cc4a8e1307f7cf5175b, type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
       value: 1
       objectReference: {fileID: 0}
@@ -10303,6 +10333,95 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7979c4c410718cc4a8e1307f7cf5175b, type: 3}
+--- !u!1 &1542853083
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1542853086}
+  - component: {fileID: 1542853085}
+  - component: {fileID: 1542853084}
+  m_Layer: 0
+  m_Name: '@NetworkManagerLobby'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1542853084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1542853083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b0fecffa3f624585964b0d0eb21b18e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Port: 7777
+  NoDelay: 1
+  Interval: 10
+  Timeout: 10000
+  FastResend: 2
+  CongestionWindow: 0
+  SendWindowSize: 4096
+  ReceiveWindowSize: 4096
+  debugLog: 0
+  statisticsGUI: 0
+  statisticsLog: 0
+--- !u!114 &1542853085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1542853083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 501eaa22e27e3d14b934284a57ef3844, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dontDestroyOnLoad: 1
+  PersistNetworkManagerToOfflineScene: 0
+  runInBackground: 1
+  autoStartServerBuild: 1
+  serverTickRate: 30
+  serverBatching: 1
+  serverBatchInterval: 0
+  offlineScene: 
+  onlineScene: 
+  transport: {fileID: 1542853084}
+  networkAddress: localhost
+  maxConnections: 16
+  disconnectInactiveConnections: 0
+  disconnectInactiveTimeout: 60
+  authenticator: {fileID: 0}
+  playerPrefab: {fileID: 0}
+  autoCreatePlayer: 0
+  playerSpawnMethod: 0
+  spawnPrefabs: []
+  menuScene: 
+  lobbyPlayerPrefabContainer: {fileID: 1045544569}
+  lobbyPlayerPrefab: {fileID: 3907440634423962403, guid: 399e53ad1d254b14e8928b0a1b081736, type: 3}
+--- !u!4 &1542853086
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1542853083}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!224 &1550950700 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
@@ -10370,7 +10489,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultActiveButton: {fileID: 1624261092}
   topMenu: {fileID: 941453839}
-  hostMenu: {fileID: 1954131159}
+  lobbyMenu: {fileID: 1954131159}
   joinMenu: {fileID: 467718859}
 --- !u!95 &1597574604
 Animator:
@@ -19437,7 +19556,7 @@ GameObject:
   - component: {fileID: 1954131155}
   - component: {fileID: 1954131159}
   m_Layer: 5
-  m_Name: Host Menu
+  m_Name: Lobby Menu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19550,8 +19669,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4925a9f6b342bd875b52dcb32ab48d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultActiveButton: {fileID: 166448903}
+  networkManagerLobby: {fileID: 1542853085}
   topMenu: {fileID: 1597574603}
+  headerText: {fileID: 519472857}
+  defaultActiveButton: {fileID: 166448903}
 --- !u!1 &1964492843
 GameObject:
   m_ObjectHideFlags: 0
@@ -20956,6 +21077,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1045544569}
     m_Modifications:
+    - target: {fileID: 229494490163020971, guid: 399e53ad1d254b14e8928b0a1b081736, type: 3}
+      propertyPath: sceneId
+      value: 2170419426
+      objectReference: {fileID: 0}
     - target: {fileID: 7283075564832124328, guid: 399e53ad1d254b14e8928b0a1b081736, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1

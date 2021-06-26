@@ -9,7 +9,7 @@ namespace Menus.Main_Menu {
 
         [SerializeField] private Button defaultActiveButton;
         [SerializeField] private TopMenu topMenu;
-        [SerializeField] private HostMenu hostMenu;
+        [SerializeField] private LobbyMenu lobbyMenu;
         [SerializeField] private JoinMenu joinMenu;
         private Animator _animator;
         
@@ -35,7 +35,8 @@ namespace Menus.Main_Menu {
 
         public void OpenHostPanel() {
             AudioManager.Instance.Play("ui-dialog-open");
-            hostMenu.Show();
+            lobbyMenu.Show();
+            lobbyMenu.StartHost();
             Hide();
         }
 

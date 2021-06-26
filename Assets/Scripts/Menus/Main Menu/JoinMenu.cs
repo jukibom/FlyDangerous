@@ -8,8 +8,12 @@ using UnityEngine.UI;
 
 namespace Menus.Main_Menu {
     public class JoinMenu : MonoBehaviour {
-        [SerializeField] private Button defaultActiveButton;
+        [SerializeField] private NetworkManagerLobby networkManagerLobby;
+        [SerializeField] private LobbyMenu lobbyMenu;
+        [SerializeField] private Button joinButton;
         [SerializeField] private MultiPlayerMenu topMenu;
+        
+        [Header("Input Fields")]
         [SerializeField] private InputField playerName;
         [SerializeField] private InputField serverIPAddress;
         [SerializeField] private InputField serverPort;
@@ -21,15 +25,22 @@ namespace Menus.Main_Menu {
         }
 
         private void OnEnable() {
+            NetworkManagerLobby.OnClientConnected += HandleClientConnected;
+            NetworkManagerLobby.OnClientDisconnected += HandleClientDisconnected;
             playerName.text = Preferences.Instance.GetString("playerName");
             serverIPAddress.text = Preferences.Instance.GetString("lastUsedServerJoinAddress");
             serverPort.text = Preferences.Instance.GetString("lastUsedServerJoinPort");
         }
 
+        private void OnDisable() {
+            NetworkManagerLobby.OnClientConnected -= HandleClientConnected;
+            NetworkManagerLobby.OnClientDisconnected -= HandleClientDisconnected;
+        }
+
         public void Show() {
             gameObject.SetActive(true);
             _animator.SetBool("Open", true);
-            defaultActiveButton.Select();
+            joinButton.Select();
         }
 
         public void Hide() {
@@ -49,9 +60,31 @@ namespace Menus.Main_Menu {
             Preferences.Instance.SetString("lastUsedServerJoinPort", serverPort.text);
             Preferences.Instance.Save();
         }
-
+        
         public void Join() {
-            // OH GOD WHY THE PAIN MAKE IT STOP
+            string hostAddress = serverIPAddress.text;
+            ushort port = Convert.ToUInt16(Int16.Parse(serverPort.text));
+            Debug.Log("Connecting to " + hostAddress + ":" + port);
+            
+            networkManagerLobby.networkAddress = hostAddress;
+            networkManagerLobby.networkTransport.Port = port;
+            
+            networkManagerLobby.StartClient();
+            joinButton.interactable = false;
+        }
+
+        private void HandleClientConnected() {
+            joinButton.interactable = true;
+            Hide();
+            lobbyMenu.Show();
+            lobbyMenu.JoinPlayer();
+        }
+
+        private void HandleClientDisconnected() {
+            joinButton.interactable = true;
+            Show();
+            lobbyMenu.Hide();
+            // TODO: Some disconnect reason here?
         }
     }
 }

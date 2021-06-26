@@ -27,7 +27,6 @@ namespace Menus.Main_Menu {
         void OnEnable() {
             SceneManager.sceneLoaded += OnEnvironmentLoadComplete;
             Game.OnVRStatus += OnVRStatus;
-            FloatingOrigin.Instance.focalTransform = transform;
             StartCoroutine(MenuLoad());
         }
 
@@ -83,6 +82,8 @@ namespace Menus.Main_Menu {
                 }
             }
             yield return SceneManager.LoadSceneAsync(sceneEnvironment, LoadSceneMode.Additive);
+            
+            FloatingOrigin.Instance.focalTransform = transform;
             Game.Instance.FadeFromBlack();
         }
 

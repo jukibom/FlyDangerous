@@ -7,9 +7,14 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace Menus.Main_Menu {
-    public class HostMenu : MonoBehaviour {
-        [SerializeField] private Button defaultActiveButton;
+    public class LobbyMenu : MonoBehaviour {
+        [SerializeField] private NetworkManagerLobby networkManagerLobby;
         [SerializeField] private MultiPlayerMenu topMenu;
+
+        [Header("UI")]
+        [SerializeField] private Text headerText;
+        [SerializeField] private Button defaultActiveButton;
+        
         private Animator _animator;
 
         private void Awake() {
@@ -26,14 +31,24 @@ namespace Menus.Main_Menu {
             gameObject.SetActive(false);
         }
 
+        public void JoinPlayer() {
+            headerText.text = "MULTIPLAYER LOBBY";
+        }
+
+        public void StartHost() {
+            headerText.text = "HOSTING LOBBY";
+            networkManagerLobby.StartHost();
+        }
+
+        public void StopHost() {
+            networkManagerLobby.StopHost();
+        }
+
         public void Cancel() {
             AudioManager.Instance.Play("ui-cancel");
             topMenu.Show();
+            networkManagerLobby.StopHost();
             Hide();
-        }
-
-        public void Join() {
-            // OH GOD WHY THE PAIN MAKE IT STOP
         }
     }
 }
