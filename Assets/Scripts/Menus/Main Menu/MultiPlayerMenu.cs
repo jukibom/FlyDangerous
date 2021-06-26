@@ -9,6 +9,7 @@ namespace Menus.Main_Menu {
 
         [SerializeField] private Button defaultActiveButton;
         [SerializeField] private TopMenu topMenu;
+        [SerializeField] private JoinMenu joinMenu;
         private Animator _animator;
         
         private void Awake() {
@@ -32,11 +33,13 @@ namespace Menus.Main_Menu {
         }
 
         public void OpenHostPanel() {
-            AudioManager.Instance.Play("ui-confirm");
+            AudioManager.Instance.Play("ui-dialog-open");
         }
 
         public void OpenJoinPanel() {
-            AudioManager.Instance.Play("ui-confirm");
+            AudioManager.Instance.Play("ui-dialog-open");
+            joinMenu.Show();
+            Hide();
         }
     }
 }

@@ -97,6 +97,8 @@ namespace Engine {
          
         public string GetDefaultString(string key) {
             switch (key) {
+                case "playerName":
+                    return "PLAYER NAME";
                 case "flightAssistDefault":
                     return "all on";
                 case "inputBindings":
@@ -109,6 +111,10 @@ namespace Engine {
                     return "borderless window";
                 case "graphics-anti-aliasing":
                     return "none";
+                case "lastUsedServerJoinAddress":
+                    return "0.0.0.0";
+                case "lastUsedServerJoinPort":
+                    return "7777";
                 default: 
                     Debug.LogWarning("Attempted to get preference " + key + " with no default specified");
                     return "";
