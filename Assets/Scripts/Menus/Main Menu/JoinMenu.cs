@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Audio;
 using Engine;
-using Menus.Main_Menu;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +13,7 @@ namespace Menus.Main_Menu {
         [SerializeField] private InputField playerName;
         [SerializeField] private InputField serverIPAddress;
         [SerializeField] private InputField serverPort;
+        [SerializeField] private InputField serverPassword;
         private Animator _animator;
 
         private void Awake() {
@@ -47,6 +47,7 @@ namespace Menus.Main_Menu {
             Preferences.Instance.SetString("playerName", playerName.text);
             Preferences.Instance.SetString("lastUsedServerJoinAddress", serverIPAddress.text);
             Preferences.Instance.SetString("lastUsedServerJoinPort", serverPort.text);
+            Preferences.Instance.Save();
         }
 
         public void Join() {

@@ -1,48 +1,39 @@
-﻿using Audio;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using Audio;
 using Engine;
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 namespace Menus.Main_Menu {
-    public class MultiPlayerMenu : MonoBehaviour {
-
+    public class HostMenu : MonoBehaviour {
         [SerializeField] private Button defaultActiveButton;
-        [SerializeField] private TopMenu topMenu;
-        [SerializeField] private HostMenu hostMenu;
-        [SerializeField] private JoinMenu joinMenu;
+        [SerializeField] private MultiPlayerMenu topMenu;
         private Animator _animator;
-        
+
         private void Awake() {
             _animator = GetComponent<Animator>();
         }
-        
+
         public void Show() {
             gameObject.SetActive(true);
             _animator.SetBool("Open", true);
             defaultActiveButton.Select();
         }
-        
+
         public void Hide() {
             gameObject.SetActive(false);
         }
 
-        public void ClosePanel() {
+        public void Cancel() {
             AudioManager.Instance.Play("ui-cancel");
             topMenu.Show();
             Hide();
         }
 
-        public void OpenHostPanel() {
-            AudioManager.Instance.Play("ui-dialog-open");
-            hostMenu.Show();
-            Hide();
-        }
-
-        public void OpenJoinPanel() {
-            AudioManager.Instance.Play("ui-dialog-open");
-            joinMenu.Show();
-            Hide();
+        public void Join() {
+            // OH GOD WHY THE PAIN MAKE IT STOP
         }
     }
 }
