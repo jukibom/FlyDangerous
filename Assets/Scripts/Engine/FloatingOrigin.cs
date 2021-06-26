@@ -24,8 +24,6 @@ public class FloatingOrigin : MonoBehaviour {
             Destroy(gameObject);
             return;
         }
-
-        DontDestroyOnLoad(gameObject);
     }
 
     void Update() {

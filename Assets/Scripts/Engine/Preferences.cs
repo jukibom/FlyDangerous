@@ -44,8 +44,6 @@ namespace Engine {
                 Destroy(gameObject);
                 return;
             }
-
-            DontDestroyOnLoad(gameObject);
         }
 
         public bool GetDefaultBool(string key) {

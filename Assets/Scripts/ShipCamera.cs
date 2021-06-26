@@ -20,7 +20,6 @@ public class ShipCamera : MonoBehaviour {
     }
     
     void FixedUpdate() {
-        
         var angularVelocity = target.angularVelocity;
         Vector3 rotationCameraModifier = Quaternion.AngleAxis(90, Vector3.back) * (angularMomentumDampener * angularVelocity);
 

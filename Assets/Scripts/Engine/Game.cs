@@ -72,8 +72,6 @@ public class Game : MonoBehaviour {
             Destroy(gameObject);
             return;
         }
-
-        DontDestroyOnLoad(gameObject);
     }
 
     public void Start() {
