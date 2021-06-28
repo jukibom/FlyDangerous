@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using Audio;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class UIButton : MonoBehaviour, IPointerEnterHandler, ISelectHandler, IScrollHandler
-{
+public class UIButton : MonoBehaviour, IPointerEnterHandler, ISelectHandler, IScrollHandler {
+    [SerializeField] public Text label;
     public void OnPointerEnter(PointerEventData eventData) {
         PlaySound();
     }

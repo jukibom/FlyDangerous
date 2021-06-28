@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Audio;
 using Engine;
+using Mirror;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,12 +11,15 @@ namespace Menus.Main_Menu {
     public class LobbyMenu : MonoBehaviour {
         [SerializeField] private NetworkManagerLobby networkManagerLobby;
         [SerializeField] private MultiPlayerMenu topMenu;
+        [SerializeField] private UIButton startButton;
 
         [Header("UI")]
         [SerializeField] private Text headerText;
         [SerializeField] private Button defaultActiveButton;
         
         private Animator _animator;
+
+        public UIButton StartButton => startButton;
 
         private void Awake() {
             _animator = GetComponent<Animator>();
@@ -44,11 +48,16 @@ namespace Menus.Main_Menu {
             networkManagerLobby.StopHost();
         }
 
-        public void Cancel() {
+        public void CloseLobby() {
+            // TODO: show a notification here
             AudioManager.Instance.Play("ui-cancel");
             topMenu.Show();
-            networkManagerLobby.StopHost();
             Hide();
+        }
+
+        public void Cancel() {
+            networkManagerLobby.StopHost();
+            CloseLobby();
         }
     }
 }
