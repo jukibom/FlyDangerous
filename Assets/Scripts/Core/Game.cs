@@ -13,41 +13,41 @@ using UnityEngine.SceneManagement;
 using UnityEngine.XR.Interaction.Toolkit;
 
 namespace Core {
+
+    public enum SessionType {
+        Singleplayer,
+        Multiplayer
+    }
     public class Game : MonoBehaviour {
 
         public static Game Instance;
 
         public delegate void RestartLevelAction();
-
         public delegate void GraphicsSettingsApplyAction();
-
         public delegate void VRToggledAction(bool enabled);
-
         public static event RestartLevelAction OnRestart;
         public static event GraphicsSettingsApplyAction OnGraphicsSettingsApplied;
         public static event VRToggledAction OnVRStatus;
 
         [SerializeField] private InputActionAsset playerBindings;
         [SerializeField] private ScriptableRendererFeature ssao;
-        [CanBeNull] private ShipParameters _shipParameters;
+        private ShipParameters _shipParameters;
         private Vector3 _hmdPosition;
         private Quaternion _hmdRotation;
         private LevelLoader _levelLoader;
+        private SessionType _sessionType = SessionType.Singleplayer;
+        private bool _isVREnabled = false;
 
         // TODO: This must be done via network manager to transition state
         [SerializeField] private Ship playerShipPrefab;
-
+        
         // The level data most recently used to load a map
         public LevelData LoadedLevelData => _levelLoader.LoadedLevelData;
-
         // The level data hydrated with the current player position and track layout
         public LevelData LevelDataAtCurrentPosition => _levelLoader.LevelDataAtCurrentPosition;
-
-        private bool _isVREnabled = false;
-
-        public bool IsVREnabled {
-            get => _isVREnabled;
-        }
+        
+        public SessionType SessionType => _sessionType;
+        public bool IsVREnabled => _isVREnabled;
 
         public ShipParameters ShipParameters {
             get => _shipParameters == null
@@ -173,11 +173,17 @@ namespace Core {
         }
 
         public void StartGame(LevelData levelData, bool dynamicPlacementStart = false) {
+            
+            /* TODO: Split this somehow into single and multiplayer - logic should be mostly the same but we don't
+                transition from a lobby and we need to set the queryable SessionType for other logic in-game
+                (e.g. no actual pause on pause menu, quick to menu being quit to lobby etc)
+            */ 
+            
             LockCursor();
 
             IEnumerator LoadGame() {
                 yield return _levelLoader.SwitchToLoadingScreen();
-                // TODO: network player transition to loading player prefab
+                // TODO: network player potential transition from lobby player prefab to loading player prefab
                 yield return _levelLoader.StartGame(levelData);
 
                 // TODO: yield on query network manager for all player loaded status
