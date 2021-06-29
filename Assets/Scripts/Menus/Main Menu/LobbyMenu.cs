@@ -9,11 +9,11 @@ using UnityEngine.UI;
 
 namespace Menus.Main_Menu {
     public class LobbyMenu : MonoBehaviour {
-        [SerializeField] private NetworkManagerLobby networkManagerLobby;
-        [SerializeField] private MultiPlayerMenu topMenu;
-        [SerializeField] private UIButton startButton;
+        private NetworkManagerLobby _networkManagerLobby;
 
         [Header("UI")]
+        [SerializeField] private MultiPlayerMenu topMenu;
+        [SerializeField] private UIButton startButton;
         [SerializeField] private Text headerText;
         [SerializeField] private Button defaultActiveButton;
         
@@ -25,7 +25,11 @@ namespace Menus.Main_Menu {
             _animator = GetComponent<Animator>();
         }
 
+        private void Start() {
+        }
+
         public void Show() {
+            _networkManagerLobby = NetworkManagerLobby.singleton as NetworkManagerLobby;
             gameObject.SetActive(true);
             _animator.SetBool("Open", true);
             defaultActiveButton.Select();
@@ -41,11 +45,11 @@ namespace Menus.Main_Menu {
 
         public void StartHost() {
             headerText.text = "HOSTING LOBBY";
-            networkManagerLobby.StartHost();
+            _networkManagerLobby.StartHost();
         }
 
         public void StopHost() {
-            networkManagerLobby.StopHost();
+            _networkManagerLobby.StopHost();
         }
 
         public void CloseLobby() {
@@ -56,7 +60,7 @@ namespace Menus.Main_Menu {
         }
 
         public void Cancel() {
-            networkManagerLobby.StopHost();
+            _networkManagerLobby.StopHost();
             CloseLobby();
         }
     }

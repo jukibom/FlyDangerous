@@ -12,7 +12,7 @@ public class Ring : MonoBehaviour
         
     // Start is called before the first frame update
     void Start() {
-        if (Game.Instance.LevelDataAsLoaded.raceType != RaceType.Editor) {
+        if (Game.Instance.LoadedLevelData.raceType != RaceType.Editor) {
             gameObject.SetActive(false);
         }
         _transform = transform;

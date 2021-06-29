@@ -118,7 +118,7 @@ namespace Menus {
 
         public void CopyLocationToClipboard() {
             AudioManager.Instance.Play("ui-confirm");
-            GUIUtility.systemCopyBuffer = Game.Instance.LevelDataCurrent.ToJsonString();
+            GUIUtility.systemCopyBuffer = Game.Instance.LevelDataAtCurrentPosition.ToJsonString();
             var copyConfirmTransform = copyConfirmationText.transform;
             copyConfirmTransform.localPosition = new Vector3(copyConfirmTransform.localPosition.x, 55, copyConfirmTransform.position.z);
             copyConfirmationText.color = new Color(1f, 1f, 1f, 1f);

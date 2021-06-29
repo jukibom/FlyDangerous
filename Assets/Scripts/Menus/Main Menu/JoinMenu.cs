@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace Menus.Main_Menu {
     public class JoinMenu : MonoBehaviour {
-        [SerializeField] private NetworkManagerLobby networkManagerLobby;
+        private NetworkManagerLobby _networkManagerLobby;
         [SerializeField] private LobbyMenu lobbyMenu;
         [SerializeField] private Button joinButton;
         [SerializeField] private MultiPlayerMenu topMenu;
@@ -38,6 +38,7 @@ namespace Menus.Main_Menu {
         }
 
         public void Show() {
+            _networkManagerLobby = NetworkManagerLobby.singleton as NetworkManagerLobby;
             gameObject.SetActive(true);
             _animator.SetBool("Open", true);
             joinButton.Select();
@@ -66,10 +67,10 @@ namespace Menus.Main_Menu {
             ushort port = Convert.ToUInt16(Int16.Parse(serverPort.text));
             Debug.Log("Connecting to " + hostAddress + ":" + port);
             
-            networkManagerLobby.networkAddress = hostAddress;
-            networkManagerLobby.networkTransport.Port = port;
+            _networkManagerLobby.networkAddress = hostAddress;
+            _networkManagerLobby.networkTransport.Port = port;
             
-            networkManagerLobby.StartClient();
+            _networkManagerLobby.StartClient();
             joinButton.interactable = false;
         }
 

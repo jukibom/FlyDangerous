@@ -68,6 +68,12 @@ namespace Menus.Main_Menu {
         }
 
         IEnumerator MenuLoad() {
+            
+            // load engine if not already 
+            if (!SceneManager.GetSceneByName("Engine").isLoaded) {
+                yield return SceneManager.LoadSceneAsync("Engine", LoadSceneMode.Additive);
+            }
+            
             string sceneEnvironment = "Planet_Orbit_Bottom";
             
             if (!FirstRun) {

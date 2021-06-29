@@ -29,7 +29,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1147554568742394716}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8665724121135789077
 MonoBehaviour:
@@ -43,7 +43,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 079e6fe2b6ebd0341b4b66006e653ac8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  checkpointPrefab: {fileID: 6669859985673270575, guid: 3eb8bb4dab0017b498b324aeb2b6d0e5, type: 3}
   playerBindings: {fileID: -944628639613478452, guid: cdb424aa45592664faeac2ce28028bc8, type: 3}
   ssao: {fileID: 5161890783807516584, guid: 4a8e21d5c33334b11b34a596161b9360, type: 2}
   crossfade: {fileID: 7032496712428909581}
@@ -75,12 +74,13 @@ Transform:
   m_LocalPosition: {x: 4740.9395, y: 2129.763, z: 1989.7357}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 598106266443235869}
   - {fileID: 430417543772622580}
+  - {fileID: 598106266443235869}
   - {fileID: 2113042804485065058}
   - {fileID: 3354585026440390399}
   - {fileID: 5737125732707836333}
-  - {fileID: 2126994958669929609}
+  - {fileID: 1966683068085731795}
+  - {fileID: 5348441963532606526}
   - {fileID: 7032496712428909577}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -244,6 +244,50 @@ MonoBehaviour:
     pitch: 1
     loop: 0
     source: {fileID: 0}
+--- !u!1 &6040392751399591797
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1966683068085731795}
+  - component: {fileID: 6689495321093305778}
+  m_Layer: 0
+  m_Name: '@LevelLoader'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1966683068085731795
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6040392751399591797}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1147554568742394716}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6689495321093305778
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6040392751399591797}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8de1a536c5f7484698474a83fb5234ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkpointPrefab: {fileID: 6669859985673270575, guid: 3eb8bb4dab0017b498b324aeb2b6d0e5, type: 3}
 --- !u!1 &6641487180449501075
 GameObject:
   m_ObjectHideFlags: 0
@@ -273,7 +317,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1147554568742394716}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1704900121584912733
 MonoBehaviour:
@@ -289,7 +333,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   focalTransform: {fileID: 0}
   correctionDistance: 1000
---- !u!1 &8361102878264447051
+--- !u!1 &7966117636676226303
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -297,44 +341,44 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2126994958669929609}
-  - component: {fileID: 8477922917375829853}
-  - component: {fileID: 6925106524373447586}
-  - component: {fileID: 1435849165482031805}
+  - component: {fileID: 5348441963532606526}
+  - component: {fileID: 7926466904788661996}
+  - component: {fileID: 6247869052788839305}
+  - component: {fileID: 7778386937366711345}
   m_Layer: 0
-  m_Name: '@NetworkManager'
+  m_Name: '@NetworkManagerLobby'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &2126994958669929609
+--- !u!4 &5348441963532606526
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8361102878264447051}
+  m_GameObject: {fileID: 7966117636676226303}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -4740.9395, y: -2129.763, z: -1989.7357}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1147554568742394716}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8477922917375829853
+--- !u!114 &7926466904788661996
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8361102878264447051}
+  m_GameObject: {fileID: 7966117636676226303}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8aab4c8111b7c411b9b92cf3dbc5bd4e, type: 3}
+  m_Script: {fileID: 11500000, guid: 501eaa22e27e3d14b934284a57ef3844, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dontDestroyOnLoad: 1
+  dontDestroyOnLoad: 0
   PersistNetworkManagerToOfflineScene: 0
   runInBackground: 1
   autoStartServerBuild: 1
@@ -343,23 +387,27 @@ MonoBehaviour:
   serverBatchInterval: 0
   offlineScene: 
   onlineScene: 
-  transport: {fileID: 6925106524373447586}
+  transport: {fileID: 6247869052788839305}
   networkAddress: localhost
-  maxConnections: 100
+  maxConnections: 16
   disconnectInactiveConnections: 0
   disconnectInactiveTimeout: 60
   authenticator: {fileID: 0}
   playerPrefab: {fileID: 1767139775458680011, guid: 28f3c96dd6aab644ab0a02156a3f779a, type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 0
-  spawnPrefabs: []
---- !u!114 &6925106524373447586
+  spawnPrefabs:
+  - {fileID: 8358629113583290633, guid: 399e53ad1d254b14e8928b0a1b081736, type: 3}
+  minPlayers: 2
+  menuScene: Assets/Scenes/UI/Main Menu.unity
+  lobbyPlayerPrefab: {fileID: 3907440634423962403, guid: 399e53ad1d254b14e8928b0a1b081736, type: 3}
+--- !u!114 &6247869052788839305
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8361102878264447051}
+  m_GameObject: {fileID: 7966117636676226303}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6b0fecffa3f624585964b0d0eb21b18e, type: 3}
@@ -376,13 +424,13 @@ MonoBehaviour:
   debugLog: 0
   statisticsGUI: 0
   statisticsLog: 0
---- !u!114 &1435849165482031805
+--- !u!114 &7778386937366711345
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8361102878264447051}
+  m_GameObject: {fileID: 7966117636676226303}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6442dc8070ceb41f094e44de0bf87274, type: 3}
@@ -451,7 +499,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5767733330303709240, guid: 4a7b393b0022fdf468d688f10143f7fa, type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 5767733330303709240, guid: 4a7b393b0022fdf468d688f10143f7fa, type: 3}
       propertyPath: m_AnchorMax.x
