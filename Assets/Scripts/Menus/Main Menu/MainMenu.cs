@@ -1,14 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Audio;
-using Engine;
-using Menus.Options;
+using Core;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
 using Random = UnityEngine.Random;
 
@@ -70,7 +66,7 @@ namespace Menus.Main_Menu {
         IEnumerator MenuLoad() {
             
             // load engine if not already 
-            if (!SceneManager.GetSceneByName("Engine").isLoaded) {
+            if (!FindObjectOfType<Engine>()) {
                 yield return SceneManager.LoadSceneAsync("Engine", LoadSceneMode.Additive);
             }
             

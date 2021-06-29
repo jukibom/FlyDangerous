@@ -4,7 +4,7 @@ using System.IO;
 using Newtonsoft.Json;
 using UnityEngine;
 
-namespace Engine {
+namespace Core {
     public class SaveData {
         public Dictionary<string, bool> boolPrefs;
         public Dictionary<string, float> floatPrefs;

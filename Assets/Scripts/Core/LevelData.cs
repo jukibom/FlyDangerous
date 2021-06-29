@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 using Newtonsoft.Json;
 using UnityEngine;
 
-namespace Engine {
+namespace Core {
     public class LevelDataVector3<T> {
         public T x;
         public T y;

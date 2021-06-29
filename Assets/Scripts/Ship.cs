@@ -3,13 +3,12 @@ using System.Collections;
 using System.Globalization;
 using System.Linq;
 using Audio;
-using Engine;
+using Core;
 using JetBrains.Annotations;
 using Mirror;
 using Misc;
 using Newtonsoft.Json;
 using UnityEngine;
-using UnityEngine.Experimental.GlobalIllumination;
 using UnityEngine.UI;
 
 public class ShipParameters {

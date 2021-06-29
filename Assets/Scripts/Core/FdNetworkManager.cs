@@ -6,7 +6,7 @@ using Mirror;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Engine {
+namespace Core {
     
     public enum FdNetworkStatus {
         Offline,

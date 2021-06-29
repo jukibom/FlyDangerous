@@ -5,7 +5,7 @@ using Mirror;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Engine {
+namespace Core {
     public class LobbyPlayer : NetworkBehaviour {
         public bool isPartyLeader;
 

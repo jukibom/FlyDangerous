@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-namespace Engine {
+namespace Core {
     public class LevelLoader : MonoBehaviour {
         
         private LevelData _levelData = new LevelData();
@@ -298,10 +298,7 @@ namespace Engine {
             }
 
             // unload the loading screen
-            var unload = SceneManager.UnloadSceneAsync("Loading");
-            while (!unload.isDone) {
-                yield return null;
-            }
+            yield return SceneManager.UnloadSceneAsync("Loading");
 
             _scenesLoading.Clear();
         }
