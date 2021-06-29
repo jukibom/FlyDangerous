@@ -34,6 +34,9 @@ public class Game : MonoBehaviour {
     private Quaternion _hmdRotation;
     private LevelLoader _levelLoader;
 
+    // TODO: This must be done via network manager to transition state
+    [SerializeField] private Ship playerShipPrefab;
+
     // The level data most recently used to load a map
     public LevelData LoadedLevelData => _levelLoader.LoadedLevelData;
     
@@ -165,18 +168,105 @@ public class Game : MonoBehaviour {
 
     public void StartGame(LevelData levelData, bool dynamicPlacementStart = false) {
         LockCursor();
-        _levelLoader.StartGame(levelData, _shipParameters, dynamicPlacementStart);
+
+        IEnumerator LoadGame() {
+            yield return _levelLoader.SwitchToLoadingScreen();
+            // TODO: network player transition to loading player prefab
+            yield return _levelLoader.StartGame(levelData);
+            
+            // TODO: yield on query network manager for all player loaded status
+
+            // TODO: Instantiate the ship vis network manager transition rather than this nonsense
+            // instantiate ship and wait for it to initialise
+            var ship = Instantiate(playerShipPrefab);
+            yield return new WaitForEndOfFrame();
+            if (ship) {
+                // debug flight params
+                ship.Parameters = ShipParameters;
+
+                ship.transform.position = new Vector3(
+                    LoadedLevelData.startPosition.x,
+                    LoadedLevelData.startPosition.y,
+                    LoadedLevelData.startPosition.z
+                );
+                ship.transform.rotation = Quaternion.Euler(
+                    LoadedLevelData.startRotation.x,
+                    LoadedLevelData.startRotation.y,
+                    LoadedLevelData.startRotation.z
+                );
+                
+                // terrain loaded, if we need to dynamically place the ship let's do that now
+                if (dynamicPlacementStart) {
+                    // TODO: make this iterate over the corners of the ship:
+                    // move the player up high and perform 5 raycasts - one from each corner of the ship and one from the centre.
+                    // move the player to the closest one, height-wise.
+                    // Additionally, move the ship around in a spiral and perform this operation a number of times.
+                    // Move the ship to the lowest position.
+
+                    var shipTransform = ship.transform;
+                    
+                    // move ship above terrain max
+                    shipTransform.position = new Vector3(
+                        shipTransform.position.x,
+                        10000,
+                        shipTransform.position.z
+                    );
+                    
+                    // cast down to get terrain height at this position
+                    if (Physics.Raycast(ship.transform.position, Vector3.down, out var hit, 10000)) {
+                        shipTransform.position = hit.point;
+                        
+                        // move ship 25 meters up to compensate for rocks and other crap
+                        shipTransform.Translate(0, 25, 0);
+                        
+                        // store new position in game level data for restarts
+                        LoadedLevelData.startPosition.x = shipTransform.position.x;
+                        LoadedLevelData.startPosition.y = shipTransform.position.y;
+                        LoadedLevelData.startPosition.z = shipTransform.position.z;
+                    }
+                }
+            }
+            
+            
+            // set up graphics settings (e.g. camera FoV) + VR status (cameras, radial fog etc)
+            ApplyGraphicsOptions();
+            NotifyVRStatus();
+
+            // resume the game
+            Time.timeScale = 1;
+            Game.Instance.FadeFromBlack();
+            yield return new WaitForSeconds(0.7f);
+
+            // if there's a track in the game world, start it
+            var track = FindObjectOfType<Track>();
+            if (track) {
+                yield return track.StartTrackWithCountdown();
+            }
+
+            // enable user input
+            var user = FindObjectOfType<User>();
+            if (user != null) {
+                user.EnableGameInput();
+            };
+        }
+
+        StartCoroutine(LoadGame());
     }
 
     public void RestartLevel() {
-        _levelLoader.RestartLevel(() => {
-            if (OnRestart != null) OnRestart();
-        });
+        StartCoroutine(_levelLoader.RestartLevel(() => {
+            if (OnRestart != null) {
+                OnRestart();
+            }
+        }));
     }
 
     public void QuitToMenu() {
         _menuFirstRun = false;
-        _levelLoader.StopTerrainGenerationIfApplicable();
+        var mapMagic = FindObjectOfType<MapMagicObject>();
+        if (mapMagic) {
+            mapMagic.StopGenerate();
+        }
         var user = FindObjectOfType<User>();
         user.DisableGameInput();
         
@@ -219,7 +309,7 @@ public class Game : MonoBehaviour {
         crossfade.SetTrigger("FadeFromBlack");
     }
 
-    public void NotifyVRStatus() {
+    private void NotifyVRStatus() {
         if (OnVRStatus != null) {
             OnVRStatus(IsVREnabled);
         }
