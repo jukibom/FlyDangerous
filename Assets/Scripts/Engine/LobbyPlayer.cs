@@ -30,11 +30,11 @@ namespace Engine {
             }
         }
         
-        private NetworkManagerLobby _room;
-        private NetworkManagerLobby Room {
+        private FdNetworkManager _room;
+        private FdNetworkManager Room {
             get {
                 if (_room == null) {
-                    _room = NetworkManager.singleton as NetworkManagerLobby;
+                    _room = NetworkManager.singleton as FdNetworkManager;
                 }
                 return _room;
             }

@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace Menus.Main_Menu {
     public class JoinMenu : MonoBehaviour {
-        private NetworkManagerLobby _networkManagerLobby;
+        private FdNetworkManager _fdNetworkManager;
         [SerializeField] private LobbyMenu lobbyMenu;
         [SerializeField] private Button joinButton;
         [SerializeField] private MultiPlayerMenu topMenu;
@@ -25,20 +25,20 @@ namespace Menus.Main_Menu {
         }
 
         private void OnEnable() {
-            NetworkManagerLobby.OnClientConnected += HandleClientConnected;
-            NetworkManagerLobby.OnClientDisconnected += HandleClientDisconnected;
+            FdNetworkManager.OnClientConnected += HandleClientConnected;
+            FdNetworkManager.OnClientDisconnected += HandleClientDisconnected;
             playerName.text = Preferences.Instance.GetString("playerName");
             serverIPAddress.text = Preferences.Instance.GetString("lastUsedServerJoinAddress");
             serverPort.text = Preferences.Instance.GetString("lastUsedServerJoinPort");
         }
 
         private void OnDisable() {
-            NetworkManagerLobby.OnClientConnected -= HandleClientConnected;
-            NetworkManagerLobby.OnClientDisconnected -= HandleClientDisconnected;
+            FdNetworkManager.OnClientConnected -= HandleClientConnected;
+            FdNetworkManager.OnClientDisconnected -= HandleClientDisconnected;
         }
 
         public void Show() {
-            _networkManagerLobby = NetworkManagerLobby.singleton as NetworkManagerLobby;
+            _fdNetworkManager = FdNetworkManager.singleton as FdNetworkManager;
             gameObject.SetActive(true);
             _animator.SetBool("Open", true);
             joinButton.Select();
@@ -67,10 +67,10 @@ namespace Menus.Main_Menu {
             ushort port = Convert.ToUInt16(Int16.Parse(serverPort.text));
             Debug.Log("Connecting to " + hostAddress + ":" + port);
             
-            _networkManagerLobby.networkAddress = hostAddress;
-            _networkManagerLobby.networkTransport.Port = port;
+            _fdNetworkManager.networkAddress = hostAddress;
+            _fdNetworkManager.networkTransport.Port = port;
             
-            _networkManagerLobby.StartClient();
+            _fdNetworkManager.StartClient();
             joinButton.interactable = false;
         }
 

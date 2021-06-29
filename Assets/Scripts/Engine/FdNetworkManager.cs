@@ -7,12 +7,18 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Engine {
-    public class NetworkManagerLobby : NetworkManager {
+    
+    public enum FdNetworkStatus {
+        Offline,
+        Lobby,
+        Loading,
+        InGame,
+    }
+    
+    public class FdNetworkManager : NetworkManager {
         
         // TODO: This is game mode dependent
         [SerializeField] private int minPlayers = 2;
-        
-        [Scene] [SerializeField] private string menuScene = string.Empty;
 
         [Header("Room")] 
         [SerializeField] private LobbyPlayer lobbyPlayerPrefab = null;
@@ -23,13 +29,18 @@ namespace Engine {
 
         public KcpTransport networkTransport => GetComponent<KcpTransport>();
 
+        private FdNetworkStatus _status = FdNetworkStatus.Offline;
+        private FdNetworkStatus Status => _status;
+
+        public void StartLobbyServer() {
+            _status = FdNetworkStatus.Lobby;
+        }
+        
         // --- LOCAL CLIENT SIDE PLAYER CONNECTIONS --- //
         public override void OnClientConnect(NetworkConnection conn) {
             Debug.Log("[CLIENT] PLAYER CONNECT");
             base.OnClientConnect(conn);
             OnClientConnected?.Invoke();
-            
-
         }
         public override void OnClientDisconnect(NetworkConnection conn) {
             Debug.Log("[CLIENT] PLAYER DISCONNECT");
@@ -69,7 +80,7 @@ namespace Engine {
             
             NetworkServer.AddPlayerForConnection(conn, lobbyPlayer.gameObject);
         }
-        
+
         // Server shutdown, notify all players
         public override void OnStopClient() {
             Debug.Log("[SERVER] SHUTDOWN");
@@ -77,6 +88,7 @@ namespace Engine {
                 lobbyPlayer.CloseLobby();
             }
             RoomPlayers.Clear();
+            _status = FdNetworkStatus.Offline;
         }
 
         public void NotifyPlayersOfReadyState() {

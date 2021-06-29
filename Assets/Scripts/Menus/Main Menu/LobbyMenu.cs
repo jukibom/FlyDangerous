@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 namespace Menus.Main_Menu {
     public class LobbyMenu : MonoBehaviour {
-        private NetworkManagerLobby _networkManagerLobby;
+        private FdNetworkManager _fdNetworkManager;
 
         [Header("UI")]
         [SerializeField] private MultiPlayerMenu topMenu;
@@ -29,7 +29,7 @@ namespace Menus.Main_Menu {
         }
 
         public void Show() {
-            _networkManagerLobby = NetworkManagerLobby.singleton as NetworkManagerLobby;
+            _fdNetworkManager = FdNetworkManager.singleton as FdNetworkManager;
             gameObject.SetActive(true);
             _animator.SetBool("Open", true);
             defaultActiveButton.Select();
@@ -45,11 +45,11 @@ namespace Menus.Main_Menu {
 
         public void StartHost() {
             headerText.text = "HOSTING LOBBY";
-            _networkManagerLobby.StartHost();
+            _fdNetworkManager.StartHost();
         }
 
         public void StopHost() {
-            _networkManagerLobby.StopHost();
+            _fdNetworkManager.StopHost();
         }
 
         public void CloseLobby() {
@@ -60,7 +60,7 @@ namespace Menus.Main_Menu {
         }
 
         public void Cancel() {
-            _networkManagerLobby.StopHost();
+            _fdNetworkManager.StopHost();
             CloseLobby();
         }
     }
