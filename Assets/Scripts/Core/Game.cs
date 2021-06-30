@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Core.Player;
 using Den.Tools;
 using JetBrains.Annotations;
 using MapMagic.Core;
@@ -39,7 +40,7 @@ namespace Core {
         private bool _isVREnabled = false;
 
         // TODO: This must be done via network manager to transition state
-        [SerializeField] private Ship playerShipPrefab;
+        [SerializeField] private ShipPlayer shipPlayerPrefab;
         
         // The level data most recently used to load a map
         public LevelData LoadedLevelData => _levelLoader.LoadedLevelData;
@@ -51,11 +52,11 @@ namespace Core {
 
         public ShipParameters ShipParameters {
             get => _shipParameters == null
-                ? FindObjectOfType<Ship>()?.Parameters ?? Ship.ShipParameterDefaults
+                ? FindObjectOfType<ShipPlayer>()?.Parameters ?? ShipPlayer.ShipParameterDefaults
                 : _shipParameters;
             set {
                 _shipParameters = value;
-                var ship = FindObjectOfType<Ship>();
+                var ship = FindObjectOfType<ShipPlayer>();
                 if (ship) ship.Parameters = _shipParameters;
             }
         }
@@ -190,7 +191,7 @@ namespace Core {
 
                 // TODO: Instantiate the ship vis network manager transition rather than this nonsense
                 // instantiate ship and wait for it to initialise
-                var ship = Instantiate(playerShipPrefab);
+                var ship = Instantiate(shipPlayerPrefab);
                 yield return new WaitForEndOfFrame();
                 if (ship) {
                     // debug flight params

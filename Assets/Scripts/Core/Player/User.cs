@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Audio;
 using Core;
+using Core.Player;
 using Menus;
 using UnityEditor.XR.LegacyInputHelpers;
 using UnityEngine;
@@ -15,7 +16,7 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class User : MonoBehaviour {
     
-    [SerializeField] public Ship playerShip;
+    [SerializeField] public ShipPlayer shipPlayer;
     
     [SerializeField] public PauseMenu pauseMenu;
     [SerializeField] public Canvas uiCanvas;
@@ -96,17 +97,17 @@ public class User : MonoBehaviour {
                 yaw += mouseYaw;
             }
 
-            playerShip.SetPitch(pitch);
-            playerShip.SetRoll(roll);
-            playerShip.SetYaw(yaw);
-            playerShip.SetThrottle(throttle);
-            playerShip.SetLateralH(lateralH);
-            playerShip.SetLateralV(lateralV);
-            playerShip.Boost(_boost);
+            shipPlayer.SetPitch(pitch);
+            shipPlayer.SetRoll(roll);
+            shipPlayer.SetYaw(yaw);
+            shipPlayer.SetThrottle(throttle);
+            shipPlayer.SetLateralH(lateralH);
+            shipPlayer.SetLateralV(lateralV);
+            shipPlayer.Boost(_boost);
         }
 
         if (boostButtonEnabledOverride) {
-            playerShip.Boost(_boost);
+            shipPlayer.Boost(_boost);
         }
     }
 
@@ -265,23 +266,23 @@ public class User : MonoBehaviour {
     }
 
     public void OnVelocityLimiter(InputValue value) {
-        playerShip.VelocityLimiterIsPressed(value.isPressed);
+        shipPlayer.VelocityLimiterIsPressed(value.isPressed);
     }
 
     public void OnAllFlightAssistToggle(InputValue value) {
-        playerShip.AllFlightAssistToggle();
+        shipPlayer.AllFlightAssistToggle();
     }
 
     public void OnVectorFlightAssistToggle(InputValue value) {
-        playerShip.FlightAssistVectorControlToggle();   
+        shipPlayer.FlightAssistVectorControlToggle();   
     }
 
     public void OnRotationalFlightAssistToggle(InputValue value) {
-        playerShip.FlightAssistRotationalDampeningToggle();
+        shipPlayer.FlightAssistRotationalDampeningToggle();
     }
     
     public void OnShipLightsToggle(InputValue value) {
-        playerShip.ShipLightsToggle();
+        shipPlayer.ShipLightsToggle();
     }
 
     public void OnAltFlightControlsToggle(InputValue value) {

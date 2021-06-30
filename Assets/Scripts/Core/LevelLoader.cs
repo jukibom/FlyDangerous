@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Core.Player;
 using Den.Tools;
 using MapMagic.Core;
 using UnityEngine;
@@ -60,7 +61,7 @@ namespace Core {
         
          public IEnumerator RestartLevel(Action onRestart) { 
             var user = FindObjectOfType<User>();
-            var ship = FindObjectOfType<Ship>();
+            var ship = FindObjectOfType<ShipPlayer>();
              
             Action DoReset = () => {
                  var world = GameObject.Find("World")?.transform;
@@ -178,7 +179,7 @@ namespace Core {
             levelData.terrainSeed = _levelData.terrainSeed;
             levelData.checkpoints = _levelData.checkpoints;
 
-            var ship = FindObjectOfType<Ship>();
+            var ship = FindObjectOfType<ShipPlayer>();
             // TODO: Is this ship the actual player? (Convert it to a network object!)
             if (ship) {
                 ship.AbsoluteWorldPosition(out var outPosition, out var outRotation);
