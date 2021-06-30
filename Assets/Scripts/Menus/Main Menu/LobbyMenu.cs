@@ -25,11 +25,9 @@ namespace Menus.Main_Menu {
             _animator = GetComponent<Animator>();
         }
 
-        private void Start() {
-        }
-
         public void Show() {
             _fdNetworkManager = FdNetworkManager.singleton as FdNetworkManager;
+            _fdNetworkManager.StartLobbyServer();
             gameObject.SetActive(true);
             _animator.SetBool("Open", true);
             defaultActiveButton.Select();
@@ -60,7 +58,7 @@ namespace Menus.Main_Menu {
         }
 
         public void Cancel() {
-            _fdNetworkManager.StopHost();
+            _fdNetworkManager.CloseConnection();
             CloseLobby();
         }
     }

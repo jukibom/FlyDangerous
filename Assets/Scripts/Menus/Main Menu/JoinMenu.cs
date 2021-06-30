@@ -40,8 +40,9 @@ namespace Menus.Main_Menu {
         public void Show() {
             _fdNetworkManager = FdNetworkManager.singleton as FdNetworkManager;
             gameObject.SetActive(true);
-            _animator.SetBool("Open", true);
+            joinButton.interactable = true;
             joinButton.Select();
+            _animator.SetBool("Open", true);
         }
 
         public void Hide() {
@@ -50,6 +51,7 @@ namespace Menus.Main_Menu {
 
         public void Cancel() {
             AudioManager.Instance.Play("ui-cancel");
+            _fdNetworkManager.CloseConnection();
             topMenu.Show();
             Hide();
         }
@@ -68,7 +70,7 @@ namespace Menus.Main_Menu {
             Debug.Log("Connecting to " + hostAddress + ":" + port);
             
             _fdNetworkManager.networkAddress = hostAddress;
-            _fdNetworkManager.networkTransport.Port = port;
+            _fdNetworkManager.NetworkTransport.Port = port;
             
             _fdNetworkManager.StartClient();
             joinButton.interactable = false;
