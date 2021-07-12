@@ -6,6 +6,7 @@ using Core.Player;
 using Den.Tools;
 using JetBrains.Annotations;
 using MapMagic.Core;
+using Mirror;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
@@ -19,7 +20,7 @@ namespace Core {
         Singleplayer,
         Multiplayer
     }
-    public class Game : MonoBehaviour {
+    public class Game : NetworkBehaviour {
 
         public static Game Instance;
 
@@ -174,6 +175,7 @@ namespace Core {
         }
 
         public void StartGame(LevelData levelData, bool dynamicPlacementStart = false) {
+        public void StartGame(LevelData levelData, bool dynamicPlacementStart) {
             
             /* TODO: Split this somehow into single and multiplayer - logic should be mostly the same but we don't
                 transition from a lobby and we need to set the queryable SessionType for other logic in-game
@@ -247,7 +249,7 @@ namespace Core {
 
                 // resume the game
                 Time.timeScale = 1;
-                Game.Instance.FadeFromBlack();
+                FadeFromBlack();
                 yield return new WaitForSeconds(0.7f);
 
                 // if there's a track in the game world, start it

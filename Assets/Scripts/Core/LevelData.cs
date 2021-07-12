@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using Mirror;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -70,6 +71,17 @@ namespace Core {
                 #endif
                 return null;
             }
+        }
+    }
+    
+    // Level data network serialisation 
+    public static class LevelDataReaderWriter {
+        public static void WriteLevelData(this NetworkWriter writer, LevelData levelData) {
+            writer.WriteString(levelData.ToJsonString());
+        }
+
+        public static LevelData ReadLevelData(this NetworkReader reader) {
+            return LevelData.FromJsonString(reader.ReadString());
         }
     }
 }
