@@ -9,7 +9,6 @@ using UnityEngine.UI;
 
 namespace Menus.Main_Menu {
     public class LobbyMenu : MonoBehaviour {
-        private FdNetworkManager _fdNetworkManager;
 
         [Header("UI")]
         [SerializeField] private MultiPlayerMenu topMenu;
@@ -26,8 +25,6 @@ namespace Menus.Main_Menu {
         }
 
         public void Show() {
-            _fdNetworkManager = FdNetworkManager.singleton as FdNetworkManager;
-            _fdNetworkManager.StartLobbyServer();
             gameObject.SetActive(true);
             _animator.SetBool("Open", true);
             defaultActiveButton.Select();
@@ -43,11 +40,11 @@ namespace Menus.Main_Menu {
 
         public void StartHost() {
             headerText.text = "HOSTING LOBBY";
-            _fdNetworkManager.StartHost();
+            FdNetworkManager.Instance.StartLobbyServer();
         }
 
         public void StopHost() {
-            _fdNetworkManager.StopHost();
+            FdNetworkManager.Instance.StopHost();
         }
 
         public void CloseLobby() {
@@ -58,7 +55,7 @@ namespace Menus.Main_Menu {
         }
 
         public void Cancel() {
-            _fdNetworkManager.CloseConnection();
+            FdNetworkManager.Instance.CloseConnection();
             CloseLobby();
         }
     }

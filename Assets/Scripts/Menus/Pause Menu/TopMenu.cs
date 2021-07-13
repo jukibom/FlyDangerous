@@ -28,9 +28,12 @@ public class TopMenu : MonoBehaviour
         gameObject.SetActive(true);
         defaultActiveButton.Select();
         _animator.SetBool("Open", true);
+        
+        FdNetworkManager.Instance.CloseConnection();
     }
 
     public void OpenSinglePlayerPanel() {
+        FdNetworkManager.Instance.StartOfflineServer();
         AudioManager.Instance.Play("ui-dialog-open");
         singlePlayerMenu.Show();
         Hide();

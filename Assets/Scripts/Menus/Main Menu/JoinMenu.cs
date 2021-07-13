@@ -8,7 +8,6 @@ using UnityEngine.UI;
 
 namespace Menus.Main_Menu {
     public class JoinMenu : MonoBehaviour {
-        private FdNetworkManager _fdNetworkManager;
         [SerializeField] private LobbyMenu lobbyMenu;
         [SerializeField] private Button joinButton;
         [SerializeField] private MultiPlayerMenu topMenu;
@@ -38,7 +37,6 @@ namespace Menus.Main_Menu {
         }
 
         public void Show() {
-            _fdNetworkManager = FdNetworkManager.singleton as FdNetworkManager;
             gameObject.SetActive(true);
             joinButton.interactable = true;
             joinButton.Select();
@@ -51,7 +49,7 @@ namespace Menus.Main_Menu {
 
         public void Cancel() {
             AudioManager.Instance.Play("ui-cancel");
-            _fdNetworkManager.CloseConnection();
+            FdNetworkManager.Instance.CloseConnection();
             topMenu.Show();
             Hide();
         }
@@ -69,10 +67,10 @@ namespace Menus.Main_Menu {
             ushort port = Convert.ToUInt16(Int16.Parse(serverPort.text));
             Debug.Log("Connecting to " + hostAddress + ":" + port);
             
-            _fdNetworkManager.networkAddress = hostAddress;
-            _fdNetworkManager.NetworkTransport.Port = port;
+            FdNetworkManager.Instance.networkAddress = hostAddress;
+            FdNetworkManager.Instance.NetworkTransport.Port = port;
             
-            _fdNetworkManager.StartClient();
+            FdNetworkManager.Instance.StartClient();
             joinButton.interactable = false;
         }
 

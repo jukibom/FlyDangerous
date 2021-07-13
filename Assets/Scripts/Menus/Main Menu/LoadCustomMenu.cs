@@ -74,7 +74,7 @@ namespace Menus.Main_Menu {
 
         public void StartMap() {
             var levelData = _levelData ?? new LevelData();
-            Game.Instance.StartGame(levelData, false);
+            Game.Instance.StartGame(levelData);
         }
 
         private void SetValidState() {

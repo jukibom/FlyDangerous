@@ -29,16 +29,6 @@ namespace Core {
                 return _lobby;
             }
         }
-        
-        private FdNetworkManager _room;
-        private FdNetworkManager Room {
-            get {
-                if (_room == null) {
-                    _room = NetworkManager.singleton as FdNetworkManager;
-                }
-                return _room;
-            }
-        }
 
         void Start() {
             Debug.Log("*** PLAYER PREFAB CREATED ***");
@@ -55,12 +45,12 @@ namespace Core {
         }
 
         public override void OnStartClient() {
-            Room.RoomPlayers.Add(this);
+            FdNetworkManager.Instance.RoomPlayers.Add(this);
             UpdateDisplay();
         }
 
         public override void OnStopClient() {
-            Room.RoomPlayers.Remove(this);
+            FdNetworkManager.Instance.RoomPlayers.Remove(this);
             UpdateDisplay();
         }
 

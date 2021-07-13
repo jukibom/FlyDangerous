@@ -20,7 +20,7 @@ namespace Core {
         Singleplayer,
         Multiplayer
     }
-    public class Game : NetworkBehaviour {
+    public class Game : MonoBehaviour {
 
         public static Game Instance;
 
@@ -263,8 +263,6 @@ namespace Core {
                 if (user != null) {
                     user.EnableGameInput();
                 }
-
-                ;
             }
 
             StartCoroutine(LoadGame());
@@ -279,6 +277,8 @@ namespace Core {
         }
 
         public void QuitToMenu() {
+            FdNetworkManager.Instance.CloseConnection();
+            
             _menuFirstRun = false;
             var mapMagic = FindObjectOfType<MapMagicObject>();
             if (mapMagic) {

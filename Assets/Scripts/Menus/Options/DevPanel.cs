@@ -111,8 +111,6 @@ public class DevPanel : MonoBehaviour {
         if (!_inialised) {
             return ShipPlayer.ShipParameterDefaults;
         }
-
-        Debug.Log(massTextField.text);
         
         return new ShipParameters {
             mass = float.Parse(massTextField.text),

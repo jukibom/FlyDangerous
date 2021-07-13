@@ -18,6 +18,8 @@ namespace Core {
     
     public class FdNetworkManager : NetworkManager {
         
+        public static FdNetworkManager Instance => singleton as FdNetworkManager;
+        
         // TODO: This is game mode dependent
         [SerializeField] private int minPlayers = 2;
 
@@ -40,10 +42,25 @@ namespace Core {
 
         public void StartLobbyServer() {
             _status = FdNetworkStatus.Lobby;
+            StartHost();
+            // TODO: This should come from the lobby panel UI element
+            maxConnections = 16;
         }
 
+        public void StartLobbyJoin() {
+            _status = FdNetworkStatus.Lobby;
+            StartClient();
+        }
+
+        public void StartOfflineServer() {
+            _status = FdNetworkStatus.Offline;
+            StartHost();
+            maxConnections = 1;
+        }
         public void CloseConnection() {
-            StopHost();
+            if (mode != NetworkManagerMode.Offline) {
+                StopHost();
+            }
             _status = FdNetworkStatus.Offline;
         }
 
