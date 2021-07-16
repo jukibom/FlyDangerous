@@ -188,9 +188,11 @@ namespace Core {
                 // TODO: network player potential transition from lobby player prefab to loading player prefab
                 yield return _levelLoader.StartGame(levelData);
 
+                yield return FdNetworkManager.Instance.WaitForAllPlayersLoaded();
+                
                 // TODO: yield on query network manager for all player loaded status
 
-                // TODO: Instantiate the ship vis network manager transition rather than this nonsense
+                // TODO: Instantiate the ship via network manager transition rather than this nonsense
                 // instantiate ship and wait for it to initialise
                 var ship = Instantiate(shipPlayerPrefab);
                 yield return new WaitForEndOfFrame();

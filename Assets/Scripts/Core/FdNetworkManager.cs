@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Core.Player;
 using kcp2k;
 using Mirror;
@@ -135,11 +136,11 @@ namespace Core {
             }
             _status = FdNetworkStatus.SinglePlayerMenu;
         }
-            foreach (var lobbyPlayer in RoomPlayers) {
-                lobbyPlayer.CloseLobby();
-            }
-            RoomPlayers.Clear();
-            _status = FdNetworkStatus.Offline;
+        
+        public IEnumerator WaitForAllPlayersLoaded() {
+            yield return LoadingPlayers.All(loadingPlayer => loadingPlayer.IsLoaded) 
+                ? null 
+                : new WaitForFixedUpdate();
         }
 
         public void NotifyPlayersOfReadyState() {

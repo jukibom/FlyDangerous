@@ -11,6 +11,9 @@ using UnityEngine.UI;
 namespace Core {
     public class LevelLoader : MonoBehaviour {
         
+        public delegate void LevelLoadedAction();
+        public static event LevelLoadedAction OnLevelLoaded;
+        
         private LevelData _levelData = new LevelData();
         private List<AsyncOperation> _scenesLoading = new List<AsyncOperation>();
         public LevelData LoadedLevelData => _levelData;
@@ -302,6 +305,10 @@ namespace Core {
             yield return SceneManager.UnloadSceneAsync("Loading");
 
             _scenesLoading.Clear();
+
+            if (OnLevelLoaded != null) {
+                OnLevelLoaded();
+            } 
         }
     }
 }
