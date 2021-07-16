@@ -175,7 +175,6 @@ namespace Core {
         }
 
         public void StartGame(LevelData levelData, bool dynamicPlacementStart = false) {
-        public void StartGame(LevelData levelData, bool dynamicPlacementStart) {
             
             /* TODO: Split this somehow into single and multiplayer - logic should be mostly the same but we don't
                 transition from a lobby and we need to set the queryable SessionType for other logic in-game

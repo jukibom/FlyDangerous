@@ -10,8 +10,8 @@ using UnityEngine.SceneManagement;
 namespace Core {
     
     public enum FdNetworkStatus {
-        Offline,
-        Lobby,
+        SinglePlayerMenu,
+        LobbyMenu,
         Loading,
         InGame,
     }
@@ -35,33 +35,37 @@ namespace Core {
         public static event Action OnClientConnected;
         public static event Action OnClientDisconnected;
         public List<LobbyPlayer> RoomPlayers { get; } = new List<LobbyPlayer>();
+        public List<LoadingPlayer> LoadingPlayers { get; } = new List<LoadingPlayer>();
+        public List<ShipPlayer> ShipPlayers { get; } = new List<ShipPlayer>();
         public KcpTransport NetworkTransport => GetComponent<KcpTransport>();
 
-        private FdNetworkStatus _status = FdNetworkStatus.Offline;
+        private FdNetworkStatus _status = FdNetworkStatus.SinglePlayerMenu;
         private FdNetworkStatus Status => _status;
 
         public void StartLobbyServer() {
-            _status = FdNetworkStatus.Lobby;
+            _status = FdNetworkStatus.LobbyMenu;
             StartHost();
             // TODO: This should come from the lobby panel UI element
             maxConnections = 16;
         }
 
         public void StartLobbyJoin() {
-            _status = FdNetworkStatus.Lobby;
+            _status = FdNetworkStatus.LobbyMenu;
             StartClient();
         }
 
         public void StartOfflineServer() {
-            _status = FdNetworkStatus.Offline;
-            StartHost();
+            _status = FdNetworkStatus.SinglePlayerMenu;
             maxConnections = 1;
+            StartHost();
+        }
         }
         public void CloseConnection() {
             if (mode != NetworkManagerMode.Offline) {
                 StopHost();
+                StopClient();
             }
-            _status = FdNetworkStatus.Offline;
+            _status = FdNetworkStatus.SinglePlayerMenu;
         }
 
         // --- LOCAL CLIENT SIDE PLAYER CONNECTIONS --- //
@@ -89,8 +93,18 @@ namespace Core {
             Debug.Log("[SERVER] PLAYER DISCONNECT");
                         
             if (conn.identity != null) {
-                var player = conn.identity.GetComponent<LobbyPlayer>();
-                RoomPlayers.Remove(player);
+                switch (Status) {
+                    case FdNetworkStatus.SinglePlayerMenu:
+                        var loadingPlayer = conn.identity.GetComponent<LoadingPlayer>();
+                        LoadingPlayers.Remove(loadingPlayer);
+                        break;
+                    
+                    case FdNetworkStatus.LobbyMenu:
+                        var lobbyPlayer = conn.identity.GetComponent<LobbyPlayer>();
+                        RoomPlayers.Remove(lobbyPlayer);
+                        break;
+                }
+                
             }
             
             base.OnServerDisconnect(conn);
@@ -99,6 +113,28 @@ namespace Core {
         // Server shutdown, notify all players
         public override void OnStopClient() {
             Debug.Log("[SERVER] SHUTDOWN");
+            switch (Status) {
+                
+                case FdNetworkStatus.LobbyMenu:
+                    foreach (var lobbyPlayer in RoomPlayers) {
+                        lobbyPlayer.CloseLobby();
+                    }
+                    RoomPlayers.Clear();
+                    break;
+                
+                case FdNetworkStatus.Loading:
+                    // foreach (var loadingPlayer in LoadingPlayers) {
+                    //     
+                    // }
+                    LoadingPlayers.Clear();
+                    break;
+                
+                case FdNetworkStatus.InGame:
+                    break;
+                    
+            }
+            _status = FdNetworkStatus.SinglePlayerMenu;
+        }
             foreach (var lobbyPlayer in RoomPlayers) {
                 lobbyPlayer.CloseLobby();
             }
@@ -108,11 +144,11 @@ namespace Core {
 
         public void NotifyPlayersOfReadyState() {
             foreach (var player in RoomPlayers) {
-                player.HandleReadyStatusChanged(IsReadyToStart());
+                player.HandleReadyStatusChanged(IsReadyToLoad());
             }
         }
 
-        private bool IsReadyToStart() {
+        private bool IsReadyToLoad() {
             if (numPlayers < minPlayers) {
                 return false; 
             }
@@ -130,7 +166,17 @@ namespace Core {
         public override void OnServerAddPlayer(NetworkConnection conn) {
             Debug.Log("[SERVER] PLAYER ADDED");
             switch (Status) {
-                case FdNetworkStatus.Lobby: 
+                
+                case FdNetworkStatus.SinglePlayerMenu:
+                    LoadingPlayer loadingPlayer = Instantiate(loadingPlayerPrefab);
+                    NetworkServer.AddPlayerForConnection(conn, loadingPlayer.gameObject);
+                    if (conn.identity != null) {
+                        var player = conn.identity.GetComponent<LoadingPlayer>();
+                        LoadingPlayers.Add(player);
+                    }
+                    break;
+                
+                case FdNetworkStatus.LobbyMenu: 
                     LobbyPlayer lobbyPlayer = Instantiate(lobbyPlayerPrefab);
                     lobbyPlayer.isPartyLeader = RoomPlayers.Count == 0;
             
