@@ -143,6 +143,27 @@ namespace Core {
                 : new WaitForFixedUpdate();
         }
 
+        public LobbyPlayer TransitionToLobbyPlayer<T>(T previousPlayer) where T: NetworkBehaviour {
+            var lobbyPlayer = Instantiate(lobbyPlayerPrefab);
+            return ReplacePlayer(lobbyPlayer, previousPlayer);
+        }
+        
+        public LoadingPlayer TransitionToLoadingPlayer<T>(T previousPlayer) where T: NetworkBehaviour {
+            var loadingPlayer = Instantiate(loadingPlayerPrefab);
+            return ReplacePlayer(loadingPlayer, previousPlayer);
+        }
+        
+        public ShipPlayer TransitionToShipPlayer<T>(T previousPlayer) where T: NetworkBehaviour {
+            var shipPlayer = Instantiate(shipPlayerPrefab);
+            return ReplacePlayer(shipPlayer, previousPlayer);
+        }
+
+        private T ReplacePlayer<T, U>(T newPlayer, U previousPlayer) where T : NetworkBehaviour where U : NetworkBehaviour {
+            NetworkServer.ReplacePlayerForConnection(previousPlayer.connectionToClient, newPlayer.gameObject, true);
+            Destroy(previousPlayer.gameObject);
+            return newPlayer;
+        }
+
         public void NotifyPlayersOfReadyState() {
             foreach (var player in RoomPlayers) {
                 player.HandleReadyStatusChanged(IsReadyToLoad());

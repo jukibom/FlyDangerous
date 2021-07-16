@@ -194,8 +194,12 @@ namespace Core {
 
                 // TODO: Instantiate the ship via network manager transition rather than this nonsense
                 // instantiate ship and wait for it to initialise
-                var ship = Instantiate(shipPlayerPrefab);
+                // var ship = Instantiate(shipPlayerPrefab);
+                var loadingPlayer =
+                    FdNetworkManager.Instance.LoadingPlayers.Find(loadingPlayer => loadingPlayer.isLocalPlayer);
+                var ship = FdNetworkManager.Instance.TransitionToShipPlayer(loadingPlayer);
                 yield return new WaitForEndOfFrame();
+                
                 if (ship) {
                     // debug flight params
                     ship.Parameters = ShipParameters;
