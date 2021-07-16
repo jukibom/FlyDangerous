@@ -158,12 +158,6 @@ namespace Core {
             return ReplacePlayer(shipPlayer, previousPlayer);
         }
 
-        private T ReplacePlayer<T, U>(T newPlayer, U previousPlayer) where T : NetworkBehaviour where U : NetworkBehaviour {
-            NetworkServer.ReplacePlayerForConnection(previousPlayer.connectionToClient, newPlayer.gameObject, true);
-            Destroy(previousPlayer.gameObject);
-            return newPlayer;
-        }
-
         public void NotifyPlayersOfReadyState() {
             foreach (var player in LobbyPlayers) {
                 player.HandleReadyStatusChanged(IsReadyToLoad());
@@ -212,6 +206,13 @@ namespace Core {
             }
         }
         
+        private T ReplacePlayer<T, U>(T newPlayer, U previousPlayer) where T : NetworkBehaviour where U : NetworkBehaviour {
+            NetworkServer.ReplacePlayerForConnection(previousPlayer.connectionToClient, newPlayer.gameObject, true);
+            RemovePlayer(previousPlayer);
+            AddPlayer(newPlayer);
+            Destroy(previousPlayer.gameObject);
+            return newPlayer;
+        }
 
         private void AddPlayer<T>(T player) where T : NetworkBehaviour {
             switch (player) {
