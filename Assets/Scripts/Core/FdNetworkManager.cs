@@ -35,7 +35,7 @@ namespace Core {
         
         public static event Action OnClientConnected;
         public static event Action OnClientDisconnected;
-        public List<LobbyPlayer> RoomPlayers { get; } = new List<LobbyPlayer>();
+        public List<LobbyPlayer> LobbyPlayers { get; } = new List<LobbyPlayer>();
         public List<LoadingPlayer> LoadingPlayers { get; } = new List<LoadingPlayer>();
         public List<ShipPlayer> ShipPlayers { get; } = new List<ShipPlayer>();
         public KcpTransport NetworkTransport => GetComponent<KcpTransport>();
@@ -102,7 +102,7 @@ namespace Core {
                     
                     case FdNetworkStatus.LobbyMenu:
                         var lobbyPlayer = conn.identity.GetComponent<LobbyPlayer>();
-                        RoomPlayers.Remove(lobbyPlayer);
+                        LobbyPlayers.Remove(lobbyPlayer);
                         break;
                 }
                 
@@ -117,10 +117,10 @@ namespace Core {
             switch (Status) {
                 
                 case FdNetworkStatus.LobbyMenu:
-                    foreach (var lobbyPlayer in RoomPlayers) {
+                    foreach (var lobbyPlayer in LobbyPlayers) {
                         lobbyPlayer.CloseLobby();
                     }
-                    RoomPlayers.Clear();
+                    LobbyPlayers.Clear();
                     break;
                 
                 case FdNetworkStatus.Loading:
@@ -165,7 +165,7 @@ namespace Core {
         }
 
         public void NotifyPlayersOfReadyState() {
-            foreach (var player in RoomPlayers) {
+            foreach (var player in LobbyPlayers) {
                 player.HandleReadyStatusChanged(IsReadyToLoad());
             }
         }
@@ -175,7 +175,7 @@ namespace Core {
                 return false; 
             }
 
-            foreach (var player in RoomPlayers) {
+            foreach (var player in LobbyPlayers) {
                 if (!player.isReady) {
                     return false; 
                 }
@@ -200,13 +200,13 @@ namespace Core {
                 
                 case FdNetworkStatus.LobbyMenu: 
                     LobbyPlayer lobbyPlayer = Instantiate(lobbyPlayerPrefab);
-                    lobbyPlayer.isPartyLeader = RoomPlayers.Count == 0;
+                    lobbyPlayer.isPartyLeader = LobbyPlayers.Count == 0;
             
                     NetworkServer.AddPlayerForConnection(conn, lobbyPlayer.gameObject);
                     
                     if (conn.identity != null) {
                         var player = conn.identity.GetComponent<LobbyPlayer>();
-                        RoomPlayers.Add(player);
+                        LobbyPlayers.Add(player);
                     }
                     break;
             }

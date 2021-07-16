@@ -174,12 +174,19 @@ namespace Core {
             _hmdPosition += xrRig.transform.position - before;
         }
 
-        public void StartGame(LevelData levelData, bool dynamicPlacementStart = false) {
-            
-            /* TODO: Split this somehow into single and multiplayer - logic should be mostly the same but we don't
+        public void StartGame(SessionType sessionType, LevelData levelData, bool dynamicPlacementStart = false) {
+
+            /* Split this into single and multiplayer - logic should be mostly the same but we don't
                 transition from a lobby and we need to set the queryable SessionType for other logic in-game
                 (e.g. no actual pause on pause menu, quick to menu being quit to lobby etc)
-            */ 
+            */
+            _sessionType = sessionType;
+
+            // find the local lobby player and transition it, if it exists
+            var lobbyPlayer = LobbyPlayer.FindLocal;
+            if (_sessionType == SessionType.Multiplayer && lobbyPlayer) {
+                FdNetworkManager.Instance.TransitionToLoadingPlayer(lobbyPlayer);
+            }
             
             LockCursor();
 
@@ -189,14 +196,8 @@ namespace Core {
                 yield return _levelLoader.StartGame(levelData);
 
                 yield return FdNetworkManager.Instance.WaitForAllPlayersLoaded();
-                
-                // TODO: yield on query network manager for all player loaded status
 
-                // TODO: Instantiate the ship via network manager transition rather than this nonsense
-                // instantiate ship and wait for it to initialise
-                // var ship = Instantiate(shipPlayerPrefab);
-                var loadingPlayer =
-                    FdNetworkManager.Instance.LoadingPlayers.Find(loadingPlayer => loadingPlayer.isLocalPlayer);
+                var loadingPlayer = LoadingPlayer.FindLocal;
                 var ship = FdNetworkManager.Instance.TransitionToShipPlayer(loadingPlayer);
                 yield return new WaitForEndOfFrame();
                 

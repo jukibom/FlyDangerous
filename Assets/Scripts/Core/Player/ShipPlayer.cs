@@ -56,6 +56,10 @@ namespace Core.Player {
     [RequireComponent(typeof(Transform))]
     [RequireComponent(typeof(Rigidbody))]
     public class ShipPlayer : NetworkBehaviour {
+        
+        [CanBeNull]
+        public static ShipPlayer FindLocal => 
+            FdNetworkManager.Instance.ShipPlayers.Find(shipPlayer => shipPlayer.isLocalPlayer);
 
         // TODO: remove this stuff once params are finalised (this is for debug panel in release)
         public static ShipParameters ShipParameterDefaults {

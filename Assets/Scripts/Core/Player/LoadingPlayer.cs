@@ -1,9 +1,14 @@
 using System;
+using JetBrains.Annotations;
 using Mirror;
 using UnityEngine;
 
 namespace Core.Player {
     public class LoadingPlayer : NetworkBehaviour {
+
+        [CanBeNull]
+        public static LoadingPlayer FindLocal => 
+            FdNetworkManager.Instance.LoadingPlayers.Find(loadingPlayer => loadingPlayer.isLocalPlayer);
 
         [SyncVar]
         private bool _isLoaded;

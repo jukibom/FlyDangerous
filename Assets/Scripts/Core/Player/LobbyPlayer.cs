@@ -1,12 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using Menus.Main_Menu;
 using Mirror;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Core {
+namespace Core.Player {
     public class LobbyPlayer : NetworkBehaviour {
+        
+        [CanBeNull]
+        public static LobbyPlayer FindLocal => 
+            FdNetworkManager.Instance.LobbyPlayers.Find(lobbyPlayer => lobbyPlayer.isLocalPlayer);
+
         public bool isPartyLeader;
 
         [SyncVar(hook = nameof(OnPlayerNameChanged))]
@@ -45,12 +51,12 @@ namespace Core {
         }
 
         public override void OnStartClient() {
-            FdNetworkManager.Instance.RoomPlayers.Add(this);
+            FdNetworkManager.Instance.LobbyPlayers.Add(this);
             UpdateDisplay();
         }
 
         public override void OnStopClient() {
-            FdNetworkManager.Instance.RoomPlayers.Remove(this);
+            FdNetworkManager.Instance.LobbyPlayers.Remove(this);
             UpdateDisplay();
         }
 
