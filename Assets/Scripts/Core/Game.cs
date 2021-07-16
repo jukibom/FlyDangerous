@@ -187,7 +187,7 @@ namespace Core {
             if (_sessionType == SessionType.Multiplayer && lobbyPlayer) {
                 FdNetworkManager.Instance.TransitionToLoadingPlayer(lobbyPlayer);
             }
-            
+   
             LockCursor();
 
             IEnumerator LoadGame() {
@@ -199,6 +199,8 @@ namespace Core {
 
                 var loadingPlayer = LoadingPlayer.FindLocal;
                 var ship = FdNetworkManager.Instance.TransitionToShipPlayer(loadingPlayer);
+                
+                // Allow the rigid body to initialise before setting new parameters!
                 yield return new WaitForEndOfFrame();
                 
                 if (ship) {

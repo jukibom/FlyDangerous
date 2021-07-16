@@ -97,12 +97,12 @@ namespace Core {
                 switch (Status) {
                     case FdNetworkStatus.SinglePlayerMenu:
                         var loadingPlayer = conn.identity.GetComponent<LoadingPlayer>();
-                        LoadingPlayers.Remove(loadingPlayer);
+                        RemovePlayer(loadingPlayer);
                         break;
                     
                     case FdNetworkStatus.LobbyMenu:
                         var lobbyPlayer = conn.identity.GetComponent<LobbyPlayer>();
-                        LobbyPlayers.Remove(lobbyPlayer);
+                        RemovePlayer(lobbyPlayer);
                         break;
                 }
                 
@@ -194,7 +194,7 @@ namespace Core {
                     NetworkServer.AddPlayerForConnection(conn, loadingPlayer.gameObject);
                     if (conn.identity != null) {
                         var player = conn.identity.GetComponent<LoadingPlayer>();
-                        LoadingPlayers.Add(player);
+                        AddPlayer(player);
                     }
                     break;
                 
@@ -206,9 +206,36 @@ namespace Core {
                     
                     if (conn.identity != null) {
                         var player = conn.identity.GetComponent<LobbyPlayer>();
-                        LobbyPlayers.Add(player);
+                        AddPlayer(player);
                     }
                     break;
+            }
+        }
+        
+
+        private void AddPlayer<T>(T player) where T : NetworkBehaviour {
+            switch (player) {
+                case LobbyPlayer lobbyPlayer: LobbyPlayers.Add(lobbyPlayer);
+                    break;
+                case LoadingPlayer loadingPlayer: LoadingPlayers.Add(loadingPlayer);
+                    break;
+                case ShipPlayer shipPlayer: ShipPlayers.Add(shipPlayer);
+                    break;
+                default:
+                    throw new Exception("Unsupported player object tyep!");
+            }
+        }
+
+        private void RemovePlayer<T>(T player) where T : NetworkBehaviour {
+            switch (player) {
+                case LobbyPlayer lobbyPlayer: LobbyPlayers.Remove(lobbyPlayer);
+                    break;
+                case LoadingPlayer loadingPlayer: LoadingPlayers.Remove(loadingPlayer);
+                    break;
+                case ShipPlayer shipPlayer: ShipPlayers.Remove(shipPlayer);
+                    break;
+                default:
+                    throw new Exception("Unsupported player object tyep!");
             }
         }
     }
