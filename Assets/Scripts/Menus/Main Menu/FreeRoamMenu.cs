@@ -87,7 +87,7 @@ namespace Menus.Main_Menu {
                     break;
             }
 
-            Game.Instance.StartGame(levelData, true);
+            Game.Instance.StartGame(SessionType.Singleplayer, levelData, true);
         }
     }
 }
