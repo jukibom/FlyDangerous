@@ -141,7 +141,7 @@ namespace Core {
 
             // TODO: Make this distance dynamic based on tiles?
             if (mapMagic && ship && distanceToStart > 20000) {
-                yield return StartCoroutine(SwitchToLoadingScreen(true));
+                yield return StartCoroutine(ShowLoadingScreen(true));
                 yield return StartCoroutine(LoadTerrainAndReset(mapMagic));
                 yield return ResetTrackIfNeeded();
             }
@@ -155,7 +155,7 @@ namespace Core {
          // This is a separate action so that we can safely move to a new active loading scene and fully unload everything
          // before moving to any other map or whatever we need to do.
          // On completion it executes callback `then` with a reference to the loading text.
-         public IEnumerator SwitchToLoadingScreen(bool keepScene = false) {
+         public IEnumerator ShowLoadingScreen(bool keepScene = false) {
             
              // disable user input if we're in-game while handling everything else
              var user = FindObjectOfType<User>();
@@ -170,6 +170,11 @@ namespace Core {
              // load loading screen (lol)
              var loadMode = keepScene ? LoadSceneMode.Additive : LoadSceneMode.Single;
              yield return SceneManager.LoadSceneAsync("Loading", loadMode);
+         }
+
+         public IEnumerator HideLoadingScreen() {
+             // unload the loading screen
+             yield return SceneManager.UnloadSceneAsync("Loading");
          }
 
         // Return a new level data object hydrated with all the information of the current game state
@@ -300,9 +305,6 @@ namespace Core {
                     yield return null;
                 }
             }
-
-            // unload the loading screen
-            yield return SceneManager.UnloadSceneAsync("Loading");
 
             _scenesLoading.Clear();
 
