@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
@@ -11,8 +12,8 @@ namespace Core.Player {
         
         [CanBeNull]
         public static LobbyPlayer FindLocal => 
-            FdNetworkManager.Instance.LobbyPlayers.Find(lobbyPlayer => lobbyPlayer.isLocalPlayer);
-
+            Array.Find(FindObjectsOfType<LobbyPlayer>(), lobbyPlayer => lobbyPlayer.isLocalPlayer);
+        
         public bool isPartyLeader;
 
         [SyncVar(hook = nameof(OnPlayerNameChanged))]

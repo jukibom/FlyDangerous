@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Audio;
 using Core;
+using Den.Tools;
 using JetBrains.Annotations;
 using Mirror;
 using Misc;
@@ -58,8 +59,9 @@ namespace Core.Player {
     public class ShipPlayer : NetworkBehaviour {
         
         [CanBeNull]
-        public static ShipPlayer FindLocal => 
-            FdNetworkManager.Instance.ShipPlayers.Find(shipPlayer => shipPlayer.isLocalPlayer);
+        public static ShipPlayer FindLocal =>
+            Array.Find(FindObjectsOfType<ShipPlayer>(), shipPlayer => shipPlayer.isLocalPlayer);
+        
 
         // TODO: remove this stuff once params are finalised (this is for debug panel in release)
         public static ShipParameters ShipParameterDefaults {

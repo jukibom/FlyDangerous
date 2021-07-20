@@ -8,8 +8,8 @@ namespace Core.Player {
 
         [CanBeNull]
         public static LoadingPlayer FindLocal => 
-            FdNetworkManager.Instance.LoadingPlayers.Find(loadingPlayer => loadingPlayer.isLocalPlayer);
-
+            Array.Find(FindObjectsOfType<LoadingPlayer>(), loadingPlayer => loadingPlayer.isLocalPlayer);
+        
         [SyncVar]
         private bool _isLoaded;
         public bool IsLoaded => _isLoaded;
