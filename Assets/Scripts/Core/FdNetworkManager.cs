@@ -82,14 +82,49 @@ namespace Core {
         }
 
         // --- SERVER SIDE PLAYER CONNECTIONS --- //
+        // player joins
         public override void OnServerConnect(NetworkConnection conn) {
-            Debug.Log("[SERVER] PLAYER CONNECT" + " (" + numPlayers + 1 + " / " + maxConnections + " players)");
+            Debug.Log("[SERVER] PLAYER CONNECT" + " (" + (numPlayers + 1) + " / " + maxConnections + " players)");
             if (numPlayers >= maxConnections) {
                 conn.Disconnect();
                 // TODO: Send a message why
                 return;
             }
+
+            IEnumerator AddNewPlayerConnection() {
+                while (!conn.isReady) {
+                    yield return new WaitForEndOfFrame();
+                }
+                
+                switch (Status) {
+                    case FdNetworkStatus.SinglePlayerMenu:
+                        LoadingPlayer loadingPlayer = Instantiate(loadingPlayerPrefab);
+                        NetworkServer.AddPlayerForConnection(conn, loadingPlayer.gameObject);
+                        if (conn.identity != null) {
+                            var player = conn.identity.GetComponent<LoadingPlayer>();
+                            AddPlayer(player);
+                        }
+                        break;
+                
+                    case FdNetworkStatus.LobbyMenu: 
+                        LobbyPlayer lobbyPlayer = Instantiate(lobbyPlayerPrefab);
+                        lobbyPlayer.isPartyLeader = LobbyPlayers.Count == 0;
+            
+                        NetworkServer.AddPlayerForConnection(conn, lobbyPlayer.gameObject);
+                    
+                        if (conn.identity != null) {
+                            var player = conn.identity.GetComponent<LobbyPlayer>();
+                            AddPlayer(player);
+                        }
+                        break;
+                }
+            }
+
+            StartCoroutine(AddNewPlayerConnection());
+
         }
+        
+        // player leaves
         public override void OnServerDisconnect(NetworkConnection conn) {
             Debug.Log("[SERVER] PLAYER DISCONNECT");
                         
@@ -178,33 +213,6 @@ namespace Core {
             return true;
         }
 
-        // hijack the auto add player functionality and add our own depending on context
-        public override void OnServerAddPlayer(NetworkConnection conn) {
-            Debug.Log("[SERVER] PLAYER ADDED");
-            switch (Status) {
-                
-                case FdNetworkStatus.SinglePlayerMenu:
-                    LoadingPlayer loadingPlayer = Instantiate(loadingPlayerPrefab);
-                    NetworkServer.AddPlayerForConnection(conn, loadingPlayer.gameObject);
-                    if (conn.identity != null) {
-                        var player = conn.identity.GetComponent<LoadingPlayer>();
-                        AddPlayer(player);
-                    }
-                    break;
-                
-                case FdNetworkStatus.LobbyMenu: 
-                    LobbyPlayer lobbyPlayer = Instantiate(lobbyPlayerPrefab);
-                    lobbyPlayer.isPartyLeader = LobbyPlayers.Count == 0;
-            
-                    NetworkServer.AddPlayerForConnection(conn, lobbyPlayer.gameObject);
-                    
-                    if (conn.identity != null) {
-                        var player = conn.identity.GetComponent<LobbyPlayer>();
-                        AddPlayer(player);
-                    }
-                    break;
-            }
-        }
         
         private T ReplacePlayer<T, U>(T newPlayer, U previousPlayer) where T : NetworkBehaviour where U : NetworkBehaviour {
             NetworkServer.ReplacePlayerForConnection(previousPlayer.connectionToClient, newPlayer.gameObject, true);
