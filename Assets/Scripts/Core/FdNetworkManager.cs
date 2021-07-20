@@ -6,7 +6,6 @@ using Core.Player;
 using kcp2k;
 using Mirror;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace Core {
     
@@ -32,6 +31,12 @@ namespace Core {
 
         [Header("In-Game")] 
         [SerializeField] private ShipPlayer shipPlayerPrefab;
+
+        private struct StartGameMessage : NetworkMessage {
+            public SessionType sessionType;
+            public LevelData levelData;
+            public bool dynamicPlacement;
+        }
         
         public static event Action OnClientConnected;
         public static event Action OnClientDisconnected;
@@ -42,7 +47,76 @@ namespace Core {
 
         private FdNetworkStatus _status = FdNetworkStatus.SinglePlayerMenu;
         private FdNetworkStatus Status => _status;
+        
+        public IEnumerator WaitForAllPlayersLoaded() {
+            yield return LoadingPlayers.All(loadingPlayer => loadingPlayer.IsLoaded) 
+                ? null 
+                : new WaitForFixedUpdate();
+        }
+        
+        // TODO: finish lobby ready state handling
+        public void NotifyPlayersOfReadyState() {
+            foreach (var player in LobbyPlayers) {
+                player.HandleReadyStatusChanged(IsReadyToLoad());
+            }
+        }
 
+        private bool IsReadyToLoad() {
+            if (numPlayers < minPlayers) {
+                return false; 
+            }
+
+            foreach (var player in LobbyPlayers) {
+                if (!player.isReady) {
+                    return false; 
+                }
+            }
+
+            return true;
+        }
+
+        #region Start / Quit Game
+        public void StartGameLoadSequence(SessionType sessionType, LevelData levelData, bool dynamicPlacement = false) {
+            if (NetworkServer.active) {
+                // Transition any lobby players to loading state
+                if (_status == FdNetworkStatus.LobbyMenu) {
+                    // iterate over a COPY of the lobby players (the List is mutated by transitioning!)
+                    foreach (var lobbyPlayer in LobbyPlayers.ToArray()) {
+                        TransitionToLoadingPlayer(lobbyPlayer);
+                    }
+                }
+
+                // notify all clients about the new scene
+                NetworkServer.SendToAll(new StartGameMessage {
+                    sessionType = sessionType, 
+                    levelData = levelData, 
+                    dynamicPlacement = dynamicPlacement
+                });
+            }
+            else {
+                throw new Exception("Cannot start a game without an active server!");
+            }
+        }
+
+        private void StartLoadGame(StartGameMessage message) {
+            _status = FdNetworkStatus.Loading;
+            Game.Instance.StartGame(message.sessionType, message.levelData, message.dynamicPlacement);
+        }
+        
+        public void StartMainGame() {
+            _status = FdNetworkStatus.InGame;
+            if (NetworkClient.connection.identity.isServer) {
+                // iterate over a COPY of the lobby players (the List is mutated by transitioning!)
+                foreach (var loadingPlayer in LoadingPlayers.ToArray()) {
+                    TransitionToShipPlayer(loadingPlayer);
+                }
+            }
+        }
+
+        #endregion
+        
+        #region State Management
+        
         public void StartLobbyServer() {
             _status = FdNetworkStatus.LobbyMenu;
             StartHost();
@@ -60,28 +134,38 @@ namespace Core {
             maxConnections = 1;
             StartHost();
         }
-        }
-        public void CloseConnection() {
+
+        public void StopAll() {
             if (mode != NetworkManagerMode.Offline) {
                 StopHost();
                 StopClient();
             }
             _status = FdNetworkStatus.SinglePlayerMenu;
         }
+        
+        #endregion
 
-        // --- LOCAL CLIENT SIDE PLAYER CONNECTIONS --- //
+        #region Client Handlers
+
+        // player joins
         public override void OnClientConnect(NetworkConnection conn) {
             Debug.Log("[CLIENT] PLAYER CONNECT");
             base.OnClientConnect(conn);
             OnClientConnected?.Invoke();
+            NetworkClient.RegisterHandler<StartGameMessage>(StartLoadGame);
         }
+        
+        // player leaves
         public override void OnClientDisconnect(NetworkConnection conn) {
             Debug.Log("[CLIENT] PLAYER DISCONNECT");
             base.OnClientDisconnect(conn);
             OnClientDisconnected?.Invoke();
         }
 
-        // --- SERVER SIDE PLAYER CONNECTIONS --- //
+        #endregion
+        
+        #region Server Handlers
+
         // player joins
         public override void OnServerConnect(NetworkConnection conn) {
             Debug.Log("[SERVER] PLAYER CONNECT" + " (" + (numPlayers + 1) + " / " + maxConnections + " players)");
@@ -171,54 +255,35 @@ namespace Core {
             }
             _status = FdNetworkStatus.SinglePlayerMenu;
         }
-        
-        public IEnumerator WaitForAllPlayersLoaded() {
-            yield return LoadingPlayers.All(loadingPlayer => loadingPlayer.IsLoaded) 
-                ? null 
-                : new WaitForFixedUpdate();
-        }
 
-        public LobbyPlayer TransitionToLobbyPlayer<T>(T previousPlayer) where T: NetworkBehaviour {
+        #endregion
+
+        #region Player Transition + List Management
+
+        private LobbyPlayer TransitionToLobbyPlayer<T>(T previousPlayer) where T: NetworkBehaviour {
             var lobbyPlayer = Instantiate(lobbyPlayerPrefab);
             return ReplacePlayer(lobbyPlayer, previousPlayer);
         }
         
-        public LoadingPlayer TransitionToLoadingPlayer<T>(T previousPlayer) where T: NetworkBehaviour {
+        private LoadingPlayer TransitionToLoadingPlayer<T>(T previousPlayer) where T: NetworkBehaviour {
             var loadingPlayer = Instantiate(loadingPlayerPrefab);
             return ReplacePlayer(loadingPlayer, previousPlayer);
         }
         
-        public ShipPlayer TransitionToShipPlayer<T>(T previousPlayer) where T: NetworkBehaviour {
+        private ShipPlayer TransitionToShipPlayer<T>(T previousPlayer) where T: NetworkBehaviour {
             var shipPlayer = Instantiate(shipPlayerPrefab);
             return ReplacePlayer(shipPlayer, previousPlayer);
         }
-
-        public void NotifyPlayersOfReadyState() {
-            foreach (var player in LobbyPlayers) {
-                player.HandleReadyStatusChanged(IsReadyToLoad());
-            }
-        }
-
-        private bool IsReadyToLoad() {
-            if (numPlayers < minPlayers) {
-                return false; 
-            }
-
-            foreach (var player in LobbyPlayers) {
-                if (!player.isReady) {
-                    return false; 
-                }
-            }
-
-            return true;
-        }
-
         
         private T ReplacePlayer<T, U>(T newPlayer, U previousPlayer) where T : NetworkBehaviour where U : NetworkBehaviour {
-            NetworkServer.ReplacePlayerForConnection(previousPlayer.connectionToClient, newPlayer.gameObject, true);
+            Debug.Log("REPLACE PLAYER " + previousPlayer + " " + previousPlayer.connectionToClient + " " + newPlayer);
+            var conn = previousPlayer.connectionToClient;
+            if (previousPlayer.connectionToClient.identity != null) {
+                NetworkServer.Destroy(previousPlayer.connectionToClient.identity.gameObject);
+            }
+            NetworkServer.ReplacePlayerForConnection(conn, newPlayer.gameObject, true);
             RemovePlayer(previousPlayer);
             AddPlayer(newPlayer);
-            Destroy(previousPlayer.gameObject);
             return newPlayer;
         }
 
@@ -236,16 +301,23 @@ namespace Core {
         }
 
         private void RemovePlayer<T>(T player) where T : NetworkBehaviour {
-            switch (player) {
-                case LobbyPlayer lobbyPlayer: LobbyPlayers.Remove(lobbyPlayer);
-                    break;
-                case LoadingPlayer loadingPlayer: LoadingPlayers.Remove(loadingPlayer);
-                    break;
-                case ShipPlayer shipPlayer: ShipPlayers.Remove(shipPlayer);
-                    break;
-                default:
-                    throw new Exception("Unsupported player object tyep!");
+            if (player != null) {
+                switch (player) {
+                    case LobbyPlayer lobbyPlayer:
+                        LobbyPlayers.Remove(lobbyPlayer);
+                        break;
+                    case LoadingPlayer loadingPlayer:
+                        LoadingPlayers.Remove(loadingPlayer);
+                        break;
+                    case ShipPlayer shipPlayer:
+                        ShipPlayers.Remove(shipPlayer);
+                        break;
+                    default:
+                        throw new Exception("Unsupported player object type!");
+                }
             }
         }
+        
+        #endregion
     }
 }

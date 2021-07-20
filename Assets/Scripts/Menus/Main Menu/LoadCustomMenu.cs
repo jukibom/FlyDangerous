@@ -74,7 +74,7 @@ namespace Menus.Main_Menu {
 
         public void StartMap() {
             var levelData = _levelData ?? new LevelData();
-            Game.Instance.StartGame(SessionType.Singleplayer, levelData);
+            FdNetworkManager.Instance.StartGameLoadSequence(SessionType.Singleplayer, levelData);
         }
 
         private void SetValidState() {

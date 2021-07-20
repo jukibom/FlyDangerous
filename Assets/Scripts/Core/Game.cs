@@ -182,27 +182,28 @@ namespace Core {
             */
             _sessionType = sessionType;
 
-            // find the local lobby player and transition it, if it exists
-            var lobbyPlayer = LobbyPlayer.FindLocal;
-            if (_sessionType == SessionType.Multiplayer && lobbyPlayer) {
-                FdNetworkManager.Instance.TransitionToLoadingPlayer(lobbyPlayer);
-            }
-   
             LockCursor();
 
             IEnumerator LoadGame() {
-                yield return _levelLoader.SwitchToLoadingScreen();
-                // TODO: network player potential transition from lobby player prefab to loading player prefab
+                yield return _levelLoader.ShowLoadingScreen();
                 yield return _levelLoader.StartGame(levelData);
 
                 yield return FdNetworkManager.Instance.WaitForAllPlayersLoaded();
 
-                var loadingPlayer = LoadingPlayer.FindLocal;
-                var ship = FdNetworkManager.Instance.TransitionToShipPlayer(loadingPlayer);
+                // TODO: handle terrain gen freaking out (no camera for a frame...)
+
+                FdNetworkManager.Instance.StartMainGame();
+                
+                // wait for local ship client object
+                while (!ShipPlayer.FindLocal) {
+                    yield return new WaitForEndOfFrame();
+                }
+                var ship = ShipPlayer.FindLocal;
                 
                 // Allow the rigid body to initialise before setting new parameters!
                 yield return new WaitForEndOfFrame();
                 
+                // TODO: need to handle different clients' positions...
                 if (ship) {
                     // debug flight params
                     ship.Parameters = ShipParameters;
@@ -249,11 +250,13 @@ namespace Core {
                         }
                     }
                 }
-
+                
 
                 // set up graphics settings (e.g. camera FoV) + VR status (cameras, radial fog etc)
                 ApplyGraphicsOptions();
                 NotifyVRStatus();
+                
+                yield return _levelLoader.HideLoadingScreen();
 
                 // resume the game
                 Time.timeScale = 1;
@@ -285,8 +288,6 @@ namespace Core {
         }
 
         public void QuitToMenu() {
-            FdNetworkManager.Instance.CloseConnection();
-            
             _menuFirstRun = false;
             var mapMagic = FindObjectOfType<MapMagicObject>();
             if (mapMagic) {
@@ -299,7 +300,10 @@ namespace Core {
             IEnumerator LoadMenu() {
                 FadeToBlack();
                 yield return new WaitForSeconds(0.5f);
+                Debug.Log("LOAD MAIN MENU");
                 SceneManager.LoadScene("Main Menu");
+                Debug.Log("LOADED");
+                FdNetworkManager.Instance.StopAll();
                 _levelLoader.ResetLoadedLevelData();
                 ApplyGraphicsOptions();
                 NotifyVRStatus();

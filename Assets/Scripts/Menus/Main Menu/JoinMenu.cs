@@ -49,7 +49,7 @@ namespace Menus.Main_Menu {
 
         public void Cancel() {
             AudioManager.Instance.Play("ui-cancel");
-            FdNetworkManager.Instance.CloseConnection();
+            FdNetworkManager.Instance.StopAll();
             topMenu.Show();
             Hide();
         }

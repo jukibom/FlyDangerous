@@ -29,7 +29,7 @@ public class TopMenu : MonoBehaviour
         defaultActiveButton.Select();
         _animator.SetBool("Open", true);
         
-        FdNetworkManager.Instance.CloseConnection();
+        FdNetworkManager.Instance.StopAll();
     }
 
     public void OpenSinglePlayerPanel() {

@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Audio;
+﻿using Audio;
 using Core;
-using Mirror;
+using Core.Player;
 using UnityEngine;
 using UnityEngine.UI;
+using Environment = Core.Environment;
 
 namespace Menus.Main_Menu {
     public class LobbyMenu : MonoBehaviour {
@@ -47,6 +45,18 @@ namespace Menus.Main_Menu {
             FdNetworkManager.Instance.StopHost();
         }
 
+        public void StartGame() {
+            var localLobbyPlayer = LobbyPlayer.FindLocal;
+            if (localLobbyPlayer && localLobbyPlayer.isPartyLeader) {
+                FdNetworkManager.Instance.StartGameLoadSequence(SessionType.Multiplayer, new LevelData {
+                    location = Location.TestSpaceStation,
+                    terrainSeed = "testing",
+                    raceType = RaceType.None,
+                    environment = Environment.SunsetClear
+                }, true);
+            }
+        }
+
         public void CloseLobby() {
             // TODO: show a notification here
             AudioManager.Instance.Play("ui-cancel");
@@ -55,7 +65,7 @@ namespace Menus.Main_Menu {
         }
 
         public void Cancel() {
-            FdNetworkManager.Instance.CloseConnection();
+            FdNetworkManager.Instance.StopAll();
             CloseLobby();
         }
     }
