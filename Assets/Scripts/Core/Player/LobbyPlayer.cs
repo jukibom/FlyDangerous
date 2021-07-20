@@ -52,12 +52,10 @@ namespace Core.Player {
         }
 
         public override void OnStartClient() {
-            FdNetworkManager.Instance.LobbyPlayers.Add(this);
             UpdateDisplay();
         }
 
         public override void OnStopClient() {
-            FdNetworkManager.Instance.LobbyPlayers.Remove(this);
             UpdateDisplay();
         }
 
@@ -94,7 +92,7 @@ namespace Core.Player {
             playerName = name;
             UpdateDisplay();
         }
-        
+
         // On each client
         public void CloseLobby() {
             LobbyUI.CloseLobby();
