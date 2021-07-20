@@ -151,6 +151,7 @@ namespace Core.Player {
             }
         }
 
+        [SerializeField] private GameObject playerLogic;
         [SerializeField] private Text velocityIndicator;
         [SerializeField] private Image accelerationBar;
         [SerializeField] private Text boostIndicator;
@@ -221,8 +222,25 @@ namespace Core.Player {
         }
 
         public void Start() {
+            DontDestroyOnLoad(this);
+            
+            // rigidbody defaults
+            _rigidBody.centerOfMass = Vector3.zero;
+            _rigidBody.inertiaTensorRotation = Quaternion.identity;
+            _rigidBody.mass = ShipParameterDefaults.mass;
+            _rigidBody.drag = ShipParameterDefaults.drag;
+            _rigidBody.angularDrag = ShipParameterDefaults.angularDrag;
+
+            // setup angular momentum for collisions (higher multiplier = less spin)
+            _initialInertiaTensor = _rigidBody.inertiaTensor;
+            _rigidBody.inertiaTensor *= _inertialTensorMultiplier;
+        }
+
+        public override void OnStartLocalPlayer() {
+            // enable input, camera, effects etc
+            playerLogic.SetActive(true);
+            
             // register self as floating origin focus
-            // TODO Move this to client local start for multiplayer
             FloatingOrigin.Instance.focalTransform = transform;
 
             switch (Preferences.Instance.GetString("flightAssistDefault")) {
@@ -241,18 +259,6 @@ namespace Core.Player {
                     _flightAssistRotationalDampening = true;
                     break;
             }
-
-            _rigidBody.centerOfMass = Vector3.zero;
-            _rigidBody.inertiaTensorRotation = Quaternion.identity;
-
-            // rigidbody defaults
-            _rigidBody.mass = ShipParameterDefaults.mass;
-            _rigidBody.drag = ShipParameterDefaults.drag;
-            _rigidBody.angularDrag = ShipParameterDefaults.angularDrag;
-
-            // setup angular momentum for collisions (higher multiplier = less spin)
-            _initialInertiaTensor = _rigidBody.inertiaTensor;
-            _rigidBody.inertiaTensor *= _inertialTensorMultiplier;
         }
 
         public void Reset() {

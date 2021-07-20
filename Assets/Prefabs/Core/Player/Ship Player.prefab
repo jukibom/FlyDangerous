@@ -1546,7 +1546,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children: []
-  m_Father: {fileID: 1767139775458680010}
+  m_Father: {fileID: 4380481734890611750}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1767139775010821695
@@ -1885,7 +1885,7 @@ Transform:
   - {fileID: 1767139775165192756}
   - {fileID: 1767139775749866472}
   - {fileID: 1767139775199173864}
-  m_Father: {fileID: 1767139775458680010}
+  m_Father: {fileID: 4380481734890611750}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1767139775196325524
@@ -2025,7 +2025,7 @@ VFXRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1767139775199173865}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -2205,9 +2205,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1767139775010821693}
-  - {fileID: 1767139775869506801}
-  - {fileID: 1767139775196325525}
+  - {fileID: 4380481734890611750}
   - {fileID: 1767139775042258874}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -2242,6 +2240,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  playerLogic: {fileID: 9213456603229471013}
   velocityIndicator: {fileID: 1767139776027946752}
   accelerationBar: {fileID: 8710939369980382968}
   boostIndicator: {fileID: 4356181547278628074}
@@ -2858,13 +2857,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1767139775869506806}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.5, z: 6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1767139775857899948}
   - {fileID: 1767139774795322250}
-  m_Father: {fileID: 1767139775458680010}
+  m_Father: {fileID: 4380481734890611750}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1767139775913163842
@@ -3025,6 +3024,39 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: <Seed>
+--- !u!1 &9213456603229471013
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4380481734890611750}
+  m_Layer: 0
+  m_Name: PlayerLogic
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &4380481734890611750
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9213456603229471013}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1767139775010821693}
+  - {fileID: 1767139775869506801}
+  - {fileID: 1767139775196325525}
+  m_Father: {fileID: 1767139775458680010}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1220547742937816739
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3810,7 +3842,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 177074050465568753, guid: 6dfae0ad47b80844caf683dce03ecaf1, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 177074050465568753, guid: 6dfae0ad47b80844caf683dce03ecaf1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3900,6 +3932,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!108 &8538543542728229736 stripped
+Light:
+  m_CorrespondingSourceObject: {fileID: 7821683513650746147, guid: 6dfae0ad47b80844caf683dce03ecaf1, type: 3}
+  m_PrefabInstance: {fileID: 1941952670020079691}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &4356181547278628074 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2776319239903798433, guid: 6dfae0ad47b80844caf683dce03ecaf1, type: 3}
@@ -3911,11 +3948,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!108 &8538543542728229736 stripped
-Light:
-  m_CorrespondingSourceObject: {fileID: 7821683513650746147, guid: 6dfae0ad47b80844caf683dce03ecaf1, type: 3}
-  m_PrefabInstance: {fileID: 1941952670020079691}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3694649321974750538
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9580,7 +9612,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 605509427674605846, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: Button 6 [Logitech Extreme 3D]
+      value: Button 4 [Logitech Extreme 3D]
       objectReference: {fileID: 0}
     - target: {fileID: 605509427693747616, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
@@ -19984,11 +20016,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
---- !u!224 &1767139775098253398 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 8027640669048419933, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
-  m_PrefabInstance: {fileID: 8638410843055048203}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1767139775098253421 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8027640669048419942, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
@@ -20000,3 +20027,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07a106139e28456781912e06ceac08bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!224 &1767139775098253398 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8027640669048419933, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
+  m_PrefabInstance: {fileID: 8638410843055048203}
+  m_PrefabAsset: {fileID: 0}
