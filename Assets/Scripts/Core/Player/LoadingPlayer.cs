@@ -14,7 +14,7 @@ namespace Core.Player {
         private bool _isLoaded;
         public bool IsLoaded => _isLoaded;
         
-        private void Awake() {
+        private void Start() {
             // We want to keep this around when jumping to the loading scene and manually destroy it later.
             DontDestroyOnLoad(gameObject);
         }
