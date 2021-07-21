@@ -94,14 +94,14 @@ namespace Core.Player {
 
         public ShipParameters Parameters {
             get {
-                if (!_rigidBody) {
+                if (!_rigidbody) {
                     return ShipParameterDefaults;
                 }
 
                 var parameters = new ShipParameters();
-                parameters.mass = Mathf.Round(_rigidBody.mass);
-                parameters.drag = _rigidBody.drag;
-                parameters.angularDrag = _rigidBody.angularDrag;
+                parameters.mass = Mathf.Round(_rigidbody.mass);
+                parameters.drag = _rigidbody.drag;
+                parameters.angularDrag = _rigidbody.angularDrag;
                 parameters.inertiaTensorMultiplier = _inertialTensorMultiplier;
                 parameters.maxSpeed = _maxSpeed;
                 parameters.maxBoostSpeed = _maxBoostSpeed;
@@ -125,10 +125,10 @@ namespace Core.Player {
                 return parameters;
             }
             set {
-                _rigidBody.mass = value.mass;
-                _rigidBody.drag = value.drag;
-                _rigidBody.angularDrag = value.angularDrag;
-                _rigidBody.inertiaTensor = _initialInertiaTensor * value.inertiaTensorMultiplier;
+                _rigidbody.mass = value.mass;
+                _rigidbody.drag = value.drag;
+                _rigidbody.angularDrag = value.angularDrag;
+                _rigidbody.inertiaTensor = _initialInertiaTensor * value.inertiaTensorMultiplier;
                 _inertialTensorMultiplier = value.inertiaTensorMultiplier;
 
                 _maxSpeed = value.maxSpeed;
@@ -213,29 +213,41 @@ namespace Core.Player {
 
         [CanBeNull] private Coroutine _boostCoroutine;
 
-        private Rigidbody _rigidBody;
+        private Transform _transform;
+        private Rigidbody _rigidbody;
+        private bool IsReady => _transform && _rigidbody;
 
-        public float Velocity {
-            get { return Mathf.Round(_rigidBody.velocity.magnitude); }
-        }
+        public float Velocity => Mathf.Round(_rigidbody.velocity.magnitude);
 
         public void Awake() {
-            _rigidBody = GetComponent<Rigidbody>();
+            _transform = transform;
+            _rigidbody = GetComponent<Rigidbody>();
         }
 
         public void Start() {
             DontDestroyOnLoad(this);
             
             // rigidbody defaults
-            _rigidBody.centerOfMass = Vector3.zero;
-            _rigidBody.inertiaTensorRotation = Quaternion.identity;
-            _rigidBody.mass = ShipParameterDefaults.mass;
-            _rigidBody.drag = ShipParameterDefaults.drag;
-            _rigidBody.angularDrag = ShipParameterDefaults.angularDrag;
+            _rigidbody.centerOfMass = Vector3.zero;
+            _rigidbody.inertiaTensorRotation = Quaternion.identity;
+            _rigidbody.mass = ShipParameterDefaults.mass;
+            _rigidbody.drag = ShipParameterDefaults.drag;
+            _rigidbody.angularDrag = ShipParameterDefaults.angularDrag;
 
             // setup angular momentum for collisions (higher multiplier = less spin)
-            _initialInertiaTensor = _rigidBody.inertiaTensor;
-            _rigidBody.inertiaTensor *= _inertialTensorMultiplier;
+            var inertiaTensor = _rigidbody.inertiaTensor;
+            _initialInertiaTensor = inertiaTensor;
+            inertiaTensor *= _inertialTensorMultiplier;
+            _rigidbody.inertiaTensor = inertiaTensor;
+        }
+
+        private void OnEnable() {
+            // perform positional correction on non-local client player objects like anything else in the world
+            FloatingOrigin.OnFloatingOriginCorrection += NonLocalPlayerPositionCorrection;
+        }
+    
+        private void OnDisable() {
+            FloatingOrigin.OnFloatingOriginCorrection -= NonLocalPlayerPositionCorrection;
         }
 
         public override void OnStartLocalPlayer() {
@@ -262,10 +274,27 @@ namespace Core.Player {
                     break;
             }
         }
+        
+        // Get the position and rotation of the ship within the world, taking into account floating origin fix
+        public void AbsoluteWorldPosition(out Vector3 position, out Quaternion rotation) {
+            var t = transform;
+            var p = t.position;
+            var r = t.rotation.eulerAngles;
+            position.x = p.x;
+            position.y = p.y;
+            position.z = p.z;
+            rotation = Quaternion.Euler(r.x, r.y, r.z);
+
+            // if floating origin fix is active, overwrite position with corrected world space
+            var origin = FloatingOrigin.Instance.FocalObjectPosition;
+            position.x = origin.x;
+            position.y = origin.y;
+            position.z = origin.z;
+        }
 
         public void Reset() {
-            _rigidBody.velocity = Vector3.zero;
-            _rigidBody.angularVelocity = Vector3.zero;
+            _rigidbody.velocity = Vector3.zero;
+            _rigidbody.angularVelocity = Vector3.zero;
             _pitchInput = 0;
             _rollInput = 0;
             _yawInput = 0;
@@ -293,7 +322,34 @@ namespace Core.Player {
 
             AudioManager.Instance.Stop("ship-boost");
         }
+        
+        private void OnTriggerEnter(Collider other) {
+            var checkpoint = other.GetComponentInParent<Checkpoint>();
+            if (checkpoint) {
+                checkpoint.Hit();
+            }
+        }
+        
+        // Apply all physics updates in fixed intervals (WRITE)
+        private void FixedUpdate() {
+            // TODO: Ensure ship updates are still processed in multiplayer (e.g. sounds, thrusters)
+            if (isLocalPlayer) {
+                CalculateBoost(out var maxThrustWithBoost, out var maxTorqueWithBoost, out var boostedMaxSpeedDelta);
+                CalculateFlightForces(
+                    maxThrustWithBoost,
+                    maxTorqueWithBoost,
+                    _maxSpeed + boostedMaxSpeedDelta,
+                    out var thrust);
 
+                ClampMaxSpeed(boostedMaxSpeedDelta);
+                UpdateIndicators(thrust);
+
+                // Send the current floating origin along with the new position and rotation to the server
+                CmdSetPosition(FloatingOrigin.Instance.Origin, _transform.localPosition, _transform.rotation, _rigidbody.velocity);
+            }
+        }
+
+        #region Input
         public void SetPitch(float value) {
             if (_flightAssistRotationalDampening) {
                 _pitchTargetFactor = ClampInput(value);
@@ -432,76 +488,22 @@ namespace Core.Player {
                 AudioManager.Instance.Play("ship-velocity-limit-off");
             }
         }
-
-        // Get the position and rotation of the ship within the world, taking into account floating origin fix
-        public void AbsoluteWorldPosition(out Vector3 position, out Quaternion rotation) {
-            var t = transform;
-            var p = t.position;
-            var r = t.rotation.eulerAngles;
-            position.x = p.x;
-            position.y = p.y;
-            position.z = p.z;
-            rotation = Quaternion.Euler(r.x, r.y, r.z);
-
-            // if floating origin fix is active, overwrite position with corrected world space
-            var origin = FloatingOrigin.Instance.FocalObjectPosition;
-            position.x = origin.x;
-            position.y = origin.y;
-            position.z = origin.z;
-        }
-
-        private void OnTriggerEnter(Collider other) {
-            var checkpoint = other.GetComponentInParent<Checkpoint>();
-            if (checkpoint) {
-                checkpoint.Hit();
-            }
-        }
-
-        // Apply all physics updates in fixed intervals (WRITE)
-        private void FixedUpdate() {
-            CalculateBoost(out var maxThrustWithBoost, out var maxTorqueWithBoost, out var boostedMaxSpeedDelta);
-            CalculateFlightForces(
-                maxThrustWithBoost,
-                maxTorqueWithBoost,
-                _maxSpeed + boostedMaxSpeedDelta,
-                out var thrust);
-
-            // TODO: clamping should be based on input rather than modifying the rigid body - if gravity pulls you down then that's fine, similar to if a collision yeets you into a spinning mess.
-            ClampMaxSpeed(boostedMaxSpeedDelta);
-            UpdateIndicators(thrust);
-        }
-
-        private void UpdateIndicators(float thrust) {
-            if (velocityIndicator != null) {
-                velocityIndicator.text = Velocity.ToString(CultureInfo.InvariantCulture);
-            }
-
-            if (accelerationBar != null) {
-                var acceleration = thrust / _maxThrust;
-                accelerationBar.fillAmount = MathfExtensions.Remap(0, 1, 0, 0.755f, acceleration);
-                accelerationBar.color = Color.Lerp(Color.green, Color.red, acceleration);
-            }
-
-            if (boostIndicator != null) {
-                boostIndicator.text = ((int) _boostCapacitorPercent).ToString(CultureInfo.InvariantCulture) + "%";
-            }
-
-            if (boostCapacitorBar != null) {
-                boostCapacitorBar.fillAmount = MathfExtensions.Remap(0, 100, 0, 0.775f, _boostCapacitorPercent);
-                boostCapacitorBar.color = Color.Lerp(Color.red, Color.green, _boostCapacitorPercent / 100);
-            }
-        }
-
+        
         /**
-     * All axis should be between -1 and 1. 
-     */
+         * All axis should be between -1 and 1. 
+         */
         private float ClampInput(float input) {
             return Mathf.Min(Mathf.Max(input, -1), 1);
         }
+        #endregion
 
-        private void CalculateBoost(out float maxThrustWithBoost, out float maxTorqueWithBoost,
-            out float boostedMaxSpeedDelta) {
+        #region Flight Calculations
 
+        private void CalculateBoost(
+            out float maxThrustWithBoost, 
+            out float maxTorqueWithBoost,
+            out float boostedMaxSpeedDelta
+        ) {
             _boostCapacitorPercent = Mathf.Min(100,
                 _boostCapacitorPercent + _boostCapacityPercentChargeRate * Time.fixedDeltaTime);
 
@@ -513,7 +515,7 @@ namespace Core.Player {
 
             // reduce boost potency over time period
             if (_isBoosting) {
-                // Ease-in (boost dropoff is more dramatic)
+                // Ease-in (boost drop-off is more dramatic)
                 float t = _currentBoostTime / _totalBoostTime;
                 float tBoost = 1f - Mathf.Cos(t * Mathf.PI * 0.5f);
                 float tTorque = 1f - Mathf.Cos(t * Mathf.PI * 0.5f);
@@ -571,7 +573,7 @@ namespace Core.Player {
             // standard thrust calculated per-axis (each axis has it's own max thrust component including boost)
             var baseThrust = thrustInput * _maxThrust;
             var thrust = thrustInput * maxThrustWithBoost;
-            _rigidBody.AddForce(transform.TransformDirection(thrust));
+            _rigidbody.AddForce(transform.TransformDirection(thrust));
             // output var for indicators
             calculatedThrust = Math.Abs(baseThrust.x) + Math.Abs(baseThrust.y) + Math.Abs(baseThrust.z);
 
@@ -583,12 +585,12 @@ namespace Core.Player {
                 _rollInput * _rollMultiplier * maxTorqueWithBoost * -1
             ) * _inertialTensorMultiplier; // if we don't counteract the inertial tensor of the rigidbody, the rotation spin would increase in lockstep
 
-            _rigidBody.AddTorque(transform.TransformDirection(torque));
+            _rigidbody.AddTorque(transform.TransformDirection(torque));
         }
 
         private void CalculateVectorControlFlightAssist(float maxSpeedWithBoost) {
             // convert global rigid body velocity into local space
-            Vector3 localVelocity = transform.InverseTransformDirection(_rigidBody.velocity);
+            Vector3 localVelocity = transform.InverseTransformDirection(_rigidbody.velocity);
 
             CalculateAssistedAxis(_latHTargetFactor, localVelocity.x, 0.1f, maxSpeedWithBoost, out _latHInput);
             CalculateAssistedAxis(_latVTargetFactor, localVelocity.y, 0.1f, maxSpeedWithBoost, out _latVInput);
@@ -598,7 +600,7 @@ namespace Core.Player {
 
         private void CalculateRotationalDampeningFlightAssist() {
             // convert global rigid body velocity into local space
-            Vector3 localAngularVelocity = transform.InverseTransformDirection(_rigidBody.angularVelocity);
+            Vector3 localAngularVelocity = transform.InverseTransformDirection(_rigidbody.angularVelocity);
 
             CalculateAssistedAxis(_pitchTargetFactor, localAngularVelocity.x, 0.3f, 2.0f, out _pitchInput);
             CalculateAssistedAxis(_yawTargetFactor, localAngularVelocity.y, 0.3f, 2.0f, out _yawInput);
@@ -627,8 +629,8 @@ namespace Core.Player {
         ) {
             var targetRate = max * targetFactor;
 
-            // prevent tiny noticeable movement on restart (floating point comparison, really only ever true when both are zero) 
-            if (currentAxisVelocity == targetRate) {
+            // prevent tiny noticeable movement
+            if (Math.Abs(currentAxisVelocity - targetRate) < 0.01f) {
                 axis = 0;
                 return;
             }
@@ -652,16 +654,75 @@ namespace Core.Player {
             }
         }
 
+        // TODO: clamping should be based on input rather than modifying the rigid body - if gravity pulls you down
+        //   then that's fine, similar to if a collision yeets you into a spinning mess.
         private void ClampMaxSpeed(float boostedMaxSpeedDelta) {
             // clamp max speed if user is holding the velocity limiter button down
             if (_userVelocityLimit) {
                 _velocityLimitCap = Math.Max(_prevVelocity, _minUserLimitedVelocity);
-                _rigidBody.velocity = Vector3.ClampMagnitude(_rigidBody.velocity, _velocityLimitCap);
+                _rigidbody.velocity = Vector3.ClampMagnitude(_rigidbody.velocity, _velocityLimitCap);
             }
 
             // clamp max speed in general including boost variance (max boost speed minus max speed)
-            _rigidBody.velocity = Vector3.ClampMagnitude(_rigidBody.velocity, _maxSpeed + boostedMaxSpeedDelta);
-            _prevVelocity = _rigidBody.velocity.magnitude;
+            _rigidbody.velocity = Vector3.ClampMagnitude(_rigidbody.velocity, _maxSpeed + boostedMaxSpeedDelta);
+            _prevVelocity = _rigidbody.velocity.magnitude;
+        }
+        #endregion
+        
+        #region Network Position Sync
+        // This is server-side and should really validate the positions coming in before blindly firing to all the clients!
+        [Command]
+        void CmdSetPosition(Vector3 origin, Vector3 position, Quaternion rotation, Vector3 velocity) {
+            RpcUpdate(origin, position, rotation, velocity);
+        }
+    
+        // On each client, update the position of this object if it's not the local player.
+        [ClientRpc]
+        void RpcUpdate(Vector3 remoteOrigin, Vector3 position, Quaternion rotation, Vector3 velocity) {
+            if (!isLocalPlayer && IsReady) {
+                // Calculate the local difference to position based on the local clients' floating origin.
+                // If these values are gigantic, the doesn't really matter as they only update at fixed distances.
+                // We'll lose precision here but we add our position on top after-the-fact, so we always have
+                // local-level precision.
+                var offset = remoteOrigin - FloatingOrigin.Instance.Origin;
+                var localPosition = offset + position;
+
+                _rigidbody.velocity = Vector3.Lerp(_rigidbody.velocity, velocity, 0.1f);
+                _transform.localPosition = Vector3.Lerp(_transform.localPosition, localPosition, 0.5f);
+                _transform.localRotation = Quaternion.Lerp(_transform.localRotation, rotation, 0.5f);
+            
+                // add velocity to position as position would have moved on server at that velocity
+                transform.localPosition += velocity * Time.fixedDeltaTime;
+            }
+        }
+        
+        private void NonLocalPlayerPositionCorrection(Vector3 offset) {
+            if (!isLocalPlayer) {
+                transform.position -= offset;
+            }
+        }
+        #endregion
+        
+        // TODO: Move to a ship object script (it'll need more for thrusters, sounds etc)
+        private void UpdateIndicators(float thrust) {
+            if (velocityIndicator != null) {
+                velocityIndicator.text = Velocity.ToString(CultureInfo.InvariantCulture);
+            }
+
+            if (accelerationBar != null) {
+                var acceleration = thrust / _maxThrust;
+                accelerationBar.fillAmount = MathfExtensions.Remap(0, 1, 0, 0.755f, acceleration);
+                accelerationBar.color = Color.Lerp(Color.green, Color.red, acceleration);
+            }
+
+            if (boostIndicator != null) {
+                boostIndicator.text = ((int) _boostCapacitorPercent).ToString(CultureInfo.InvariantCulture) + "%";
+            }
+
+            if (boostCapacitorBar != null) {
+                boostCapacitorBar.fillAmount = MathfExtensions.Remap(0, 100, 0, 0.775f, _boostCapacitorPercent);
+                boostCapacitorBar.color = Color.Lerp(Color.red, Color.green, _boostCapacitorPercent / 100);
+            }
         }
     }
 }
