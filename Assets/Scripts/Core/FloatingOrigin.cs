@@ -9,14 +9,22 @@ namespace Core {
 
         public static event FloatingOriginCorrectionAction OnFloatingOriginCorrection;
 
+        public Vector3 Origin { get; private set; }
+        
         // The object to track - this should be the local client player
-        [SerializeField] public Transform focalTransform;
+        [SerializeField] private Transform focalTransform; 
+        public Transform FocalTransform {
+            get => focalTransform;
+            set {
+                focalTransform = value;
+                Origin = Vector3.zero;
+            }
+        }
 
         // Distance required to perform a correction. If 0, will occur every frame.
-        [SerializeField] public float correctionDistance = 100.0f;
+        [SerializeField] public float correctionDistance = 1000.0f;
 
-        public Vector3 Origin { get; private set; }
-        public Vector3 FocalObjectPosition => focalTransform.position + Origin;
+        public Vector3 FocalObjectPosition => FocalTransform.position + Origin;
 
         void Awake() {
             // singleton shenanigans
@@ -32,14 +40,14 @@ namespace Core {
         void Update() {
 
             // if we have a focal object, perform the floating origin fix
-            if (focalTransform && focalTransform.position.magnitude > correctionDistance) {
-                var focalPosition = focalTransform.position;
+            if (FocalTransform && FocalTransform.position.magnitude > correctionDistance) {
+                var focalPosition = FocalTransform.position;
                 Origin += focalPosition;
 
                 OnFloatingOriginCorrection?.Invoke(focalPosition);
 
                 // reset focal object (local player) to 0,0,0
-                focalTransform.position = Vector3.zero;
+                FocalTransform.position = Vector3.zero;
             }
         }
     }
