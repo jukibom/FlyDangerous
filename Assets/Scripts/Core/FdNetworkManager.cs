@@ -5,6 +5,7 @@ using System.Linq;
 using Core.Player;
 using kcp2k;
 using Mirror;
+using Misc;
 using UnityEngine;
 
 namespace Core {
@@ -36,6 +37,11 @@ namespace Core {
             public SessionType sessionType;
             public LevelData levelData;
             public bool dynamicPlacement;
+        }
+
+        private struct SetShipPositionMessage : NetworkMessage {
+            public Vector3 position;
+            public Quaternion rotation;
         }
         
         public static event Action OnClientConnected;
@@ -102,17 +108,57 @@ namespace Core {
             _status = FdNetworkStatus.Loading;
             Game.Instance.StartGame(message.sessionType, message.levelData, message.dynamicPlacement);
         }
-        
-        public void StartMainGame() {
+
+        private void SetShipPosition(SetShipPositionMessage message) {
+            var ship = ShipPlayer.FindLocal;
+            if (ship) {
+                var shipTransform = ship.transform;
+                shipTransform.position = message.position;
+                shipTransform.rotation = message.rotation;
+            }
+        }
+
+        public void StartMainGame(LevelData levelData) {
             _status = FdNetworkStatus.InGame;
             if (NetworkClient.connection.identity.isServer) {
                 // iterate over a COPY of the lobby players (the List is mutated by transitioning!)
                 foreach (var loadingPlayer in LoadingPlayers.ToArray()) {
-                    TransitionToShipPlayer(loadingPlayer);
+                    var ship = TransitionToShipPlayer(loadingPlayer);
+                    var position = new Vector3(
+                        levelData.startPosition.x,
+                        levelData.startPosition.y,
+                        levelData.startPosition.z
+                    );
+                    var rotation = Quaternion.Euler(
+                        levelData.startRotation.x,
+                        levelData.startRotation.y,
+                        levelData.startRotation.z
+                    );
+
+                    // TODO: radius should possibly be determined by the ship model itself!
+                    position = PositionalHelpers.FindClosestEmptyPosition(position, 10);
+
+                    // update locally immediately for subsequent collision checks
+                    var shipTransform = ship.transform;
+                    shipTransform.position = position;
+                    shipTransform.rotation = rotation;
+
+                    // ensure each client receives their assigned position
+                    ship.connectionToClient.Send(new SetShipPositionMessage {
+                        position = position,
+                        rotation = rotation
+                    });
+
+                    // Update physics engine so subsequent collision checks are up-to-date
+                    Physics.SyncTransforms();
+                }
+
+                // all ships placed, notify ready (allows them to start syncing their own positions)
+                foreach (var shipPlayer in ShipPlayers) {
+                    shipPlayer.ServerReady();
                 }
             }
         }
-
         #endregion
         
         #region State Management
@@ -153,6 +199,7 @@ namespace Core {
             base.OnClientConnect(conn);
             OnClientConnected?.Invoke();
             NetworkClient.RegisterHandler<StartGameMessage>(StartLoadGame);
+            NetworkClient.RegisterHandler<SetShipPositionMessage>(SetShipPosition);
         }
         
         // player leaves
@@ -275,7 +322,7 @@ namespace Core {
             return ReplacePlayer(shipPlayer, previousPlayer);
         }
         
-        private T ReplacePlayer<T, U>(T newPlayer, U previousPlayer) where T : NetworkBehaviour where U : NetworkBehaviour {
+        private T ReplacePlayer<T, TU>(T newPlayer, TU previousPlayer) where T : NetworkBehaviour where TU : NetworkBehaviour {
             Debug.Log("REPLACE PLAYER " + previousPlayer + " " + previousPlayer.connectionToClient + " " + newPlayer);
             var conn = previousPlayer.connectionToClient;
             if (previousPlayer.connectionToClient.identity != null) {

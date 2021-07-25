@@ -189,7 +189,7 @@ namespace Core {
 
                 // TODO: handle terrain gen freaking out (no camera for a frame...)
 
-                FdNetworkManager.Instance.StartMainGame();
+                FdNetworkManager.Instance.StartMainGame(levelData);
                 
                 // wait for local ship client object
                 while (!ShipPlayer.FindLocal) {
