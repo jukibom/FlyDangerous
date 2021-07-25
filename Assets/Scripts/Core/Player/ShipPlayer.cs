@@ -62,7 +62,6 @@ namespace Core.Player {
         public static ShipPlayer FindLocal =>
             Array.Find(FindObjectsOfType<ShipPlayer>(), shipPlayer => shipPlayer.isLocalPlayer);
         
-
         // TODO: remove this stuff once params are finalised (this is for debug panel in release)
         public static ShipParameters ShipParameterDefaults {
             get => new ShipParameters {
@@ -215,7 +214,8 @@ namespace Core.Player {
 
         private Transform _transform;
         private Rigidbody _rigidbody;
-        private bool IsReady => _transform && _rigidbody;
+        [SyncVar] private bool _serverReady;
+        private bool IsReady => _transform && _rigidbody && _serverReady;
 
         public float Velocity => Mathf.Round(_rigidbody.velocity.magnitude);
 
@@ -273,6 +273,11 @@ namespace Core.Player {
                     _flightAssistRotationalDampening = true;
                     break;
             }
+        }
+        
+        // called when the server has finished instantiating all players
+        public void ServerReady() {
+            _serverReady = true;
         }
         
         // Get the position and rotation of the ship within the world, taking into account floating origin fix
@@ -333,7 +338,7 @@ namespace Core.Player {
         // Apply all physics updates in fixed intervals (WRITE)
         private void FixedUpdate() {
             // TODO: Ensure ship updates are still processed in multiplayer (e.g. sounds, thrusters)
-            if (isLocalPlayer) {
+            if (isLocalPlayer && IsReady) {
                 CalculateBoost(out var maxThrustWithBoost, out var maxTorqueWithBoost, out var boostedMaxSpeedDelta);
                 CalculateFlightForces(
                     maxThrustWithBoost,
