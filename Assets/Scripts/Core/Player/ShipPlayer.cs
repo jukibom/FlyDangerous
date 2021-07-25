@@ -255,7 +255,7 @@ namespace Core.Player {
             playerLogic.SetActive(true);
             
             // register self as floating origin focus
-            FloatingOrigin.Instance.focalTransform = transform;
+            FloatingOrigin.Instance.FocalTransform = transform;
 
             switch (Preferences.Instance.GetString("flightAssistDefault")) {
                 case "vector assist only":

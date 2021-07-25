@@ -1,12 +1,7 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using Core.Player;
-using Den.Tools;
-using JetBrains.Annotations;
 using MapMagic.Core;
-using Mirror;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
@@ -38,10 +33,7 @@ namespace Core {
         private Quaternion _hmdRotation;
         private LevelLoader _levelLoader;
         private SessionType _sessionType = SessionType.Singleplayer;
-        private bool _isVREnabled = false;
-
-        // TODO: This must be done via network manager to transition state
-        [SerializeField] private ShipPlayer shipPlayerPrefab;
+        private bool _isVREnabled;
         
         // The level data most recently used to load a map
         public LevelData LoadedLevelData => _levelLoader.LoadedLevelData;
@@ -53,11 +45,11 @@ namespace Core {
 
         public ShipParameters ShipParameters {
             get => _shipParameters == null
-                ? FindObjectOfType<ShipPlayer>()?.Parameters ?? ShipPlayer.ShipParameterDefaults
+                ? ShipPlayer.FindLocal?.Parameters ?? ShipPlayer.ShipParameterDefaults
                 : _shipParameters;
             set {
                 _shipParameters = value;
-                var ship = FindObjectOfType<ShipPlayer>();
+                var ship = ShipPlayer.FindLocal;
                 if (ship) ship.Parameters = _shipParameters;
             }
         }
@@ -73,6 +65,9 @@ namespace Core {
         // show certain things if first time hitting the menu
         private bool _menuFirstRun = true;
         public bool menuFirstRun => _menuFirstRun;
+        
+        private static readonly int fadeToBlack = Animator.StringToHash("FadeToBlack");
+        private static readonly int fadeFromBlack = Animator.StringToHash("FadeFromBlack");
 
         void Awake() {
             // singleton shenanigans
@@ -81,7 +76,6 @@ namespace Core {
             }
             else {
                 Destroy(gameObject);
-                return;
             }
         }
 
@@ -166,12 +160,13 @@ namespace Core {
             }
         }
 
-        public void ResetHMDView(XRRig xrRig, Transform targetTransform) {
-            var before = xrRig.transform.position;
+        public void ResetHmdView(XRRig xrRig, Transform targetTransform) {
+            var position = xrRig.transform.position;
+            var before = position;
             xrRig.MoveCameraToWorldLocation(targetTransform.position);
             xrRig.MatchRigUpCameraForward(targetTransform.up, targetTransform.forward);
             _hmdRotation = xrRig.transform.rotation;
-            _hmdPosition += xrRig.transform.position - before;
+            _hmdPosition += position - before;
         }
 
         public void StartGame(SessionType sessionType, LevelData levelData, bool dynamicPlacementStart = false) {
@@ -186,6 +181,8 @@ namespace Core {
 
             IEnumerator LoadGame() {
                 yield return _levelLoader.ShowLoadingScreen();
+                
+                // TODO: move loading players to location BEFORE level loader starts (force terrain to be correct location)
                 yield return _levelLoader.StartGame(levelData);
 
                 yield return FdNetworkManager.Instance.WaitForAllPlayersLoaded();
@@ -203,55 +200,11 @@ namespace Core {
                 // Allow the rigid body to initialise before setting new parameters!
                 yield return new WaitForEndOfFrame();
                 
-                // TODO: need to handle different clients' positions...
                 if (ship) {
                     // debug flight params
                     ship.Parameters = ShipParameters;
-
-                    ship.transform.position = new Vector3(
-                        LoadedLevelData.startPosition.x,
-                        LoadedLevelData.startPosition.y,
-                        LoadedLevelData.startPosition.z
-                    );
-                    ship.transform.rotation = Quaternion.Euler(
-                        LoadedLevelData.startRotation.x,
-                        LoadedLevelData.startRotation.y,
-                        LoadedLevelData.startRotation.z
-                    );
-
-                    // terrain loaded, if we need to dynamically place the ship let's do that now
-                    if (dynamicPlacementStart) {
-                        // TODO: make this iterate over the corners of the ship:
-                        // move the player up high and perform 5 raycasts - one from each corner of the ship and one from the centre.
-                        // move the player to the closest one, height-wise.
-                        // Additionally, move the ship around in a spiral and perform this operation a number of times.
-                        // Move the ship to the lowest position.
-
-                        var shipTransform = ship.transform;
-
-                        // move ship above terrain max
-                        shipTransform.position = new Vector3(
-                            shipTransform.position.x,
-                            10000,
-                            shipTransform.position.z
-                        );
-
-                        // cast down to get terrain height at this position
-                        if (Physics.Raycast(ship.transform.position, Vector3.down, out var hit, 10000)) {
-                            shipTransform.position = hit.point;
-
-                            // move ship 25 meters up to compensate for rocks and other crap
-                            shipTransform.Translate(0, 25, 0);
-
-                            // store new position in game level data for restarts
-                            LoadedLevelData.startPosition.x = shipTransform.position.x;
-                            LoadedLevelData.startPosition.y = shipTransform.position.y;
-                            LoadedLevelData.startPosition.z = shipTransform.position.z;
-                        }
-                    }
                 }
                 
-
                 // set up graphics settings (e.g. camera FoV) + VR status (cameras, radial fog etc)
                 ApplyGraphicsOptions();
                 NotifyVRStatus();
@@ -332,11 +285,11 @@ namespace Core {
         }
 
         public void FadeToBlack() {
-            crossfade.SetTrigger("FadeToBlack");
+            crossfade.SetTrigger(fadeToBlack);
         }
 
         public void FadeFromBlack() {
-            crossfade.SetTrigger("FadeFromBlack");
+            crossfade.SetTrigger(fadeFromBlack);
         }
 
         private void NotifyVRStatus() {
@@ -348,8 +301,9 @@ namespace Core {
             if (IsVREnabled) {
                 var xrRig = FindObjectOfType<XRRig>();
                 if (xrRig) {
-                    xrRig.transform.rotation = _hmdRotation;
-                    xrRig.transform.localPosition = xrRig.transform.localPosition + _hmdPosition;
+                    var xrTransform = xrRig.transform;
+                    xrTransform.rotation = _hmdRotation;
+                    xrTransform.localPosition = xrTransform.localPosition + _hmdPosition;
                 }
             }
         }

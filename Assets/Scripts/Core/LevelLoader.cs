@@ -187,8 +187,7 @@ namespace Core {
             levelData.terrainSeed = _levelData.terrainSeed;
             levelData.checkpoints = _levelData.checkpoints;
 
-            var ship = FindObjectOfType<ShipPlayer>();
-            // TODO: Is this ship the actual player? (Convert it to a network object!)
+            var ship = ShipPlayer.FindLocal;
             if (ship) {
                 ship.AbsoluteWorldPosition(out var outPosition, out var outRotation);
                 levelData.startPosition.x = outPosition.x;

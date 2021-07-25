@@ -43,7 +43,7 @@ namespace Menus.Main_Menu {
 
         public void OnResetHMDView(InputValue inputValue) {
             if (xrRig) {
-                Game.Instance.ResetHMDView(xrRig, flatScreenCamera.transform);
+                Game.Instance.ResetHmdView(xrRig, flatScreenCamera.transform);
             }
         }
         
@@ -85,7 +85,7 @@ namespace Menus.Main_Menu {
             }
             yield return SceneManager.LoadSceneAsync(sceneEnvironment, LoadSceneMode.Additive);
             
-            FloatingOrigin.Instance.focalTransform = transform;
+            FloatingOrigin.Instance.FocalTransform = transform;
             Game.Instance.FadeFromBlack();
         }
 
