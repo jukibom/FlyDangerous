@@ -248,6 +248,8 @@ namespace Core {
                             AddPlayer(player);
                         }
                         break;
+                    
+                    // TODO: Joining mid-game
                 }
             }
 
@@ -295,13 +297,13 @@ namespace Core {
                     break;
                 
                 case FdNetworkStatus.Loading:
-                    // foreach (var loadingPlayer in LoadingPlayers) {
-                    //     
-                    // }
+                    // TODO: Back to menu for all!
                     LoadingPlayers.Clear();
                     break;
                 
                 case FdNetworkStatus.InGame:
+                    // TODO: Back to menu for all!
+                    ShipPlayers.Clear();
                     break;
                     
             }

@@ -239,6 +239,11 @@ namespace Core.Player {
             _initialInertiaTensor = inertiaTensor;
             inertiaTensor *= _inertialTensorMultiplier;
             _rigidbody.inertiaTensor = inertiaTensor;
+            
+            // rigidbody angular momentum constraints (non local clients)
+            if (!isLocalPlayer) {
+                _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+            }
         }
 
         private void OnEnable() {
@@ -634,8 +639,8 @@ namespace Core.Player {
         ) {
             var targetRate = max * targetFactor;
 
-            // prevent tiny noticeable movement
-            if (Math.Abs(currentAxisVelocity - targetRate) < 0.01f) {
+            // prevent tiny noticeable movement on start and jitter
+            if (Math.Abs(currentAxisVelocity - targetRate) < 0.000001f) {
                 axis = 0;
                 return;
             }
