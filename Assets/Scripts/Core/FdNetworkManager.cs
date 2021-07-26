@@ -269,6 +269,11 @@ namespace Core {
                     case FdNetworkStatus.LobbyMenu:
                         var lobbyPlayer = conn.identity.GetComponent<LobbyPlayer>();
                         RemovePlayer(lobbyPlayer);
+                        break;  
+                    
+                    case FdNetworkStatus.InGame:
+                        var shipPlayer = conn.identity.GetComponent<ShipPlayer>();
+                        RemovePlayer(shipPlayer);
                         break;
                 }
                 
