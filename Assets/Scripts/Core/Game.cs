@@ -201,7 +201,12 @@ namespace Core {
                 yield return new WaitForEndOfFrame();
 
                 ship.Parameters = ShipParameters;
+                var shipPosition = ship.transform.position;
+                _levelLoader.LoadedLevelData.startPosition.x = shipPosition.x;
+                _levelLoader.LoadedLevelData.startPosition.y = shipPosition.y;
+                _levelLoader.LoadedLevelData.startPosition.z = shipPosition.z;
 
+                
 
                 // set up graphics settings (e.g. camera FoV) + VR status (cameras, radial fog etc)
                 ApplyGraphicsOptions();
