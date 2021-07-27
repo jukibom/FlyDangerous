@@ -67,12 +67,7 @@ namespace Core {
             if (ship) {
                 
                 Action DoReset = () => {
-                    var world = FindObjectOfType<World>();
-                    if (world != null) {
-                        world.Reset();
-                    }
-
-                    ship.transform.position = new Vector3 {
+                    ship.AbsoluteWorldPosition = new Vector3 {
                         x = LoadedLevelData.startPosition.x,
                         y = LoadedLevelData.startPosition.y,
                         z = LoadedLevelData.startPosition.z
@@ -125,9 +120,7 @@ namespace Core {
                     }
                 }
 
-                ship.AbsoluteWorldPosition(out var shipPosition, out _);
-
-                // ship.AbsoluteWorldPosition(out var shipPosition, out _);
+                var shipPosition = ship.AbsoluteWorldPosition;
                 var distanceToStart = Vector3.Distance(shipPosition, new Vector3 {
                     x = LoadedLevelData.startPosition.x,
                     y = LoadedLevelData.startPosition.y,
@@ -191,13 +184,14 @@ namespace Core {
 
             var ship = ShipPlayer.FindLocal;
             if (ship) {
-                ship.AbsoluteWorldPosition(out var outPosition, out var outRotation);
-                levelData.startPosition.x = outPosition.x;
-                levelData.startPosition.y = outPosition.y;
-                levelData.startPosition.z = outPosition.z;
-                levelData.startRotation.x = outRotation.eulerAngles.x;
-                levelData.startRotation.y = outRotation.eulerAngles.y;
-                levelData.startRotation.z = outRotation.eulerAngles.z;
+                var position = ship.AbsoluteWorldPosition;
+                var rotation = ship.transform.rotation;
+                levelData.startPosition.x = position.x;
+                levelData.startPosition.y = position.y;
+                levelData.startPosition.z = position.z;
+                levelData.startRotation.x = rotation.eulerAngles.x;
+                levelData.startRotation.y = rotation.eulerAngles.y;
+                levelData.startRotation.z = rotation.eulerAngles.z;
             }
 
             var track = FindObjectOfType<Track>();

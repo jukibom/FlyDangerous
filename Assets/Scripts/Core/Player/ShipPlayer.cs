@@ -215,11 +215,30 @@ namespace Core.Player {
         private Transform _transform;
         private Rigidbody _rigidbody;
         [SyncVar] private bool _serverReady;
+        
         private bool IsReady => _transform && _rigidbody && _serverReady;
-
         public float Velocity => Mathf.Round(_rigidbody.velocity.magnitude);
-
         public User User => GetComponentInChildren<User>();
+        
+        // The position and rotation of the ship within the world, taking into account floating origin fix
+        public Vector3 AbsoluteWorldPosition {
+            get {
+                Vector3 position = transform.position;
+                // if floating origin fix is active, overwrite position with corrected world space
+                if (FloatingOrigin.Instance.FocalTransform == transform) {
+                    position = FloatingOrigin.Instance.FocalObjectPosition;
+                }
+                return position;
+            }
+            set {
+                Vector3 position = value;
+                // if floating origin fix is active, overwrite position with corrected world space
+                if (FloatingOrigin.Instance.FocalTransform == transform) {
+                    position -= FloatingOrigin.Instance.Origin;
+                }
+                transform.position = position;
+            }
+        }
 
         public void Awake() {
             _transform = transform;
@@ -285,23 +304,6 @@ namespace Core.Player {
         // called when the server has finished instantiating all players
         public void ServerReady() {
             _serverReady = true;
-        }
-        
-        // Get the position and rotation of the ship within the world, taking into account floating origin fix
-        public void AbsoluteWorldPosition(out Vector3 position, out Quaternion rotation) {
-            var t = transform;
-            var p = t.position;
-            var r = t.rotation.eulerAngles;
-            position.x = p.x;
-            position.y = p.y;
-            position.z = p.z;
-            rotation = Quaternion.Euler(r.x, r.y, r.z);
-
-            // if floating origin fix is active, overwrite position with corrected world space
-            var origin = FloatingOrigin.Instance.FocalObjectPosition;
-            position.x = origin.x;
-            position.y = origin.y;
-            position.z = origin.z;
         }
 
         public void Reset() {
