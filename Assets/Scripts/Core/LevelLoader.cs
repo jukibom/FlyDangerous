@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using Core.Player;
@@ -67,10 +67,10 @@ namespace Core {
             if (ship) {
                 
                 Action DoReset = () => {
-                 var world = GameObject.Find("World")?.transform;
-                 if (world != null) {
-                     world.position = Vector3.zero;
-                 }
+                    var world = FindObjectOfType<World>();
+                    if (world != null) {
+                        world.Reset();
+                    }
 
                     ship.transform.position = new Vector3 {
                         x = LoadedLevelData.startPosition.x,
