@@ -182,6 +182,18 @@ namespace Core {
             IEnumerator LoadGame() {
                 yield return _levelLoader.ShowLoadingScreen();
                 
+                // Position the active camera to the designated start location so we can be sure to load in anything
+                // important at that location as part of the load sequence 
+                var loadingRoom = FindObjectOfType<LoadingRoom>();
+                if (loadingRoom) {
+                    var loadingPlayerCameraTransform = loadingRoom.transform;
+                    loadingPlayerCameraTransform.position = new Vector3(
+                        levelData.startPosition.x,
+                        levelData.startPosition.y, 
+                        levelData.startPosition.z
+                    );
+                }
+                
                 // TODO: move loading players to location BEFORE level loader starts (force terrain to be correct location)
                 yield return _levelLoader.StartGame(levelData);
 
