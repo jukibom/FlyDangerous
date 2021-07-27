@@ -219,6 +219,8 @@ namespace Core.Player {
 
         public float Velocity => Mathf.Round(_rigidbody.velocity.magnitude);
 
+        public User User => GetComponentInChildren<User>();
+
         public void Awake() {
             _transform = transform;
             _rigidbody = GetComponent<Rigidbody>();

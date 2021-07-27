@@ -37,7 +37,7 @@ public class Track : MonoBehaviour {
     public void InitialiseTrack() {
         var start = Checkpoints.Find(c => c.Type == CheckpointType.Start);
         if (start) {
-            var ship = FindObjectOfType<ShipPlayer>();
+            var ship = ShipPlayer.FindLocal;
             if (ship) {
                 var startTransform = start.transform;
                 ship.transform.position = new Vector3 {
@@ -167,7 +167,10 @@ public class Track : MonoBehaviour {
     private void FixedUpdate() {
         // failing to get user in early stages due to modular loading? 
         if (!_user) {
-            _user = FindObjectOfType<User>();
+            var ship = ShipPlayer.FindLocal;
+            if (ship) {
+                _user = ship.User;
+            }
             return;
         }
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Core.Player;
@@ -61,107 +61,109 @@ namespace Core {
 
             yield return StartCoroutine(LoadGameScenes());
         }
-        
-         public IEnumerator RestartLevel(Action onRestart) { 
-            var user = FindObjectOfType<User>();
-            var ship = FindObjectOfType<ShipPlayer>();
-             
-            Action DoReset = () => {
+
+        public IEnumerator RestartLevel(Action onRestart) {
+            var ship = ShipPlayer.FindLocal;
+            if (ship) {
+                
+                Action DoReset = () => {
                  var world = GameObject.Find("World")?.transform;
                  if (world != null) {
                      world.position = Vector3.zero;
                  }
 
-                 ship.transform.position = new Vector3 {
-                     x = LoadedLevelData.startPosition.x, 
-                     y = LoadedLevelData.startPosition.y, 
-                     z = LoadedLevelData.startPosition.z
-                 };
-                 ship.transform.rotation = Quaternion.Euler(
-                     LoadedLevelData.startRotation.x, 
-                     LoadedLevelData.startRotation.y,
-                     LoadedLevelData.startRotation.z
-                 );
-                 ship.Reset();
+                    ship.transform.position = new Vector3 {
+                        x = LoadedLevelData.startPosition.x,
+                        y = LoadedLevelData.startPosition.y,
+                        z = LoadedLevelData.startPosition.z
+                    };
+                    ship.transform.rotation = Quaternion.Euler(
+                        LoadedLevelData.startRotation.x,
+                        LoadedLevelData.startRotation.y,
+                        LoadedLevelData.startRotation.z
+                    );
+                    ship.Reset();
 
-                 onRestart();
-             };
+                    onRestart();
+                };
 
-             // the terrain will not be loaded if we teleport there, we need to fade to black, wait for terrain to load, then fade back. This should still be faster than full reload.
-             IEnumerator LoadTerrainAndReset(MapMagicObject mapMagic) {
-                 DoReset();
-                 yield return new WaitForSeconds(0.5f);
-                    
-                 // wait for fully loaded local terrain
-                 while (mapMagic.IsGenerating()) {
-                     var progressPercent = Mathf.Min(100, Mathf.Round(mapMagic.GetProgress() * 100));
-                     var loadText = GameObject.FindGameObjectWithTag("DynamicLoadingText").GetComponent<Text>();
-                     loadText.text = $"Regenerating terrain at start position ({progressPercent}%)";
+                // the terrain will not be loaded if we teleport there, we need to fade to black, wait for terrain to load, then fade back. This should still be faster than full reload.
+                IEnumerator LoadTerrainAndReset(MapMagicObject mapMagic) {
+                    DoReset();
+                    yield return new WaitForSeconds(0.5f);
 
-                     yield return null;
-                 }
-                    
-                 // unload the loading screen
-                 var unload = SceneManager.UnloadSceneAsync("Loading");
-                 while (!unload.isDone) {
-                     yield return null;
-                 }
-                    
-                 Game.Instance.FadeFromBlack();
-                 yield return new WaitForSeconds(0.7f);
+                    // wait for fully loaded local terrain
+                    while (mapMagic.IsGenerating()) {
+                        var progressPercent = Mathf.Min(100, Mathf.Round(mapMagic.GetProgress() * 100));
+                        var loadText = GameObject.FindGameObjectWithTag("DynamicLoadingText").GetComponent<Text>();
+                        loadText.text = $"Regenerating terrain at start position ({progressPercent}%)";
 
-             }
-             
-            IEnumerator ResetTrackIfNeeded() {
-                // if there's a track in the game world, start it
-                var track = FindObjectOfType<Track>();
-                if (track) {
-                    yield return track.StartTrackWithCountdown();
+                        yield return null;
+                    }
+
+                    // unload the loading screen
+                    var unload = SceneManager.UnloadSceneAsync("Loading");
+                    while (!unload.isDone) {
+                        yield return null;
+                    }
+
+                    Game.Instance.FadeFromBlack();
+                    yield return new WaitForSeconds(0.7f);
+
                 }
 
-                if (user) {
-                    user.EnableGameInput();
+                IEnumerator ResetTrackIfNeeded() {
+                    // if there's a track in the game world, start it
+                    var track = FindObjectOfType<Track>();
+                    if (track) {
+                        yield return track.StartTrackWithCountdown();
+                    }
+
+                    var user = ship.User;
+                    if (user) {
+                        user.EnableGameInput();
+                    }
                 }
-            }
 
-            var shipPosition = Vector3.zero;
-            if (ship != null) {
-                ship.AbsoluteWorldPosition(out shipPosition, out _);
-            }
+                ship.AbsoluteWorldPosition(out var shipPosition, out _);
 
-            // ship.AbsoluteWorldPosition(out var shipPosition, out _);
-            var distanceToStart = Vector3.Distance(shipPosition, new Vector3 {
-                x = LoadedLevelData.startPosition.x, 
-                y = LoadedLevelData.startPosition.y, 
-                z = LoadedLevelData.startPosition.z
-            }) ;
+                // ship.AbsoluteWorldPosition(out var shipPosition, out _);
+                var distanceToStart = Vector3.Distance(shipPosition, new Vector3 {
+                    x = LoadedLevelData.startPosition.x,
+                    y = LoadedLevelData.startPosition.y,
+                    z = LoadedLevelData.startPosition.z
+                });
 
-            // first let's check if this is a terrain world and handle that appropriately
-            var mapMagic = FindObjectOfType<MapMagicObject>();
+                // first let's check if this is a terrain world and handle that appropriately
+                var mapMagic = FindObjectOfType<MapMagicObject>();
 
-            // TODO: Make this distance dynamic based on tiles?
-            if (mapMagic && ship && distanceToStart > 20000) {
-                yield return StartCoroutine(ShowLoadingScreen(true));
-                yield return StartCoroutine(LoadTerrainAndReset(mapMagic));
-                yield return ResetTrackIfNeeded();
+                // TODO: Make this distance dynamic based on tiles?
+                if (mapMagic && ship && distanceToStart > 20000) {
+                    yield return StartCoroutine(ShowLoadingScreen(true));
+                    yield return StartCoroutine(LoadTerrainAndReset(mapMagic));
+                    yield return ResetTrackIfNeeded();
+                }
+                else {
+                    // don't need to wait for full scene reload, just reset state and notify subscribers
+                    DoReset();
+                    yield return ResetTrackIfNeeded();
+                }
             }
             else {
-                // don't need to wait for full scene reload, just reset state and notify subscribers
-                DoReset();
-                yield return ResetTrackIfNeeded();   
+                Debug.LogWarning("No local ship player found for restart action");
             }
-         }
-         
-         // This is a separate action so that we can safely move to a new active loading scene and fully unload everything
+        }
+
+        // This is a separate action so that we can safely move to a new active loading scene and fully unload everything
          // before moving to any other map or whatever we need to do.
          // On completion it executes callback `then` with a reference to the loading text.
          public IEnumerator ShowLoadingScreen(bool keepScene = false) {
             
              // disable user input if we're in-game while handling everything else
-             var user = FindObjectOfType<User>();
-             if (user != null) {
-                 user.DisableGameInput();
-                 user.DisableUIInput();
+             var ship = ShipPlayer.FindLocal;
+             if (ship != null) {
+                 ship.User.DisableGameInput();
+                 ship.User.DisableUIInput();
              }
 
              Game.Instance.FadeToBlack();

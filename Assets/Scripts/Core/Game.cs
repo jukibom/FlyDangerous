@@ -82,9 +82,9 @@ namespace Core {
         public void Start() {
             // must be a level loader in the scene
             _levelLoader = FindObjectOfType<LevelLoader>();
-
+            
             // if there's a user object when the game starts, enable input (usually in the editor!)
-            FindObjectOfType<User>()?.EnableGameInput();
+            FindObjectOfType<ShipPlayer>()?.User.EnableGameInput();
             LoadBindings();
             ApplyGraphicsOptions();
 
@@ -199,12 +199,10 @@ namespace Core {
                 
                 // Allow the rigid body to initialise before setting new parameters!
                 yield return new WaitForEndOfFrame();
-                
-                if (ship) {
-                    // debug flight params
-                    ship.Parameters = ShipParameters;
-                }
-                
+
+                ship.Parameters = ShipParameters;
+
+
                 // set up graphics settings (e.g. camera FoV) + VR status (cameras, radial fog etc)
                 ApplyGraphicsOptions();
                 NotifyVRStatus();
@@ -223,10 +221,7 @@ namespace Core {
                 }
 
                 // enable user input
-                var user = FindObjectOfType<User>();
-                if (user != null) {
-                    user.EnableGameInput();
-                }
+                ship.User.EnableGameInput();
             }
 
             StartCoroutine(LoadGame());
@@ -247,8 +242,10 @@ namespace Core {
                 mapMagic.StopGenerate();
             }
 
-            var user = FindObjectOfType<User>();
-            user.DisableGameInput();
+            var ship = ShipPlayer.FindLocal;
+            if (ship) {
+                ship.User.DisableGameInput();
+            }
 
             IEnumerator LoadMenu() {
                 FadeToBlack();
