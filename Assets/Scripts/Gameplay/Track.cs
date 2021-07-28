@@ -39,12 +39,7 @@ public class Track : MonoBehaviour {
         if (start) {
             var ship = ShipPlayer.FindLocal;
             if (ship) {
-                var startTransform = start.transform;
-                ship.transform.position = new Vector3 {
-                    x = startTransform.position.x,
-                    y = startTransform.position.y,
-                    z = startTransform.position.z
-                };
+                ship.transform.position = start.transform.position;
             }
         }
         else {

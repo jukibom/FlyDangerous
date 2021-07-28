@@ -112,16 +112,15 @@ namespace Core {
         private void SetShipPosition(SetShipPositionMessage message) {
             var ship = ShipPlayer.FindLocal;
             if (ship) {
-                var shipTransform = ship.transform;
-                shipTransform.position = message.position;
-                shipTransform.rotation = message.rotation;
+                ship.AbsoluteWorldPosition = message.position;
+                ship.transform.rotation = message.rotation;
             }
         }
 
         public void StartMainGame(LevelData levelData) {
             _status = FdNetworkStatus.InGame;
             if (NetworkClient.connection.identity.isServer) {
-                // iterate over a COPY of the lobby players (the List is mutated by transitioning!)
+                // iterate over a COPY of the loading players (the List is mutated by transitioning!)
                 foreach (var loadingPlayer in LoadingPlayers.ToArray()) {
                     var ship = TransitionToShipPlayer(loadingPlayer);
                     var position = new Vector3(
@@ -139,9 +138,8 @@ namespace Core {
                     position = PositionalHelpers.FindClosestEmptyPosition(position, 10);
 
                     // update locally immediately for subsequent collision checks
-                    var shipTransform = ship.transform;
-                    shipTransform.position = position;
-                    shipTransform.rotation = rotation;
+                    ship.AbsoluteWorldPosition = position;
+                    ship.transform.rotation = rotation;
 
                     // ensure each client receives their assigned position
                     ship.connectionToClient.Send(new SetShipPositionMessage {

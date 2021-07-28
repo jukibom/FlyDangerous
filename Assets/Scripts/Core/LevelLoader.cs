@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Core.Player;
@@ -65,25 +65,19 @@ namespace Core {
         public IEnumerator RestartLevel(Action onRestart) {
             var ship = ShipPlayer.FindLocal;
             if (ship) {
+                // first let's check if this is a terrain world and handle that appropriately
+                var mapMagic = FindObjectOfType<MapMagicObject>();
                 
-                Action DoReset = () => {
-                    ship.AbsoluteWorldPosition = new Vector3 {
-                        x = LoadedLevelData.startPosition.x,
-                        y = LoadedLevelData.startPosition.y,
-                        z = LoadedLevelData.startPosition.z
-                    };
-                    ship.transform.rotation = Quaternion.Euler(
-                        LoadedLevelData.startRotation.x,
-                        LoadedLevelData.startRotation.y,
-                        LoadedLevelData.startRotation.z
-                    );
+                void DoReset() {
+                    ship.AbsoluteWorldPosition = new Vector3 {x = LoadedLevelData.startPosition.x, y = LoadedLevelData.startPosition.y, z = LoadedLevelData.startPosition.z};
+                    ship.transform.rotation = Quaternion.Euler(LoadedLevelData.startRotation.x, LoadedLevelData.startRotation.y, LoadedLevelData.startRotation.z);
                     ship.Reset();
 
                     onRestart();
-                };
+                }
 
                 // the terrain will not be loaded if we teleport there, we need to fade to black, wait for terrain to load, then fade back. This should still be faster than full reload.
-                IEnumerator LoadTerrainAndReset(MapMagicObject mapMagic) {
+                IEnumerator LoadTerrainAndReset() {
                     DoReset();
                     yield return new WaitForSeconds(0.5f);
 
@@ -127,13 +121,10 @@ namespace Core {
                     z = LoadedLevelData.startPosition.z
                 });
 
-                // first let's check if this is a terrain world and handle that appropriately
-                var mapMagic = FindObjectOfType<MapMagicObject>();
-
                 // TODO: Make this distance dynamic based on tiles?
                 if (mapMagic && ship && distanceToStart > 20000) {
                     yield return StartCoroutine(ShowLoadingScreen(true));
-                    yield return StartCoroutine(LoadTerrainAndReset(mapMagic));
+                    yield return StartCoroutine(LoadTerrainAndReset());
                     yield return ResetTrackIfNeeded();
                 }
                 else {
@@ -259,13 +250,13 @@ namespace Core {
                     var checkpointObject = Instantiate(checkpointPrefab, track.transform);
                     var checkpoint = checkpointObject.GetComponent<Checkpoint>();
                     checkpoint.Type = c.type;
-                    var transform = checkpointObject.transform;
-                    transform.position = new Vector3(
+                    var checkpointObjectTransform = checkpointObject.transform;
+                    checkpointObjectTransform.position = new Vector3(
                         c.position.x,
                         c.position.y,
                         c.position.z
                     );
-                    transform.rotation = Quaternion.Euler(
+                    checkpointObjectTransform.rotation = Quaternion.Euler(
                         c.rotation.x,
                         c.rotation.y,
                         c.rotation.z
