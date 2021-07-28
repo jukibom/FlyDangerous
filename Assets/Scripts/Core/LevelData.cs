@@ -10,6 +10,9 @@ namespace Core {
         public T x;
         public T y;
         public T z;
+        public override string ToString() {
+            return "[ " + x + ", " + y + ", " + z + " ]";
+        }
     }
 
     public enum Location {

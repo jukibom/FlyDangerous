@@ -9,7 +9,8 @@ namespace Core {
 
         public static event FloatingOriginCorrectionAction OnFloatingOriginCorrection;
 
-        public Vector3 Origin { get; private set; }
+        [SerializeField] private Vector3 origin;
+        public Vector3 Origin => origin;
         
         // The object to track - this should be the local client player
         [SerializeField] private Transform focalTransform; 
@@ -17,7 +18,7 @@ namespace Core {
             get => focalTransform;
             set {
                 focalTransform = value;
-                Origin = Vector3.zero;
+                origin = Vector3.zero;
             }
         }
 
@@ -42,7 +43,7 @@ namespace Core {
             // if we have a focal object, perform the floating origin fix
             if (FocalTransform && FocalTransform.position.magnitude > correctionDistance) {
                 var focalPosition = FocalTransform.position;
-                Origin += focalPosition;
+                origin += focalPosition;
 
                 OnFloatingOriginCorrection?.Invoke(focalPosition);
 
