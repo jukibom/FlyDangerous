@@ -4,29 +4,27 @@ namespace Misc {
     public static class PositionalHelpers {
 
         // generate a valid location to spawn an object by checking in a Fibonacci sphere of ever-increasing radius until a position is found.
-        public static Vector3 FindClosestEmptyPosition(Vector3 position, int objectRadius) {
-
-            // if the requested position is clear, we have no work to do.
-            // TODO: add a layer mask specifically for the local player to avoid checking against itself (starts at 0,0,0 - if the map does too then this will fail)
-            var hits = Physics.OverlapSphere(position, objectRadius);
-            if (hits.Length == 0) {
-                return position;
-            }
-            
-            int n = 0;
+        public static Vector3 FindClosestEmptyPosition(Vector3 originalPosition, int objectRadius) {
+            // -1 in this instance effectively means the original position with no transformation
+            int n = -1;
             int max = 20;
             int radius = 50;
             Collider[] hitColliders = new Collider[1];
-            Vector3 testPosition = position;
+            Vector3 testPosition = originalPosition;
+
+            // check against everything except UI elements
+            int collisionLayerMask = ~(1 << 5);
 
             // set the next position and perform a simple sphere collision check, return the number of
-            bool CheckNextPositionIsClear() {
-                testPosition = position + FibSpherePosition(n, max, radius);
-                Physics.OverlapSphereNonAlloc(testPosition, objectRadius, hitColliders);
-                return hitColliders[0] == null;
+            bool NextPositionIsObstructed() {
+                if (n != -1) {
+                    testPosition = originalPosition + FibSpherePosition(n, max, radius);   
+                }
+                Physics.OverlapSphereNonAlloc(testPosition, objectRadius, hitColliders, collisionLayerMask);
+                return hitColliders[0] != null;
             }
 
-            while (!CheckNextPositionIsClear()) {
+            while (NextPositionIsObstructed()) {
                 // clear the colliders array, increment our counter and try again
                 hitColliders[0] = null;
                 n++;
@@ -34,7 +32,11 @@ namespace Misc {
                     n = 0;
                     radius += 20;
                 }
+
+                Debug.Log("Failed to position ship at " + testPosition);
             }
+
+            Debug.Log("Positioning ship at " + testPosition);
 
             return testPosition;
         }
