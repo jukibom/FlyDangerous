@@ -223,8 +223,14 @@ namespace Core {
                 // set up graphics settings (e.g. camera FoV) + VR status (cameras, radial fog etc)
                 ApplyGraphicsOptions();
                 NotifyVRStatus();
-                
+
                 yield return _levelLoader.HideLoadingScreen();
+                
+                // if there's a track, initialise it
+                var track = FindObjectOfType<Track>();
+                if (track) {
+                    track.InitialiseTrack();
+                }
 
                 // resume the game
                 Time.timeScale = 1;
@@ -232,7 +238,6 @@ namespace Core {
                 yield return new WaitForSeconds(0.7f);
 
                 // if there's a track in the game world, start it
-                var track = FindObjectOfType<Track>();
                 if (track) {
                     yield return track.StartTrackWithCountdown();
                 }

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using Core.Player;
@@ -263,8 +263,6 @@ namespace Core {
                     );
                     checkpoint.transform.parent = track.transform;
                 });
-                // position the player at the start and initialise all the checkpoints
-                track.InitialiseTrack();
             }
 
             // if terrain needs to generate, toggle special logic and wait for it to load all primary tiles
