@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Core.Player;
+using JetBrains.Annotations;
 using kcp2k;
 using Mirror;
 using Misc;
@@ -117,41 +118,46 @@ namespace Core {
             }
         }
 
-        public void StartMainGame(LevelData levelData) {
+        public void StartMainGame([CanBeNull] LevelData levelData) {
             _status = FdNetworkStatus.InGame;
+
             if (NetworkClient.connection.identity.isServer) {
                 // iterate over a COPY of the loading players (the List is mutated by transitioning!)
                 foreach (var loadingPlayer in LoadingPlayers.ToArray()) {
                     var ship = TransitionToShipPlayer(loadingPlayer);
-                    var position = new Vector3(
-                        levelData.startPosition.x,
-                        levelData.startPosition.y,
-                        levelData.startPosition.z
-                    );
-                    var rotation = Quaternion.Euler(
-                        levelData.startRotation.x,
-                        levelData.startRotation.y,
-                        levelData.startRotation.z
-                    );
+                    
+                    // handle start position for each client
+                    if (levelData != null) {
+                        var position = new Vector3(
+                            levelData.startPosition.x,
+                            levelData.startPosition.y,
+                            levelData.startPosition.z
+                        );
+                        var rotation = Quaternion.Euler(
+                            levelData.startRotation.x,
+                            levelData.startRotation.y,
+                            levelData.startRotation.z
+                        );
 
-                    // TODO: radius should possibly be determined by the ship model itself!
-                    position = PositionalHelpers.FindClosestEmptyPosition(position, 10);
+                        // TODO: radius should possibly be determined by the ship model itself!
+                        position = PositionalHelpers.FindClosestEmptyPosition(position, 10);
 
-                    // update locally immediately for subsequent collision checks
-                    ship.AbsoluteWorldPosition = position;
-                    ship.transform.rotation = rotation;
+                        // update locally immediately for subsequent collision checks
+                        ship.AbsoluteWorldPosition = position;
+                        ship.transform.rotation = rotation;
 
-                    // ensure each client receives their assigned position
-                    ship.connectionToClient.Send(new SetShipPositionMessage {
-                        position = position,
-                        rotation = rotation
-                    });
-
-                    // Update physics engine so subsequent collision checks are up-to-date
-                    Physics.SyncTransforms();
+                        // ensure each client receives their assigned position
+                        ship.connectionToClient.Send(new SetShipPositionMessage {
+                            position = position,
+                            rotation = rotation
+                        });
+                        
+                        // Update physics engine so subsequent collision checks are up-to-date
+                        Physics.SyncTransforms();
+                    }
                 }
 
-                // all ships placed, notify ready (allows them to start syncing their own positions)
+                // all ships created and placed, notify ready (allows them to start syncing their own positions)
                 foreach (var shipPlayer in ShipPlayers) {
                     shipPlayer.ServerReady();
                 }

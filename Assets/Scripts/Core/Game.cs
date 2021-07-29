@@ -194,13 +194,10 @@ namespace Core {
                     );
                 }
                 
-                // TODO: move loading players to location BEFORE level loader starts (force terrain to be correct location)
                 yield return _levelLoader.StartGame(levelData);
 
                 yield return FdNetworkManager.Instance.WaitForAllPlayersLoaded();
-
-                // TODO: handle terrain gen freaking out (no camera for a frame...)
-
+                
                 FdNetworkManager.Instance.StartMainGame(levelData);
                 
                 // wait for local ship client object
@@ -217,8 +214,6 @@ namespace Core {
                 _levelLoader.LoadedLevelData.startPosition.x = shipPosition.x;
                 _levelLoader.LoadedLevelData.startPosition.y = shipPosition.y;
                 _levelLoader.LoadedLevelData.startPosition.z = shipPosition.z;
-
-                
 
                 // set up graphics settings (e.g. camera FoV) + VR status (cameras, radial fog etc)
                 ApplyGraphicsOptions();
