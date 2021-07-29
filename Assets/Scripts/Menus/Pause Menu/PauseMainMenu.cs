@@ -1,7 +1,8 @@
-﻿using UnityEngine;
+﻿using Menus.Pause_Menu;
+using UnityEngine;
 using UnityEngine.UI;
 
-namespace Menus {
+namespace Menus.Pause_Menu {
     public class PauseMainMenu : MonoBehaviour {
         
         [SerializeField]
@@ -12,10 +13,12 @@ namespace Menus {
         
         [SerializeField]
         private Button optionsButton;
-        
+
+        private static readonly int open = Animator.StringToHash("Open");
+
         public void Show() {
             this.gameObject.SetActive(true);
-            this.GetComponent<Animator>().SetBool("Open", true);
+            this.GetComponent<Animator>().SetBool(open, true);
         }
 
         public void Hide() {

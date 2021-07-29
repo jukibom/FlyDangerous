@@ -4,11 +4,10 @@ using Menus.Options;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Core;
-using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
+using Core.Player;
 using UnityEngine.UI;
 
-namespace Menus {
+namespace Menus.Pause_Menu {
     public enum PauseMenuState {
         Unpaused,
         PausedMainMenu,
@@ -40,13 +39,12 @@ namespace Menus {
                 UpdatePauseGameState();
             }
         }
-        private Canvas _menuCanvas;
         private Animator _panelAnimator;
         private RectTransform _rectTransform;
+        private static readonly int open = Animator.StringToHash("Open");
 
         private void Start() {
             seedText.text = Game.Instance.IsTerrainMap ? "SEED: " + Game.Instance.Seed : "";
-            _menuCanvas = backgroundCanvas.GetComponent<Canvas>();
             _panelAnimator = mainCanvas.GetComponent<Animator>();
             _rectTransform = GetComponent<RectTransform>();
             
@@ -86,13 +84,13 @@ namespace Menus {
             AudioManager.Instance.Play("ui-dialog-open");
             MenuState = PauseMenuState.PausedMainMenu;
             mainPanel.HighlightResume();
-            _panelAnimator.SetBool("Open", true);
+            _panelAnimator.SetBool(open, true);
         }
 
         public void Resume() {
             AudioManager.Instance.Play("ui-cancel");
             MenuState = PauseMenuState.Unpaused;
-            _panelAnimator.SetBool("Open", false);
+            _panelAnimator.SetBool(open, false);
         }
 
         public void Restart() {
@@ -127,11 +125,12 @@ namespace Menus {
             IEnumerator FadeText() {
                 while (copyConfirmationText.color.a > 0.0f) {
                     copyConfirmationText.color = new Color(1f, 1f, 1f, copyConfirmationText.color.a - Time.unscaledDeltaTime);
-                    
+
+                    var localPosition = gameObject.transform.localPosition;
                     copyConfirmTransform.localPosition = new Vector3(
-                        gameObject.transform.localPosition.x + 160, 
+                        localPosition.x + 160, 
                         copyConfirmationText.gameObject.transform.localPosition.y + (Time.unscaledDeltaTime * 20), 
-                        gameObject.transform.localPosition.z
+                        localPosition.z
                     );
                     yield return null;
                 }
