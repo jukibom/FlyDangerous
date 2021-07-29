@@ -27,7 +27,7 @@ public class MouseWidget : MonoBehaviour {
     void Update() {
         
         // pref determines draw active
-        var shouldShow = Preferences.Instance.GetBool("showMouseWidget") && Preferences.Instance.GetBool("enableMouseFlightControls");
+        var shouldShow = Preferences.Instance.GetBool("showMouseWidget");
         crosshair.SetActive(shouldShow);
         arrow.SetActive(shouldShow);
 
