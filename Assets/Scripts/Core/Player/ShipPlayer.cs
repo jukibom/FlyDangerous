@@ -220,7 +220,7 @@ namespace Core.Player {
         
         private bool IsReady => _transform && _rigidbody && _serverReady;
         public float Velocity => Mathf.Round(_rigidbody.velocity.magnitude);
-        public User User => GetComponentInChildren<User>();
+        public User User => GetComponentInChildren<User>(true);
         
         // The position and rotation of the ship within the world, taking into account floating origin fix
         public Vector3 AbsoluteWorldPosition {

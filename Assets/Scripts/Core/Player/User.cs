@@ -17,8 +17,8 @@ namespace Core.Player {
 
         [SerializeField] public PauseMenu pauseMenu;
         [SerializeField] public Canvas uiCanvas;
-        [SerializeField] public Camera flatScreenCamera;
-        [SerializeField] public Camera uiCamera;
+        [SerializeField] public GameObject flatScreenCamera;
+        [SerializeField] public Camera flatScreenGameplayCamera;
         [SerializeField] public XRRig xrRig;
 
         [SerializeField] public InputSystemUIInputModule pauseUIInputModule;
@@ -42,6 +42,11 @@ namespace Core.Player {
         [SerializeField] public bool movementEnabled;
         public bool pauseMenuEnabled = true;
         public bool boostButtonEnabledOverride;
+        
+        public Vector3 UserHeadPosition => 
+            Game.Instance.IsVREnabled
+                ? xrRig.gameObject.GetComponentInChildren<Camera>().transform.position
+                : flatScreenCamera.gameObject.GetComponentInChildren<Camera>().transform.position;
 
         private Action<InputAction.CallbackContext> _cancelAction;
 
@@ -74,7 +79,9 @@ namespace Core.Player {
         }
 
         public void OnGraphicsSettingsApplied() {
-            flatScreenCamera.fieldOfView = Preferences.Instance.GetFloat("graphics-field-of-view");
+            foreach (var gameCamera in flatScreenGameplayCamera.GetComponentsInChildren<Camera>()) {
+                gameCamera.fieldOfView = Preferences.Instance.GetFloat("graphics-field-of-view");
+            }
         }
 
         public void Update() {
@@ -162,8 +169,7 @@ namespace Core.Player {
                 var pauseMenuRect = pauseMenuCanvas.GetComponent<RectTransform>();
                 pauseMenuRect.sizeDelta = new Vector2(1280, 1000);
                 pauseMenuRect.localScale /= 2;
-                flatScreenCamera.enabled = false;
-                uiCamera.enabled = false;
+                flatScreenCamera.SetActive(false);
                 xrRig.gameObject.SetActive(true);
             }
             else {
@@ -173,8 +179,7 @@ namespace Core.Player {
                 var pauseMenuRect = pauseMenuCanvas.GetComponent<RectTransform>();
                 pauseMenuRect.sizeDelta = new Vector2(1920, 1080);
                 pauseMenuRect.localScale *= 2;
-                flatScreenCamera.enabled = true;
-                uiCamera.enabled = true;
+                flatScreenCamera.SetActive(true);
                 xrRig.gameObject.SetActive(false);
             }
         }

@@ -32,17 +32,17 @@ namespace Game_UI {
                 var target = keyValuePair.Value;
                 
                 var playerName = player.playerName;
-                var position = transform.position;
+                var position = ShipPlayer.FindLocal.User.UserHeadPosition;
                 
                 var originPosition = position;
-                var targetPosition = player.AbsoluteWorldPosition;
+                var targetPosition = player.User.transform.position;
                 
                 var distance = Vector3.Distance(originPosition, targetPosition);
 
                 target.Name = playerName;
                 target.DistanceMeters = distance;
                 
-                target.transform.position = Vector3.MoveTowards(originPosition, targetPosition, 3);
+                target.transform.position = Vector3.MoveTowards(originPosition, targetPosition, 30f);
             }
         }
     }
