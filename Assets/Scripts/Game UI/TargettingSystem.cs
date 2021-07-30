@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Core;
 using Core.Player;
@@ -7,23 +8,22 @@ namespace Game_UI {
     public class TargettingSystem : MonoBehaviour {
         [SerializeField] private Target targetPrefab;
         Dictionary<ShipPlayer, Target> _players = new Dictionary<ShipPlayer, Target>();
+
+        private void OnEnable() {
+            Game.OnVRStatus += OnVRStatusChanged;
+        }
         
+        private void OnDisable() {
+            Game.OnVRStatus -= OnVRStatusChanged;
+        }
+
         // Update is called once per frame
         void Update() {
             var players = FindObjectsOfType<ShipPlayer>();
             
             // if we don't have (players - 1) targets, rebuild 
             if (_players.Count != players.Length - 1) {
-                foreach (var keyValuePair in _players) {
-                    Destroy(keyValuePair.Value);
-                }
-                _players.Clear();
-                foreach (var shipPlayer in players) {
-                    if (!shipPlayer.isLocalPlayer) {
-                        var target = Instantiate(targetPrefab, transform);
-                        _players.Add(shipPlayer, target);
-                    }
-                }
+                ResetTargets();
             }
             
             // update target objects for players
@@ -32,9 +32,9 @@ namespace Game_UI {
                 var target = keyValuePair.Value;
                 
                 var playerName = player.playerName;
-                var position = ShipPlayer.FindLocal.User.UserHeadPosition;
+                var originTransform = ShipPlayer.FindLocal.User.UserHeadTransform;
                 
-                var originPosition = position;
+                var originPosition = originTransform.position;
                 var targetPosition = player.User.transform.position;
                 
                 var distance = Vector3.Distance(originPosition, targetPosition);
@@ -50,9 +50,30 @@ namespace Game_UI {
                 
                 // rotate sprite to face HMD in VR (looks odd in flat screen!)
                 if (Game.Instance.IsVREnabled) {
-                    target.transform.LookAt(originPosition);
-                    target.transform.RotateAround(target.transform.position, target.transform.up, 180f);
+                    target.transform.LookAt(originPosition, originTransform.up);
+                    target.transform.RotateAround(target.transform.position, originTransform.transform.up, 180f);
                 }
+            }
+        }
+
+        private void ResetTargets() {
+            var players = FindObjectsOfType<ShipPlayer>();
+            foreach (var keyValuePair in _players) {
+                Destroy(keyValuePair.Value.gameObject);
+            }
+            _players.Clear();
+            foreach (var shipPlayer in players) {
+                if (!shipPlayer.isLocalPlayer) {
+                    var target = Instantiate(targetPrefab, transform);
+                    _players.Add(shipPlayer, target);
+                }
+            }
+        }
+
+        private void OnVRStatusChanged(bool vrEnabled) {
+            // rebuild targets to reset all rotations
+            if (!vrEnabled) {
+                ResetTargets();
             }
         }
     }

@@ -43,10 +43,10 @@ namespace Core.Player {
         public bool pauseMenuEnabled = true;
         public bool boostButtonEnabledOverride;
         
-        public Vector3 UserHeadPosition => 
+        public Transform UserHeadTransform => 
             Game.Instance.IsVREnabled
-                ? xrRig.gameObject.GetComponentInChildren<Camera>().transform.position
-                : flatScreenCamera.gameObject.GetComponentInChildren<Camera>().transform.position;
+                ? xrRig.gameObject.GetComponentInChildren<Camera>().transform
+                : flatScreenCamera.gameObject.GetComponentInChildren<Camera>().transform;
 
         private Action<InputAction.CallbackContext> _cancelAction;
 
