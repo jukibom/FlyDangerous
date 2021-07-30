@@ -20,7 +20,7 @@ namespace Game_UI {
                 _players.Clear();
                 foreach (var shipPlayer in players) {
                     if (!shipPlayer.isLocalPlayer) {
-                        var target = Instantiate(targetPrefab, transform, true);
+                        var target = Instantiate(targetPrefab, transform);
                         _players.Add(shipPlayer, target);
                     }
                 }
