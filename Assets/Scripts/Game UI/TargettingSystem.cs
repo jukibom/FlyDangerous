@@ -10,10 +10,10 @@ namespace Game_UI {
         
         // Update is called once per frame
         void Update() {
-            var players = FdNetworkManager.Instance.ShipPlayers;
+            var players = FindObjectsOfType<ShipPlayer>();
             
             // if we don't have (players - 1) targets, rebuild 
-            if (_players.Count != players.Count - 1) {
+            if (_players.Count != players.Length - 1) {
                 foreach (var keyValuePair in _players) {
                     Destroy(keyValuePair.Value);
                 }
