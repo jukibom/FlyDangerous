@@ -38,11 +38,15 @@ namespace Game_UI {
                 var targetPosition = player.User.transform.position;
                 
                 var distance = Vector3.Distance(originPosition, targetPosition);
+                var direction = (targetPosition - originPosition).normalized;
 
                 target.Name = playerName;
                 target.DistanceMeters = distance;
+
+                var minDistance = 10f;
+                var maxDistance = 30f + minDistance;
                 
-                target.transform.position = Vector3.MoveTowards(originPosition, targetPosition, 30f);
+                target.transform.position = Vector3.MoveTowards(originPosition, targetPosition + (direction * minDistance), maxDistance);
                 
                 // rotate sprite to face HMD in VR (looks odd in flat screen!)
                 if (Game.Instance.IsVREnabled) {
