@@ -158,6 +158,8 @@ namespace Core.Player {
         [SerializeField] private Text boostIndicator;
         [SerializeField] private Image boostCapacitorBar;
         [SerializeField] private Light shipLights;
+        [SerializeField] private GameObject cockpitLocal;
+        [SerializeField] private GameObject cockpitExternal;
 
         private float _maxSpeed = ShipParameterDefaults.maxSpeed;
         private float _maxBoostSpeed = ShipParameterDefaults.maxBoostSpeed;
@@ -263,9 +265,13 @@ namespace Core.Player {
             inertiaTensor *= _inertialTensorMultiplier;
             _rigidbody.inertiaTensor = inertiaTensor;
             
-            // rigidbody angular momentum constraints (non local clients)
+            // (non local clients)
             if (!isLocalPlayer) {
+                // rigidbody angular momentum constraints 
                 _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+                // show correct cockpit (renders on different layer)
+                cockpitLocal.SetActive(false);
+                cockpitExternal.SetActive(true);
             }
         }
 
