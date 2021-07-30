@@ -214,7 +214,9 @@ namespace Core.Player {
 
         private Transform _transform;
         private Rigidbody _rigidbody;
+        
         [SyncVar] private bool _serverReady;
+        [SyncVar] public string playerName;
         
         private bool IsReady => _transform && _rigidbody && _serverReady;
         public float Velocity => Mathf.Round(_rigidbody.velocity.magnitude);
@@ -299,8 +301,8 @@ namespace Core.Player {
                     _flightAssistRotationalDampening = true;
                     break;
             }
+            CmdSetPlayerName(Preferences.Instance.GetString("playerName"));
         }
-        
         // called when the server has finished instantiating all players
         public void ServerReady() {
             _serverReady = true;
@@ -737,6 +739,15 @@ namespace Core.Player {
                 boostCapacitorBar.fillAmount = MathfExtensions.Remap(0, 100, 0, 0.775f, _boostCapacitorPercent);
                 boostCapacitorBar.color = Color.Lerp(Color.red, Color.green, _boostCapacitorPercent / 100);
             }
+        }
+        
+        [Command]
+        public void CmdSetPlayerName(string name) {
+            if (name == "") {
+                name = "UNNAMED SCRUB";
+            }
+
+            playerName = name;
         }
     }
 }

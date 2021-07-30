@@ -21,15 +21,15 @@ namespace Game_UI {
         }
 
         private void UpdateDistanceText() {
-            string text = "UNKNOWN";
+            string text;
             if (_targetDistanceMeters < 850) {
                 text = Mathf.Round(_targetDistanceMeters) + " M";
             }
             else if (_targetDistanceMeters < 850000) {
-                text = Mathf.Round(_targetDistanceMeters / 1000) + " kM";
+                text = Mathf.Round(_targetDistanceMeters / 100) / 10 + " kM";
             }
-            if (_targetDistanceMeters > 2.998e7f) {
-                text = Mathf.Round(_targetDistanceMeters / 2.998e8f) + " lS";
+            else {
+                text = Mathf.Max(0.1f, Mathf.Round(_targetDistanceMeters / 29980000f) / 10) + " lS";
             }
 
             targetDistanceText.text = text;

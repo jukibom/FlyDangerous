@@ -9,6 +9,8 @@ namespace Core.Player {
         [CanBeNull]
         public static LoadingPlayer FindLocal => 
             Array.Find(FindObjectsOfType<LoadingPlayer>(), loadingPlayer => loadingPlayer.isLocalPlayer);
+
+        [SyncVar] public string playerName;
         
         [SyncVar]
         private bool _isLoaded;
@@ -26,10 +28,24 @@ namespace Core.Player {
         private void OnDisable() {
             LevelLoader.OnLevelLoaded -= OnLevelLoaded;
         }
+        
+        // On local client start
+        public override void OnStartAuthority() {
+            CmdSetPlayerName(Preferences.Instance.GetString("playerName"));
+        }
 
         private void OnLevelLoaded() {
             // store loaded state, inform network layer
             _isLoaded = true;
+        }
+
+        [Command]
+        public void CmdSetPlayerName(string name) {
+            if (name == "") {
+                name = "UNNAMED SCRUB";
+            }
+
+            playerName = name;
         }
     }
 }
