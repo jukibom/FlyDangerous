@@ -38,7 +38,6 @@ namespace Game_UI {
                 var targetPosition = player.AbsoluteWorldPosition;
                 
                 var distance = Vector3.Distance(originPosition, targetPosition);
-                var direction = targetPosition - originPosition;
 
                 target.Name = playerName;
                 target.DistanceMeters = distance;

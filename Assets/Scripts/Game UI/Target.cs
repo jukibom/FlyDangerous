@@ -1,3 +1,4 @@
+using System.Globalization;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,15 +22,22 @@ namespace Game_UI {
         }
 
         private void UpdateDistanceText() {
+            string addPointZeroIfNeeded(float distance) {
+                return distance % 1 == 0 ? distance + ".0" : distance.ToString(CultureInfo.CurrentCulture);
+            }
+            
             string text;
             if (_targetDistanceMeters < 850) {
-                text = Mathf.Round(_targetDistanceMeters) + " M";
+                text = Mathf.Round(_targetDistanceMeters) + "m";
             }
             else if (_targetDistanceMeters < 850000) {
-                text = Mathf.Round(_targetDistanceMeters / 100) / 10 + " kM";
+                text = addPointZeroIfNeeded(Mathf.Round(_targetDistanceMeters / 100) / 10) + "Km";
+            }
+            else if (_targetDistanceMeters < 29979245.8f) {
+                text = addPointZeroIfNeeded(Mathf.Round(_targetDistanceMeters / 100000) / 10) + "Mm";
             }
             else {
-                text = Mathf.Max(0.1f, Mathf.Round(_targetDistanceMeters / 29980000f) / 10) + " lS";
+                text = addPointZeroIfNeeded(Mathf.Max(0.1f, Mathf.Round(_targetDistanceMeters / 29980000f) / 10)) + "Ls";
             }
 
             targetDistanceText.text = text;
