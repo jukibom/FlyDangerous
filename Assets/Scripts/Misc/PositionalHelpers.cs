@@ -66,8 +66,9 @@ namespace Misc {
                     testPosition = originalPosition + FibSpherePosition(n, max, positionSphereRadius);   
                 }
 
-                testPosition = ClampPositionToTerrain(testPosition, objectRadius);
                 Physics.OverlapSphereNonAlloc(testPosition, objectRadius, hitColliders, collisionLayerMask);
+                testPosition = ClampPositionToTerrain(testPosition, objectRadius);
+
                 return hitColliders[0] != null;
             }
 
