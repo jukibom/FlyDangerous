@@ -160,7 +160,11 @@ namespace Menus.Pause_Menu {
                     optionsPanel.Hide();
                     mainPanel.Show();
                     copyConfirmationText.color = new Color(1f, 1f, 1f, 0f);
-                    Time.timeScale = 0;
+                    
+                    // game pause only applies to single player
+                    if (Game.Instance.SessionType == SessionType.Singleplayer) {
+                        Time.timeScale = 0;
+                    }
                     break;
                 case PauseMenuState.PausedOptionsMenu:
                     optionsPanel.Show();

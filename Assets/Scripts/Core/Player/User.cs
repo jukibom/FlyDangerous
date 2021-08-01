@@ -148,6 +148,14 @@ namespace Core.Player {
             movementEnabled = false;
             pauseMenuEnabled = false;
             boostButtonEnabledOverride = false;
+            
+            // clear inputs
+            shipPlayer.SetPitch(0);
+            shipPlayer.SetRoll(0);
+            shipPlayer.SetYaw(0);
+            shipPlayer.SetThrottle(0);
+            shipPlayer.SetLateralH(0);
+            shipPlayer.SetLateralV(0);
 
             Console.Instance.LogMessage("** USER INPUT DISABLED **");
         }
