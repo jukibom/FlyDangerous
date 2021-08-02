@@ -96,6 +96,10 @@ namespace Core {
             if (args.ToList().Contains("-vr") || args.ToList().Contains("-VR")) {
                 EnableVR();
             }
+            
+            // load hmd position from preferences
+            _hmdPosition = Preferences.Instance.GetVector3("hmdPosition");
+            _hmdRotation = Quaternion.Euler(Preferences.Instance.GetVector3("hmdRotation"));
         }
 
         private void OnDestroy() {
@@ -166,7 +170,10 @@ namespace Core {
             xrRig.MoveCameraToWorldLocation(targetTransform.position);
             xrRig.MatchRigUpCameraForward(targetTransform.up, targetTransform.forward);
             _hmdRotation = xrRig.transform.rotation;
-            _hmdPosition += position - before;
+            
+            Preferences.Instance.SetVector3("hmdPosition", _hmdPosition);
+            Preferences.Instance.SetVector3("hmdRotation", _hmdRotation.eulerAngles);
+            Preferences.Instance.Save();
         }
 
         public void StartGame(SessionType sessionType, LevelData levelData, bool dynamicPlacementStart = false) {
