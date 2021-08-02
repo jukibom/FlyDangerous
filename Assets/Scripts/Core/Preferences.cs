@@ -5,15 +5,27 @@ using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Core {
+
+    public class SaveDataVector3<T> {
+        public T x;
+        public T y;
+        public T z;
+        public override string ToString() {
+            return "[ " + x + ", " + y + ", " + z + " ]";
+        }
+    }
+    
     public class SaveData {
         public Dictionary<string, bool> boolPrefs;
         public Dictionary<string, float> floatPrefs;
         public Dictionary<string, string> stringPrefs;
+        public Dictionary<string, SaveDataVector3<float>> vector3Prefs;
         
         public SaveData() {
             boolPrefs = new Dictionary<string, bool>();
             floatPrefs = new Dictionary<string, float>();
             stringPrefs = new Dictionary<string, string>();
+            vector3Prefs = new Dictionary<string, SaveDataVector3<float>>();
         }
 
         public SaveData Clone() {
@@ -21,11 +33,11 @@ namespace Core {
             s.boolPrefs = new Dictionary<string, bool>(boolPrefs);
             s.floatPrefs = new Dictionary<string, float>(floatPrefs);
             s.stringPrefs = new Dictionary<string, string>(stringPrefs);
+            s.vector3Prefs = new Dictionary<string, SaveDataVector3<float>>(vector3Prefs);
             return s;
         }
 
         public string ToJsonString() {
-            // Tells Newtonsoft to convert this object to a JSON.
             return JsonConvert.SerializeObject(this, Formatting.Indented);
         }
     }
@@ -121,6 +133,15 @@ namespace Core {
             }
         }
 
+        public Vector3 GetDefaultVector3(string key) {
+            switch (key) {
+                case "hmdPosition": 
+                case "hmdRotation": 
+                default:
+                    return Vector3.zero;
+            }
+        }
+
         
         public bool GetBool(string key) {
             return GetCurrent().boolPrefs.TryGetValue(key, out bool value)
@@ -139,6 +160,12 @@ namespace Core {
                 ? value
                 : GetDefaultString(key);
         }
+
+        public Vector3 GetVector3(string key) {
+            return GetCurrent().vector3Prefs.TryGetValue(key, out SaveDataVector3<float> value)
+                ? new Vector3(value.x, value.y, value.z)
+                : GetDefaultVector3(key);
+        }
         
         public void SetBool(string key, bool val) {
             GetCurrent().boolPrefs[key] = val;
@@ -150,6 +177,10 @@ namespace Core {
         
         public void SetString(string key, string val) { 
             GetCurrent().stringPrefs[key] = val;
+        }
+
+        public void SetVector3(string key, Vector3 val) {
+            GetCurrent().vector3Prefs[key] = new SaveDataVector3<float> {x = val.x, y = val.y, z = val.z };
         }
 
         public SaveData GetCurrent() {
