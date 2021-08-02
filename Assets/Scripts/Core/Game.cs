@@ -266,6 +266,7 @@ namespace Core {
             var mapMagic = FindObjectOfType<MapMagicObject>();
             if (mapMagic) {
                 mapMagic.StopGenerate();
+                mapMagic.enabled = false;
             }
 
             var ship = ShipPlayer.FindLocal;
