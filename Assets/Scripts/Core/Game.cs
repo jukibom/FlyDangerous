@@ -35,6 +35,7 @@ namespace Core {
         private LevelLoader _levelLoader;
         private SessionType _sessionType = SessionType.Singleplayer;
         private bool _isVREnabled;
+        private Coroutine _loadingRoutine;
         
         // The level data most recently used to load a map
         public LevelData LoadedLevelData => _levelLoader.LoadedLevelData;
@@ -251,7 +252,7 @@ namespace Core {
                 ship.User.EnableGameInput();
             }
 
-            StartCoroutine(LoadGame());
+            _loadingRoutine = StartCoroutine(LoadGame());
         }
 
         public void RestartLevel() {
@@ -266,7 +267,11 @@ namespace Core {
             if (FindObjectOfType<MainMenu>()) {
                 return;
             }
-            
+
+            if (_loadingRoutine != null) {
+                StopCoroutine(_loadingRoutine);
+            }
+
             _menuFirstRun = false;
             var mapMagic = FindObjectOfType<MapMagicObject>();
             if (mapMagic) {
@@ -280,6 +285,9 @@ namespace Core {
             }
 
             IEnumerator LoadMenu() {
+                // during load we pause scaled time to prevent *absolutely anything* from interacting incorrectly
+                Time.timeScale = 1;
+                
                 FadeToBlack();
                 yield return new WaitForSeconds(0.5f);
                 yield return SceneManager.LoadSceneAsync("Main Menu");

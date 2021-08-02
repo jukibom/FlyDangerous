@@ -12,6 +12,7 @@ using UnityEngine;
 namespace Core {
     
     public enum FdNetworkStatus {
+        Offline,
         SinglePlayerMenu,
         LobbyMenu,
         Loading,
@@ -52,7 +53,7 @@ namespace Core {
         public List<ShipPlayer> ShipPlayers { get; } = new List<ShipPlayer>();
         public KcpTransport NetworkTransport => GetComponent<KcpTransport>();
 
-        private FdNetworkStatus _status = FdNetworkStatus.SinglePlayerMenu;
+        private FdNetworkStatus _status = FdNetworkStatus.Offline;
         private FdNetworkStatus Status => _status;
         
         public IEnumerator WaitForAllPlayersLoaded() {
@@ -190,7 +191,7 @@ namespace Core {
                 StopHost();
                 StopClient();
             }
-            _status = FdNetworkStatus.SinglePlayerMenu;
+            _status = FdNetworkStatus.Offline;
         }
         
         #endregion
@@ -199,7 +200,7 @@ namespace Core {
 
         // player joins
         public override void OnClientConnect(NetworkConnection conn) {
-            Debug.Log("[CLIENT] PLAYER CONNECT");
+            Debug.Log("[CLIENT] LOCAL CLIENT HAS CONNECTED");
             base.OnClientConnect(conn);
             OnClientConnected?.Invoke();
             NetworkClient.RegisterHandler<StartGameMessage>(StartLoadGame);
@@ -208,7 +209,7 @@ namespace Core {
         
         // player leaves
         public override void OnClientDisconnect(NetworkConnection conn) {
-            Debug.Log("[CLIENT] PLAYER DISCONNECT");
+            Debug.Log("[CLIENT] LOCAL CLIENT HAS DISCONNECTED");
             base.OnClientDisconnect(conn);
             OnClientDisconnected?.Invoke();
         }
@@ -265,6 +266,7 @@ namespace Core {
         public override void OnServerDisconnect(NetworkConnection conn) {
             Debug.Log("[SERVER] PLAYER DISCONNECT");
                         
+            // TODO: notify other players than someone has left
             if (conn.identity != null) {
                 switch (Status) {
                     case FdNetworkStatus.SinglePlayerMenu:
@@ -282,7 +284,6 @@ namespace Core {
                         RemovePlayer(shipPlayer);
                         break;
                 }
-                
             }
             
             base.OnServerDisconnect(conn);
@@ -302,16 +303,18 @@ namespace Core {
                 
                 case FdNetworkStatus.Loading:
                     // TODO: Back to menu for all!
+                    Game.Instance.QuitToMenu();
                     LoadingPlayers.Clear();
                     break;
                 
                 case FdNetworkStatus.InGame:
                     // TODO: Back to menu for all!
+                    Game.Instance.QuitToMenu();
                     ShipPlayers.Clear();
                     break;
                     
             }
-            _status = FdNetworkStatus.SinglePlayerMenu;
+            _status = FdNetworkStatus.Offline;
         }
 
         #endregion

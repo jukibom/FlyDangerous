@@ -284,7 +284,11 @@ namespace Core {
                 // wait for fully loaded local terrain
                 while (mapMagic.IsGenerating()) {
                     var progressPercent = Mathf.Min(100, Mathf.Round(mapMagic.GetProgress() * 100));
-                    loadText.text = $"Generating terrain ({progressPercent}%)\n\n\nSeed: \"{_levelData.terrainSeed}\"";
+                    
+                    // this entity may be destroyed by server shutdown...
+                    if (loadText != null) {
+                        loadText.text = $"Generating terrain ({progressPercent}%)\n\n\nSeed: \"{_levelData.terrainSeed}\"";
+                    }
 
                     yield return null;
                 }
