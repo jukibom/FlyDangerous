@@ -165,11 +165,13 @@ namespace Core {
         }
 
         public void ResetHmdView(XRRig xrRig, Transform targetTransform) {
-            var position = xrRig.transform.position;
-            var before = position;
+            
             xrRig.MoveCameraToWorldLocation(targetTransform.position);
             xrRig.MatchRigUpCameraForward(targetTransform.up, targetTransform.forward);
-            _hmdRotation = xrRig.transform.rotation;
+            
+            var xrRigTransform = xrRig.transform;
+            _hmdPosition = xrRigTransform.localPosition;
+            _hmdRotation = xrRigTransform.localRotation;
             
             Preferences.Instance.SetVector3("hmdPosition", _hmdPosition);
             Preferences.Instance.SetVector3("hmdRotation", _hmdRotation.eulerAngles);
@@ -320,11 +322,11 @@ namespace Core {
 
             // if user has previously applied a HMD position, reapply
             if (IsVREnabled) {
-                var xrRig = FindObjectOfType<XRRig>();
+                var xrRig = FindObjectOfType<XRRig>(true);
                 if (xrRig) {
                     var xrTransform = xrRig.transform;
-                    xrTransform.rotation = _hmdRotation;
-                    xrTransform.localPosition = xrTransform.localPosition + _hmdPosition;
+                    xrTransform.localRotation = _hmdRotation;
+                    xrTransform.localPosition = _hmdPosition;
                 }
             }
         }
