@@ -267,12 +267,12 @@ namespace Core {
             IEnumerator LoadMenu() {
                 FadeToBlack();
                 yield return new WaitForSeconds(0.5f);
-                Debug.Log("LOAD MAIN MENU");
-                SceneManager.LoadScene("Main Menu");
-                Debug.Log("LOADED");
+                yield return SceneManager.LoadSceneAsync("Main Menu");
+                yield return new WaitForEndOfFrame();
                 FdNetworkManager.Instance.StopAll();
                 _levelLoader.ResetLoadedLevelData();
                 ApplyGraphicsOptions();
+                yield return new WaitForEndOfFrame();
                 NotifyVRStatus();
                 FreeCursor();
             }
