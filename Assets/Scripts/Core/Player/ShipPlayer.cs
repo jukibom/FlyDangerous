@@ -245,6 +245,7 @@ namespace Core.Player {
         }
 
         public void Awake() {
+            playerLogic.SetActive(false);
             _transform = transform;
             _rigidbody = GetComponent<Rigidbody>();
         }
