@@ -2,6 +2,7 @@ using System.Collections;
 using System.Linq;
 using Core.Player;
 using MapMagic.Core;
+using Menus.Main_Menu;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
@@ -262,6 +263,10 @@ namespace Core {
         }
 
         public void QuitToMenu() {
+            if (FindObjectOfType<MainMenu>()) {
+                return;
+            }
+            
             _menuFirstRun = false;
             var mapMagic = FindObjectOfType<MapMagicObject>();
             if (mapMagic) {
