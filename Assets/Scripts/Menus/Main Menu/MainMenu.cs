@@ -43,7 +43,7 @@ namespace Menus.Main_Menu {
 
         public void OnResetHMDView(InputValue inputValue) {
             if (xrRig) {
-                Game.Instance.ResetHmdView(xrRig, flatScreenCamera.transform);
+                Game.Instance.ResetHmdView(xrRig, xrRig.transform.parent);
             }
         }
         
@@ -51,6 +51,12 @@ namespace Menus.Main_Menu {
             // if VR is enabled, we need to swap our active cameras and make UI panels operate in world space
             if (isVREnabled) {
                 canvas.renderMode = RenderMode.WorldSpace;
+                var canvasRect = canvas.GetComponent<RectTransform>();
+                if (canvasRect) {
+                    canvasRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 1920);
+                    canvasRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 1080);
+                }
+                canvas.transform.localScale = new Vector3(0.005f, 0.005f, 0.005f);
                 flatScreenCamera.enabled = false;
                 uiCamera.enabled = false;
                 xrRig.gameObject.SetActive(true);
