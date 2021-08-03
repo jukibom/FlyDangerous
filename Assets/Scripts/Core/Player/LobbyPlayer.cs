@@ -14,7 +14,7 @@ namespace Core.Player {
         public static LobbyPlayer FindLocal => 
             Array.Find(FindObjectsOfType<LobbyPlayer>(), lobbyPlayer => lobbyPlayer.isLocalPlayer);
         
-        public bool isPartyLeader;
+        [SyncVar] public bool isHost;
 
         [SyncVar(hook = nameof(OnPlayerNameChanged))]
         public string playerName = "Connecting ...";
@@ -24,7 +24,7 @@ namespace Core.Player {
 
         [SerializeField] private Text playerNameTextEntry;
         [SerializeField] private RawImage readyStatus;
-        
+
         private LobbyMenu _lobby;
         private LobbyMenu LobbyUI {
             get
@@ -73,7 +73,7 @@ namespace Core.Player {
         private void UpdateDisplay() {
             playerNameTextEntry.text = playerName;
             readyStatus.enabled = isReady;
-            if (isPartyLeader && !isReady) {
+            if (isHost && !isReady) {
                 LobbyUI.StartButton.label.text = "START GAME";
             } else if (!isReady) {
                 LobbyUI.StartButton.label.text = "READY";

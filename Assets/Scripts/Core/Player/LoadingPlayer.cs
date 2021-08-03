@@ -11,7 +11,9 @@ namespace Core.Player {
             Array.Find(FindObjectsOfType<LoadingPlayer>(), loadingPlayer => loadingPlayer.isLocalPlayer);
 
         [SyncVar] public string playerName;
-        
+
+        [SyncVar] public bool isHost;
+            
         [SyncVar]
         private bool _isLoaded;
         public bool IsLoaded => _isLoaded;

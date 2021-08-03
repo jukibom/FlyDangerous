@@ -219,6 +219,7 @@ namespace Core.Player {
         
         [SyncVar] private bool _serverReady;
         [SyncVar] public string playerName;
+        [SyncVar] public bool isHost;
         
         private bool IsReady => _transform && _rigidbody && _serverReady;
         public float Velocity => Mathf.Round(_rigidbody.velocity.magnitude);

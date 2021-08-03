@@ -244,7 +244,7 @@ namespace Core {
                 
                     case FdNetworkStatus.LobbyMenu: 
                         LobbyPlayer lobbyPlayer = Instantiate(lobbyPlayerPrefab);
-                        lobbyPlayer.isPartyLeader = LobbyPlayers.Count == 0;
+                        lobbyPlayer.isHost = LobbyPlayers.Count == 0;
             
                         NetworkServer.AddPlayerForConnection(conn, lobbyPlayer.gameObject);
                     
@@ -323,16 +323,19 @@ namespace Core {
 
         private LobbyPlayer TransitionToLobbyPlayer<T>(T previousPlayer) where T: NetworkBehaviour {
             var lobbyPlayer = Instantiate(lobbyPlayerPrefab);
+            lobbyPlayer.isHost = GetHostStatus(previousPlayer);
             return ReplacePlayer(lobbyPlayer, previousPlayer);
         }
         
         private LoadingPlayer TransitionToLoadingPlayer<T>(T previousPlayer) where T: NetworkBehaviour {
             var loadingPlayer = Instantiate(loadingPlayerPrefab);
+            loadingPlayer.isHost = GetHostStatus(previousPlayer);
             return ReplacePlayer(loadingPlayer, previousPlayer);
         }
         
         private ShipPlayer TransitionToShipPlayer<T>(T previousPlayer) where T: NetworkBehaviour {
             var shipPlayer = Instantiate(shipPlayerPrefab);
+            shipPlayer.isHost = GetHostStatus(previousPlayer);
             return ReplacePlayer(shipPlayer, previousPlayer);
         }
         
@@ -377,6 +380,23 @@ namespace Core {
                         throw new Exception("Unsupported player object type!");
                 }
             }
+        }
+
+        private bool GetHostStatus<T>(T player) where T : NetworkBehaviour {
+            if (player != null) {
+                switch (player) {
+                    case LobbyPlayer lobbyPlayer:
+                        return lobbyPlayer.isHost;
+                    case LoadingPlayer loadingPlayer:
+                        return loadingPlayer.isHost;
+                    case ShipPlayer shipPlayer:
+                        return shipPlayer.isHost;
+                    default:
+                        throw new Exception("Unsupported player object type!");
+                }
+            }
+
+            return false;
         }
         
         #endregion
