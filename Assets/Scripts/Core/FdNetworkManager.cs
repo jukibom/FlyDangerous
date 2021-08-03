@@ -122,46 +122,52 @@ namespace Core {
         public void StartMainGame([CanBeNull] LevelData levelData) {
             _status = FdNetworkStatus.InGame;
 
-            if (NetworkClient.connection.identity.isServer) {
-                // iterate over a COPY of the loading players (the List is mutated by transitioning!)
-                foreach (var loadingPlayer in LoadingPlayers.ToArray()) {
-                    var ship = TransitionToShipPlayer(loadingPlayer);
-                    
-                    // handle start position for each client
-                    if (levelData != null) {
-                        var position = new Vector3(
-                            levelData.startPosition.x,
-                            levelData.startPosition.y,
-                            levelData.startPosition.z
-                        );
-                        var rotation = Quaternion.Euler(
-                            levelData.startRotation.x,
-                            levelData.startRotation.y,
-                            levelData.startRotation.z
-                        );
+            try {
+                if (NetworkClient.connection.identity.isServer) {
+                    // iterate over a COPY of the loading players (the List is mutated by transitioning!)
+                    foreach (var loadingPlayer in LoadingPlayers.ToArray()) {
+                        var ship = TransitionToShipPlayer(loadingPlayer);
 
-                        // TODO: radius should possibly be determined by the ship model itself!
-                        position = PositionalHelpers.FindClosestEmptyPosition(position, 10);
+                        // handle start position for each client
+                        if (levelData != null) {
+                            var position = new Vector3(
+                                levelData.startPosition.x,
+                                levelData.startPosition.y,
+                                levelData.startPosition.z
+                            );
+                            var rotation = Quaternion.Euler(
+                                levelData.startRotation.x,
+                                levelData.startRotation.y,
+                                levelData.startRotation.z
+                            );
 
-                        // update locally immediately for subsequent collision checks
-                        ship.AbsoluteWorldPosition = position;
-                        ship.transform.rotation = rotation;
+                            // TODO: radius should possibly be determined by the ship model itself!
+                            position = PositionalHelpers.FindClosestEmptyPosition(position, 10);
 
-                        // ensure each client receives their assigned position
-                        ship.connectionToClient.Send(new SetShipPositionMessage {
-                            position = position,
-                            rotation = rotation
-                        });
-                        
-                        // Update physics engine so subsequent collision checks are up-to-date
-                        Physics.SyncTransforms();
+                            // update locally immediately for subsequent collision checks
+                            ship.AbsoluteWorldPosition = position;
+                            ship.transform.rotation = rotation;
+
+                            // ensure each client receives their assigned position
+                            ship.connectionToClient.Send(new SetShipPositionMessage {
+                                position = position,
+                                rotation = rotation
+                            });
+
+                            // Update physics engine so subsequent collision checks are up-to-date
+                            Physics.SyncTransforms();
+                        }
                     }
-                }
 
-                // all ships created and placed, notify ready (allows them to start syncing their own positions)
-                foreach (var shipPlayer in ShipPlayers) {
-                    shipPlayer.ServerReady();
+                    // all ships created and placed, notify ready (allows them to start syncing their own positions)
+                    foreach (var shipPlayer in ShipPlayers) {
+                        shipPlayer.ServerReady();
+                    }
+
                 }
+            }
+            catch {
+                Game.Instance.QuitToMenu("The server failed to initialise properly");
             }
         }
         #endregion
