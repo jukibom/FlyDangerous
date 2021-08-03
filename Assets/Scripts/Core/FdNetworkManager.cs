@@ -163,7 +163,6 @@ namespace Core {
                     foreach (var shipPlayer in ShipPlayers) {
                         shipPlayer.ServerReady();
                     }
-
                 }
             }
             catch {
@@ -176,9 +175,9 @@ namespace Core {
         
         public void StartLobbyServer() {
             _status = FdNetworkStatus.LobbyMenu;
-            StartHost();
             // TODO: This should come from the lobby panel UI element
             maxConnections = 16;
+            StartHost();
         }
 
         public void StartLobbyJoin() {
