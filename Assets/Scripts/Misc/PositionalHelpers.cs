@@ -1,4 +1,4 @@
-﻿using JetBrains.Annotations;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace Misc {
@@ -65,9 +65,9 @@ namespace Misc {
                 if (n != -1) {
                     testPosition = originalPosition + FibSpherePosition(n, max, positionSphereRadius);   
                 }
-
+                
+                testPosition = ClampPositionToTerrain(testPosition, objectRadius * 4);
                 Physics.OverlapSphereNonAlloc(testPosition, objectRadius, hitColliders, collisionLayerMask);
-                testPosition = ClampPositionToTerrain(testPosition, objectRadius);
 
                 return hitColliders[0] != null;
             }
