@@ -87,7 +87,7 @@ namespace Core {
                     while (mapMagic.IsGenerating()) {
                         var progressPercent = Mathf.Min(100, Mathf.Round(mapMagic.GetProgress() * 100));
                         var loadText = GameObject.FindGameObjectWithTag("DynamicLoadingText").GetComponent<Text>();
-                        loadText.text = $"Regenerating terrain at start position ({progressPercent}%)";
+                        loadText.text = $"Generating terrain ({progressPercent}%)";
 
                         yield return null;
                     }
