@@ -1,6 +1,7 @@
-﻿using Audio;
+using Audio;
 using Core;
 using Core.Player;
+using Mirror;
 using UnityEngine;
 using UnityEngine.UI;
 using Environment = Core.Environment;
@@ -13,6 +14,11 @@ namespace Menus.Main_Menu {
         [SerializeField] private UIButton startButton;
         [SerializeField] private Text headerText;
         [SerializeField] private Button defaultActiveButton;
+
+        [SerializeField] private Button loadCustomButton;
+        [SerializeField] private Dropdown gameModeDropdown;
+        [SerializeField] private Dropdown environmentDropdown;
+        [SerializeField] private Dropdown mapDropdown;
         
         private Animator _animator;
 
@@ -34,6 +40,13 @@ namespace Menus.Main_Menu {
 
         public void JoinPlayer() {
             headerText.text = "MULTIPLAYER LOBBY";
+            
+            if (!NetworkClient.isHostClient) {
+                loadCustomButton.enabled = false;
+                gameModeDropdown.enabled = false;
+                environmentDropdown.enabled = false;
+                mapDropdown.enabled = false;
+            }
         }
 
         public void StartHost() {
