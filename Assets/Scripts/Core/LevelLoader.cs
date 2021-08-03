@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Core.Player;
 using Den.Tools;
 using MapMagic.Core;
+using Misc;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -68,17 +70,17 @@ namespace Core {
                 // first let's check if this is a terrain world and handle that appropriately
                 var mapMagic = FindObjectOfType<MapMagicObject>();
                 
-                void DoReset() {
-                    ship.AbsoluteWorldPosition = new Vector3 {x = LoadedLevelData.startPosition.x, y = LoadedLevelData.startPosition.y, z = LoadedLevelData.startPosition.z};
-                    ship.transform.rotation = Quaternion.Euler(LoadedLevelData.startRotation.x, LoadedLevelData.startRotation.y, LoadedLevelData.startRotation.z);
+                void DoReset(Vector3 position, Quaternion rotation) {
+                    ship.AbsoluteWorldPosition = position;
+                    ship.transform.rotation = rotation;
                     ship.Reset();
 
                     onRestart();
                 }
 
                 // the terrain will not be loaded if we teleport there, we need to fade to black, wait for terrain to load, then fade back. This should still be faster than full reload.
-                IEnumerator LoadTerrainAndReset() {
-                    DoReset();
+                IEnumerator LoadTerrainAndReset(Vector3 position, Quaternion rotation) {
+                    DoReset(position, rotation);
                     yield return new WaitForSeconds(0.5f);
 
                     // wait for fully loaded local terrain
@@ -114,22 +116,38 @@ namespace Core {
                     }
                 }
 
-                var shipPosition = ship.AbsoluteWorldPosition;
-                var distanceToStart = Vector3.Distance(shipPosition, new Vector3 {
+                var positionToWarpTo = new Vector3 {
                     x = LoadedLevelData.startPosition.x,
                     y = LoadedLevelData.startPosition.y,
                     z = LoadedLevelData.startPosition.z
-                });
+                };
+
+                var rotationToWarpTo = Quaternion.Euler(LoadedLevelData.startRotation.x,
+                    LoadedLevelData.startRotation.y, LoadedLevelData.startRotation.z);
+                
+                // if multiplayer free-roam and not the host, warp to the host
+                if (Game.Instance.SessionType == SessionType.Multiplayer && LoadedLevelData.raceType == RaceType.None && !ship.isHost) {
+                    FindObjectsOfType<ShipPlayer>().ToList().ForEach(otherShipPlayer => {
+                        if (otherShipPlayer.isHost) {
+                            var emptyPosition = PositionalHelpers.FindClosestEmptyPosition(otherShipPlayer.AbsoluteWorldPosition, 10);
+                            rotationToWarpTo = otherShipPlayer.transform.rotation;
+                            positionToWarpTo = emptyPosition + FloatingOrigin.Instance.Origin;
+                        }
+                    });
+                }
+
+                var shipPosition = ship.AbsoluteWorldPosition;
+                var distanceToStart = Vector3.Distance(shipPosition, positionToWarpTo);
 
                 // TODO: Make this distance dynamic based on tiles?
                 if (mapMagic && ship && distanceToStart > 20000) {
                     yield return StartCoroutine(ShowLoadingScreen(true));
-                    yield return StartCoroutine(LoadTerrainAndReset());
+                    yield return StartCoroutine(LoadTerrainAndReset(positionToWarpTo, rotationToWarpTo));
                     yield return ResetTrackIfNeeded();
                 }
                 else {
                     // don't need to wait for full scene reload, just reset state and notify subscribers
-                    DoReset();
+                    DoReset(positionToWarpTo, rotationToWarpTo);
                     yield return ResetTrackIfNeeded();
                 }
             }
@@ -194,9 +212,10 @@ namespace Core {
                     checkpointLocation.type = checkpoint.Type;
                     checkpointLocation.position = new LevelDataVector3<float>();
                     checkpointLocation.rotation = new LevelDataVector3<float>();
-                    
-                    var position = checkpoint.transform.localPosition;
-                    var rotation = checkpoint.transform.rotation.eulerAngles;
+
+                    var checkpointTransform = checkpoint.transform;
+                    var position = checkpointTransform.localPosition;
+                    var rotation = checkpointTransform.rotation.eulerAngles;
                     checkpointLocation.position.x = position.x;
                     checkpointLocation.position.y = position.y;
                     checkpointLocation.position.z = position.z;

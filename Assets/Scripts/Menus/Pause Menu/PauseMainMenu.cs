@@ -1,4 +1,7 @@
-﻿using Menus.Pause_Menu;
+using System;
+using Core;
+using Core.Player;
+using Menus.Pause_Menu;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,9 +15,27 @@ namespace Menus.Pause_Menu {
         private Button resumeButton;
         
         [SerializeField]
+        private Button restartButton;
+        
+        [SerializeField]
         private Button optionsButton;
+        
+        [SerializeField]
+        private Button quitButton;
 
         private static readonly int open = Animator.StringToHash("Open");
+
+        public void OnEnable() {
+            // multiplayer specific UI changes
+            var player = ShipPlayer.FindLocal;
+            if (player && Game.Instance.SessionType == SessionType.Multiplayer) {
+                // in free roam, restart for clients is changed to warping to the leader (on non-host client)
+                if (!player.isHost && Game.Instance.LoadedLevelData.raceType == RaceType.None) {
+                    restartButton.GetComponent<UIButton>().label.text = "WARP TO HOST";
+                }
+                quitButton.GetComponent<UIButton>().label.text = "LEAVE GAME";
+            }
+        }
 
         public void Show() {
             this.gameObject.SetActive(true);
