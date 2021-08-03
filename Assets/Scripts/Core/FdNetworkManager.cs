@@ -302,14 +302,12 @@ namespace Core {
                     break;
                 
                 case FdNetworkStatus.Loading:
-                    // TODO: Back to menu for all!
-                    Game.Instance.QuitToMenu();
+                    Game.Instance.QuitToMenu("LOST CONNECTION TO THE SERVER WHILE LOADING.");
                     LoadingPlayers.Clear();
                     break;
                 
                 case FdNetworkStatus.InGame:
-                    // TODO: Back to menu for all!
-                    Game.Instance.QuitToMenu();
+                    Game.Instance.QuitToMenu("THE SERVER CLOSED THE CONNECTION");
                     ShipPlayers.Clear();
                     break;
                     
