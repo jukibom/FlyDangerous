@@ -11,12 +11,18 @@ using Random = UnityEngine.Random;
 namespace Menus.Main_Menu {
     public class MainMenu : MonoBehaviour {
 
-        [SerializeField] private Canvas canvas;
+        // Animating the ship
         [SerializeField] private GameObject shipMesh;
 
+        // VR handling
+        [SerializeField] private Canvas canvas;
         [SerializeField] private Camera flatScreenCamera;
         [SerializeField] private Camera uiCamera;
         [SerializeField] private XRRig xrRig;
+        
+        // Disconnection Handling
+        [SerializeField] private TopMenu topMenu;
+        [SerializeField] private DisconnectionDialog disconnectionDialog;
 
         public static bool FirstRun => Game.Instance?.menuFirstRun ?? true;
 
@@ -39,6 +45,12 @@ namespace Menus.Main_Menu {
             // gently rock the ship mesh back and forth
             var rotationAmount = (0.25f - Mathf.PingPong(Time.time / 20, 0.5f)) / 5;
             shipMesh.transform.Rotate(Vector3.forward, rotationAmount);
+        }
+
+        public void ShowDisconnectedDialog(string reason) {
+            topMenu.gameObject.SetActive(false);
+            disconnectionDialog.gameObject.SetActive(true);
+            disconnectionDialog.Reason = reason;
         }
 
         public void OnResetHMDView(InputValue inputValue) {

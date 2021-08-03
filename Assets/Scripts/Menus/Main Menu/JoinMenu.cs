@@ -10,7 +10,7 @@ namespace Menus.Main_Menu {
     public class JoinMenu : MonoBehaviour {
         [SerializeField] private LobbyMenu lobbyMenu;
         [SerializeField] private Button joinButton;
-        [SerializeField] private MultiPlayerMenu topMenu;
+        [SerializeField] private MultiPlayerMenu multiPlayerMenu;
         
         [Header("Input Fields")]
         [SerializeField] private InputField playerName;
@@ -50,7 +50,7 @@ namespace Menus.Main_Menu {
         public void Cancel() {
             AudioManager.Instance.Play("ui-cancel");
             FdNetworkManager.Instance.StopAll();
-            topMenu.Show();
+            multiPlayerMenu.Show();
             Hide();
         }
 

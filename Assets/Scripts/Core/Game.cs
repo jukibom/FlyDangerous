@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Linq;
 using Core.Player;
+using JetBrains.Annotations;
 using MapMagic.Core;
 using Menus.Main_Menu;
 using UnityEngine;
@@ -263,7 +264,7 @@ namespace Core {
             }));
         }
 
-        public void QuitToMenu() {
+        public void QuitToMenu([CanBeNull] string withDisconnectionReason = null) {
             if (FindObjectOfType<MainMenu>()) {
                 return;
             }
@@ -298,6 +299,11 @@ namespace Core {
                 yield return new WaitForEndOfFrame();
                 NotifyVRStatus();
                 FreeCursor();
+
+                var mainMenu = FindObjectOfType<MainMenu>();
+                if (mainMenu && withDisconnectionReason != null) {
+                    mainMenu.ShowDisconnectedDialog(withDisconnectionReason);
+                }
             }
 
             StartCoroutine(LoadMenu());
