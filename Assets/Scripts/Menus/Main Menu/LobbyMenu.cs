@@ -1,4 +1,4 @@
-using Audio;
+﻿using Audio;
 using Core;
 using Core.Player;
 using Mirror;
@@ -16,14 +16,12 @@ namespace Menus.Main_Menu {
         [SerializeField] private Button defaultActiveButton;
 
         [SerializeField] private Button loadCustomButton;
-        [SerializeField] private Dropdown gameModeDropdown;
-        [SerializeField] private Dropdown environmentDropdown;
-        [SerializeField] private Dropdown mapDropdown;
-        
+        [SerializeField] private LobbyConfigurationPanel lobbyConfigurationPanel;
+
         private Animator _animator;
 
         public UIButton StartButton => startButton;
-
+        
         private void Awake() {
             _animator = GetComponent<Animator>();
         }
@@ -40,13 +38,7 @@ namespace Menus.Main_Menu {
 
         public void JoinPlayer() {
             headerText.text = "MULTIPLAYER LOBBY";
-            
-            if (!NetworkClient.isHostClient) {
-                loadCustomButton.enabled = false;
-                gameModeDropdown.enabled = false;
-                environmentDropdown.enabled = false;
-                mapDropdown.enabled = false;
-            }
+            lobbyConfigurationPanel.IsHost = NetworkClient.isHostClient;
         }
 
         public void StartHost() {
@@ -60,13 +52,9 @@ namespace Menus.Main_Menu {
 
         public void StartGame() {
             var localLobbyPlayer = LobbyPlayer.FindLocal;
-            if (localLobbyPlayer && localLobbyPlayer.isPartyLeader) {
-                FdNetworkManager.Instance.StartGameLoadSequence(SessionType.Multiplayer, new LevelData {
-                    location = Location.TestSpaceStation,
-                    terrainSeed = "testing",
-                    raceType = RaceType.None,
-                    environment = Environment.SunsetClear
-                }, true);
+            var lobbyLevelData = lobbyConfigurationPanel.LobbyLevelData;
+            if (localLobbyPlayer && localLobbyPlayer.isHost) {
+                FdNetworkManager.Instance.StartGameLoadSequence(SessionType.Multiplayer, lobbyLevelData, true);
             }
         }
 

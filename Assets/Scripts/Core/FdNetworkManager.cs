@@ -55,33 +55,6 @@ namespace Core {
 
         private FdNetworkStatus _status = FdNetworkStatus.Offline;
         private FdNetworkStatus Status => _status;
-        
-        public IEnumerator WaitForAllPlayersLoaded() {
-            yield return LoadingPlayers.All(loadingPlayer => loadingPlayer.IsLoaded) 
-                ? null 
-                : new WaitForFixedUpdate();
-        }
-        
-        // TODO: finish lobby ready state handling
-        public void NotifyPlayersOfReadyState() {
-            foreach (var player in LobbyPlayers) {
-                player.HandleReadyStatusChanged(IsReadyToLoad());
-            }
-        }
-
-        private bool IsReadyToLoad() {
-            if (numPlayers < minPlayers) {
-                return false; 
-            }
-
-            foreach (var player in LobbyPlayers) {
-                if (!player.isReady) {
-                    return false; 
-                }
-            }
-
-            return true;
-        }
 
         #region Start / Quit Game
         public void StartGameLoadSequence(SessionType sessionType, LevelData levelData, bool dynamicPlacement = false) {
@@ -109,14 +82,6 @@ namespace Core {
         private void StartLoadGame(StartGameMessage message) {
             _status = FdNetworkStatus.Loading;
             Game.Instance.StartGame(message.sessionType, message.levelData, message.dynamicPlacement);
-        }
-
-        private void SetShipPosition(SetShipPositionMessage message) {
-            var ship = ShipPlayer.FindLocal;
-            if (ship) {
-                ship.AbsoluteWorldPosition = message.position;
-                ship.transform.rotation = message.rotation;
-            }
         }
 
         public void StartMainGame([CanBeNull] LevelData levelData) {
@@ -256,6 +221,11 @@ namespace Core {
                         if (conn.identity != null) {
                             var player = conn.identity.GetComponent<LobbyPlayer>();
                             AddPlayer(player);
+                            
+                            var configPanel = FindObjectOfType<LobbyConfigurationPanel>();
+                            if (configPanel) {
+                                player.UpdateLobby(configPanel.LobbyLevelData);
+                            }
                         }
                         break;
                     
@@ -402,6 +372,45 @@ namespace Core {
             return false;
         }
         
+        #endregion
+
+        #region Helpers + Message handling
+
+        private void SetShipPosition(SetShipPositionMessage message) {
+            var ship = ShipPlayer.FindLocal;
+            if (ship) {
+                ship.AbsoluteWorldPosition = message.position;
+                ship.transform.rotation = message.rotation;
+            }
+        }
+        
+        // TODO: finish lobby ready state handling
+        public void NotifyPlayersOfReadyState() {
+            foreach (var player in LobbyPlayers) {
+                player.HandleReadyStatusChanged(IsReadyToLoad());
+            }
+        }
+        
+        public IEnumerator WaitForAllPlayersLoaded() {
+            yield return LoadingPlayers.All(loadingPlayer => loadingPlayer.IsLoaded) 
+                ? null 
+                : new WaitForFixedUpdate();
+        }
+        
+        private bool IsReadyToLoad() {
+            if (numPlayers < minPlayers) {
+                return false; 
+            }
+
+            foreach (var player in LobbyPlayers) {
+                if (!player.isReady) {
+                    return false; 
+                }
+            }
+
+            return true;
+        }
+
         #endregion
     }
 }

@@ -46,6 +46,10 @@ namespace Core.Player {
             }
         }
 
+        public void UpdateLobby(LevelData lobbyLevelData) {
+            RpcUpdateLobby(lobbyLevelData);
+        }
+
         // On local client start
         public override void OnStartAuthority() {
             CmdSetPlayerName(Preferences.Instance.GetString("playerName"));
@@ -84,13 +88,26 @@ namespace Core.Player {
         }
 
         [Command]
-        public void CmdSetPlayerName(string name) {
+        private void CmdSetPlayerName(string name) {
             if (name == "") {
                 name = "UNNAMED SCRUB";
             }
 
             playerName = name;
             UpdateDisplay();
+        }
+
+        [Command]
+        private void CmdUpdateLobby(LevelData lobbyLevelData) {
+            RpcUpdateLobby(lobbyLevelData);
+        }
+
+        [ClientRpc]
+        private void RpcUpdateLobby(LevelData lobbyLevelData) {
+            var configPanel = FindObjectOfType<LobbyConfigurationPanel>();
+            if (configPanel) {
+                configPanel.LobbyLevelData = lobbyLevelData;
+            }
         }
 
         // On each client

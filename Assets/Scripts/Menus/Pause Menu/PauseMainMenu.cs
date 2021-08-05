@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Core;
 using Core.Player;
 using Menus.Pause_Menu;
@@ -30,10 +30,13 @@ namespace Menus.Pause_Menu {
             var player = ShipPlayer.FindLocal;
             if (player && Game.Instance.SessionType == SessionType.Multiplayer) {
                 // in free roam, restart for clients is changed to warping to the leader (on non-host client)
-                if (!player.isHost && Game.Instance.LoadedLevelData.raceType == RaceType.None) {
+                if (!player.isHost && Game.Instance.LoadedLevelData.gameType == GameType.FreeRoam) {
                     restartButton.GetComponent<UIButton>().label.text = "WARP TO HOST";
                 }
                 quitButton.GetComponent<UIButton>().label.text = "LEAVE GAME";
+                if (player.isHost) {
+                    quitButton.GetComponent<UIButton>().label.text = "RETURN TO LOBBY";
+                }
             }
         }
 

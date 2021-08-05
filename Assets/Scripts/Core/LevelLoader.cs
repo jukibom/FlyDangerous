@@ -126,7 +126,7 @@ namespace Core {
                     LoadedLevelData.startRotation.y, LoadedLevelData.startRotation.z);
                 
                 // if multiplayer free-roam and not the host, warp to the host
-                if (Game.Instance.SessionType == SessionType.Multiplayer && LoadedLevelData.raceType == RaceType.None && !ship.isHost) {
+                if (Game.Instance.SessionType == SessionType.Multiplayer && LoadedLevelData.gameType == GameType.FreeRoam && !ship.isHost) {
                     FindObjectsOfType<ShipPlayer>().ToList().ForEach(otherShipPlayer => {
                         if (otherShipPlayer.isHost) {
                             var emptyPosition = PositionalHelpers.FindClosestEmptyPosition(otherShipPlayer.AbsoluteWorldPosition, 10);
@@ -185,7 +185,7 @@ namespace Core {
         private LevelData GenerateLevelData() {
             var levelData = new LevelData();
             levelData.name = _levelData.name;
-            levelData.raceType = _levelData.raceType;
+            levelData.gameType = _levelData.gameType;
             levelData.location = _levelData.location;
             levelData.environment = _levelData.environment;
             levelData.terrainSeed = _levelData.terrainSeed;
