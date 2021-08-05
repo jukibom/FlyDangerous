@@ -57,7 +57,7 @@ namespace Menus.Main_Menu {
             levelData.location = Preferences.Instance.GetBool("enableExperimentalTerrain")
                 ? Location.TerrainV2
                 : Location.TerrainV1;
-            levelData.raceType = RaceType.None;
+            levelData.gameType = GameType.FreeRoam;
             levelData.terrainSeed = seedInput.text;
 
             switch (conditionsSelector.value) {
