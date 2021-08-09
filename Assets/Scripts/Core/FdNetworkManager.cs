@@ -67,13 +67,14 @@ namespace Core {
                         TransitionToLoadingPlayer(lobbyPlayer);
                     }
                 }
-                _status = FdNetworkStatus.Loading;
 
                 // notify all clients about the new scene
                 NetworkServer.SendToAll(new StartGameMessage {
                     sessionType = sessionType, 
                     levelData = levelData
                 });
+                
+                _status = FdNetworkStatus.Loading;
             }
             else {
                 throw new Exception("Cannot start a game without an active server!");
@@ -92,6 +93,8 @@ namespace Core {
 
                 // notify all clients about the new scene
                 NetworkServer.SendToAll(new ReturnToLobbyMessage());
+                
+                _status = FdNetworkStatus.LobbyMenu;
             }
             else {
                 throw new Exception("Cannot return to lobby without an active server!");
