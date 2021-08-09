@@ -96,7 +96,7 @@ namespace Menus.Pause_Menu {
         public void Restart() {
             AudioManager.Instance.Play("ui-confirm");
             Resume();
-            Game.Instance.RestartLevel();
+            Game.Instance.RestartSession();
         }
 
         public void OpenOptionsPanel() {
@@ -112,7 +112,7 @@ namespace Menus.Pause_Menu {
         public void Quit() {
             AudioManager.Instance.Play("ui-confirm");
             Resume();
-            Game.Instance.QuitToMenu();
+            Game.Instance.LeaveSession();
         }
 
         public void CopyLocationToClipboard() {

@@ -213,7 +213,7 @@ namespace Core.Player {
 
         public void OnRestartTrack() {
             if (movementEnabled) {
-                Game.Instance.RestartLevel();
+                Game.Instance.RestartSession();
             }
         }
 

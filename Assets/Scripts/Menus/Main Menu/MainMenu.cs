@@ -53,6 +53,17 @@ namespace Menus.Main_Menu {
             disconnectionDialog.Reason = reason;
         }
 
+        public void ShowLobby() {
+            var lobby = FindObjectOfType<LobbyMenu>(true);
+            if (lobby) {
+                topMenu.Hide();
+                lobby.Show();
+            }
+            else {
+                Debug.LogWarning("Failed to find lobby!");
+            }
+        }
+
         public void OnResetHMDView(InputValue inputValue) {
             if (xrRig) {
                 Game.Instance.ResetHmdView(xrRig, xrRig.transform.parent);

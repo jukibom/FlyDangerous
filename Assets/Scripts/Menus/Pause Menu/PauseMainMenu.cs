@@ -41,37 +41,37 @@ namespace Menus.Pause_Menu {
         }
 
         public void Show() {
-            this.gameObject.SetActive(true);
-            this.GetComponent<Animator>().SetBool(open, true);
+            gameObject.SetActive(true);
+            GetComponent<Animator>().SetBool(open, true);
         }
 
         public void Hide() {
-            this.gameObject.SetActive(false);
+            gameObject.SetActive(false);
         }
 
         public void Resume() {
-            this.pauseMenu.Resume();
+            pauseMenu.Resume();
         }
 
         public void Restart() {
-            this.pauseMenu.Restart();
+            pauseMenu.Restart();
         }
 
         public void Options() {
-            this.pauseMenu.OpenOptionsPanel();
+            pauseMenu.OpenOptionsPanel();
         }
 
         public void Quit() {
-            this.pauseMenu.Quit();
+            pauseMenu.Quit();
         }
         
         // This is gross but I'm not spending more time on this nonsense than I have to
         public void HighlightResume() {
-            this.resumeButton.Select();
+            resumeButton.Select();
         }
 
         public void HighlightOptions() {
-            this.optionsButton.Select();
+            optionsButton.Select();
         }
     }
 }

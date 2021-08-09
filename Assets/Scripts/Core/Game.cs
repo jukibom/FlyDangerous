@@ -4,6 +4,7 @@ using Core.Player;
 using JetBrains.Annotations;
 using MapMagic.Core;
 using Menus.Main_Menu;
+using Mirror;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
@@ -256,7 +257,7 @@ namespace Core {
             _loadingRoutine = StartCoroutine(LoadGame());
         }
 
-        public void RestartLevel() {
+        public void RestartSession() {
             StartCoroutine(_levelLoader.RestartLevel(() => {
                 if (OnRestart != null) {
                     OnRestart();
@@ -264,9 +265,35 @@ namespace Core {
             }));
         }
 
+        // Graceful leave game (no error and, if host triggered, transition to lobby)
+        public void LeaveSession() {
+            if (NetworkClient.isHostClient) {
+                QuitToLobby();
+            }
+            else {
+                QuitToMenu();
+            }
+        }
+
+        public void QuitToLobby() {
+            IEnumerator ReturnPlayersToLobby() {
+                yield return LoadMainMenu();
+                var mainMenu = FindObjectOfType<MainMenu>();
+                mainMenu.ShowLobby();
+            }
+
+            StartCoroutine(ReturnPlayersToLobby());
+        }
+
+        // Drop back to the menu (with optional disconnection reason) - this will destroy the active network session
+        // for all current users (ideally gracefully for clients not expecting it!)
         public void QuitToMenu([CanBeNull] string withDisconnectionReason = null) {
+            StartCoroutine(LoadMainMenu(withDisconnectionReason));
+        }
+
+        private IEnumerator LoadMainMenu([CanBeNull] string withDisconnectionReason = null) {
             if (FindObjectOfType<MainMenu>()) {
-                return;
+                yield return null;
             }
 
             if (_loadingRoutine != null) {
@@ -285,7 +312,7 @@ namespace Core {
                 ship.User.DisableGameInput();
             }
 
-            IEnumerator LoadMenu() {
+            IEnumerator LoadMenuScene() {
                 // during load we pause scaled time to prevent *absolutely anything* from interacting incorrectly
                 Time.timeScale = 1;
                 
@@ -306,7 +333,7 @@ namespace Core {
                 }
             }
 
-            StartCoroutine(LoadMenu());
+            yield return LoadMenuScene();
         }
 
         public void QuitGame() {

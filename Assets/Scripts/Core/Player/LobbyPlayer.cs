@@ -38,12 +38,7 @@ namespace Core.Player {
         }
 
         void Start() {
-            Debug.Log("*** PLAYER PREFAB CREATED ***");
-            // Attach self to the player list
-            var container = GameObject.FindGameObjectWithTag("LobbyPlayerContainer");
-            if (container) {
-                transform.SetParent(container.transform, false);
-            }
+            AttachToLobbyContainer();
         }
 
         public void UpdateLobby(LevelData lobbyLevelData) {
@@ -73,7 +68,13 @@ namespace Core.Player {
 
         private void OnPlayerNameChanged(string oldName, string newName) => UpdateDisplay();
         private void OnPlayerReadyStatusChanged(bool oldStatus, bool newStatus) => UpdateDisplay();
-        
+
+        private void AttachToLobbyContainer() {
+            var container = GameObject.FindGameObjectWithTag("LobbyPlayerContainer");
+            if (container) {
+                transform.SetParent(container.transform, false);
+            }
+        }
         private void UpdateDisplay() {
             playerNameTextEntry.text = playerName;
             readyStatus.enabled = isReady;
@@ -108,6 +109,17 @@ namespace Core.Player {
             if (configPanel) {
                 configPanel.LobbyLevelData = lobbyLevelData;
             }
+        }
+
+        [Command]
+        public void CmdAttachToLobbyContainer() {
+            Debug.Log("ATTACH COMMAND");
+            RpcAttachToLobbyContainer();
+        }
+
+        [ClientRpc]
+        public void RpcAttachToLobbyContainer() {
+            AttachToLobbyContainer();
         }
 
         // On each client
