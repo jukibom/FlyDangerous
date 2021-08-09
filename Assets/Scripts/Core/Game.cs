@@ -291,18 +291,17 @@ namespace Core {
         // This should be used in ALL cases where disconnection has unexpectedly occurred or where network services
         // are no longer required (graceful client quit)
         public void QuitToMenu([CanBeNull] string withDisconnectionReason = null) {
-            IEnumerator QuitAndShutdownNetwork() {
-                yield return LoadMainMenu(withDisconnectionReason);
-                FdNetworkManager.Instance.StopAll();
+            if (!FindObjectOfType<MainMenu>()) {
+                IEnumerator QuitAndShutdownNetwork() {
+                    yield return LoadMainMenu(withDisconnectionReason);
+                    FdNetworkManager.Instance.StopAll();
+                }
+
+                StartCoroutine(QuitAndShutdownNetwork());
             }
-            StartCoroutine(QuitAndShutdownNetwork());
         }
 
         private IEnumerator LoadMainMenu([CanBeNull] string withDisconnectionReason = null) {
-            if (FindObjectOfType<MainMenu>()) {
-                yield return null;
-            }
-
             if (_loadingRoutine != null) {
                 StopCoroutine(_loadingRoutine);
             }
