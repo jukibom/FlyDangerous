@@ -38,7 +38,6 @@ namespace Core {
         private struct StartGameMessage : NetworkMessage {
             public SessionType sessionType;
             public LevelData levelData;
-            public bool dynamicPlacement;
         }
 
         private struct ReturnToLobbyMessage : NetworkMessage {};
@@ -56,24 +55,24 @@ namespace Core {
         public KcpTransport NetworkTransport => GetComponent<KcpTransport>();
 
         private FdNetworkStatus _status = FdNetworkStatus.Offline;
-        private FdNetworkStatus Status => _status;
 
         #region Start / Quit Game
         public void StartGameLoadSequence(SessionType sessionType, LevelData levelData, bool dynamicPlacement = false) {
             if (NetworkServer.active) {
                 // Transition any lobby players to loading state
                 if (_status == FdNetworkStatus.LobbyMenu) {
+                    
                     // iterate over a COPY of the lobby players (the List is mutated by transitioning!)
                     foreach (var lobbyPlayer in LobbyPlayers.ToArray()) {
                         TransitionToLoadingPlayer(lobbyPlayer);
                     }
                 }
+                _status = FdNetworkStatus.Loading;
 
                 // notify all clients about the new scene
                 NetworkServer.SendToAll(new StartGameMessage {
                     sessionType = sessionType, 
-                    levelData = levelData, 
-                    dynamicPlacement = dynamicPlacement
+                    levelData = levelData
                 });
             }
             else {
@@ -99,50 +98,49 @@ namespace Core {
             }
         }
 
-        public void StartMainGame([CanBeNull] LevelData levelData) {
+        [Server]
+        public void StartMainGame() {
             _status = FdNetworkStatus.InGame;
+        }
 
+        [Server]
+        public void LoadPlayerShip(LoadingPlayer loadingPlayer) {
             try {
-                if (NetworkClient.connection.identity.isServer) {
-                    // iterate over a COPY of the loading players (the List is mutated by transitioning!)
-                    foreach (var loadingPlayer in LoadingPlayers.ToArray()) {
-                        var ship = TransitionToShipPlayer(loadingPlayer);
+                var ship = TransitionToShipPlayer(loadingPlayer);
+                var levelData = Game.Instance.LoadedLevelData;
+                
+                // handle start position for each client
+                var position = new Vector3(
+                    levelData.startPosition.x,
+                    levelData.startPosition.y,
+                    levelData.startPosition.z
+                );
+                var rotation = Quaternion.Euler(
+                    levelData.startRotation.x,
+                    levelData.startRotation.y,
+                    levelData.startRotation.z
+                );
 
-                        // handle start position for each client
-                        if (levelData != null) {
-                            var position = new Vector3(
-                                levelData.startPosition.x,
-                                levelData.startPosition.y,
-                                levelData.startPosition.z
-                            );
-                            var rotation = Quaternion.Euler(
-                                levelData.startRotation.x,
-                                levelData.startRotation.y,
-                                levelData.startRotation.z
-                            );
+                // TODO: radius should possibly be determined by the ship model itself!
+                position = PositionalHelpers.FindClosestEmptyPosition(position, 10);
 
-                            // TODO: radius should possibly be determined by the ship model itself!
-                            position = PositionalHelpers.FindClosestEmptyPosition(position, 10);
+                // update locally immediately for subsequent collision checks
+                ship.AbsoluteWorldPosition = position;
+                ship.transform.rotation = rotation;
 
-                            // update locally immediately for subsequent collision checks
-                            ship.AbsoluteWorldPosition = position;
-                            ship.transform.rotation = rotation;
+                // ensure each client receives their assigned position
+                ship.connectionToClient.Send(new SetShipPositionMessage {
+                    position = position,
+                    rotation = rotation
+                });
 
-                            // ensure each client receives their assigned position
-                            ship.connectionToClient.Send(new SetShipPositionMessage {
-                                position = position,
-                                rotation = rotation
-                            });
+                // Update physics engine so subsequent collision checks are up-to-date
+                Physics.SyncTransforms();
+                
 
-                            // Update physics engine so subsequent collision checks are up-to-date
-                            Physics.SyncTransforms();
-                        }
-                    }
-
-                    // all ships created and placed, notify ready (allows them to start syncing their own positions)
-                    foreach (var shipPlayer in ShipPlayers) {
-                        shipPlayer.ServerReady();
-                    }
+                // all ships created and placed, notify ready (allows them to start syncing their own positions)
+                foreach (var shipPlayer in ShipPlayers) {
+                    shipPlayer.ServerReady();
                 }
             }
             catch {
@@ -158,11 +156,6 @@ namespace Core {
             // TODO: This should come from the lobby panel UI element
             maxConnections = 16;
             StartHost();
-        }
-
-        public void StartLobbyJoin() {
-            _status = FdNetworkStatus.LobbyMenu;
-            StartClient();
         }
 
         public void StartOfflineServer() {
@@ -218,13 +211,24 @@ namespace Core {
                     yield return new WaitForEndOfFrame();
                 }
                 
-                switch (Status) {
+                switch (_status) {
                     case FdNetworkStatus.SinglePlayerMenu:
+                    case FdNetworkStatus.InGame:
+                    case FdNetworkStatus.Loading:
                         LoadingPlayer loadingPlayer = Instantiate(loadingPlayerPrefab);
                         NetworkServer.AddPlayerForConnection(conn, loadingPlayer.gameObject);
                         if (conn.identity != null) {
                             var player = conn.identity.GetComponent<LoadingPlayer>();
                             AddPlayer(player);
+                        }
+
+                        // if we're joining mid-game (not single player), attempt to start the single client
+                        if (_status != FdNetworkStatus.SinglePlayerMenu) {
+                            var levelData = Game.Instance.LoadedLevelData;
+                            conn.identity.connectionToClient.Send( new StartGameMessage {
+                                sessionType = SessionType.Multiplayer, 
+                                levelData = levelData
+                            });
                         }
                         break;
                 
@@ -245,7 +249,11 @@ namespace Core {
                         }
                         break;
                     
-                    // TODO: Joining mid-game
+                    case FdNetworkStatus.Offline:
+                        // I don't know how the hell we get here but something gone bonkers if we do
+                        Debug.LogError("Somehow tried to get a connection without being online!");
+                        conn.Disconnect();
+                        break;
                 }
             }
 
@@ -259,7 +267,7 @@ namespace Core {
                         
             // TODO: notify other players than someone has left
             if (conn.identity != null) {
-                switch (Status) {
+                switch (_status) {
                     case FdNetworkStatus.SinglePlayerMenu:
                         var loadingPlayer = conn.identity.GetComponent<LoadingPlayer>();
                         RemovePlayer(loadingPlayer);
@@ -283,7 +291,7 @@ namespace Core {
         // Server shutdown, notify all players
         public override void OnStopClient() {
             Debug.Log("[SERVER] SHUTDOWN");
-            switch (Status) {
+            switch (_status) {
                 
                 case FdNetworkStatus.LobbyMenu:
                     foreach (var lobbyPlayer in LobbyPlayers.ToArray()) {
@@ -398,13 +406,7 @@ namespace Core {
                 player.HandleReadyStatusChanged(IsReadyToLoad());
             }
         }
-        
-        public IEnumerator WaitForAllPlayersLoaded() {
-            yield return LoadingPlayers.All(loadingPlayer => loadingPlayer.IsLoaded) 
-                ? null 
-                : new WaitForFixedUpdate();
-        }
-        
+
         private bool IsReadyToLoad() {
             if (numPlayers < minPlayers) {
                 return false; 
@@ -424,12 +426,10 @@ namespace Core {
         #region Client Message Handlers
 
         private void StartLoadGame(StartGameMessage message) {
-            _status = FdNetworkStatus.Loading;
-            Game.Instance.StartGame(message.sessionType, message.levelData, message.dynamicPlacement);
+            Game.Instance.StartGame(message.sessionType, message.levelData);
         }
 
         private void ShowLobby(ReturnToLobbyMessage message) {
-            _status = FdNetworkStatus.LobbyMenu;
             Game.Instance.QuitToLobby();
         }
         

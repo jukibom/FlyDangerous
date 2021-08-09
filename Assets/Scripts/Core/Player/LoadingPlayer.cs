@@ -36,18 +36,27 @@ namespace Core.Player {
             CmdSetPlayerName(Preferences.Instance.GetString("playerName"));
         }
 
+        public void RequestTransitionToShipPlayer() {
+            CmdRequestTransitionToShipPlayer();
+        }
+
         private void OnLevelLoaded() {
             // store loaded state, inform network layer
             _isLoaded = true;
         }
 
         [Command]
-        public void CmdSetPlayerName(string name) {
+        private void CmdSetPlayerName(string name) {
             if (name == "") {
                 name = "UNNAMED SCRUB";
             }
 
             playerName = name;
+        }
+
+        [Command]
+        private void CmdRequestTransitionToShipPlayer() {
+            FdNetworkManager.Instance.LoadPlayerShip(this);
         }
     }
 }

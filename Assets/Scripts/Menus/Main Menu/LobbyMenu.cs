@@ -60,14 +60,13 @@ namespace Menus.Main_Menu {
 
         public void CloseLobby() {
             // TODO: show a notification here
-            FdNetworkManager.Instance.StopAll();
             AudioManager.Instance.Play("ui-cancel");
             topMenu.Show();
             Hide();
+            FdNetworkManager.Instance.StopAll();
         }
 
         public void Cancel() {
-            FdNetworkManager.Instance.StopAll();
             CloseLobby();
         }
     }

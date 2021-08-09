@@ -182,7 +182,7 @@ namespace Core {
             Preferences.Instance.Save();
         }
 
-        public void StartGame(SessionType sessionType, LevelData levelData, bool dynamicPlacementStart = false) {
+        public void StartGame(SessionType sessionType, LevelData levelData) {
 
             /* Split this into single and multiplayer - logic should be mostly the same but we don't
                 transition from a lobby and we need to set the queryable SessionType for other logic in-game
@@ -191,6 +191,12 @@ namespace Core {
             _sessionType = sessionType;
 
             LockCursor();
+            
+            IEnumerator WaitForAllPlayersLoaded() {
+                yield return FindObjectsOfType<LoadingPlayer>().All(loadingPlayer => loadingPlayer.IsLoaded) 
+                    ? null 
+                    : new WaitForFixedUpdate();
+            }
 
             IEnumerator LoadGame() {
                 yield return _levelLoader.ShowLoadingScreen();
@@ -206,13 +212,28 @@ namespace Core {
                         levelData.startPosition.z
                     );
                 }
-                
+
                 yield return _levelLoader.StartGame(levelData);
 
-                yield return FdNetworkManager.Instance.WaitForAllPlayersLoaded();
+                // wait for all known currently loading players to have finished loading
+                // TODO: show "Waiting for Players" text in loading screen
+                // _levelLoader.
+                yield return WaitForAllPlayersLoaded();
+
+                var loadingPlayer = LoadingPlayer.FindLocal;
+                if (loadingPlayer) {
+                    loadingPlayer.RequestTransitionToShipPlayer();
+                }
+                else {
+                    QuitToMenu("Failed to create connection");
+                    yield return null;
+                }
                 
-                FdNetworkManager.Instance.StartMainGame(levelData);
-                
+                // Set the appropriate state in the server 
+                if (NetworkClient.isHostClient) {
+                    FdNetworkManager.Instance.StartMainGame();
+                }
+
                 // wait for local ship client object
                 while (!ShipPlayer.FindLocal) {
                     yield return new WaitForEndOfFrame();
