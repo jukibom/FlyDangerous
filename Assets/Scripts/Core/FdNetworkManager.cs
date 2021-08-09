@@ -41,7 +41,9 @@ namespace Core {
             public bool dynamicPlacement;
         }
 
-        private struct SetShipPositionMessage : NetworkMessage {
+        private struct ReturnToLobbyMessage : NetworkMessage {};
+
+            private struct SetShipPositionMessage : NetworkMessage {
             public Vector3 position;
             public Quaternion rotation;
         }
@@ -79,9 +81,22 @@ namespace Core {
             }
         }
 
-        private void StartLoadGame(StartGameMessage message) {
-            _status = FdNetworkStatus.Loading;
-            Game.Instance.StartGame(message.sessionType, message.levelData, message.dynamicPlacement);
+        public void StartReturnToLobbySequence() {
+            if (NetworkServer.active) {
+                // Transition any lobby players to loading state
+                if (_status == FdNetworkStatus.InGame) {
+                    // iterate over a COPY of the lobby players (the List is mutated by transitioning!)
+                    foreach (var shipPlayer in ShipPlayers.ToArray()) {
+                        TransitionToLobbyPlayer(shipPlayer);
+                    }
+                }
+
+                // notify all clients about the new scene
+                NetworkServer.SendToAll(new ReturnToLobbyMessage());
+            }
+            else {
+                throw new Exception("Cannot return to lobby without an active server!");
+            }
         }
 
         public void StartMainGame([CanBeNull] LevelData levelData) {
@@ -174,6 +189,7 @@ namespace Core {
             base.OnClientConnect(conn);
             OnClientConnected?.Invoke();
             NetworkClient.RegisterHandler<StartGameMessage>(StartLoadGame);
+            NetworkClient.RegisterHandler<ReturnToLobbyMessage>(ShowLobby);
             NetworkClient.RegisterHandler<SetShipPositionMessage>(SetShipPosition);
         }
         
@@ -374,16 +390,8 @@ namespace Core {
         
         #endregion
 
-        #region Helpers + Message handling
+        #region Helpers
 
-        private void SetShipPosition(SetShipPositionMessage message) {
-            var ship = ShipPlayer.FindLocal;
-            if (ship) {
-                ship.AbsoluteWorldPosition = message.position;
-                ship.transform.rotation = message.rotation;
-            }
-        }
-        
         // TODO: finish lobby ready state handling
         public void NotifyPlayersOfReadyState() {
             foreach (var player in LobbyPlayers) {
@@ -411,6 +419,28 @@ namespace Core {
             return true;
         }
 
+        #endregion
+        
+        #region Client Message Handlers
+
+        private void StartLoadGame(StartGameMessage message) {
+            _status = FdNetworkStatus.Loading;
+            Game.Instance.StartGame(message.sessionType, message.levelData, message.dynamicPlacement);
+        }
+
+        private void ShowLobby(ReturnToLobbyMessage message) {
+            _status = FdNetworkStatus.LobbyMenu;
+            Game.Instance.QuitToLobby();
+        }
+        
+        private void SetShipPosition(SetShipPositionMessage message) {
+            var ship = ShipPlayer.FindLocal;
+            if (ship) {
+                ship.AbsoluteWorldPosition = message.position;
+                ship.transform.rotation = message.rotation;
+            }
+        }
+        
         #endregion
     }
 }
