@@ -286,7 +286,7 @@ namespace Core {
             switch (Status) {
                 
                 case FdNetworkStatus.LobbyMenu:
-                    foreach (var lobbyPlayer in LobbyPlayers) {
+                    foreach (var lobbyPlayer in LobbyPlayers.ToArray()) {
                         lobbyPlayer.CloseLobby();
                     }
                     LobbyPlayers.Clear();
