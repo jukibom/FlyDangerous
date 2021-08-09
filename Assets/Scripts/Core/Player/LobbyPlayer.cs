@@ -38,7 +38,13 @@ namespace Core.Player {
         }
 
         void Start() {
-            AttachToLobbyContainer();
+            DontDestroyOnLoad(this);
+        }
+
+        private void FixedUpdate() {
+            if (!transform.parent) {
+                AttachToLobbyContainer();
+            }
         }
 
         public void UpdateLobby(LevelData lobbyLevelData) {
@@ -73,18 +79,23 @@ namespace Core.Player {
             var container = GameObject.FindGameObjectWithTag("LobbyPlayerContainer");
             if (container) {
                 transform.SetParent(container.transform, false);
+                UpdateDisplay();
             }
         }
+        
         private void UpdateDisplay() {
             playerNameTextEntry.text = playerName;
             readyStatus.enabled = isReady;
-            if (isHost && !isReady) {
-                LobbyUI.StartButton.label.text = "START GAME";
-            } else if (!isReady) {
-                LobbyUI.StartButton.label.text = "READY";
-            }
-            else {
-                LobbyUI.StartButton.label.text = "UN-READY";
+            if (LobbyUI) {
+                if (isHost && !isReady) {
+                    LobbyUI.StartButton.label.text = "START GAME";
+                }
+                else if (!isReady) {
+                    LobbyUI.StartButton.label.text = "READY";
+                }
+                else {
+                    LobbyUI.StartButton.label.text = "UN-READY";
+                }
             }
         }
 
@@ -109,17 +120,6 @@ namespace Core.Player {
             if (configPanel) {
                 configPanel.LobbyLevelData = lobbyLevelData;
             }
-        }
-
-        [Command]
-        public void CmdAttachToLobbyContainer() {
-            Debug.Log("ATTACH COMMAND");
-            RpcAttachToLobbyContainer();
-        }
-
-        [ClientRpc]
-        public void RpcAttachToLobbyContainer() {
-            AttachToLobbyContainer();
         }
 
         // On each client

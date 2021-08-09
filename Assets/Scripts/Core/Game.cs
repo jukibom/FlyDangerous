@@ -265,16 +265,17 @@ namespace Core {
             }));
         }
 
-        // Graceful leave game (no error and, if host triggered, transition to lobby)
+        // Graceful leave game and decide if to transition back to lobby
         public void LeaveSession() {
             if (NetworkClient.isHostClient) {
-                QuitToLobby();
+                FdNetworkManager.Instance.StartReturnToLobbySequence();
             }
             else {
                 QuitToMenu();
             }
         }
-
+        
+        // Drop back to the menu but retain the network connection and transition players back to the lobby
         public void QuitToLobby() {
             IEnumerator ReturnPlayersToLobby() {
                 yield return LoadMainMenu();
@@ -287,6 +288,8 @@ namespace Core {
 
         // Drop back to the menu (with optional disconnection reason) - this will destroy the active network session
         // for all current users (ideally gracefully for clients not expecting it!)
+        // This should be used in ALL cases where disconnection has unexpectedly occurred or where network services
+        // are no longer required (graceful client quit)
         public void QuitToMenu([CanBeNull] string withDisconnectionReason = null) {
             IEnumerator QuitAndShutdownNetwork() {
                 yield return LoadMainMenu(withDisconnectionReason);
