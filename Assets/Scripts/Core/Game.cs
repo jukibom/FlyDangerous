@@ -288,7 +288,11 @@ namespace Core {
         // Drop back to the menu (with optional disconnection reason) - this will destroy the active network session
         // for all current users (ideally gracefully for clients not expecting it!)
         public void QuitToMenu([CanBeNull] string withDisconnectionReason = null) {
-            StartCoroutine(LoadMainMenu(withDisconnectionReason));
+            IEnumerator QuitAndShutdownNetwork() {
+                yield return LoadMainMenu(withDisconnectionReason);
+                FdNetworkManager.Instance.StopAll();
+            }
+            StartCoroutine(QuitAndShutdownNetwork());
         }
 
         private IEnumerator LoadMainMenu([CanBeNull] string withDisconnectionReason = null) {
@@ -320,7 +324,6 @@ namespace Core {
                 yield return new WaitForSeconds(0.5f);
                 yield return SceneManager.LoadSceneAsync("Main Menu");
                 yield return new WaitForEndOfFrame();
-                FdNetworkManager.Instance.StopAll();
                 _levelLoader.ResetLoadedLevelData();
                 ApplyGraphicsOptions();
                 yield return new WaitForEndOfFrame();

@@ -24,6 +24,7 @@ namespace Menus.Main_Menu {
         
         public void Hide() {
             gameObject.SetActive(false);
+            FdNetworkManager.Instance.StopAll();
         }
 
         public void ClosePanel() {
