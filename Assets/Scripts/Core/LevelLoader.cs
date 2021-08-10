@@ -28,16 +28,16 @@ namespace Core {
             string location;
             string environment;
             
-            // main location loader 
+            // main location loader (maps to unity scene filename in Scenes/Maps
             switch (levelData.location) {
-                case Location.NullSpace: location = "MapTest"; break;   // used when loading without going via the menu
+                case Location.NullSpace: location = "Space"; break;   // used when loading without going via the menu
                 case Location.TestSpaceStation: location = "SpaceStation"; break;
                 case Location.TerrainV1: location = "TerrainV1"; break;
                 case Location.TerrainV2: location = "TerrainV2"; break;
                 default: throw new Exception("Supplied map type (" + levelData.location + ") is not a valid scene.");
             }
             
-            // if terrain, include conditions
+            // if terrain, include conditions (maps to unity scene filename in Scenes/Environments
             switch (levelData.environment) {
                 case Environment.PlanetOrbitBottom: environment = "Planet_Orbit_Bottom"; break;
                 case Environment.PlanetOrbitTop: environment = "Planet_Orbit_Top"; break;

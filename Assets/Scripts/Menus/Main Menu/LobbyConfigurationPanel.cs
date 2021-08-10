@@ -24,8 +24,11 @@ public class LobbyConfigurationPanel : MonoBehaviour
 
     public bool IsHost {
         set {
-            loadCustomButton.gameObject.SetActive(value);
+            // TODO
+            loadCustomButton.gameObject.SetActive(false);
             gameModeDropdown.gameObject.SetActive(value);
+            gameModeDropdown.interactable = false;  // TODO
+            
             environmentDropdown.gameObject.SetActive(value);
             locationDropdown.gameObject.SetActive(value);
         
@@ -47,94 +50,49 @@ public class LobbyConfigurationPanel : MonoBehaviour
         set {
             _lobbyLevelData = value;
             
+            // ridiculous looping dropdown on change event avoidance
+            var gameModeValue = (int) _lobbyLevelData.gameType;
+            var environmentValue =  (int) _lobbyLevelData.environment;
+            var locationValue = (int) _lobbyLevelData.location;
+
+            // host drop-downs
+            gameModeDropdown.value = gameModeValue;
+            environmentDropdown.value = environmentValue;
+            locationDropdown.value = locationValue;
+            
             // client-side non-editable fields
             gameModeClientLabel.text = EnumExtensions.DescriptionAtt(_lobbyLevelData.gameType).ToUpper();
             environmentClientLabel.text = EnumExtensions.DescriptionAtt(_lobbyLevelData.environment).ToUpper();
             locationClientLabel.text = EnumExtensions.DescriptionAtt(_lobbyLevelData.location).ToUpper();
+            
+            // TODO (this is reactivated by setting the data...)
+            gameModeDropdown.interactable = false;
         }
     }
 
     private void Awake() {
+        EnumExtensions.PopulateDropDownWithEnum<GameType>(gameModeDropdown, option => option.ToUpper());
+        EnumExtensions.PopulateDropDownWithEnum<Environment>(environmentDropdown, option => option.ToUpper());
+        EnumExtensions.PopulateDropDownWithEnum<Location>(locationDropdown, option => option.ToUpper());
+        
         // resume where we left on on lobby creation (if client, this is overwritten by message)
-        var activeLevelData = Game.Instance.LoadedLevelData;
-        if (activeLevelData.location != Location.NullSpace) {
-            LobbyLevelData = activeLevelData;
-            UpdateLobby();
-        }
-    }
-
-    public void OnGameTypeChanged() {
-        switch (gameModeDropdown.value) {
-            case 0:
-                _lobbyLevelData.gameType = GameType.FreeRoam;
-                break;
-            case 1:
-                _lobbyLevelData.gameType = GameType.TimeTrial;
-                break;
-            case 2:
-                _lobbyLevelData.gameType = GameType.HoonAttack;
-                break;
-        }
+        LobbyLevelData = Game.Instance.LoadedLevelData;
         UpdateLobby();
     }
 
-    public void OnEnvironmentChanged() {
-        switch (environmentDropdown.value) {
-            case 0:
-                _lobbyLevelData.environment = Environment.PlanetOrbitTop;
-                break;
-            case 1:
-                _lobbyLevelData.environment = Environment.PlanetOrbitBottom;
-                break;
-            case 2:
-                _lobbyLevelData.environment = Environment.SunriseClear;
-                break;
-            case 3:
-                _lobbyLevelData.environment = Environment.NoonClear;
-                break;
-            case 4:
-                _lobbyLevelData.environment = Environment.NoonCloudy;
-                break;
-            case 5:
-                _lobbyLevelData.environment = Environment.NoonStormy;
-                break;
-            case 6:
-                _lobbyLevelData.environment = Environment.SunsetClear;
-                break;
-            case 7:
-                _lobbyLevelData.environment = Environment.SunsetCloudy;
-                break;
-            case 8:
-                _lobbyLevelData.environment = Environment.NightClear;
-                break;
-            case 9:
-                _lobbyLevelData.environment = Environment.NightCloudy;
-                break;
-        }
-        UpdateLobby();
-    }
+    public void OnConfigurationSettingChanged() {
+        _lobbyLevelData.gameType = (GameType)gameModeDropdown.value;
+        _lobbyLevelData.environment = (Environment)environmentDropdown.value;
+        _lobbyLevelData.location = (Location)locationDropdown.value;
 
-    public void OnLocationChanged() {
-        switch (locationDropdown.value) {
-            case 0:
-                _lobbyLevelData.location = Location.TestSpaceStation;
-                break;
-            case 1:
-                _lobbyLevelData.location = Location.TerrainV1;
-                break;
-            case 2:
-                _lobbyLevelData.location = Location.TerrainV2;
-                break;
-        }
         UpdateLobby();
     }
 
     private void UpdateLobby() {
-        if (NetworkClient.isHostClient) {
-            var host = LobbyPlayer.FindLocal;
-            if (host) {
-                host.UpdateLobby(LobbyLevelData);
-            }
+        var localPlayer = LobbyPlayer.FindLocal;
+        if (localPlayer && localPlayer.isHost) {
+            localPlayer.UpdateLobby(LobbyLevelData);
         }
     }
+    
 }

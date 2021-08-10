@@ -17,7 +17,7 @@ namespace Core {
     }
 
     public enum Location {
-        [Description("Literally the void of space")]
+        [Description("Space")]
         NullSpace,
         
         [Description("Test Space Station")]

@@ -116,9 +116,11 @@ namespace Core.Player {
 
         [ClientRpc]
         private void RpcUpdateLobby(LevelData lobbyLevelData) {
-            var configPanel = FindObjectOfType<LobbyConfigurationPanel>();
-            if (configPanel) {
-                configPanel.LobbyLevelData = lobbyLevelData;
+            if (!NetworkClient.isHostClient) {
+                var configPanel = FindObjectOfType<LobbyConfigurationPanel>();
+                if (configPanel) {
+                    configPanel.LobbyLevelData = lobbyLevelData;
+                }
             }
         }
 
