@@ -18,6 +18,15 @@ namespace Core {
         Singleplayer,
         Multiplayer
     }
+    
+    public enum SessionStatus {
+        Offline,
+        SinglePlayerMenu,
+        LobbyMenu,
+        Loading,
+        InGame,
+    }
+    
     public class Game : MonoBehaviour {
 
         public static Game Instance;
@@ -35,8 +44,6 @@ namespace Core {
         private Vector3 _hmdPosition;
         private Quaternion _hmdRotation;
         private LevelLoader _levelLoader;
-        private SessionType _sessionType = SessionType.Singleplayer;
-        private bool _isVREnabled;
         private Coroutine _loadingRoutine;
         
         // The level data most recently used to load a map
@@ -44,13 +51,13 @@ namespace Core {
         // The level data hydrated with the current player position and track layout
         public LevelData LevelDataAtCurrentPosition => _levelLoader.LevelDataAtCurrentPosition;
         
-        public SessionType SessionType => _sessionType;
-        public bool IsVREnabled => _isVREnabled;
+        public SessionType SessionType { get; private set; } = SessionType.Singleplayer;
+        public SessionStatus SessionStatus { get; set; } = SessionStatus.Offline;
+
+        public bool IsVREnabled { get; private set; }
 
         public ShipParameters ShipParameters {
-            get => _shipParameters == null
-                ? ShipPlayer.FindLocal?.Parameters ?? ShipPlayer.ShipParameterDefaults
-                : _shipParameters;
+            get => _shipParameters ?? (ShipPlayer.FindLocal?.Parameters ?? ShipPlayer.ShipParameterDefaults);
             set {
                 _shipParameters = value;
                 var ship = ShipPlayer.FindLocal;
@@ -67,9 +74,8 @@ namespace Core {
         [SerializeField] private Animator crossfade;
 
         // show certain things if first time hitting the menu
-        private bool _menuFirstRun = true;
-        public bool menuFirstRun => _menuFirstRun;
-        
+        public bool menuFirstRun { get; private set; } = true;
+
         private static readonly int fadeToBlack = Animator.StringToHash("FadeToBlack");
         private static readonly int fadeFromBlack = Animator.StringToHash("FadeFromBlack");
 
@@ -152,7 +158,7 @@ namespace Core {
             IEnumerator StartXR() {
                 yield return UnityEngine.XR.Management.XRGeneralSettings.Instance.Manager.InitializeLoader();
                 UnityEngine.XR.Management.XRGeneralSettings.Instance.Manager.StartSubsystems();
-                _isVREnabled = true;
+                IsVREnabled = true;
                 NotifyVRStatus();
             }
 
@@ -163,7 +169,7 @@ namespace Core {
             if (IsVREnabled) {
                 UnityEngine.XR.Management.XRGeneralSettings.Instance.Manager.StopSubsystems();
                 UnityEngine.XR.Management.XRGeneralSettings.Instance.Manager.DeinitializeLoader();
-                _isVREnabled = false;
+                IsVREnabled = false;
                 NotifyVRStatus();
             }
         }
@@ -183,12 +189,12 @@ namespace Core {
         }
 
         public void StartGame(SessionType sessionType, LevelData levelData) {
-
             /* Split this into single and multiplayer - logic should be mostly the same but we don't
                 transition from a lobby and we need to set the queryable SessionType for other logic in-game
                 (e.g. no actual pause on pause menu, quick to menu being quit to lobby etc)
             */
-            _sessionType = sessionType;
+            SessionType = sessionType;
+            SessionStatus = SessionStatus.Loading;
 
             LockCursor();
             
@@ -229,11 +235,8 @@ namespace Core {
                     yield return null;
                 }
                 
-                // Set the appropriate state in the server 
-                if (NetworkClient.isHostClient) {
-                    FdNetworkManager.Instance.StartMainGame();
-                }
-
+                SessionStatus = SessionStatus.InGame;
+                
                 // wait for local ship client object
                 while (!ShipPlayer.FindLocal) {
                     yield return new WaitForEndOfFrame();
@@ -304,6 +307,7 @@ namespace Core {
                 mainMenu.ShowLobby();
             }
 
+            SessionStatus = SessionStatus.LobbyMenu;
             StartCoroutine(ReturnPlayersToLobby());
         }
 
@@ -315,6 +319,7 @@ namespace Core {
             if (!FindObjectOfType<MainMenu>()) {
                 IEnumerator QuitAndShutdownNetwork() {
                     yield return LoadMainMenu(withDisconnectionReason);
+                    SessionStatus = SessionStatus.Offline;
                     FdNetworkManager.Instance.StopAll();
                 }
 
@@ -327,7 +332,7 @@ namespace Core {
                 StopCoroutine(_loadingRoutine);
             }
 
-            _menuFirstRun = false;
+            menuFirstRun = false;
             var mapMagic = FindObjectOfType<MapMagicObject>();
             if (mapMagic) {
                 mapMagic.StopGenerate();
@@ -347,7 +352,6 @@ namespace Core {
                 yield return new WaitForSeconds(0.5f);
                 yield return SceneManager.LoadSceneAsync("Main Menu");
                 yield return new WaitForEndOfFrame();
-                _levelLoader.ResetLoadedLevelData();
                 ApplyGraphicsOptions();
                 yield return new WaitForEndOfFrame();
                 NotifyVRStatus();

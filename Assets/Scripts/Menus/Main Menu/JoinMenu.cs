@@ -1,6 +1,7 @@
 using System;
 using Audio;
 using Core;
+using Core.Player;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -47,6 +48,7 @@ namespace Menus.Main_Menu {
 
         public void Cancel() {
             AudioManager.Instance.Play("ui-cancel");
+            Game.Instance.SessionStatus = SessionStatus.Offline;
             FdNetworkManager.Instance.StopAll();
             multiPlayerMenu.Show();
             Hide();
@@ -72,14 +74,17 @@ namespace Menus.Main_Menu {
             joinButton.interactable = false;
         }
 
-        private void HandleClientConnected(bool showLobby) {
+        private void HandleClientConnected(FdNetworkManager.JoinGameMessage message) {
             joinButton.interactable = true;
             Hide();
             
             // if the server has created a lobby player for us, show the lobby
-            if (showLobby) {
+            if (message.showLobby) {
+                Game.Instance.SessionStatus = SessionStatus.LobbyMenu;
                 lobbyMenu.Show();
                 lobbyMenu.JoinPlayer();
+                
+                LobbyPlayer.FindLocal.UpdateLobby(message.levelData);
             }
         }
 

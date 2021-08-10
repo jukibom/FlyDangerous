@@ -43,7 +43,9 @@ namespace Menus.Main_Menu {
 
         public void StartHost() {
             headerText.text = "HOSTING LOBBY";
-            FdNetworkManager.Instance.StartLobbyServer();
+            // TODO: Use UI for maxConnections
+            FdNetworkManager.Instance.maxConnections = 16;
+            FdNetworkManager.Instance.StartHost();;
         }
 
         public void StopHost() {
@@ -54,7 +56,7 @@ namespace Menus.Main_Menu {
             var localLobbyPlayer = LobbyPlayer.FindLocal;
             var lobbyLevelData = lobbyConfigurationPanel.LobbyLevelData;
             if (localLobbyPlayer && localLobbyPlayer.isHost) {
-                FdNetworkManager.Instance.StartGameLoadSequence(SessionType.Multiplayer, lobbyLevelData, true);
+                FdNetworkManager.Instance.StartGameLoadSequence(SessionType.Multiplayer, lobbyLevelData);
             }
         }
 
@@ -64,6 +66,7 @@ namespace Menus.Main_Menu {
             topMenu.Show();
             Hide();
             FdNetworkManager.Instance.StopAll();
+            Game.Instance.SessionStatus = SessionStatus.Offline;
         }
 
         public void Cancel() {

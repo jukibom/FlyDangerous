@@ -33,6 +33,7 @@ namespace Menus.Main_Menu {
         }
 
         public void OpenHostPanel() {
+            Game.Instance.SessionStatus = SessionStatus.LobbyMenu;
             AudioManager.Instance.Play("ui-dialog-open");
             lobbyMenu.Show();
             lobbyMenu.StartHost();

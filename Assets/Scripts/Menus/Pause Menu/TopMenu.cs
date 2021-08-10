@@ -31,7 +31,10 @@ public class TopMenu : MonoBehaviour
     }
 
     public void OpenSinglePlayerPanel() {
-        FdNetworkManager.Instance.StartOfflineServer();
+        FdNetworkManager.Instance.maxConnections = 1;
+        FdNetworkManager.Instance.StartHost();
+        Game.Instance.SessionStatus = SessionStatus.SinglePlayerMenu;
+        
         AudioManager.Instance.Play("ui-dialog-open");
         singlePlayerMenu.Show();
         Hide();

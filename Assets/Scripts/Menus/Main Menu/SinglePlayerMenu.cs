@@ -33,6 +33,7 @@ namespace Menus.Main_Menu {
         }
 
         public void Cancel() {
+            Game.Instance.SessionStatus = SessionStatus.Offline;
             FdNetworkManager.Instance.StopAll();
             ClosePanel();
         }

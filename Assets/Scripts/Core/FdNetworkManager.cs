@@ -10,15 +10,6 @@ using Misc;
 using UnityEngine;
 
 namespace Core {
-    
-    public enum FdNetworkStatus {
-        Offline,
-        SinglePlayerMenu,
-        LobbyMenu,
-        Loading,
-        InGame,
-    }
-    
     public class FdNetworkManager : NetworkManager {
         
         public static FdNetworkManager Instance => singleton as FdNetworkManager;
@@ -35,8 +26,9 @@ namespace Core {
         [Header("In-Game")] 
         [SerializeField] private ShipPlayer shipPlayerPrefab;
 
-        private struct JoinGameMessage : NetworkMessage {
+        public struct JoinGameMessage : NetworkMessage {
             public bool showLobby;
+            public LevelData levelData;
         }
         
         private struct StartGameMessage : NetworkMessage {
@@ -51,20 +43,18 @@ namespace Core {
             public Quaternion rotation;
         }
         
-        public static event Action<bool> OnClientConnected;
+        public static event Action<JoinGameMessage> OnClientConnected;
         public static event Action OnClientDisconnected;
         public List<LobbyPlayer> LobbyPlayers { get; } = new List<LobbyPlayer>();
         public List<LoadingPlayer> LoadingPlayers { get; } = new List<LoadingPlayer>();
         public List<ShipPlayer> ShipPlayers { get; } = new List<ShipPlayer>();
         public KcpTransport NetworkTransport => GetComponent<KcpTransport>();
-
-        private FdNetworkStatus _status = FdNetworkStatus.Offline;
-
+        
         #region Start / Quit Game
-        public void StartGameLoadSequence(SessionType sessionType, LevelData levelData, bool dynamicPlacement = false) {
+        public void StartGameLoadSequence(SessionType sessionType, LevelData levelData) {
             if (NetworkServer.active) {
                 // Transition any lobby players to loading state
-                if (_status == FdNetworkStatus.LobbyMenu) {
+                if (Game.Instance.SessionStatus == SessionStatus.LobbyMenu) {
                     
                     // iterate over a COPY of the lobby players (the List is mutated by transitioning!)
                     foreach (var lobbyPlayer in LobbyPlayers.ToArray()) {
@@ -77,8 +67,6 @@ namespace Core {
                     sessionType = sessionType, 
                     levelData = levelData
                 });
-                
-                _status = FdNetworkStatus.Loading;
             }
             else {
                 throw new Exception("Cannot start a game without an active server!");
@@ -88,7 +76,7 @@ namespace Core {
         public void StartReturnToLobbySequence() {
             if (NetworkServer.active) {
                 // Transition any lobby players to loading state
-                if (_status == FdNetworkStatus.InGame) {
+                if (Game.Instance.SessionStatus == SessionStatus.InGame) {
                     // iterate over a COPY of the lobby players (the List is mutated by transitioning!)
                     foreach (var shipPlayer in ShipPlayers.ToArray()) {
                         TransitionToLobbyPlayer(shipPlayer);
@@ -97,17 +85,10 @@ namespace Core {
 
                 // notify all clients about the new scene
                 NetworkServer.SendToAll(new ReturnToLobbyMessage());
-                
-                _status = FdNetworkStatus.LobbyMenu;
             }
             else {
                 throw new Exception("Cannot return to lobby without an active server!");
             }
-        }
-
-        [Server]
-        public void StartMainGame() {
-            _status = FdNetworkStatus.InGame;
         }
 
         [Server]
@@ -157,26 +138,12 @@ namespace Core {
         #endregion
         
         #region State Management
-        
-        public void StartLobbyServer() {
-            _status = FdNetworkStatus.LobbyMenu;
-            // TODO: This should come from the lobby panel UI element
-            maxConnections = 16;
-            StartHost();
-        }
-
-        public void StartOfflineServer() {
-            _status = FdNetworkStatus.SinglePlayerMenu;
-            maxConnections = 1;
-            StartHost();
-        }
 
         public void StopAll() {
             if (mode != NetworkManagerMode.Offline) {
                 StopHost();
                 StopClient();
             }
-            _status = FdNetworkStatus.Offline;
         }
         
         #endregion
@@ -217,11 +184,14 @@ namespace Core {
                 while (!conn.isReady) {
                     yield return new WaitForEndOfFrame();
                 }
+
+                var sessionStatus = Game.Instance.SessionStatus;
+                var levelData = Game.Instance.LoadedLevelData;;
                 
-                switch (_status) {
-                    case FdNetworkStatus.SinglePlayerMenu:
-                    case FdNetworkStatus.InGame:
-                    case FdNetworkStatus.Loading:
+                switch (sessionStatus) {
+                    case SessionStatus.SinglePlayerMenu:
+                    case SessionStatus.InGame:
+                    case SessionStatus.Loading:
                         LoadingPlayer loadingPlayer = Instantiate(loadingPlayerPrefab);
                         NetworkServer.AddPlayerForConnection(conn, loadingPlayer.gameObject);
                         if (conn.identity != null) {
@@ -230,8 +200,7 @@ namespace Core {
                         }
 
                         // if we're joining mid-game (not single player), attempt to start the single client
-                        if (_status != FdNetworkStatus.SinglePlayerMenu) {
-                            var levelData = Game.Instance.LoadedLevelData;
+                        if (sessionStatus != SessionStatus.SinglePlayerMenu) {
                             conn.identity.connectionToClient.Send( new StartGameMessage {
                                 sessionType = SessionType.Multiplayer, 
                                 levelData = levelData
@@ -239,7 +208,13 @@ namespace Core {
                         }
                         break;
                 
-                    case FdNetworkStatus.LobbyMenu: 
+                    case SessionStatus.LobbyMenu:
+                        // Fetch host lobby config to send to client instead of game state loaded level data
+                        var hostLobbyConfigurationPanel = FindObjectOfType<LobbyConfigurationPanel>();
+                        if (hostLobbyConfigurationPanel) {
+                            levelData = hostLobbyConfigurationPanel.LobbyLevelData;
+                        }
+                        
                         LobbyPlayer lobbyPlayer = Instantiate(lobbyPlayerPrefab);
                         lobbyPlayer.isHost = LobbyPlayers.Count == 0;
             
@@ -248,15 +223,10 @@ namespace Core {
                         if (conn.identity != null) {
                             var player = conn.identity.GetComponent<LobbyPlayer>();
                             AddPlayer(player);
-                            
-                            var configPanel = FindObjectOfType<LobbyConfigurationPanel>();
-                            if (configPanel) {
-                                player.UpdateLobby(configPanel.LobbyLevelData);
-                            }
                         }
                         break;
                     
-                    case FdNetworkStatus.Offline:
+                    case SessionStatus.Offline:
                         // I don't know how the hell we get here but something gone bonkers if we do
                         Debug.LogError("Somehow tried to get a connection without being online!");
                         conn.Disconnect();
@@ -264,7 +234,7 @@ namespace Core {
                 }
 
                 conn.identity.connectionToClient.Send(new JoinGameMessage
-                    { showLobby = _status == FdNetworkStatus.LobbyMenu }
+                    { showLobby = sessionStatus == SessionStatus.LobbyMenu, levelData = levelData }
                 );
             }
 
@@ -278,18 +248,18 @@ namespace Core {
                         
             // TODO: notify other players than someone has left
             if (conn.identity != null) {
-                switch (_status) {
-                    case FdNetworkStatus.SinglePlayerMenu:
+                switch (Game.Instance.SessionStatus) {
+                    case SessionStatus.SinglePlayerMenu:
                         var loadingPlayer = conn.identity.GetComponent<LoadingPlayer>();
                         RemovePlayer(loadingPlayer);
                         break;
                     
-                    case FdNetworkStatus.LobbyMenu:
+                    case SessionStatus.LobbyMenu:
                         var lobbyPlayer = conn.identity.GetComponent<LobbyPlayer>();
                         RemovePlayer(lobbyPlayer);
                         break;  
                     
-                    case FdNetworkStatus.InGame:
+                    case SessionStatus.InGame:
                         var shipPlayer = conn.identity.GetComponent<ShipPlayer>();
                         RemovePlayer(shipPlayer);
                         break;
@@ -302,27 +272,27 @@ namespace Core {
         // Server shutdown, notify all players
         public override void OnStopClient() {
             Debug.Log("[CLIENT] SERVER SHUTDOWN");
-            switch (_status) {
+            switch (Game.Instance.SessionStatus) {
                 
-                case FdNetworkStatus.LobbyMenu:
+                case SessionStatus.LobbyMenu:
                     foreach (var lobbyPlayer in LobbyPlayers.ToArray()) {
                         lobbyPlayer.CloseLobby();
                     }
                     LobbyPlayers.Clear();
                     break;
                 
-                case FdNetworkStatus.Loading:
+                case SessionStatus.Loading:
                     Game.Instance.QuitToMenu("LOST CONNECTION TO THE SERVER WHILE LOADING.");
                     LoadingPlayers.Clear();
                     break;
                 
-                case FdNetworkStatus.InGame:
+                case SessionStatus.InGame:
                     Game.Instance.QuitToMenu("THE SERVER CLOSED THE CONNECTION");
                     ShipPlayers.Clear();
                     break;
                     
             }
-            _status = FdNetworkStatus.Offline;
+            Game.Instance.SessionStatus = SessionStatus.Offline;
         }
 
         #endregion
@@ -352,10 +322,13 @@ namespace Core {
             var conn = previousPlayer.connectionToClient;
             if (previousPlayer.connectionToClient.identity != null) {
                 NetworkServer.Destroy(previousPlayer.connectionToClient.identity.gameObject);
+                NetworkServer.ReplacePlayerForConnection(conn, newPlayer.gameObject, true);
+                AddPlayer(newPlayer);
             }
-            NetworkServer.ReplacePlayerForConnection(conn, newPlayer.gameObject, true);
+            else {
+                Debug.LogWarning("Null connection found when replacing player - skipping.");
+            }
             RemovePlayer(previousPlayer);
-            AddPlayer(newPlayer);
             return newPlayer;
         }
 
@@ -437,7 +410,8 @@ namespace Core {
         #region Client Message Handlers
 
         private void JoinGame(JoinGameMessage message) {
-            OnClientConnected?.Invoke(message.showLobby);
+            Debug.Log("JOIN GAME " + message.levelData.location);
+            OnClientConnected?.Invoke(message);
         }
 
         private void StartLoadGame(StartGameMessage message) {

@@ -22,10 +22,6 @@ namespace Core {
         public LevelData LevelDataAtCurrentPosition => GenerateLevelData();
         public GameObject checkpointPrefab;
 
-        public void ResetLoadedLevelData() {
-            _levelData = new LevelData();
-        }
-        
         public IEnumerator StartGame(LevelData levelData) {
             _levelData = levelData;
 

@@ -87,7 +87,7 @@ namespace Menus.Main_Menu {
                     break;
             }
 
-            FdNetworkManager.Instance.StartGameLoadSequence(SessionType.Singleplayer, levelData, true);
+            FdNetworkManager.Instance.StartGameLoadSequence(SessionType.Singleplayer, levelData);
         }
     }
 }
