@@ -35,6 +35,10 @@ namespace Core {
         [Header("In-Game")] 
         [SerializeField] private ShipPlayer shipPlayerPrefab;
 
+        private struct JoinGameMessage : NetworkMessage {
+            public bool showLobby;
+        }
+        
         private struct StartGameMessage : NetworkMessage {
             public SessionType sessionType;
             public LevelData levelData;
@@ -47,7 +51,7 @@ namespace Core {
             public Quaternion rotation;
         }
         
-        public static event Action OnClientConnected;
+        public static event Action<bool> OnClientConnected;
         public static event Action OnClientDisconnected;
         public List<LobbyPlayer> LobbyPlayers { get; } = new List<LobbyPlayer>();
         public List<LoadingPlayer> LoadingPlayers { get; } = new List<LoadingPlayer>();
@@ -183,7 +187,7 @@ namespace Core {
         public override void OnClientConnect(NetworkConnection conn) {
             Debug.Log("[CLIENT] LOCAL CLIENT HAS CONNECTED");
             base.OnClientConnect(conn);
-            OnClientConnected?.Invoke();
+            NetworkClient.RegisterHandler<JoinGameMessage>(JoinGame);
             NetworkClient.RegisterHandler<StartGameMessage>(StartLoadGame);
             NetworkClient.RegisterHandler<ReturnToLobbyMessage>(ShowLobby);
             NetworkClient.RegisterHandler<SetShipPositionMessage>(SetShipPosition);
@@ -258,6 +262,10 @@ namespace Core {
                         conn.Disconnect();
                         break;
                 }
+
+                conn.identity.connectionToClient.Send(new JoinGameMessage
+                    { showLobby = _status == FdNetworkStatus.LobbyMenu }
+                );
             }
 
             StartCoroutine(AddNewPlayerConnection());
@@ -293,7 +301,7 @@ namespace Core {
 
         // Server shutdown, notify all players
         public override void OnStopClient() {
-            Debug.Log("[SERVER] SHUTDOWN");
+            Debug.Log("[CLIENT] SERVER SHUTDOWN");
             switch (_status) {
                 
                 case FdNetworkStatus.LobbyMenu:
@@ -427,6 +435,10 @@ namespace Core {
         #endregion
         
         #region Client Message Handlers
+
+        private void JoinGame(JoinGameMessage message) {
+            OnClientConnected?.Invoke(message.showLobby);
+        }
 
         private void StartLoadGame(StartGameMessage message) {
             Game.Instance.StartGame(message.sessionType, message.levelData);

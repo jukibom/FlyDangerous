@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using Audio;
 using Core;
 using UnityEngine;
@@ -74,11 +72,15 @@ namespace Menus.Main_Menu {
             joinButton.interactable = false;
         }
 
-        private void HandleClientConnected() {
+        private void HandleClientConnected(bool showLobby) {
             joinButton.interactable = true;
             Hide();
-            lobbyMenu.Show();
-            lobbyMenu.JoinPlayer();
+            
+            // if the server has created a lobby player for us, show the lobby
+            if (showLobby) {
+                lobbyMenu.Show();
+                lobbyMenu.JoinPlayer();
+            }
         }
 
         private void HandleClientDisconnected() {
