@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Core;
 using Core.Player;
 using Mirror;
+using Misc;
 using UnityEngine;
 using UnityEngine.UI;
 using Environment = Core.Environment;
@@ -44,9 +46,20 @@ public class LobbyConfigurationPanel : MonoBehaviour
         get => _lobbyLevelData;
         set {
             _lobbyLevelData = value;
-            gameModeClientLabel.text = _lobbyLevelData.GameTypeLabel.ToUpper();
-            environmentClientLabel.text = _lobbyLevelData.EnvironmentLabel.ToUpper();
-            locationClientLabel.text = _lobbyLevelData.LocationLabel.ToUpper();
+            
+            // client-side non-editable fields
+            gameModeClientLabel.text = EnumExtensions.DescriptionAtt(_lobbyLevelData.gameType).ToUpper();
+            environmentClientLabel.text = EnumExtensions.DescriptionAtt(_lobbyLevelData.environment).ToUpper();
+            locationClientLabel.text = EnumExtensions.DescriptionAtt(_lobbyLevelData.location).ToUpper();
+        }
+    }
+
+    private void Awake() {
+        // resume where we left on on lobby creation (if client, this is overwritten by message)
+        var activeLevelData = Game.Instance.LoadedLevelData;
+        if (activeLevelData.location != Location.NullSpace) {
+            LobbyLevelData = activeLevelData;
+            UpdateLobby();
         }
     }
 

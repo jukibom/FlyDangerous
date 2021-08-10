@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using JetBrains.Annotations;
 using Mirror;
 using Newtonsoft.Json;
@@ -16,31 +17,66 @@ namespace Core {
     }
 
     public enum Location {
+        [Description("Literally the void of space")]
         NullSpace,
+        
+        [Description("Test Space Station")]
         TestSpaceStation,
+        
+        [Description("Terrain V1")]
         TerrainV1,
+        
+        [Description("Terrain V2")]
         TerrainV2
     }
 
     public enum Environment {
+        [Description("Planet Orbit (Top)")]
         PlanetOrbitBottom,
+        
+        [Description("Planet Orbit (Bottom)")]
         PlanetOrbitTop,
+        
+        [Description("Sunrise Clear")]
         SunriseClear,
+        
+        [Description("Noon Clear")]
         NoonClear,
+        
+        [Description("Noon Cloudy")]
         NoonCloudy,
+        
+        [Description("Noon Stormy")]
         NoonStormy,
+        
+        [Description("Sunset Clear")]
         SunsetClear,
+        
+        [Description("Sunset Cloudy")]
         SunsetCloudy,
+        
+        [Description("Night Clear")]
         NightClear,
+        
+        [Description("Night Cloudy")]
         NightCloudy,
     }
-    
+
     public enum GameType {
+        [Description("Free Roam")]
         FreeRoam,
+        
+        [Description("Time Trial")]
         TimeTrial,
-        Laps,
+        
+        [Description("Race (Sprint)")]
+        RaceSprint,
+        
+        [Description("Race (Laps)")]
+        RaceLaps,
+        
+        [Description("Hoon Attack")]
         HoonAttack,
-        Editor,
     }
 
     public class CheckpointLocation {
@@ -59,47 +95,6 @@ namespace Core {
         public LevelDataVector3<float> startRotation = new LevelDataVector3<float>();
         public GameType gameType = GameType.FreeRoam;
         [CanBeNull] public List<CheckpointLocation> checkpoints;
-
-        public string LocationLabel {
-            get {
-                switch (location) {
-                    case Location.NullSpace: return "Literally the void of space";
-                    case Location.TestSpaceStation: return "Space Station";
-                    case Location.TerrainV1: return "Terrain V1";
-                    case Location.TerrainV2: return "Terrain V2";
-                    default: return "UNKNOWN";
-                }
-            }
-        }
-        public string EnvironmentLabel {
-            get {
-                switch (environment) {
-                    case Environment.PlanetOrbitTop: return "Planet Orbit (Top)";
-                    case Environment.PlanetOrbitBottom: return "Planet Orbit (Bottom)";
-                    case Environment.SunriseClear: return "Sunrise Clear";
-                    case Environment.NoonClear: return "Noon Clear";
-                    case Environment.NoonCloudy: return "Noon Cloudy";
-                    case Environment.NoonStormy: return "Noon Stormy";
-                    case Environment.SunsetClear: return "Sunset Clear";
-                    case Environment.SunsetCloudy: return "Sunset Cloudy";
-                    case Environment.NightClear: return "Night Clear";
-                    case Environment.NightCloudy: return "Night Cloudy";
-                    default: return "UNKNOWN";
-                }
-            }
-        }
-
-        public string GameTypeLabel {
-            get {
-                switch (gameType) {
-                    case GameType.FreeRoam: return "Free Roam";
-                    case GameType.TimeTrial: return "Time Trial";
-                    case GameType.Laps: return "Laps";
-                    case GameType.Editor: return "Editor Mode";
-                    default: return "UNKNOWN";
-                }
-            }
-        }
 
         public string ToJsonString() {
             return JsonConvert.SerializeObject(this, Formatting.Indented);

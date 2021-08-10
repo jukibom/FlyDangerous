@@ -29,6 +29,10 @@ namespace Menus.Main_Menu {
         public void Show() {
             gameObject.SetActive(true);
             _animator.SetBool("Open", true);
+            var localPlayer = LobbyPlayer.FindLocal;
+            if (localPlayer) {
+                lobbyConfigurationPanel.IsHost = localPlayer.isHost;
+            }
             defaultActiveButton.Select();
         }
 
@@ -38,7 +42,6 @@ namespace Menus.Main_Menu {
 
         public void JoinPlayer() {
             headerText.text = "MULTIPLAYER LOBBY";
-            lobbyConfigurationPanel.IsHost = NetworkClient.isHostClient;
         }
 
         public void StartHost() {

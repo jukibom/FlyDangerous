@@ -22,17 +22,20 @@ namespace Menus.Main_Menu {
             _animator = GetComponent<Animator>();
         }
 
-        private void OnEnable() {
+        private void Start() {
             FdNetworkManager.OnClientConnected += HandleClientConnected;
             FdNetworkManager.OnClientDisconnected += HandleClientDisconnected;
+        }
+        
+        private void OnDestroy() {
+            FdNetworkManager.OnClientConnected -= HandleClientConnected;
+            FdNetworkManager.OnClientDisconnected -= HandleClientDisconnected;
+        }
+
+        private void OnEnable() {
             playerName.text = Preferences.Instance.GetString("playerName");
             serverIPAddress.text = Preferences.Instance.GetString("lastUsedServerJoinAddress");
             serverPort.text = Preferences.Instance.GetString("lastUsedServerJoinPort");
-        }
-
-        private void OnDisable() {
-            FdNetworkManager.OnClientConnected -= HandleClientConnected;
-            FdNetworkManager.OnClientDisconnected -= HandleClientDisconnected;
         }
 
         public void Show() {

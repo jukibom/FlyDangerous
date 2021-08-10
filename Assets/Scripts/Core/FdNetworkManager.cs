@@ -410,7 +410,6 @@ namespace Core {
         #region Client Message Handlers
 
         private void JoinGame(JoinGameMessage message) {
-            Debug.Log("JOIN GAME " + message.levelData.location);
             OnClientConnected?.Invoke(message);
         }
 

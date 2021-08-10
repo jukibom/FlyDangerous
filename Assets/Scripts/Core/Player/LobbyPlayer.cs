@@ -48,7 +48,7 @@ namespace Core.Player {
         }
 
         public void UpdateLobby(LevelData lobbyLevelData) {
-            RpcUpdateLobby(lobbyLevelData);
+            CmdUpdateLobby(lobbyLevelData);
         }
 
         // On local client start

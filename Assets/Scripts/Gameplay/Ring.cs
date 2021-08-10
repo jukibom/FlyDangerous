@@ -6,15 +6,12 @@ using UnityEngine;
 public class Ring : MonoBehaviour
 {
     
-    [SerializeField] float rotationAmount = 0.0f;
+    [SerializeField] float rotationAmount;
 
     private Transform _transform;
         
     // Start is called before the first frame update
     void Start() {
-        if (Game.Instance.LoadedLevelData.gameType != GameType.Editor) {
-            gameObject.SetActive(false);
-        }
         _transform = transform;
         if (rotationAmount == 0) {
             rotationAmount = Random.Range(-0.5f, 0.5f);
