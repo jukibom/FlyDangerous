@@ -30,6 +30,7 @@ namespace Core {
 
         public struct JoinGameRequestMessage : NetworkMessage {
             public string password;
+            public string version;
         }
         
         public struct JoinGameSuccessMessage : NetworkMessage {
@@ -428,12 +429,18 @@ namespace Core {
                 // prevent server checks against connection requests on a HostClient
                 var isLocalConnection = conn.connectionId == NetworkClient.connection.connectionId;
 
+                // authentication
                 if (!isLocalConnection && !string.IsNullOrEmpty(serverPassword)) {
                     if (serverPassword != message.password) {
                         RejectPlayerConnection(conn, "Could not authenticate: incorrect password");
-                        yield return new WaitForEndOfFrame();
-                        conn.Disconnect();
                         yield break;
+                    }
+                }
+                
+                // version check
+                if (!isLocalConnection) {
+                    if (Application.version != message.version) {
+                        RejectPlayerConnection(conn, "Fly Dangerous version mismatch! Server is running version " + Application.version);
                     }
                 }
 

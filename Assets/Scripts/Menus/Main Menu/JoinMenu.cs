@@ -85,7 +85,8 @@ namespace Menus.Main_Menu {
 
             FdNetworkManager.Instance.StartClient();
             FdNetworkManager.Instance.joinGameRequestMessage = new FdNetworkManager.JoinGameRequestMessage {
-                password = serverPassword.text
+                password = serverPassword.text,
+                version = Application.version
             };
             joinButton.button.interactable = false;
             joinButton.label.text = "CONNECTING ...";
