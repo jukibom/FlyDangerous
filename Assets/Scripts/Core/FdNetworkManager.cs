@@ -166,6 +166,31 @@ namespace Core {
             base.OnClientDisconnect(conn);
             OnClientDisconnected?.Invoke();
         }
+        
+        // Server shutdown, notify all players
+        public override void OnStopClient() {
+            Debug.Log("[CLIENT] SERVER SHUTDOWN");
+            switch (Game.Instance.SessionStatus) {
+                
+                case SessionStatus.LobbyMenu:
+                    var localPlayer = LobbyPlayer.FindLocal;
+                    if (localPlayer) {
+                        localPlayer.HostCloseLobby();
+                    }
+                    break;
+                
+                case SessionStatus.Loading:
+                    Game.Instance.QuitToMenu("LOST CONNECTION TO THE SERVER WHILE LOADING.");
+                    break;
+                
+                case SessionStatus.InGame:
+                    Game.Instance.QuitToMenu("THE SERVER CLOSED THE CONNECTION");
+                    break;
+                    
+            }
+
+            Game.Instance.SessionStatus = SessionStatus.Offline;
+        }
 
         #endregion
         
@@ -269,31 +294,10 @@ namespace Core {
             base.OnServerDisconnect(conn);
         }
 
-        // Server shutdown, notify all players
-        public override void OnStopClient() {
-            Debug.Log("[CLIENT] SERVER SHUTDOWN");
-            switch (Game.Instance.SessionStatus) {
-                
-                case SessionStatus.LobbyMenu:
-                    var localPlayer = LobbyPlayer.FindLocal;
-                    if (localPlayer) {
-                        localPlayer.HostCloseLobby();
-                    }
-                    break;
-                
-                case SessionStatus.Loading:
-                    Game.Instance.QuitToMenu("LOST CONNECTION TO THE SERVER WHILE LOADING.");
-                    break;
-                
-                case SessionStatus.InGame:
-                    Game.Instance.QuitToMenu("THE SERVER CLOSED THE CONNECTION");
-                    break;
-                    
-            }
+        public override void OnStopServer() {
             LobbyPlayers.Clear();
             LoadingPlayers.Clear();
             ShipPlayers.Clear();
-            Game.Instance.SessionStatus = SessionStatus.Offline;
         }
 
         #endregion
