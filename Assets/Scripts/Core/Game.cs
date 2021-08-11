@@ -56,6 +56,9 @@ namespace Core {
 
         public bool IsVREnabled { get; private set; }
 
+        public bool IsGameHotJoinable => LoadedLevelData.gameType == GameType.FreeRoam ||
+                                         LoadedLevelData.gameType == GameType.TimeTrial;
+
         public ShipParameters ShipParameters {
             get => _shipParameters ?? (ShipPlayer.FindLocal?.Parameters ?? ShipPlayer.ShipParameterDefaults);
             set {

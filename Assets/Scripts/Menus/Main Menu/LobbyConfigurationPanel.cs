@@ -99,8 +99,6 @@ public class LobbyConfigurationPanel : MonoBehaviour
         _lobbyLevelData.gameType = (GameType)gameModeDropdown.value;
         _lobbyLevelData.environment = (Environment)environmentDropdown.value;
         _lobbyLevelData.location = (Location)locationDropdown.value;
-
-        Debug.Log("MAX PLAYERS " + maxPlayers + " " + FdNetworkManager.Instance.maxPlayers);
         
         UpdateLobby();
     }
@@ -121,5 +119,4 @@ public class LobbyConfigurationPanel : MonoBehaviour
             localPlayer.UpdateLobby(LobbyLevelData, maxPlayers);
         }
     }
-    
 }

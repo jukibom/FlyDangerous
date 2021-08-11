@@ -34,6 +34,10 @@ namespace Core {
             public short maxPlayers;
         }
         
+        public struct JoinGameRejectionMessage : NetworkMessage {
+            public string reason;
+        }
+        
         private struct StartGameMessage : NetworkMessage {
             public SessionType sessionType;
             public LevelData levelData;
@@ -48,10 +52,17 @@ namespace Core {
         
         public static event Action<JoinGameMessage> OnClientConnected;
         public static event Action OnClientDisconnected;
+        public static event Action<string> OnClientConnectionRejected;
         public List<LobbyPlayer> LobbyPlayers { get; } = new List<LobbyPlayer>();
         public List<LoadingPlayer> LoadingPlayers { get; } = new List<LoadingPlayer>();
         public List<ShipPlayer> ShipPlayers { get; } = new List<ShipPlayer>();
         public KcpTransport NetworkTransport => GetComponent<KcpTransport>();
+        
+        // Mirror's transport layer IMMEDIATELY severs the connection if the internal maxConnections limit is exceeded.
+        // To work around this and have some sane messaging back to clients, we're using a server limit of 129 and
+        // a "true" limit of 128. The additional slot is there just to allow a client to connect, receive a message
+        // explaining why they're being kicked ... and then kicked. Aren't distributed systems fun?
+        public short maxPlayers = maxPlayerLimit;
         
         #region Start / Quit Game
         public void StartGameLoadSequence(SessionType sessionType, LevelData levelData) {
@@ -158,6 +169,7 @@ namespace Core {
             Debug.Log("[CLIENT] LOCAL CLIENT HAS CONNECTED");
             base.OnClientConnect(conn);
             NetworkClient.RegisterHandler<JoinGameMessage>(JoinGame);
+            NetworkClient.RegisterHandler<JoinGameRejectionMessage>(RejectConnection);
             NetworkClient.RegisterHandler<StartGameMessage>(StartLoadGame);
             NetworkClient.RegisterHandler<ReturnToLobbyMessage>(ShowLobby);
             NetworkClient.RegisterHandler<SetShipPositionMessage>(SetShipPosition);
@@ -201,11 +213,17 @@ namespace Core {
 
         // player joins
         public override void OnServerConnect(NetworkConnection conn) {
-            Debug.Log("[SERVER] PLAYER CONNECT" + " (" + (numPlayers + 1) + " / " + maxConnections + " players)");
-            if (numPlayers >= maxConnections) {
-                conn.Disconnect();
-                // TODO: Send a message why
+            Debug.Log("[SERVER] PLAYER CONNECT" + " (" + (numPlayers + 1) + " / " + maxPlayers + " players)");
+            if (numPlayers >= maxPlayers) {
+                RejectPlayerConnection(conn, "Server is at max player limit.");
                 return;
+            }
+
+            if (Game.Instance.SessionStatus != SessionStatus.LobbyMenu) {
+                // joining mid-game checks
+                if (!Game.Instance.IsGameHotJoinable) {
+                    RejectPlayerConnection(conn , "Game is currently running and does not permit joining during the match.");
+                }
             }
 
             IEnumerator AddNewPlayerConnection() {
@@ -261,8 +279,11 @@ namespace Core {
                         break;
                 }
 
-                conn.identity.connectionToClient.Send(new JoinGameMessage
-                    { showLobby = sessionStatus == SessionStatus.LobbyMenu, levelData = levelData }
+                conn.identity.connectionToClient.Send(new JoinGameMessage {
+                        showLobby = sessionStatus == SessionStatus.LobbyMenu, 
+                        levelData = levelData,
+                        maxPlayers = maxPlayers
+                    }
                 );
             }
 
@@ -413,12 +434,42 @@ namespace Core {
             return true;
         }
 
+        /**
+         * This handler is a bit of a beast so let's break it down.
+         * Mirror requires an active connection tied to an entity to send messages to them. In order to "reject" a
+         * connection we must first, therefore, accept it. This means that our Mirror maxConnections is always at least
+         * 1 more than the actual maximum to accomodate this. This function creates a loading player prefab, adds the
+         * client as an active connection and starts a Coroutine to wait for ready status before sending a message that
+         * the client subscribes to and then forcibly disconnects the client so that a reason can be displayed.
+         */
+        private void RejectPlayerConnection(NetworkConnection conn, string reason) {
+            LoadingPlayer loadingPlayer = Instantiate(loadingPlayerPrefab);
+            NetworkServer.AddPlayerForConnection(conn, loadingPlayer.gameObject);
+            
+            IEnumerator Reject() {
+                while (!conn.isReady) {
+                    yield return new WaitForEndOfFrame();
+                }
+                conn.identity.connectionToClient.Send(new JoinGameRejectionMessage { reason = reason });
+                yield return new WaitForEndOfFrame();
+
+                conn.Disconnect();
+            }
+
+            StartCoroutine(Reject());
+        }
+
         #endregion
         
         #region Client Message Handlers
-
+        
         private void JoinGame(JoinGameMessage message) {
             OnClientConnected?.Invoke(message);
+        }
+        
+        private void RejectConnection(JoinGameRejectionMessage message) {
+            Debug.Log(message.reason);
+            OnClientConnectionRejected?.Invoke(message.reason);
         }
 
         private void StartLoadGame(StartGameMessage message) {

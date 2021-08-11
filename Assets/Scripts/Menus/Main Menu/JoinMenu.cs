@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 namespace Menus.Main_Menu {
     public class JoinMenu : MonoBehaviour {
+        [SerializeField] private MainMenu mainMenu;
         [SerializeField] private LobbyMenu lobbyMenu;
         [SerializeField] private Button joinButton;
         [SerializeField] private MultiPlayerMenu multiPlayerMenu;
@@ -24,10 +25,12 @@ namespace Menus.Main_Menu {
 
         private void Start() {
             FdNetworkManager.OnClientConnected += HandleClientConnected;
+            FdNetworkManager.OnClientConnectionRejected += HandleClientRejected;
         }
         
         private void OnDestroy() {
             FdNetworkManager.OnClientConnected -= HandleClientConnected;
+            FdNetworkManager.OnClientConnectionRejected -= HandleClientRejected;
         }
 
         private void OnEnable() {
@@ -90,6 +93,12 @@ namespace Menus.Main_Menu {
                     localPlayer.UpdateLobby(message.levelData);
                 }
             }
+        }
+
+
+        private void HandleClientRejected(string reason) {
+            Hide();
+            mainMenu.ShowDisconnectedDialog(reason);
         }
     }
 }
