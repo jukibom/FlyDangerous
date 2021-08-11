@@ -22,7 +22,8 @@ namespace Core.Player {
         [SyncVar(hook = nameof(OnPlayerReadyStatusChanged))]
         public bool isReady;
 
-        [SerializeField] private Text playerNameTextEntry;
+        [SerializeField] private Text playerNameLabel;
+        [SerializeField] private InputField playerNameTextEntry;
         [SerializeField] private RawImage readyStatus;
 
         private LobbyMenu _lobby;
@@ -57,6 +58,9 @@ namespace Core.Player {
         }
 
         public override void OnStartClient() {
+            // show or hide the input field or static label depending on authority
+            playerNameLabel.transform.parent.gameObject.SetActive(!hasAuthority);
+            playerNameTextEntry.gameObject.SetActive(hasAuthority);
             UpdateDisplay();
         }
 
@@ -72,6 +76,12 @@ namespace Core.Player {
             isReady = ready;
         }
 
+        public void OnPlayerNameInputChanged() {
+            CmdSetPlayerName(playerNameTextEntry.text);
+            Preferences.Instance.SetString("playerName", playerNameTextEntry.text);
+            Preferences.Instance.Save();
+        }
+
         private void OnPlayerNameChanged(string oldName, string newName) => UpdateDisplay();
         private void OnPlayerReadyStatusChanged(bool oldStatus, bool newStatus) => UpdateDisplay();
 
@@ -84,6 +94,7 @@ namespace Core.Player {
         }
         
         private void UpdateDisplay() {
+            playerNameLabel.text = playerName;
             playerNameTextEntry.text = playerName;
             readyStatus.enabled = isReady;
             if (LobbyUI) {
