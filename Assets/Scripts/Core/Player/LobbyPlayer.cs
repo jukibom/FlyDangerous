@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
 using Menus.Main_Menu;
 using Mirror;
@@ -19,7 +20,7 @@ namespace Core.Player {
         [SyncVar(hook = nameof(OnPlayerNameChanged))]
         public string playerName = "Connecting ...";
         
-        [SyncVar(hook = nameof(OnPlayerReadyStatusChanged))]
+        [SyncVar(hook = nameof(OnReadyStatusChanged))]
         public bool isReady;
 
         [SerializeField] private Text playerNameLabel;
@@ -30,7 +31,7 @@ namespace Core.Player {
         private LobbyMenu LobbyUI {
             get
             {
-                if (_lobby == null) {
+                if (_lobby == null && hasAuthority) {
                     _lobby = FindObjectOfType<LobbyMenu>();
                 }
 
@@ -61,6 +62,9 @@ namespace Core.Player {
             // show or hide the input field or static label depending on authority
             playerNameLabel.transform.parent.gameObject.SetActive(!hasAuthority);
             playerNameTextEntry.gameObject.SetActive(hasAuthority);
+            if (hasAuthority) {
+                CmdSetReadyStatus(isHost);
+            }
             UpdateDisplay();
         }
 
@@ -69,11 +73,7 @@ namespace Core.Player {
         }
 
         public void ToggleReady() {
-            isReady = !isReady;
-        }
-
-        public void HandleReadyStatusChanged(bool ready) {
-            isReady = ready;
+            CmdSetReadyStatus(!isReady);
         }
 
         public void OnPlayerNameInputChanged() {
@@ -83,8 +83,11 @@ namespace Core.Player {
         }
 
         private void OnPlayerNameChanged(string oldName, string newName) => UpdateDisplay();
-        private void OnPlayerReadyStatusChanged(bool oldStatus, bool newStatus) => UpdateDisplay();
-
+        private void OnReadyStatusChanged(bool oldStatus, bool newStatus) {
+            isReady = newStatus;
+            UpdateDisplay();
+        }
+        
         private void AttachToLobbyContainer() {
             var container = GameObject.FindGameObjectWithTag("LobbyPlayerContainer");
             if (container) {
@@ -97,8 +100,9 @@ namespace Core.Player {
             playerNameLabel.text = playerName;
             playerNameTextEntry.text = playerName;
             readyStatus.enabled = isReady;
+            
             if (LobbyUI) {
-                if (isHost && !isReady) {
+                if (isHost) {
                     LobbyUI.StartButton.label.text = "START GAME";
                 }
                 else if (!isReady) {
@@ -118,6 +122,11 @@ namespace Core.Player {
 
             playerName = name;
             UpdateDisplay();
+        }
+
+        [Command]
+        private void CmdSetReadyStatus(bool ready) {
+            isReady = ready;
         }
 
         [Command]

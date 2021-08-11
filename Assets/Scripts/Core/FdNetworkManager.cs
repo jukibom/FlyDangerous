@@ -368,28 +368,7 @@ namespace Core {
         #endregion
 
         #region Helpers
-
-        // TODO: finish lobby ready state handling
-        public void NotifyPlayersOfReadyState() {
-            foreach (var player in LobbyPlayers) {
-                player.HandleReadyStatusChanged(IsReadyToLoad());
-            }
-        }
-
-        private bool IsReadyToLoad() {
-            if (numPlayers < minPlayers) {
-                return false; 
-            }
-
-            foreach (var player in LobbyPlayers) {
-                if (!player.isReady) {
-                    return false; 
-                }
-            }
-
-            return true;
-        }
-
+        
         /**
          * This handler is a bit of a beast so let's break it down.
          * Mirror requires an active connection tied to an entity to send messages to them. In order to "reject" a
