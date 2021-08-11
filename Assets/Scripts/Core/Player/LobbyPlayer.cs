@@ -125,9 +125,9 @@ namespace Core.Player {
         }
 
         // On each client
-        public void CloseLobby() {
+        public void HostCloseLobby() {
             if (LobbyUI && LobbyUI.gameObject.activeSelf) {
-                LobbyUI.CloseLobby();
+                LobbyUI.CloseLobby("The host has closed the lobby.");
             }
         }
     }

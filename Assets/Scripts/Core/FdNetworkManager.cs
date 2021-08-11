@@ -38,7 +38,7 @@ namespace Core {
 
         private struct ReturnToLobbyMessage : NetworkMessage {};
 
-            private struct SetShipPositionMessage : NetworkMessage {
+        private struct SetShipPositionMessage : NetworkMessage {
             public Vector3 position;
             public Quaternion rotation;
         }
@@ -275,23 +275,24 @@ namespace Core {
             switch (Game.Instance.SessionStatus) {
                 
                 case SessionStatus.LobbyMenu:
-                    foreach (var lobbyPlayer in LobbyPlayers.ToArray()) {
-                        lobbyPlayer.CloseLobby();
+                    var localPlayer = LobbyPlayer.FindLocal;
+                    if (localPlayer) {
+                        localPlayer.HostCloseLobby();
                     }
-                    LobbyPlayers.Clear();
                     break;
                 
                 case SessionStatus.Loading:
                     Game.Instance.QuitToMenu("LOST CONNECTION TO THE SERVER WHILE LOADING.");
-                    LoadingPlayers.Clear();
                     break;
                 
                 case SessionStatus.InGame:
                     Game.Instance.QuitToMenu("THE SERVER CLOSED THE CONNECTION");
-                    ShipPlayers.Clear();
                     break;
                     
             }
+            LobbyPlayers.Clear();
+            LoadingPlayers.Clear();
+            ShipPlayers.Clear();
             Game.Instance.SessionStatus = SessionStatus.Offline;
         }
 

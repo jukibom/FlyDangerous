@@ -24,12 +24,10 @@ namespace Menus.Main_Menu {
 
         private void Start() {
             FdNetworkManager.OnClientConnected += HandleClientConnected;
-            FdNetworkManager.OnClientDisconnected += HandleClientDisconnected;
         }
         
         private void OnDestroy() {
             FdNetworkManager.OnClientConnected -= HandleClientConnected;
-            FdNetworkManager.OnClientDisconnected -= HandleClientDisconnected;
         }
 
         private void OnEnable() {
@@ -87,15 +85,11 @@ namespace Menus.Main_Menu {
                 lobbyMenu.Show();
                 lobbyMenu.JoinPlayer();
                 
-                LobbyPlayer.FindLocal.UpdateLobby(message.levelData);
+                var localPlayer = LobbyPlayer.FindLocal;
+                if (localPlayer) {
+                    localPlayer.UpdateLobby(message.levelData);
+                }
             }
-        }
-
-        private void HandleClientDisconnected() {
-            joinButton.interactable = true;
-            Show();
-            lobbyMenu.Hide();
-            // TODO: Some disconnect reason here?
         }
     }
 }

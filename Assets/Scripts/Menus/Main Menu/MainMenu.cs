@@ -49,7 +49,7 @@ namespace Menus.Main_Menu {
 
         public void ShowDisconnectedDialog(string reason) {
             topMenu.gameObject.SetActive(false);
-            disconnectionDialog.gameObject.SetActive(true);
+            disconnectionDialog.Show();
             disconnectionDialog.Reason = reason;
         }
 

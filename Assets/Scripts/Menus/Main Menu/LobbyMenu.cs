@@ -1,6 +1,7 @@
 ﻿using Audio;
 using Core;
 using Core.Player;
+using JetBrains.Annotations;
 using Mirror;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,6 +11,7 @@ namespace Menus.Main_Menu {
     public class LobbyMenu : MonoBehaviour {
 
         [Header("UI")]
+        [SerializeField] private MainMenu mainMenu;
         [SerializeField] private MultiPlayerMenu topMenu;
         [SerializeField] private UIButton startButton;
         [SerializeField] private Text headerText;
@@ -63,10 +65,15 @@ namespace Menus.Main_Menu {
             }
         }
 
-        public void CloseLobby() {
-            // TODO: show a notification here
+        public void CloseLobby([CanBeNull] string reason = null) {
             AudioManager.Instance.Play("ui-cancel");
-            topMenu.Show();
+            if (reason != null) {
+                mainMenu.ShowDisconnectedDialog(reason);
+            }
+            else {
+                topMenu.Show();
+            }
+
             Hide();
             FdNetworkManager.Instance.StopAll();
             Game.Instance.SessionStatus = SessionStatus.Offline;
