@@ -235,7 +235,7 @@ namespace Core {
                 }
                 else {
                     QuitToMenu("Failed to create connection");
-                    yield return null;
+                    yield break;
                 }
                 
                 SessionStatus = SessionStatus.InGame;
