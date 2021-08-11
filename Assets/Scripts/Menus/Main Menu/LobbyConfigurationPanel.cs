@@ -59,6 +59,7 @@ public class LobbyConfigurationPanel : MonoBehaviour
             _lobbyLevelData = value;
             
             // ridiculous looping dropdown on change event avoidance
+            passwordInputField.text = FdNetworkManager.serverPassword;
             var gameModeValue = (int) _lobbyLevelData.gameType;
             var environmentValue =  (int) _lobbyLevelData.environment;
             var locationValue = (int) _lobbyLevelData.location;
@@ -91,6 +92,9 @@ public class LobbyConfigurationPanel : MonoBehaviour
     }
 
     public void OnConfigurationSettingChanged() {
+        // server password
+        FdNetworkManager.serverPassword = passwordInputField.text;
+        
         // parse out max players text box (between 2 and maxPlayerLimit)
         maxPlayers = Int16.Parse(maxPlayersInputField.text);
         maxPlayersInputField.text = maxPlayers.ToString();

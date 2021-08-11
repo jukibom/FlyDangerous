@@ -28,7 +28,11 @@ namespace Core {
         [Header("In-Game")] 
         [SerializeField] private ShipPlayer shipPlayerPrefab;
 
-        public struct JoinGameMessage : NetworkMessage {
+        public struct JoinGameRequestMessage : NetworkMessage {
+            public string password;
+        }
+        
+        public struct JoinGameSuccessMessage : NetworkMessage {
             public bool showLobby;
             public LevelData levelData;
             public short maxPlayers;
@@ -50,19 +54,25 @@ namespace Core {
             public Quaternion rotation;
         }
         
-        public static event Action<JoinGameMessage> OnClientConnected;
+        public static event Action<JoinGameSuccessMessage> OnClientConnected;
         public static event Action OnClientDisconnected;
         public static event Action<string> OnClientConnectionRejected;
         public List<LobbyPlayer> LobbyPlayers { get; } = new List<LobbyPlayer>();
         public List<LoadingPlayer> LoadingPlayers { get; } = new List<LoadingPlayer>();
         public List<ShipPlayer> ShipPlayers { get; } = new List<ShipPlayer>();
         public KcpTransport NetworkTransport => GetComponent<KcpTransport>();
-        
+
         // Mirror's transport layer IMMEDIATELY severs the connection if the internal maxConnections limit is exceeded.
         // To work around this and have some sane messaging back to clients, we're using a server limit of 129 and
         // a "true" limit of 128. The additional slot is there just to allow a client to connect, receive a message
         // explaining why they're being kicked ... and then kicked. Aren't distributed systems fun?
         public short maxPlayers = maxPlayerLimit;
+
+        // set to non-empty string to force password validation on connecting clients
+        public static string serverPassword;
+
+        // TODO: This is gross (client attach object before connection attempt) but I'm almost out of fucks to give
+        public JoinGameRequestMessage joinGameRequestMessage;
         
         #region Start / Quit Game
         public void StartGameLoadSequence(SessionType sessionType, LevelData levelData) {
@@ -168,11 +178,14 @@ namespace Core {
         public override void OnClientConnect(NetworkConnection conn) {
             Debug.Log("[CLIENT] LOCAL CLIENT HAS CONNECTED");
             base.OnClientConnect(conn);
-            NetworkClient.RegisterHandler<JoinGameMessage>(JoinGame);
-            NetworkClient.RegisterHandler<JoinGameRejectionMessage>(RejectConnection);
-            NetworkClient.RegisterHandler<StartGameMessage>(StartLoadGame);
-            NetworkClient.RegisterHandler<ReturnToLobbyMessage>(ShowLobby);
-            NetworkClient.RegisterHandler<SetShipPositionMessage>(SetShipPosition);
+            NetworkClient.RegisterHandler<JoinGameSuccessMessage>(OnJoinGameClientMsg);
+            NetworkClient.RegisterHandler<JoinGameRejectionMessage>(OnRejectConnectionClientMsg);
+            NetworkClient.RegisterHandler<StartGameMessage>(OnStartLoadGameClientMsg);
+            NetworkClient.RegisterHandler<ReturnToLobbyMessage>(OnShowLobbyClientMsg);
+            NetworkClient.RegisterHandler<SetShipPositionMessage>(OnSetShipPositionClientMsg);
+            
+            // Initiate handshake
+            conn.Send(joinGameRequestMessage);
         }
         
         // player leaves
@@ -210,10 +223,16 @@ namespace Core {
         #endregion
         
         #region Server Handlers
+        
+        public override void OnStartServer() {
+            base.OnStartServer();
+            NetworkServer.RegisterHandler<JoinGameRequestMessage>(OnJoinGameServerMsg);
+        }
 
         // player joins
         public override void OnServerConnect(NetworkConnection conn) {
             Debug.Log("[SERVER] PLAYER CONNECT" + " (" + (numPlayers + 1) + " / " + maxPlayers + " players)");
+            
             if (numPlayers >= maxPlayers) {
                 RejectPlayerConnection(conn, "Server is at max player limit.");
                 return;
@@ -225,70 +244,6 @@ namespace Core {
                     RejectPlayerConnection(conn , "Game is currently running and does not permit joining during the match.");
                 }
             }
-
-            IEnumerator AddNewPlayerConnection() {
-                while (!conn.isReady) {
-                    yield return new WaitForEndOfFrame();
-                }
-
-                var sessionStatus = Game.Instance.SessionStatus;
-                var levelData = Game.Instance.LoadedLevelData;;
-                
-                switch (sessionStatus) {
-                    case SessionStatus.SinglePlayerMenu:
-                    case SessionStatus.InGame:
-                    case SessionStatus.Loading:
-                        LoadingPlayer loadingPlayer = Instantiate(loadingPlayerPrefab);
-                        NetworkServer.AddPlayerForConnection(conn, loadingPlayer.gameObject);
-                        if (conn.identity != null) {
-                            var player = conn.identity.GetComponent<LoadingPlayer>();
-                            AddPlayer(player);
-                        }
-
-                        // if we're joining mid-game (not single player), attempt to start the single client
-                        if (sessionStatus != SessionStatus.SinglePlayerMenu) {
-                            conn.identity.connectionToClient.Send( new StartGameMessage {
-                                sessionType = SessionType.Multiplayer, 
-                                levelData = levelData
-                            });
-                        }
-                        break;
-                
-                    case SessionStatus.LobbyMenu:
-                        // Fetch host lobby config to send to client instead of game state loaded level data
-                        var hostLobbyConfigurationPanel = FindObjectOfType<LobbyConfigurationPanel>();
-                        if (hostLobbyConfigurationPanel) {
-                            levelData = hostLobbyConfigurationPanel.LobbyLevelData;
-                        }
-                        
-                        LobbyPlayer lobbyPlayer = Instantiate(lobbyPlayerPrefab);
-                        lobbyPlayer.isHost = LobbyPlayers.Count == 0;
-            
-                        NetworkServer.AddPlayerForConnection(conn, lobbyPlayer.gameObject);
-                    
-                        if (conn.identity != null) {
-                            var player = conn.identity.GetComponent<LobbyPlayer>();
-                            AddPlayer(player);
-                        }
-                        break;
-                    
-                    case SessionStatus.Offline:
-                        // I don't know how the hell we get here but something gone bonkers if we do
-                        Debug.LogError("Somehow tried to get a connection without being online!");
-                        conn.Disconnect();
-                        break;
-                }
-
-                conn.identity.connectionToClient.Send(new JoinGameMessage {
-                        showLobby = sessionStatus == SessionStatus.LobbyMenu, 
-                        levelData = levelData,
-                        maxPlayers = maxPlayers
-                    }
-                );
-            }
-
-            StartCoroutine(AddNewPlayerConnection());
-
         }
         
         // player leaves
@@ -370,7 +325,7 @@ namespace Core {
                 case ShipPlayer shipPlayer: ShipPlayers.Add(shipPlayer);
                     break;
                 default:
-                    throw new Exception("Unsupported player object tyep!");
+                    throw new Exception("Unsupported player object type!");
             }
         }
 
@@ -461,26 +416,109 @@ namespace Core {
 
         #endregion
         
-        #region Client Message Handlers
         
-        private void JoinGame(JoinGameMessage message) {
-            OnClientConnected?.Invoke(message);
+        #region Server Message Handlers
+
+        private void OnJoinGameServerMsg(NetworkConnection conn, JoinGameRequestMessage message) { 
+            IEnumerator AddNewPlayerConnection() {
+                while (!conn.isReady) {
+                    yield return new WaitForEndOfFrame();
+                }
+
+                // prevent server checks against connection requests on a HostClient
+                var isLocalConnection = conn.connectionId == NetworkClient.connection.connectionId;
+
+                if (!isLocalConnection && !string.IsNullOrEmpty(serverPassword)) {
+                    if (serverPassword != message.password) {
+                        RejectPlayerConnection(conn, "Could not authenticate: incorrect password");
+                        yield return new WaitForEndOfFrame();
+                        conn.Disconnect();
+                        yield break;
+                    }
+                }
+
+                var sessionStatus = Game.Instance.SessionStatus;
+                var levelData = Game.Instance.LoadedLevelData;;
+                
+                switch (sessionStatus) {
+                    case SessionStatus.SinglePlayerMenu:
+                    case SessionStatus.InGame:
+                    case SessionStatus.Loading:
+                        LoadingPlayer loadingPlayer = Instantiate(loadingPlayerPrefab);
+                        NetworkServer.AddPlayerForConnection(conn, loadingPlayer.gameObject);
+                        if (conn.identity != null) {
+                            var player = conn.identity.GetComponent<LoadingPlayer>();
+                            AddPlayer(player);
+                        }
+
+                        // if we're joining mid-game (not single player), attempt to start the single client
+                        if (sessionStatus != SessionStatus.SinglePlayerMenu) {
+                            conn.identity.connectionToClient.Send( new StartGameMessage {
+                                sessionType = SessionType.Multiplayer, 
+                                levelData = levelData
+                            });
+                        }
+                        break;
+                
+                    case SessionStatus.LobbyMenu:
+                        // Fetch host lobby config to send to client instead of game state loaded level data
+                        var hostLobbyConfigurationPanel = FindObjectOfType<LobbyConfigurationPanel>();
+                        if (hostLobbyConfigurationPanel) {
+                            levelData = hostLobbyConfigurationPanel.LobbyLevelData;
+                        }
+                        
+                        LobbyPlayer lobbyPlayer = Instantiate(lobbyPlayerPrefab);
+                        lobbyPlayer.isHost = LobbyPlayers.Count == 0;
+            
+                        NetworkServer.AddPlayerForConnection(conn, lobbyPlayer.gameObject);
+                    
+                        if (conn.identity != null) {
+                            var player = conn.identity.GetComponent<LobbyPlayer>();
+                            AddPlayer(player);
+                        }
+                        break;
+                    
+                    case SessionStatus.Offline:
+                        // I don't know how the hell we get here but something gone bonkers if we do
+                        Debug.LogError("Somehow tried to get a connection without being online!");
+                        conn.Disconnect();
+                        break;
+                }
+
+                conn.identity.connectionToClient.Send(new JoinGameSuccessMessage {
+                        showLobby = sessionStatus == SessionStatus.LobbyMenu, 
+                        levelData = levelData,
+                        maxPlayers = maxPlayers
+                    }
+                );
+            }
+
+            StartCoroutine(AddNewPlayerConnection());
         }
         
-        private void RejectConnection(JoinGameRejectionMessage message) {
+        #endregion
+        
+        
+        #region Client Message Handlers
+        
+        private void OnJoinGameClientMsg(JoinGameSuccessMessage successMessage) {
+            OnClientConnected?.Invoke(successMessage);
+        }
+        
+        private void OnRejectConnectionClientMsg(JoinGameRejectionMessage message) {
             Debug.Log(message.reason);
             OnClientConnectionRejected?.Invoke(message.reason);
         }
 
-        private void StartLoadGame(StartGameMessage message) {
+        private void OnStartLoadGameClientMsg(StartGameMessage message) {
             Game.Instance.StartGame(message.sessionType, message.levelData);
         }
 
-        private void ShowLobby(ReturnToLobbyMessage message) {
+        private void OnShowLobbyClientMsg(ReturnToLobbyMessage message) {
             Game.Instance.QuitToLobby();
         }
         
-        private void SetShipPosition(SetShipPositionMessage message) {
+        private void OnSetShipPositionClientMsg(SetShipPositionMessage message) {
             var ship = ShipPlayer.FindLocal;
             if (ship) {
                 ship.AbsoluteWorldPosition = message.position;

@@ -127,6 +127,8 @@ namespace Core {
                     return "0.0.0.0";
                 case "lastUsedServerJoinPort":
                     return "7777";
+                case "lastUsedServerPassword":
+                    return "";
                 default: 
                     Debug.LogWarning("Attempted to get preference " + key + " with no default specified");
                     return "";

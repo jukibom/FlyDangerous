@@ -2,6 +2,7 @@ using System;
 using Audio;
 using Core;
 using Core.Player;
+using Mirror;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -39,6 +40,7 @@ namespace Menus.Main_Menu {
             playerName.text = Preferences.Instance.GetString("playerName");
             serverIPAddress.text = Preferences.Instance.GetString("lastUsedServerJoinAddress");
             serverPort.text = Preferences.Instance.GetString("lastUsedServerJoinPort");
+            serverPassword.text = Preferences.Instance.GetString("lastUsedServerPassword");
         }
 
         public void Show() {
@@ -66,34 +68,41 @@ namespace Menus.Main_Menu {
             Preferences.Instance.SetString("playerName", playerName.text);
             Preferences.Instance.SetString("lastUsedServerJoinAddress", serverIPAddress.text);
             Preferences.Instance.SetString("lastUsedServerJoinPort", serverPort.text);
+            Preferences.Instance.SetString("lastUsedServerPassword", serverPassword.text);
             Preferences.Instance.Save();
         }
         
         public void Join() {
+            // save entries
+            OnTextEntryChange();
+            
             string hostAddress = serverIPAddress.text;
             ushort port = Convert.ToUInt16(Int16.Parse(serverPort.text));
             Debug.Log("Connecting to " + hostAddress + ":" + port);
             
             FdNetworkManager.Instance.networkAddress = hostAddress;
             FdNetworkManager.Instance.NetworkTransport.Port = port;
-            
+
             FdNetworkManager.Instance.StartClient();
+            FdNetworkManager.Instance.joinGameRequestMessage = new FdNetworkManager.JoinGameRequestMessage {
+                password = serverPassword.text
+            };
             joinButton.button.interactable = false;
             joinButton.label.text = "CONNECTING ...";
         }
 
-        private void HandleClientConnected(FdNetworkManager.JoinGameMessage message) {
+        private void HandleClientConnected(FdNetworkManager.JoinGameSuccessMessage successMessage) {
             Hide();
             
             // if the server has created a lobby player for us, show the lobby
-            if (message.showLobby) {
+            if (successMessage.showLobby) {
                 Game.Instance.SessionStatus = SessionStatus.LobbyMenu;
                 lobbyMenu.Show();
                 lobbyMenu.JoinPlayer();
                 
                 var localPlayer = LobbyPlayer.FindLocal;
                 if (localPlayer) {
-                    localPlayer.UpdateLobby(message.levelData, message.maxPlayers);
+                    localPlayer.UpdateLobby(successMessage.levelData, successMessage.maxPlayers);
                 }
             }
         }
