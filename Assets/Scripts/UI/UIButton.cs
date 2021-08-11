@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class UIButton : MonoBehaviour, IPointerEnterHandler, ISelectHandler, IScrollHandler {
+    [SerializeField] public Button button;
     [SerializeField] public Text label;
     public void OnPointerEnter(PointerEventData eventData) {
         PlaySound();

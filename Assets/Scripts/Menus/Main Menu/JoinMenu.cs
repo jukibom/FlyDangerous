@@ -9,7 +9,7 @@ namespace Menus.Main_Menu {
     public class JoinMenu : MonoBehaviour {
         [SerializeField] private MainMenu mainMenu;
         [SerializeField] private LobbyMenu lobbyMenu;
-        [SerializeField] private Button joinButton;
+        [SerializeField] private UIButton joinButton;
         [SerializeField] private MultiPlayerMenu multiPlayerMenu;
         
         [Header("Input Fields")]
@@ -25,11 +25,13 @@ namespace Menus.Main_Menu {
 
         private void Start() {
             FdNetworkManager.OnClientConnected += HandleClientConnected;
+            FdNetworkManager.OnClientDisconnected += HandleFailedConnection;
             FdNetworkManager.OnClientConnectionRejected += HandleClientRejected;
         }
         
         private void OnDestroy() {
             FdNetworkManager.OnClientConnected -= HandleClientConnected;
+            FdNetworkManager.OnClientDisconnected -= HandleFailedConnection;
             FdNetworkManager.OnClientConnectionRejected -= HandleClientRejected;
         }
 
@@ -41,8 +43,9 @@ namespace Menus.Main_Menu {
 
         public void Show() {
             gameObject.SetActive(true);
-            joinButton.interactable = true;
-            joinButton.Select();
+            joinButton.button.interactable = true;
+            joinButton.label.text = "CONNECT";
+            joinButton.button.Select();
             _animator.SetBool("Open", true);
         }
 
@@ -75,11 +78,11 @@ namespace Menus.Main_Menu {
             FdNetworkManager.Instance.NetworkTransport.Port = port;
             
             FdNetworkManager.Instance.StartClient();
-            joinButton.interactable = false;
+            joinButton.button.interactable = false;
+            joinButton.label.text = "CONNECTING ...";
         }
 
         private void HandleClientConnected(FdNetworkManager.JoinGameMessage message) {
-            joinButton.interactable = true;
             Hide();
             
             // if the server has created a lobby player for us, show the lobby
@@ -90,11 +93,16 @@ namespace Menus.Main_Menu {
                 
                 var localPlayer = LobbyPlayer.FindLocal;
                 if (localPlayer) {
-                    localPlayer.UpdateLobby(message.levelData);
+                    localPlayer.UpdateLobby(message.levelData, message.maxPlayers);
                 }
             }
         }
 
+        private void HandleFailedConnection() {
+            joinButton.button.interactable = true;
+            joinButton.label.text = "CONNECT";
+            joinButton.button.Select();
+        }
 
         private void HandleClientRejected(string reason) {
             Hide();
