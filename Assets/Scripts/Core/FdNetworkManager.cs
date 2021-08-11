@@ -12,6 +12,8 @@ using UnityEngine;
 namespace Core {
     public class FdNetworkManager : NetworkManager {
         
+        public const short maxPlayerLimit = 128;
+        
         public static FdNetworkManager Instance => singleton as FdNetworkManager;
         
         // TODO: This is game mode dependent
@@ -29,6 +31,7 @@ namespace Core {
         public struct JoinGameMessage : NetworkMessage {
             public bool showLobby;
             public LevelData levelData;
+            public short maxPlayers;
         }
         
         private struct StartGameMessage : NetworkMessage {

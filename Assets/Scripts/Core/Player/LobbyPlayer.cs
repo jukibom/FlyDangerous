@@ -47,8 +47,8 @@ namespace Core.Player {
             }
         }
 
-        public void UpdateLobby(LevelData lobbyLevelData) {
-            CmdUpdateLobby(lobbyLevelData);
+        public void UpdateLobby(LevelData lobbyLevelData, short maxPlayers) {
+            CmdUpdateLobby(lobbyLevelData, maxPlayers);
         }
 
         // On local client start
@@ -110,15 +110,16 @@ namespace Core.Player {
         }
 
         [Command]
-        private void CmdUpdateLobby(LevelData lobbyLevelData) {
-            RpcUpdateLobby(lobbyLevelData);
+        private void CmdUpdateLobby(LevelData lobbyLevelData, short maxPlayers) {
+            RpcUpdateLobby(lobbyLevelData, maxPlayers);
         }
 
         [ClientRpc]
-        private void RpcUpdateLobby(LevelData lobbyLevelData) {
+        private void RpcUpdateLobby(LevelData lobbyLevelData, short maxPlayers) {
             if (!NetworkClient.isHostClient) {
                 var configPanel = FindObjectOfType<LobbyConfigurationPanel>();
                 if (configPanel) {
+                    configPanel.maxPlayers = maxPlayers;
                     configPanel.LobbyLevelData = lobbyLevelData;
                 }
             }
