@@ -6,6 +6,7 @@ using Menus.Options;
 using UnityEngine;
 using UnityEngine.UI;
 using Core;
+using Mirror;
 
 public class TopMenu : MonoBehaviour
 {
@@ -31,7 +32,7 @@ public class TopMenu : MonoBehaviour
     }
 
     public void OpenSinglePlayerPanel() {
-        FdNetworkManager.Instance.maxConnections = 1;
+        NetworkServer.dontListen = true;
         FdNetworkManager.Instance.StartHost();
         Game.Instance.SessionStatus = SessionStatus.SinglePlayerMenu;
         

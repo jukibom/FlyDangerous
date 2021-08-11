@@ -49,7 +49,7 @@ namespace Menus.Main_Menu {
         public void StartHost() {
             headerText.text = "HOSTING LOBBY";
             // TODO: Use UI for maxConnections
-            FdNetworkManager.Instance.maxConnections = 16;
+            NetworkServer.dontListen = false;
             FdNetworkManager.Instance.StartHost();;
         }
 
