@@ -584,17 +584,34 @@ namespace Core.Player {
             }
 
             /* INPUTS */
+            
+            var latH = _latHInput;
+            var latV = _latVInput;
+            var throttle = _throttleInput;
+            
             // special case for throttle - no reverse while boosting but, while always going forward, the ship will change
-            // vector less harshly while holding back (up to 40%)
-            var throttle = _isBoosting && _currentBoostTime < _totalBoostTime
-                ? Math.Min(1f, _throttleInput + 1.6f)
-                : _throttleInput;
+            // vector less harshly while holding back (up to 40%). The whole reverse axis is remapped to 40% for this calculation.
+            // any additional throttle thrust not used in boost to be distributed across laterals
+            if (_isBoosting && _currentBoostTime < _totalBoostTime) {
+                throttle = Mathf.Min(1f, MathfExtensions.Remap(-1, 0, 0.6f, 1, _throttleInput));
+            
+                var delta = 1f - throttle;
+                if (delta > 0) {    
+                    var latInputTotal = Mathf.Abs(latH) + Mathf.Abs(latV);
+                    if (latInputTotal > 0) {
+                        var latHComponent = Mathf.Abs(latH) / latInputTotal;
+                        var latVComponent = Mathf.Abs(latV) / latInputTotal;
+                        latH *= 1 + (delta * latHComponent);
+                        latV *= 1 + (delta * latVComponent);
+                    }
+                }
+            }
 
             // Get the raw inputs multiplied by the ship params multipliers as a vector3.
             // All components are between -1 and 1.
             var thrustInput = new Vector3(
-                _latHInput * _latHMultiplier,
-                _latVInput * _latVMultiplier,
+                latH * _latHMultiplier,
+                latV * _latVMultiplier,
                 throttle * _throttleMultiplier
             );
 
