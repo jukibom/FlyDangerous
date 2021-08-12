@@ -68,7 +68,7 @@ namespace Menus.Main_Menu {
                     if (lobbyPlayers.All(lobbyPlayer => lobbyPlayer.isReady)) {
                         FdNetworkManager.Instance.StartGameLoadSequence(SessionType.Multiplayer, lobbyLevelData);
                     }
-                    // TODO: else send message that host wants to start the game?
+                    localLobbyPlayer.SendChatMessage("<HOST WANTS TO START THE GAME>");
                 }
                 else {
                     localLobbyPlayer.ToggleReady();   
