@@ -292,23 +292,9 @@ namespace Core.Player {
             
             // register self as floating origin focus
             FloatingOrigin.Instance.FocalTransform = transform;
+            
+            SetFlightAssistDefaults(Preferences.Instance.GetString("flightAssistDefault"));
 
-            switch (Preferences.Instance.GetString("flightAssistDefault")) {
-                case "vector assist only":
-                    _flightAssistVectorControl = true;
-                    break;
-                case "rotational assist only":
-                    _flightAssistRotationalDampening = true;
-                    break;
-                case "all off":
-                    _flightAssistVectorControl = false;
-                    _flightAssistRotationalDampening = false;
-                    break;
-                default:
-                    _flightAssistVectorControl = true;
-                    _flightAssistRotationalDampening = true;
-                    break;
-            }
             CmdSetPlayerName(Preferences.Instance.GetString("playerName"));
         }
         // called when the server has finished instantiating all players
@@ -346,11 +332,30 @@ namespace Core.Player {
 
             AudioManager.Instance.Stop("ship-boost");
         }
-        
+
         private void OnTriggerEnter(Collider other) {
             var checkpoint = other.GetComponentInParent<Checkpoint>();
             if (checkpoint) {
                 checkpoint.Hit();
+            }
+        }
+
+        public void SetFlightAssistDefaults(string preference) {
+            switch (preference) {
+                case "vector assist only":
+                    _flightAssistVectorControl = true;
+                    break;
+                case "rotational assist only":
+                    _flightAssistRotationalDampening = true;
+                    break;
+                case "all off":
+                    _flightAssistVectorControl = false;
+                    _flightAssistRotationalDampening = false;
+                    break;
+                default:
+                    _flightAssistVectorControl = true;
+                    _flightAssistRotationalDampening = true;
+                    break;
             }
         }
         

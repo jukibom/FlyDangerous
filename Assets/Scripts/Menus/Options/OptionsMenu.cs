@@ -1,6 +1,7 @@
 ﻿using System;
 using Audio;
 using Core;
+using Core.Player;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -72,6 +73,22 @@ namespace Menus.Options {
             SavePreferences();
             AudioManager.Instance.Play("ui-cancel");
             returnToParentMenu.Invoke();
+        }
+
+        public void OnFlightAssistDefaultsChange(Dropdown dropdown) {
+            
+            // if the game is running, apply the chosen defaults to the local player ship
+            var player = ShipPlayer.FindLocal;
+            if (player) {
+                var preference = "";
+                switch (dropdown.value) {
+                    case 0: preference = "all on"; break;
+                    case 1: preference = "rotational assist only"; break;
+                    case 2: preference = "vector assist only"; break;
+                    case 3: preference = "all off"; break;
+                }
+                player.SetFlightAssistDefaults(preference);
+            }
         }
 
         private void LoadPreferences() {
