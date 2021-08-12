@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Audio;
+using Core;
+using Core.Player;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.UI;
@@ -35,14 +37,9 @@ public class Track : MonoBehaviour {
     public void InitialiseTrack() {
         var start = Checkpoints.Find(c => c.Type == CheckpointType.Start);
         if (start) {
-            var ship = FindObjectOfType<Ship>();
+            var ship = ShipPlayer.FindLocal;
             if (ship) {
-                var startTransform = start.transform;
-                ship.transform.position = new Vector3 {
-                    x = startTransform.position.x,
-                    y = startTransform.position.y,
-                    z = startTransform.position.z
-                };
+                ship.transform.position = start.transform.position;
             }
         }
         else {
@@ -121,7 +118,7 @@ public class Track : MonoBehaviour {
                 _user.totalTimeDisplay.GetComponent<Text>().color = new Color(0, 1, 0, 1);
 
                 if (!FindObjectOfType<Game>().ShipParameters.ToJsonString()
-                    .Equals(Ship.ShipParameterDefaults.ToJsonString())) {
+                    .Equals(ShipPlayer.ShipParameterDefaults.ToJsonString())) {
                     // you dirty debug cheater!
                     _user.totalTimeDisplay.GetComponent<Text>().color = new Color(1, 1, 0, 1);
                 }
@@ -165,7 +162,10 @@ public class Track : MonoBehaviour {
     private void FixedUpdate() {
         // failing to get user in early stages due to modular loading? 
         if (!_user) {
-            _user = FindObjectOfType<User>();
+            var ship = ShipPlayer.FindLocal;
+            if (ship) {
+                _user = ship.User;
+            }
             return;
         }
 

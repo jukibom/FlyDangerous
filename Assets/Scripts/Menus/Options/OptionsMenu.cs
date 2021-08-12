@@ -1,7 +1,6 @@
 ﻿using System;
 using Audio;
-using Engine;
-using UI;
+using Core;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
