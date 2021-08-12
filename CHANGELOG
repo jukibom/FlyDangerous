@@ -1,6 +1,25 @@
-﻿???
+﻿0.3.0
+New:
+    * Multiplayer - enormous refactor to a client => server architecture.
+        * Lobby system - only host may make changes
+            * Ready-up system
+            * Chat box (lobby only for now)
+        * Complete overhaul of loading logic.
+        * Ability for non-host players to warp to the host (replaces Restart functionality).
+        * Ability for host players to return all players to the lobby.
+    * Targeting system - currently not user-selectable but draws a target and distance for elements in the world on the ship cockpit glass 
+    * Menu system segregates single and multiplayer - oooo new icon buttons!
+
 Changes:
-    * Refactored menu system to segregate single and multiplayer - oooo new icon buttons!
+    * Lighting pass on terrain worlds - terrain now renders shadows onto itself and other entities.
+    * Shadow pass - shadows draw much further and have multiple levels of cascade. The cockpit effectively has an entire shadow map to itself.
+    * Flight model changes:
+        * Pulling back on the throttle at all now decreases forward thrust UNDER BOOST by up to 40% - previously this only worked on the bottom 40% of the axis and is now spread across the whole reverse axis.
+        * Any residual thrust can now be pushed into lats + verts - this, by virtue of applying reverse throttle, applies automatically with vector flight assist when making tight maneuvers. 
+    
+Fixes:
+    * Space station has had a much-needed collider pass, should now be able to fly between fine geometry details
+    * Changing the default flight assist dropdown option will now apply that option immediately (no need to add key binds) 
 
 0.2.2b
 Fixes:
