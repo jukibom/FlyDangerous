@@ -72,7 +72,6 @@ namespace Core {
                 case "mouseXInvert:":
                 case "mouseYInvert:":
                 case "enableExperimentalTerrain":
-                case "enableExperimentalHighResTerrain":
                     return false;
 
                 default: 
