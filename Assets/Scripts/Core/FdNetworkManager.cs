@@ -1,9 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Core.Player;
-using JetBrains.Annotations;
 using kcp2k;
 using Mirror;
 using Misc;
@@ -15,9 +13,6 @@ namespace Core {
         public const short maxPlayerLimit = 128;
         
         public static FdNetworkManager Instance => singleton as FdNetworkManager;
-        
-        // TODO: This is game mode dependent
-        [SerializeField] private int minPlayers = 2;
 
         [Header("Room")] 
         [SerializeField] private LobbyPlayer lobbyPlayerPrefab;
