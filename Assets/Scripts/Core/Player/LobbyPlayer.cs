@@ -31,7 +31,7 @@ namespace Core.Player {
         private LobbyMenu LobbyUI {
             get
             {
-                if (_lobby == null && hasAuthority) {
+                if (_lobby == null) {
                     _lobby = FindObjectOfType<LobbyMenu>();
                 }
 
@@ -76,6 +76,10 @@ namespace Core.Player {
             CmdSetReadyStatus(!isReady);
         }
 
+        public void SendChatMessage(string message) {
+            CmdSendMessage(message);
+        }
+
         public void OnPlayerNameInputChanged() {
             CmdSetPlayerName(playerNameTextEntry.text);
             Preferences.Instance.SetString("playerName", playerNameTextEntry.text);
@@ -101,7 +105,8 @@ namespace Core.Player {
             playerNameTextEntry.text = playerName;
             readyStatus.enabled = isReady;
             
-            if (LobbyUI) {
+            // Client-side UI changes to start button
+            if (LobbyUI && hasAuthority) {
                 if (isHost) {
                     LobbyUI.StartButton.label.text = "START GAME";
                 }
@@ -132,6 +137,18 @@ namespace Core.Player {
         [Command]
         private void CmdUpdateLobby(LevelData lobbyLevelData, short maxPlayers) {
             RpcUpdateLobby(lobbyLevelData, maxPlayers);
+        }
+
+        [Command]
+        private void CmdSendMessage(string message) {
+            RpcReceiveMessage(playerName + ": " + message);
+        }
+
+        [ClientRpc]
+        private void RpcReceiveMessage(string message) {
+            if (LobbyUI) {
+                LobbyUI.ReceiveChatMessage(message);
+            }
         }
 
         [ClientRpc]

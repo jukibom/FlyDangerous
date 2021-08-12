@@ -1,4 +1,5 @@
-﻿using Audio;
+﻿using System.Linq;
+using Audio;
 using Core;
 using Core.Player;
 using JetBrains.Annotations;
@@ -19,6 +20,10 @@ namespace Menus.Main_Menu {
 
         [SerializeField] private Button loadCustomButton;
         [SerializeField] private LobbyConfigurationPanel lobbyConfigurationPanel;
+
+        [SerializeField] private InputField chatSendMessageInput;
+        [SerializeField] private Text chatMessageBox;
+        [SerializeField] private ScrollRect chatScrollRect;
 
         private Animator _animator;
 
@@ -53,15 +58,21 @@ namespace Menus.Main_Menu {
             FdNetworkManager.Instance.StartHost();;
         }
 
-        public void StopHost() {
-            FdNetworkManager.Instance.StopHost();
-        }
-
         public void StartGame() {
             var localLobbyPlayer = LobbyPlayer.FindLocal;
             var lobbyLevelData = lobbyConfigurationPanel.LobbyLevelData;
-            if (localLobbyPlayer && localLobbyPlayer.isHost) {
-                FdNetworkManager.Instance.StartGameLoadSequence(SessionType.Multiplayer, lobbyLevelData);
+            if (localLobbyPlayer) {
+                // host will attempt to start game if all are ready
+                if (localLobbyPlayer.isHost) {
+                    var lobbyPlayers = FindObjectsOfType<LobbyPlayer>();
+                    if (lobbyPlayers.All(lobbyPlayer => lobbyPlayer.isReady)) {
+                        FdNetworkManager.Instance.StartGameLoadSequence(SessionType.Multiplayer, lobbyLevelData);
+                    }
+                    // TODO: else send message that host wants to start the game?
+                }
+                else {
+                    localLobbyPlayer.ToggleReady();   
+                }
             }
         }
 
@@ -81,6 +92,23 @@ namespace Menus.Main_Menu {
 
         public void Cancel() {
             CloseLobby();
+        }
+
+        public void SendChatMessage() {
+            var message = chatSendMessageInput.text;
+            var player = LobbyPlayer.FindLocal;
+            if (player && message != "") {
+                player.SendChatMessage(message);
+            }
+
+            chatSendMessageInput.text = "";
+            chatSendMessageInput.ActivateInputField();
+        }
+
+        public void ReceiveChatMessage(string message) {
+            chatMessageBox.text += message + "\n";
+            // force to bottom
+            chatScrollRect.verticalNormalizedPosition = 0f;
         }
     }
 }
