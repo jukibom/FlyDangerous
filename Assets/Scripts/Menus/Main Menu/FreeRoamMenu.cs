@@ -15,6 +15,7 @@ namespace Menus.Main_Menu {
         [SerializeField] private SinglePlayerMenu singlePlayerMenu;
         [SerializeField] private InputField seedInput;
         [SerializeField] private Button defaultActiveButton;
+        [SerializeField] private Button startButton;
 
         [CanBeNull] private LevelData _levelData;
         [SerializeField] private Dropdown conditionsSelector;
@@ -22,17 +23,19 @@ namespace Menus.Main_Menu {
         private Animator _animator;
 
         private void Awake() {
-            this._animator = this.GetComponent<Animator>();
+            _animator = GetComponent<Animator>();
         }
 
         public void Hide() {
-            this.gameObject.SetActive(false);
+            gameObject.SetActive(false);
         }
 
         public void Show() {
-            this.gameObject.SetActive(true);
+            startButton.interactable = true;
+
+            gameObject.SetActive(true);
             defaultActiveButton.Select();
-            this._animator.SetBool("Open", true);
+            _animator.SetBool("Open", true);
         }
 
         public void ClosePanel() {
@@ -53,6 +56,8 @@ namespace Menus.Main_Menu {
         }
 
         public void StartFreeRoam() {
+            startButton.interactable = false;
+            
             var levelData = _levelData != null ? _levelData : new LevelData();
             levelData.location = Preferences.Instance.GetBool("enableExperimentalTerrain")
                 ? Location.TerrainV2

@@ -16,6 +16,7 @@ namespace Menus.Main_Menu {
         [SerializeField] private InputField saveInput;
         [SerializeField] private Text saveWarning;
         [SerializeField] private Button defaultActiveButton;
+        [SerializeField] private Button startButton;
 
         [CanBeNull] private LevelData _levelData;
 
@@ -30,9 +31,10 @@ namespace Menus.Main_Menu {
         }
 
         public void Show() {
-            this.gameObject.SetActive(true);
+            startButton.interactable = true;
+            gameObject.SetActive(true);
             defaultActiveButton.Select();
-            this._animator.SetBool("Open", true);
+            _animator.SetBool("Open", true);
         }
         
         public void ClosePanel() {
@@ -73,6 +75,7 @@ namespace Menus.Main_Menu {
         }
 
         public void StartMap() {
+            startButton.interactable = false;
             var levelData = _levelData ?? new LevelData();
             FdNetworkManager.Instance.StartGameLoadSequence(SessionType.Singleplayer, levelData);
         }
