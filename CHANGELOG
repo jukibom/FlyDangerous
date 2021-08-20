@@ -1,4 +1,12 @@
-﻿0.3.0
+﻿0.3.1
+New:
+
+Changes:
+    * Updated to Unity 2021.1.17f1
+
+Fixes:
+
+0.3.0
 New:
     * Multiplayer - enormous refactor to a client => server architecture.
         * Lobby system - only host may make changes
@@ -16,6 +24,7 @@ Changes:
     * Flight model changes:
         * Pulling back on the throttle at all now decreases forward thrust UNDER BOOST by up to 40% - previously this only worked on the bottom 40% of the axis and is now spread across the whole reverse axis.
         * Any residual thrust can now be pushed into lats + verts - this, by virtue of applying reverse throttle, applies automatically with vector flight assist when making tight maneuvers. 
+    * Removed experimental HQ terrain - was worth a try but it ran poorly on many systems and caused multiplayer instabilities
     
 Fixes:
     * Space station has had a much-needed collider pass, should now be able to fly between fine geometry details

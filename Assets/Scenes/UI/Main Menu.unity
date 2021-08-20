@@ -3407,7 +3407,6 @@ GameObject:
   - component: {fileID: 495656927}
   - component: {fileID: 495656926}
   - component: {fileID: 495656925}
-  - component: {fileID: 495656924}
   - component: {fileID: 495656923}
   m_Layer: 0
   m_Name: Space Dust Particles
@@ -3443,21 +3442,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forceOn: 1
---- !u!114 &495656924
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 495656921}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07c3070554d0a8944a95ff8f018c2c9f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Property:
-    m_Name: Camera_position
-  Target: {fileID: 339787321}
 --- !u!114 &495656925
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3471,8 +3455,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ExecuteInEditor: 1
-  m_Bindings:
-  - {fileID: 495656924}
+  m_Bindings: []
   m_VisualEffect: {fileID: 495656927}
 --- !u!73398921 &495656926
 VFXRenderer:
