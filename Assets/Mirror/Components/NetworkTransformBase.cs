@@ -1,563 +1,538 @@
-// vis2k:
-// base class for NetworkTransform and NetworkTransformChild.
-// New method is simple and stupid. No more 1500 lines of code.
+// NetworkTransform V2 aka project Oumuamua by vis2k (2021-07)
+// Snapshot Interpolation: https://gafferongames.com/post/snapshot_interpolation/
 //
-// Server sends current data.
-// Client saves it and interpolates last and latest data points.
-//   Update handles transform movement / rotation
-//   FixedUpdate handles rigidbody movement / rotation
+// Base class for NetworkTransform and NetworkTransformChild.
+// => simple unreliable sync without any interpolation for now.
+// => which means we don't need teleport detection either
 //
-// Notes:
-// * Built-in Teleport detection in case of lags / teleport / obstacles
-// * Quaternion > EulerAngles because gimbal lock and Quaternion.Slerp
-// * Syncs XYZ. Works 3D and 2D. Saving 4 bytes isn't worth 1000 lines of code.
-// * Initial delay might happen if server sends packet immediately after moving
-//   just 1cm, hence we move 1cm and then wait 100ms for next packet
-// * Only way for smooth movement is to use a fixed movement speed during
-//   interpolation. interpolation over time is never that good.
+// NOTE: several functions are virtual in case someone needs to modify a part.
 //
+// Channel: uses UNRELIABLE at all times.
+// -> out of order packets are dropped automatically
+// -> it's better than RELIABLE for several reasons:
+//    * head of line blocking would add delay
+//    * resending is mostly pointless
+//    * bigger data race:
+//      -> if we use a Cmd() at position X over reliable
+//      -> client gets Cmd() and X at the same time, but buffers X for bufferTime
+//      -> for unreliable, it would get X before the reliable Cmd(), still
+//         buffer for bufferTime but end up closer to the original time
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Mirror
 {
     public abstract class NetworkTransformBase : NetworkBehaviour
     {
+        // TODO SyncDirection { CLIENT_TO_SERVER, SERVER_TO_CLIENT } is easier?
         [Header("Authority")]
         [Tooltip("Set to true if moves come from owner client, set to false if moves always come from server")]
         public bool clientAuthority;
-
-        /// <summary>
-        /// We need to store this locally on the server so clients can't request Authority when ever they like
-        /// </summary>
-        bool clientAuthorityBeforeTeleport;
 
         // Is this a client with authority over this transform?
         // This component could be on the player object or any object that has been assigned authority to this client.
         bool IsClientWithAuthority => hasAuthority && clientAuthority;
 
-        // Sensitivity is added for VR where human players tend to have micro movements so this can quiet down
-        // the network traffic.  Additionally, rigidbody drift should send less traffic, e.g very slow sliding / rolling.
-        [Header("Sensitivity")]
-        [Tooltip("Changes to the transform must exceed these values to be transmitted on the network.")]
-        public float localPositionSensitivity = .01f;
-        [Tooltip("If rotation exceeds this angle, it will be transmitted on the network")]
-        public float localRotationSensitivity = .01f;
-        [Tooltip("Changes to the transform must exceed these values to be transmitted on the network.")]
-        public float localScaleSensitivity = .01f;
-
-        [Header("Compression")]
-        [Tooltip("Enables smallest-three quaternion compression, which is lossy. Great for 3D, not great for 2D where minimal sprite rotations would look wobbly.")]
-        public bool compressRotation; // disabled by default to not break 2D projects
-
-        [Header("Interpolation")]
-        [Tooltip("Set to true if scale should be interpolated, false is ideal for instant sprite flipping.")]
-        public bool interpolateScale = true;
-        [Tooltip("Set to true if rotation should be interpolated, false is ideal for instant turning, common in retro 2d style games")]
-        public bool interpolateRotation = true;
-        [Tooltip("Set to true if position should be interpolated, false is ideal for grid bassed movement")]
-        public bool interpolatePosition = true;
-
-        [Header("Synchronization")]
-        // It should be very rare cases that people want to continuously sync scale, true by default to not break previous projects that use it
-        // Users in most scenarios are best to send change of scale via cmd/rpc, syncvar/hooks, only once, and when required.  Saves instant 12 bytes (25% of NT bandwidth!)
-        [Tooltip("Set to false to not continuously send scale data, and save bandwidth.")]
-        public bool syncScale = true;
-
         // target transform to sync. can be on a child.
         protected abstract Transform targetComponent { get; }
 
-        // server
-        Vector3 lastPosition;
-        Quaternion lastRotation;
-        Vector3 lastScale;
+        [Header("Synchronization")]
+        [Range(0, 1)] public float sendInterval = 0.050f;
+        public bool syncPosition = true;
+        public bool syncRotation = true;
+        // scale sync is rare. off by default.
+        public bool syncScale = false;
 
-        // client
-        public class DataPoint
+        double lastClientSendTime;
+        double lastServerSendTime;
+
+        // not all games need to interpolate. a board game might jump to the
+        // final position immediately.
+        [Header("Interpolation")]
+        public bool interpolatePosition = true;
+        public bool interpolateRotation = true;
+        public bool interpolateScale = true;
+
+        // "Experimentally I’ve found that the amount of delay that works best
+        //  at 2-5% packet loss is 3X the packet send rate"
+        // NOTE: we do NOT use a dyanmically changing buffer size.
+        //       it would come with a lot of complications, e.g. buffer time
+        //       advantages/disadvantages for different connections.
+        //       Glenn Fiedler's recommendation seems solid, and should cover
+        //       the vast majority of connections.
+        //       (a player with 2000ms latency will have issues no matter what)
+        [Header("Buffering")]
+        [Tooltip("Snapshots are buffered for sendInterval * multiplier seconds. At 2-5% packet loss, 3x supposedly works best.")]
+        public int bufferTimeMultiplier = 3;
+        public float bufferTime => sendInterval * bufferTimeMultiplier;
+        [Tooltip("Buffer size limit to avoid ever growing list memory consumption attacks.")]
+        public int bufferSizeLimit = 64;
+
+        [Tooltip("Start to accelerate interpolation if buffer size is >= threshold. Needs to be larger than bufferTimeMultiplier.")]
+        public int catchupThreshold = 6;
+
+        [Tooltip("Once buffer is larger catchupThreshold, accelerate by multiplier % per excess entry.")]
+        [Range(0, 1)] public float catchupMultiplier = 0.10f;
+
+        // snapshots sorted by timestamp
+        // in the original article, glenn fiedler drops any snapshots older than
+        // the last received snapshot.
+        // -> instead, we insert into a sorted buffer
+        // -> the higher the buffer information density, the better
+        // -> we still drop anything older than the first element in the buffer
+        // => internal for testing
+        //
+        // IMPORTANT: of explicit 'NTSnapshot' type instead of 'Snapshot'
+        //            interface because List<interface> allocates through boxing
+        internal SortedList<double, NTSnapshot> serverBuffer = new SortedList<double, NTSnapshot>();
+        internal SortedList<double, NTSnapshot> clientBuffer = new SortedList<double, NTSnapshot>();
+
+        // absolute interpolation time, moved along with deltaTime
+        // (roughly between [0, delta] where delta is snapshot B - A timestamp)
+        // (can be bigger than delta when overshooting)
+        double serverInterpolationTime;
+        double clientInterpolationTime;
+
+        // only convert the static Interpolation function to Func<T> once to
+        // avoid allocations
+        Func<NTSnapshot, NTSnapshot, double, NTSnapshot> Interpolate = NTSnapshot.Interpolate;
+
+        [Header("Debug")]
+        public bool showGizmos;
+        public bool showOverlay;
+        public Color overlayColor = new Color(0, 0, 0, 0.5f);
+
+        // snapshot functions //////////////////////////////////////////////////
+        // construct a snapshot of the current state
+        // => internal for testing
+        protected virtual NTSnapshot ConstructSnapshot()
         {
-            public float timeStamp;
-            // use local position/rotation for VR support
-            public Vector3 localPosition;
-            public Quaternion localRotation;
-            public Vector3 localScale;
-            public float movementSpeed;
-        }
-        // interpolation start and goal
-        DataPoint start;
-        DataPoint goal;
-
-        // local authority send time
-        float lastClientSendTime;
-
-        // serialization is needed by OnSerialize and by manual sending from authority
-        // public only for tests
-        public static void SerializeIntoWriter(NetworkWriter writer, Vector3 position, Quaternion rotation, Vector3 scale, bool compressRotation, bool syncScale)
-        {
-            // serialize position, rotation, scale
-            // => compress rotation from 4*4=16 to 4 bytes
-            // => less bandwidth = better CCU tests / scale
-            writer.WriteVector3(position);
-            if (compressRotation)
-            {
-                // smalles three compression for 3D
-                writer.WriteUInt(Compression.CompressQuaternion(rotation));
-            }
-            else
-            {
-                // uncompressed for 2D
-                writer.WriteQuaternion(rotation);
-            }
-            if (syncScale) { writer.WriteVector3(scale); }
-        }
-
-        public override bool OnSerialize(NetworkWriter writer, bool initialState)
-        {
-            // use local position/rotation/scale for VR support
-            SerializeIntoWriter(writer, targetComponent.localPosition, targetComponent.localRotation, targetComponent.localScale, compressRotation, syncScale);
-            return true;
-        }
-
-        // try to estimate movement speed for a data point based on how far it
-        // moved since the previous one
-        // => if this is the first time ever then we use our best guess:
-        //    -> delta based on transform.localPosition
-        //    -> elapsed based on send interval hoping that it roughly matches
-        static float EstimateMovementSpeed(DataPoint from, DataPoint to, Transform transform, float sendInterval)
-        {
-            Vector3 delta = to.localPosition - (from != null ? from.localPosition : transform.localPosition);
-            float elapsed = from != null ? to.timeStamp - from.timeStamp : sendInterval;
-            // avoid NaN
-            return elapsed > 0 ? delta.magnitude / elapsed : 0;
-        }
-
-        // serialization is needed by OnSerialize and by manual sending from authority
-        void DeserializeFromReader(NetworkReader reader)
-        {
-            // put it into a data point immediately
-            DataPoint temp = new DataPoint
-            {
-                // deserialize position, rotation, scale
-                // (rotation is optionally compressed)
-                localPosition = reader.ReadVector3(),
-                localRotation = compressRotation
-                                ? Compression.DecompressQuaternion(reader.ReadUInt())
-                                : reader.ReadQuaternion(),
-                // use current target scale, so we can check boolean and reader later, to see if the data is actually sent.
-                localScale = targetComponent.localScale,
-                timeStamp = Time.time
-            };
-
-            if (syncScale)
-            {
-                // Reader length is checked here, 12 is used as thats the current Vector3 (3 floats) amount.
-                // In rare cases people may do mis-matched builds, log useful warning message, and then do not process missing scale data.
-                if (reader.Length >= 12) { temp.localScale = reader.ReadVector3(); }
-                else { Debug.LogWarning("Reader length does not contain enough data for a scale, please check that both server and client builds syncScale booleans match.", this); }
-            }
-
-            // movement speed: based on how far it moved since last time
-            // has to be calculated before 'start' is overwritten
-            temp.movementSpeed = EstimateMovementSpeed(goal, temp, targetComponent, syncInterval);
-
-            // reassign start wisely
-            // -> first ever data point? then make something up for previous one
-            //    so that we can start interpolation without waiting for next.
-            if (start == null)
-            {
-                start = new DataPoint
-                {
-                    timeStamp = Time.time - syncInterval,
-                    // local position/rotation for VR support
-                    localPosition = targetComponent.localPosition,
-                    localRotation = targetComponent.localRotation,
-                    localScale = targetComponent.localScale,
-                    movementSpeed = temp.movementSpeed
-                };
-            }
-            // -> second or nth data point? then update previous, but:
-            //    we start at where ever we are right now, so that it's
-            //    perfectly smooth and we don't jump anywhere
-            //
-            //    example if we are at 'x':
-            //
-            //        A--x->B
-            //
-            //    and then receive a new point C:
-            //
-            //        A--x--B
-            //              |
-            //              |
-            //              C
-            //
-            //    then we don't want to just jump to B and start interpolation:
-            //
-            //              x
-            //              |
-            //              |
-            //              C
-            //
-            //    we stay at 'x' and interpolate from there to C:
-            //
-            //           x..B
-            //            \ .
-            //             \.
-            //              C
-            //
-            else
-            {
-                float oldDistance = Vector3.Distance(start.localPosition, goal.localPosition);
-                float newDistance = Vector3.Distance(goal.localPosition, temp.localPosition);
-
-                start = goal;
-
-                // teleport / lag / obstacle detection: only continue at current
-                // position if we aren't too far away
-                //
-                // local position/rotation for VR support
-                if (Vector3.Distance(targetComponent.localPosition, start.localPosition) < oldDistance + newDistance)
-                {
-                    start.localPosition = targetComponent.localPosition;
-                    start.localRotation = targetComponent.localRotation;
-                    start.localScale = targetComponent.localScale;
-                }
-            }
-
-            // set new destination in any case. new data is best data.
-            goal = temp;
+            // NetworkTime.localTime for double precision until Unity has it too
+            return new NTSnapshot(
+                // our local time is what the other end uses as remote time
+                NetworkTime.localTime,
+                // the other end fills out local time itself
+                0,
+                targetComponent.localPosition,
+                targetComponent.localRotation,
+                targetComponent.localScale
+            );
         }
 
-        public override void OnDeserialize(NetworkReader reader, bool initialState)
-        {
-            // deserialize
-            DeserializeFromReader(reader);
-        }
-
-        // local authority client sends sync message to server for broadcasting
-        [Command(channel = Channels.Unreliable)]
-        void CmdClientToServerSync(ArraySegment<byte> payload)
-        {
-            // Ignore messages from client if not in client authority mode
-            if (!clientAuthority)
-                return;
-
-            // deserialize payload
-            using (PooledNetworkReader networkReader = NetworkReaderPool.GetReader(payload))
-                DeserializeFromReader(networkReader);
-
-            // server-only mode does no interpolation to save computations,
-            // but let's set the position directly
-            if (isServer && !isClient)
-                ApplyPositionRotationScale(goal.localPosition, goal.localRotation, goal.localScale);
-
-            // set dirty so that OnSerialize broadcasts it
-            SetDirtyBit(1UL);
-        }
-
-        // where are we in the timeline between start and goal? [0,1]
-        static float CurrentInterpolationFactor(DataPoint start, DataPoint goal)
-        {
-            if (start != null)
-            {
-                float difference = goal.timeStamp - start.timeStamp;
-
-                // the moment we get 'goal', 'start' is supposed to
-                // start, so elapsed time is based on:
-                float elapsed = Time.time - goal.timeStamp;
-                // avoid NaN
-                return difference > 0 ? elapsed / difference : 0;
-            }
-            return 0;
-        }
-
-        Vector3 InterpolatePosition(DataPoint start, DataPoint goal, Vector3 currentPosition)
-        {
-            if (!interpolatePosition)
-            {
-                return goal.localPosition;
-            }
-            else if (start != null)
-            {
-                // Option 1: simply interpolate based on time. but stutter
-                // will happen, it's not that smooth. especially noticeable if
-                // the camera automatically follows the player
-                //   float t = CurrentInterpolationFactor();
-                //   return Vector3.Lerp(start.position, goal.position, t);
-
-                // Option 2: always += speed
-                // -> speed is 0 if we just started after idle, so always use max
-                //    for best results
-                float speed = Mathf.Max(start.movementSpeed, goal.movementSpeed);
-                return Vector3.MoveTowards(currentPosition, goal.localPosition, speed * Time.deltaTime);
-            }
-            return currentPosition;
-        }
-
-        Quaternion InterpolateRotation(DataPoint start, DataPoint goal, Quaternion defaultRotation)
-        {
-            if (!interpolateRotation)
-            {
-                return goal.localRotation;
-            }
-            else if (start != null)
-            {
-                float t = CurrentInterpolationFactor(start, goal);
-                return Quaternion.Slerp(start.localRotation, goal.localRotation, t);
-            }
-            return defaultRotation;
-        }
-
-        Vector3 InterpolateScale(DataPoint start, DataPoint goal, Vector3 currentScale)
-        {
-            if (!syncScale)
-            {
-                return currentScale;
-            }
-            else if (!interpolateScale)
-            {
-                return goal.localScale;
-            }
-            else if (interpolateScale && start != null )
-            {
-                float t = CurrentInterpolationFactor(start, goal);
-                return Vector3.Lerp(start.localScale, goal.localScale, t);
-            }
-            else
-            {
-                return currentScale;
-            }
-        }
-
-        // teleport / lag / stuck detection
-        // -> checking distance is not enough since there could be just a tiny
-        //    fence between us and the goal
-        // -> checking time always works, this way we just teleport if we still
-        //    didn't reach the goal after too much time has elapsed
-        bool NeedsTeleport()
-        {
-            // calculate time between the two data points
-            float startTime = start != null ? start.timeStamp : Time.time - syncInterval;
-            float goalTime = goal != null ? goal.timeStamp : Time.time;
-            float difference = goalTime - startTime;
-            float timeSinceGoalReceived = Time.time - goalTime;
-            return timeSinceGoalReceived > difference * 5;
-        }
-
-        // moved since last time we checked it?
-        bool HasEitherMovedRotatedScaled()
-        {
-            // moved or rotated or scaled?
-            // local position/rotation/scale for VR support
-            bool moved = Vector3.Distance(lastPosition, targetComponent.localPosition) > localPositionSensitivity;
-            bool scaled = Vector3.Distance(lastScale, targetComponent.localScale) > localScaleSensitivity;
-            bool rotated = Quaternion.Angle(lastRotation, targetComponent.localRotation) > localRotationSensitivity;
-
-            // save last for next frame to compare
-            // (only if change was detected. otherwise slow moving objects might
-            //  never sync because of C#'s float comparison tolerance. see also:
-            //  https://github.com/vis2k/Mirror/pull/428)
-            bool change = moved || rotated || scaled;
-            if (change)
-            {
-                // local position/rotation for VR support
-                lastPosition = targetComponent.localPosition;
-                lastRotation = targetComponent.localRotation;
-                lastScale = targetComponent.localScale;
-            }
-            return change;
-        }
-
-        // set position carefully depending on the target component
-        void ApplyPositionRotationScale(Vector3 position, Quaternion rotation, Vector3 scale)
+        // apply a snapshot to the Transform.
+        // -> start, end, interpolated are all passed in caes they are needed
+        // -> a regular game would apply the 'interpolated' snapshot
+        // -> a board game might want to jump to 'goal' directly
+        // (it's easier to always interpolate and then apply selectively,
+        //  instead of manually interpolating x, y, z, ... depending on flags)
+        // => internal for testing
+        //
+        // NOTE: stuck detection is unnecessary here.
+        //       we always set transform.position anyway, we can't get stuck.
+        protected virtual void ApplySnapshot(NTSnapshot start, NTSnapshot goal, NTSnapshot interpolated)
         {
             // local position/rotation for VR support
-            targetComponent.localPosition = position;
-            targetComponent.localRotation = rotation;
-            targetComponent.localScale = scale;
+            //
+            // if syncPosition/Rotation/Scale is disabled then we received nulls
+            // -> current position/rotation/scale would've been added as snapshot
+            // -> we still interpolated
+            // -> but simply don't apply it. if the user doesn't want to sync
+            //    scale, then we should not touch scale etc.
+            if (syncPosition)
+                targetComponent.localPosition = interpolatePosition ? interpolated.position : goal.position;
+
+            if (syncRotation)
+                targetComponent.localRotation = interpolateRotation ? interpolated.rotation : goal.rotation;
+
+            if (syncScale)
+                targetComponent.localScale = interpolateScale ? interpolated.scale : goal.scale;
+        }
+
+        // cmd /////////////////////////////////////////////////////////////////
+        // only unreliable. see comment above of this file.
+        [Command(channel = Channels.Unreliable)]
+        void CmdClientToServerSync(Vector3? position, Quaternion? rotation, Vector3? scale) =>
+            OnClientToServerSync(position, rotation, scale);
+
+        // local authority client sends sync message to server for broadcasting
+        protected virtual void OnClientToServerSync(Vector3? position, Quaternion? rotation, Vector3? scale)
+        {
+            // only apply if in client authority mode
+            if (!clientAuthority) return;
+
+            // protect against ever growing buffer size attacks
+            if (serverBuffer.Count >= bufferSizeLimit) return;
+
+            // only player owned objects (with a connection) can send to
+            // server. we can get the timestamp from the connection.
+            double timestamp = connectionToClient.remoteTimeStamp;
+
+            // position, rotation, scale can have no value if same as last time.
+            // saves bandwidth.
+            // but we still need to feed it to snapshot interpolation. we can't
+            // just have gaps in there if nothing has changed. for example, if
+            //   client sends snapshot at t=0
+            //   client sends nothing for 10s because not moved
+            //   client sends snapshot at t=10
+            // then the server would assume that it's one super slow move and
+            // replay it for 10 seconds.
+            if (!position.HasValue) position = targetComponent.localPosition;
+            if (!rotation.HasValue) rotation = targetComponent.localRotation;
+            if (!scale.HasValue) scale = targetComponent.localScale;
+
+            // construct snapshot with batch timestamp to save bandwidth
+            NTSnapshot snapshot = new NTSnapshot(
+                timestamp,
+                NetworkTime.localTime,
+                position.Value, rotation.Value, scale.Value
+            );
+
+            // add to buffer (or drop if older than first element)
+            SnapshotInterpolation.InsertIfNewEnough(snapshot, serverBuffer);
+        }
+
+        // rpc /////////////////////////////////////////////////////////////////
+        // only unreliable. see comment above of this file.
+        [ClientRpc(channel = Channels.Unreliable)]
+        void RpcServerToClientSync(Vector3? position, Quaternion? rotation, Vector3? scale) =>
+            OnServerToClientSync(position, rotation, scale);
+
+        // server broadcasts sync message to all clients
+        protected virtual void OnServerToClientSync(Vector3? position, Quaternion? rotation, Vector3? scale)
+        {
+            // in host mode, the server sends rpcs to all clients.
+            // the host client itself will receive them too.
+            // -> host server is always the source of truth
+            // -> we can ignore any rpc on the host client
+            // => otherwise host objects would have ever growing clientBuffers
+            // (rpc goes to clients. if isServer is true too then we are host)
+            if (isServer) return;
+
+            // don't apply for local player with authority
+            if (IsClientWithAuthority) return;
+
+            // protect against ever growing buffer size attacks
+            if (clientBuffer.Count >= bufferSizeLimit) return;
+
+            // on the client, we receive rpcs for all entities.
+            // not all of them have a connectionToServer.
+            // but all of them go through NetworkClient.connection.
+            // we can get the timestamp from there.
+            double timestamp = NetworkClient.connection.remoteTimeStamp;
+
+            // position, rotation, scale can have no value if same as last time.
+            // saves bandwidth.
+            // but we still need to feed it to snapshot interpolation. we can't
+            // just have gaps in there if nothing has changed. for example, if
+            //   client sends snapshot at t=0
+            //   client sends nothing for 10s because not moved
+            //   client sends snapshot at t=10
+            // then the server would assume that it's one super slow move and
+            // replay it for 10 seconds.
+            if (!position.HasValue) position = targetComponent.localPosition;
+            if (!rotation.HasValue) rotation = targetComponent.localRotation;
+            if (!scale.HasValue) scale = targetComponent.localScale;
+
+            // construct snapshot with batch timestamp to save bandwidth
+            NTSnapshot snapshot = new NTSnapshot(
+                timestamp,
+                NetworkTime.localTime,
+                position.Value, rotation.Value, scale.Value
+            );
+
+            // add to buffer (or drop if older than first element)
+            SnapshotInterpolation.InsertIfNewEnough(snapshot, clientBuffer);
+        }
+
+        // update //////////////////////////////////////////////////////////////
+        void UpdateServer()
+        {
+            // broadcast to all clients each 'sendInterval'
+            // (client with authority will drop the rpc)
+            // NetworkTime.localTime for double precision until Unity has it too
+            //
+            // IMPORTANT:
+            // snapshot interpolation requires constant sending.
+            // DO NOT only send if position changed. for example:
+            // ---
+            // * client sends first position at t=0
+            // * ... 10s later ...
+            // * client moves again, sends second position at t=10
+            // ---
+            // * server gets first position at t=0
+            // * server gets second position at t=10
+            // * server moves from first to second within a time of 10s
+            //   => would be a super slow move, instead of a wait & move.
+            //
+            // IMPORTANT:
+            // DO NOT send nulls if not changed 'since last send' either. we
+            // send unreliable and don't know which 'last send' the other end
+            // received successfully.
+            if (NetworkTime.localTime >= lastServerSendTime + sendInterval)
+            {
+                // send snapshot without timestamp.
+                // receiver gets it from batch timestamp to save bandwidth.
+                NTSnapshot snapshot = ConstructSnapshot();
+                RpcServerToClientSync(
+                    // only sync what the user wants to sync
+                    syncPosition ? snapshot.position : new Vector3?(),
+                    syncRotation? snapshot.rotation : new Quaternion?(),
+                    syncScale ? snapshot.scale : new Vector3?()
+                );
+
+                lastServerSendTime = NetworkTime.localTime;
+            }
+
+            // apply buffered snapshots IF client authority
+            // -> in server authority, server moves the object
+            //    so no need to apply any snapshots there.
+            // -> don't apply for host mode player objects either, even if in
+            //    client authority mode. if it doesn't go over the network,
+            //    then we don't need to do anything.
+            if (clientAuthority && !hasAuthority)
+            {
+                // compute snapshot interpolation & apply if any was spit out
+                // TODO we don't have Time.deltaTime double yet. float is fine.
+                if (SnapshotInterpolation.Compute(
+                    NetworkTime.localTime, Time.deltaTime,
+                    ref serverInterpolationTime,
+                    bufferTime, serverBuffer,
+                    catchupThreshold, catchupMultiplier,
+                    Interpolate,
+                    out NTSnapshot computed))
+                {
+                    NTSnapshot start = serverBuffer.Values[0];
+                    NTSnapshot goal = serverBuffer.Values[1];
+                    ApplySnapshot(start, goal, computed);
+                }
+            }
+        }
+
+        void UpdateClient()
+        {
+            // client authority, and local player (= allowed to move myself)?
+            if (IsClientWithAuthority)
+            {
+                // send to server each 'sendInterval'
+                // NetworkTime.localTime for double precision until Unity has it too
+                //
+                // IMPORTANT:
+                // snapshot interpolation requires constant sending.
+                // DO NOT only send if position changed. for example:
+                // ---
+                // * client sends first position at t=0
+                // * ... 10s later ...
+                // * client moves again, sends second position at t=10
+                // ---
+                // * server gets first position at t=0
+                // * server gets second position at t=10
+                // * server moves from first to second within a time of 10s
+                //   => would be a super slow move, instead of a wait & move.
+                //
+                // IMPORTANT:
+                // DO NOT send nulls if not changed 'since last send' either. we
+                // send unreliable and don't know which 'last send' the other end
+                // received successfully.
+                if (NetworkTime.localTime >= lastClientSendTime + sendInterval)
+                {
+                    // send snapshot without timestamp.
+                    // receiver gets it from batch timestamp to save bandwidth.
+                    NTSnapshot snapshot = ConstructSnapshot();
+                    CmdClientToServerSync(
+                        // only sync what the user wants to sync
+                        syncPosition ? snapshot.position : new Vector3?(),
+                        syncRotation? snapshot.rotation : new Quaternion?(),
+                        syncScale ? snapshot.scale : new Vector3?()
+                    );
+
+                    lastClientSendTime = NetworkTime.localTime;
+                }
+            }
+            // for all other clients (and for local player if !authority),
+            // we need to apply snapshots from the buffer
+            else
+            {
+                // compute snapshot interpolation & apply if any was spit out
+                // TODO we don't have Time.deltaTime double yet. float is fine.
+                if (SnapshotInterpolation.Compute(
+                    NetworkTime.localTime, Time.deltaTime,
+                    ref clientInterpolationTime,
+                    bufferTime, clientBuffer,
+                    catchupThreshold, catchupMultiplier,
+                    Interpolate,
+                    out NTSnapshot computed))
+                {
+                    NTSnapshot start = clientBuffer.Values[0];
+                    NTSnapshot goal = clientBuffer.Values[1];
+                    ApplySnapshot(start, goal, computed);
+                }
+            }
         }
 
         void Update()
         {
             // if server then always sync to others.
-            if (isServer)
-            {
-                // just use OnSerialize via SetDirtyBit only sync when position
-                // changed. set dirty bits 0 or 1
-                SetDirtyBit(HasEitherMovedRotatedScaled() ? 1UL : 0UL);
-            }
-
-            // no 'else if' since host mode would be both
-            if (isClient)
-            {
-                // send to server if we have local authority (and aren't the server)
-                // -> only if connectionToServer has been initialized yet too
-                if (!isServer && IsClientWithAuthority)
-                {
-                    // check only each 'syncInterval'
-                    if (Time.time - lastClientSendTime >= syncInterval)
-                    {
-                        if (HasEitherMovedRotatedScaled())
-                        {
-                            // serialize
-                            // local position/rotation for VR support
-                            using (PooledNetworkWriter writer = NetworkWriterPool.GetWriter())
-                            {
-                                SerializeIntoWriter(writer, targetComponent.localPosition, targetComponent.localRotation, targetComponent.localScale, compressRotation, syncScale);
-
-                                // send to server
-                                CmdClientToServerSync(writer.ToArraySegment());
-                            }
-                        }
-                        lastClientSendTime = Time.time;
-                    }
-                }
-
-                // apply interpolation on client for all players
-                // unless this client has authority over the object. could be
-                // himself or another object that he was assigned authority over
-                if (!IsClientWithAuthority)
-                {
-                    // received one yet? (initialized?)
-                    if (goal != null)
-                    {
-                        // teleport or interpolate
-                        if (NeedsTeleport())
-                        {
-                            // local position/rotation for VR support
-                            ApplyPositionRotationScale(goal.localPosition, goal.localRotation, goal.localScale);
-
-                            // reset data points so we don't keep interpolating
-                            start = null;
-                            goal = null;
-                        }
-                        else
-                        {
-                            // local position/rotation for VR support
-                            ApplyPositionRotationScale(InterpolatePosition(start, goal, targetComponent.localPosition),
-                                                       InterpolateRotation(start, goal, targetComponent.localRotation),
-                                                       InterpolateScale(start, goal, targetComponent.localScale));
-                        }
-                    }
-                }
-            }
+            if (isServer) UpdateServer();
+            // 'else if' because host mode shouldn't send anything to server.
+            // it is the server. don't overwrite anything there.
+            else if (isClient) UpdateClient();
         }
 
-        #region Server Teleport (force move player)
-        /// <summary>
-        /// Server side teleportation.
-        /// This method will override this GameObject's current Transform.Position to the Vector3 you have provided
-        /// and send it to all other Clients to override it at their side too.
-        /// </summary>
-        /// <param name="position">Where to teleport this GameObject</param>
-        [Server]
-        public void ServerTeleport(Vector3 position)
+        // common Teleport code for client->server and server->client
+        protected virtual void OnTeleport(Vector3 destination)
         {
-            Quaternion rotation = transform.rotation;
-            ServerTeleport(position, rotation);
+            // reset any in-progress interpolation & buffers
+            Reset();
+
+            // set the new position.
+            // interpolation will automatically continue.
+            targetComponent.position = destination;
+
+            // TODO
+            // what if we still receive a snapshot from before the interpolation?
+            // it could easily happen over unreliable.
+            // -> maybe add destionation as first entry?
         }
 
-        /// <summary>
-        /// Server side teleportation.
-        /// This method will override this GameObject's current Transform.Position and Transform.Rotation
-        /// to the Vector3 you have provided
-        /// and send it to all other Clients to override it at their side too.
-        /// </summary>
-        /// <param name="position">Where to teleport this GameObject</param>
-        /// <param name="rotation">Which rotation to set this GameObject</param>
-        [Server]
-        public void ServerTeleport(Vector3 position, Quaternion rotation)
-        {
-            // To prevent applying the position updates received from client (if they have ClientAuth) while being teleported.
-
-            // clientAuthorityBeforeTeleport defaults to false when not teleporting, if it is true then it means that teleport was previously called but not finished
-            // therefore we should keep it as true so that 2nd teleport call doesn't clear authority
-            clientAuthorityBeforeTeleport = clientAuthority || clientAuthorityBeforeTeleport;
-            clientAuthority = false;
-
-            DoTeleport(position, rotation);
-
-            // tell all clients about new values
-            RpcTeleport(position, rotation, clientAuthorityBeforeTeleport);
-        }
-
-        void DoTeleport(Vector3 newPosition, Quaternion newRotation)
-        {
-            transform.position = newPosition;
-            transform.rotation = newRotation;
-
-            // Since we are overriding the position we don't need a goal and start.
-            // Reset them to null for fresh start
-            goal = null;
-            start = null;
-            lastPosition = newPosition;
-            lastRotation = newRotation;
-        }
-
+        // server->client teleport to force position without interpolation.
+        // otherwise it would interpolate to a (far away) new position.
+        // => manually calling Teleport is the only 100% reliable solution.
         [ClientRpc]
-        void RpcTeleport(Vector3 newPosition, Quaternion newRotation, bool isClientAuthority)
+        public void RpcTeleport(Vector3 destination)
         {
-            DoTeleport(newPosition, newRotation);
+            // NOTE: even in client authority mode, the server is always allowed
+            //       to teleport the player. for example:
+            //       * CmdEnterPortal() might teleport the player
+            //       * Some people use client authority with server sided checks
+            //         so the server should be able to reset position if needed.
 
-            // only send finished if is owner and is ClientAuthority on server
-            if (hasAuthority && isClientAuthority)
-                CmdTeleportFinished();
+            // TODO what about host mode?
+            OnTeleport(destination);
         }
 
-        /// <summary>
-        /// This RPC will be invoked on server after client finishes overriding the position.
-        /// </summary>
-        /// <param name="initialAuthority"></param>
+        // client->server teleport to force position without interpolation.
+        // otherwise it would interpolate to a (far away) new position.
+        // => manually calling Teleport is the only 100% reliable solution.
         [Command]
-        void CmdTeleportFinished()
+        public void CmdTeleport(Vector3 destination)
         {
-            if (clientAuthorityBeforeTeleport)
-            {
-                clientAuthority = true;
+            // client can only teleport objects that it has authority over.
+            if (!clientAuthority) return;
 
-                // reset value so doesn't effect future calls, see note in ServerTeleport
-                clientAuthorityBeforeTeleport = false;
-            }
-            else
+            // TODO what about host mode?
+            OnTeleport(destination);
+
+            // if a client teleports, we need to broadcast to everyone else too
+            // TODO the teleported client should ignore the rpc though.
+            //      otherwise if it already moved again after teleporting,
+            //      the rpc would come a little bit later and reset it once.
+            // TODO or not? if client ONLY calls Teleport(pos), the position
+            //      would only be set after the rpc. unless the client calls
+            //      BOTH Teleport(pos) and targetComponent.position=pos
+            RpcTeleport(destination);
+        }
+
+        protected virtual void Reset()
+        {
+            // disabled objects aren't updated anymore.
+            // so let's clear the buffers.
+            serverBuffer.Clear();
+            clientBuffer.Clear();
+
+            // reset interpolation time too so we start at t=0 next time
+            serverInterpolationTime = 0;
+            clientInterpolationTime = 0;
+        }
+
+        protected virtual void OnDisable() => Reset();
+        protected virtual void OnEnable() => Reset();
+
+        protected virtual void OnValidate()
+        {
+            // make sure that catchup threshold is > buffer multiplier.
+            // for a buffer multiplier of '3', we usually have at _least_ 3
+            // buffered snapshots. often 4-5 even.
+            catchupThreshold = Mathf.Max(bufferTimeMultiplier + 1, catchupThreshold);
+
+            // buffer limit should be at least multiplier to have enough in there
+            bufferSizeLimit = Mathf.Max(bufferTimeMultiplier, bufferSizeLimit);
+        }
+
+        // debug ///////////////////////////////////////////////////////////////
+        protected virtual void OnGUI()
+        {
+            if (!showOverlay) return;
+
+            // show data next to player for easier debugging. this is very useful!
+            // IMPORTANT: this is basically an ESP hack for shooter games.
+            //            DO NOT make this available with a hotkey in release builds
+            if (!Debug.isDebugBuild) return;
+
+            // project position to screen
+            Vector3 point = Camera.main.WorldToScreenPoint(targetComponent.position);
+
+            // enough alpha, in front of camera and in screen?
+            if (point.z >= 0 && Utils.IsPointInScreen(point))
             {
-                Debug.LogWarning("Client called TeleportFinished when clientAuthority was false on server", this);
+                // catchup is useful to show too
+                int serverBufferExcess = Mathf.Max(serverBuffer.Count - catchupThreshold, 0);
+                int clientBufferExcess = Mathf.Max(clientBuffer.Count - catchupThreshold, 0);
+                float serverCatchup = serverBufferExcess * catchupMultiplier;
+                float clientCatchup = clientBufferExcess * catchupMultiplier;
+
+                GUI.color = overlayColor;
+                GUILayout.BeginArea(new Rect(point.x, Screen.height - point.y, 200, 100));
+
+                // always show both client & server buffers so it's super
+                // obvious if we accidentally populate both.
+                GUILayout.Label($"Server Buffer:{serverBuffer.Count}");
+                if (serverCatchup > 0)
+                    GUILayout.Label($"Server Catchup:{serverCatchup*100:F2}%");
+
+                GUILayout.Label($"Client Buffer:{clientBuffer.Count}");
+                if (clientCatchup > 0)
+                    GUILayout.Label($"Client Catchup:{clientCatchup*100:F2}%");
+
+                GUILayout.EndArea();
+                GUI.color = Color.white;
             }
         }
-        #endregion
 
-        static void DrawDataPointGizmo(DataPoint data, Color color)
+        protected virtual void DrawGizmos(SortedList<double, NTSnapshot> buffer)
         {
-            // use a little offset because transform.localPosition might be in
-            // the ground in many cases
-            Vector3 offset = Vector3.up * 0.01f;
+            // only draw if we have at least two entries
+            if (buffer.Count < 2) return;
 
-            // draw position
-            Gizmos.color = color;
-            Gizmos.DrawSphere(data.localPosition + offset, 0.5f);
+            // calcluate threshold for 'old enough' snapshots
+            double threshold = NetworkTime.localTime - bufferTime;
+            Color oldEnoughColor = new Color(0, 1, 0, 0.5f);
+            Color notOldEnoughColor = new Color(0.5f, 0.5f, 0.5f, 0.3f);
 
-            // draw forward and up
-            // like unity move tool
-            Gizmos.color = Color.blue;
-            Gizmos.DrawRay(data.localPosition + offset, data.localRotation * Vector3.forward);
+            // draw the whole buffer for easier debugging.
+            // it's worth seeing how much we have buffered ahead already
+            for (int i = 0; i < buffer.Count; ++i)
+            {
+                // color depends on if old enough or not
+                NTSnapshot entry = buffer.Values[i];
+                bool oldEnough = entry.localTimestamp <= threshold;
+                Gizmos.color = oldEnough ? oldEnoughColor : notOldEnoughColor;
+                Gizmos.DrawCube(entry.position, Vector3.one);
+            }
 
-            // like unity move tool
+            // extra: lines between start<->position<->goal
             Gizmos.color = Color.green;
-            Gizmos.DrawRay(data.localPosition + offset, data.localRotation * Vector3.up);
+            Gizmos.DrawLine(buffer.Values[0].position, targetComponent.position);
+            Gizmos.color = Color.white;
+            Gizmos.DrawLine(targetComponent.position, buffer.Values[1].position);
         }
 
-        static void DrawLineBetweenDataPoints(DataPoint data1, DataPoint data2, Color color)
+        protected virtual void OnDrawGizmos()
         {
-            Gizmos.color = color;
-            Gizmos.DrawLine(data1.localPosition, data2.localPosition);
-        }
+            if (!showGizmos) return;
 
-        // draw the data points for easier debugging
-        void OnDrawGizmos()
-        {
-            // draw start and goal points
-            if (start != null) DrawDataPointGizmo(start, Color.gray);
-            if (goal != null) DrawDataPointGizmo(goal, Color.white);
-
-            // draw line between them
-            if (start != null && goal != null) DrawLineBetweenDataPoints(start, goal, Color.cyan);
+            if (isServer) DrawGizmos(serverBuffer);
+            if (isClient) DrawGizmos(clientBuffer);
         }
     }
 }
