@@ -297,6 +297,7 @@ namespace Core.Player {
 
             CmdSetPlayerName(Preferences.Instance.GetString("playerName"));
         }
+        
         // called when the server has finished instantiating all players
         public void ServerReady() {
             _serverReady = true;

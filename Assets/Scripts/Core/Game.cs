@@ -20,6 +20,7 @@ namespace Core {
     }
     
     public enum SessionStatus {
+        Development,
         Offline,
         SinglePlayerMenu,
         LobbyMenu,

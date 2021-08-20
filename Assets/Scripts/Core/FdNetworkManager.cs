@@ -312,6 +312,19 @@ namespace Core {
             return newPlayer;
         }
 
+        private T AddPlayerFromPrefab<T>(NetworkConnection conn, T prefab) where T : NetworkBehaviour {
+            T playerConnectionPrefab = Instantiate(prefab);
+            NetworkServer.AddPlayerForConnection(conn, playerConnectionPrefab.gameObject);
+            if (conn.identity != null) {
+                var player = conn.identity.GetComponent<T>();
+                AddPlayer(player);
+                return player;
+            }
+            else {
+                throw new Exception("Failed to add player with null connection!");
+            }
+        }
+        
         private void AddPlayer<T>(T player) where T : NetworkBehaviour {
             switch (player) {
                 case LobbyPlayer lobbyPlayer: LobbyPlayers.Add(lobbyPlayer);
@@ -422,15 +435,15 @@ namespace Core {
                 var levelData = Game.Instance.LoadedLevelData;;
                 
                 switch (sessionStatus) {
+                    case SessionStatus.Development:
+                        var shipPlayer = AddPlayerFromPrefab(conn, shipPlayerPrefab);
+                        shipPlayer.ServerReady();
+                        break;
+                    
                     case SessionStatus.SinglePlayerMenu:
                     case SessionStatus.InGame:
                     case SessionStatus.Loading:
-                        LoadingPlayer loadingPlayer = Instantiate(loadingPlayerPrefab);
-                        NetworkServer.AddPlayerForConnection(conn, loadingPlayer.gameObject);
-                        if (conn.identity != null) {
-                            var player = conn.identity.GetComponent<LoadingPlayer>();
-                            AddPlayer(player);
-                        }
+                        AddPlayerFromPrefab(conn, loadingPlayerPrefab);
 
                         // if we're joining mid-game (not single player), attempt to start the single client
                         if (sessionStatus != SessionStatus.SinglePlayerMenu) {
@@ -447,16 +460,10 @@ namespace Core {
                         if (hostLobbyConfigurationPanel) {
                             levelData = hostLobbyConfigurationPanel.LobbyLevelData;
                         }
-                        
-                        LobbyPlayer lobbyPlayer = Instantiate(lobbyPlayerPrefab);
+
+                        LobbyPlayer lobbyPlayer = AddPlayerFromPrefab(conn, lobbyPlayerPrefab);
                         lobbyPlayer.isHost = LobbyPlayers.Count == 0;
-            
-                        NetworkServer.AddPlayerForConnection(conn, lobbyPlayer.gameObject);
-                    
-                        if (conn.identity != null) {
-                            var player = conn.identity.GetComponent<LobbyPlayer>();
-                            AddPlayer(player);
-                        }
+                        
                         break;
                     
                     case SessionStatus.Offline:

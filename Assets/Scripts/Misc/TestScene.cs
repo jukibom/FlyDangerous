@@ -11,14 +11,18 @@ namespace Misc {
      * without having to go through the menus etc.
      */
     public class TestScene : MonoBehaviour {
+
+        [SerializeField]
+        private ShipPlayer shipPlayerPrefab; 
         
         private void Start() {
             IEnumerator StartGame() {
+                Game.Instance.SessionStatus = SessionStatus.Development;
                 
                 // start server and connect to it
-                FdNetworkManager.Instance.StartOfflineServer();
-                yield return new WaitForEndOfFrame();
-                FdNetworkManager.Instance.StartMainGame(null);
+                NetworkServer.dontListen = true;
+                FdNetworkManager.Instance.StartHost();
+
                 yield return new WaitForEndOfFrame();
                 
                 // enable input and position it where this entity is
