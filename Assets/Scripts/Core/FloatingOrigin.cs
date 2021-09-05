@@ -45,10 +45,25 @@ namespace Core {
                 var focalPosition = FocalTransform.position;
                 origin += focalPosition;
 
+                UpdateTrails(focalPosition);
                 OnFloatingOriginCorrection?.Invoke(focalPosition);
 
                 // reset focal object (local player) to 0,0,0
                 FocalTransform.position = Vector3.zero;
+            }
+        }
+
+        private void UpdateTrails(Vector3 offset) {
+            var trails = FindObjectsOfType<TrailRenderer>() as TrailRenderer[];
+            foreach (var trail in trails)
+            {
+                Vector3[] positions = new Vector3[trail.positionCount];
+
+                int positionCount = trail.GetPositions(positions);
+                for (int i = 0; i < positionCount; ++i)
+                    positions[i] -= offset;
+
+                trail.SetPositions(positions);
             }
         }
     }
