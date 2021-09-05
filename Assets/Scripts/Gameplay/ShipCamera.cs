@@ -13,6 +13,9 @@ public class ShipCamera : MonoBehaviour {
     private Vector3 _velocity = Vector3.zero;
     private Vector3 _lastVelocity;
 
+    private readonly Vector3 _minPos = new Vector3(-0.2175f, -0.0678f, -0.2856f);
+    private readonly Vector3 _maxPos = new Vector3(0.2175f, 0.0561f, 0.0412f);
+
     public void Reset() {
         _lastVelocity = Vector3.zero;
         _lastVelocity = Vector3.zero;
@@ -28,7 +31,10 @@ public class ShipCamera : MonoBehaviour {
         
         Vector3 desiredPosition = accelerationCameraDelta - rotationCameraModifier;
 
-        transform.localPosition = Vector3.SmoothDamp(transform.localPosition, desiredPosition, ref _velocity, smoothSpeed);
+        var cameraPosition = Vector3.SmoothDamp(transform.localPosition, desiredPosition, ref _velocity, smoothSpeed);
+        cameraPosition = Vector3.Min(Vector3.Max(cameraPosition, _minPos), _maxPos);
+        transform.localPosition = cameraPosition;
+        
         _lastVelocity = target.velocity;
     }
 }
