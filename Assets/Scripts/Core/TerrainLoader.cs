@@ -33,8 +33,10 @@ namespace Core {
             _mapMagicTerrain.terrainSettings.pixelError = (int) pixelError;
             _mapMagicTerrain.terrainSettings.baseMapDist = (int) textureHQDistance;
 
+            // main terrain chunks
             _mapMagicTerrain.mainRange = (int) terrainChunks;
-            _mapMagicTerrain.tiles.generateRange = (int) terrainChunks;
+            // draw draft tiles +1 out
+            _mapMagicTerrain.tiles.generateRange = (int) terrainChunks + 1;
 
             _mapMagicTerrain.terrainSettings.detailDraw = Preferences.Instance.GetBool("graphics-terrain-details");
 

@@ -26,11 +26,14 @@ public class ScreenSpaceFog : MonoBehaviour {
         #if (NO_PAID_ASSETS == false)
             var mapMagic = FindObjectOfType<MapMagicObject>();
             if (mapMagic && _volume.profile.TryGet<SCPE.Fog>(out var fog)) {
-                var tileChunkCount = Preferences.Instance.GetFloat("graphics-terrain-chunks");
+                var tileChunkCount = Preferences.Instance.GetFloat("graphics-terrain-chunks") + 1; // include drafts
                 var tileSize = mapMagic.tileSize.x;
-                var fogDistance = (tileSize * tileChunkCount) - tileSize / 2;
-                fog.fogStartDistance.Override(Mathf.Max(1000f, fogDistance - fogDistance/2));
-                fog.fogEndDistance.Override(fogDistance);
+                
+                var fogEndDistance = (tileSize * tileChunkCount) - tileSize / 2;
+                var fogStartDistance = Mathf.Max(1000f, fogEndDistance - fogEndDistance / 1.5f); 
+                
+                fog.fogEndDistance.Override(fogEndDistance);
+                fog.fogStartDistance.Override(fogStartDistance);
             }
         #endif
     }
