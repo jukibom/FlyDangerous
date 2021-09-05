@@ -462,7 +462,7 @@ namespace Core {
                         }
 
                         LobbyPlayer lobbyPlayer = AddPlayerFromPrefab(conn, lobbyPlayerPrefab);
-                        lobbyPlayer.isHost = LobbyPlayers.Count == 0;
+                        lobbyPlayer.isHost = LobbyPlayers.Count == 1;
                         
                         break;
                     
