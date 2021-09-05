@@ -24,15 +24,12 @@ namespace Menus.Options {
             this._animator = this.GetComponent<Animator>();
         }
 
-        private void Start() {
-            LoadPreferences();
-        }
-
         private void OnEnable() {
             defaultSelectedButton.Select();
         }
 
         public void Show() {
+            LoadPreferences();
             gameObject.SetActive(true);
             this._animator.SetBool("Open", true);
         }
