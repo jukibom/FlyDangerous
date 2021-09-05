@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Runtime.Serialization;
 using JetBrains.Annotations;
 using Mirror;
 using Newtonsoft.Json;
@@ -18,16 +19,20 @@ namespace Core {
 
     public enum Location {
         [Description("Space")]
+        [IgnoreDataMember]
         NullSpace,
         
         [Description("Test Space Station")]
         TestSpaceStation,
         
-        [Description("Terrain V1")]
+        [Description("Terrain Flat")]
         TerrainV1,
         
-        [Description("Terrain V2")]
-        TerrainV2
+        [Description("Terrain Canyons")]
+        TerrainV2,
+        
+        [Description("Terrain Biome")]
+        TerrainV3
     }
 
     public enum Environment {
