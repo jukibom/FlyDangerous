@@ -5,6 +5,7 @@ using System.Linq;
 using Audio;
 using Core;
 using JetBrains.Annotations;
+using Misc;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -18,12 +19,16 @@ namespace Menus.Main_Menu {
         [SerializeField] private Button startButton;
 
         [CanBeNull] private LevelData _levelData;
-        [SerializeField] private Dropdown conditionsSelector;
+        [SerializeField] private Dropdown locationDropdown;
+        [SerializeField] private Dropdown environmentDropdown;
 
         private Animator _animator;
 
         private void Awake() {
             _animator = GetComponent<Animator>();
+            
+            EnumExtensions.PopulateDropDownWithEnum<Location>(locationDropdown, option => option.ToUpper());
+            EnumExtensions.PopulateDropDownWithEnum<Environment>(environmentDropdown, option => option.ToUpper());
         }
 
         public void Hide() {
@@ -64,33 +69,8 @@ namespace Menus.Main_Menu {
                 : Location.TerrainV1;
             levelData.gameType = GameType.FreeRoam;
             levelData.terrainSeed = seedInput.text;
-
-            switch (conditionsSelector.value) {
-                case 0:
-                    levelData.environment = Environment.SunriseClear;
-                    break;
-                case 1:
-                    levelData.environment = Environment.NoonClear;
-                    break;
-                case 2:
-                    levelData.environment = Environment.NoonCloudy;
-                    break;
-                case 3:
-                    levelData.environment = Environment.NoonStormy;
-                    break;
-                case 4:
-                    levelData.environment = Environment.SunsetClear;
-                    break;
-                case 5:
-                    levelData.environment = Environment.SunsetCloudy;
-                    break;
-                case 6:
-                    levelData.environment = Environment.NightClear;
-                    break;
-                case 7:
-                    levelData.environment = Environment.NightCloudy;
-                    break;
-            }
+            levelData.environment = (Environment)environmentDropdown.value;
+            levelData.location = (Location)locationDropdown.value;
 
             FdNetworkManager.Instance.StartGameLoadSequence(SessionType.Singleplayer, levelData);
         }
