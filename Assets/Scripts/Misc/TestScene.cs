@@ -1,9 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Core;
 using Core.Player;
 using MapMagic.Core;
+using Mirror;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Misc {
     /**
@@ -12,11 +15,17 @@ namespace Misc {
      */
     public class TestScene : MonoBehaviour {
 
-        [SerializeField]
-        private ShipPlayer shipPlayerPrefab; 
+        public Transform spawnLocation; 
         
+        private void Awake() {
+            SceneManager.LoadScene("Engine", LoadSceneMode.Additive);
+        }
+
         private void Start() {
             IEnumerator StartGame() {
+                // allow game state to initialise
+                yield return new WaitForEndOfFrame();
+                
                 Game.Instance.SessionStatus = SessionStatus.Development;
                 
                 // start server and connect to it
@@ -29,7 +38,7 @@ namespace Misc {
                 var player = ShipPlayer.FindLocal;
                 if (player) {
                     player.User.EnableGameInput();
-                    player.AbsoluteWorldPosition = transform.position;
+                    player.AbsoluteWorldPosition = spawnLocation.position;
                 }
                 
                 // if there's a map magic object going on here, enable it
