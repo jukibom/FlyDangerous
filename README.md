@@ -29,7 +29,7 @@ Unity build: 2021.1.17f1
 
 Relies on following assets:
 
-* Map Magic 2 Bundle - https://assetstore.unity.com/packages/tools/terrain/mapmagic-2-bundle-178682 
+* Map Magic 2 Bundle 2.1.7 - https://assetstore.unity.com/packages/tools/terrain/mapmagic-2-bundle-178682 
 * Allsky - https://assetstore.unity.com/packages/2d/textures-materials/sky/allsky-200-sky-skybox-set-10109
 * SC Post Effects - https://assetstore.unity.com/packages/vfx/shaders/fullscreen-camera-effects/sc-post-effects-pack-108753
 
