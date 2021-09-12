@@ -13,8 +13,8 @@ public class ShipCamera : MonoBehaviour {
     private Vector3 _velocity = Vector3.zero;
     private Vector3 _lastVelocity;
 
-    private readonly Vector3 _minPos = new Vector3(-0.2175f, -0.0678f, -0.2856f);
-    private readonly Vector3 _maxPos = new Vector3(0.2175f, 0.0561f, 0.0412f);
+    private readonly Vector3 _minPos = new Vector3(-0.1175f, -0.0678f, -0.2856f);
+    private readonly Vector3 _maxPos = new Vector3(0.1175f, 0.04f, 0.0412f);
 
     public void Reset() {
         _lastVelocity = Vector3.zero;
