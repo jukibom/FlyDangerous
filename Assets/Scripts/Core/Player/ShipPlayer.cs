@@ -1,10 +1,7 @@
 using System;
 using System.Collections;
 using System.Globalization;
-using System.Linq;
 using Audio;
-using Core;
-using Den.Tools;
 using JetBrains.Annotations;
 using Mirror;
 using Misc;
@@ -773,12 +770,12 @@ namespace Core.Player {
         }
         
         [Command]
-        public void CmdSetPlayerName(string name) {
-            if (name == "") {
-                name = "UNNAMED SCRUB";
+        private void CmdSetPlayerName(string newName) {
+            if (newName == "") {
+                newName = "UNNAMED SCRUB";
             }
 
-            playerName = name;
+            playerName = newName;
         }
     }
 }
