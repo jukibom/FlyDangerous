@@ -18,7 +18,7 @@ namespace Core.Ship {
         [SerializeField] private List<Thruster> rollRightThrusters;
         [SerializeField] private List<Thruster> yawLeftThrusters;
         [SerializeField] private List<Thruster> yawRightThrusters;
-
+        
         private float targetForwardThrust;
         private float targetUpThrust;
         private float targetRightThrust;
@@ -36,7 +36,7 @@ namespace Core.Ship {
             targetYawThrust = MathfExtensions.Clamp(-1, 1, rotationalThrust.y);
             
             // reset our thrusters as operations from here on are additive
-            ForEachThruster(thruster => thruster.Thrust = 0);
+            ForEachThruster(thruster => thruster.TargetThrust = 0);
 
             DistributeThrust(forwardThrusters, reverseThrusters, targetForwardThrust);
             DistributeThrust(rightThrusters, leftThrusters, targetRightThrust);
@@ -50,10 +50,10 @@ namespace Core.Ship {
         private void DistributeThrust(List<Thruster> positiveThrusters, List<Thruster> negativeThrusters,
             float thrust) {
             if (thrust > 0) {
-                positiveThrusters.ForEach(thruster => thruster.Thrust += thrust);
+                positiveThrusters.ForEach(thruster => thruster.TargetThrust += thrust);
             }
             else {
-                negativeThrusters.ForEach(thruster => thruster.Thrust += Math.Abs(thrust));
+                negativeThrusters.ForEach(thruster => thruster.TargetThrust += Math.Abs(thrust));
             }
         }
 
