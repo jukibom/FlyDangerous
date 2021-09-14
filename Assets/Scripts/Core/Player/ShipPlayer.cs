@@ -608,9 +608,17 @@ namespace Core.Player {
         private void CalculateFlightForces(float maxThrustWithBoost, float maxTorqueWithBoost, float maxSpeedWithBoost,
             out Vector3 calculatedThrust, out Vector3 calculatedTorque) {
 
+            /* GRAVITY */
+            var gravity = new Vector3(
+                Game.Instance.LoadedLevelData.gravity.x, 
+                Game.Instance.LoadedLevelData.gravity.y, 
+                Game.Instance.LoadedLevelData.gravity.z
+            );
+            _rigidbody.AddForce(_rigidbody.mass * gravity);
+            
             /* FLIGHT ASSISTS */
             if (_flightAssistVectorControl) {
-                CalculateVectorControlFlightAssist(maxSpeedWithBoost);
+                CalculateVectorControlFlightAssist(maxSpeedWithBoost, gravity);
             }
 
             if (_flightAssistRotationalDampening) {
@@ -670,9 +678,12 @@ namespace Core.Player {
             calculatedTorque = torque / _inertialTensorMultiplier;
         }
 
-        private void CalculateVectorControlFlightAssist(float maxSpeedWithBoost) {
+        private void CalculateVectorControlFlightAssist(float maxSpeedWithBoost, Vector3 gravity) {
             // convert global rigid body velocity into local space
-            Vector3 localVelocity = transform.InverseTransformDirection(_rigidbody.velocity);
+            Vector3 localVelocity = transform.InverseTransformDirection(_rigidbody.velocity + (gravity * 0.5715f)); // WTF
+            // TODO: Correctly calculate gravity for FA (need the actual velocity from acceleration caused in the previous frame)
+
+            Debug.Log("localVelocity: " + localVelocity.y + " _latVTargetFactor " + _latVTargetFactor);
 
             CalculateAssistedAxis(_latHTargetFactor, localVelocity.x, 0.1f, maxSpeedWithBoost, out _latHInput);
             CalculateAssistedAxis(_latVTargetFactor, localVelocity.y, 0.1f, maxSpeedWithBoost, out _latVInput);

@@ -104,6 +104,7 @@ namespace Core {
         public Location location = Location.NullSpace;
         public Environment environment = Environment.NoonClear;
         public string terrainSeed = "";
+        public LevelDataVector3<float> gravity = new LevelDataVector3<float>(0, 0, 0);
         public LevelDataVector3<float> startPosition = new LevelDataVector3<float>();
         public LevelDataVector3<float> startRotation = new LevelDataVector3<float>();
         public GameType gameType = GameType.FreeRoam;
