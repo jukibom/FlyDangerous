@@ -403,12 +403,22 @@ namespace Core {
 
             // if user has previously applied a HMD position, reapply
             if (IsVREnabled) {
-                var xrRig = FindObjectOfType<XRRig>(true);
-                if (xrRig) {
-                    var xrTransform = xrRig.transform;
-                    xrTransform.localRotation = _hmdRotation;
-                    xrTransform.localPosition = _hmdPosition;
+                IEnumerator ResetHMDPosition() {
+                    // allow xr rigs to be initialised before resetting hmd position
+                    yield return new WaitForEndOfFrame();
+                    var xrRig = FindObjectOfType<XRRig>(true);
+                    if (xrRig) {
+                        var xrTransform = xrRig.transform;
+                        
+                        _hmdPosition = Preferences.Instance.GetVector3("hmdPosition");
+                        _hmdRotation = Quaternion.Euler(Preferences.Instance.GetVector3("hmdRotation"));
+
+                        xrTransform.localRotation = _hmdRotation;
+                        xrTransform.localPosition = _hmdPosition;
+                    }
                 }
+
+                StartCoroutine(ResetHMDPosition());
             }
         }
     }
