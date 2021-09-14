@@ -6,5 +6,9 @@ namespace Misc {
         public static float Remap(float iMin, float iMax, float oMin, float oMax, float v) {
             return Mathf.Lerp(oMin, oMax, Mathf.InverseLerp(iMin, iMax, v));
         }
+
+        public static float Clamp(float iMin, float iMax, float v) {
+            return Mathf.Min(Mathf.Max(v, iMin), iMax);
+        }
     }
 }

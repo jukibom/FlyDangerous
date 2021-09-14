@@ -12,6 +12,14 @@ namespace Core {
         public T x;
         public T y;
         public T z;
+
+        public LevelDataVector3() {}
+        public LevelDataVector3(T x, T y, T z) {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+        }
+        
         public override string ToString() {
             return "[ " + x + ", " + y + ", " + z + " ]";
         }

@@ -8,11 +8,18 @@ namespace Core.Ship {
 
         [SerializeField] private MeshRenderer thrusterRenderer;
         [SerializeField] private AudioSource audioSource;
+        
+        public bool isLarge;
+        
+        public float Thrust {
+            get => thrust;
+            set => thrust = MathfExtensions.Clamp(0, 1, value);
+        }
+        [Range(0, 1)] [SerializeField] private float thrust;
+        
         private Material _thrusterMaterial;
         private static readonly int thrustProperty = Shader.PropertyToID("_Thrust");
 
-        [Range(0, 1)] public float thrust;
-        public bool isLarge;
 
         private void Start() {
             _thrusterMaterial = thrusterRenderer.material;

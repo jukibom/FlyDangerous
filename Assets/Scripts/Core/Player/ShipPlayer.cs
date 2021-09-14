@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Globalization;
 using Audio;
+using Core.Ship;
 using JetBrains.Annotations;
 using Mirror;
 using Misc;
@@ -150,13 +151,6 @@ namespace Core.Player {
         }
 
         [SerializeField] private GameObject playerLogic;
-        [SerializeField] private Text velocityIndicator;
-        [SerializeField] private Image accelerationBar;
-        [SerializeField] private Text boostIndicator;
-        [SerializeField] private Image boostCapacitorBar;
-        [SerializeField] private Light shipLights;
-        [SerializeField] private GameObject cockpitLocal;
-        [SerializeField] private GameObject cockpitExternal;
 
         private float _maxSpeed = ShipParameterDefaults.maxSpeed;
         private float _maxBoostSpeed = ShipParameterDefaults.maxBoostSpeed;
@@ -221,6 +215,50 @@ namespace Core.Player {
         private bool IsReady => _transform && _rigidbody && _serverReady;
         public float Velocity => Mathf.Round(_rigidbody.velocity.magnitude);
         public User User => GetComponentInChildren<User>(true);
+
+        [CanBeNull] private IShip<MonoBehaviour> _ship;
+        [CanBeNull] public IShip<MonoBehaviour> Ship {
+            get {
+                // if no ship associated, try to grab one from the entity tree and initialise it
+                if (_ship == null) {
+                    _ship ??= GetComponentInChildren<Puffin>();
+                    _ship ??= GetComponentInChildren<Calidris>();
+                    
+                    Ship = _ship;
+                }
+
+                return _ship;
+            }
+            set {
+                if (value != null) {
+                    var prev = _ship;
+                    
+                    // store and parent to main player transform
+                    _ship = value;
+                    var entity = _ship.Entity();
+                    entity.transform.parent = transform;
+                    
+                    // clean up existing ship
+                    if (prev != value) {
+                        Destroy(prev?.Entity().gameObject);
+                    }
+                    
+                    // set cockpit visibility mode
+                    if (isLocalPlayer) {
+                        _ship.SetCockpitMode(CockpitMode.Internal);
+                    }
+                    else {
+                        // rigidbody angular momentum constraints 
+                        // TODO: Is this needed??
+                        _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+                        // show correct cockpit (renders on different layer)
+                        _ship.SetCockpitMode(CockpitMode.External);
+                    }
+                }
+            }
+        }
+
+        private ShipIndicatorData _shipIndicatorData;
         
         // The position and rotation of the ship within the world, taking into account floating origin fix
         public Vector3 AbsoluteWorldPosition {
@@ -263,15 +301,6 @@ namespace Core.Player {
             _initialInertiaTensor = inertiaTensor;
             inertiaTensor *= _inertialTensorMultiplier;
             _rigidbody.inertiaTensor = inertiaTensor;
-            
-            // (non local clients)
-            if (!isLocalPlayer) {
-                // rigidbody angular momentum constraints 
-                _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
-                // show correct cockpit (renders on different layer)
-                cockpitLocal.SetActive(false);
-                cockpitExternal.SetActive(true);
-            }
         }
 
         private void OnEnable() {
@@ -366,13 +395,21 @@ namespace Core.Player {
                     maxThrustWithBoost,
                     maxTorqueWithBoost,
                     _maxSpeed + boostedMaxSpeedDelta,
-                    out var thrust);
+                    out var thrust,
+                    out var torque
+                );
 
                 ClampMaxSpeed(boostedMaxSpeedDelta);
-                UpdateIndicators(thrust);
+
+                _shipIndicatorData.velocity = Velocity;
+                _shipIndicatorData.acceleration = Math.Abs(thrust.x) + Math.Abs(thrust.y) + Math.Abs(thrust.z) / _maxThrust;
+                _shipIndicatorData.throttle = _throttleInput;
+                _shipIndicatorData.boostCapacitorPercent = _boostCapacitorPercent;
+
+                Ship?.UpdateIndicators(_shipIndicatorData);
 
                 // Send the current floating origin along with the new position and rotation to the server
-                CmdSetPosition(FloatingOrigin.Instance.Origin, _transform.localPosition, _transform.rotation, _rigidbody.velocity);
+                CmdSetPosition(FloatingOrigin.Instance.Origin, _transform.localPosition, _transform.rotation, _rigidbody.velocity, _rigidbody.angularVelocity, thrust, torque);
             }
         }
 
@@ -501,8 +538,7 @@ namespace Core.Player {
         }
 
         public void ShipLightsToggle() {
-            AudioManager.Instance.Play("ui-nav");
-            shipLights.enabled = !shipLights.enabled;
+            Ship?.ToggleLights();
         }
 
         public void VelocityLimiterIsPressed(bool isPressed) {
@@ -570,7 +606,7 @@ namespace Core.Player {
         }
 
         private void CalculateFlightForces(float maxThrustWithBoost, float maxTorqueWithBoost, float maxSpeedWithBoost,
-            out float calculatedThrust) {
+            out Vector3 calculatedThrust, out Vector3 calculatedTorque) {
 
             /* FLIGHT ASSISTS */
             if (_flightAssistVectorControl) {
@@ -615,11 +651,8 @@ namespace Core.Player {
 
             /* THRUST */
             // standard thrust calculated per-axis (each axis has it's own max thrust component including boost)
-            var baseThrust = thrustInput * _maxThrust;
             var thrust = thrustInput * maxThrustWithBoost;
             _rigidbody.AddForce(transform.TransformDirection(thrust));
-            // output var for indicators
-            calculatedThrust = Math.Abs(baseThrust.x) + Math.Abs(baseThrust.y) + Math.Abs(baseThrust.z);
 
             /* TORQUE */
             // torque is applied entirely independently, this may be looked at later.
@@ -630,6 +663,11 @@ namespace Core.Player {
             ) * _inertialTensorMultiplier; // if we don't counteract the inertial tensor of the rigidbody, the rotation spin would increase in lockstep
 
             _rigidbody.AddTorque(transform.TransformDirection(torque));
+            
+                        
+            // output var for indicators etc
+            calculatedThrust = thrustInput * _maxThrust;
+            calculatedTorque = torque / _inertialTensorMultiplier;
         }
 
         private void CalculateVectorControlFlightAssist(float maxSpeedWithBoost) {
@@ -713,16 +751,16 @@ namespace Core.Player {
         }
         #endregion
         
-        #region Network Position Sync
+        #region Network Position Sync etc
         // This is server-side and should really validate the positions coming in before blindly firing to all the clients!
         [Command]
-        void CmdSetPosition(Vector3 origin, Vector3 position, Quaternion rotation, Vector3 velocity) {
-            RpcUpdate(origin, position, rotation, velocity);
+        void CmdSetPosition(Vector3 origin, Vector3 position, Quaternion rotation, Vector3 velocity, Vector3 angularVelocity, Vector3 thrust, Vector3 torque) {
+            RpcUpdate(origin, position, rotation, velocity, angularVelocity, thrust, torque);
         }
     
         // On each client, update the position of this object if it's not the local player.
         [ClientRpc]
-        void RpcUpdate(Vector3 remoteOrigin, Vector3 position, Quaternion rotation, Vector3 velocity) {
+        void RpcUpdate(Vector3 remoteOrigin, Vector3 position, Quaternion rotation, Vector3 velocity, Vector3 angularVelocity, Vector3 thrust, Vector3 torque) {
             if (!isLocalPlayer && IsReady) {
                 // Calculate the local difference to position based on the local clients' floating origin.
                 // If these values are gigantic, the doesn't really matter as they only update at fixed distances.
@@ -732,40 +770,21 @@ namespace Core.Player {
                 var localPosition = offset + position;
 
                 _rigidbody.velocity = Vector3.Lerp(_rigidbody.velocity, velocity, 0.1f);
+                _rigidbody.angularVelocity = angularVelocity;
                 _transform.localPosition = Vector3.Lerp(_transform.localPosition, localPosition, 0.5f);
                 _transform.localRotation = Quaternion.Lerp(_transform.localRotation, rotation, 0.5f);
             
                 // add velocity to position as position would have moved on server at that velocity
                 transform.localPosition += velocity * Time.fixedDeltaTime;
             }
+            
+            // Update Thrusters
+            Ship?.UpdateThrusters(thrust / _maxThrust, torque / (_maxThrust * _torqueThrustMultiplier));
         }
         
         private void NonLocalPlayerPositionCorrection(Vector3 offset) {
             if (!isLocalPlayer) {
                 transform.position -= offset;
-            }
-        }
-        #endregion
-        
-        // TODO: Move to a ship object script (it'll need more for thrusters, sounds etc)
-        private void UpdateIndicators(float thrust) {
-            if (velocityIndicator != null) {
-                velocityIndicator.text = Velocity.ToString(CultureInfo.InvariantCulture);
-            }
-
-            if (accelerationBar != null) {
-                var acceleration = thrust / _maxThrust;
-                accelerationBar.fillAmount = MathfExtensions.Remap(0, 1, 0, 0.755f, acceleration);
-                accelerationBar.color = Color.Lerp(Color.green, Color.red, acceleration);
-            }
-
-            if (boostIndicator != null) {
-                boostIndicator.text = ((int) _boostCapacitorPercent).ToString(CultureInfo.InvariantCulture) + "%";
-            }
-
-            if (boostCapacitorBar != null) {
-                boostCapacitorBar.fillAmount = MathfExtensions.Remap(0, 100, 0, 0.775f, _boostCapacitorPercent);
-                boostCapacitorBar.color = Color.Lerp(Color.red, Color.green, _boostCapacitorPercent / 100);
             }
         }
         
@@ -777,5 +796,6 @@ namespace Core.Player {
 
             playerName = newName;
         }
+        #endregion
     }
 }

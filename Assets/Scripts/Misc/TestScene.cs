@@ -15,7 +15,8 @@ namespace Misc {
      */
     public class TestScene : MonoBehaviour {
 
-        public Transform spawnLocation; 
+        public Transform spawnLocation;
+        public ShipPlayer shipPlayerPrefab;
         
         private void Awake() {
             SceneManager.LoadScene("Engine", LoadSceneMode.Additive);
@@ -26,6 +27,7 @@ namespace Misc {
                 // allow game state to initialise
                 yield return new WaitForEndOfFrame();
                 
+                // instruct the server to create a ship player immediately on start
                 Game.Instance.SessionStatus = SessionStatus.Development;
                 
                 // start server and connect to it
@@ -38,7 +40,9 @@ namespace Misc {
                 var player = ShipPlayer.FindLocal;
                 if (player) {
                     player.User.EnableGameInput();
-                    player.AbsoluteWorldPosition = spawnLocation.position;
+                    var pos = spawnLocation.position;
+                    player.AbsoluteWorldPosition = pos;
+                    Game.Instance.LoadedLevelData.startPosition = new LevelDataVector3<float>(pos.x, pos.y, pos.z);
                 }
                 
                 // if there's a map magic object going on here, enable it
@@ -47,11 +51,24 @@ namespace Misc {
                     mapMagic.enabled = true;
                 }
                 
+                // apply graphics options
+                Game.Instance.ApplyGraphicsOptions();
+                
+                // create a test other player
+                CreateTestSecondShip();
+                
                 // My work here is done
                 gameObject.SetActive(false);
             }
 
             StartCoroutine(StartGame());
+        }
+        
+        private void CreateTestSecondShip() {
+            var player = ShipPlayer.FindLocal;
+            if (player) {
+                Instantiate(shipPlayerPrefab, player.transform.position + new Vector3(0, 0, 10), Quaternion.identity);
+            }
         }
     }
 }
