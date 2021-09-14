@@ -45,7 +45,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerBindings: {fileID: -944628639613478452, guid: cdb424aa45592664faeac2ce28028bc8, type: 3}
   ssao: {fileID: 5161890783807516584, guid: 4a8e21d5c33334b11b34a596161b9360, type: 2}
-  shipPlayerPrefab: {fileID: 0}
   crossfade: {fileID: 7032496712428909581}
 --- !u!1 &2202320483295001056
 GameObject:
@@ -332,6 +331,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75c750df7e6365c44a93de6d6695c4d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  origin: {x: 0, y: 0, z: 0}
   focalTransform: {fileID: 0}
   correctionDistance: 1000
 --- !u!1 &7966117636676226303
@@ -383,8 +383,6 @@ MonoBehaviour:
   runInBackground: 1
   autoStartServerBuild: 1
   serverTickRate: 30
-  serverBatching: 1
-  serverBatchInterval: 0
   offlineScene: 
   onlineScene: 
   transport: {fileID: 6247869052788839305}
@@ -398,10 +396,10 @@ MonoBehaviour:
   playerSpawnMethod: 0
   spawnPrefabs:
   - {fileID: 8358629113583290633, guid: 399e53ad1d254b14e8928b0a1b081736, type: 3}
-  minPlayers: 2
   lobbyPlayerPrefab: {fileID: 3907440634423962403, guid: 399e53ad1d254b14e8928b0a1b081736, type: 3}
   loadingPlayerPrefab: {fileID: 0}
   shipPlayerPrefab: {fileID: 0}
+  maxPlayers: 128
 --- !u!114 &6247869052788839305
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -415,6 +413,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Port: 7777
+  DualMode: 1
   NoDelay: 1
   Interval: 10
   Timeout: 10000
@@ -422,6 +421,7 @@ MonoBehaviour:
   CongestionWindow: 0
   SendWindowSize: 4096
   ReceiveWindowSize: 4096
+  NonAlloc: 1
   debugLog: 0
   statisticsGUI: 0
   statisticsLog: 0

@@ -121,6 +121,11 @@ namespace Core.Player {
         public void EnableGameInput() {
             var playerInput = GetComponent<PlayerInput>();
             playerInput.ActivateInput();
+            
+            // enable multiple input action sets
+            playerInput.actions.FindActionMap("Global").Enable();
+            playerInput.actions.FindActionMap("Ship").Enable();
+            
             movementEnabled = true;
             pauseMenuEnabled = true;
             boostButtonEnabledOverride = false;
@@ -144,7 +149,11 @@ namespace Core.Player {
         }
 
         public void DisableGameInput() {
-            GetComponent<PlayerInput>().DeactivateInput();
+            var playerInput = GetComponent<PlayerInput>();
+
+            // enable multiple input action sets
+            playerInput.actions.FindActionMap("Ship").Disable();
+            
             movementEnabled = false;
             pauseMenuEnabled = false;
             boostButtonEnabledOverride = false;

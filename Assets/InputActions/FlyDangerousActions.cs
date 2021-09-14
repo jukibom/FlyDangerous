@@ -24,6 +24,63 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
     ""name"": ""FlyDangerousActions"",
     ""maps"": [
         {
+            ""name"": ""Global"",
+            ""id"": ""8804f5c8-213c-478d-867a-b44329ec345e"",
+            ""actions"": [
+                {
+                    ""name"": ""Reset HMD View"",
+                    ""type"": ""Button"",
+                    ""id"": ""0ac8ccd5-c4f5-414f-86f8-2717d1c497dd"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Toggle Console"",
+                    ""type"": ""Button"",
+                    ""id"": ""3c90a3e8-ca40-4b53-bfa3-28640b4ca8ce"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""580ea396-2c38-4802-a6b3-58d9c32b4102"",
+                    ""path"": ""<Keyboard>/f11"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Reset HMD View"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4d1e4d79-b0a7-44d9-97dc-53a8a06ee117"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Reset HMD View"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""98605d84-24e0-4798-bae4-a45bebe8be90"",
+                    ""path"": ""<Keyboard>/backquote"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Toggle Console"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
             ""name"": ""Ship"",
             ""id"": ""319c08b3-97e0-4636-a79a-bb6bde0a90f7"",
             ""actions"": [
@@ -208,22 +265,6 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""type"": ""Value"",
                     ""id"": ""3c8df1e4-b47c-4b6e-b763-2d56ec05e701"",
                     ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""Reset HMD View"",
-                    ""type"": ""Button"",
-                    ""id"": ""211e77d7-642f-4d4f-b706-ddca8db27596"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""Toggle Console"",
-                    ""type"": ""Button"",
-                    ""id"": ""0fe6c9f9-0cee-4004-ba47-06e9efdf8dbc"",
-                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
                 }
@@ -1452,17 +1493,6 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""a997f199-43ef-4ae8-857c-835082a7740e"",
-                    ""path"": ""<Keyboard>/backquote"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Everything"",
-                    ""action"": ""Toggle Console"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""ac3c8db0-3135-4ee3-b07c-9bc98f011f33"",
                     ""path"": ""<Keyboard>/l"",
                     ""interactions"": """",
@@ -1480,28 +1510,6 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Everything"",
                     ""action"": ""ShipLightsToggle"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""580073eb-65f5-4917-a590-2452618fdea0"",
-                    ""path"": ""<Keyboard>/f11"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Everything"",
-                    ""action"": ""Reset HMD View"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""cf2bfefb-022b-4855-8ba5-f96aec096bfa"",
-                    ""path"": """",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Everything"",
-                    ""action"": ""Reset HMD View"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -2169,6 +2177,10 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         }
     ]
 }");
+        // Global
+        m_Global = asset.FindActionMap("Global", throwIfNotFound: true);
+        m_Global_ResetHMDView = m_Global.FindAction("Reset HMD View", throwIfNotFound: true);
+        m_Global_ToggleConsole = m_Global.FindAction("Toggle Console", throwIfNotFound: true);
         // Ship
         m_Ship = asset.FindActionMap("Ship", throwIfNotFound: true);
         m_Ship_ShowGameMenu = m_Ship.FindAction("Show Game Menu", throwIfNotFound: true);
@@ -2194,8 +2206,6 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         m_Ship_ShipLightsToggle = m_Ship.FindAction("ShipLightsToggle", throwIfNotFound: true);
         m_Ship_AltFlightControlsToggle = m_Ship.FindAction("Alt Flight Controls Toggle", throwIfNotFound: true);
         m_Ship_MouseRawDelta = m_Ship.FindAction("Mouse Raw Delta", throwIfNotFound: true);
-        m_Ship_ResetHMDView = m_Ship.FindAction("Reset HMD View", throwIfNotFound: true);
-        m_Ship_ToggleConsole = m_Ship.FindAction("Toggle Console", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -2264,6 +2274,47 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         return asset.FindBinding(bindingMask, out action);
     }
 
+    // Global
+    private readonly InputActionMap m_Global;
+    private IGlobalActions m_GlobalActionsCallbackInterface;
+    private readonly InputAction m_Global_ResetHMDView;
+    private readonly InputAction m_Global_ToggleConsole;
+    public struct GlobalActions
+    {
+        private @FlyDangerousActions m_Wrapper;
+        public GlobalActions(@FlyDangerousActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @ResetHMDView => m_Wrapper.m_Global_ResetHMDView;
+        public InputAction @ToggleConsole => m_Wrapper.m_Global_ToggleConsole;
+        public InputActionMap Get() { return m_Wrapper.m_Global; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(GlobalActions set) { return set.Get(); }
+        public void SetCallbacks(IGlobalActions instance)
+        {
+            if (m_Wrapper.m_GlobalActionsCallbackInterface != null)
+            {
+                @ResetHMDView.started -= m_Wrapper.m_GlobalActionsCallbackInterface.OnResetHMDView;
+                @ResetHMDView.performed -= m_Wrapper.m_GlobalActionsCallbackInterface.OnResetHMDView;
+                @ResetHMDView.canceled -= m_Wrapper.m_GlobalActionsCallbackInterface.OnResetHMDView;
+                @ToggleConsole.started -= m_Wrapper.m_GlobalActionsCallbackInterface.OnToggleConsole;
+                @ToggleConsole.performed -= m_Wrapper.m_GlobalActionsCallbackInterface.OnToggleConsole;
+                @ToggleConsole.canceled -= m_Wrapper.m_GlobalActionsCallbackInterface.OnToggleConsole;
+            }
+            m_Wrapper.m_GlobalActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @ResetHMDView.started += instance.OnResetHMDView;
+                @ResetHMDView.performed += instance.OnResetHMDView;
+                @ResetHMDView.canceled += instance.OnResetHMDView;
+                @ToggleConsole.started += instance.OnToggleConsole;
+                @ToggleConsole.performed += instance.OnToggleConsole;
+                @ToggleConsole.canceled += instance.OnToggleConsole;
+            }
+        }
+    }
+    public GlobalActions @Global => new GlobalActions(this);
+
     // Ship
     private readonly InputActionMap m_Ship;
     private IShipActions m_ShipActionsCallbackInterface;
@@ -2290,8 +2341,6 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Ship_ShipLightsToggle;
     private readonly InputAction m_Ship_AltFlightControlsToggle;
     private readonly InputAction m_Ship_MouseRawDelta;
-    private readonly InputAction m_Ship_ResetHMDView;
-    private readonly InputAction m_Ship_ToggleConsole;
     public struct ShipActions
     {
         private @FlyDangerousActions m_Wrapper;
@@ -2319,8 +2368,6 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         public InputAction @ShipLightsToggle => m_Wrapper.m_Ship_ShipLightsToggle;
         public InputAction @AltFlightControlsToggle => m_Wrapper.m_Ship_AltFlightControlsToggle;
         public InputAction @MouseRawDelta => m_Wrapper.m_Ship_MouseRawDelta;
-        public InputAction @ResetHMDView => m_Wrapper.m_Ship_ResetHMDView;
-        public InputAction @ToggleConsole => m_Wrapper.m_Ship_ToggleConsole;
         public InputActionMap Get() { return m_Wrapper.m_Ship; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -2399,12 +2446,6 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @MouseRawDelta.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnMouseRawDelta;
                 @MouseRawDelta.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnMouseRawDelta;
                 @MouseRawDelta.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnMouseRawDelta;
-                @ResetHMDView.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnResetHMDView;
-                @ResetHMDView.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnResetHMDView;
-                @ResetHMDView.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnResetHMDView;
-                @ToggleConsole.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnToggleConsole;
-                @ToggleConsole.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnToggleConsole;
-                @ToggleConsole.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnToggleConsole;
             }
             m_Wrapper.m_ShipActionsCallbackInterface = instance;
             if (instance != null)
@@ -2478,12 +2519,6 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @MouseRawDelta.started += instance.OnMouseRawDelta;
                 @MouseRawDelta.performed += instance.OnMouseRawDelta;
                 @MouseRawDelta.canceled += instance.OnMouseRawDelta;
-                @ResetHMDView.started += instance.OnResetHMDView;
-                @ResetHMDView.performed += instance.OnResetHMDView;
-                @ResetHMDView.canceled += instance.OnResetHMDView;
-                @ToggleConsole.started += instance.OnToggleConsole;
-                @ToggleConsole.performed += instance.OnToggleConsole;
-                @ToggleConsole.canceled += instance.OnToggleConsole;
             }
         }
     }
@@ -2647,6 +2682,11 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
             return asset.controlSchemes[m_EverythingSchemeIndex];
         }
     }
+    public interface IGlobalActions
+    {
+        void OnResetHMDView(InputAction.CallbackContext context);
+        void OnToggleConsole(InputAction.CallbackContext context);
+    }
     public interface IShipActions
     {
         void OnShowGameMenu(InputAction.CallbackContext context);
@@ -2672,8 +2712,6 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         void OnShipLightsToggle(InputAction.CallbackContext context);
         void OnAltFlightControlsToggle(InputAction.CallbackContext context);
         void OnMouseRawDelta(InputAction.CallbackContext context);
-        void OnResetHMDView(InputAction.CallbackContext context);
-        void OnToggleConsole(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

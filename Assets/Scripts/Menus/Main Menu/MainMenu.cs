@@ -93,6 +93,10 @@ namespace Menus.Main_Menu {
         }
 
         IEnumerator MenuLoad() {
+            // input jank - disable and re-enable
+            var playerInput = GetComponent<PlayerInput>();
+            playerInput.user.ActivateControlScheme("Everything");
+            playerInput.enabled = false;
             
             // load engine if not already 
             if (!FindObjectOfType<Engine>()) {
@@ -116,6 +120,9 @@ namespace Menus.Main_Menu {
             
             FloatingOrigin.Instance.FocalTransform = transform;
             Game.Instance.FadeFromBlack();
+
+            // I hate everything
+            playerInput.enabled = true;
         }
 
         private void OnEnvironmentLoadComplete(Scene scene, LoadSceneMode mode) {
