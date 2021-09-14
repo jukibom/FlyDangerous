@@ -8,6 +8,7 @@ namespace Core.Ship {
 
         [SerializeField] private MeshRenderer thrusterRenderer;
         [SerializeField] private AudioSource audioSource;
+        [SerializeField] private Light lightSource;
         [SerializeField] private Color thrustColor;
         [SerializeField] private Color thrustRingColor;
 
@@ -29,6 +30,9 @@ namespace Core.Ship {
 
         private void Start() {
             _thrusterMaterial = thrusterRenderer.material;
+            _thrusterMaterial.SetColor(thrustColorProperty, thrustColor);
+            _thrusterMaterial.SetColor(thrustRingColorProperty, thrustRingColor);
+            lightSource.color = thrustColor * 2;
         }
 
         private void Update() {
@@ -36,12 +40,11 @@ namespace Core.Ship {
             _thrust = Mathf.Lerp(_thrust, targetThrust, 0.1f);
             
             _thrusterMaterial.SetFloat(thrustProperty, _thrust);
-            _thrusterMaterial.SetColor(thrustColorProperty, thrustColor);
-            _thrusterMaterial.SetColor(thrustRingColorProperty, thrustRingColor);
-            
+
             audioSource.volume = MathfExtensions.Remap(0, 1, 0, 0.2f, _thrust);
             audioSource.pitch = MathfExtensions.Remap(0, 1, 0.8f, 2f, _thrust);
-
+            lightSource.intensity = MathfExtensions.Remap(0, 1, 0, 2, _thrust);
+            
             if (isLarge) {
                 audioSource.volume *= 2;
                 audioSource.pitch /= 3;
