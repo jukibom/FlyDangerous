@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using Core.Player;
 using UnityEngine;
 
 namespace Core.Ship {
@@ -33,7 +34,14 @@ namespace Core.Ship {
 
         public virtual void SetLights(bool active) {
             simpleToggle.Play();
-            shipLights.enabled = !shipLights.enabled;        }
+            shipLights.enabled = !shipLights.enabled;
+            
+            // ensure that the local player ship lights take priority over all others
+            var player = GetComponentInParent<ShipPlayer>();
+            if (player && player.isLocalPlayer) {
+                shipLights.renderMode = LightRenderMode.ForcePixel;
+            }
+        }
         
         public virtual void SetAssist(bool active) {
             if (active) assistActivate.Play();
