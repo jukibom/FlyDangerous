@@ -29,6 +29,10 @@ namespace Core.Ship {
         public void OnEnable() {
             Game.OnPauseToggle += PauseAudio;
         }
+        
+        public void OnDisable() {
+            Game.OnPauseToggle -= PauseAudio;
+        }
 
         #region IShip Basic Functions
 
