@@ -67,7 +67,8 @@ namespace Misc {
         private void CreateTestSecondShip() {
             var player = ShipPlayer.FindLocal;
             if (player) {
-                Instantiate(shipPlayerPrefab, player.transform.position + new Vector3(0, 0, 10), Quaternion.identity);
+                var testPlayer = Instantiate(shipPlayerPrefab, player.transform.position + new Vector3(0, 0, 10), Quaternion.identity);
+                testPlayer.Ship.SetCockpitMode(CockpitMode.External);
             }
         }
     }
