@@ -26,8 +26,20 @@ namespace Core.Ship {
         private float targetRollThrust;
         private float targetYawThrust;
 
+        [SerializeField] float baseForwardThrustScaleZ;
+        [SerializeField] float boostForwardThrustScaleZ;
+        
         public void AnimateBoostThrusters() {
-            
+            forwardThrusters.ForEach(thruster => {
+                var thrusterTransform = thruster.transform;
+                var localScale = thrusterTransform.localScale;
+                localScale = new Vector3(
+                    localScale.x, 
+                    localScale.y,
+                    boostForwardThrustScaleZ
+                );
+                thrusterTransform.localScale = localScale;
+            });
         }
         
         public void UpdateThrusters(Vector3 lateralThrust, Vector3 rotationalThrust) {
@@ -49,6 +61,19 @@ namespace Core.Ship {
             DistributeThrust(pitchUpThrusters, pitchDownThrusters, targetPitchThrust);
             DistributeThrust(rollRightThrusters, rollLeftThrusters, targetRollThrust);
             DistributeThrust(yawRightThrusters, yawLeftThrusters, targetYawThrust);
+        }
+
+        private void FixedUpdate() {
+            forwardThrusters.ForEach(thruster => {
+                var thrusterTransform = thruster.transform;
+                var localScale = thrusterTransform.localScale;
+                localScale = new Vector3(
+                    localScale.x, 
+                    localScale.y,
+                    Mathf.Lerp(localScale.z,  baseForwardThrustScaleZ, 0.01f)
+                );
+                thrusterTransform.localScale = localScale;
+            });
         }
 
         private void DistributeThrust(List<Thruster> positiveThrusters, List<Thruster> negativeThrusters,

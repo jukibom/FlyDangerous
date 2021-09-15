@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using Core.Player;
 using UnityEngine;
 
@@ -15,9 +16,10 @@ namespace Core.Ship {
         [SerializeField] private Light shipLights;
         [SerializeField] private GameObject cockpitInternal;
         [SerializeField] private GameObject cockpitExternal;
+        [SerializeField] private List<TrailRenderer> trailRenderers;
+        
         [SerializeField] private AudioSource engineBoostAudioSource;
         [SerializeField] private AudioSource externalBoostAudioSource;
-        
         [SerializeField] private AudioSource simpleToggle;
         [SerializeField] private AudioSource assistActivate;
         [SerializeField] private AudioSource assistDeactivate;
@@ -28,6 +30,7 @@ namespace Core.Ship {
 
         public void OnEnable() {
             Game.OnPauseToggle += PauseAudio;
+            trailRenderers.ForEach(trailRenderer => trailRenderer.emitting = false);
         }
         
         public void OnDisable() {
@@ -61,9 +64,13 @@ namespace Core.Ship {
             IEnumerator DoBoost() {
                 engineBoostAudioSource.Play();
                 // TODO: make two external sources and mix them alternately? (the clip is long and may be played before finished)
+                // alternatively, separate out the external spool up from the blast
                 externalBoostAudioSource.Play();
                 yield return new WaitForSeconds(1);
                 thrusterController.AnimateBoostThrusters();
+                trailRenderers.ForEach(trailRenderer => trailRenderer.emitting = true);
+                yield return new WaitForSeconds(boostTime);
+                trailRenderers.ForEach(trailRenderer => trailRenderer.emitting = false);
             }
 
             StartCoroutine(DoBoost());

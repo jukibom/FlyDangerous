@@ -134,6 +134,11 @@ MonoBehaviour:
   shipLights: {fileID: 2368065440930616049}
   cockpitInternal: {fileID: 682626577688587610}
   cockpitExternal: {fileID: 8620020253450878590}
+  trailRenderers:
+  - {fileID: 7616534137881490067}
+  - {fileID: 1968396314100413533}
+  - {fileID: 616111041389902882}
+  - {fileID: 7028611380035217710}
   engineBoostAudioSource: {fileID: 3632842809499355508}
   externalBoostAudioSource: {fileID: 8823152912469975989}
   simpleToggle: {fileID: 6329047670680299313}
@@ -946,7 +951,7 @@ TrailRenderer:
     generateLightingData: 0
   m_MinVertexDistance: 0
   m_Autodestruct: 0
-  m_Emitting: 1
+  m_Emitting: 0
 --- !u!1 &4549681856552754469
 GameObject:
   m_ObjectHideFlags: 0
@@ -1094,7 +1099,7 @@ TrailRenderer:
     generateLightingData: 0
   m_MinVertexDistance: 0
   m_Autodestruct: 0
-  m_Emitting: 1
+  m_Emitting: 0
 --- !u!1 &4810122340290180979
 GameObject:
   m_ObjectHideFlags: 0
@@ -2079,7 +2084,7 @@ TrailRenderer:
     generateLightingData: 0
   m_MinVertexDistance: 0
   m_Autodestruct: 0
-  m_Emitting: 1
+  m_Emitting: 0
 --- !u!1 &7157141198030110168
 GameObject:
   m_ObjectHideFlags: 0
@@ -2181,6 +2186,8 @@ MonoBehaviour:
   - {fileID: 1513367850657576045}
   - {fileID: 6604377195862170886}
   - {fileID: 1243858318178669050}
+  baseForwardThrustScaleZ: 0.2558584
+  boostForwardThrustScaleZ: 3
 --- !u!1 &7238448723110631879
 GameObject:
   m_ObjectHideFlags: 0
@@ -2538,7 +2545,7 @@ TrailRenderer:
     generateLightingData: 0
   m_MinVertexDistance: 0
   m_Autodestruct: 0
-  m_Emitting: 1
+  m_Emitting: 0
 --- !u!1 &8132176192230073434
 GameObject:
   m_ObjectHideFlags: 0
