@@ -37,7 +37,7 @@ namespace Core.Ship {
 
         private void Update() {
 
-            _thrust = Mathf.Lerp(_thrust, targetThrust, 0.1f);
+            _thrust = Mathf.Lerp(_thrust, targetThrust, 0.03f);
             
             _thrusterMaterial.SetFloat(thrustProperty, _thrust);
 
