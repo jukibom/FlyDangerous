@@ -54,7 +54,7 @@ namespace Menus.Options {
             SetDebugFlightParameters();
             Game.Instance.ApplyGraphicsOptions();
             returnToParentMenu.Invoke();
-            AudioManager.Instance.Play("ui-confirm");
+            UIAudioManager.Instance.Play("ui-confirm");
         }
 
         public void Cancel() {
@@ -68,7 +68,7 @@ namespace Menus.Options {
             
             RevertPreferences();
             SavePreferences();
-            AudioManager.Instance.Play("ui-cancel");
+            UIAudioManager.Instance.Play("ui-cancel");
             returnToParentMenu.Invoke();
         }
 

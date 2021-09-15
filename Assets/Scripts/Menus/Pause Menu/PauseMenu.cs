@@ -81,26 +81,26 @@ namespace Menus.Pause_Menu {
         }
 
         public void Pause() {
-            AudioManager.Instance.Play("ui-dialog-open");
+            UIAudioManager.Instance.Play("ui-dialog-open");
             MenuState = PauseMenuState.PausedMainMenu;
             mainPanel.HighlightResume();
             _panelAnimator.SetBool(open, true);
         }
 
         public void Resume() {
-            AudioManager.Instance.Play("ui-cancel");
+            UIAudioManager.Instance.Play("ui-cancel");
             MenuState = PauseMenuState.Unpaused;
             _panelAnimator.SetBool(open, false);
         }
 
         public void Restart() {
-            AudioManager.Instance.Play("ui-confirm");
+            UIAudioManager.Instance.Play("ui-confirm");
             Resume();
             Game.Instance.RestartSession();
         }
 
         public void OpenOptionsPanel() {
-            AudioManager.Instance.Play("ui-dialog-open");
+            UIAudioManager.Instance.Play("ui-dialog-open");
             MenuState = PauseMenuState.PausedOptionsMenu;
         }
 
@@ -110,13 +110,13 @@ namespace Menus.Pause_Menu {
         }
 
         public void Quit() {
-            AudioManager.Instance.Play("ui-confirm");
+            UIAudioManager.Instance.Play("ui-confirm");
             Resume();
             Game.Instance.LeaveSession();
         }
 
         public void CopyLocationToClipboard() {
-            AudioManager.Instance.Play("ui-confirm");
+            UIAudioManager.Instance.Play("ui-confirm");
             GUIUtility.systemCopyBuffer = Game.Instance.LevelDataAtCurrentPosition.ToJsonString();
             var copyConfirmTransform = copyConfirmationText.transform;
             copyConfirmTransform.localPosition = new Vector3(copyConfirmTransform.localPosition.x, 55, copyConfirmTransform.position.z);
@@ -142,16 +142,8 @@ namespace Menus.Pause_Menu {
         // toggle ship controller input and timescales
         private void UpdatePauseGameState() {
             switch (MenuState) {
-                case PauseMenuState.Unpaused:
-                    Game.Instance.LockCursor();
-                    backgroundCanvas.SetActive(false);
-                    user.EnableGameInput();
-                    user.DisableUIInput();
-                    user.ResetMouseToCentre();
-                    Time.timeScale = 1;
-                    break;
                 case PauseMenuState.PausedMainMenu: 
-                    Game.Instance.FreeCursor();
+                    Game.Instance.PauseGameToggle(true);
                     cursor.OnPointerMove(Vector2.zero);
                     backgroundCanvas.SetActive(true);
                     user.DisableGameInput();
@@ -160,11 +152,13 @@ namespace Menus.Pause_Menu {
                     optionsPanel.Hide();
                     mainPanel.Show();
                     copyConfirmationText.color = new Color(1f, 1f, 1f, 0f);
-                    
-                    // game pause only applies to single player
-                    if (Game.Instance.SessionType == SessionType.Singleplayer) {
-                        Time.timeScale = 0;
-                    }
+                    break;
+                case PauseMenuState.Unpaused:
+                    Game.Instance.PauseGameToggle(false);
+                    backgroundCanvas.SetActive(false);
+                    user.EnableGameInput();
+                    user.DisableUIInput();
+                    user.ResetMouseToCentre();
                     break;
                 case PauseMenuState.PausedOptionsMenu:
                     optionsPanel.Show();

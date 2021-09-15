@@ -34,9 +34,11 @@ namespace Core {
 
         public delegate void RestartLevelAction();
         public delegate void GraphicsSettingsApplyAction();
+        public delegate void GamePauseAction(bool enabled);
         public delegate void VRToggledAction(bool enabled);
         public static event RestartLevelAction OnRestart;
         public static event GraphicsSettingsApplyAction OnGraphicsSettingsApplied;
+        public static event GamePauseAction OnPauseToggle;
         public static event VRToggledAction OnVRStatus;
 
         [SerializeField] private InputActionAsset playerBindings;
@@ -396,6 +398,24 @@ namespace Core {
             crossfade.SetTrigger(fadeFromBlack);
         }
 
+        public void PauseGameToggle(bool paused) {
+            if (OnPauseToggle != null) {
+                OnPauseToggle(paused);
+            }
+
+            if (paused) {
+                // actual game logic pause only applies to single player
+                if (SessionType == SessionType.Singleplayer) {
+                    Time.timeScale = 0;
+                }
+                FreeCursor();
+            }
+            else {
+                Time.timeScale = 1;
+                LockCursor();
+            }
+        }
+        
         private void NotifyVRStatus() {
             if (OnVRStatus != null) {
                 OnVRStatus(IsVREnabled);

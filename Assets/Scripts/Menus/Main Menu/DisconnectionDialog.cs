@@ -30,7 +30,7 @@ namespace Menus.Main_Menu {
         }
 
         public void Close() {
-            AudioManager.Instance.Play("ui-cancel");
+            UIAudioManager.Instance.Play("ui-cancel");
             topMenu.Show();
             Hide();
         }

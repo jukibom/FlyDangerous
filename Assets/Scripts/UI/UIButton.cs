@@ -22,7 +22,7 @@ public class UIButton : MonoBehaviour, IPointerEnterHandler, ISelectHandler, ISc
     }
 
     private void PlaySound() {
-        AudioManager.Instance?.Play("ui-nav");
+        UIAudioManager.Instance?.Play("ui-nav");
     }
 
 }

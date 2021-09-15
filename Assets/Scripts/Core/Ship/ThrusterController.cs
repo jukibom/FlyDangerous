@@ -25,13 +25,17 @@ namespace Core.Ship {
         private float targetPitchThrust;
         private float targetRollThrust;
         private float targetYawThrust;
+
+        public void AnimateBoostThrusters() {
             
+        }
+        
         public void UpdateThrusters(Vector3 lateralThrust, Vector3 rotationalThrust) {
             
             targetForwardThrust = MathfExtensions.Clamp(-1, 1, lateralThrust.z);
             targetUpThrust = MathfExtensions.Clamp(-1, 1, lateralThrust.y);
             targetRightThrust = MathfExtensions.Clamp(-1, 1, lateralThrust.x);
-            targetPitchThrust = MathfExtensions.Clamp(-1, 1, rotationalThrust.x);
+            targetPitchThrust = MathfExtensions.Clamp(-1, 1, -rotationalThrust.x);
             targetRollThrust = MathfExtensions.Clamp(-1, 1, rotationalThrust.z);
             targetYawThrust = MathfExtensions.Clamp(-1, 1, rotationalThrust.y);
             

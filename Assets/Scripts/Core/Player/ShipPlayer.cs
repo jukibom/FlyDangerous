@@ -182,8 +182,10 @@ namespace Core.Player {
         private float _boostCapacitorPercent = 100f;
 
         private float _prevVelocity;
-        private bool _userVelocityLimit;
         private float _velocityLimitCap;
+        
+        private bool _shipLightsActive;
+        private bool _velocityLimiterActive;
         private bool _flightAssistVectorControl;
         private bool _flightAssistRotationalDampening;
 
@@ -216,8 +218,8 @@ namespace Core.Player {
         public float Velocity => Mathf.Round(_rigidbody.velocity.magnitude);
         public User User => GetComponentInChildren<User>(true);
 
-        [CanBeNull] private IShip<MonoBehaviour> _ship;
-        [CanBeNull] public IShip<MonoBehaviour> Ship {
+        [CanBeNull] private IShip _ship;
+        [CanBeNull] public IShip Ship {
             get {
                 // if no ship associated, try to grab one from the entity tree and initialise it
                 if (_ship == null) {
@@ -357,7 +359,7 @@ namespace Core.Player {
                 StopCoroutine(_boostCoroutine);
             }
 
-            AudioManager.Instance.Stop("ship-boost");
+            UIAudioManager.Instance.Stop("ship-boost");
         }
 
         private void OnTriggerEnter(Collider other) {
@@ -405,6 +407,10 @@ namespace Core.Player {
                 _shipIndicatorData.acceleration = Math.Abs(thrust.x) + Math.Abs(thrust.y) + Math.Abs(thrust.z) / _maxThrust;
                 _shipIndicatorData.throttle = _throttleInput;
                 _shipIndicatorData.boostCapacitorPercent = _boostCapacitorPercent;
+                _shipIndicatorData.lightsActive = _shipLightsActive;
+                _shipIndicatorData.velocityLimiterActive = _velocityLimiterActive;
+                _shipIndicatorData.vectorFlightAssistActive = _flightAssistVectorControl;
+                _shipIndicatorData.rotationalFlightAssistActive = _flightAssistRotationalDampening;
 
                 Ship?.UpdateIndicators(_shipIndicatorData);
 
@@ -475,7 +481,7 @@ namespace Core.Player {
                 _boostCharging = true;
 
                 IEnumerator DoBoost() {
-                    AudioManager.Instance.Play("ship-boost");
+                    CmdBoost(_totalBoostTime);
                     yield return new WaitForSeconds(1);
                     _currentBoostTime = 0f;
                     _boostedMaxSpeedDelta = _maxBoostSpeed - _maxSpeed;
@@ -504,10 +510,10 @@ namespace Core.Player {
 
             // TODO: proper flight assist sounds
             if (isEnabled) {
-                AudioManager.Instance.Play("ship-alternate-flight-on");
+                UIAudioManager.Instance.Play("ship-alternate-flight-on");
             }
             else {
-                AudioManager.Instance.Play("ship-alternate-flight-off");
+                UIAudioManager.Instance.Play("ship-alternate-flight-off");
             }
         }
 
@@ -517,10 +523,10 @@ namespace Core.Player {
 
             // TODO: proper flight assist sounds
             if (_flightAssistVectorControl) {
-                AudioManager.Instance.Play("ship-alternate-flight-on");
+                UIAudioManager.Instance.Play("ship-alternate-flight-on");
             }
             else {
-                AudioManager.Instance.Play("ship-alternate-flight-off");
+                UIAudioManager.Instance.Play("ship-alternate-flight-off");
             }
         }
 
@@ -530,25 +536,26 @@ namespace Core.Player {
 
             // TODO: proper flight assist sounds
             if (_flightAssistRotationalDampening) {
-                AudioManager.Instance.Play("ship-alternate-flight-on");
+                UIAudioManager.Instance.Play("ship-alternate-flight-on");
             }
             else {
-                AudioManager.Instance.Play("ship-alternate-flight-off");
+                UIAudioManager.Instance.Play("ship-alternate-flight-off");
             }
         }
 
         public void ShipLightsToggle() {
-            Ship?.ToggleLights();
+            _shipLightsActive = !_shipLightsActive;
+            CmdSetLights(_shipLightsActive);
         }
 
         public void VelocityLimiterIsPressed(bool isPressed) {
-            _userVelocityLimit = isPressed;
+            _velocityLimiterActive = isPressed;
 
-            if (_userVelocityLimit) {
-                AudioManager.Instance.Play("ship-velocity-limit-on");
+            if (_velocityLimiterActive) {
+                UIAudioManager.Instance.Play("ship-velocity-limit-on");
             }
             else {
-                AudioManager.Instance.Play("ship-velocity-limit-off");
+                UIAudioManager.Instance.Play("ship-velocity-limit-off");
             }
         }
         
@@ -682,9 +689,7 @@ namespace Core.Player {
             // convert global rigid body velocity into local space
             Vector3 localVelocity = transform.InverseTransformDirection(_rigidbody.velocity + (gravity * 0.5715f)); // WTF
             // TODO: Correctly calculate gravity for FA (need the actual velocity from acceleration caused in the previous frame)
-
-            Debug.Log("localVelocity: " + localVelocity.y + " _latVTargetFactor " + _latVTargetFactor);
-
+            
             CalculateAssistedAxis(_latHTargetFactor, localVelocity.x, 0.1f, maxSpeedWithBoost, out _latHInput);
             CalculateAssistedAxis(_latVTargetFactor, localVelocity.y, 0.1f, maxSpeedWithBoost, out _latVInput);
             CalculateAssistedAxis(_throttleTargetFactor, localVelocity.z, 0.1f, maxSpeedWithBoost, out _throttleInput);
@@ -751,7 +756,7 @@ namespace Core.Player {
         //   then that's fine, similar to if a collision yeets you into a spinning mess.
         private void ClampMaxSpeed(float boostedMaxSpeedDelta) {
             // clamp max speed if user is holding the velocity limiter button down
-            if (_userVelocityLimit) {
+            if (_velocityLimiterActive) {
                 _velocityLimitCap = Math.Max(_prevVelocity, _minUserLimitedVelocity);
                 _rigidbody.velocity = Vector3.ClampMagnitude(_rigidbody.velocity, _velocityLimitCap);
             }
@@ -768,7 +773,7 @@ namespace Core.Player {
         void CmdSetPosition(Vector3 origin, Vector3 position, Quaternion rotation, Vector3 velocity, Vector3 angularVelocity, Vector3 thrust, Vector3 torque) {
             RpcUpdate(origin, position, rotation, velocity, angularVelocity, thrust, torque);
         }
-    
+
         // On each client, update the position of this object if it's not the local player.
         [ClientRpc]
         void RpcUpdate(Vector3 remoteOrigin, Vector3 position, Quaternion rotation, Vector3 velocity, Vector3 angularVelocity, Vector3 thrust, Vector3 torque) {
@@ -791,6 +796,26 @@ namespace Core.Player {
             
             // Update Thrusters
             Ship?.UpdateThrusters(thrust / _maxThrust, torque / (_maxThrust * _torqueThrustMultiplier));
+        }
+
+        [Command]
+        void CmdBoost(float boostTime) {
+            RpcBoost(boostTime);
+        }
+
+        [ClientRpc]
+        void RpcBoost(float boostTime) {
+            Ship?.Boost(boostTime);
+        }
+        
+        [Command]
+        void CmdSetLights(bool active) {
+            RpcSetLights(active);
+        }
+
+        [ClientRpc]
+        void RpcSetLights(bool active) {
+            Ship?.SetLights(active);
         }
         
         private void NonLocalPlayerPositionCorrection(Vector3 offset) {

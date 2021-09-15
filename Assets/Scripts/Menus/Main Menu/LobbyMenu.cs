@@ -77,7 +77,7 @@ namespace Menus.Main_Menu {
         }
 
         public void CloseLobby([CanBeNull] string reason = null) {
-            AudioManager.Instance.Play("ui-cancel");
+            UIAudioManager.Instance.Play("ui-cancel");
             if (reason != null) {
                 mainMenu.ShowDisconnectedDialog(reason);
             }

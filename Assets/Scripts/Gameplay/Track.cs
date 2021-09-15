@@ -91,7 +91,7 @@ public class Track : MonoBehaviour {
                 yield return new WaitForSeconds(0.5f);
                 
                 // start countdown sounds
-                AudioManager.Instance.Play("tt-countdown");
+                UIAudioManager.Instance.Play("tt-countdown");
                 
                 // second beep (boost available here)
                 yield return new WaitForSeconds(1);

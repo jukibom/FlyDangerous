@@ -27,21 +27,21 @@ namespace Menus.Main_Menu {
         }
 
         public void ClosePanel() {
-            AudioManager.Instance.Play("ui-cancel");
+            UIAudioManager.Instance.Play("ui-cancel");
             topMenu.Show();
             Hide();
         }
 
         public void OpenHostPanel() {
             Game.Instance.SessionStatus = SessionStatus.LobbyMenu;
-            AudioManager.Instance.Play("ui-dialog-open");
+            UIAudioManager.Instance.Play("ui-dialog-open");
             lobbyMenu.Show();
             lobbyMenu.StartHost();
             Hide();
         }
 
         public void OpenJoinPanel() {
-            AudioManager.Instance.Play("ui-dialog-open");
+            UIAudioManager.Instance.Play("ui-dialog-open");
             joinMenu.Show();
             Hide();
         }

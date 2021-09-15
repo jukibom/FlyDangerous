@@ -33,7 +33,7 @@ namespace UI {
                 _tabGroup.OnTabSelected(this);
             }
 
-            AudioManager.Instance.Play("ui-dialog-open");
+            UIAudioManager.Instance.Play("ui-dialog-open");
         }
 
         public void OnPointerClick(PointerEventData eventData) {
@@ -41,7 +41,7 @@ namespace UI {
                 _tabGroup.OnTabSelected(this);
             }
 
-            AudioManager.Instance.Play("ui-dialog-open");
+            UIAudioManager.Instance.Play("ui-dialog-open");
         }
 
         public void SetSelectedState(bool enabled) {

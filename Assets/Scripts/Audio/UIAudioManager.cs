@@ -5,9 +5,9 @@ using UnityEngine;
 using UnityEngine.Audio;
 
 namespace Audio {
-    public class AudioManager : MonoBehaviour {
+    public class UIAudioManager : MonoBehaviour {
 
-        public static AudioManager Instance;
+        public static UIAudioManager Instance;
         public Sound[] sounds;
 
         void Awake() {

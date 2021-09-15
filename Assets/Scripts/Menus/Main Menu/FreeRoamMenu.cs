@@ -44,7 +44,7 @@ namespace Menus.Main_Menu {
         }
 
         public void ClosePanel() {
-            AudioManager.Instance.Play("ui-cancel");
+            UIAudioManager.Instance.Play("ui-cancel");
             singlePlayerMenu.Show();
             Hide();
         }

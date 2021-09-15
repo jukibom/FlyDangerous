@@ -36,19 +36,19 @@ public class TopMenu : MonoBehaviour
         FdNetworkManager.Instance.StartHost();
         Game.Instance.SessionStatus = SessionStatus.SinglePlayerMenu;
         
-        AudioManager.Instance.Play("ui-dialog-open");
+        UIAudioManager.Instance.Play("ui-dialog-open");
         singlePlayerMenu.Show();
         Hide();
     }
 
     public void OpenMultiPlayerMenu() {
-        AudioManager.Instance.Play("ui-dialog-open");
+        UIAudioManager.Instance.Play("ui-dialog-open");
         multiPlayerMenu.Show();
         Hide();
     }
         
     public void OpenOptionsPanel() {
-        AudioManager.Instance.Play("ui-dialog-open");
+        UIAudioManager.Instance.Play("ui-dialog-open");
         optionsMenu.Show();
         Hide();
     }
@@ -59,12 +59,12 @@ public class TopMenu : MonoBehaviour
     }
         
     public void OpenDiscordLink() {
-        AudioManager.Instance.Play("ui-dialog-open");
+        UIAudioManager.Instance.Play("ui-dialog-open");
         Application.OpenURL("https://discord.gg/4daSEUKZ6A");
     }
 
     public void Quit() {
         Game.Instance.QuitGame();
-        AudioManager.Instance.Play("ui-cancel");
+        UIAudioManager.Instance.Play("ui-cancel");
     }
 }

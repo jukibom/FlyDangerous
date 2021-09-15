@@ -37,11 +37,11 @@ namespace UI {
             
             isChecked = !isChecked;
             if (isChecked) {
-                AudioManager.Instance.Play("ui-confirm");
+                UIAudioManager.Instance.Play("ui-confirm");
                 handler?.OnEnabled();
             }
             else {
-                AudioManager.Instance.Play("ui-cancel");
+                UIAudioManager.Instance.Play("ui-cancel");
                 handler?.OnDisabled();
             }
         }

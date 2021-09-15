@@ -56,7 +56,7 @@ namespace Menus.Main_Menu {
         }
 
         public void Cancel() {
-            AudioManager.Instance.Play("ui-cancel");
+            UIAudioManager.Instance.Play("ui-cancel");
             Game.Instance.SessionStatus = SessionStatus.Offline;
             FdNetworkManager.Instance.StopAll();
             multiPlayerMenu.Show();

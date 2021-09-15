@@ -34,12 +34,12 @@ public class AxisDropdown : MonoBehaviour, ISubmitHandler, IPointerClickHandler 
     private void HandleToggleLogic() {
         if (isOpen) {
             icon.text = "-";
-            AudioManager.Instance.Play("ui-dialog-open");
+            UIAudioManager.Instance.Play("ui-dialog-open");
             container.SetActive(true);
         }
         else {
             icon.text = "+";
-            AudioManager.Instance.Play("ui-cancel");
+            UIAudioManager.Instance.Play("ui-cancel");
             container.SetActive(false);
         }
         parentContentFitter.RefreshContentFitters();

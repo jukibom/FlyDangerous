@@ -313,10 +313,10 @@ namespace Core.Player {
             _lateralV = 0;
             _alternateFlightControls = !_alternateFlightControls;
             if (_alternateFlightControls) {
-                AudioManager.Instance.Play("ship-alternate-flight-on");
+                UIAudioManager.Instance.Play("ship-alternate-flight-on");
             }
             else {
-                AudioManager.Instance.Play("ship-alternate-flight-off");
+                UIAudioManager.Instance.Play("ship-alternate-flight-off");
             }
         }
 
