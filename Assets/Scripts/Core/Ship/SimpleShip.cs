@@ -26,15 +26,22 @@ namespace Core.Ship {
         [SerializeField] private AudioSource velocityLimitActivate;
         [SerializeField] private AudioSource velocityLimitDeactivate;
 
+        private ShipShake _shipShake;
+        
         public MonoBehaviour Entity() => this;
 
         public void OnEnable() {
             Game.OnPauseToggle += PauseAudio;
             trailRenderers.ForEach(trailRenderer => trailRenderer.emitting = false);
+            _shipShake = new ShipShake(transform);
         }
         
         public void OnDisable() {
             Game.OnPauseToggle -= PauseAudio;
+        }
+
+        public void FixedUpdate() {
+            _shipShake.Update();
         }
 
         #region IShip Basic Functions
@@ -66,7 +73,10 @@ namespace Core.Ship {
                 // TODO: make two external sources and mix them alternately? (the clip is long and may be played before finished)
                 // alternatively, separate out the external spool up from the blast
                 externalBoostAudioSource.Play();
+                
                 yield return new WaitForSeconds(1);
+                _shipShake.Shake(boostTime - 1, 0.005f);
+                
                 thrusterController.AnimateBoostThrusters();
                 trailRenderers.ForEach(trailRenderer => trailRenderer.emitting = true);
                 yield return new WaitForSeconds(boostTime);

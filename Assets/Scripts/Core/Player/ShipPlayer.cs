@@ -390,7 +390,6 @@ namespace Core.Player {
         
         // Apply all physics updates in fixed intervals (WRITE)
         private void FixedUpdate() {
-            // TODO: Ensure ship updates are still processed in multiplayer (e.g. sounds, thrusters)
             if (isLocalPlayer && IsReady) {
                 CalculateBoost(out var maxThrustWithBoost, out var maxTorqueWithBoost, out var boostedMaxSpeedDelta);
                 CalculateFlightForces(
@@ -403,20 +402,24 @@ namespace Core.Player {
 
                 ClampMaxSpeed(boostedMaxSpeedDelta);
 
-                _shipIndicatorData.velocity = Velocity;
-                _shipIndicatorData.acceleration = Math.Abs(thrust.x) + Math.Abs(thrust.y) + Math.Abs(thrust.z) / _maxThrust;
-                _shipIndicatorData.throttle = _throttleInput;
-                _shipIndicatorData.boostCapacitorPercent = _boostCapacitorPercent;
-                _shipIndicatorData.lightsActive = _shipLightsActive;
-                _shipIndicatorData.velocityLimiterActive = _velocityLimiterActive;
-                _shipIndicatorData.vectorFlightAssistActive = _flightAssistVectorControl;
-                _shipIndicatorData.rotationalFlightAssistActive = _flightAssistRotationalDampening;
-
-                Ship?.UpdateIndicators(_shipIndicatorData);
+                UpdateIndicators(thrust);
 
                 // Send the current floating origin along with the new position and rotation to the server
                 CmdSetPosition(FloatingOrigin.Instance.Origin, _transform.localPosition, _transform.rotation, _rigidbody.velocity, _rigidbody.angularVelocity, thrust, torque);
             }
+        }
+
+        private void UpdateIndicators(Vector3 thrust) {
+            _shipIndicatorData.velocity = Velocity;
+            _shipIndicatorData.acceleration = Math.Abs(thrust.x) + Math.Abs(thrust.y) + Math.Abs(thrust.z) / _maxThrust;
+            _shipIndicatorData.throttle = _throttleInput;
+            _shipIndicatorData.boostCapacitorPercent = _boostCapacitorPercent;
+            _shipIndicatorData.lightsActive = _shipLightsActive;
+            _shipIndicatorData.velocityLimiterActive = _velocityLimiterActive;
+            _shipIndicatorData.vectorFlightAssistActive = _flightAssistVectorControl;
+            _shipIndicatorData.rotationalFlightAssistActive = _flightAssistRotationalDampening;
+
+            Ship?.UpdateIndicators(_shipIndicatorData);
         }
 
         #region Input
