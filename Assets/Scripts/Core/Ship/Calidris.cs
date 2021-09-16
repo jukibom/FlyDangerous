@@ -103,9 +103,14 @@ namespace Core.Ship {
             else {
                 boostCapacitorBar.color = activeColor;
             }
-            
-            boostReadyIcon.color = shipIndicatorData.boostReady ? positiveColor : warningColor;
-            boostChargeText.text = shipIndicatorData.boostReady ? "BOOST READY" : "BOOST CHARGING";
+
+            var boostWarningColor = shipIndicatorData.boostTimerReady ? notificationColor : warningColor;
+            boostReadyIcon.color = shipIndicatorData.boostTimerReady && shipIndicatorData.boostChargeReady ? positiveColor : boostWarningColor;
+            boostChargeText.text = shipIndicatorData.boostTimerReady && shipIndicatorData.boostChargeReady 
+                ? "BOOST READY" 
+                : !shipIndicatorData.boostTimerReady ? 
+                    "BOOSTING"
+                    :"BOOST CHARGING";
 
             #endregion
             

@@ -413,12 +413,16 @@ namespace Core.Player {
         }
 
         private void UpdateIndicators(Vector3 thrust) {
-            
-            _shipIndicatorData.velocity = Velocity;
+
+            _shipIndicatorData.throttlePosition = _flightAssistVectorControl
+                ? _throttleTargetFactor
+                : _throttleInput;
             _shipIndicatorData.acceleration = Math.Abs(thrust.x) + Math.Abs(thrust.y) + Math.Abs(thrust.z) / _maxThrust;
+            _shipIndicatorData.velocity = Velocity;
             _shipIndicatorData.throttle = _throttleInput;
             _shipIndicatorData.boostCapacitorPercent = _boostCapacitorPercent;
-            _shipIndicatorData.boostReady = BoostReady;
+            _shipIndicatorData.boostTimerReady = !_boostCharging;
+            _shipIndicatorData.boostChargeReady = _boostCapacitorPercent > _boostCapacitorPercentCost;
             _shipIndicatorData.lightsActive = _shipLightsActive;
             _shipIndicatorData.velocityLimiterActive = _velocityLimiterActive;
             _shipIndicatorData.vectorFlightAssistActive = _flightAssistVectorControl;

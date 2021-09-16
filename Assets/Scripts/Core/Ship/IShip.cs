@@ -9,7 +9,8 @@ namespace Core.Ship {
         public float throttle; // 0 - 1
         public float gForce;
         public float boostCapacitorPercent; // 0 - 100
-        public bool boostReady;
+        public bool boostTimerReady;
+        public bool boostChargeReady;
         public bool lightsActive;
         public bool velocityLimiterActive;
         public bool vectorFlightAssistActive;
