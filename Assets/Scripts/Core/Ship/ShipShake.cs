@@ -30,7 +30,6 @@ namespace Core.Ship {
         {
             if (_shakeTimer > 0) {
                 _shakeAmount = Mathf.Lerp(0, _targetShakeAmount, _shakeTimer / _shakeDuration);
-                Debug.Log(_shakeTimer / _shakeDuration + " " + _shakeAmount);
                 _shipTransform.localPosition = _originalPos + Random.insideUnitSphere * _shakeAmount;
                 _shakeTimer -= Time.deltaTime;
             }
