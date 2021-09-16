@@ -58,8 +58,9 @@ namespace Core.Ship {
             DistributeThrust(rightThrusters, leftThrusters, targetRightThrust);
             DistributeThrust(upThrusters, downThrusters, targetUpThrust);
             
+            // torque isn't always neat -1:1
             DistributeThrust(pitchUpThrusters, pitchDownThrusters, targetPitchThrust);
-            DistributeThrust(rollRightThrusters, rollLeftThrusters, targetRollThrust);
+            DistributeThrust(rollLeftThrusters, rollRightThrusters, targetRollThrust);
             DistributeThrust(yawRightThrusters, yawLeftThrusters, targetYawThrust);
         }
 

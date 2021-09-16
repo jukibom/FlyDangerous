@@ -809,7 +809,13 @@ namespace Core.Player {
             }
             
             // Update Thrusters
-            Ship?.UpdateThrusters(thrust / _maxThrust, torque / (_maxThrust * _torqueThrustMultiplier));
+            var torqueNormalised = torque / (_maxThrust * _torqueThrustMultiplier);
+            var torqueVec = new Vector3(
+                torque.x,
+                MathfExtensions.Remap(-0.8f, 0.8f, -1, 1, torque.y),
+                MathfExtensions.Remap(-0.3f, 0.3f, -1, 1, torque.z)
+            );
+            Ship?.UpdateThrusters(thrust / _maxThrust, torqueVec);
         }
 
         [Command]
