@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using Misc;
 using UnityEngine;
 using UnityEngine.UI;
@@ -34,7 +34,23 @@ namespace Core.Ship {
         [SerializeField] private Text gForceNumberText;
 
         private float _previousGForce;
+
         public override void UpdateIndicators(ShipIndicatorData shipIndicatorData) {
+            #region Simple Indicators
+            
+            vectorAssistIcon.color = shipIndicatorData.vectorFlightAssistActive ? positiveColor : warningColor;
+            vectorAssistText.text = shipIndicatorData.vectorFlightAssistActive ? "VFA\nON" : "VFA\nOFF";
+            
+            rotationalAssistIcon.color = shipIndicatorData.rotationalFlightAssistActive ? positiveColor : warningColor;
+            rotationAssistText.text = shipIndicatorData.rotationalFlightAssistActive ? "RFA\nON" : "RFA\nOFF";
+
+            velocityLimiterIcon.color = shipIndicatorData.velocityLimiterActive ? activeColor : disabledColor;
+            velocityLimiterText.text = shipIndicatorData.velocityLimiterActive ? "V-LIM\nON" : "V-LIM\nOFF";
+
+            shipLightIcon.color = shipIndicatorData.lightsActive ? activeColor : disabledColor;
+
+            #endregion
+            
             #region Velocity
             velocityIndicatorText.text = shipIndicatorData.velocity.ToString(CultureInfo.InvariantCulture);
 
@@ -88,20 +104,11 @@ namespace Core.Ship {
                 boostCapacitorBar.color = activeColor;
             }
             
-            vectorAssistIcon.color = shipIndicatorData.vectorFlightAssistActive ? positiveColor : warningColor;
-            vectorAssistText.text = shipIndicatorData.vectorFlightAssistActive ? "VFA\nON" : "VFA\nOFF";
-            
-            rotationalAssistIcon.color = shipIndicatorData.rotationalFlightAssistActive ? positiveColor : warningColor;
-            rotationAssistText.text = shipIndicatorData.rotationalFlightAssistActive ? "RFA\nON" : "RFA\nOFF";
-
-            velocityLimiterIcon.color = shipIndicatorData.velocityLimiterActive ? activeColor : disabledColor;
-            velocityLimiterText.text = shipIndicatorData.velocityLimiterActive ? "V-LIM\nON" : "V-LIM\nOFF";
-
-            shipLightIcon.color = shipIndicatorData.lightsActive ? activeColor : disabledColor;
-            
             boostReadyIcon.color = shipIndicatorData.boostReady ? positiveColor : warningColor;
             boostChargeText.text = shipIndicatorData.boostReady ? "BOOST READY" : "BOOST CHARGING";
 
+            #endregion
+            
             #region GForce
             var gForce = Mathf.Lerp(_previousGForce, shipIndicatorData.gForce, 0.1f);
             _previousGForce = gForce;
