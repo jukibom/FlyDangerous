@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using Misc;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,6 +10,7 @@ namespace Core.Ship {
         private Color32 disabledColor = new Color32(39, 72, 91, 255);
         private Color32 positiveColor = new Color32(30, 195, 28, 255);
         private Color32 warningColor = new Color32(195, 28, 30, 255);
+        private Color32 notificationColor = new Color32(195, 195, 30, 255);
 
         [SerializeField] private Text velocityIndicatorText;
         [SerializeField] private Image accelerationBar;
@@ -33,15 +34,31 @@ namespace Core.Ship {
         [SerializeField] private Text gForceNumberText;
 
         public override void UpdateIndicators(ShipIndicatorData shipIndicatorData) {
-
             velocityIndicatorText.text = shipIndicatorData.velocity.ToString(CultureInfo.InvariantCulture);
-            accelerationBar.fillAmount = Mathf.Lerp(accelerationBar.fillAmount, MathfExtensions.Remap(0, 1, 0, 0.755f, shipIndicatorData.acceleration), 0.1f);
+
+            // special use-case for acceleration bar depending on flight assist (switch to throttle input)
+            var accelerationBarAmount = shipIndicatorData.vectorFlightAssistActive
+                ? Mathf.Abs(shipIndicatorData.throttlePosition)
+                : shipIndicatorData.acceleration;
+            
+            // if reverse, switch to a yellow colour
+            var accelerationBarBaseActiveColor = activeColor;
+            if (shipIndicatorData.vectorFlightAssistActive && shipIndicatorData.throttlePosition < 0) {
+                accelerationBar.color = notificationColor;
+                accelerationBarBaseActiveColor = notificationColor;
+            }
+
+            // animate bar
+            accelerationBar.fillAmount = Mathf.Lerp(accelerationBar.fillAmount, MathfExtensions.Remap(0, 1, 0, 0.755f, accelerationBarAmount), 0.1f);
+            
+            // fade to red near end of bar 
             if (accelerationBar.fillAmount > 0.7f) {
-                accelerationBar.color = Color.Lerp(activeColor, warningColor, MathfExtensions.Remap(0.95f, 1, 0, 1, shipIndicatorData.acceleration));
+                accelerationBar.color = Color.Lerp(accelerationBarBaseActiveColor, warningColor, MathfExtensions.Remap(0.95f, 1, 0, 1, accelerationBarAmount));
             }
             else {
-                accelerationBar.color = activeColor;
+                accelerationBar.color = accelerationBarBaseActiveColor;
             }
+            #endregion
             
             boostIndicatorText.text = ((int) shipIndicatorData.boostCapacitorPercent).ToString(CultureInfo.InvariantCulture) + "%";
             boostCapacitorBar.fillAmount = MathfExtensions.Remap(0, 100, 0, 0.775f, shipIndicatorData.boostCapacitorPercent);
