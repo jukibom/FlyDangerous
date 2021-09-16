@@ -182,6 +182,7 @@ namespace Core.Player {
         private float _boostCapacitorPercent = 100f;
 
         private float _prevVelocity;
+        private float _gforce;
         private float _velocityLimitCap;
         
         private bool _shipLightsActive;
@@ -259,6 +260,8 @@ namespace Core.Player {
                 }
             }
         }
+
+        private bool BoostReady => !_boostCharging && _boostCapacitorPercent > _boostCapacitorPercentCost;
 
         private ShipIndicatorData _shipIndicatorData;
         
@@ -410,15 +413,18 @@ namespace Core.Player {
         }
 
         private void UpdateIndicators(Vector3 thrust) {
+            
             _shipIndicatorData.velocity = Velocity;
             _shipIndicatorData.acceleration = Math.Abs(thrust.x) + Math.Abs(thrust.y) + Math.Abs(thrust.z) / _maxThrust;
             _shipIndicatorData.throttle = _throttleInput;
             _shipIndicatorData.boostCapacitorPercent = _boostCapacitorPercent;
+            _shipIndicatorData.boostReady = BoostReady;
             _shipIndicatorData.lightsActive = _shipLightsActive;
             _shipIndicatorData.velocityLimiterActive = _velocityLimiterActive;
             _shipIndicatorData.vectorFlightAssistActive = _flightAssistVectorControl;
             _shipIndicatorData.rotationalFlightAssistActive = _flightAssistRotationalDampening;
-
+            _shipIndicatorData.gForce = _gforce;
+            
             Ship?.UpdateIndicators(_shipIndicatorData);
         }
 
@@ -479,7 +485,7 @@ namespace Core.Player {
 
         public void Boost(bool isPressed) {
             var boost = isPressed;
-            if (boost && !_boostCharging && _boostCapacitorPercent > _boostCapacitorPercentCost) {
+            if (boost && BoostReady) {
                 _boostCapacitorPercent -= _boostCapacitorPercentCost;
                 _boostCharging = true;
 
@@ -766,6 +772,7 @@ namespace Core.Player {
 
             // clamp max speed in general including boost variance (max boost speed minus max speed)
             _rigidbody.velocity = Vector3.ClampMagnitude(_rigidbody.velocity, _maxSpeed + boostedMaxSpeedDelta);
+            _gforce = Math.Abs((_rigidbody.velocity.magnitude - _prevVelocity) / (Time.fixedDeltaTime * 9.8f));
             _prevVelocity = _rigidbody.velocity.magnitude;
         }
         #endregion

@@ -1,9 +1,72 @@
-﻿using UnityEngine;
+﻿using System.Globalization;
+using Misc;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace Core.Ship {
     public class Calidris : SimpleShip {
+
+        private Color32 activeColor = new Color32(0, 153, 225, 255);
+        private Color32 disabledColor = new Color32(39, 72, 91, 255);
+        private Color32 positiveColor = new Color32(30, 195, 28, 255);
+        private Color32 warningColor = new Color32(195, 28, 30, 255);
+
+        [SerializeField] private Text velocityIndicatorText;
+        [SerializeField] private Image accelerationBar;
+        
+        [SerializeField] private Text boostIndicatorText;
+        [SerializeField] private Image boostCapacitorBar;
+        
+        [SerializeField] private Text boostChargeText;
+        [SerializeField] private Image boostReadyIcon;
+
+        [SerializeField] private Image vectorAssistIcon;
+        [SerializeField] private Text vectorAssistText;
+        
+        [SerializeField] private Image rotationalAssistIcon;
+        [SerializeField] private Text rotationAssistText;
+        
+        [SerializeField] private Image velocityLimiterIcon;
+        [SerializeField] private Text velocityLimiterText;
+        
+        [SerializeField] private Image shipLightIcon;
+        [SerializeField] private Text gForceNumberText;
+
         public override void UpdateIndicators(ShipIndicatorData shipIndicatorData) {
+
+            velocityIndicatorText.text = shipIndicatorData.velocity.ToString(CultureInfo.InvariantCulture);
+            accelerationBar.fillAmount = Mathf.Lerp(accelerationBar.fillAmount, MathfExtensions.Remap(0, 1, 0, 0.755f, shipIndicatorData.acceleration), 0.1f);
+            if (accelerationBar.fillAmount > 0.7f) {
+                accelerationBar.color = Color.Lerp(activeColor, warningColor, MathfExtensions.Remap(0.95f, 1, 0, 1, shipIndicatorData.acceleration));
+            }
+            else {
+                accelerationBar.color = activeColor;
+            }
             
+            boostIndicatorText.text = ((int) shipIndicatorData.boostCapacitorPercent).ToString(CultureInfo.InvariantCulture) + "%";
+            boostCapacitorBar.fillAmount = MathfExtensions.Remap(0, 100, 0, 0.775f, shipIndicatorData.boostCapacitorPercent);
+            if (shipIndicatorData.boostCapacitorPercent > 95f) {
+                boostCapacitorBar.color = Color.Lerp(activeColor, positiveColor, MathfExtensions.Remap(95, 100, 0, 1, shipIndicatorData.boostCapacitorPercent));
+            }
+            else {
+                boostCapacitorBar.color = activeColor;
+            }
+            
+            vectorAssistIcon.color = shipIndicatorData.vectorFlightAssistActive ? positiveColor : warningColor;
+            vectorAssistText.text = shipIndicatorData.vectorFlightAssistActive ? "VFA\nON" : "VFA\nOFF";
+            
+            rotationalAssistIcon.color = shipIndicatorData.rotationalFlightAssistActive ? positiveColor : warningColor;
+            rotationAssistText.text = shipIndicatorData.rotationalFlightAssistActive ? "RFA\nON" : "RFA\nOFF";
+
+            velocityLimiterIcon.color = shipIndicatorData.velocityLimiterActive ? activeColor : disabledColor;
+            velocityLimiterText.text = shipIndicatorData.velocityLimiterActive ? "V-LIM\nON" : "V-LIM\nOFF";
+
+            shipLightIcon.color = shipIndicatorData.lightsActive ? activeColor : disabledColor;
+            
+            boostReadyIcon.color = shipIndicatorData.boostReady ? positiveColor : warningColor;
+            boostChargeText.text = shipIndicatorData.boostReady ? "BOOST READY" : "BOOST CHARGING";
+
+            gForceNumberText.text = System.Math.Round(shipIndicatorData.gForce, 1).ToString(CultureInfo.InvariantCulture);
         }
     }
 }
