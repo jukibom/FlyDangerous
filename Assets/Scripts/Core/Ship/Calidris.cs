@@ -59,11 +59,28 @@ namespace Core.Ship {
                 accelerationBar.color = accelerationBarBaseActiveColor;
             }
             #endregion
-            
+
+            #region Boost
+
             boostIndicatorText.text = ((int) shipIndicatorData.boostCapacitorPercent).ToString(CultureInfo.InvariantCulture) + "%";
-            boostCapacitorBar.fillAmount = MathfExtensions.Remap(0, 100, 0, 0.775f, shipIndicatorData.boostCapacitorPercent);
+            boostCapacitorBar.fillAmount = Mathf.Lerp(
+                boostCapacitorBar.fillAmount, 
+                MathfExtensions.Remap(0, 100, 0, 0.755f, shipIndicatorData.boostCapacitorPercent), 
+                0.1f
+            );
+
             if (shipIndicatorData.boostCapacitorPercent > 95f) {
-                boostCapacitorBar.color = Color.Lerp(activeColor, positiveColor, MathfExtensions.Remap(95, 100, 0, 1, shipIndicatorData.boostCapacitorPercent));
+                boostCapacitorBar.color = Color.Lerp(activeColor, positiveColor, 
+                    MathfExtensions.Remap(
+                        0.95f / boostCapacitorBar.fillAmount, 
+                        boostCapacitorBar.fillAmount,
+                        0, 1, boostCapacitorBar.fillAmount
+                    )
+                );
+            }
+            else if (shipIndicatorData.boostCapacitorPercent < 20f) {
+                boostCapacitorBar.color = Color.Lerp(activeColor, warningColor,
+                    MathfExtensions.Remap(0.2f / boostCapacitorBar.fillAmount, 0, 0, 1, boostCapacitorBar.fillAmount));
             }
             else {
                 boostCapacitorBar.color = activeColor;
