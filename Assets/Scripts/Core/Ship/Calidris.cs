@@ -33,7 +33,9 @@ namespace Core.Ship {
         [SerializeField] private Image shipLightIcon;
         [SerializeField] private Text gForceNumberText;
 
+        private float _previousGForce;
         public override void UpdateIndicators(ShipIndicatorData shipIndicatorData) {
+            #region Velocity
             velocityIndicatorText.text = shipIndicatorData.velocity.ToString(CultureInfo.InvariantCulture);
 
             // special use-case for acceleration bar depending on flight assist (switch to throttle input)
@@ -100,7 +102,11 @@ namespace Core.Ship {
             boostReadyIcon.color = shipIndicatorData.boostReady ? positiveColor : warningColor;
             boostChargeText.text = shipIndicatorData.boostReady ? "BOOST READY" : "BOOST CHARGING";
 
-            gForceNumberText.text = System.Math.Round(shipIndicatorData.gForce, 1).ToString(CultureInfo.InvariantCulture);
+            #region GForce
+            var gForce = Mathf.Lerp(_previousGForce, shipIndicatorData.gForce, 0.1f);
+            _previousGForce = gForce;
+            gForceNumberText.text = System.Math.Round(gForce, 1).ToString(CultureInfo.InvariantCulture);
+            #endregion
         }
     }
 }
