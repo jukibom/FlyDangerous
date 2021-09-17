@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using Misc;
 using UnityEngine;
 using UnityEngine.UI;
@@ -126,9 +126,9 @@ namespace Core.Ship {
             #endregion
             
             #region GForce
-            var gForce = Mathf.Lerp(_previousGForce, shipIndicatorData.gForce, 0.1f);
+            var gForce = Mathf.Lerp(_previousGForce, shipIndicatorData.gForce, 0.01f);
             _previousGForce = gForce;
-            gForceNumberText.text = System.Math.Round(gForce, 1).ToString(CultureInfo.InvariantCulture);
+            gForceNumberText.text = $"{gForce:0.0}";
             #endregion
         }
     }
