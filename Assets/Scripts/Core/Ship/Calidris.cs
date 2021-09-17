@@ -98,18 +98,18 @@ namespace Core.Ship {
                 0.1f
             );
 
-            if (shipIndicatorData.boostCapacitorPercent > 95f) {
+            if (shipIndicatorData.boostCapacitorPercent > 80) {
                 boostCapacitorBar.color = Color.Lerp(activeColor, positiveColor, 
                     MathfExtensions.Remap(
-                        0.95f / boostCapacitorBar.fillAmount, 
-                        boostCapacitorBar.fillAmount,
-                        0, 1, boostCapacitorBar.fillAmount
+                        80, 
+                        90,
+                        0, 1, shipIndicatorData.boostCapacitorPercent
                     )
                 );
             }
-            else if (shipIndicatorData.boostCapacitorPercent < 20f) {
+            else if (shipIndicatorData.boostCapacitorPercent < 30f) {
                 boostCapacitorBar.color = Color.Lerp(activeColor, warningColor,
-                    MathfExtensions.Remap(0.2f / boostCapacitorBar.fillAmount, 0, 0, 1, boostCapacitorBar.fillAmount));
+                    MathfExtensions.Remap(30, 15, 0, 1, shipIndicatorData.boostCapacitorPercent));
             }
             else {
                 boostCapacitorBar.color = activeColor;
