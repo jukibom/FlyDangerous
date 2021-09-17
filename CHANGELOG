@@ -1,9 +1,12 @@
-﻿0.3.1
+﻿0.4.0
 New:
     * Added new ship, the Calidris!
+    * Added additional cockpit indicators to calidris (g-force, assist status, limiter, lights, boost status)
     * Added independent thrusters + spacial audio emitters
     * Added ship thruster trails (thanks Tavi!)
-    * Added new biome world test
+    * Added new biome test world with 8k textures, let me know how this performs!
+    * Ship lights and thrusters are shown on other ships in multiplayer (local player lights are prioritised in renderer)
+    * Added basic support for gravity
 
 Changes:
     * Updated to Unity 2021.1.17f1
@@ -11,16 +14,19 @@ Changes:
         * Halved the default boost multiplier
         * Halved the torque multiplier
         * Doubled the regular non-boost base thrust N
+    * Increased terrain world draw distance by 1 tile in all graphics scenarios (so anywhere from 33 to 100 percent increase)
     * Free roam now has ability to select location (removed experimental terrain flag)
     * Updated Cloudy terrain to have a more interesting skybox
+    * Split boost sound between front and back and made boost action multiplayer-aware
+    * VR HMD position => input bind (default F11) now works in pause menu etc, should *always* restore from preferences
 
 Fixes:
     * Fog no longer interacts with transparent objects (e.g. checkpoint)
     * VR view no longer brighter in right eye on terrain v1 (?!)
-    * Options menu correctly re-initialises on show (could have unchanged changes)
+    * Cockpit camera position is now clamped for ridiculously fast builds
+    * Options menu correctly re-initialises on show (previously maintained unsaved changes)
     * Tweaked exact positions of sun light sources
     * Space dust no longer fails to move origin with ship
-    * VR HMD position => input bind (default F11) now works in pause menu etc, should always restore from preferences
 
 0.3.0
 New:
