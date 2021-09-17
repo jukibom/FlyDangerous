@@ -404,7 +404,6 @@ namespace Core.Player {
                 );
 
                 ClampMaxSpeed(boostedMaxSpeedDelta);
-
                 UpdateIndicators(thrust);
 
                 // Send the current floating origin along with the new position and rotation to the server
@@ -417,7 +416,7 @@ namespace Core.Player {
             _shipIndicatorData.throttlePosition = _flightAssistVectorControl
                 ? _throttleTargetFactor
                 : _throttleInput;
-            _shipIndicatorData.acceleration = Math.Abs(thrust.x) + Math.Abs(thrust.y) + Math.Abs(thrust.z) / _maxThrust;
+            _shipIndicatorData.acceleration = (Math.Abs(thrust.x) + Math.Abs(thrust.y) + Math.Abs(thrust.z)) / _maxThrust;
             _shipIndicatorData.velocity = Velocity;
             _shipIndicatorData.throttle = _throttleInput;
             _shipIndicatorData.boostCapacitorPercent = _boostCapacitorPercent;
@@ -811,9 +810,9 @@ namespace Core.Player {
             // Update Thrusters
             var torqueNormalised = torque / (_maxThrust * _torqueThrustMultiplier);
             var torqueVec = new Vector3(
-                torque.x,
-                MathfExtensions.Remap(-0.8f, 0.8f, -1, 1, torque.y),
-                MathfExtensions.Remap(-0.3f, 0.3f, -1, 1, torque.z)
+                torqueNormalised.x,
+                MathfExtensions.Remap(-0.8f, 0.8f, -1, 1, torqueNormalised.y),
+                MathfExtensions.Remap(-0.3f, 0.3f, -1, 1, torqueNormalised.z)
             );
             Ship?.UpdateThrusters(thrust / _maxThrust, torqueVec);
         }
