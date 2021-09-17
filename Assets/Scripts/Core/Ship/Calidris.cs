@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using Misc;
 using UnityEngine;
 using UnityEngine.UI;
@@ -33,6 +33,8 @@ namespace Core.Ship {
         [SerializeField] private Image shipLightIcon;
         [SerializeField] private Text gForceNumberText;
 
+        // Lerping fun
+        private float _previousAccelerationBarAmount;
         private float _previousGForce;
 
         public override void UpdateIndicators(ShipIndicatorData shipIndicatorData) {
@@ -56,22 +58,31 @@ namespace Core.Ship {
 
             // special use-case for acceleration bar depending on flight assist (switch to throttle input)
             var accelerationBarAmount = shipIndicatorData.vectorFlightAssistActive
-                ? Mathf.Abs(shipIndicatorData.throttlePosition)
+                ? shipIndicatorData.throttlePosition
                 : shipIndicatorData.acceleration;
+
+            accelerationBarAmount = Mathf.Lerp(_previousAccelerationBarAmount, accelerationBarAmount, 0.1f);
+
+            _previousAccelerationBarAmount = MathfExtensions.Clamp(-1, 1, accelerationBarAmount);
             
-            // if reverse, switch to a yellow colour
+            // if reverse, switch to a yellow colour and invert
+            accelerationBar.transform.localRotation = Quaternion.Euler(0, 0, 45);
+            accelerationBar.fillClockwise = true;
             var accelerationBarBaseActiveColor = activeColor;
-            if (shipIndicatorData.vectorFlightAssistActive && shipIndicatorData.throttlePosition < 0) {
+            if (shipIndicatorData.vectorFlightAssistActive && accelerationBarAmount < 0) {
                 accelerationBar.color = notificationColor;
                 accelerationBarBaseActiveColor = notificationColor;
+                accelerationBar.transform.localRotation = Quaternion.Euler(0, 0, 135);
+                accelerationBar.fillClockwise = false;
             }
 
             // animate bar
-            accelerationBar.fillAmount = Mathf.Lerp(accelerationBar.fillAmount, MathfExtensions.Remap(0, 1, 0, 0.755f, accelerationBarAmount), 0.1f);
+            var accelerationDrawFillAmount = Mathf.Abs(accelerationBarAmount);
+            accelerationBar.fillAmount = MathfExtensions.Remap(0, 1, 0, 0.755f, accelerationDrawFillAmount);
             
             // fade to red near end of bar 
-            if (accelerationBar.fillAmount > 0.7f) {
-                accelerationBar.color = Color.Lerp(accelerationBarBaseActiveColor, warningColor, MathfExtensions.Remap(0.95f, 1, 0, 1, accelerationBarAmount));
+            if (accelerationDrawFillAmount > 0.7f) {
+                accelerationBar.color = Color.Lerp(accelerationBarBaseActiveColor, warningColor, MathfExtensions.Remap(0.95f, 1, 0, 1, accelerationDrawFillAmount));
             }
             else {
                 accelerationBar.color = accelerationBarBaseActiveColor;
