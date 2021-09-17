@@ -6,9 +6,11 @@ Yes, racing exists in Elite and yes it's awesome -- but accessible it is not.
 
 This project aims to provide a ground-up reimplementation of a similar-enough flight model to provide a training ground and common set of tools to track leaderboards, ghosts and general tom-foolery. Feedback is extremely welcome!
 
-[Download on itch.io](https://jukibom.itch.io/fly-dangerous)
+[Download on itch.io](itch.flydangero.us)
 
-[Join the discord](https://discord.gg/4daSEUKZ6A)
+[Join the discord](discord.flydangero.us)
+
+[Follow me on twitter](juki.flydangero.us)
 
 ## Planned Features
 
