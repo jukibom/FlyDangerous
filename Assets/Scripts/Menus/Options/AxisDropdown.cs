@@ -11,7 +11,6 @@ public class AxisDropdown : MonoBehaviour, ISubmitHandler, IPointerClickHandler 
     public bool isOpen;
     public Text icon;
     public GameObject container;
-    public ContentFitterRefresh parentContentFitter;
 
     void Start() {
         isOpen = false;
@@ -42,6 +41,10 @@ public class AxisDropdown : MonoBehaviour, ISubmitHandler, IPointerClickHandler 
             UIAudioManager.Instance.Play("ui-cancel");
             container.SetActive(false);
         }
-        parentContentFitter.RefreshContentFitters();
+
+        var parentContentFitters = GetComponentsInParent<ContentFitterRefresh>();
+        foreach (var contentFitterRefresh in parentContentFitters) {
+            contentFitterRefresh.RefreshContentFitters();
+        }
     }
 }

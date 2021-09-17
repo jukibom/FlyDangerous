@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Core;
 using Core.Player;
+using Core.Ship;
 using MapMagic.Core;
 using Mirror;
 using UnityEngine;
@@ -55,7 +56,7 @@ namespace Misc {
                 Game.Instance.ApplyGraphicsOptions();
                 
                 // create a test other player
-                CreateTestSecondShip();
+                // CreateTestSecondShip();
                 
                 // My work here is done
                 gameObject.SetActive(false);
