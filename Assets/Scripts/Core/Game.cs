@@ -387,7 +387,7 @@ namespace Core {
         }
 
         public void LockCursor() {
-            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.lockState = CursorLockMode.Locked;
         }
 
         public void FadeToBlack() {

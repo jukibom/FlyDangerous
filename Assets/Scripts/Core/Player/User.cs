@@ -438,8 +438,8 @@ namespace Core.Player {
             // clamp to virtual screen 
             var extentsX = Screen.width * Mathf.Pow(sensitivityX, -1);
             var extentsY = Screen.height * Mathf.Pow(sensitivityY, -1);
-            _mousePositionScreen.x = Math.Max(-extentsX, Math.Min(extentsX, _mousePositionScreen.x));
-            _mousePositionScreen.y = Math.Max(-extentsY, Math.Min(extentsY, _mousePositionScreen.y));
+            _mousePositionScreen.x = Math.Max(Screen.width - extentsX, Math.Min(extentsX, _mousePositionScreen.x));
+            _mousePositionScreen.y = Math.Max(Screen.height - extentsY, Math.Min(extentsY, _mousePositionScreen.y));
 
             // we're done
             pitchMouseInput = pitch;
