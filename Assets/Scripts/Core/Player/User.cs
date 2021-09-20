@@ -208,6 +208,7 @@ namespace Core.Player {
             _mousePositionScreen = warpedPosition;
             _mousePositionNormalized = new Vector2(0, 0);
             _mousePositionDelta = new Vector2(0, 0);
+            mouseWidget.ResetToCentre();
         }
 
         /**
