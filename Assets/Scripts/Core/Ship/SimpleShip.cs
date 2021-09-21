@@ -28,18 +28,21 @@ namespace Core.Ship {
         [SerializeField] private AudioSource velocityLimitActivateAudioSource;
         [SerializeField] private AudioSource velocityLimitDeactivateAudioSource;
 
+        private Coroutine _boostCoroutine;
         private ShipShake _shipShake;
         
         public MonoBehaviour Entity() => this;
 
         public void OnEnable() {
             Game.OnPauseToggle += PauseAudio;
+            Game.OnRestart += Restart;
             trailRenderers.ForEach(trailRenderer => trailRenderer.emitting = false);
             _shipShake = new ShipShake(transform);
         }
         
         public void OnDisable() {
             Game.OnPauseToggle -= PauseAudio;
+            Game.OnRestart -= Restart;
         }
 
         public void FixedUpdate() {
@@ -84,7 +87,7 @@ namespace Core.Ship {
                 trailRenderers.ForEach(trailRenderer => trailRenderer.emitting = false);
             }
 
-            StartCoroutine(DoBoost());
+            _boostCoroutine = StartCoroutine(DoBoost());
         }
 
         #endregion
@@ -116,6 +119,17 @@ namespace Core.Ship {
                     if (paused) audioSource.Pause();
                     else audioSource.UnPause();
                 }
+            }
+        }
+
+        private void Restart() {
+            _shipShake.Reset();
+            trailRenderers.ForEach(trail => trail.Clear());
+            engineBoostAudioSource.Stop();
+            externalBoostAudioSource.Stop();
+            externalBoostThrusterAudioSource.Stop();
+            if (_boostCoroutine != null) {
+                StopCoroutine(_boostCoroutine);
             }
         }
 

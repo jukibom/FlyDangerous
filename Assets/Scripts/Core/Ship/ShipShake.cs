@@ -26,6 +26,12 @@ namespace Core.Ship {
             _targetShakeAmount = amount;
         }
 
+        public void Reset() {
+            _shakeTimer = 0;
+            _shakeDuration = 0;
+            _shakeAmount = 0;
+        }
+
         public void Update()
         {
             if (_shakeTimer > 0) {
