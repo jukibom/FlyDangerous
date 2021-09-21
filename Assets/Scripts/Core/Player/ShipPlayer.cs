@@ -61,33 +61,31 @@ namespace Core.Player {
             Array.Find(FindObjectsOfType<ShipPlayer>(), shipPlayer => shipPlayer.isLocalPlayer);
         
         // TODO: remove this stuff once params are finalised (this is for debug panel in release)
-        public static ShipParameters ShipParameterDefaults {
-            get => new ShipParameters {
-                mass = 1100f,
-                drag = 0f,
-                angularDrag = 0f,
-                inertiaTensorMultiplier = 175f,
-                maxSpeed = 800f,
-                maxBoostSpeed = 932f,
-                maxThrust = 220000f,
-                torqueThrustMultiplier = 0.04f,
-                throttleMultiplier = 1f,
-                latHMultiplier = 0.5f,
-                latVMultiplier = 0.7f,
-                pitchMultiplier = 1f,
-                rollMultiplier = 0.3f,
-                yawMultiplier = 0.8f,
-                thrustBoostMultiplier = 3.25f,
-                torqueBoostMultiplier = 2f,
-                totalBoostTime = 5f,
-                totalBoostRotationalTime = 6f,
-                boostMaxSpeedDropOffTime = 12f,
-                boostRechargeTime = 4f,
-                boostCapacitorPercentCost = 70f,
-                boostCapacityPercentChargeRate = 10f,
-                minUserLimitedVelocity = 250f,
-            };
-        }
+        public static ShipParameters ShipParameterDefaults => new ShipParameters {
+            mass = 1100f,
+            drag = 0f,
+            angularDrag = 0f,
+            inertiaTensorMultiplier = 175f,
+            maxSpeed = 800f,
+            maxBoostSpeed = 932f,
+            maxThrust = 220000f,
+            torqueThrustMultiplier = 0.04f,
+            throttleMultiplier = 1f,
+            latHMultiplier = 0.5f,
+            latVMultiplier = 0.7f,
+            pitchMultiplier = 1f,
+            rollMultiplier = 0.3f,
+            yawMultiplier = 0.8f,
+            thrustBoostMultiplier = 3.25f,
+            torqueBoostMultiplier = 2f,
+            totalBoostTime = 5f,
+            totalBoostRotationalTime = 6f,
+            boostMaxSpeedDropOffTime = 12f,
+            boostRechargeTime = 4f,
+            boostCapacitorPercentCost = 70f,
+            boostCapacityPercentChargeRate = 10f,
+            minUserLimitedVelocity = 250f,
+        };
 
         public ShipParameters Parameters {
             get {
@@ -302,10 +300,12 @@ namespace Core.Player {
             _rigidbody.angularDrag = ShipParameterDefaults.angularDrag;
 
             // setup angular momentum for collisions (higher multiplier = less spin)
-            var inertiaTensor = _rigidbody.inertiaTensor;
-            _initialInertiaTensor = inertiaTensor;
-            inertiaTensor *= _inertialTensorMultiplier;
-            _rigidbody.inertiaTensor = inertiaTensor;
+            // This magic number is the original inertiaTensor of the puffin ship which, unbeknownst to me at the time,
+            // is actually calculated from the rigid body bounding boxes and impacts the torque rotation physics.
+            // Therefore, to maintains consistency with the flight parameters model this will likely never change.
+            // Good fun!
+            _initialInertiaTensor = new Vector3(5189.9f, 5825.6f, 1471.6f);
+            _rigidbody.inertiaTensor = _initialInertiaTensor * _inertialTensorMultiplier;
         }
 
         private void OnEnable() {
