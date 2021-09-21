@@ -1608,7 +1608,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""type"": ""PassThrough"",
                     ""id"": ""4228771a-3eee-4250-bb1b-1186f85c0c5d"",
                     ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
+                    ""processors"": ""NormalizeMouseScroll"",
                     ""interactions"": """"
                 },
                 {
