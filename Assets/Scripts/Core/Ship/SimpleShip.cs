@@ -21,11 +21,12 @@ namespace Core.Ship {
         
         [SerializeField] private AudioSource engineBoostAudioSource;
         [SerializeField] private AudioSource externalBoostAudioSource;
-        [SerializeField] private AudioSource simpleToggle;
-        [SerializeField] private AudioSource assistActivate;
-        [SerializeField] private AudioSource assistDeactivate;
-        [SerializeField] private AudioSource velocityLimitActivate;
-        [SerializeField] private AudioSource velocityLimitDeactivate;
+        [SerializeField] private AudioSource externalBoostThrusterAudioSource;
+        [SerializeField] private AudioSource simpleToggleAudioSource;
+        [SerializeField] private AudioSource assistActivateAudioSource;
+        [SerializeField] private AudioSource assistDeactivateAudioSource;
+        [SerializeField] private AudioSource velocityLimitActivateAudioSource;
+        [SerializeField] private AudioSource velocityLimitDeactivateAudioSource;
 
         private ShipShake _shipShake;
         
@@ -48,7 +49,7 @@ namespace Core.Ship {
         #region IShip Basic Functions
 
         public virtual void SetLights(bool active) {
-            simpleToggle.Play();
+            simpleToggleAudioSource.Play();
             shipLights.enabled = !shipLights.enabled;
             
             // ensure that the local player ship lights take priority over all others
@@ -59,28 +60,27 @@ namespace Core.Ship {
         }
         
         public virtual void SetAssist(bool active) {
-            if (active) assistActivate.Play();
-            else assistDeactivate.Play();
+            if (active) assistActivateAudioSource.Play();
+            else assistDeactivateAudioSource.Play();
         }
         
         public virtual void SetVelocityLimiter(bool active) {
-            if (active) velocityLimitActivate.Play();
-            else velocityLimitDeactivate.Play();
+            if (active) velocityLimitActivateAudioSource.Play();
+            else velocityLimitDeactivateAudioSource.Play();
         }
         
         public void Boost(float boostTime) {
             IEnumerator DoBoost() {
                 engineBoostAudioSource.Play();
-                // TODO: make two external sources and mix them alternately? (the clip is long and may be played before finished)
-                // alternatively, separate out the external spool up from the blast
                 externalBoostAudioSource.Play();
                 
                 yield return new WaitForSeconds(1);
                 _shipShake.Shake(boostTime - 1, 0.005f);
                 
+                externalBoostThrusterAudioSource.Play();
                 thrusterController.AnimateBoostThrusters();
                 trailRenderers.ForEach(trailRenderer => trailRenderer.emitting = true);
-                yield return new WaitForSeconds(boostTime);
+                yield return new WaitForSeconds(boostTime - 1);
                 trailRenderers.ForEach(trailRenderer => trailRenderer.emitting = false);
             }
 
@@ -93,7 +93,7 @@ namespace Core.Ship {
         
         public virtual void UpdateIndicators(ShipIndicatorData shipIndicatorData) { }
 
-        public virtual void UpdateThrusters(Vector3 force, Vector3 torque) {
+        public virtual void UpdateMotionInformation(float velocity, Vector3 force, Vector3 torque) {
             thrusterController.UpdateThrusters(force, torque);
         }
 

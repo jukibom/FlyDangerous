@@ -814,7 +814,7 @@ namespace Core.Player {
                 MathfExtensions.Remap(-0.8f, 0.8f, -1, 1, torqueNormalised.y),
                 MathfExtensions.Remap(-0.3f, 0.3f, -1, 1, torqueNormalised.z)
             );
-            Ship?.UpdateThrusters(thrust / _maxThrust, torqueVec);
+            Ship?.UpdateMotionInformation(velocity.magnitude, thrust / _maxThrust, torqueVec);
         }
 
         [Command]
