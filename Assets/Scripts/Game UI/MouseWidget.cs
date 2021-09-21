@@ -60,5 +60,9 @@ namespace Game_UI {
         public void UpdateWidgetSprites(Vector2 mousePositionNormalised) {
             this.mousePositionNormalised = mousePositionNormalised;
         }
+
+        public void ResetToCentre() {
+            UpdateWidgetSprites(new Vector2(0, 0));
+        }
     }
 }
