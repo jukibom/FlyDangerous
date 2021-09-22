@@ -42,8 +42,11 @@ namespace Misc {
                 if (player) {
                     player.User.EnableGameInput();
                     var pos = spawnLocation.position;
+                    var rot = spawnLocation.rotation;
                     player.AbsoluteWorldPosition = pos;
+                    player.transform.rotation = rot;
                     Game.Instance.LoadedLevelData.startPosition = new LevelDataVector3<float>(pos.x, pos.y, pos.z);
+                    Game.Instance.LoadedLevelData.startRotation = new LevelDataVector3<float>(rot.eulerAngles.x, rot.eulerAngles.y, rot.eulerAngles.z);
                 }
                 
                 // if there's a map magic object going on here, enable it
