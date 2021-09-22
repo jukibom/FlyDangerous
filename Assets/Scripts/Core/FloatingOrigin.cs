@@ -38,7 +38,7 @@ namespace Core {
             }
         }
 
-        void Update() {
+        void FixedUpdate() {
 
             // if we have a focal object, perform the floating origin fix
             if (FocalTransform && FocalTransform.position.magnitude > correctionDistance) {
