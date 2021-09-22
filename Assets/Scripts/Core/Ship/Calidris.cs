@@ -37,6 +37,16 @@ namespace Core.Ship {
         private float _previousAccelerationBarAmount;
         private float _previousGForce;
 
+        public override void OnEnable() {
+            Game.OnRestart += Restart;
+            base.OnEnable();
+        }
+
+        public override void OnDisable() {
+            Game.OnRestart -= Restart;
+            base.OnDisable();
+        }
+
         public override void UpdateIndicators(ShipIndicatorData shipIndicatorData) {
             #region Simple Indicators
             
@@ -130,6 +140,10 @@ namespace Core.Ship {
             _previousGForce = gForce;
             gForceNumberText.text = $"{gForce:0.0}";
             #endregion
+        }
+
+        private void Restart() {
+            _previousGForce = 0;
         }
     }
 }

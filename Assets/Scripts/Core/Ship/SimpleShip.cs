@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using Core.Player;
@@ -33,19 +33,19 @@ namespace Core.Ship {
         
         public MonoBehaviour Entity() => this;
 
-        public void OnEnable() {
+        public virtual void OnEnable() {
             Game.OnPauseToggle += PauseAudio;
             Game.OnRestart += Restart;
             trailRenderers.ForEach(trailRenderer => trailRenderer.emitting = false);
             _shipShake = new ShipShake(transform);
         }
         
-        public void OnDisable() {
+        public virtual void OnDisable() {
             Game.OnPauseToggle -= PauseAudio;
             Game.OnRestart -= Restart;
         }
 
-        public void FixedUpdate() {
+        public virtual void FixedUpdate() {
             _shipShake.Update();
         }
 
