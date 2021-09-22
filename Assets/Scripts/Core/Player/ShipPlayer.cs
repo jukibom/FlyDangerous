@@ -365,13 +365,6 @@ namespace Core.Player {
             UIAudioManager.Instance.Stop("ship-boost");
         }
 
-        private void OnTriggerEnter(Collider other) {
-            var checkpoint = other.GetComponentInParent<Checkpoint>();
-            if (checkpoint) {
-                checkpoint.Hit();
-            }
-        }
-
         public void SetFlightAssistDefaults(string preference) {
             switch (preference) {
                 case "vector assist only":
@@ -408,6 +401,30 @@ namespace Core.Player {
 
                 // Send the current floating origin along with the new position and rotation to the server
                 CmdSetPosition(FloatingOrigin.Instance.Origin, _transform.localPosition, _transform.rotation, _rigidbody.velocity, _rigidbody.angularVelocity, thrust, torque);
+
+                TriggerCollisionCheck();
+            }
+        }
+
+        // standard OnTriggerEnter doesn't cut the mustard at these speeds so we need to do something a bit more precise
+        private void TriggerCollisionCheck() {
+            var shipTransform = transform;
+            
+            var frameVelocity = _rigidbody.velocity * Time.fixedDeltaTime;
+            var start = shipTransform.position + (frameVelocity * 2);   // + 1 to include the current frame
+
+            // Check for checkpoint collisions (layer mask 9) using an inverse velocity ray rather than the inbuilt box check
+            // use the velocity * 4 to make damn sure we capture everything
+            var hits = Physics.RaycastAll(start, frameVelocity.normalized * -1, frameVelocity.magnitude * 4, 1 << 9,
+                QueryTriggerInteraction.Collide);
+            
+            // Debug.DrawRay(start, frameVelocity * 2 * -1, Color.red);
+            
+            foreach (var raycastHit in hits) {
+                var checkpoint = raycastHit.collider.GetComponentInParent<Checkpoint>();
+                if (checkpoint) {
+                    checkpoint.Hit();
+                }
             }
         }
 
