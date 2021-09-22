@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Core.Player;
@@ -124,7 +124,10 @@ namespace Core.Ship {
 
         private void Restart() {
             _shipShake.Reset();
-            trailRenderers.ForEach(trail => trail.Clear());
+            trailRenderers.ForEach(trail => {
+                trail.Clear();
+                trail.emitting = false;
+            });
             engineBoostAudioSource.Stop();
             externalBoostAudioSource.Stop();
             externalBoostThrusterAudioSource.Stop();
