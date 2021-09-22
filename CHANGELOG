@@ -2,11 +2,13 @@
 New:
     * Added new ship, the Calidris!
     * Added additional cockpit indicators to calidris (g-force, assist status, limiter, lights, boost status)
-    * Added independent thrusters + spacial audio emitters
+    * Added independent thrusters with shader effect + spacial audio emitters
+    * Lots of new sound effects in the cockpit and multiplayer-aware boost + thruster sounds
     * Added ship thruster trails (thanks Tavi!)
     * Added new biome test world with 8k textures, let me know how this performs!
     * Ship lights and thrusters are shown on other ships in multiplayer (local player lights are prioritised in renderer)
     * Added basic support for gravity
+    * Added snapshot sfx to checkpoint 
 
 Changes:
     * Updated to Unity 2021.1.17f1
@@ -19,6 +21,7 @@ Changes:
     * Updated Cloudy terrain to have a more interesting skybox
     * Split boost sound between front and back and made boost action multiplayer-aware
     * VR HMD position => input bind (default F11) now works in pause menu etc, should *always* restore from preferences
+    * Checkpoint collision checking now uses velocity-based raycasts and should work with any arbitrary speed
 
 Fixes:
     * Fog no longer interacts with transparent objects (e.g. checkpoint)
@@ -27,6 +30,11 @@ Fixes:
     * Options menu correctly re-initialises on show (previously maintained unsaved changes)
     * Tweaked exact positions of sun light sources
     * Space dust no longer fails to move origin with ship
+    * Split timer fade out works correctly if two checkpoints are hit close together (would fade out super fast as an extra co-routine would start)
+    * Fixed race condition with floating origin as it previously updated outside the physics update loop (oops!)
+    * Mouse widget UI elements resets to center if mouse input is disabled (Thank you Lignar!)
+    * [Linux] Mouse constrains to window correctly (Thank you Lignar!)
+    * [Linux] Scroll speed + direction now consistent with windows build (Thank you Lignar!)
 
 0.3.0
 New:
