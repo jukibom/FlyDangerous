@@ -21,6 +21,7 @@ public class Track : MonoBehaviour {
     [SerializeField] private bool isActive;
     private bool _complete;
     [CanBeNull] private User _user;
+    [CanBeNull] private Coroutine _splitFader;
     
     public bool IsEndCheckpointValid => hitCheckpoints.Count >= Checkpoints.Count - 2; // remove start and end
 
@@ -145,7 +146,10 @@ public class Track : MonoBehaviour {
                         }
                     }
 
-                    StartCoroutine(FadeText());
+                    if (_splitFader != null) {
+                        StopCoroutine(_splitFader);
+                    }
+                    _splitFader = StartCoroutine(FadeText());
                 }
             }
         }
