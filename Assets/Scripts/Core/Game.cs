@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Linq;
+using Core.MapData;
 using Core.Player;
 using JetBrains.Annotations;
 using MapMagic.Core;

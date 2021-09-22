@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Core;
+using Core.MapData;
 using Core.Player;
 using Core.Ship;
 using MapMagic.Core;

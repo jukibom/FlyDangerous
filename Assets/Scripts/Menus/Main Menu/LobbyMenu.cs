@@ -6,7 +6,6 @@ using JetBrains.Annotations;
 using Mirror;
 using UnityEngine;
 using UnityEngine.UI;
-using Environment = Core.Environment;
 
 namespace Menus.Main_Menu {
     public class LobbyMenu : MonoBehaviour {

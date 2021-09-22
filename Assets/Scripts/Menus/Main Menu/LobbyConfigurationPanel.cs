@@ -1,12 +1,13 @@
 using System;
 using System.Globalization;
 using Core;
+using Core.MapData;
 using Core.Player;
 using Misc;
 using UnityEngine;
 using UnityEngine.UI;
 using Button = UnityEngine.UI.Button;
-using Environment = Core.Environment;
+using Environment = Core.MapData.Environment;
 
 public class LobbyConfigurationPanel : MonoBehaviour
 {
@@ -62,7 +63,7 @@ public class LobbyConfigurationPanel : MonoBehaviour
             passwordInputField.text = FdNetworkManager.serverPassword;
             var gameModeValue = (int) _lobbyLevelData.gameType;
             var environmentValue =  (int) _lobbyLevelData.environment;
-            var locationValue = (int) _lobbyLevelData.location;
+            var locationValue = _lobbyLevelData.location.Id;
 
             // host drop-downs
             gameModeDropdown.value = gameModeValue;
@@ -73,7 +74,7 @@ public class LobbyConfigurationPanel : MonoBehaviour
             // client-side non-editable fields
             gameModeClientLabel.text = EnumExtensions.DescriptionAtt(_lobbyLevelData.gameType).ToUpper();
             environmentClientLabel.text = EnumExtensions.DescriptionAtt(_lobbyLevelData.environment).ToUpper();
-            locationClientLabel.text = EnumExtensions.DescriptionAtt(_lobbyLevelData.location).ToUpper();
+            locationClientLabel.text = _lobbyLevelData.location.Name.ToUpper();
             maxPlayersLabel.text = maxPlayers.ToString();
 
             // TODO: other game modes than free play (this is reactivated by setting the data...)
@@ -84,7 +85,7 @@ public class LobbyConfigurationPanel : MonoBehaviour
     private void Awake() {
         EnumExtensions.PopulateDropDownWithEnum<GameType>(gameModeDropdown, option => option.ToUpper());
         EnumExtensions.PopulateDropDownWithEnum<Environment>(environmentDropdown, option => option.ToUpper());
-        EnumExtensions.PopulateDropDownWithEnum<Location>(locationDropdown, option => option.ToUpper());
+        Location.PopulateDropDown(locationDropdown, option => option.ToUpper());
         
         // resume where we left on on lobby creation (if client, this is overwritten by message)
         LobbyLevelData = Game.Instance.LoadedLevelData;
@@ -102,7 +103,7 @@ public class LobbyConfigurationPanel : MonoBehaviour
         
         _lobbyLevelData.gameType = (GameType)gameModeDropdown.value;
         _lobbyLevelData.environment = (Environment)environmentDropdown.value;
-        _lobbyLevelData.location = (Location)locationDropdown.value;
+        _lobbyLevelData.location = Location.FromId(locationDropdown.value);
         
         UpdateLobby();
     }

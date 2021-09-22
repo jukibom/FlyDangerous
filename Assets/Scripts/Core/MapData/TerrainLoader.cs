@@ -4,7 +4,7 @@ using MapMagic.Core;
 using Misc;
 using UnityEngine;
 
-namespace Core {
+namespace Core.MapData {
     [RequireComponent(typeof(MapMagicObject))]
     public class TerrainLoader : MonoBehaviour {
 

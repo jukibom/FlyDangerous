@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Core.MapData;
 using Core.Player;
 using kcp2k;
 using Mirror;

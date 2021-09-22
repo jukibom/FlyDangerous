@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.Serialization;
 using JetBrains.Annotations;
 using Mirror;
 using Newtonsoft.Json;
 using UnityEngine;
 
-namespace Core {
+namespace Core.MapData {
     public class LevelDataVector3<T> {
         public T x;
         public T y;
@@ -23,24 +24,6 @@ namespace Core {
         public override string ToString() {
             return "[ " + x + ", " + y + ", " + z + " ]";
         }
-    }
-
-    public enum Location {
-        [Description("Space")]
-        [IgnoreDataMember]
-        NullSpace,
-        
-        [Description("Test Space Station")]
-        TestSpaceStation,
-        
-        [Description("Terrain Flat")]
-        TerrainV1,
-        
-        [Description("Terrain Canyons")]
-        TerrainV2,
-        
-        [Description("Terrain Biome")]
-        TerrainV3
     }
 
     public enum Environment {
@@ -99,9 +82,12 @@ namespace Core {
     }
     
     public class LevelData {
-        public int version = 1;     // if the version is not this then we'll use the legacy terrain
+        public int version = 1;
         public string name = "";
-        public Location location = Location.NullSpace;
+        
+        [JsonConverter(typeof(LocationJsonConverter))]
+        public Location location = Location.Space;
+        
         public Environment environment = Environment.NoonClear;
         public string terrainSeed = "";
         public LevelDataVector3<float> gravity = new LevelDataVector3<float>(0, 0, 0);

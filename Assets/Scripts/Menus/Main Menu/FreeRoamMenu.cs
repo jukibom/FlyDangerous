@@ -4,12 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Audio;
 using Core;
+using Core.MapData;
 using JetBrains.Annotations;
 using Misc;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using Environment = Core.Environment;
+using Environment = Core.MapData.Environment;
+
 
 namespace Menus.Main_Menu {
     public class FreeRoamMenu : MonoBehaviour {
@@ -27,7 +29,7 @@ namespace Menus.Main_Menu {
         private void Awake() {
             _animator = GetComponent<Animator>();
             
-            EnumExtensions.PopulateDropDownWithEnum<Location>(locationDropdown, option => option.ToUpper());
+            Location.PopulateDropDown(locationDropdown, option => option.ToUpper());
             EnumExtensions.PopulateDropDownWithEnum<Environment>(environmentDropdown, option => option.ToUpper());
         }
 
@@ -70,7 +72,8 @@ namespace Menus.Main_Menu {
             levelData.gameType = GameType.FreeRoam;
             levelData.terrainSeed = seedInput.text;
             levelData.environment = (Environment)environmentDropdown.value;
-            levelData.location = (Location)locationDropdown.value;
+            levelData.location = Location.FromId(locationDropdown.value);
+
 
             FdNetworkManager.Instance.StartGameLoadSequence(SessionType.Singleplayer, levelData);
         }
