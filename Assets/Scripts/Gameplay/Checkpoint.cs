@@ -24,6 +24,7 @@ public class Checkpoint : MonoBehaviour {
     [SerializeField] private Material checkMaterial;
     [SerializeField] private Material validEndMaterial;
     [SerializeField] private Material invalidEndMaterial;
+    [SerializeField] private AudioSource checkpointAudioSource;
     
     private Track _track;
 
@@ -61,7 +62,7 @@ public class Checkpoint : MonoBehaviour {
         if (Type == CheckpointType.End && !_track.IsEndCheckpointValid) {
             return;
         }
-        _track.CheckpointHit(this);
+        _track.CheckpointHit(this, checkpointAudioSource);
         HideOverlay();
     }
 

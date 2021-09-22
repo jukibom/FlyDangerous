@@ -110,7 +110,7 @@ public class Track : MonoBehaviour {
         _complete = true;
     }
 
-    public void CheckpointHit(Checkpoint checkpoint) {
+    public void CheckpointHit(Checkpoint checkpoint, AudioSource checkpointHitAudio) {
         if (isActive) {
             var hitCheckpoint = hitCheckpoints.Find(c => c == checkpoint);
 
@@ -129,6 +129,7 @@ public class Track : MonoBehaviour {
             if (!hitCheckpoint) {
                 // new checkpoint, record it and split timer
                 hitCheckpoints.Add(checkpoint);
+                checkpointHitAudio.Play();
                 // update split display and fade out
                 if (checkpoint.Type == CheckpointType.Check) {
                     _user.splitTimeDisplay.SetTimeMs(timeMs);
