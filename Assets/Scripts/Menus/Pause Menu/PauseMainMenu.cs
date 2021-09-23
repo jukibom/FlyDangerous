@@ -31,7 +31,7 @@ namespace Menus.Pause_Menu {
             var player = ShipPlayer.FindLocal;
             if (player && Game.Instance.SessionType == SessionType.Multiplayer) {
                 // in free roam, restart for clients is changed to warping to the leader (on non-host client)
-                if (!player.isHost && Game.Instance.LoadedLevelData.gameType == GameType.FreeRoam) {
+                if (!player.isHost && Game.Instance.LoadedLevelData.gameType.CanWarpToHost) {
                     restartButton.GetComponent<UIButton>().label.text = "WARP TO HOST";
                 }
                 quitButton.GetComponent<UIButton>().label.text = "LEAVE GAME";

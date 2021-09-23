@@ -100,7 +100,7 @@ namespace Core.MapData {
                     LoadedLevelData.startRotation.y, LoadedLevelData.startRotation.z);
                 
                 // if multiplayer free-roam and not the host, warp to the host
-                if (Game.Instance.SessionType == SessionType.Multiplayer && LoadedLevelData.gameType == GameType.FreeRoam && !ship.isHost) {
+                if (Game.Instance.SessionType == SessionType.Multiplayer && LoadedLevelData.gameType.CanWarpToHost && !ship.isHost) {
                     FindObjectsOfType<ShipPlayer>().ToList().ForEach(otherShipPlayer => {
                         if (otherShipPlayer.isHost) {
                             var emptyPosition = PositionalHelpers.FindClosestEmptyPosition(otherShipPlayer.AbsoluteWorldPosition, 10);
