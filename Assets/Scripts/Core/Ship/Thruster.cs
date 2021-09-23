@@ -9,8 +9,8 @@ namespace Core.Ship {
         [SerializeField] private MeshRenderer thrusterRenderer;
         [SerializeField] private AudioSource audioSource;
         [SerializeField] private Light lightSource;
-        [SerializeField] private Color thrustColor;
-        [SerializeField] private Color thrustRingColor;
+        [SerializeField] public Color thrustColor;
+        [SerializeField] public Color thrustRingColor;
 
         public bool isLarge;
         

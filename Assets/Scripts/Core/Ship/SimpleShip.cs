@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using Core.Player;
 using Misc;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
+using LightType = UnityEngine.LightType;
 
 namespace Core.Ship {
     
@@ -117,38 +119,67 @@ namespace Core.Ship {
         #region User Preferences
 
         public virtual void SetPrimaryColor(string htmlColor) {
-            if (!ColorUtility.TryParseHtmlString(htmlColor, out var primaryColor)) {
-                primaryColor = Color.red;
-                Debug.LogWarning("Failed to parse primary html color " + primaryColor);
-            }
+            var color = ParseColor(htmlColor);
             primaryColorMeshes.ForEach(mesh => {
                 var mat = mesh.material;
-                mat.color = primaryColor;
+                mat.color = color;
             });
         }
         
         public virtual void SetAccentColor(string htmlColor) {
-            if (!ColorUtility.TryParseHtmlString(htmlColor, out var accentColor)) {
-                accentColor = Color.black;
-                Debug.LogWarning("Failed to parse accent html color " + accentColor);
-            }
+            var color = ParseColor(htmlColor);
             accentColorMeshes.ForEach(mesh => {
                 var mat = mesh.material;
-                mat.color = accentColor;
+                mat.color = color;
             });
+        }
+
+        public virtual void SetThrusterColor(string htmlColor) {
+            var color = ParseColor(htmlColor);
+            foreach (var thruster in GetComponentsInChildren<Thruster>()) {
+                thruster.thrustColor = color;
+            }
+        }
+
+        /** Set the color of the trails which occur under boost */
+        public virtual void SetTrailColor(string htmlColor) {
+            var thrusterColor = ParseColor(htmlColor);
+            foreach (var thruster in GetComponentsInChildren<TrailRenderer>()) {
+                thruster.startColor = thrusterColor;
+                thruster.endColor = thrusterColor;
+            }
+        }
+
+        /** Set the color of the ship head-lights */
+        public virtual void SetHeadLightsColor(string htmlColor) {
+            var color = ParseColor(htmlColor);
+            foreach (var shipLight in GetComponentsInChildren<Light>()) {
+                if (shipLight.type == LightType.Spot) {
+                    shipLight.color = color;
+                }
+            }
         }
         
         #endregion
 
         #region Internal Helper
 
-        private void PauseAudio(bool paused) {
+        protected void PauseAudio(bool paused) {
             if (Game.Instance.SessionType == SessionType.Singleplayer) {
                 foreach (var audioSource in GetComponentsInChildren<AudioSource>()) {
                     if (paused) audioSource.Pause();
                     else audioSource.UnPause();
                 }
             }
+        }
+
+        protected Color ParseColor(string htmlColor) {
+            if (!ColorUtility.TryParseHtmlString(htmlColor, out var color)) {
+                color = Color.red;
+                Debug.LogWarning("Failed to parse html color " + color);
+            }
+
+            return color;
         }
 
         private void Restart() {

@@ -237,7 +237,7 @@ namespace Core.Player {
                     // store and parent to main player transform
                     _ship = value;
                     var entity = _ship.Entity();
-                    entity.transform.parent = transform;
+                    entity.transform.SetParent(transform, false);
                     
                     // clean up existing ship
                     if (prev != value) {
@@ -331,7 +331,10 @@ namespace Core.Player {
             CmdLoadShipModelPreferences(
                 Preferences.Instance.GetString("playerShipDesign"),
                 Preferences.Instance.GetString("playerShipPrimaryColor"),
-                Preferences.Instance.GetString("playerShipAccentColor")
+                Preferences.Instance.GetString("playerShipAccentColor"),
+                Preferences.Instance.GetString("playerShipThrusterColor"),
+                Preferences.Instance.GetString("playerShipTrailColor"),
+                Preferences.Instance.GetString("playerShipHeadLightsColor")
             );
         }
         
@@ -876,19 +879,22 @@ namespace Core.Player {
         }
 
         [Command]
-        void CmdLoadShipModelPreferences(string ship, string primaryColor, string accentColor) {
-            // TODO: validation that these are actually valid and a fallback to puffin red / black if not.
-            RpcLoadShipModelPreferences(ship, primaryColor, accentColor);
+        void CmdLoadShipModelPreferences(string ship, string primaryColor, string accentColor, string thrusterColor, string trailColor, string headLightsColor) {
+            // TODO: validation that the ship is valid and a fallback to puffin if not.
+            RpcLoadShipModelPreferences(ship, primaryColor, accentColor, thrusterColor, trailColor, headLightsColor);
         }
 
         [ClientRpc]
-        void RpcLoadShipModelPreferences(string ship, string primaryColor, string accentColor) {
+        void RpcLoadShipModelPreferences(string ship, string primaryColor, string accentColor, string thrusterColor, string trailColor, string headLightsColor) {
             var shipData = ShipMeta.FromString(ship);
             // TODO: make this async
             var shipModel = Instantiate(Resources.Load(shipData.PrefabToLoad, typeof(GameObject)) as GameObject);
             var shipObject = shipModel.GetComponent<IShip>();
             shipObject.SetPrimaryColor(primaryColor);
             shipObject.SetAccentColor(accentColor);
+            shipObject.SetThrusterColor(thrusterColor);
+            shipObject.SetTrailColor(trailColor);
+            shipObject.SetHeadLightsColor(headLightsColor);
             Ship = shipObject;
         }
         

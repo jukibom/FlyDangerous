@@ -131,9 +131,15 @@ namespace Core {
                 case "playerShipDesign":
                     return "Calidris";
                 case "playerShipPrimaryColor":
-                    return "#CC0000";
+                    return "#761012";
                 case "playerShipAccentColor":
-                    return "#000000";
+                    return "#000000"; 
+                case "playerShipThrusterColor":
+                    return "#005BBF";
+                case "playerShipTrailColor":
+                    return "#348A9F";
+                case "playerShipHeadLightsColor":
+                    return "#FFF4D6";
                 default: 
                     Debug.LogWarning("Attempted to get preference " + key + " with no default specified");
                     return "";

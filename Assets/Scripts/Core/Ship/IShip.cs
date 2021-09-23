@@ -61,5 +61,14 @@ namespace Core.Ship {
         
         /** Set the accent color of the ship as a html color */
         public void SetAccentColor(string htmlColor);
+
+        /** Set the color of the individual thrusters visible on the outside of the ship */
+        public void SetThrusterColor(string htmlColor);
+
+        /** Set the color of the trails which occur under boost */
+        public void SetTrailColor(string htmlColor);
+
+        /** Set the color of the ship head-lights */
+        public void SetHeadLightsColor(string htmlColor);
     }
 }
