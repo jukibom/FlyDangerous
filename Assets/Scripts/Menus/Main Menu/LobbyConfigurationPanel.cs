@@ -50,7 +50,7 @@ public class LobbyConfigurationPanel : MonoBehaviour
     private LevelData _lobbyLevelData = new LevelData {
         gameType = GameType.FreeRoam,
         environment = Environment.SunriseClear,
-        location = Location.TerrainV2,
+        location = Location.TerrainV3,
         terrainSeed = Guid.NewGuid().ToString(),
     };
     
@@ -61,8 +61,8 @@ public class LobbyConfigurationPanel : MonoBehaviour
             
             // ridiculous looping dropdown on change event avoidance
             passwordInputField.text = FdNetworkManager.serverPassword;
-            var gameModeValue = (int) _lobbyLevelData.gameType;
-            var environmentValue =  (int) _lobbyLevelData.environment;
+            var gameModeValue = _lobbyLevelData.gameType.Id;
+            var environmentValue =  _lobbyLevelData.environment.Id;
             var locationValue = _lobbyLevelData.location.Id;
 
             // host drop-downs
@@ -72,8 +72,8 @@ public class LobbyConfigurationPanel : MonoBehaviour
             maxPlayersInputField.text = maxPlayers.ToString();
             
             // client-side non-editable fields
-            gameModeClientLabel.text = EnumExtensions.DescriptionAtt(_lobbyLevelData.gameType).ToUpper();
-            environmentClientLabel.text = EnumExtensions.DescriptionAtt(_lobbyLevelData.environment).ToUpper();
+            gameModeClientLabel.text = _lobbyLevelData.gameType.Name.ToUpper();
+            environmentClientLabel.text = _lobbyLevelData.environment.Name.ToUpper();
             locationClientLabel.text = _lobbyLevelData.location.Name.ToUpper();
             maxPlayersLabel.text = maxPlayers.ToString();
 
@@ -83,9 +83,9 @@ public class LobbyConfigurationPanel : MonoBehaviour
     }
 
     private void Awake() {
-        EnumExtensions.PopulateDropDownWithEnum<GameType>(gameModeDropdown, option => option.ToUpper());
-        EnumExtensions.PopulateDropDownWithEnum<Environment>(environmentDropdown, option => option.ToUpper());
-        Location.PopulateDropDown(locationDropdown, option => option.ToUpper());
+        FdEnum.PopulateDropDown(GameType.List(), gameModeDropdown, option => option.ToUpper());
+        FdEnum.PopulateDropDown(Environment.List(), environmentDropdown, option => option.ToUpper());
+        FdEnum.PopulateDropDown(Location.List(), locationDropdown, option => option.ToUpper());
         
         // resume where we left on on lobby creation (if client, this is overwritten by message)
         LobbyLevelData = Game.Instance.LoadedLevelData;
@@ -101,8 +101,8 @@ public class LobbyConfigurationPanel : MonoBehaviour
         maxPlayersInputField.text = maxPlayers.ToString();
         FdNetworkManager.Instance.maxPlayers = maxPlayers;
         
-        _lobbyLevelData.gameType = (GameType)gameModeDropdown.value;
-        _lobbyLevelData.environment = (Environment)environmentDropdown.value;
+        _lobbyLevelData.gameType = GameType.FromId(gameModeDropdown.value);
+        _lobbyLevelData.environment = Environment.FromId(environmentDropdown.value);
         _lobbyLevelData.location = Location.FromId(locationDropdown.value);
         
         UpdateLobby();

@@ -60,8 +60,7 @@ namespace Core {
 
         public bool IsVREnabled { get; private set; }
 
-        public bool IsGameHotJoinable => LoadedLevelData.gameType == GameType.FreeRoam ||
-                                         LoadedLevelData.gameType == GameType.TimeTrial;
+        public bool IsGameHotJoinable => LoadedLevelData.gameType.IsHotJoinable;
 
         public ShipParameters ShipParameters {
             get => _shipParameters ?? (ShipPlayer.FindLocal?.Parameters ?? ShipPlayer.ShipParameterDefaults);
@@ -72,9 +71,7 @@ namespace Core {
             }
         }
 
-        public bool IsTerrainMap =>
-            _levelLoader.LoadedLevelData.location == Location.TerrainV1 ||
-            _levelLoader.LoadedLevelData.location == Location.TerrainV2;
+        public bool IsTerrainMap => _levelLoader.LoadedLevelData.location.IsTerrain;
 
         public string Seed => _levelLoader.LoadedLevelData.terrainSeed;
 

@@ -1,14 +1,10 @@
 ﻿#nullable enable
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using JetBrains.Annotations;
-using Newtonsoft.Json;
-using UnityEngine;
-using UnityEngine.UI;
+using Misc;
 
 namespace Core.MapData {
-    public class Location {
+
+    public class Location : IFdEnum {
         // Declare locations here and add to the List() function below
         public static Location Space => new Location(0, "Space", "Space", false);
         public static Location TestSpaceStation => new Location(1, "Test Space Station", "SpaceStation", false);
@@ -34,53 +30,11 @@ namespace Core.MapData {
         }
 
         public static Location FromString(string locationString) {
-            return List().Single(l => l.Name == locationString);
+            return FdEnum.FromString(List(), locationString);
         }
 
         public static Location FromId(int id) {
-            return List().Single(l => l.Id == id);
-        }
-        
-        // TODO: this should really be elsewhere and generic based on a sane enum helper type
-        public static void PopulateDropDown(
-            Dropdown dropdown, 
-            Func<string, string>? textTransform = null
-        ) {
-            var values = List();
-            var newOptions = new List<Dropdown.OptionData>();
-            
-            foreach (var location in values) {
-                var option = textTransform != null ? textTransform(location.Name) : location.Name;
-                newOptions.Add(new Dropdown.OptionData(option));
-            }
- 
-            dropdown.ClearOptions();
-            dropdown.AddOptions(newOptions);
-        }
-
-        public override string ToString() {
-            return Name;
-        }
-    }
-
-    public class LocationJsonConverter : JsonConverter {
-        public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer) {
-            if (value is Location location) {
-                writer.WriteValue(location.Name);
-            }
-        }
-
-        public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer) {
-            if (reader.TokenType != JsonToken.String) {
-                throw new JsonSerializationException();
-            }
-
-            var location = serializer.Deserialize<string>(reader);
-            return location != null ? Location.FromString(location) : null;
-        }
-
-        public override bool CanConvert(Type objectType) {
-            return objectType == typeof(string);
+            return FdEnum.FromId(List(), id);
         }
     }
 }

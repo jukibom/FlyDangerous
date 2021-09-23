@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Runtime.Serialization;
 using JetBrains.Annotations;
 using Mirror;
+using Misc;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -26,55 +25,6 @@ namespace Core.MapData {
         }
     }
 
-    public enum Environment {
-        [Description("Planet Orbit (Top)")]
-        PlanetOrbitBottom,
-        
-        [Description("Planet Orbit (Bottom)")]
-        PlanetOrbitTop,
-        
-        [Description("Sunrise Clear")]
-        SunriseClear,
-        
-        [Description("Noon Clear")]
-        NoonClear,
-        
-        [Description("Noon Cloudy")]
-        NoonCloudy,
-        
-        [Description("Noon Stormy")]
-        NoonStormy,
-        
-        [Description("Sunset Clear")]
-        SunsetClear,
-        
-        [Description("Sunset Cloudy")]
-        SunsetCloudy,
-        
-        [Description("Night Clear")]
-        NightClear,
-        
-        [Description("Night Cloudy")]
-        NightCloudy,
-    }
-
-    public enum GameType {
-        [Description("Free Roam")]
-        FreeRoam,
-        
-        [Description("Time Trial")]
-        TimeTrial,
-        
-        [Description("Race (Sprint)")]
-        RaceSprint,
-        
-        [Description("Race (Laps)")]
-        RaceLaps,
-        
-        [Description("Hoon Attack")]
-        HoonAttack,
-    }
-
     public class CheckpointLocation {
         public CheckpointType type;
         public LevelDataVector3<float> position;
@@ -85,15 +35,20 @@ namespace Core.MapData {
         public int version = 1;
         public string name = "";
         
-        [JsonConverter(typeof(LocationJsonConverter))]
+        [JsonConverter(typeof(FdEnumJsonConverter))]
         public Location location = Location.Space;
         
+        [JsonConverter(typeof(FdEnumJsonConverter))]
         public Environment environment = Environment.NoonClear;
+        
+        [JsonConverter(typeof(FdEnumJsonConverter))]
+        public GameType gameType = GameType.FreeRoam;
+        
         public string terrainSeed = "";
         public LevelDataVector3<float> gravity = new LevelDataVector3<float>(0, 0, 0);
         public LevelDataVector3<float> startPosition = new LevelDataVector3<float>();
         public LevelDataVector3<float> startRotation = new LevelDataVector3<float>();
-        public GameType gameType = GameType.FreeRoam;
+        
         [CanBeNull] public List<CheckpointLocation> checkpoints;
 
         public string ToJsonString() {

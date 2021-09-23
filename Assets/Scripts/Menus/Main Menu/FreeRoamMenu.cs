@@ -1,14 +1,10 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using Audio;
 using Core;
 using Core.MapData;
 using JetBrains.Annotations;
 using Misc;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using Environment = Core.MapData.Environment;
 
@@ -25,12 +21,13 @@ namespace Menus.Main_Menu {
         [SerializeField] private Dropdown environmentDropdown;
 
         private Animator _animator;
+        private static readonly int open = Animator.StringToHash("Open");
 
         private void Awake() {
             _animator = GetComponent<Animator>();
             
-            Location.PopulateDropDown(locationDropdown, option => option.ToUpper());
-            EnumExtensions.PopulateDropDownWithEnum<Environment>(environmentDropdown, option => option.ToUpper());
+            FdEnum.PopulateDropDown(Location.List(), locationDropdown, option => option.ToUpper());
+            FdEnum.PopulateDropDown(Environment.List(), environmentDropdown, option => option.ToUpper());
         }
 
         public void Hide() {
@@ -42,7 +39,7 @@ namespace Menus.Main_Menu {
 
             gameObject.SetActive(true);
             defaultActiveButton.Select();
-            _animator.SetBool("Open", true);
+            _animator.SetBool(open, true);
         }
 
         public void ClosePanel() {
@@ -65,15 +62,11 @@ namespace Menus.Main_Menu {
         public void StartFreeRoam() {
             startButton.interactable = false;
             
-            var levelData = _levelData != null ? _levelData : new LevelData();
-            levelData.location = Preferences.Instance.GetBool("enableExperimentalTerrain")
-                ? Location.TerrainV2
-                : Location.TerrainV1;
+            var levelData = _levelData ?? new LevelData();
             levelData.gameType = GameType.FreeRoam;
             levelData.terrainSeed = seedInput.text;
-            levelData.environment = (Environment)environmentDropdown.value;
+            levelData.environment = Environment.FromId(environmentDropdown.value);
             levelData.location = Location.FromId(locationDropdown.value);
-
 
             FdNetworkManager.Instance.StartGameLoadSequence(SessionType.Singleplayer, levelData);
         }

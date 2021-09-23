@@ -28,25 +28,10 @@ namespace Core.MapData {
             _levelData = levelData;
 
             string locationSceneToLoad = levelData.location.SceneToLoad;
-            string environment;
-
-            // if terrain, include conditions (maps to unity scene filename in Scenes/Environments
-            switch (levelData.environment) {
-                case Environment.PlanetOrbitBottom: environment = "Planet_Orbit_Bottom"; break;
-                case Environment.PlanetOrbitTop: environment = "Planet_Orbit_Top"; break;
-                case Environment.SunriseClear: environment = "Sunrise_Clear"; break;
-                case Environment.NoonClear: environment = "Noon_Clear"; break;
-                case Environment.NoonCloudy: environment = "Noon_Cloudy"; break;
-                case Environment.NoonStormy: environment = "Noon_Stormy"; break;
-                case Environment.SunsetClear: environment = "Sunset_Clear"; break;
-                case Environment.SunsetCloudy: environment = "Sunset_Cloudy"; break;
-                case Environment.NightClear: environment = "Night_Clear"; break;
-                case Environment.NightCloudy: environment = "Night_Cloudy"; break;
-                default: environment = "Sunrise_Clear"; break;
-            }
+            string environmentSceneToLoad = levelData.environment.SceneToLoad;
 
             // now we can finally start the level load
-            _scenesLoading.Add(SceneManager.LoadSceneAsync(environment, LoadSceneMode.Additive));
+            _scenesLoading.Add(SceneManager.LoadSceneAsync(environmentSceneToLoad, LoadSceneMode.Additive));
             _scenesLoading.Add(SceneManager.LoadSceneAsync(locationSceneToLoad, LoadSceneMode.Additive));
             _scenesLoading.ForEach(scene => scene.allowSceneActivation = false);
 
