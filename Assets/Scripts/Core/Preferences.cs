@@ -128,6 +128,12 @@ namespace Core {
                     return "7777";
                 case "lastUsedServerPassword":
                     return "";
+                case "playerShipDesign":
+                    return "Calidris";
+                case "playerShipPrimaryColor":
+                    return "#CC0000";
+                case "playerShipSecondaryColor":
+                    return "#000000";
                 default: 
                     Debug.LogWarning("Attempted to get preference " + key + " with no default specified");
                     return "";

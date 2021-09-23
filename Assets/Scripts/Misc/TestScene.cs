@@ -73,7 +73,7 @@ namespace Misc {
             var player = ShipPlayer.FindLocal;
             if (player) {
                 var testPlayer = Instantiate(shipPlayerPrefab, player.transform.position + new Vector3(0, 0, 10), Quaternion.identity);
-                testPlayer.Ship.SetCockpitMode(CockpitMode.External);
+                testPlayer.Ship?.SetCockpitMode(CockpitMode.External);
             }
         }
     }

@@ -222,15 +222,15 @@ namespace Core.Player {
             get {
                 // if no ship associated, try to grab one from the entity tree and initialise it
                 if (_ship == null) {
-                    _ship ??= GetComponentInChildren<Puffin>();
-                    _ship ??= GetComponentInChildren<Calidris>();
+                    _ship ??= GetComponentInChildren<Puffin>(true);
+                    _ship ??= GetComponentInChildren<Calidris>(true);
                     
                     Ship = _ship;
                 }
 
                 return _ship;
             }
-            set {
+            private set {
                 if (value != null) {
                     var prev = _ship;
                     
@@ -241,6 +241,7 @@ namespace Core.Player {
                     
                     // clean up existing ship
                     if (prev != value) {
+                        Debug.Log("Cleaning up existing ... " + prev);
                         Destroy(prev?.Entity().gameObject);
                     }
                     
@@ -327,6 +328,11 @@ namespace Core.Player {
             SetFlightAssistDefaults(Preferences.Instance.GetString("flightAssistDefault"));
 
             CmdSetPlayerName(Preferences.Instance.GetString("playerName"));
+            CmdLoadShipModelPreferences(
+                Preferences.Instance.GetString("playerShipDesign"),
+                Preferences.Instance.GetString("playerShipPrimaryColor"),
+                Preferences.Instance.GetString("playerShipSecondaryColor")
+            );
         }
         
         // called when the server has finished instantiating all players
@@ -868,6 +874,21 @@ namespace Core.Player {
 
             playerName = newName;
         }
+
+        [Command]
+        void CmdLoadShipModelPreferences(string ship, string primaryColor, string secondaryColor) {
+            // TODO: validation that these are actually valid and a fallback to puffin red / black if not.
+            RpcLoadShipModelPreferences(ship, primaryColor, secondaryColor);
+        }
+
+        [ClientRpc]
+        void RpcLoadShipModelPreferences(string ship, string primaryColor, string secondaryColor) {
+            var shipData = ShipMeta.FromString(ship);
+            // TODO: make this async
+            var shipModel = Instantiate(Resources.Load(shipData.PrefabToLoad, typeof(GameObject)) as GameObject);
+            Ship = shipModel.GetComponent<IShip>();
+        }
+        
         #endregion
     }
 }
