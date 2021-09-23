@@ -212,6 +212,12 @@ namespace Core.Player {
         [SyncVar] private bool _serverReady;
         [SyncVar] public string playerName;
         [SyncVar] public bool isHost;
+        [SyncVar] private string _shipModel;
+        [SyncVar] private string _primaryColor;
+        [SyncVar] private string _accentColor;
+        [SyncVar] private string _thrusterColor;
+        [SyncVar] private string _trailColor;
+        [SyncVar] private string _headLightsColor;
         
         private bool IsReady => _transform && _rigidbody && _serverReady;
         public float Velocity => Mathf.Round(_rigidbody.velocity.magnitude);
@@ -240,7 +246,7 @@ namespace Core.Player {
                     entity.transform.SetParent(transform, false);
                     
                     // clean up existing ship
-                    if (prev != value) {
+                    if (prev != value && prev != null) {
                         Debug.Log("Cleaning up existing ... " + prev);
                         Destroy(prev?.Entity().gameObject);
                     }
@@ -336,8 +342,41 @@ namespace Core.Player {
                 Preferences.Instance.GetString("playerShipTrailColor"),
                 Preferences.Instance.GetString("playerShipHeadLightsColor")
             );
+            
+            RefreshShipModel();
         }
-        
+
+        // When a client connects, update all other ships on that local client
+        public override void OnStartClient() {
+            Debug.Log("CLIENT START MODEL REFRESH TIME");
+            foreach (var shipPlayer in FindObjectsOfType<ShipPlayer>()) {
+                if (!shipPlayer.isLocalPlayer) {
+                    shipPlayer.RefreshShipModel();
+                }
+            }
+        }
+
+        public void RefreshShipModel() {
+            IEnumerator RefreshShipAsync() {
+                while (string.IsNullOrEmpty(_shipModel)) {
+                    yield return new WaitForFixedUpdate();
+                }
+
+                var shipData = ShipMeta.FromString(_shipModel);
+                // TODO: make this async
+                var shipModel = Instantiate(Resources.Load(shipData.PrefabToLoad, typeof(GameObject)) as GameObject);
+                var shipObject = shipModel.GetComponent<IShip>();
+                shipObject.SetPrimaryColor(_primaryColor);
+                shipObject.SetAccentColor(_accentColor);
+                shipObject.SetThrusterColor(_thrusterColor);
+                shipObject.SetTrailColor(_trailColor);
+                shipObject.SetHeadLightsColor(_headLightsColor);
+                Ship = shipObject;
+            }
+
+            StartCoroutine(RefreshShipAsync());
+        }
+
         // called when the server has finished instantiating all players
         public void ServerReady() {
             _serverReady = true;
@@ -879,25 +918,16 @@ namespace Core.Player {
         }
 
         [Command]
-        void CmdLoadShipModelPreferences(string ship, string primaryColor, string accentColor, string thrusterColor, string trailColor, string headLightsColor) {
-            // TODO: validation that the ship is valid and a fallback to puffin if not.
-            RpcLoadShipModelPreferences(ship, primaryColor, accentColor, thrusterColor, trailColor, headLightsColor);
+        void CmdLoadShipModelPreferences(string shipModel, string primaryColor, string accentColor,
+            string thrusterColor, string trailColor, string headLightsColor) {
+            _shipModel = shipModel;
+            _primaryColor = primaryColor;
+            _accentColor = accentColor;
+            _thrusterColor = thrusterColor;
+            _trailColor = trailColor;
+            _headLightsColor = headLightsColor;
         }
 
-        [ClientRpc]
-        void RpcLoadShipModelPreferences(string ship, string primaryColor, string accentColor, string thrusterColor, string trailColor, string headLightsColor) {
-            var shipData = ShipMeta.FromString(ship);
-            // TODO: make this async
-            var shipModel = Instantiate(Resources.Load(shipData.PrefabToLoad, typeof(GameObject)) as GameObject);
-            var shipObject = shipModel.GetComponent<IShip>();
-            shipObject.SetPrimaryColor(primaryColor);
-            shipObject.SetAccentColor(accentColor);
-            shipObject.SetThrusterColor(thrusterColor);
-            shipObject.SetTrailColor(trailColor);
-            shipObject.SetHeadLightsColor(headLightsColor);
-            Ship = shipObject;
-        }
-        
         #endregion
     }
 }

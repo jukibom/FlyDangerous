@@ -446,7 +446,7 @@ namespace Core {
                     case SessionStatus.Loading:
                         AddPlayerFromPrefab(conn, loadingPlayerPrefab);
 
-                        // if we're joining mid-game (not single player), attempt to start the single client
+                        // if we're joining mid-game (or single player), attempt to start the single client
                         if (sessionStatus != SessionStatus.SinglePlayerMenu) {
                             conn.identity.connectionToClient.Send( new StartGameMessage {
                                 sessionType = SessionType.Multiplayer, 
