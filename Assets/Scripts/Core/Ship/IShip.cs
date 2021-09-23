@@ -55,5 +55,11 @@ namespace Core.Ship {
 
         /** Set the visible entity for internal vs external cam (stacking means need to pick one!).*/
         public void SetCockpitMode(CockpitMode cockpitMode);
+
+        /** Set the main color of the ship as a html color */
+        public void SetPrimaryColor(string htmlColor);
+        
+        /** Set the accent color of the ship as a html color */
+        public void SetAccentColor(string htmlColor);
     }
 }

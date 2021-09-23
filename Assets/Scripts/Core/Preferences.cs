@@ -132,7 +132,7 @@ namespace Core {
                     return "Calidris";
                 case "playerShipPrimaryColor":
                     return "#CC0000";
-                case "playerShipSecondaryColor":
+                case "playerShipAccentColor":
                     return "#000000";
                 default: 
                     Debug.LogWarning("Attempted to get preference " + key + " with no default specified");

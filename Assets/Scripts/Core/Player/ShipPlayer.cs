@@ -331,7 +331,7 @@ namespace Core.Player {
             CmdLoadShipModelPreferences(
                 Preferences.Instance.GetString("playerShipDesign"),
                 Preferences.Instance.GetString("playerShipPrimaryColor"),
-                Preferences.Instance.GetString("playerShipSecondaryColor")
+                Preferences.Instance.GetString("playerShipAccentColor")
             );
         }
         
@@ -876,17 +876,20 @@ namespace Core.Player {
         }
 
         [Command]
-        void CmdLoadShipModelPreferences(string ship, string primaryColor, string secondaryColor) {
+        void CmdLoadShipModelPreferences(string ship, string primaryColor, string accentColor) {
             // TODO: validation that these are actually valid and a fallback to puffin red / black if not.
-            RpcLoadShipModelPreferences(ship, primaryColor, secondaryColor);
+            RpcLoadShipModelPreferences(ship, primaryColor, accentColor);
         }
 
         [ClientRpc]
-        void RpcLoadShipModelPreferences(string ship, string primaryColor, string secondaryColor) {
+        void RpcLoadShipModelPreferences(string ship, string primaryColor, string accentColor) {
             var shipData = ShipMeta.FromString(ship);
             // TODO: make this async
             var shipModel = Instantiate(Resources.Load(shipData.PrefabToLoad, typeof(GameObject)) as GameObject);
-            Ship = shipModel.GetComponent<IShip>();
+            var shipObject = shipModel.GetComponent<IShip>();
+            shipObject.SetPrimaryColor(primaryColor);
+            shipObject.SetAccentColor(accentColor);
+            Ship = shipObject;
         }
         
         #endregion

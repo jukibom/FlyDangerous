@@ -19,6 +19,9 @@ namespace Core.Ship {
         [SerializeField] private GameObject cockpitExternal;
         [SerializeField] private List<TrailRenderer> trailRenderers;
         
+        [SerializeField] private List<MeshRenderer> primaryColorMeshes = new List<MeshRenderer>();
+        [SerializeField] private List<MeshRenderer> accentColorMeshes = new List<MeshRenderer>();
+        
         [SerializeField] private AudioSource engineBoostAudioSource;
         [SerializeField] private AudioSource externalBoostAudioSource;
         [SerializeField] private AudioSource externalBoostThrusterAudioSource;
@@ -93,8 +96,8 @@ namespace Core.Ship {
         #endregion
 
         #region Rolling Updates
-        
-        public virtual void UpdateIndicators(ShipIndicatorData shipIndicatorData) { }
+
+        public virtual void UpdateIndicators(ShipIndicatorData shipIndicatorData) { /* Indicators are entirely model-specific and should be implemented. */ }
 
         public virtual void UpdateMotionInformation(float velocity, Vector3 force, Vector3 torque) {
             thrusterController.UpdateThrusters(force, torque);
@@ -109,6 +112,32 @@ namespace Core.Ship {
             cockpitExternal.SetActive(cockpitMode == CockpitMode.External);
         }
 
+        #endregion
+        
+        #region User Preferences
+
+        public virtual void SetPrimaryColor(string htmlColor) {
+            if (!ColorUtility.TryParseHtmlString(htmlColor, out var primaryColor)) {
+                primaryColor = Color.red;
+                Debug.LogWarning("Failed to parse primary html color " + primaryColor);
+            }
+            primaryColorMeshes.ForEach(mesh => {
+                var mat = mesh.material;
+                mat.color = primaryColor;
+            });
+        }
+        
+        public virtual void SetAccentColor(string htmlColor) {
+            if (!ColorUtility.TryParseHtmlString(htmlColor, out var accentColor)) {
+                accentColor = Color.black;
+                Debug.LogWarning("Failed to parse accent html color " + accentColor);
+            }
+            accentColorMeshes.ForEach(mesh => {
+                var mat = mesh.material;
+                mat.color = accentColor;
+            });
+        }
+        
         #endregion
 
         #region Internal Helper
