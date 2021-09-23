@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Core;
+using Misc;
 using UnityEngine;
 
 public class ShipCamera : MonoBehaviour {
@@ -15,6 +17,19 @@ public class ShipCamera : MonoBehaviour {
 
     private readonly Vector3 _minPos = new Vector3(-0.1175f, -0.0678f, -0.2856f);
     private readonly Vector3 _maxPos = new Vector3(0.1175f, 0.04f, 0.0412f);
+
+    private float _baseFov;
+    private Camera[] _cameras;
+    
+    public void OnEnable() {
+        Game.OnGraphicsSettingsApplied += SetBaseFov;
+        _cameras = GetComponentsInChildren<Camera>();
+        SetBaseFov();
+    }
+    
+    public void OnDisable() {
+        Game.OnGraphicsSettingsApplied -= SetBaseFov;
+    }
 
     public void Reset() {
         _lastVelocity = Vector3.zero;
@@ -36,5 +51,14 @@ public class ShipCamera : MonoBehaviour {
         transform.localPosition = cameraPosition;
         
         _lastVelocity = target.velocity;
+        
+        // Fov
+        foreach (var playerCamera in _cameras) {
+            playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, MathfExtensions.Remap(0, _minPos.z, _baseFov, _baseFov + 20, cameraPosition.z), 0.1f);
+        }
+    }
+
+    private void SetBaseFov() {
+        _baseFov = Preferences.Instance.GetFloat("graphics-field-of-view");
     }
 }
