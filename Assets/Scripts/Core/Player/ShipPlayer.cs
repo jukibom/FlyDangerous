@@ -220,6 +220,7 @@ namespace Core.Player {
         [SyncVar] private string _headLightsColor;
         
         private bool IsReady => _transform && _rigidbody && _serverReady;
+        public bool IsRotationalFlightAssistActive => _flightAssistRotationalDampening;
         public float Velocity => Mathf.Round(_rigidbody.velocity.magnitude);
         public User User => GetComponentInChildren<User>(true);
 
@@ -585,12 +586,15 @@ namespace Core.Player {
 
             Debug.Log("All Flight Assists " + (isEnabled ? "ON" : "OFF"));
 
-            // TODO: proper flight assist sounds
             if (isEnabled) {
                 UIAudioManager.Instance.Play("ship-alternate-flight-on");
             }
             else {
                 UIAudioManager.Instance.Play("ship-alternate-flight-off");
+            }
+            
+            if (Preferences.Instance.GetBool("forceRelativeMouseWithFAOff")) {
+                User.ResetMouseToCentre();
             }
         }
 
@@ -598,7 +602,6 @@ namespace Core.Player {
             _flightAssistVectorControl = !_flightAssistVectorControl;
             Debug.Log("Vector Control Flight Assist " + (_flightAssistVectorControl ? "ON" : "OFF"));
 
-            // TODO: proper flight assist sounds
             if (_flightAssistVectorControl) {
                 UIAudioManager.Instance.Play("ship-alternate-flight-on");
             }
@@ -611,12 +614,15 @@ namespace Core.Player {
             _flightAssistRotationalDampening = !_flightAssistRotationalDampening;
             Debug.Log("Rotational Dampening Flight Assist " + (_flightAssistRotationalDampening ? "ON" : "OFF"));
 
-            // TODO: proper flight assist sounds
             if (_flightAssistRotationalDampening) {
                 UIAudioManager.Instance.Play("ship-alternate-flight-on");
             }
             else {
                 UIAudioManager.Instance.Play("ship-alternate-flight-off");
+            }
+            
+            if (Preferences.Instance.GetBool("forceRelativeMouseWithFAOff")) {
+                User.ResetMouseToCentre();
             }
         }
 

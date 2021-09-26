@@ -408,8 +408,8 @@ namespace Core.Player {
             bool mouseXInvert = Preferences.Instance.GetBool("mouseXInvert");
             bool mouseYInvert = Preferences.Instance.GetBool("mouseXInvert");
 
-            var mouseXIsRelative = Preferences.Instance.GetBool("relativeMouseXAxis");
-            var mouseYIsRelative = Preferences.Instance.GetBool("relativeMouseYAxis");
+            var mouseXIsRelative = Preferences.Instance.GetBool("relativeMouseXAxis") || (Preferences.Instance.GetBool("forceRelativeMouseWithFAOff") && !shipPlayer.IsRotationalFlightAssistActive);
+            var mouseYIsRelative = Preferences.Instance.GetBool("relativeMouseYAxis") || (Preferences.Instance.GetBool("forceRelativeMouseWithFAOff") && !shipPlayer.IsRotationalFlightAssistActive);;
 
             float mouseRelativeRate = MathfExtensions.Clamp(1, 50f, Preferences.Instance.GetFloat("mouseRelativeRate"));
 

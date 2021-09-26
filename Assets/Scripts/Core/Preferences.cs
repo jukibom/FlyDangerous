@@ -60,6 +60,7 @@ namespace Core {
                 case "relativeMouseYAxis":
                 case "mouseXInvert:":
                 case "mouseYInvert:":
+                case "forceRelativeMouseWithFAOff":
                 case "enableExperimentalTerrain":
                     return false;
 
