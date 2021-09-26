@@ -59,7 +59,7 @@ namespace Menus.Options {
                         ? height >= targetHeight
                         : height <= targetHeight;
 
-                float increment = startingHeight > targetHeight ? -5 : 5;
+                float increment = 10 * (startingHeight > targetHeight ? -1 : 1);
 
                 var size = new Vector2(0, height);
                 
