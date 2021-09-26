@@ -61,10 +61,14 @@ namespace Menus.Options {
 
                 float increment = startingHeight > targetHeight ? -5 : 5;
 
+                var size = new Vector2(0, height);
+                
                 while (HeightAssertion()) {
                     foreach (var rectTransform in _elements) {
                         var rect = rectTransform.rect;
-                        rectTransform.sizeDelta = new Vector2(rect.width, height);
+                        size.x = rect.width;
+                        size.y = height;
+                        rectTransform.sizeDelta = size;
                     }
 
                     height += increment;
