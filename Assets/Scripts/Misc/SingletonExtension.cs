@@ -50,6 +50,7 @@ namespace Misc {
 
         protected virtual void Awake() {
             // if this class is created before a script calls it, it must be set in the unity editor
+            _shuttingDown = false;
             if (_instance != null) {
                 Destroy(_instance.gameObject);
             }
