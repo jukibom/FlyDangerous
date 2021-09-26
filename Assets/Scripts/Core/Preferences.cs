@@ -107,6 +107,8 @@ namespace Core {
                     return "roll";
                 case "mouseYAxis":
                     return "pitch";
+                case "throttleType":
+                    return "full range";
                 case "screen-mode":
                     return "borderless window";
                 case "graphics-anti-aliasing":

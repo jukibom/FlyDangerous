@@ -222,6 +222,15 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
+                    ""name"": ""Toggle Reverse"",
+                    ""type"": ""Button"",
+                    ""id"": ""335e25d1-e016-4849-aee9-90ce40cdda59"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Boost"",
                     ""type"": ""Value"",
                     ""id"": ""ae9270a1-0fa9-4611-bb01-798738d7842c"",
@@ -1581,6 +1590,28 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""action"": ""Vector Flight Assist Toggle"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""35b2f42f-a7e2-4ca1-acb2-1b62f0bca932"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Toggle Reverse"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8f2c999d-d3a4-4f1a-9379-ff574a882b89"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Toggle Reverse"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -2233,6 +2264,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         m_Ship_LateralHAlt = m_Ship.FindAction("LateralH Alt", throwIfNotFound: true);
         m_Ship_LateralV = m_Ship.FindAction("LateralV", throwIfNotFound: true);
         m_Ship_LateralVAlt = m_Ship.FindAction("LateralV Alt", throwIfNotFound: true);
+        m_Ship_ToggleReverse = m_Ship.FindAction("Toggle Reverse", throwIfNotFound: true);
         m_Ship_Boost = m_Ship.FindAction("Boost", throwIfNotFound: true);
         m_Ship_VelocityLimiter = m_Ship.FindAction("Velocity Limiter", throwIfNotFound: true);
         m_Ship_AllFlightAssistToggle = m_Ship.FindAction("All Flight Assist Toggle", throwIfNotFound: true);
@@ -2368,6 +2400,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Ship_LateralHAlt;
     private readonly InputAction m_Ship_LateralV;
     private readonly InputAction m_Ship_LateralVAlt;
+    private readonly InputAction m_Ship_ToggleReverse;
     private readonly InputAction m_Ship_Boost;
     private readonly InputAction m_Ship_VelocityLimiter;
     private readonly InputAction m_Ship_AllFlightAssistToggle;
@@ -2395,6 +2428,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         public InputAction @LateralHAlt => m_Wrapper.m_Ship_LateralHAlt;
         public InputAction @LateralV => m_Wrapper.m_Ship_LateralV;
         public InputAction @LateralVAlt => m_Wrapper.m_Ship_LateralVAlt;
+        public InputAction @ToggleReverse => m_Wrapper.m_Ship_ToggleReverse;
         public InputAction @Boost => m_Wrapper.m_Ship_Boost;
         public InputAction @VelocityLimiter => m_Wrapper.m_Ship_VelocityLimiter;
         public InputAction @AllFlightAssistToggle => m_Wrapper.m_Ship_AllFlightAssistToggle;
@@ -2457,6 +2491,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @LateralVAlt.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnLateralVAlt;
                 @LateralVAlt.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnLateralVAlt;
                 @LateralVAlt.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnLateralVAlt;
+                @ToggleReverse.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnToggleReverse;
+                @ToggleReverse.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnToggleReverse;
+                @ToggleReverse.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnToggleReverse;
                 @Boost.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnBoost;
                 @Boost.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnBoost;
                 @Boost.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnBoost;
@@ -2530,6 +2567,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @LateralVAlt.started += instance.OnLateralVAlt;
                 @LateralVAlt.performed += instance.OnLateralVAlt;
                 @LateralVAlt.canceled += instance.OnLateralVAlt;
+                @ToggleReverse.started += instance.OnToggleReverse;
+                @ToggleReverse.performed += instance.OnToggleReverse;
+                @ToggleReverse.canceled += instance.OnToggleReverse;
                 @Boost.started += instance.OnBoost;
                 @Boost.performed += instance.OnBoost;
                 @Boost.canceled += instance.OnBoost;
@@ -2739,6 +2779,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         void OnLateralHAlt(InputAction.CallbackContext context);
         void OnLateralV(InputAction.CallbackContext context);
         void OnLateralVAlt(InputAction.CallbackContext context);
+        void OnToggleReverse(InputAction.CallbackContext context);
         void OnBoost(InputAction.CallbackContext context);
         void OnVelocityLimiter(InputAction.CallbackContext context);
         void OnAllFlightAssistToggle(InputAction.CallbackContext context);

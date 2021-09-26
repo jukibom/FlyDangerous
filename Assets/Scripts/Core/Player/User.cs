@@ -3,6 +3,7 @@ using System.Linq;
 using Audio;
 using Game_UI;
 using Menus.Pause_Menu;
+using Misc;
 using UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -39,6 +40,7 @@ namespace Core.Player {
         private float _lateralH;
         private float _lateralV;
         private bool _boost;
+        private bool _reverse;
 
         [SerializeField] public bool movementEnabled;
         public bool pauseMenuEnabled = true;
@@ -93,6 +95,13 @@ namespace Core.Player {
                 var throttle = _throttle;
                 var lateralH = _lateralH;
                 var lateralV = _lateralV;
+
+                if (Preferences.Instance.GetString("throttleType") == "forward only") {
+                    throttle = MathfExtensions.Remap(-1, 1, 0, 1, throttle);
+                    if (_reverse) {
+                        throttle *= -1;
+                    }
+                }
 
                 if (!pauseMenu.IsPaused && Preferences.Instance.GetBool("enableMouseFlightControls")) {
                     CalculateMouseInput(out var mousePitch, out var mouseRoll, out var mouseYaw);
@@ -280,6 +289,11 @@ namespace Core.Player {
 
         public void OnLateralVAlt(InputValue value) {
             if (_alternateFlightControls) _lateralV = value.Get<float>();
+        }
+
+        public void OnToggleReverse(InputValue value) {
+            UIAudioManager.Instance.Play("ui-nav");
+            _reverse = !_reverse;
         }
 
         public void OnBoost(InputValue value) {
