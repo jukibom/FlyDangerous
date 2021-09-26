@@ -8,9 +8,10 @@ using UnityEngine.Audio;
 namespace Audio {
     public class UIAudioManager : Singleton<UIAudioManager> {
 
-        [SerializeField] private Sound[] sounds;
+        [SerializeField] private Sound[] sounds = new Sound[]{};
 
-        void Awake() {
+        protected override void Awake() {
+            base.Awake();
             foreach (Sound s in sounds) {
                 s.source = gameObject.AddComponent<AudioSource>();
                 s.source.playOnAwake = false;

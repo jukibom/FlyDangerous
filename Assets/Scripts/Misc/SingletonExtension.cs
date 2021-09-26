@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Misc {
@@ -46,8 +47,16 @@ namespace Misc {
                 }
             }
         }
- 
- 
+
+        protected virtual void Awake() {
+            // if this class is created before a script calls it, it must be set in the unity editor
+            if (_instance != null) {
+                Destroy(_instance.gameObject);
+            }
+            _instance = GetComponent<T>();
+        }
+
+
         private void OnApplicationQuit()
         {
             _shuttingDown = true;
