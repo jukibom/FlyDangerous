@@ -10,6 +10,14 @@ New:
     * Added basic support for gravity
     * Added snapshot sfx to checkpoint 
     * Cockpit camera FOV increase in non-VR mode under forward acceleration
+    * New Throttle input options:
+        * Ability to use the full throttle axis ("Forward Only" mode)
+        * New binding to toggle reverse for forward only mode 
+        * Ability to bind buttons to increase or decrease a virtual throttle (note: this is immediately reset if any continuous axis input is received)
+    * New mouse input options:
+        * New binding to recenter the mouse on demand
+        * Mouse relative return rate - the higher this value, the faster the mouse will return to the centre.
+        * Mouse power curve - from 1 to 3, this raises input to the power of the slider to follow tighter curve
 
 Changes:
     * Updated to Unity 2021.1.17f1
@@ -23,6 +31,8 @@ Changes:
     * Split boost sound between front and back and made boost action multiplayer-aware
     * VR HMD position => input bind (default F11) now works in pause menu etc, should *always* restore from preferences
     * Checkpoint collision checking now uses velocity-based raycasts and should work with any arbitrary speed
+    * Cleaned up the bindings UI - now within one tab with related bindings grouped together
+    * Minor change to options UI - small `+` button replaced with full header with animation
 
 Fixes:
     * Fog no longer interacts with transparent objects (e.g. checkpoint)
