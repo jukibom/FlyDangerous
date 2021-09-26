@@ -319,6 +319,15 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Recenter Mouse"",
+                    ""type"": ""Button"",
+                    ""id"": ""b43d1338-0375-4761-a9be-0daaaeef9a89"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1674,6 +1683,28 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""action"": ""Throttle Decrease"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""46115d6f-81d5-4825-95aa-40a1c7ce275d"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Recenter Mouse"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8a2e0447-b09e-40ab-87f9-d11c4fd9501e"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Recenter Mouse"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -2337,6 +2368,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         m_Ship_ShipLightsToggle = m_Ship.FindAction("ShipLightsToggle", throwIfNotFound: true);
         m_Ship_AltFlightControlsToggle = m_Ship.FindAction("Alt Flight Controls Toggle", throwIfNotFound: true);
         m_Ship_MouseRawDelta = m_Ship.FindAction("Mouse Raw Delta", throwIfNotFound: true);
+        m_Ship_RecenterMouse = m_Ship.FindAction("Recenter Mouse", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -2475,6 +2507,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Ship_ShipLightsToggle;
     private readonly InputAction m_Ship_AltFlightControlsToggle;
     private readonly InputAction m_Ship_MouseRawDelta;
+    private readonly InputAction m_Ship_RecenterMouse;
     public struct ShipActions
     {
         private @FlyDangerousActions m_Wrapper;
@@ -2505,6 +2538,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         public InputAction @ShipLightsToggle => m_Wrapper.m_Ship_ShipLightsToggle;
         public InputAction @AltFlightControlsToggle => m_Wrapper.m_Ship_AltFlightControlsToggle;
         public InputAction @MouseRawDelta => m_Wrapper.m_Ship_MouseRawDelta;
+        public InputAction @RecenterMouse => m_Wrapper.m_Ship_RecenterMouse;
         public InputActionMap Get() { return m_Wrapper.m_Ship; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -2592,6 +2626,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @MouseRawDelta.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnMouseRawDelta;
                 @MouseRawDelta.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnMouseRawDelta;
                 @MouseRawDelta.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnMouseRawDelta;
+                @RecenterMouse.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnRecenterMouse;
+                @RecenterMouse.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnRecenterMouse;
+                @RecenterMouse.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnRecenterMouse;
             }
             m_Wrapper.m_ShipActionsCallbackInterface = instance;
             if (instance != null)
@@ -2674,6 +2711,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @MouseRawDelta.started += instance.OnMouseRawDelta;
                 @MouseRawDelta.performed += instance.OnMouseRawDelta;
                 @MouseRawDelta.canceled += instance.OnMouseRawDelta;
+                @RecenterMouse.started += instance.OnRecenterMouse;
+                @RecenterMouse.performed += instance.OnRecenterMouse;
+                @RecenterMouse.canceled += instance.OnRecenterMouse;
             }
         }
     }
@@ -2870,6 +2910,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         void OnShipLightsToggle(InputAction.CallbackContext context);
         void OnAltFlightControlsToggle(InputAction.CallbackContext context);
         void OnMouseRawDelta(InputAction.CallbackContext context);
+        void OnRecenterMouse(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

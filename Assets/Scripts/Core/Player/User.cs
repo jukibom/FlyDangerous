@@ -375,6 +375,10 @@ namespace Core.Player {
             );
         }
 
+        public void OnRecenterMouse(InputValue value) {
+            ResetMouseToCentre();
+        }
+
         public void OnResetHMDView(InputValue value) {
             if (xrRig) {
                 Game.Instance.ResetHmdView(xrRig, transform);
