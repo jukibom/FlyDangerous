@@ -384,7 +384,7 @@ namespace Menus.Options {
             }
 
             if (displayString.Length == 0) {
-                displayString = "(not bound)";
+                displayString = "(unbound primary)";
             }
             
             // Set on label (if any).
@@ -410,7 +410,7 @@ namespace Menus.Options {
             }
 
             if (displayString.Length == 0) {
-                displayString = "(not bound)";
+                displayString = "(unbound secondary)";
             }
             
             // Set on label (if any).
