@@ -7,6 +7,12 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace Menus.Options {
+
+    public enum BindingType {
+        Primary,
+        Secondary
+    }
+    
     public class RebindAction : MonoBehaviour {
 
         [Serializable]
@@ -203,11 +209,11 @@ namespace Menus.Options {
             {
                 var firstPartIndex = bindingIndex + 1;
                 if (firstPartIndex < action.bindings.Count && action.bindings[firstPartIndex].isPartOfComposite)
-                    PerformInteractiveRebind(m_PrimaryBindingText, action, firstPartIndex, allCompositeParts: true);
+                    PerformInteractiveRebind(m_PrimaryBindingText, action, firstPartIndex, BindingType.Primary, allCompositeParts: true);
             }
             else
             {
-                PerformInteractiveRebind(m_PrimaryBindingText, action, bindingIndex);
+                PerformInteractiveRebind(m_PrimaryBindingText, action, bindingIndex, BindingType.Primary);
             }
         }
         
@@ -220,15 +226,15 @@ namespace Menus.Options {
             {
                 var firstPartIndex = bindingIndex + 1;
                 if (firstPartIndex < action.bindings.Count && action.bindings[firstPartIndex].isPartOfComposite)
-                    PerformInteractiveRebind(m_SecondaryBindingText, action, firstPartIndex, allCompositeParts: true);
+                    PerformInteractiveRebind(m_SecondaryBindingText, action, firstPartIndex, BindingType.Secondary, allCompositeParts: true);
             }
             else
             {
-                PerformInteractiveRebind(m_SecondaryBindingText, action, bindingIndex);
+                PerformInteractiveRebind(m_SecondaryBindingText, action, bindingIndex, BindingType.Secondary);
             }
         }
 
-        private void PerformInteractiveRebind(Text bindingText, InputAction action, int bindingIndex, bool allCompositeParts = false) {
+        private void PerformInteractiveRebind(Text bindingText, InputAction action, int bindingIndex, BindingType bindingType, bool allCompositeParts = false) {
             m_RebindOperation?.Cancel(); // Will null out m_RebindOperation.
 
             Boolean shouldReEnable = action.enabled;
@@ -270,7 +276,7 @@ namespace Menus.Options {
                             var nextBindingIndex = bindingIndex + 1;
                             if (nextBindingIndex < action.bindings.Count &&
                                 action.bindings[nextBindingIndex].isPartOfComposite)
-                                PerformInteractiveRebind(bindingText, action, nextBindingIndex, true);
+                                PerformInteractiveRebind(bindingText, action, nextBindingIndex, bindingType, true);
                         }
                     })
                 .WithCancelingThrough("<Keyboard>/escape")
@@ -289,10 +295,10 @@ namespace Menus.Options {
 
             // Bring up rebind overlay, if we have one.
             m_RebindOverlay?.SetActive(true);
-            if (m_RebindText != null)
-            {
+            if (m_RebindText != null) {
+                var bindingTypeName = bindingType == BindingType.Primary ? "Primary" : "Secondary";
                 var text = !string.IsNullOrEmpty(m_RebindOperation.expectedControlType)
-                    ? $"{partName}\nWaiting for {m_RebindOperation.expectedControlType} input...\n\n-------------------------------------------\n\nESC to cancel\nDEL to unbind"
+                    ? $"{partName.ToUpper()}:  {bindingTypeName.ToUpper()} BINDING\n\nWaiting for {m_RebindOperation.expectedControlType} input...\n\n-------------------------------------------\n\nESC to cancel\nDEL to unbind"
                     : $"{partName}\nWaiting for input...\n\n-------------------------------------------\n\nESC to cancel\nDEL to unbind";
                 m_RebindText.text = text;
             }
