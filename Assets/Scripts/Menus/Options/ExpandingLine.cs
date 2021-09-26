@@ -89,12 +89,12 @@ namespace Menus.Options {
                 icon.text = "-";
                 UIAudioManager.Instance.Play("ui-dialog-open");
                 container.SetActive(true);
-                StartCoroutine(AnimatePanel(_currentAnimationStep, 80));
+                _animation = StartCoroutine(AnimatePanel(_currentAnimationStep, 80));
             }
             else {
                 icon.text = "+";
                 UIAudioManager.Instance.Play("ui-cancel");
-                StartCoroutine(AnimatePanel(_currentAnimationStep, 0, () => {
+                _animation = StartCoroutine(AnimatePanel(_currentAnimationStep, 0, () => {
                     container.GetComponent<RectTransform>().sizeDelta = Vector2.zero;
                     container.SetActive(false);
                     RefreshView();
