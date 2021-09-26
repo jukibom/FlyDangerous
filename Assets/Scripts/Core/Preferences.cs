@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Misc;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -42,22 +43,10 @@ namespace Core {
         }
     }
 
-    public class Preferences : MonoBehaviour {
+    public class Preferences : Singleton<Preferences> {
 
-        public static Preferences Instance;
         private SaveData _saveData;
-
-        void Awake() {
-            // singleton shenanigans
-            if (Instance == null) {
-                Instance = this;
-            }
-            else {
-                Destroy(gameObject);
-                return;
-            }
-        }
-
+        
         public bool GetDefaultBool(string key) {
             switch (key) {
                 case "showSpaceDust":

@@ -6,6 +6,7 @@ using JetBrains.Annotations;
 using MapMagic.Core;
 using Menus.Main_Menu;
 using Mirror;
+using Misc;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
@@ -29,10 +30,8 @@ namespace Core {
         InGame,
     }
     
-    public class Game : MonoBehaviour {
-
-        public static Game Instance;
-
+    public class Game : Singleton<Game> {
+        
         public delegate void RestartLevelAction();
         public delegate void GraphicsSettingsApplyAction();
         public delegate void GamePauseAction(bool enabled);
@@ -82,16 +81,6 @@ namespace Core {
 
         private static readonly int fadeToBlack = Animator.StringToHash("FadeToBlack");
         private static readonly int fadeFromBlack = Animator.StringToHash("FadeFromBlack");
-
-        void Awake() {
-            // singleton shenanigans
-            if (Instance == null) {
-                Instance = this;
-            }
-            else {
-                Destroy(gameObject);
-            }
-        }
 
         public void Start() {
             // must be a level loader in the scene

@@ -3,6 +3,7 @@ using System.Linq;
 using Audio;
 using Game_UI;
 using Menus.Pause_Menu;
+using UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
@@ -69,7 +70,7 @@ namespace Core.Player {
             Game.OnGraphicsSettingsApplied += OnGraphicsSettingsApplied;
             Game.OnVRStatus += SetVRStatus;
             ResetMouseToCentre();
-            Console.Instance.Clear();
+            FdConsole.Instance.Clear();
         }
 
         public void OnDisable() {
@@ -130,19 +131,19 @@ namespace Core.Player {
             pauseMenuEnabled = true;
             boostButtonEnabledOverride = false;
 
-            Console.Instance.LogMessage("** USER INPUT ENABLED **");
+            FdConsole.Instance.LogMessage("** USER INPUT ENABLED **");
             foreach (var inputDevice in InputSystem.devices) {
-                Console.Instance.LogMessage(inputDevice.name + " with path <" + inputDevice.device.path + ">" +
+                FdConsole.Instance.LogMessage(inputDevice.name + " with path <" + inputDevice.device.path + ">" +
                                             " detected");
                 if (!playerInput.devices.Contains(inputDevice)) {
-                    Console.Instance.LogMessage(inputDevice.name + " not paired to user! Pairing ...");
+                    FdConsole.Instance.LogMessage(inputDevice.name + " not paired to user! Pairing ...");
                     InputUser.PerformPairingWithDevice(inputDevice, playerInput.user);
                 }
             }
 
-            Console.Instance.LogMessage("---");
+            FdConsole.Instance.LogMessage("---");
             foreach (var playerInputDevice in playerInput.devices) {
-                Console.Instance.LogMessage(playerInputDevice.name + " paired");
+                FdConsole.Instance.LogMessage(playerInputDevice.name + " paired");
             }
 
             ResetMouseToCentre();
@@ -166,7 +167,7 @@ namespace Core.Player {
             shipPlayer.SetLateralH(0);
             shipPlayer.SetLateralV(0);
 
-            Console.Instance.LogMessage("** USER INPUT DISABLED **");
+            FdConsole.Instance.LogMessage("** USER INPUT DISABLED **");
         }
 
         public void EnableUIInput() {
@@ -338,11 +339,11 @@ namespace Core.Player {
         }
 
         public void OnToggleConsole(InputValue value) {
-            if (Console.Instance.Visible) {
-                Console.Instance.Hide();
+            if (FdConsole.Instance.Visible) {
+                FdConsole.Instance.Hide();
             }
             else {
-                Console.Instance.Show();
+                FdConsole.Instance.Show();
             }
         }
 

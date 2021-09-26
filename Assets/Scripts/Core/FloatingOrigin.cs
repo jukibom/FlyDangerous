@@ -1,10 +1,9 @@
+using Misc;
 using UnityEngine;
 
 namespace Core {
-    public class FloatingOrigin : MonoBehaviour {
-
-        public static FloatingOrigin Instance { get; private set; }
-
+    public class FloatingOrigin : Singleton<FloatingOrigin> {
+        
         public delegate void FloatingOriginCorrectionAction(Vector3 offset);
 
         public static event FloatingOriginCorrectionAction OnFloatingOriginCorrection;
@@ -27,17 +26,6 @@ namespace Core {
 
         public Vector3 FocalObjectPosition => FocalTransform.position + Origin;
 
-        void Awake() {
-            // singleton shenanigans
-            if (Instance == null) {
-                Instance = this;
-            }
-            else {
-                Destroy(gameObject);
-                return;
-            }
-        }
-
         void FixedUpdate() {
 
             // if we have a focal object, perform the floating origin fix
@@ -54,10 +42,10 @@ namespace Core {
         }
 
         private void UpdateTrails(Vector3 offset) {
-            var trails = FindObjectsOfType<TrailRenderer>() as TrailRenderer[];
+            var trails = FindObjectsOfType<TrailRenderer>();
             foreach (var trail in trails)
             {
-                Vector3[] positions = new Vector3[trail.positionCount];
+                var positions = new Vector3[trail.positionCount];
 
                 int positionCount = trail.GetPositions(positions);
                 for (int i = 0; i < positionCount; ++i)

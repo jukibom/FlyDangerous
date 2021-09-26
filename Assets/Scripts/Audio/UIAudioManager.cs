@@ -1,25 +1,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Misc;
 using UnityEngine;
 using UnityEngine.Audio;
 
 namespace Audio {
-    public class UIAudioManager : MonoBehaviour {
+    public class UIAudioManager : Singleton<UIAudioManager> {
 
-        public static UIAudioManager Instance;
-        public Sound[] sounds;
+        [SerializeField] private Sound[] sounds;
 
         void Awake() {
-            // singleton shenanigans
-            if (Instance == null) {
-                Instance = this;
-            }
-            else {
-                Destroy(gameObject);
-                return;
-            }
-
             foreach (Sound s in sounds) {
                 s.source = gameObject.AddComponent<AudioSource>();
                 s.source.playOnAwake = false;
