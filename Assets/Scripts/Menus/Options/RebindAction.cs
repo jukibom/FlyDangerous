@@ -259,9 +259,19 @@ namespace Menus.Options {
                         binding.overridePath = "";
                         operation.action.ChangeBinding(bindingIndex).To(binding);
                         operation.Cancel();
+                        return;
                     }
 
-                    operation.Complete();
+                    // special case for Axis binds - we want to ignore button presses on axis binds (but not
+                    // necessarily axis binds on other button bindings). 
+                    // NOTE: This is not a direct comparison because "Button" bindings receive input "Key" from
+                    // the keyboard. No, I am not making this shit up I swear
+                    if (m_RebindOperation.expectedControlType == "Axis" && operation.selectedControl.layout != "Axis") {
+                        operation.Cancel();
+                    }
+                    else {
+                        operation.Complete();
+                    }
                 })
                 .OnComplete(
                     operation => {
