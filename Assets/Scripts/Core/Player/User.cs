@@ -41,6 +41,8 @@ namespace Core.Player {
         private float _lateralV;
         private bool _boost;
         private bool _reverse;
+        private float _targetThrottle;
+        private float _targetThrottleIncrement;
 
         [SerializeField] public bool movementEnabled;
         public bool pauseMenuEnabled = true;
@@ -103,6 +105,11 @@ namespace Core.Player {
                     }
                 }
 
+                _targetThrottle = MathfExtensions.Clamp(-1, 1, _targetThrottle + _targetThrottleIncrement);
+                if (_targetThrottle != 0) {
+                    throttle = _targetThrottle;
+                }
+                
                 if (!pauseMenu.IsPaused && Preferences.Instance.GetBool("enableMouseFlightControls")) {
                     CalculateMouseInput(out var mousePitch, out var mouseRoll, out var mouseYaw);
                     pitch += mousePitch;
@@ -268,11 +275,33 @@ namespace Core.Player {
         }
 
         public void OnThrottle(InputValue value) {
+            _targetThrottle = 0;
+            _targetThrottleIncrement = 0;
             if (!_alternateFlightControls) _throttle = value.Get<float>();
         }
 
         public void OnThrottleAlt(InputValue value) {
+            _targetThrottle = 0;
+            _targetThrottleIncrement = 0;
             if (_alternateFlightControls) _throttle = value.Get<float>();
+        }
+
+        public void OnThrottleIncrease(InputValue value) {
+            if (value.isPressed) {
+                _targetThrottleIncrement = MathfExtensions.Remap(0, 1, 0, 0.005f, value.Get<float>());
+            }
+            else {
+                _targetThrottleIncrement = 0;
+            }
+        }
+
+        public void OnThrottleDecrease(InputValue value) {
+            if (value.isPressed) { 
+                _targetThrottleIncrement = MathfExtensions.Remap(0, 1, 0, -0.005f, value.Get<float>());
+            }
+            else {
+                _targetThrottleIncrement = 0;
+            }
         }
 
         public void OnLateralH(InputValue value) {

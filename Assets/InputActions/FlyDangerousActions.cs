@@ -231,6 +231,24 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""Throttle Decrease"",
+                    ""type"": ""Value"",
+                    ""id"": ""bb734ebf-84e7-4663-b57e-f5a92686dcfa"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Throttle Increase"",
+                    ""type"": ""Value"",
+                    ""id"": ""91fd4261-9926-40e4-9994-f0a5c5162ded"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
                     ""name"": ""Boost"",
                     ""type"": ""Value"",
                     ""id"": ""ae9270a1-0fa9-4611-bb01-798738d7842c"",
@@ -1612,6 +1630,50 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""action"": ""Toggle Reverse"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""102fd659-2342-4630-be02-4a8e1c278608"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Throttle Increase"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7b8a45e5-66c2-4321-874a-d8fc60757859"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Throttle Increase"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d26c3d5f-4adf-438a-bfd5-fa1c5aa5ab32"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Throttle Decrease"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""181ce6a6-586b-417b-b611-9b0616fb689d"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Throttle Decrease"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -2265,6 +2327,8 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         m_Ship_LateralV = m_Ship.FindAction("LateralV", throwIfNotFound: true);
         m_Ship_LateralVAlt = m_Ship.FindAction("LateralV Alt", throwIfNotFound: true);
         m_Ship_ToggleReverse = m_Ship.FindAction("Toggle Reverse", throwIfNotFound: true);
+        m_Ship_ThrottleDecrease = m_Ship.FindAction("Throttle Decrease", throwIfNotFound: true);
+        m_Ship_ThrottleIncrease = m_Ship.FindAction("Throttle Increase", throwIfNotFound: true);
         m_Ship_Boost = m_Ship.FindAction("Boost", throwIfNotFound: true);
         m_Ship_VelocityLimiter = m_Ship.FindAction("Velocity Limiter", throwIfNotFound: true);
         m_Ship_AllFlightAssistToggle = m_Ship.FindAction("All Flight Assist Toggle", throwIfNotFound: true);
@@ -2401,6 +2465,8 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Ship_LateralV;
     private readonly InputAction m_Ship_LateralVAlt;
     private readonly InputAction m_Ship_ToggleReverse;
+    private readonly InputAction m_Ship_ThrottleDecrease;
+    private readonly InputAction m_Ship_ThrottleIncrease;
     private readonly InputAction m_Ship_Boost;
     private readonly InputAction m_Ship_VelocityLimiter;
     private readonly InputAction m_Ship_AllFlightAssistToggle;
@@ -2429,6 +2495,8 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         public InputAction @LateralV => m_Wrapper.m_Ship_LateralV;
         public InputAction @LateralVAlt => m_Wrapper.m_Ship_LateralVAlt;
         public InputAction @ToggleReverse => m_Wrapper.m_Ship_ToggleReverse;
+        public InputAction @ThrottleDecrease => m_Wrapper.m_Ship_ThrottleDecrease;
+        public InputAction @ThrottleIncrease => m_Wrapper.m_Ship_ThrottleIncrease;
         public InputAction @Boost => m_Wrapper.m_Ship_Boost;
         public InputAction @VelocityLimiter => m_Wrapper.m_Ship_VelocityLimiter;
         public InputAction @AllFlightAssistToggle => m_Wrapper.m_Ship_AllFlightAssistToggle;
@@ -2494,6 +2562,12 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @ToggleReverse.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnToggleReverse;
                 @ToggleReverse.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnToggleReverse;
                 @ToggleReverse.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnToggleReverse;
+                @ThrottleDecrease.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnThrottleDecrease;
+                @ThrottleDecrease.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnThrottleDecrease;
+                @ThrottleDecrease.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnThrottleDecrease;
+                @ThrottleIncrease.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnThrottleIncrease;
+                @ThrottleIncrease.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnThrottleIncrease;
+                @ThrottleIncrease.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnThrottleIncrease;
                 @Boost.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnBoost;
                 @Boost.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnBoost;
                 @Boost.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnBoost;
@@ -2570,6 +2644,12 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @ToggleReverse.started += instance.OnToggleReverse;
                 @ToggleReverse.performed += instance.OnToggleReverse;
                 @ToggleReverse.canceled += instance.OnToggleReverse;
+                @ThrottleDecrease.started += instance.OnThrottleDecrease;
+                @ThrottleDecrease.performed += instance.OnThrottleDecrease;
+                @ThrottleDecrease.canceled += instance.OnThrottleDecrease;
+                @ThrottleIncrease.started += instance.OnThrottleIncrease;
+                @ThrottleIncrease.performed += instance.OnThrottleIncrease;
+                @ThrottleIncrease.canceled += instance.OnThrottleIncrease;
                 @Boost.started += instance.OnBoost;
                 @Boost.performed += instance.OnBoost;
                 @Boost.canceled += instance.OnBoost;
@@ -2780,6 +2860,8 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         void OnLateralV(InputAction.CallbackContext context);
         void OnLateralVAlt(InputAction.CallbackContext context);
         void OnToggleReverse(InputAction.CallbackContext context);
+        void OnThrottleDecrease(InputAction.CallbackContext context);
+        void OnThrottleIncrease(InputAction.CallbackContext context);
         void OnBoost(InputAction.CallbackContext context);
         void OnVelocityLimiter(InputAction.CallbackContext context);
         void OnAllFlightAssistToggle(InputAction.CallbackContext context);
