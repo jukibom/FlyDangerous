@@ -414,7 +414,7 @@ namespace Core.Player {
             float mouseYRelativeRate = Preferences.Instance.GetFloat("mouseYRelativeRate");
 
             float mouseDeadzone = Preferences.Instance.GetFloat("mouseDeadzone");
-            float mousePowerCurve = Preferences.Instance.GetFloat("mousePowerCurve");
+            float mousePowerCurve = MathfExtensions.Clamp(1, 3, Preferences.Instance.GetFloat("mousePowerCurve"));
 
             // // get deadzone as a pixel value including sensitivity change
             var mouseDeadzoneX = mouseDeadzone * Mathf.Pow(sensitivityX, -1);
@@ -444,6 +444,12 @@ namespace Core.Player {
             // TODO: relative rate
             var relativeMouseX = _mousePositionDelta.x * sensitivityX;
             var relativeMouseY = _mousePositionDelta.y * sensitivityY;
+
+            // power curve (Mathf.Pow does not allow negatives because REASONS so abs and multiply by -1 if the original val is < 0)
+            continuousMouseX = (continuousMouseX < 0 ? -1 : 1) * Mathf.Pow(Mathf.Abs(continuousMouseX), mousePowerCurve);
+            continuousMouseY = (continuousMouseY < 0 ? -1 : 1) * Mathf.Pow(Mathf.Abs(continuousMouseY), mousePowerCurve);
+            relativeMouseX = (relativeMouseX < 0 ? -1 : 1) * Mathf.Pow(Mathf.Abs(relativeMouseX), mousePowerCurve);
+            relativeMouseY = (relativeMouseY < 0 ? -1 : 1) * Mathf.Pow(Mathf.Abs(relativeMouseY), mousePowerCurve);
 
             // set the input for a given axis 
             Action<string, float, bool> setInput = (axis, amount, shouldInvert) => {

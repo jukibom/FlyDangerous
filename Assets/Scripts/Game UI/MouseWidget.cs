@@ -57,8 +57,8 @@ namespace Game_UI {
             _crosshairImage.color = crosshairImageColor;
         }
 
-        public void UpdateWidgetSprites(Vector2 mousePositionNormalised) {
-            this.mousePositionNormalised = mousePositionNormalised;
+        public void UpdateWidgetSprites(Vector2 mousePosNormalised) {
+            mousePositionNormalised = mousePosNormalised;
         }
 
         public void ResetToCentre() {

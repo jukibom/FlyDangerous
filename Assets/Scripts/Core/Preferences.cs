@@ -85,10 +85,11 @@ namespace Core {
                 case "mouseYSensitivity":
                     return 0.5f;
                 case "mouseDeadzone":
-                case "mousePowerCurve":
                 case "mouseXRelativeRate":
                 case "mouseYRelativeRate":
                     return 0.0f;
+                case "mousePowerCurve":
+                    return 1.0f;
                 default: 
                     Debug.LogWarning("Attempted to get preference " + key + " with no default specified");
                     return 0;
