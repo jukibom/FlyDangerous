@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using Misc;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -180,24 +182,58 @@ namespace Menus.Options {
             ToggleInverseAxis(action, bindingIndex);
         }
 
-        private void ToggleInverseAxis(InputAction action, int bindingIndex) {
-            // If we need more processors, make this an AxisOptions get call in a separate refresh function or something
-            var binding = action.bindings[bindingIndex];
-
-            if (IsInverseEnabled(binding)) {
-                binding.overrideProcessors = null;
-                action.ChangeBinding(bindingIndex).To(binding); 
-            }
-            else {
-                binding.overrideProcessors = "Invert";
-                action.ChangeBinding(bindingIndex).To(binding); 
-            }
+        public void SetPrimaryAxisDeadzone(float deadzone) {
+            if (!ResolveActionAndBinding(m_PrimaryBindingId, out var action, out var bindingIndex))
+                return;
+            SetDeadzone(action, bindingIndex, deadzone);
         }
 
-        // TODO: make this more generic for other processors if we need them
-        private bool IsInverseEnabled(InputBinding binding) {
-            return (binding.overrideProcessors != null && binding.overrideProcessors.Length > 0);
+        public void SetSecondaryAxisDeadzone(float deadzone) {
+            if (!ResolveActionAndBinding(m_SecondaryBindingId, out var action, out var bindingIndex))
+                return;
+            SetDeadzone(action, bindingIndex, deadzone);
+        }
 
+        private void ToggleInverseAxis(InputAction action, int bindingIndex) {
+            var binding = action.bindings[bindingIndex];
+            binding.overrideProcessors = MakeAxisProcessorString(!IsInverseEnabled(binding), GetAxisDeadzone(binding));
+            action.ChangeBinding(bindingIndex).To(binding);
+        }
+
+        private bool IsInverseEnabled(InputBinding binding) {
+            return (binding.overrideProcessors != null && binding.overrideProcessors.Contains("Invert"));
+        }
+
+        private void SetDeadzone(InputAction action, int bindingIndex, float deadzone) {
+            deadzone = MathfExtensions.Clamp(0, 1, deadzone);
+            var binding = action.bindings[bindingIndex];
+
+            binding.overrideProcessors = MakeAxisProcessorString(IsInverseEnabled(binding), deadzone);
+            action.ChangeBinding(bindingIndex).To(binding);
+        }
+
+        private float GetAxisDeadzone(InputBinding binding) {
+            if (binding.overrideProcessors != null && binding.overrideProcessors.Contains("AxisDeadzone")) {
+                // AxisDeadzone(min=0.05,max=0.99)
+                var match = Regex.Match(binding.overrideProcessors,@"AxisDeadzone\(min\s*=\s*(\d*\.?\d*)");
+                if (match.Success) {
+                    try {
+                        return float.Parse(match.Result("$1"));
+                    }
+                    catch {
+                        // ignored
+                        Debug.LogWarning($"Failed to parse axis deadzone for {binding.name} ({match.Value}).");
+                        return 0;
+                    }
+                }
+            }
+            return 0;
+        }
+
+        private string MakeAxisProcessorString(bool invert, float deadzone) {
+            return invert
+                ? $"Invert,AxisDeadzone(min={deadzone},max=1.00)"
+                : $"AxisDeadzone(min={deadzone},max=1.00)";
         }
 
         public void StartInteractivePrimaryRebind() {
@@ -390,9 +426,11 @@ namespace Menus.Options {
             if (axisOptions != null) {
                 if (ResolveActionAndBinding(m_PrimaryBindingId, out var action, out var bindingIndex)) {
                     axisOptions.primaryInverseCheckbox.isChecked = IsInverseEnabled(action.bindings[bindingIndex]);
+                    axisOptions.primaryDeadzoneSlider.Value = GetAxisDeadzone(action.bindings[bindingIndex]);
                 }
                 if (ResolveActionAndBinding(m_SecondaryBindingId, out action, out bindingIndex)) {
                     axisOptions.secondaryInverseCheckbox.isChecked = IsInverseEnabled(action.bindings[bindingIndex]);
+                    axisOptions.secondaryDeadzoneSlider.Value = GetAxisDeadzone(action.bindings[bindingIndex]);
                 }
             }
         }
