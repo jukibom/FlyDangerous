@@ -85,9 +85,9 @@ namespace Core {
                 case "mouseYSensitivity":
                     return 0.5f;
                 case "mouseDeadzone":
-                case "mouseXRelativeRate":
-                case "mouseYRelativeRate":
-                    return 0.0f;
+                    return 0;
+                case "mouseRelativeRate":
+                    return 25.0f;
                 case "mousePowerCurve":
                     return 1.0f;
                 default: 
