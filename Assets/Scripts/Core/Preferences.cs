@@ -91,6 +91,11 @@ namespace Core {
                     return 25.0f;
                 case "mousePowerCurve":
                     return 1.0f;
+                case "volumeMaster":
+                case "volumeMusic":
+                case "volumeSound":
+                case "volumeUi":
+                    return 100;
                 default: 
                     Debug.LogWarning("Attempted to get preference " + key + " with no default specified");
                     return 0;

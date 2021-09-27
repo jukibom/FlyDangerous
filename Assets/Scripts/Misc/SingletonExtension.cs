@@ -7,7 +7,6 @@ namespace Misc {
     public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     {
         // Check to see if we're about to be destroyed.
-        private static bool _shuttingDown;
         private static object _lock = new object();
         private static T _instance;
  
@@ -16,13 +15,6 @@ namespace Misc {
         {
             get
             {
-                if (_shuttingDown)
-                {
-                    Debug.LogWarning("[Singleton] Instance '" + typeof(T) +
-                                     "' already destroyed. Returning null.");
-                    return null;
-                }
- 
                 lock (_lock)
                 {
                     if (_instance == null)
@@ -50,23 +42,11 @@ namespace Misc {
 
         protected virtual void Awake() {
             // if this class is created before a script calls it, it must be set in the unity editor
-            _shuttingDown = false;
             if (_instance != null) {
                 Destroy(_instance.gameObject);
             }
+
             _instance = GetComponent<T>();
-        }
-
-
-        private void OnApplicationQuit()
-        {
-            _shuttingDown = true;
-        }
- 
- 
-        private void OnDestroy()
-        {
-            _shuttingDown = true;
         }
     }
 }

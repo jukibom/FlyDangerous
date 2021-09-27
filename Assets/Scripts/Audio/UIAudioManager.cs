@@ -9,11 +9,13 @@ namespace Audio {
     public class UIAudioManager : Singleton<UIAudioManager> {
 
         [SerializeField] private Sound[] sounds = new Sound[]{};
+        [SerializeField] private AudioMixerGroup audioMixer;
 
         protected override void Awake() {
             base.Awake();
             foreach (Sound s in sounds) {
                 s.source = gameObject.AddComponent<AudioSource>();
+                s.source.outputAudioMixerGroup = audioMixer;
                 s.source.playOnAwake = false;
                 s.source.clip = s.clip;
                 s.source.volume = s.volume;

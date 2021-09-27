@@ -46,6 +46,50 @@ MonoBehaviour:
   playerBindings: {fileID: -944628639613478452, guid: cdb424aa45592664faeac2ce28028bc8, type: 3}
   ssao: {fileID: 5161890783807516584, guid: 4a8e21d5c33334b11b34a596161b9360, type: 2}
   crossfade: {fileID: 7032496712428909581}
+--- !u!1 &1818875068701474992
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 143940583925118809}
+  - component: {fileID: 124521541277846730}
+  m_Layer: 0
+  m_Name: '@AudioMixer'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &143940583925118809
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1818875068701474992}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 960, y: 540, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1147554568742394716}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &124521541277846730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1818875068701474992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94b0f2b9eeb0c764388910283c963263, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  masterMixerGroup: {fileID: 24300002, guid: 4d35772c6feef854a95b4dbe1c73b3bc, type: 2}
 --- !u!1 &2202320483295001056
 GameObject:
   m_ObjectHideFlags: 0
@@ -81,6 +125,7 @@ Transform:
   - {fileID: 5737125732707836333}
   - {fileID: 1966683068085731795}
   - {fileID: 5348441963532606526}
+  - {fileID: 143940583925118809}
   - {fileID: 7032496712428909577}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -244,6 +289,7 @@ MonoBehaviour:
     pitch: 1
     loop: 0
     source: {fileID: 0}
+  audioMixer: {fileID: 0}
 --- !u!1 &6040392751399591797
 GameObject:
   m_ObjectHideFlags: 0
@@ -485,7 +531,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5767733330303709240, guid: 4a7b393b0022fdf468d688f10143f7fa, type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 5767733330303709240, guid: 4a7b393b0022fdf468d688f10143f7fa, type: 3}
       propertyPath: m_AnchorMax.x
