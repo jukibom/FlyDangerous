@@ -57,7 +57,7 @@ namespace Misc {
                 }
                 
                 // apply graphics options
-                Game.Instance.ApplyGraphicsOptions();
+                Game.Instance.ApplyGameOptions();
                 
                 // create a test other player
                 // CreateTestSecondShip();

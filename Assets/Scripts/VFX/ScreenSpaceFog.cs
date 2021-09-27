@@ -13,16 +13,16 @@ public class ScreenSpaceFog : MonoBehaviour {
     }
 
     public void OnEnable() {
-        Game.OnGraphicsSettingsApplied += OnGraphicsSettingsApplied;
+        Game.OnGameSettingsApplied += OnGameSettingsApplied;
         Game.OnVRStatus += OnVRStatus;
     }
     
     public void OnDisable() {
-        Game.OnGraphicsSettingsApplied -= OnGraphicsSettingsApplied;
+        Game.OnGameSettingsApplied -= OnGameSettingsApplied;
         Game.OnVRStatus -= OnVRStatus;
     }
 
-    private void OnGraphicsSettingsApplied() {
+    private void OnGameSettingsApplied() {
         #if (NO_PAID_ASSETS == false)
             var mapMagic = FindObjectOfType<MapMagicObject>();
             if (mapMagic && _volume.profile.TryGet<SCPE.Fog>(out var fog)) {

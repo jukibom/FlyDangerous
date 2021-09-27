@@ -52,7 +52,7 @@ namespace Menus.Options {
         public void Apply() {
             SavePreferences();
             SetDebugFlightParameters();
-            Game.Instance.ApplyGraphicsOptions();
+            Game.Instance.ApplyGameOptions();
             returnToParentMenu.Invoke();
             UIAudioManager.Instance.Play("ui-confirm");
         }

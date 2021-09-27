@@ -72,7 +72,7 @@ namespace Core.Player {
 
         public void OnEnable() {
             pauseUIInputModule.cancel.action.performed += _cancelAction;
-            Game.OnGraphicsSettingsApplied += OnGraphicsSettingsApplied;
+            Game.OnGameSettingsApplied += OnGameSettingsApplied;
             Game.OnVRStatus += SetVRStatus;
             ResetMouseToCentre();
             FdConsole.Instance.Clear();
@@ -80,11 +80,11 @@ namespace Core.Player {
 
         public void OnDisable() {
             pauseUIInputModule.cancel.action.performed -= _cancelAction;
-            Game.OnGraphicsSettingsApplied -= OnGraphicsSettingsApplied;
+            Game.OnGameSettingsApplied -= OnGameSettingsApplied;
             Game.OnVRStatus -= SetVRStatus;
         }
 
-        public void OnGraphicsSettingsApplied() {
+        public void OnGameSettingsApplied() {
             foreach (var gameCamera in flatScreenGameplayCamera.GetComponentsInChildren<Camera>()) {
                 gameCamera.fieldOfView = Preferences.Instance.GetFloat("graphics-field-of-view");
             }

@@ -33,11 +33,11 @@ namespace Core {
     public class Game : Singleton<Game> {
         
         public delegate void RestartLevelAction();
-        public delegate void GraphicsSettingsApplyAction();
+        public delegate void GameSettingsApplyAction();
         public delegate void GamePauseAction(bool enabled);
         public delegate void VRToggledAction(bool enabled);
         public static event RestartLevelAction OnRestart;
-        public static event GraphicsSettingsApplyAction OnGraphicsSettingsApplied;
+        public static event GameSettingsApplyAction OnGameSettingsApplied;
         public static event GamePauseAction OnPauseToggle;
         public static event VRToggledAction OnVRStatus;
 
@@ -89,7 +89,7 @@ namespace Core {
             // if there's a user object when the game starts, enable input (usually in the editor!)
             FindObjectOfType<ShipPlayer>()?.User.EnableGameInput();
             LoadBindings();
-            ApplyGraphicsOptions();
+            ApplyGameOptions();
 
             // We use a custom canvas cursor to work in VR and pancake
             Cursor.visible = false;
@@ -120,11 +120,14 @@ namespace Core {
             }
         }
 
-        public void ApplyGraphicsOptions() {
-            if (OnGraphicsSettingsApplied != null) {
-                OnGraphicsSettingsApplied();
+        public void ApplyGameOptions() {
+            if (OnGameSettingsApplied != null) {
+                OnGameSettingsApplied();
             }
+            ApplyGraphicsOptions();
+        }
 
+        private void ApplyGraphicsOptions() {
             var urp = (UniversalRenderPipelineAsset) GraphicsSettings.currentRenderPipeline;
             urp.renderScale = Preferences.Instance.GetFloat("graphics-render-scale");
             var msaa = Preferences.Instance.GetString("graphics-anti-aliasing");
@@ -246,7 +249,7 @@ namespace Core {
                 _levelLoader.LoadedLevelData.startPosition.z = shipPosition.z;
 
                 // set up graphics settings (e.g. camera FoV) + VR status (cameras, radial fog etc)
-                ApplyGraphicsOptions();
+                ApplyGameOptions();
                 NotifyVRStatus();
 
                 yield return _levelLoader.HideLoadingScreen();
@@ -345,7 +348,7 @@ namespace Core {
                 yield return new WaitForSeconds(0.5f);
                 yield return SceneManager.LoadSceneAsync("Main Menu");
                 yield return new WaitForEndOfFrame();
-                ApplyGraphicsOptions();
+                ApplyGameOptions();
                 yield return new WaitForEndOfFrame();
                 NotifyVRStatus();
                 FreeCursor();

@@ -12,18 +12,18 @@ namespace Core.MapData {
 
         public void Start() {
             _mapMagicTerrain = GetComponent<MapMagicObject>();
-            OnGraphicsOptionsApplied();
+            OnGameOptionsApplied();
         }
 
         private void OnEnable() {
-            Game.OnGraphicsSettingsApplied += OnGraphicsOptionsApplied;
+            Game.OnGameSettingsApplied += OnGameOptionsApplied;
         }
 
         void OnDisable() {
-            Game.OnGraphicsSettingsApplied -= OnGraphicsOptionsApplied;
+            Game.OnGameSettingsApplied -= OnGameOptionsApplied;
         }
 
-        void OnGraphicsOptionsApplied() {
+        void OnGameOptionsApplied() {
             var terrainLOD = Preferences.Instance.GetFloat("graphics-terrain-geometry-lod");
             var pixelError = MathfExtensions.Remap(10, 100, 50, 0, terrainLOD);
             var textureHQDistance = Preferences.Instance.GetFloat("graphics-terrain-texture-distance");

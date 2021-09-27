@@ -22,13 +22,13 @@ public class ShipCamera : MonoBehaviour {
     private Camera[] _cameras;
     
     public void OnEnable() {
-        Game.OnGraphicsSettingsApplied += SetBaseFov;
+        Game.OnGameSettingsApplied += SetBaseFov;
         _cameras = GetComponentsInChildren<Camera>();
         SetBaseFov();
     }
     
     public void OnDisable() {
-        Game.OnGraphicsSettingsApplied -= SetBaseFov;
+        Game.OnGameSettingsApplied -= SetBaseFov;
     }
 
     public void Reset() {
