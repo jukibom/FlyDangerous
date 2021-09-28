@@ -9,8 +9,8 @@ namespace Game_UI {
         public GameObject crosshair;
         public GameObject arrow;
 
-        private RawImage _crosshairImage;
-        private RawImage _arrowImage;
+        private Image _crosshairImage;
+        private Image _arrowImage;
 
         public Vector2 mousePositionNormalised = Vector2.zero;
 
@@ -18,8 +18,8 @@ namespace Game_UI {
 
         // Start is called before the first frame update
         void Start() {
-            _crosshairImage = crosshair.GetComponent<RawImage>();
-            _arrowImage = arrow.GetComponent<RawImage>();
+            _crosshairImage = crosshair.GetComponent<Image>();
+            _arrowImage = arrow.GetComponent<Image>();
         }
 
         // Update is called once per frame
