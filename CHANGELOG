@@ -1,6 +1,8 @@
 ﻿0.4.0
 New:
     * Added new ship, the Calidris!
+    * Added Time Trial map selection
+    * Added ability to select ship and colors (in new Profile section from main menu)
     * Added additional cockpit indicators to calidris (g-force, assist status, limiter, lights, boost status)
     * Added independent thrusters with shader effect + spacial audio emitters
     * Lots of new sound effects in the cockpit and multiplayer-aware boost + thruster sounds
@@ -35,19 +37,20 @@ Changes:
     * Checkpoint collision checking now uses velocity-based raycasts and should work with any arbitrary speed
     * Cleaned up the bindings UI - now within one tab with related bindings grouped together
     * Minor change to options UI - small `+` button replaced with full header with animation
+    * Tweaked exact positions of sun light sources
 
 Fixes:
     * Fog no longer interacts with transparent objects (e.g. checkpoint)
     * VR view no longer brighter in right eye on terrain v1 (?!)
     * Cockpit camera position is now clamped for ridiculously fast builds
     * Options menu correctly re-initialises on show (previously maintained unsaved changes)
-    * Tweaked exact positions of sun light sources
     * Space dust no longer fails to move origin with ship
     * Split timer fade out works correctly if two checkpoints are hit close together (would fade out super fast as an extra co-routine would start)
     * Fixed race condition with floating origin as it previously updated outside the physics update loop (oops!)
     * Mouse widget UI elements resets to center if mouse input is disabled (Thank you Lignar!)
     * [Linux] Mouse constrains to window correctly (Thank you Lignar!)
     * [Linux] Scroll speed + direction now consistent with windows build (Thank you Lignar!)
+    * Converted mouse widget to proper unity sprites - should no longer have white fringes :| 
 
 0.3.0
 New:
