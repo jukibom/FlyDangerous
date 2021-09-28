@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Misc {
@@ -14,11 +15,28 @@ namespace Misc {
     public static class FdEnum {
         
         public static T FromId<T>(IEnumerable<T> enums, int id) where T : IFdEnum {
-            return enums.Single(l => l.Id == id);
+            var fdEnums = enums as T[] ?? enums.ToArray();
+            try {
+                return fdEnums.Single(l => l.Id == id);
+
+            }
+            catch {
+                var firstElement = fdEnums.First();
+                Debug.Log($"Failed to find enum with id {id}, returning first element {firstElement.Name}");
+                return firstElement;
+            }
         }
         
         public static T FromString<T>(IEnumerable<T> enums, string name) where T : IFdEnum {
-            return enums.Single(l => l.Name == name);
+            var fdEnums = enums as T[] ?? enums.ToArray();
+            try {
+                return fdEnums.Single(l => l.Name == name);
+            }
+            catch {
+                var firstElement = fdEnums.First();
+                Debug.Log($"Failed to parse enum string {name}, returning first element {firstElement.Name}");
+                return firstElement;
+            }
         }
         
         public static void PopulateDropDown<T>(
