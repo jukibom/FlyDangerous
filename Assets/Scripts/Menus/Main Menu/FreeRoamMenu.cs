@@ -39,6 +39,7 @@ namespace Menus.Main_Menu {
 
             gameObject.SetActive(true);
             defaultActiveButton.Select();
+            UpdateSeedField();
             _animator.SetBool(open, true);
         }
 
@@ -49,7 +50,6 @@ namespace Menus.Main_Menu {
         }
 
         private void OnEnable() {
-            seedInput.text = Guid.NewGuid().ToString();
             _levelData = null;
         }
 
@@ -57,6 +57,10 @@ namespace Menus.Main_Menu {
             if (seedInput.text.Length == 0) {
                 seedInput.text = Guid.NewGuid().ToString();
             }
+        }
+
+        public void OnLocationChanged() {
+            UpdateSeedField();
         }
 
         public void StartFreeRoam() {
@@ -69,6 +73,12 @@ namespace Menus.Main_Menu {
             levelData.location = Location.FromId(locationDropdown.value);
 
             FdNetworkManager.Instance.StartGameLoadSequence(SessionType.Singleplayer, levelData);
+        }
+
+        private void UpdateSeedField() {
+            var location = Location.FromId(locationDropdown.value);
+            seedInput.interactable = location.IsTerrain;
+            seedInput.text = location.IsTerrain ? Guid.NewGuid().ToString() : "<LOCATION SEED NOT NEEDED>";
         }
     }
 }
