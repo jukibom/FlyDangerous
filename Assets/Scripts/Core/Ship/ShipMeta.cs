@@ -13,7 +13,11 @@ namespace Core.Ship {
         public int Id { get; private set; }
         public string Name { get; private set; }
         public string FullName { get; private set; }
-        public string PrefabToLoad { get; private set; }
+        private string _prefabToLoad;
+        public string PrefabToLoad {
+            get => $"Ships/{_prefabToLoad}";
+            private set => _prefabToLoad = value;
+        }
         public string Description { get; private set; }
 
         private ShipMeta(int id, string name, string fullName, string prefabToLoad, string description) {
