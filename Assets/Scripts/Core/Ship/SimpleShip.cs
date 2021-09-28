@@ -137,7 +137,7 @@ namespace Core.Ship {
         public virtual void SetThrusterColor(string htmlColor) {
             var color = ParseColor(htmlColor);
             foreach (var thruster in GetComponentsInChildren<Thruster>()) {
-                thruster.thrustColor = color;
+                thruster.ThrustColor = color;
             }
         }
 
@@ -176,7 +176,7 @@ namespace Core.Ship {
         protected Color ParseColor(string htmlColor) {
             if (!ColorUtility.TryParseHtmlString(htmlColor, out var color)) {
                 color = Color.red;
-                Debug.LogWarning("Failed to parse html color " + color);
+                Debug.LogWarning("Failed to parse html color " + htmlColor);
             }
 
             return color;

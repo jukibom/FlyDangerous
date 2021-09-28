@@ -12,6 +12,7 @@ public class TopMenu : MonoBehaviour
 {
     [SerializeField] private SinglePlayerMenu singlePlayerMenu;
     [SerializeField] private MultiPlayerMenu multiPlayerMenu;
+    [SerializeField] private ProfileMenu profileMenu;
     [SerializeField] private OptionsMenu optionsMenu;
     [SerializeField] private Button defaultActiveButton;
     private Animator _animator;
@@ -44,6 +45,12 @@ public class TopMenu : MonoBehaviour
     public void OpenMultiPlayerMenu() {
         UIAudioManager.Instance.Play("ui-dialog-open");
         multiPlayerMenu.Show();
+        Hide();
+    }
+
+    public void OpenProfileMenu() {
+        UIAudioManager.Instance.Play("ui-dialog-open");
+        profileMenu.Show();
         Hide();
     }
         

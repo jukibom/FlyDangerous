@@ -12,6 +12,14 @@ namespace Core.Ship {
         [SerializeField] public Color thrustColor;
         [SerializeField] public Color thrustRingColor;
 
+        public Color ThrustColor {
+            get => thrustColor;
+            set {
+                thrustColor = value;
+                _thrusterMaterial?.SetColor(thrustColorProperty, thrustColor);
+            }
+        }
+        
         public bool isLarge;
         
         public float TargetThrust {
@@ -28,7 +36,7 @@ namespace Core.Ship {
         private static readonly int thrustRingColorProperty = Shader.PropertyToID("_Ring_Color");
 
 
-        private void Start() {
+        private void Awake() {
             _thrusterMaterial = thrusterRenderer.material;
             _thrusterMaterial.SetColor(thrustColorProperty, thrustColor);
             _thrusterMaterial.SetColor(thrustRingColorProperty, thrustRingColor);
