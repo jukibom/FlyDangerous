@@ -235,7 +235,7 @@ namespace Core {
                 return;
             }
 
-            if (Game.Instance.SessionStatus != SessionStatus.LobbyMenu) {
+            if (Game.Instance.SessionStatus == SessionStatus.InGame) {
                 // joining mid-game checks
                 if (!Game.Instance.IsGameHotJoinable) {
                     RejectPlayerConnection(conn , "Game is currently running and does not permit joining during the match.");
