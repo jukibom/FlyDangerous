@@ -51,7 +51,6 @@ namespace Core.Scores {
             try {
                 var filename = FilenameHash(levelData);
                 var fileLoc = Path.Combine(Application.persistentDataPath, "Save", "Records", $"{filename}");
-                Debug.Log("Loading from" + fileLoc);
                 using var file = new FileStream(fileLoc, FileMode.Open, FileAccess.Read, FileShare.Read);
                 using var reader = new StreamReader(file);
                 var json = reader.ReadToEnd();
