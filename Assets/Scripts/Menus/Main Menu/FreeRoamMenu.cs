@@ -67,10 +67,12 @@ namespace Menus.Main_Menu {
             startButton.interactable = false;
             
             var levelData = _levelData ?? new LevelData();
+            var location = Location.FromId(locationDropdown.value);
+            
             levelData.gameType = GameType.FreeRoam;
-            levelData.terrainSeed = seedInput.text;
+            levelData.terrainSeed = location.IsTerrain ? seedInput.text : "";
             levelData.environment = Environment.FromId(environmentDropdown.value);
-            levelData.location = Location.FromId(locationDropdown.value);
+            levelData.location = location;
 
             FdNetworkManager.Instance.StartGameLoadSequence(SessionType.Singleplayer, levelData);
         }
