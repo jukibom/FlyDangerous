@@ -2,6 +2,7 @@ using System.Linq;
 using Audio;
 using Core;
 using Core.MapData;
+using Misc;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -17,6 +18,13 @@ namespace Menus.Main_Menu {
 
         [SerializeField] private Text levelName;
         [SerializeField] private Image levelThumbnail;
+
+        [SerializeField] private Text personalBest;
+        [SerializeField] private Text platinumTarget;
+        [SerializeField] private Text goldTarget;
+        [SerializeField] private Text silverTarget;
+        [SerializeField] private Text bronzeTarget;
+        [SerializeField] private GameObject platinumMedalContainer;
         
         private Level _level;
 
@@ -68,8 +76,24 @@ namespace Menus.Main_Menu {
             levelName.text = level.Name;
             levelThumbnail.sprite = level.Thumbnail;
 
-            // TODO: Personal bests
-        }
+            var score = level.Score;
+            var bestTime = score.PersonalBestTotalTime;
+            personalBest.text = bestTime > 0 ? TimeExtensions.TimeSecondsToString(bestTime) : "NONE";
 
+            var platinumTargetTime = level.Data.authorTimeTarget;
+            var goldTargetTime = platinumTargetTime * 1.05f;
+            var silverTargetTime = platinumTargetTime * 1.25f;
+            var bronzeTargetTime = platinumTargetTime * 1.7f;
+
+            platinumTarget.text = TimeExtensions.TimeSecondsToString(platinumTargetTime);
+            goldTarget.text = TimeExtensions.TimeSecondsToString(goldTargetTime);
+            silverTarget.text = TimeExtensions.TimeSecondsToString(silverTargetTime);
+            bronzeTarget.text = TimeExtensions.TimeSecondsToString(bronzeTargetTime);
+            
+            // if user hasn't beaten platinum, hide it!
+            platinumMedalContainer.gameObject.SetActive(score.HasPlayedPreviously &&  bestTime <= platinumTargetTime);
+            
+            // TODO: show a medal icon associated with users' time
+        }
     }
 }

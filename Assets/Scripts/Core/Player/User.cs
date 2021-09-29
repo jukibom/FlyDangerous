@@ -27,6 +27,7 @@ namespace Core.Player {
         [SerializeField] public MouseWidget mouseWidget;
         [SerializeField] public TimeDisplay totalTimeDisplay;
         [SerializeField] public TimeDisplay splitTimeDisplay;
+        [SerializeField] public TimeDisplay splitTimeDeltaDisplay;
         private bool _alternateFlightControls;
 
         private Vector2 _mousePositionScreen;

@@ -4,7 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Audio;
 using Core;
+using Core.MapData;
 using Core.Player;
+using Core.Scores;
+using Game_UI;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,10 +25,14 @@ public class Track : MonoBehaviour {
     private bool _complete;
     [CanBeNull] private User _user;
     [CanBeNull] private Coroutine _splitFader;
+    [CanBeNull] private Coroutine _splitDeltaFader;
     
     public bool IsEndCheckpointValid => hitCheckpoints.Count >= Checkpoints.Count - 2; // remove start and end
 
-    private float timeMs;
+    private float _timeSeconds;
+    private List<float> _splits;
+
+    private Score _previousBestScore;
 
     private void OnEnable() {
         Game.OnRestart += InitialiseTrack;
@@ -43,7 +50,7 @@ public class Track : MonoBehaviour {
                 ship.transform.position = start.transform.position;
             }
         }
-        else {
+        else if (Checkpoints.Count > 0) {
             Debug.LogWarning("Checkpoints loaded with no start block! Is this intentional?");
         }
         
@@ -56,15 +63,18 @@ public class Track : MonoBehaviour {
             ResetTimer();
             StopTimer();
         }
+
+        _previousBestScore = Score.ScoreForLevel(Game.Instance.LoadedLevelData);
     }
 
     public void ResetTimer() {
         _complete = false;
-        timeMs = 0;
+        _timeSeconds = 0;
+        _splits = new List<float>();
         
         // reset timer text to 0, hide split timer
         if (_user) {
-            _user.totalTimeDisplay.SetTimeMs(0);
+            _user.totalTimeDisplay.SetTimeSeconds(0);
             _user.totalTimeDisplay.textBox.color = new Color(1f, 1f, 1f, 1);
             _user.splitTimeDisplay.textBox.color = new Color(1f, 1f, 1f, 0);
         }
@@ -79,7 +89,7 @@ public class Track : MonoBehaviour {
         if (_user != null) {
             if (Checkpoints.Count > 0) {
                 ResetTimer();
-                timeMs = -2.5f;
+                _timeSeconds = -2.5f;
                 isActive = true;
                 _complete = false;
                 
@@ -110,53 +120,72 @@ public class Track : MonoBehaviour {
     public void FinishTimer() {
         _complete = true;
     }
+    
+    IEnumerator FadeTimer(TimeDisplay timeDisplay, Color color) {
+        timeDisplay.textBox.color = color;
+        while (timeDisplay.textBox.color.a > 0.0f) {
+            timeDisplay.textBox.color = new Color(color.r, color.g, color.b,
+                timeDisplay.textBox.color.a - (Time.unscaledDeltaTime / 3));
+            yield return null;
+        }
+    }
 
     public void CheckpointHit(Checkpoint checkpoint, AudioSource checkpointHitAudio) {
-        if (isActive) {
+        if (isActive && _user) {
             var hitCheckpoint = hitCheckpoints.Find(c => c == checkpoint);
-
-            if (hitCheckpoint && hitCheckpoint.Type == CheckpointType.End) {
-                _user.totalTimeDisplay.GetComponent<Text>().color = new Color(0, 1, 0, 1);
-
-                if (!FindObjectOfType<Game>().ShipParameters.ToJsonString()
-                    .Equals(ShipPlayer.ShipParameterDefaults.ToJsonString())) {
-                    // you dirty debug cheater!
-                    _user.totalTimeDisplay.GetComponent<Text>().color = new Color(1, 1, 0, 1);
-                }
-
-                FinishTimer();
-            }
-
             if (!hitCheckpoint) {
                 // new checkpoint, record it and split timer
                 hitCheckpoints.Add(checkpoint);
                 checkpointHitAudio.Play();
+                
+                // store split time
+                if (checkpoint.Type != CheckpointType.Start) {
+                    _splits.Add(_timeSeconds);
+                    if (_splitDeltaFader != null) StopCoroutine(_splitDeltaFader);
+                    if (_previousBestScore.HasPlayedPreviously && _previousBestScore.PersonalBestTimeSplits.Count >= _splits.Count) {
+                        var index = _splits.Count - 1;
+                        var previousBestSplit = _previousBestScore.PersonalBestTimeSplits[index];
+                        var deltaSplit = _timeSeconds - previousBestSplit;
+                        Debug.Log(deltaSplit);
+                        _user.splitTimeDeltaDisplay.SetTimeSeconds(deltaSplit, true);
+                        var color = deltaSplit > 0 ? Color.red : Color.green;
+                        _user.splitTimeDeltaDisplay.textBox.color = color;
+                        _splitDeltaFader = StartCoroutine(FadeTimer(_user.splitTimeDeltaDisplay, color));
+                    }
+                }
+
                 // update split display and fade out
                 if (checkpoint.Type == CheckpointType.Check) {
-                    _user.splitTimeDisplay.SetTimeMs(timeMs);
+                    _user.splitTimeDisplay.SetTimeSeconds(_timeSeconds);
+                    if (_splitFader != null) StopCoroutine(_splitFader);
+                    _splitFader = StartCoroutine(FadeTimer(_user.splitTimeDisplay, Color.white));
+                }
+                
+                if (checkpoint.Type == CheckpointType.End) {
+                    if (_splitDeltaFader != null) StopCoroutine(_splitDeltaFader);
 
-                    // TODO: make this fade-out generic and reuse across the copy notification in pause menu
-                    _user.splitTimeDisplay.textBox.color = new Color(1f, 1f, 1f, 1f);
-
-                    IEnumerator FadeText() {
-                        while (_user.splitTimeDisplay.textBox.color.a > 0.0f) {
-                            _user.splitTimeDisplay.textBox.color = new Color(1f, 1f, 1f,
-                                _user.splitTimeDisplay.textBox.color.a - (Time.unscaledDeltaTime / 2));
-                            yield return null;
-                        }
+                    // TODO: Make this more generalised and implement a tinker tier for saving these times
+                    if (!FindObjectOfType<Game>().ShipParameters.ToJsonString()
+                        .Equals(ShipPlayer.ShipParameterDefaults.ToJsonString())) {
+                        // you dirty debug cheater!
+                        _user.totalTimeDisplay.GetComponent<Text>().color = new Color(1, 1, 0, 1);
                     }
 
-                    if (_splitFader != null) {
-                        StopCoroutine(_splitFader);
+                    else {
+                        _user.totalTimeDisplay.GetComponent<Text>().color = new Color(0, 1, 0, 1);
+                        var score = Score.NewPersonalBest(Game.Instance.LoadedLevelData, _timeSeconds, _splits);
+                        score.Save();
                     }
-                    _splitFader = StartCoroutine(FadeText());
+
+                    FinishTimer();
+                    // TODO: End screen
                 }
             }
         }
     }
 
     private void ReplaceCheckpoints(List<Checkpoint> checkpoints) {
-        foreach (var checkpoint in Checkpoints) {
+        foreach (var checkpoint in checkpoints) {
             Destroy(checkpoint.gameObject);
         }
 
@@ -176,8 +205,8 @@ public class Track : MonoBehaviour {
 
         if (isActive && !_complete && _user.totalTimeDisplay != null) {
             _user.totalTimeDisplay.textBox.color = new Color(1f, 1f, 1f, 1f);
-            timeMs += Time.fixedDeltaTime;
-            _user.totalTimeDisplay.SetTimeMs(Math.Abs(timeMs));
+            _timeSeconds += Time.fixedDeltaTime;
+            _user.totalTimeDisplay.SetTimeSeconds(Math.Abs(_timeSeconds));
         }
     }
 }

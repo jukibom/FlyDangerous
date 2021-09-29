@@ -48,8 +48,12 @@ namespace Core.MapData {
         public LevelDataVector3<float> gravity = new LevelDataVector3<float>(0, 0, 0);
         public LevelDataVector3<float> startPosition = new LevelDataVector3<float>();
         public LevelDataVector3<float> startRotation = new LevelDataVector3<float>();
+
+        public float authorTimeTarget;
         
         [CanBeNull] public List<CheckpointLocation> checkpoints;
+        
+        public string NameSlug => name.Replace(" ", "-").ToLower();
 
         public string ToJsonString() {
             return JsonConvert.SerializeObject(this, Formatting.Indented);

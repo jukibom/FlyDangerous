@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Core.Scores;
 using Misc;
 using UnityEngine;
 
@@ -9,15 +10,14 @@ namespace Core.MapData {
         public static Level Level1C => new Level(2, "Around the station", "around-the-station", GameType.TimeTrial);
         public static Level Level1D => new Level(3, "Around the station", "around-the-station", GameType.TimeTrial);
         
-        public int Id { get; private set; }
-        public string Name { get; private set; }
-        public GameType GameType { get; private set; }
+        public int Id { get; }
+        public string Name { get; }
+        public GameType GameType { get; }
         
         private readonly string _jsonPath;
         public LevelData Data => LevelData.FromJsonString(Resources.Load<TextAsset>($"Levels/{_jsonPath}/level").text);
         public Sprite Thumbnail => Resources.Load<Sprite>($"Levels/{_jsonPath}/thumbnail");
-        
-        // TODO: Store and load these in a sane format somewhere ...
+        public Score Score => Score.ScoreForLevel(Data);
         public string PersonalBest => "Some amazing time";
         public int[] PersonalBestSplits => new[] { 500, 500, 500 };
 

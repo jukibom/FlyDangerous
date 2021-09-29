@@ -82,6 +82,99 @@ MonoBehaviour:
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
   m_PresetInfoIsWorld: 0
+--- !u!1 &248508241412382464
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1041662465160359981}
+  - component: {fileID: 3412684253164461195}
+  - component: {fileID: 7738092022452043819}
+  - component: {fileID: 8127159044063131905}
+  m_Layer: 5
+  m_Name: SplitTimerDeltaDisplay
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1041662465160359981
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 248508241412382464}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1767139774795322250}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -164.6}
+  m_SizeDelta: {x: 300, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &3412684253164461195
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 248508241412382464}
+  m_CullTransparentMesh: 1
+--- !u!114 &7738092022452043819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 248508241412382464}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: 2a10b83737e7e4a418a8e42486809645, type: 3}
+    m_FontSize: 20
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 0
+    m_MaxSize: 52
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: 00:00:00:00
+--- !u!114 &8127159044063131905
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 248508241412382464}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfde8d571d894a045b90700f04508571, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textBox: {fileID: 0}
 --- !u!1 &1759817732732695163
 GameObject:
   m_ObjectHideFlags: 0
@@ -1060,7 +1153,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1767139774195400331}
   - component: {fileID: 1767139774195400325}
-  - component: {fileID: 1767139774195400330}
+  - component: {fileID: 1653120290986714600}
   m_Layer: 7
   m_Name: Crosshair
   m_TagString: Untagged
@@ -1095,7 +1188,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1767139774195400328}
   m_CullTransparentMesh: 1
---- !u!114 &1767139774195400330
+--- !u!114 &1653120290986714600
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1104,7 +1197,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1767139774195400328}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
@@ -1115,13 +1208,16 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 1a859eecd54d807419a940b4271ad841, type: 3}
-  m_UVRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
+  m_Sprite: {fileID: 21300000, guid: 1a859eecd54d807419a940b4271ad841, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &1767139774263956249
 GameObject:
   m_ObjectHideFlags: 0
@@ -1486,7 +1582,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1767139774717608278}
   - component: {fileID: 1767139774717608272}
-  - component: {fileID: 1767139774717608273}
+  - component: {fileID: 8876349238685051974}
   m_Layer: 7
   m_Name: Mouse Input
   m_TagString: Untagged
@@ -1521,7 +1617,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1767139774717608279}
   m_CullTransparentMesh: 1
---- !u!114 &1767139774717608273
+--- !u!114 &8876349238685051974
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1530,10 +1626,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1767139774717608279}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 2100000, guid: dfd0c684a2d370b4994922f114627b51, type: 2}
+  m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -1541,13 +1637,16 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 40acdda1d372abc48bd53475d980044c, type: 3}
-  m_UVRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
+  m_Sprite: {fileID: 21300000, guid: 40acdda1d372abc48bd53475d980044c, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &1767139774795322251
 GameObject:
   m_ObjectHideFlags: 0
@@ -1580,6 +1679,7 @@ RectTransform:
   m_Children:
   - {fileID: 1767139774263956248}
   - {fileID: 1767139775530616145}
+  - {fileID: 1041662465160359981}
   m_Father: {fileID: 1767139775869506801}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2057,6 +2157,7 @@ MonoBehaviour:
   mouseWidget: {fileID: 1767139773992118426}
   totalTimeDisplay: {fileID: 1767139774263956245}
   splitTimeDisplay: {fileID: 1767139775530616144}
+  splitTimeDeltaDisplay: {fileID: 8127159044063131905}
   movementEnabled: 1
   pauseMenuEnabled: 1
   boostButtonEnabledOverride: 0
@@ -4538,11 +4639,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
---- !u!224 &1220547744581305427 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
-  m_PrefabInstance: {fileID: 1767139775139670171}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1220547744581305436 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 609786914283039943, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
@@ -4554,6 +4650,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!224 &1220547744581305427 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+  m_PrefabInstance: {fileID: 1767139775139670171}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1767139775859944704
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4691,11 +4792,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
---- !u!224 &1220547743825379784 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
-  m_PrefabInstance: {fileID: 1767139775859944704}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1220547743825379783 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 609786914283039943, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
@@ -4707,6 +4803,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!224 &1220547743825379784 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+  m_PrefabInstance: {fileID: 1767139775859944704}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1941952670020079691
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8713,6 +8814,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 143129199565294183, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
+      propertyPath: m_Text
+      value: Num Sub [Keyboard]
+      objectReference: {fileID: 0}
     - target: {fileID: 162358405593229630, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -9059,7 +9164,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 605509426503640380, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: (not bound)
+      value: Button 14 [Saitek X52 Pro Flight Control System]
       objectReference: {fileID: 0}
     - target: {fileID: 605509426503640382, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Layer
@@ -9347,7 +9452,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 605509426764409907, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: (not bound)
+      value: Button 7 [Saitek X52 Pro Flight Control System]
       objectReference: {fileID: 0}
     - target: {fileID: 605509426771798827, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Layer
@@ -9375,7 +9480,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 605509426787171437, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: (not bound)
+      value: (unbound secondary)
       objectReference: {fileID: 0}
     - target: {fileID: 605509426787171439, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Layer
@@ -9899,7 +10004,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 605509427172824632, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: (not bound)
+      value: (unbound secondary)
       objectReference: {fileID: 0}
     - target: {fileID: 605509427172824634, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Layer
@@ -10011,7 +10116,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 605509427236237172, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: (not bound)
+      value: (unbound secondary)
       objectReference: {fileID: 0}
     - target: {fileID: 605509427236237174, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Layer
@@ -10323,7 +10428,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 605509427475755733, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: (not bound)
+      value: (unbound secondary)
       objectReference: {fileID: 0}
     - target: {fileID: 605509427475755735, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Layer
@@ -10559,7 +10664,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 605509427614023504, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: (not bound)
+      value: (unbound secondary)
       objectReference: {fileID: 0}
     - target: {fileID: 605509427614023506, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Layer
@@ -10667,7 +10772,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 605509427674605846, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: Shift [Keyboard]
+      value: Capslock [Keyboard]
       objectReference: {fileID: 0}
     - target: {fileID: 605509427693747616, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
@@ -10923,7 +11028,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 605509427888044280, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: Button South [Gamepad]
+      value: Button 31 [Saitek X52 Pro Flight Control System]
       objectReference: {fileID: 0}
     - target: {fileID: 605509427888044282, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Layer
@@ -11347,7 +11452,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 605509428166474550, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: (not bound)
+      value: Button 8 [Saitek X52 Pro Flight Control System]
       objectReference: {fileID: 0}
     - target: {fileID: 605509428182476827, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Layer
@@ -11359,7 +11464,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 605509428217806411, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: Button East [Gamepad]
+      value: Button 4 [Saitek X52 Pro Flight Control System]
       objectReference: {fileID: 0}
     - target: {fileID: 605509428226165688, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
@@ -11751,7 +11856,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 605509428454833541, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: (not bound)
+      value: (unbound secondary)
       objectReference: {fileID: 0}
     - target: {fileID: 605509428454833543, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Layer
@@ -11907,7 +12012,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 605509428521482743, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: (not bound)
+      value: (unbound primary)
       objectReference: {fileID: 0}
     - target: {fileID: 605509428532767448, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
@@ -12317,6 +12422,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1473386018836554741, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
+      propertyPath: m_Text
+      value: (unbound primary)
+      objectReference: {fileID: 0}
     - target: {fileID: 1484222793987765734, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -12643,11 +12752,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2516878670210019881, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: (not bound)
+      value: (unbound primary)
       objectReference: {fileID: 0}
     - target: {fileID: 2590457255266798615, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: Right Stick/X [Gamepad]
+      value: (unbound primary)
       objectReference: {fileID: 0}
     - target: {fileID: 2630059611338745293, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_AnchorMax.y
@@ -12860,6 +12969,10 @@ PrefabInstance:
     - target: {fileID: 2902271708791001920, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Layer
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2913861908548426205, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
+      propertyPath: m_Text
+      value: E [Keyboard]
       objectReference: {fileID: 0}
     - target: {fileID: 2920775191968170198, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_AnchorMax.y
@@ -13415,7 +13528,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3602638467674133717, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: (not bound)
+      value: Rz [Saitek X52 Pro Flight Control System]
       objectReference: {fileID: 0}
     - target: {fileID: 3612928998458148844, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_AnchorMax.y
@@ -14539,7 +14652,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4883695309915637155, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: (not bound)
+      value: Button 24 [Saitek X52 Pro Flight Control System]
       objectReference: {fileID: 0}
     - target: {fileID: 4905431239509479709, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_AnchorMax.y
@@ -14673,6 +14786,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 4991343700703151131, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
+      propertyPath: m_Text
+      value: (unbound primary)
+      objectReference: {fileID: 0}
     - target: {fileID: 4995658245706080773, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
       value: 
@@ -14793,6 +14910,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5185625841443318916, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
+      propertyPath: m_Text
+      value: Q [Keyboard]
+      objectReference: {fileID: 0}
     - target: {fileID: 5226700140597841455, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Layer
       value: 5
@@ -14867,7 +14988,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5368698625547651504, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: (not bound)
+      value: Stick X [Saitek X52 Pro Flight Control System]
       objectReference: {fileID: 0}
     - target: {fileID: 5416209882387573253, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
@@ -15159,11 +15280,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5941628827446237068, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: (not bound)
+      value: Stick Y [Saitek X52 Pro Flight Control System]
       objectReference: {fileID: 0}
     - target: {fileID: 5941628827514302095, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: Left Stick/Y [Gamepad]
+      value: (unbound primary)
       objectReference: {fileID: 0}
     - target: {fileID: 5949424611548826262, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_AnchorMax.y
@@ -18579,7 +18700,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6331818276908778497, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: (not bound)
+      value: Button 26 [Saitek X52 Pro Flight Control System]
       objectReference: {fileID: 0}
     - target: {fileID: 6337488843607998051, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_AnchorMax.y
@@ -18627,7 +18748,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6411261817921116031, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: (not bound)
+      value: Z [Saitek X52 Pro Flight Control System]
       objectReference: {fileID: 0}
     - target: {fileID: 6482050616409859902, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_AnchorMax.y
@@ -18732,6 +18853,10 @@ PrefabInstance:
     - target: {fileID: 6574139176421637841, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6741321601341525836, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
+      propertyPath: m_Text
+      value: Button 25 [Saitek X52 Pro Flight Control System]
       objectReference: {fileID: 0}
     - target: {fileID: 6759526268596757948, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_AnchorMax.y
@@ -19383,7 +19508,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7783911990291979328, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: Left Stick/X [Gamepad]
+      value: (unbound primary)
       objectReference: {fileID: 0}
     - target: {fileID: 7800692737490076772, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_AnchorMax.y
@@ -19436,6 +19561,10 @@ PrefabInstance:
     - target: {fileID: 7945346082103027707, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -0.20790863
+      objectReference: {fileID: 0}
+    - target: {fileID: 8004207660106975861, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
+      propertyPath: m_Text
+      value: Button 27 [Saitek X52 Pro Flight Control System]
       objectReference: {fileID: 0}
     - target: {fileID: 8017324880180492787, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_AnchorMax.y
@@ -20807,7 +20936,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8906387344554055074, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: (not bound)
+      value: 2 [Keyboard]
       objectReference: {fileID: 0}
     - target: {fileID: 8906387344954956481, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_AnchorMax.y
@@ -20891,7 +21020,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8938888169853657614, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: (not bound)
+      value: 1 [Keyboard]
       objectReference: {fileID: 0}
     - target: {fileID: 8938888170701252265, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_AnchorMax.y
@@ -21043,7 +21172,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9121375237079384286, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: (not bound)
+      value: Button 3 [Saitek X52 Pro Flight Control System]
       objectReference: {fileID: 0}
     - target: {fileID: 9128982090657086597, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Layer
@@ -21052,6 +21181,10 @@ PrefabInstance:
     - target: {fileID: 9147095401837471094, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Layer
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9162917317052959566, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
+      propertyPath: m_Text
+      value: Num Plus [Keyboard]
       objectReference: {fileID: 0}
     - target: {fileID: 9174448794300345294, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_AnchorMax.y
@@ -21119,6 +21252,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
+--- !u!224 &1767139775098253398 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8027640669048419933, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
+  m_PrefabInstance: {fileID: 8638410843055048203}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1767139775098253421 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8027640669048419942, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
@@ -21130,8 +21268,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07a106139e28456781912e06ceac08bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!224 &1767139775098253398 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 8027640669048419933, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
-  m_PrefabInstance: {fileID: 8638410843055048203}
-  m_PrefabAsset: {fileID: 0}
