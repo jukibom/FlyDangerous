@@ -349,7 +349,6 @@ namespace Core.Player {
 
         // When a client connects, update all other ships on that local client
         public override void OnStartClient() {
-            Debug.Log("CLIENT START MODEL REFRESH TIME");
             foreach (var shipPlayer in FindObjectsOfType<ShipPlayer>()) {
                 if (!shipPlayer.isLocalPlayer) {
                     shipPlayer.RefreshShipModel();

@@ -68,7 +68,6 @@ namespace Menus.Main_Menu {
             UIAudioManager.Instance.Play("ui-confirm");
             var selectedLevel = EventSystem.current.currentSelectedGameObject.GetComponent<LevelUIElement>();
             SetSelectedLevel(selectedLevel.LevelData);
-            Debug.Log($"{selectedLevel.LevelData.Name} ({selectedLevel.LevelData.Id}) selected");
         }
 
         private void SetSelectedLevel(Level level) {
