@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using Core.MapData;
+using Misc;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -47,40 +49,65 @@ namespace Core.Scores {
         private static ScoreData LoadJson(LevelData levelData) {
             // try to find file at save location
             try {
-                var fileLoc = Path.Combine(Application.persistentDataPath, "Save", "Records", $"{levelData.NameSlug}.json");
+                var filename = FilenameHash(levelData);
+                var fileLoc = Path.Combine(Application.persistentDataPath, "Save", "Records", $"{filename}");
                 Debug.Log("Loading from" + fileLoc);
                 using var file = new FileStream(fileLoc, FileMode.Open, FileAccess.Read, FileShare.Read);
                 using var reader = new StreamReader(file);
                 var json = reader.ReadToEnd();
-                var saveData = JsonConvert.DeserializeObject<ScoreData>(json);
+                var scoreData = JsonConvert.DeserializeObject<ScoreData>(json);
                 
-                // TODO: hash check
-                return saveData;
+                var scoreHash = ScoreHash(scoreData.raceTime, levelData);
+                if (scoreHash != scoreData.hash) {
+                    Debug.LogWarning("Failed integrity check on save data.");
+                    return new ScoreData();
+                }
+                return scoreData;
             }
             catch {
-                Debug.Log("Loading level score preferences");
                 return new ScoreData();
             }
         }
 
+        private static string FilenameHash(LevelData levelData) {
+            // generate the filename from a hash combination of name, checkpoints and location - this way they'll always be unique.
+            var checkpoints =
+                levelData.checkpoints.ConvertAll(checkpoint => checkpoint.position.ToString() + checkpoint.rotation);
+            var checkpointText = "";
+            foreach (var checkpoint in checkpoints) {
+                checkpointText += checkpoint;
+            }
+            return Hash.ComputeSha256Hash(
+                levelData.name + checkpointText + levelData.location.Name);
+        }
+
+        private static string ScoreHash(float score, LevelData levelData) {
+            // generate the filename from a hash combination of score, checkpoints and location.
+            var checkpoints =
+                levelData.checkpoints.ConvertAll(checkpoint => checkpoint.position.ToString() + checkpoint.rotation);
+            var checkpointText = "";
+                foreach (var checkpoint in checkpoints) {
+                    checkpointText += checkpoint;
+                }
+            return Hash.ComputeSha256Hash(score.ToString(CultureInfo.InvariantCulture) + checkpointText + levelData.location.Name);
+        }
+
         public void Save() {
             // Creates the path to the save file (make dir if needed).
-            var saveLoc = Path.Combine(Application.persistentDataPath, "Save", "Records", $"{_levelData.NameSlug}.json");
+            var filename = FilenameHash(_levelData);
+            var saveLoc = Path.Combine(Application.persistentDataPath, "Save", "Records", $"{filename}");
             var directoryLoc = Path.GetDirectoryName(saveLoc);
             if (directoryLoc != null) {
                 Directory.CreateDirectory(directoryLoc);
             }
 
+            _scoreData.hash = ScoreHash(_scoreData.raceTime, _levelData);
+
             var json = _scoreData.ToJsonString();
-            Debug.Log("Saving to " + saveLoc);
 
             using (var file = new FileStream(saveLoc, FileMode.Create, FileAccess.Write, FileShare.Read)) {
-                /* Another using block, this is because StreamWriter extends IDisposable,
-                   Which means that it will need to be disposed of later. */
                 using (var writer = new StreamWriter(file)) {
-                    // StreamWriter is able to write strings out to streams.
                     writer.Write(json);
-                    // Flush the data within the underlaying buffer to it's end point.
                     writer.Flush();
                 }
             }

@@ -7,7 +7,7 @@ namespace Core.MapData {
     public class Location : IFdEnum {
         // Declare locations here and add to the List() function below
         public static Location Space => new Location(0, "Space", "Space", false);
-        public static Location TestSpaceStation => new Location(1, "Test Space Station", "SpaceStation", false);
+        public static Location TestSpaceStation => new Location(1, "Space Station", "SpaceStation", false);
         public static Location TerrainV1 => new Location(2, "Flat World", "TerrainV1", true);
         public static Location TerrainV2 => new Location(3, "Canyons", "TerrainV2", true);
         public static Location TerrainV3 => new Location(4, "Biome World", "TerrainV3", true);

@@ -51,9 +51,7 @@ namespace Core.MapData {
 
         public float authorTimeTarget;
         
-        [CanBeNull] public List<CheckpointLocation> checkpoints;
-        
-        public string NameSlug => name.Replace(" ", "-").ToLower();
+        public List<CheckpointLocation> checkpoints;
 
         public string ToJsonString() {
             return JsonConvert.SerializeObject(this, Formatting.Indented);
