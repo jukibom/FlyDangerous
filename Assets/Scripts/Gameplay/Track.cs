@@ -26,6 +26,10 @@ public class Track : MonoBehaviour {
     [CanBeNull] private User _user;
     [CanBeNull] private Coroutine _splitFader;
     [CanBeNull] private Coroutine _splitDeltaFader;
+
+    private static readonly Color goldColor = new Color(1, 0.98f, 0.4f);
+    private static readonly Color silverColor = new Color(0.6f, 0.6f, 0.6f);
+    private static readonly Color bronzeColor = new Color(1, 0.43f, 0);
     
     public bool IsEndCheckpointValid => hitCheckpoints.Count >= Checkpoints.Count - 2; // remove start and end
 
@@ -174,7 +178,10 @@ public class Track : MonoBehaviour {
                     else {
                         _user.totalTimeDisplay.GetComponent<Text>().color = new Color(0, 1, 0, 1);
                         var score = Score.NewPersonalBest(Game.Instance.LoadedLevelData, _timeSeconds, _splits);
+                        _previousBestScore = score;
                         score.Save();
+                        
+                        UpdateTargetTimeElements();
                     }
 
                     FinishTimer();
@@ -192,6 +199,50 @@ public class Track : MonoBehaviour {
         hitCheckpoints = new List<Checkpoint>();
         InitialiseTrack();
     }
+
+    private void UpdateTargetTimeElements() {
+        var levelData = Game.Instance.LoadedLevelData;
+        var score = _previousBestScore;
+
+        var targetType = _user.targetTimeTypeDisplay;
+        var targetTimer = _user.targetTimeDisplay;
+
+        var personalBest = score.PersonalBestTotalTime;
+        var platinumTargetTime = levelData.authorTimeTarget;
+        var goldTargetTime = Score.GoldTimeTarget(levelData);
+        var silverTargetTime = Score.SilverTimeTarget(levelData);
+        var bronzeTargetTime = Score.BronzeTimeTarget(levelData);
+
+        // not played yet
+        if (personalBest == 0) {
+            targetType.text = "TARGET BRONZE";
+            targetType.color = bronzeColor;
+            targetTimer.SetTimeSeconds(bronzeTargetTime);
+            return;
+        }
+
+        if (personalBest < goldTargetTime) {
+            targetType.text = "PERSONAL BEST";
+            targetType.color = Color.white;
+            targetTimer.SetTimeSeconds(personalBest);
+        }
+        else if (personalBest < silverTargetTime) {
+            targetType.text = "TARGET GOLD";
+            targetType.color = goldColor;
+            targetTimer.SetTimeSeconds(goldTargetTime);
+        }
+        else if (personalBest < bronzeTargetTime) {
+            targetType.text = "TARGET SILVER";
+            targetType.color = silverColor;
+            targetTimer.SetTimeSeconds(silverTargetTime);
+        }
+        else {
+            targetType.text = "TARGET BRONZE";
+            targetType.color = bronzeColor;
+            targetTimer.SetTimeSeconds(bronzeTargetTime);
+        }
+        
+    }
     
     private void FixedUpdate() {
         // failing to get user in early stages due to modular loading? 
@@ -199,6 +250,7 @@ public class Track : MonoBehaviour {
             var ship = ShipPlayer.FindLocal;
             if (ship) {
                 _user = ship.User;
+                UpdateTargetTimeElements();
             }
             return;
         }

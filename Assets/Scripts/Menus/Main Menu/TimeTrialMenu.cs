@@ -2,6 +2,7 @@ using System.Linq;
 using Audio;
 using Core;
 using Core.MapData;
+using Core.Scores;
 using Misc;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -80,9 +81,9 @@ namespace Menus.Main_Menu {
             personalBest.text = bestTime > 0 ? TimeExtensions.TimeSecondsToString(bestTime) : "NONE";
 
             var platinumTargetTime = level.Data.authorTimeTarget;
-            var goldTargetTime = platinumTargetTime * 1.05f;
-            var silverTargetTime = platinumTargetTime * 1.25f;
-            var bronzeTargetTime = platinumTargetTime * 1.7f;
+            var goldTargetTime = Score.GoldTimeTarget(level.Data);
+            var silverTargetTime = Score.SilverTimeTarget(level.Data);
+            var bronzeTargetTime = Score.BronzeTimeTarget(level.Data);
 
             platinumTarget.text = TimeExtensions.TimeSecondsToString(platinumTargetTime);
             goldTarget.text = TimeExtensions.TimeSecondsToString(goldTargetTime);

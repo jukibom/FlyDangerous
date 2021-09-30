@@ -28,6 +28,18 @@ namespace Core.Scores {
         public static Score NewPersonalBest(LevelData levelData, float raceTime, List<float> splitTime) {
             return new Score(levelData, raceTime, splitTime);
         }
+
+        public static float GoldTimeTarget(LevelData level) {
+            return level.authorTimeTarget * 1.05f;
+        }
+        
+        public static float SilverTimeTarget(LevelData level) {
+            return level.authorTimeTarget * 1.25f;
+        }
+        
+        public static float BronzeTimeTarget(LevelData level) {
+            return level.authorTimeTarget * 1.7f;
+        }
         
         private ScoreData _scoreData;
         private LevelData _levelData;

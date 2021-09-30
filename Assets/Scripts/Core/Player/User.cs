@@ -10,6 +10,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.InputSystem.Users;
+using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
 
 namespace Core.Player {
@@ -28,6 +29,8 @@ namespace Core.Player {
         [SerializeField] public TimeDisplay totalTimeDisplay;
         [SerializeField] public TimeDisplay splitTimeDisplay;
         [SerializeField] public TimeDisplay splitTimeDeltaDisplay;
+        [SerializeField] public TimeDisplay targetTimeDisplay;
+        [SerializeField] public Text targetTimeTypeDisplay;
         private bool _alternateFlightControls;
 
         private Vector2 _mousePositionScreen;
