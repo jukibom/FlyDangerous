@@ -81,6 +81,7 @@ public class Track : MonoBehaviour {
             _user.totalTimeDisplay.SetTimeSeconds(0);
             _user.totalTimeDisplay.textBox.color = new Color(1f, 1f, 1f, 1);
             _user.splitTimeDisplay.textBox.color = new Color(1f, 1f, 1f, 0);
+            _user.splitTimeDeltaDisplay.textBox.color = new Color(1f, 1f, 1f, 0);
         }
     }
 
