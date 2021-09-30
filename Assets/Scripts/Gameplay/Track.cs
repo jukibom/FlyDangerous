@@ -27,9 +27,9 @@ public class Track : MonoBehaviour {
     [CanBeNull] private Coroutine _splitFader;
     [CanBeNull] private Coroutine _splitDeltaFader;
 
-    private static readonly Color goldColor = new Color(1, 0.98f, 0.4f);
-    private static readonly Color silverColor = new Color(0.6f, 0.6f, 0.6f);
-    private static readonly Color bronzeColor = new Color(1, 0.43f, 0);
+    private static readonly Color goldColor = new Color(1, 0.98f, 0.4f, 1);
+    private static readonly Color silverColor = new Color(0.6f, 0.6f, 0.6f, 1);
+    private static readonly Color bronzeColor = new Color(1, 0.43f, 0, 1);
     
     public bool IsEndCheckpointValid => hitCheckpoints.Count >= Checkpoints.Count - 2; // remove start and end
 
@@ -151,7 +151,6 @@ public class Track : MonoBehaviour {
                         var index = _splits.Count - 1;
                         var previousBestSplit = _previousBestScore.PersonalBestTimeSplits[index];
                         var deltaSplit = _timeSeconds - previousBestSplit;
-                        Debug.Log(deltaSplit);
                         _user.splitTimeDeltaDisplay.SetTimeSeconds(deltaSplit, true);
                         var color = deltaSplit > 0 ? Color.red : Color.green;
                         _user.splitTimeDeltaDisplay.textBox.color = color;
@@ -178,10 +177,12 @@ public class Track : MonoBehaviour {
 
                     else {
                         _user.totalTimeDisplay.GetComponent<Text>().color = new Color(0, 1, 0, 1);
-                        var score = Score.NewPersonalBest(Game.Instance.LoadedLevelData, _timeSeconds, _splits);
-                        _previousBestScore = score;
-                        score.Save();
-                        
+                        if (_timeSeconds < _previousBestScore.PersonalBestTotalTime) {
+                            var score = Score.NewPersonalBest(Game.Instance.LoadedLevelData, _timeSeconds, _splits);
+                            _previousBestScore = score;
+                            score.Save();
+                        }
+
                         UpdateTargetTimeElements();
                     }
 
@@ -202,47 +203,48 @@ public class Track : MonoBehaviour {
     }
 
     private void UpdateTargetTimeElements() {
-        var levelData = Game.Instance.LoadedLevelData;
-        var score = _previousBestScore;
+        if (Game.Instance.LoadedLevelData.gameType.Id == GameType.TimeTrial.Id) {
+            var levelData = Game.Instance.LoadedLevelData;
+            var score = _previousBestScore;
 
-        var targetType = _user.targetTimeTypeDisplay;
-        var targetTimer = _user.targetTimeDisplay;
+            var targetType = _user.targetTimeTypeDisplay;
+            var targetTimer = _user.targetTimeDisplay;
+            targetTimer.textBox.color = Color.white;
 
-        var personalBest = score.PersonalBestTotalTime;
-        var platinumTargetTime = levelData.authorTimeTarget;
-        var goldTargetTime = Score.GoldTimeTarget(levelData);
-        var silverTargetTime = Score.SilverTimeTarget(levelData);
-        var bronzeTargetTime = Score.BronzeTimeTarget(levelData);
+            var personalBest = score.PersonalBestTotalTime;
+            var goldTargetTime = Score.GoldTimeTarget(levelData);
+            var silverTargetTime = Score.SilverTimeTarget(levelData);
+            var bronzeTargetTime = Score.BronzeTimeTarget(levelData);
 
-        // not played yet
-        if (personalBest == 0) {
-            targetType.text = "TARGET BRONZE";
-            targetType.color = bronzeColor;
-            targetTimer.SetTimeSeconds(bronzeTargetTime);
-            return;
-        }
+            // not played yet
+            if (personalBest == 0) {
+                targetType.text = "TARGET BRONZE";
+                targetType.color = bronzeColor;
+                targetTimer.SetTimeSeconds(bronzeTargetTime);
+                return;
+            }
 
-        if (personalBest < goldTargetTime) {
-            targetType.text = "PERSONAL BEST";
-            targetType.color = Color.white;
-            targetTimer.SetTimeSeconds(personalBest);
+            if (personalBest < goldTargetTime) {
+                targetType.text = "PERSONAL BEST";
+                targetType.color = Color.white;
+                targetTimer.SetTimeSeconds(personalBest);
+            }
+            else if (personalBest < silverTargetTime) {
+                targetType.text = "TARGET GOLD";
+                targetType.color = goldColor;
+                targetTimer.SetTimeSeconds(goldTargetTime);
+            }
+            else if (personalBest < bronzeTargetTime) {
+                targetType.text = "TARGET SILVER";
+                targetType.color = silverColor;
+                targetTimer.SetTimeSeconds(silverTargetTime);
+            }
+            else {
+                targetType.text = "TARGET BRONZE";
+                targetType.color = bronzeColor;
+                targetTimer.SetTimeSeconds(bronzeTargetTime);
+            }
         }
-        else if (personalBest < silverTargetTime) {
-            targetType.text = "TARGET GOLD";
-            targetType.color = goldColor;
-            targetTimer.SetTimeSeconds(goldTargetTime);
-        }
-        else if (personalBest < bronzeTargetTime) {
-            targetType.text = "TARGET SILVER";
-            targetType.color = silverColor;
-            targetTimer.SetTimeSeconds(silverTargetTime);
-        }
-        else {
-            targetType.text = "TARGET BRONZE";
-            targetType.color = bronzeColor;
-            targetTimer.SetTimeSeconds(bronzeTargetTime);
-        }
-        
     }
     
     private void FixedUpdate() {
