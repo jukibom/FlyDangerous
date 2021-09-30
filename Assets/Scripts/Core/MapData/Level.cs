@@ -9,8 +9,10 @@ namespace Core.MapData {
         public static Level HoldOnToYourStomach => new Level(1, "Hold on to your stomach", "hold-on-to-your-stomach", GameType.TimeTrial);
         public static Level AroundTheStation => new Level(2, "Around the station", "around-the-station", GameType.TimeTrial);
         public static Level SpeedIsHalfTheBattle => new Level(3, "Speed is Only Half the Battle", "speed-is-only-half-the-battle", GameType.TimeTrial);
-        public static Level YouMightWannaHoldBack => new Level(3, "You Might Wanna Hold Back a Bit", "you-might-wanna-hold-back-a-bit", GameType.TimeTrial);
-        public static Level LimiterMastery => new Level(3, "Limiter Mastery", "limiter-mastery", GameType.TimeTrial);
+        public static Level YouMightWannaHoldBack => new Level(4, "You Might Wanna Hold Back a Bit", "you-might-wanna-hold-back-a-bit", GameType.TimeTrial);
+        public static Level DeathValley => new Level(5, "Death Valley", "death-valley", GameType.TimeTrial);
+
+        public static Level LimiterMastery => new Level(6, "Limiter Mastery", "limiter-mastery", GameType.TimeTrial);
 
         public int Id { get; }
         public string Name { get; }
@@ -29,7 +31,7 @@ namespace Core.MapData {
         }
         
         public static IEnumerable<Level> List() {
-            return new[] { GentleStart, HoldOnToYourStomach, AroundTheStation, SpeedIsHalfTheBattle, YouMightWannaHoldBack, LimiterMastery };
+            return new[] { GentleStart, HoldOnToYourStomach, AroundTheStation, SpeedIsHalfTheBattle, YouMightWannaHoldBack, DeathValley, LimiterMastery };
         }
 
         public static Level FromString(string locationString) {
