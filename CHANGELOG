@@ -1,17 +1,21 @@
 ﻿0.4.0
 New:
     * Added new ship, the Calidris!
-    * Added Time Trial map selection
+    * Some much-needed Time Trial TLC
+        * Added some new PLAYABLE MAPS and it only took six months
+        * Added new Time Trial map selection + Level data system
+        * Added target medal times to map data
+        * Added saved / loaded personal bests
+        * Added split time comparison to previous best
+        * Added snapshot sfx to checkpoint 
     * Added ability to select ship and colors (in new Profile section from main menu)
     * Added additional cockpit indicators to calidris (g-force, assist status, limiter, lights, boost status)
     * Added independent thrusters with shader effect + spacial audio emitters
     * Lots of new sound effects in the cockpit and multiplayer-aware boost + thruster sounds
-    * Added ship thruster trails (thanks Tavi!)
+    * Added ship thruster trails (thank you very much to Tavi for spending time with me on that!)
     * Added new biome test world with 8k textures, let me know how this performs!
     * Ship lights and thrusters are shown on other ships in multiplayer (local player lights are prioritised in renderer)
     * Added basic support for gravity
-    * Added snapshot sfx to checkpoint 
-    * Cockpit camera FOV increase in non-VR mode under forward acceleration
     * New Throttle input options:
         * Ability to use the full throttle axis ("Forward Only" mode)
         * New binding to toggle reverse for forward only mode 
@@ -22,21 +26,22 @@ New:
         * Mouse power curve - from 1 to 3, this raises input to the power of the slider to follow tighter curve
         * Added ability to force relative mouse on when rotational flight assist is disabled
     * Added audio volume preferences - master, music, sound effects and ui can be set independently
+    * Cockpit camera FOV increase in non-VR mode under forward acceleration
 
 Changes:
     * Updated to Unity 2021.1.17f1
-    * Flight model changes:
+    * Flight model changes to improve maneuverability while not boosting (thanks, Carda!)
         * Halved the default boost multiplier
         * Halved the torque multiplier
-        * Doubled the regular non-boost base thrust N
+        * Doubled the base thrust force to compensate
     * Increased terrain world draw distance by 1 tile in all graphics scenarios (so anywhere from 33 to 100 percent increase)
     * Free roam now has ability to select location (removed experimental terrain flag)
     * Updated Cloudy terrain to have a more interesting skybox
-    * Split boost sound between front and back and made boost action multiplayer-aware
-    * VR HMD position => input bind (default F11) now works in pause menu etc, should *always* restore from preferences
+    * Split boost sound between front and back and made boost action + sound multiplayer-aware (the doppler effect is *AWESOME*)
+    * VR HMD position => input bind (default F11) now works in pause menu etc, should *always* restore position from preferences
     * Checkpoint collision checking now uses velocity-based raycasts and should work with any arbitrary speed
     * Cleaned up the bindings UI - now within one tab with related bindings grouped together
-    * Minor change to options UI - small `+` button replaced with full header with animation
+    * Minor change to options UI - small `+` button replaced with full header with animations - people were missing it and it's a lot more obvious now.
     * Tweaked exact positions of sun light sources
 
 Fixes:
