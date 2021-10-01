@@ -177,7 +177,8 @@ public class Track : MonoBehaviour {
 
                     else {
                         _user.totalTimeDisplay.GetComponent<Text>().color = new Color(0, 1, 0, 1);
-                        if (_timeSeconds < _previousBestScore.PersonalBestTotalTime) {
+                        // if new run OR better score, save!
+                        if (_previousBestScore.PersonalBestTotalTime == 0 || _timeSeconds < _previousBestScore.PersonalBestTotalTime) {
                             var score = Score.NewPersonalBest(Game.Instance.LoadedLevelData, _timeSeconds, _splits);
                             _previousBestScore = score;
                             score.Save();
