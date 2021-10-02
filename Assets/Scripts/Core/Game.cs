@@ -195,7 +195,7 @@ namespace Core {
             LockCursor();
             
             IEnumerator WaitForAllPlayersLoaded() {
-                yield return FindObjectsOfType<LoadingPlayer>().All(loadingPlayer => loadingPlayer.IsLoaded && loadingPlayer.connectionToClient.isReady) 
+                yield return FindObjectsOfType<LoadingPlayer>().All(loadingPlayer => loadingPlayer.IsLoaded) 
                     ? null 
                     : new WaitForFixedUpdate();
             }
