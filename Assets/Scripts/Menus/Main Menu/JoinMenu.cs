@@ -76,8 +76,9 @@ namespace Menus.Main_Menu {
             // save entries
             OnTextEntryChange();
             
-            string hostAddress = serverIPAddress.text;
-            ushort port = Convert.ToUInt16(Int16.Parse(serverPort.text));
+            string hostAddress = serverIPAddress.text.Length > 0 ? serverIPAddress.text : serverIPAddress.placeholder.GetComponent<Text>().text;
+            var portText = serverPort.text.Length > 0 ? serverPort.text : serverPort.placeholder.GetComponent<Text>().text;
+            ushort port = Convert.ToUInt16(Int16.Parse(portText));
             Debug.Log("Connecting to " + hostAddress + ":" + port);
             
             FdNetworkManager.Instance.networkAddress = hostAddress;
