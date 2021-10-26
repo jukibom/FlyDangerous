@@ -252,7 +252,7 @@ namespace Core.Player {
                     // clean up existing ship
                     if (prev != value && prev != null) {
                         Debug.Log("Cleaning up existing ... " + prev);
-                        Destroy(prev?.Entity().gameObject);
+                        Destroy(prev.Entity().gameObject);
                     }
                     
                     // set cockpit visibility mode
@@ -467,7 +467,7 @@ namespace Core.Player {
             // Check for checkpoint collisions (layer mask 9) using an inverse velocity ray rather than the inbuilt box check
             // use the velocity * 4 to make damn sure we capture everything.
             // use a box cast to eliminate the problem of missing at the extreme edges.
-            var raycastHitCount = Physics.BoxCastNonAlloc(shipTransform.position, new Vector3(5, frameVelocity.magnitude * 4, 3), frameVelocity.normalized, 
+            var raycastHitCount = Physics.BoxCastNonAlloc(start, new Vector3(5, frameVelocity.magnitude * 4, 3), frameVelocity.normalized, 
                 _raycastHits, Quaternion.identity, frameVelocity.magnitude, 1 << 9);
             
             // Debug.DrawRay(start, frameVelocity * 2 * -1, Color.red);
