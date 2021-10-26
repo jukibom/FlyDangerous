@@ -219,6 +219,9 @@ namespace Core.Player {
         [SyncVar] private string _trailColor;
         [SyncVar] private string _headLightsColor;
         
+        // ray-casting without per-frame allocation
+        private readonly RaycastHit[] _raycastHits = new RaycastHit[50];
+        
         private bool IsReady => _transform && _rigidbody && _serverReady;
         public bool IsRotationalFlightAssistActive => _flightAssistRotationalDampening;
         public float Velocity => Mathf.Round(_rigidbody.velocity.magnitude);
@@ -462,13 +465,15 @@ namespace Core.Player {
             var start = shipTransform.position + (frameVelocity * 2);   // + 1 to include the current frame
 
             // Check for checkpoint collisions (layer mask 9) using an inverse velocity ray rather than the inbuilt box check
-            // use the velocity * 4 to make damn sure we capture everything
-            var hits = Physics.RaycastAll(start, frameVelocity.normalized * -1, frameVelocity.magnitude * 4, 1 << 9,
-                QueryTriggerInteraction.Collide);
+            // use the velocity * 4 to make damn sure we capture everything.
+            // use a box cast to eliminate the problem of missing at the extreme edges.
+            var raycastHitCount = Physics.BoxCastNonAlloc(shipTransform.position, new Vector3(5, frameVelocity.magnitude * 4, 3), frameVelocity.normalized, 
+                _raycastHits, Quaternion.identity, frameVelocity.magnitude, 1 << 9);
             
             // Debug.DrawRay(start, frameVelocity * 2 * -1, Color.red);
-            
-            foreach (var raycastHit in hits) {
+
+            for (int i = 0; i < raycastHitCount; i ++) {
+                var raycastHit = _raycastHits[i];
                 var checkpoint = raycastHit.collider.GetComponentInParent<Checkpoint>();
                 if (checkpoint) {
                     checkpoint.Hit();
