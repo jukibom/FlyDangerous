@@ -135,10 +135,6 @@ namespace Menus.Options {
                 Preferences.Instance.SetFloat(sliderOption.preference, sliderOption.Value);
             }
 
-            // TODO: mouse sensitivity (save defaults here so it writes to config for now)
-            Preferences.Instance.SetFloat("mouseXSensitivity", Preferences.Instance.GetFloat("mouseXSensitivity"));
-            Preferences.Instance.SetFloat("mouseYSensitivity", Preferences.Instance.GetFloat("mouseYSensitivity"));
-            
             Preferences.Instance.Save();
         }
 
