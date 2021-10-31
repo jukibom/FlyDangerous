@@ -110,7 +110,7 @@ public class LobbyConfigurationPanel : MonoBehaviour
 
     public void ClampMaxPlayersInput() {
         try {
-            var value = Math.Min(Math.Max(float.Parse(maxPlayersInputField.text), 1), FdNetworkManager.maxPlayerLimit);
+            var value = Math.Min(Math.Max(float.Parse(maxPlayersInputField.text), 1), FdNetworkManager.MAXPlayerLimit);
             maxPlayersInputField.text = value.ToString("0");
         }
         catch {

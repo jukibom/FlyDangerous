@@ -390,9 +390,10 @@ GameObject:
   m_Component:
   - component: {fileID: 5348441963532606526}
   - component: {fileID: 7926466904788661996}
-  - component: {fileID: 6247869052788839305}
+  - component: {fileID: 4175871150849242769}
+  - component: {fileID: 8522863665227369495}
   m_Layer: 0
-  m_Name: '@NetworkManagerLobby'
+  m_Name: '@NetworkManager'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -431,7 +432,7 @@ MonoBehaviour:
   serverTickRate: 30
   offlineScene: 
   onlineScene: 
-  transport: {fileID: 6247869052788839305}
+  transport: {fileID: 8522863665227369495}
   networkAddress: localhost
   maxConnections: 16
   disconnectInactiveConnections: 0
@@ -446,7 +447,19 @@ MonoBehaviour:
   loadingPlayerPrefab: {fileID: 0}
   shipPlayerPrefab: {fileID: 0}
   maxPlayers: 128
---- !u!114 &6247869052788839305
+--- !u!114 &4175871150849242769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7966117636676226303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef4bffeda13d7a748973ff9204401c07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8522863665227369495
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
