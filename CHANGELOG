@@ -1,4 +1,17 @@
-﻿0.4.1
+﻿0.5.0
+New:
+    * Added new Checkpoint 3d model (much larger, circular)
+    * Added Steam integration
+    * Added Server Browser (Steam only)
+    
+Changes:
+    * Tweaked layout of lobby + time trial menus
+    * Converted ray check to box check for checkpoint collision
+    
+Fixed:
+    * Incorrect shadows on terrain worlds (light source below the generated terrain meant no shadows - fixed by making terrain two-sided for shadow generation)
+
+0.4.1
 Fixed:
     * Multiplayer failing to establish connection (null object check)
     * Multiplayer join menu could have empty textboxes (the placeholder text is fake)
