@@ -6,6 +6,7 @@ using Core.OnlineServices;
 using Core.Player;
 using JetBrains.Annotations;
 using kcp2k;
+using Menus.Main_Menu.Components;
 using Mirror;
 using Misc;
 using UnityEngine;
@@ -73,7 +74,7 @@ namespace Core {
             get => GetComponent<KcpTransport>()?.Port ?? 0;
             set => GetComponent<KcpTransport>().Port = value;
         }
-        
+
         [CanBeNull] public IOnlineService OnlineService { get; private set; }
         
         // Mirror's transport layer IMMEDIATELY severs the connection if the internal maxConnections limit is exceeded.

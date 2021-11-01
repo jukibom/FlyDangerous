@@ -1,9 +1,8 @@
-using System;
 using Core.Ship;
 using Misc;
 using UnityEngine;
 
-namespace Menus.Main_Menu {
+namespace Menus.Main_Menu.Components {
     public class ShipSelectionRenderer : MonoBehaviour {
         private GameObject _loadedShip;
         private Vector3 _targetScale;

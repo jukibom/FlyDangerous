@@ -5,6 +5,7 @@ using System.Linq;
 using Core.MapData;
 using JetBrains.Annotations;
 using Menus.Main_Menu;
+using Menus.Main_Menu.Components;
 using Mirror;
 using UnityEngine;
 using UnityEngine.UI;

@@ -10,9 +10,7 @@ using UnityEngine.UI;
 
 
 namespace Menus.Main_Menu {
-    public class TimeTrialMenu : MonoBehaviour {
-        [SerializeField] private SinglePlayerMenu singlePlayerMenu;
-        [SerializeField] private Button defaultActiveButton;
+    public class TimeTrialMenu : MenuBase {
         [SerializeField] private Button startButton;
         [SerializeField] private LevelUIElement levelUIElementPrefab;
         [SerializeField] private RectTransform levelPrefabContainer;
@@ -29,11 +27,7 @@ namespace Menus.Main_Menu {
         
         private Level _level;
 
-        private Animator _animator;
-        private static readonly int open = Animator.StringToHash("Open");
-
-        private void Awake() {
-            _animator = GetComponent<Animator>();
+        protected override void OnOpen() {
             var levels = Level.List();
             foreach (var level in levels) {
                 var levelButton = Instantiate(levelUIElementPrefab, levelPrefabContainer);
@@ -42,22 +36,11 @@ namespace Menus.Main_Menu {
             }
 
             SetSelectedLevel(levels.First());
-        }
-        public void Hide() {
-            gameObject.SetActive(false);
-        }
-
-        public void Show() {
             startButton.interactable = true;
-            gameObject.SetActive(true);
-            defaultActiveButton.Select();
-            _animator.SetBool(open, true);
         }
 
         public void ClosePanel() {
-            UIAudioManager.Instance.Play("ui-cancel");
-            singlePlayerMenu.Show();
-            Hide();
+            Cancel();
         }
         
         public void StartTimeTrial() {
@@ -66,7 +49,7 @@ namespace Menus.Main_Menu {
         }
 
         private void OnLevelSelected() {
-            UIAudioManager.Instance.Play("ui-confirm");
+            PlayApplySound();
             var selectedLevel = EventSystem.current.currentSelectedGameObject.GetComponent<LevelUIElement>();
             SetSelectedLevel(selectedLevel.LevelData);
         }

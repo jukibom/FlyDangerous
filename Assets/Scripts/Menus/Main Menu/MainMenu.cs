@@ -1,7 +1,6 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using Core;
+using Menus.Pause_Menu;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -26,6 +25,14 @@ namespace Menus.Main_Menu {
 
         public static bool FirstRun => Game.Instance?.menuFirstRun ?? true;
 
+        private void Start() {
+            //
+            // if(SteamManager.Initialized) {
+            //     string name = SteamFriends.GetPersonaName();
+            //     Debug.Log($"Your Steam name is {name}.");
+            // }
+        }
+
         void OnEnable() {
             SceneManager.sceneLoaded += OnEnvironmentLoadComplete;
             Game.OnVRStatus += OnVRStatus;
@@ -49,7 +56,7 @@ namespace Menus.Main_Menu {
 
         public void ShowDisconnectedDialog(string reason) {
             topMenu.gameObject.SetActive(false);
-            disconnectionDialog.Show();
+            disconnectionDialog.Open(topMenu);
             disconnectionDialog.Reason = reason;
         }
 
@@ -57,7 +64,7 @@ namespace Menus.Main_Menu {
             var lobby = FindObjectOfType<LobbyMenu>(true);
             if (lobby) {
                 topMenu.Hide();
-                lobby.Show();
+                lobby.Open(topMenu);
             }
             else {
                 Debug.LogWarning("Failed to find lobby!");

@@ -11,37 +11,20 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace Menus.Main_Menu {
-    public class LoadCustomMenu : MonoBehaviour {
+    public class LoadCustomMenu : MenuBase {
         [SerializeField] private SinglePlayerMenu singlePlayerMenu;
         [SerializeField] private InputField mapInfo;
         [SerializeField] private InputField saveInput;
         [SerializeField] private Text saveWarning;
-        [SerializeField] private Button defaultActiveButton;
         [SerializeField] private Button startButton;
-
         [CanBeNull] private LevelData _levelData;
 
-        private Animator _animator;
-
-        private void Awake() {
-            this._animator = this.GetComponent<Animator>();
-        }
-
-        public void Hide() {
-            this.gameObject.SetActive(false);
-        }
-
-        public void Show() {
+        protected override void OnOpen() {
             startButton.interactable = true;
-            gameObject.SetActive(true);
-            defaultActiveButton.Select();
-            _animator.SetBool("Open", true);
         }
         
         public void ClosePanel() {
-            UIAudioManager.Instance.Play("ui-cancel");
-            singlePlayerMenu.Show();
-            Hide();
+            Cancel();
         }
 
         private void OnEnable() {

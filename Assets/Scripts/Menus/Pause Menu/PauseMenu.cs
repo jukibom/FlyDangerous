@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using Core;
 using Core.Player;
+using Menus.Main_Menu;
 using UnityEngine.UI;
 
 namespace Menus.Pause_Menu {
@@ -14,8 +15,8 @@ namespace Menus.Pause_Menu {
         PausedOptionsMenu,
     }
     
-    public class PauseMenu : MonoBehaviour, IPointerMoveHandler {
-
+    public class PauseMenu : MenuBase, IPointerMoveHandler {
+        
         [Tooltip("Used to animate the main panel")] [SerializeField]
         private GameObject mainCanvas;
         
@@ -39,13 +40,16 @@ namespace Menus.Pause_Menu {
                 UpdatePauseGameState();
             }
         }
-        private Animator _panelAnimator;
         private RectTransform _rectTransform;
-        private static readonly int open = Animator.StringToHash("Open");
+
+        protected override void OnOpen() {
+            _menuState = PauseMenuState.PausedMainMenu;
+            mainPanel.Show();
+        }
 
         private void Start() {
+            animator = mainCanvas.GetComponent<Animator>();
             seedText.text = Game.Instance.IsTerrainMap ? "SEED: " + Game.Instance.Seed : "";
-            _panelAnimator = mainCanvas.GetComponent<Animator>();
             _rectTransform = GetComponent<RectTransform>();
             
             // basic non-paused without enabling input or playing sounds etc
@@ -81,26 +85,23 @@ namespace Menus.Pause_Menu {
         }
 
         public void Pause() {
-            UIAudioManager.Instance.Play("ui-dialog-open");
+            Open(null);
             MenuState = PauseMenuState.PausedMainMenu;
             mainPanel.HighlightResume();
-            _panelAnimator.SetBool(open, true);
         }
 
         public void Resume() {
-            UIAudioManager.Instance.Play("ui-cancel");
+            Cancel();
             MenuState = PauseMenuState.Unpaused;
-            _panelAnimator.SetBool(open, false);
         }
 
         public void Restart() {
-            UIAudioManager.Instance.Play("ui-confirm");
+            PlayApplySound();
             Resume();
             Game.Instance.RestartSession();
         }
 
         public void OpenOptionsPanel() {
-            UIAudioManager.Instance.Play("ui-dialog-open");
             MenuState = PauseMenuState.PausedOptionsMenu;
         }
 
@@ -110,13 +111,13 @@ namespace Menus.Pause_Menu {
         }
 
         public void Quit() {
-            UIAudioManager.Instance.Play("ui-confirm");
+            PlayApplySound();
             Resume();
             Game.Instance.LeaveSession();
         }
 
         public void CopyLocationToClipboard() {
-            UIAudioManager.Instance.Play("ui-confirm");
+            PlayApplySound();
             GUIUtility.systemCopyBuffer = Game.Instance.LevelDataAtCurrentPosition.ToJsonString();
             var copyConfirmTransform = copyConfirmationText.transform;
             copyConfirmTransform.localPosition = new Vector3(copyConfirmTransform.localPosition.x, 55, copyConfirmTransform.position.z);
@@ -161,7 +162,9 @@ namespace Menus.Pause_Menu {
                     user.ResetMouseToCentre();
                     break;
                 case PauseMenuState.PausedOptionsMenu:
-                    optionsPanel.Show();
+                    // TODO: use Progress instead (refactor this mad menu!!)
+                    PlayOpenSound();
+                    optionsPanel.Open(this);
                     mainPanel.Hide();
                     break;
             }

@@ -77,9 +77,10 @@ namespace Core.OnlineServices.SteamOnlineService {
             }
 
             Debug.Log("Setting lobby address " + SteamUser.GetSteamID().ToString());
-            
-            SteamMatchmaking.SetLobbyData(new CSteamID(ctx.m_ulSteamIDLobby), HostAddressVar, SteamUser.GetSteamID().ToString());
-            SteamMatchmaking.SetLobbyData(new CSteamID(ctx.m_ulSteamIDLobby), "name", SteamFriends.GetPersonaName() + "'s Game");
+            var steamId = new CSteamID(ctx.m_ulSteamIDLobby);
+            SteamMatchmaking.SetLobbyData(steamId, HostAddressVar, SteamUser.GetSteamID().ToString());
+            SteamMatchmaking.SetLobbyData(steamId, "name", SteamFriends.GetPersonaName() + "'s Game");
+            SteamMatchmaking.SetLobbyData(steamId, "gameType", "Free Roam");
             
             // TODO: Unset this on lobby destroy (oof)
             // TODO: Control this better generally
@@ -115,9 +116,11 @@ namespace Core.OnlineServices.SteamOnlineService {
                     lobbyId = ctx.m_ulSteamIDLobby.ToString(),
                     connectionAddress = SteamMatchmaking.GetLobbyData(steamId, HostAddressVar),
                     players = SteamMatchmaking.GetNumLobbyMembers(steamId),
+                    playersMax = SteamMatchmaking.GetLobbyMemberLimit(steamId),
                     name = SteamMatchmaking.GetLobbyData(steamId, "name"),
-                    gameType = SteamMatchmaking.GetLobbyData(steamId, "gameType")
+                    gameMode = SteamMatchmaking.GetLobbyData(steamId, "gameType"),
                 };
+                _getLobbyInfoTaskList.Remove(ctx.m_ulSteamIDLobby);
                 task.SetResult(lobbyInfo);
             }
         }

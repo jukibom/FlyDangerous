@@ -1,12 +1,12 @@
 using System;
 using Audio;
 using Core;
+using Menus.Pause_Menu;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Menus.Main_Menu {
-    public class DisconnectionDialog : MonoBehaviour {
-        [SerializeField] private TopMenu topMenu;
+    public class DisconnectionDialog : MenuBase {
         [SerializeField] private Text reasonText;
         
         public string Reason {
@@ -14,25 +14,8 @@ namespace Menus.Main_Menu {
             set => reasonText.text = value;
         }
 
-        private Animator _animator;
-
-        private void Awake() {
-            _animator = GetComponent<Animator>();
-        }
-        
-        public void Show() {
-            gameObject.SetActive(true);
-            _animator.SetBool("Open", true);
-        }
-
-        public void Hide() {
-            gameObject.SetActive(false);
-        }
-
         public void Close() {
-            UIAudioManager.Instance.Play("ui-cancel");
-            topMenu.Show();
-            Hide();
+            Cancel();
         }
     }
 }

@@ -1,43 +1,20 @@
 ﻿using Audio;
 using Core;
-using Core.MapData;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Menus.Main_Menu {
-    public class SinglePlayerMenu : MonoBehaviour {
-
-        [SerializeField] private Button defaultActiveButton;
-        [SerializeField] private TopMenu topMenu;
+    public class SinglePlayerMenu : MenuBase {
         [SerializeField] private TimeTrialMenu timeTrialMenu;
         [SerializeField] private FreeRoamMenu freeRoamMenu;
         [SerializeField] private LoadCustomMenu loadCustomMenu;
-        private Animator _animator;
-        
-        private void Awake() {
-            _animator = GetComponent<Animator>();
-        }
-        
-        public void Show() {
-            gameObject.SetActive(true);
-            _animator.SetBool("Open", true);
-            defaultActiveButton.Select();
-        }
-        
-        public void Hide() {
-            gameObject.SetActive(false);
-        }
 
-        public void ClosePanel() {
-            UIAudioManager.Instance.Play("ui-cancel");
-            topMenu.Show();
-            Hide();
-        }
-
-        public void Cancel() {
+        protected override void OnCancel() {
             Game.Instance.SessionStatus = SessionStatus.Offline;
             FdNetworkManager.Instance.StopAll();
-            ClosePanel();
+        }
+        
+        public void ClosePanel() {
+            Cancel();
         }
 
         public void OpenCampaignPanel() {
@@ -45,21 +22,15 @@ namespace Menus.Main_Menu {
         }
 
         public void OpenTimeTrialPanel() {
-            UIAudioManager.Instance.Play("ui-confirm");
-            timeTrialMenu.Show();
-            Hide();
+            Progress(timeTrialMenu);
         }
 
         public void OpenFreeRoamPanel() {
-            UIAudioManager.Instance.Play("ui-dialog-open");
-            freeRoamMenu.Show();
-            Hide();
+            Progress(freeRoamMenu);
         }
 
         public void OpenLoadCustomPanel() {
-            UIAudioManager.Instance.Play("ui-dialog-open");
-            loadCustomMenu.Show();
-            Hide();
+            Progress(loadCustomMenu);
         }
     }
 }

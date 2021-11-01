@@ -4,15 +4,16 @@ using System.Linq;
 using Audio;
 using Core;
 using Core.Ship;
+using Menus.Main_Menu.Components;
+using Menus.Pause_Menu;
 using UnityEngine;
 using UnityEngine.UI;
 using Button = UnityEngine.UI.Button;
 using Image = UnityEngine.UI.Image;
 
 namespace Menus.Main_Menu {
-    public class ProfileMenu : MonoBehaviour {
+    public class ProfileMenu : MenuBase {
 
-        [SerializeField] private Button defaultActiveButton;
         [SerializeField] private TopMenu topMenu;
 
         [SerializeField] private InputField playerNameTextField;
@@ -42,24 +43,12 @@ namespace Menus.Main_Menu {
         private string _playerShipTrailColor;
         private string _playerShipHeadLightsColor;
         
-        private Animator _animator;
         private List<ShipMeta> _ships;
         private ShipMeta _selectedShip;
         private bool _ready;
-        private static readonly int open = Animator.StringToHash("Open");
-
-        private void Awake() {
-            _animator = GetComponent<Animator>();
-            _ships = ShipMeta.List().ToList();
-            
-            LoadFromPreferences();
-        }
         
-        public void Show() {
-            gameObject.SetActive(true);
-            _animator.SetBool(open, true);
-            defaultActiveButton.Select();
-
+        protected override void OnOpen() {
+            _ships = ShipMeta.List().ToList();
             LoadFromPreferences();
         }
 
@@ -106,11 +95,6 @@ namespace Menus.Main_Menu {
             }
         }
 
-        public void Cancel() {
-            UIAudioManager.Instance.Play("ui-cancel");
-            ClosePanel();
-        }
-
         public void Apply() {
             Preferences.Instance.SetString("playerName", playerNameTextField.text);
             // TODO: Region
@@ -121,8 +105,8 @@ namespace Menus.Main_Menu {
             Preferences.Instance.SetString("playerShipTrailColor", _playerShipTrailColor);
             Preferences.Instance.SetString("playerShipHeadLightsColor", _playerShipHeadLightsColor);
             Preferences.Instance.Save();
-            UIAudioManager.Instance.Play("ui-confirm");
-            ClosePanel();
+            // we're going backward but with a positive apply sound so don't set the call chain in the previous menu
+            Progress(caller, false, false);
         }
 
         public void NextShip() {
@@ -227,16 +211,7 @@ namespace Menus.Main_Menu {
         private void UpdateShipCounter() {
             shipCounter.text = $"{_selectedShip.Id + 1} of {_ships.Count}";
         }
-        
-        private void Hide() {
-            gameObject.SetActive(false);
-        }
 
-        private void ClosePanel() {
-            topMenu.Show();
-            Hide();
-        }
-        
         Color ParseColor(string htmlColor) {
             if (!ColorUtility.TryParseHtmlString(htmlColor, out var color)) {
                 color = Color.red;

@@ -10,47 +10,24 @@ using Environment = Core.MapData.Environment;
 
 
 namespace Menus.Main_Menu {
-    public class FreeRoamMenu : MonoBehaviour {
+    public class FreeRoamMenu : MenuBase {
         [SerializeField] private SinglePlayerMenu singlePlayerMenu;
         [SerializeField] private InputField seedInput;
-        [SerializeField] private Button defaultActiveButton;
         [SerializeField] private Button startButton;
 
         [CanBeNull] private LevelData _levelData;
         [SerializeField] private Dropdown locationDropdown;
         [SerializeField] private Dropdown environmentDropdown;
 
-        private Animator _animator;
-        private static readonly int open = Animator.StringToHash("Open");
-
-        private void Awake() {
-            _animator = GetComponent<Animator>();
-            
+        protected override void OnOpen() {
             FdEnum.PopulateDropDown(Location.List(), locationDropdown, option => option.ToUpper());
             FdEnum.PopulateDropDown(Environment.List(), environmentDropdown, option => option.ToUpper());
-        }
-
-        public void Hide() {
-            gameObject.SetActive(false);
-        }
-
-        public void Show() {
-            startButton.interactable = true;
-
-            gameObject.SetActive(true);
-            defaultActiveButton.Select();
             UpdateSeedField();
-            _animator.SetBool(open, true);
-        }
-
-        public void ClosePanel() {
-            UIAudioManager.Instance.Play("ui-cancel");
-            singlePlayerMenu.Show();
-            Hide();
-        }
-
-        private void OnEnable() {
             _levelData = null;
+        }
+        
+        public void ClosePanel() {
+            Cancel();
         }
 
         public void OnSeedInputFieldChanged(string seed) {

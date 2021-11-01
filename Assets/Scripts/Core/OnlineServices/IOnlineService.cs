@@ -10,7 +10,7 @@ namespace Core.OnlineServices {
         public string name;
         public int players;
         public int playersMax;
-        public string gameType;
+        public string gameMode;
     }
     
     public interface IOnlineService {
