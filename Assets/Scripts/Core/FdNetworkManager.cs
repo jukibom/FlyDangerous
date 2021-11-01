@@ -2,16 +2,24 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Core.MapData;
+using Core.OnlineServices;
 using Core.Player;
+using JetBrains.Annotations;
 using kcp2k;
+using Menus.Main_Menu.Components;
 using Mirror;
 using Misc;
 using UnityEngine;
 
+#if !DISABLESTEAMWORKS
+using Core.OnlineServices.SteamOnlineService;
+using Mirror.FizzySteam;
+#endif
+
 namespace Core {
     public class FdNetworkManager : NetworkManager {
         
-        public const short maxPlayerLimit = 128;
+        public const short MAXPlayerLimit = 128;
         
         public static FdNetworkManager Instance => singleton as FdNetworkManager;
 
@@ -57,20 +65,41 @@ namespace Core {
         public List<LobbyPlayer> LobbyPlayers { get; } = new List<LobbyPlayer>();
         public List<LoadingPlayer> LoadingPlayers { get; } = new List<LoadingPlayer>();
         public List<ShipPlayer> ShipPlayers { get; } = new List<ShipPlayer>();
-        public KcpTransport NetworkTransport => GetComponent<KcpTransport>();
+        public string NetworkAddress {
+            get => networkAddress;
+            set => networkAddress = value;
+        }
 
+        public ushort NetworkPort {
+            get => GetComponent<KcpTransport>()?.Port ?? 0;
+            set => GetComponent<KcpTransport>().Port = value;
+        }
+
+        [CanBeNull] public IOnlineService OnlineService { get; private set; }
+        
         // Mirror's transport layer IMMEDIATELY severs the connection if the internal maxConnections limit is exceeded.
         // To work around this and have some sane messaging back to clients, we're using a server limit of 129 and
         // a "true" limit of 128. The additional slot is there just to allow a client to connect, receive a message
         // explaining why they're being kicked ... and then kicked. Aren't distributed systems fun?
-        public short maxPlayers = maxPlayerLimit;
+        public short maxPlayers = MAXPlayerLimit;
 
         // set to non-empty string to force password validation on connecting clients
         public static string serverPassword;
 
-        // TODO: This is gross (client attach object before connection attempt) but I'm almost out of fucks to give
         public JoinGameRequestMessage joinGameRequestMessage;
-        
+
+        // initialise steam network transport and online services if we're using steamworks
+        public override void Start() {
+            base.Start();
+#if !DISABLESTEAMWORKS
+            // use online services and steam mirror transport
+            OnlineService = new SteamOnlineService();
+            Destroy(GetComponent<KcpTransport>());
+            Transport.activeTransport = gameObject.AddComponent<FizzySteamworks>();
+            transport = Transport.activeTransport;
+#endif
+        }
+
         #region Start / Quit Game
         public void StartGameLoadSequence(SessionType sessionType, LevelData levelData) {
             if (NetworkServer.active) {
@@ -405,7 +434,6 @@ namespace Core {
 
         #endregion
         
-        
         #region Server Message Handlers
 
         private void OnJoinGameServerMsg(NetworkConnection conn, JoinGameRequestMessage message) { 
@@ -433,7 +461,7 @@ namespace Core {
                 }
 
                 var sessionStatus = Game.Instance.SessionStatus;
-                var levelData = Game.Instance.LoadedLevelData;;
+                var levelData = Game.Instance.LoadedLevelData;
                 
                 switch (sessionStatus) {
                     case SessionStatus.Development:
@@ -486,7 +514,6 @@ namespace Core {
         }
         
         #endregion
-        
         
         #region Client Message Handlers
         

@@ -3,19 +3,19 @@ using Audio;
 using Core;
 using Core.Player;
 using JetBrains.Annotations;
+using Menus.Main_Menu.Components;
 using Mirror;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Menus.Main_Menu {
-    public class LobbyMenu : MonoBehaviour {
+    public class LobbyMenu : MenuBase {
 
         [Header("UI")]
         [SerializeField] private MainMenu mainMenu;
         [SerializeField] private MultiPlayerMenu topMenu;
         [SerializeField] private UIButton startButton;
         [SerializeField] private Text headerText;
-        [SerializeField] private Button defaultActiveButton;
 
         [SerializeField] private Button loadCustomButton;
         [SerializeField] private LobbyConfigurationPanel lobbyConfigurationPanel;
@@ -23,27 +23,14 @@ namespace Menus.Main_Menu {
         [SerializeField] private InputField chatSendMessageInput;
         [SerializeField] private Text chatMessageBox;
         [SerializeField] private ScrollRect chatScrollRect;
-
-        private Animator _animator;
-
-        public UIButton StartButton => startButton;
         
-        private void Awake() {
-            _animator = GetComponent<Animator>();
-        }
+        public UIButton StartButton => startButton;
 
-        public void Show() {
-            gameObject.SetActive(true);
-            _animator.SetBool("Open", true);
+        protected override void OnOpen() {
             var localPlayer = LobbyPlayer.FindLocal;
             if (localPlayer) {
                 lobbyConfigurationPanel.IsHost = localPlayer.isHost;
             }
-            defaultActiveButton.Select();
-        }
-
-        public void Hide() {
-            gameObject.SetActive(false);
         }
 
         public void JoinPlayer() {
@@ -54,7 +41,11 @@ namespace Menus.Main_Menu {
             headerText.text = "HOSTING LOBBY";
             // TODO: Use UI for maxConnections
             NetworkServer.dontListen = false;
-            FdNetworkManager.Instance.StartHost();;
+            FdNetworkManager.Instance.StartHost();
+            if (FdNetworkManager.Instance.OnlineService != null) {
+                Debug.Log("Online service active");
+                FdNetworkManager.Instance.OnlineService.CreateLobby();
+            }
         }
 
         public void StartGame() {
@@ -76,21 +67,17 @@ namespace Menus.Main_Menu {
         }
 
         public void CloseLobby([CanBeNull] string reason = null) {
-            UIAudioManager.Instance.Play("ui-cancel");
-            if (reason != null) {
+            if (!string.IsNullOrEmpty(reason)) {
+                PlayCancelSound();
                 mainMenu.ShowDisconnectedDialog(reason);
+                Hide();
             }
             else {
-                topMenu.Show();
+                Cancel();
             }
 
-            Hide();
             FdNetworkManager.Instance.StopAll();
             Game.Instance.SessionStatus = SessionStatus.Offline;
-        }
-
-        public void Cancel() {
-            CloseLobby();
         }
 
         public void SendChatMessage() {

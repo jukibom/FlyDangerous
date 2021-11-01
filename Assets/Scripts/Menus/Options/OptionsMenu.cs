@@ -2,6 +2,7 @@
 using Audio;
 using Core;
 using Core.Player;
+using Menus.Main_Menu;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -9,35 +10,12 @@ using UnityEngine.UI;
 
 namespace Menus.Options {
     
-    public class OptionsMenu : MonoBehaviour {
-        [SerializeField] 
-        private UnityEvent returnToParentMenu;
-        
+    public class OptionsMenu : MenuBase {
         public InputActionAsset actions;
-
-        [SerializeField] private Button defaultSelectedButton;
-        
-        private Animator _animator;
         private SaveData _previousPrefs;
-        
-        private void Awake() {
-            this._animator = this.GetComponent<Animator>();
-        }
 
-        private void OnEnable() {
-            defaultSelectedButton.Select();
-        }
-
-        public void Show() {
+        protected override void OnOpen() {
             LoadPreferences();
-            gameObject.SetActive(true);
-            this._animator.SetBool("Open", true);
-        }
-
-        public void Hide() {
-            this.gameObject.SetActive(false);
-            // TODO: Animate out and set active false on complete (how?!)
-            // this._animator.SetBool("Open", false);
         }
 
         public void ToggleVR() {
@@ -53,12 +31,10 @@ namespace Menus.Options {
             SavePreferences();
             SetDebugFlightParameters();
             Game.Instance.ApplyGameOptions();
-            returnToParentMenu.Invoke();
-            UIAudioManager.Instance.Play("ui-confirm");
+            Progress(caller, false, false);
         }
 
-        public void Cancel() {
-            
+        protected override void OnCancel() {
             // not sure about this - the hack here is to save the preferences, compare with previous and revert is the user chooses to discard.
             SavePreferences();
             if (_previousPrefs.ToJsonString() != Preferences.Instance.GetCurrent().ToJsonString()) {
@@ -68,8 +44,6 @@ namespace Menus.Options {
             
             RevertPreferences();
             SavePreferences();
-            UIAudioManager.Instance.Play("ui-cancel");
-            returnToParentMenu.Invoke();
         }
 
         public void OnFlightAssistDefaultsChange(Dropdown dropdown) {

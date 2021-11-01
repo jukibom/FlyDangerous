@@ -51,6 +51,10 @@ IF YOU DO NOT HAVE THESE ASSETS (and, why would you?) and do not wish to buy the
 
 Easiest way to get going is simply to load the Main Menu scene (`Assets/Scenes/UI/Main Menu`) but if you wanna be able to jump right in when testing stuff, load `@Test Scene` from the root scenes folder and additively load a map and environment from their respective folders (set the environment as active scene for correct lighting etc). A ship player will be spawned at the location of the entity inside the `@Test Scene` root entity.
 
+## Steam Integration
+
+If you wish to build without Steam integration, add the Define Symbol `DISABLESTEAMWORKS`. This will completely disable all steam integration and UI functionality, and the multiplayer component will work with regular IPs + port forwarding.
+
 ## License
 
 All code is distributed under the GPLv3 license (see LICENSE).
