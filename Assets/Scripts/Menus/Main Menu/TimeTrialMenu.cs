@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Security.Cryptography;
 using Audio;
 using Core;
 using Core.MapData;
@@ -28,6 +29,9 @@ namespace Menus.Main_Menu {
         private Level _level;
 
         protected override void OnOpen() {
+            foreach (var levelUI in levelPrefabContainer.gameObject.GetComponentsInChildren<LevelUIElement>()) {
+                Destroy(levelUI.gameObject);
+            }
             var levels = Level.List();
             foreach (var level in levels) {
                 var levelButton = Instantiate(levelUIElementPrefab, levelPrefabContainer);

@@ -8,7 +8,7 @@ namespace Menus.Main_Menu {
         [SerializeField] private FreeRoamMenu freeRoamMenu;
         [SerializeField] private LoadCustomMenu loadCustomMenu;
 
-        protected override void OnCancel() {
+        protected override void OnClose() {
             Game.Instance.SessionStatus = SessionStatus.Offline;
             FdNetworkManager.Instance.StopAll();
         }

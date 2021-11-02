@@ -34,8 +34,8 @@ namespace Menus.Options {
             Progress(caller, false, false);
         }
 
-        protected override void OnCancel() {
-            // not sure about this - the hack here is to save the preferences, compare with previous and revert is the user chooses to discard.
+        protected override void OnClose() {
+            // not sure about this - the hack here is to save the preferences, compare with previous and revert if the user chooses to discard.
             SavePreferences();
             if (_previousPrefs.ToJsonString() != Preferences.Instance.GetCurrent().ToJsonString()) {
                 Debug.Log("Discarded changed preferences! (TODO: confirmation dialog)");
@@ -43,7 +43,7 @@ namespace Menus.Options {
             }
             
             RevertPreferences();
-            SavePreferences();
+            Preferences.Instance.Save();
         }
 
         public void OnFlightAssistDefaultsChange(Dropdown dropdown) {
@@ -63,6 +63,7 @@ namespace Menus.Options {
         }
 
         private void LoadPreferences() {
+            Debug.Log("Load preferences");
             var toggleOptions = GetComponentsInChildren<ToggleOption>(true);
             foreach (var toggleOption in toggleOptions) {
                 toggleOption.IsEnabled = Preferences.Instance.GetBool(toggleOption.Preference);

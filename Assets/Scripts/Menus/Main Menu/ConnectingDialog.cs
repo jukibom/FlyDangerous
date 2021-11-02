@@ -10,8 +10,22 @@ namespace Menus.Main_Menu {
         [SerializeField] private DisconnectionDialog disconnectionDialog;
 
         private LobbyMenu _lobbyMenu;
-        
+
+        private void OnEnable() {
+            FdNetworkManager.OnClientConnected += HandleClientConnected;
+            FdNetworkManager.OnClientDisconnected += HandleFailedConnection;
+            FdNetworkManager.OnClientConnectionRejected += HandleClientRejected;
+        }
+
+        private void OnDisable() {
+            FdNetworkManager.OnClientConnected -= HandleClientConnected;
+            FdNetworkManager.OnClientDisconnected -= HandleFailedConnection;
+            FdNetworkManager.OnClientConnectionRejected -= HandleClientRejected;
+        }
+
         public async void Connect(LobbyMenu lobbyMenu, string address, string portText = "", string password = "") {
+            FdNetworkManager.Instance.ShutdownNetwork();
+            
             _lobbyMenu = lobbyMenu;
             if (FdNetworkManager.Instance.OnlineService != null) {
                 await FdNetworkManager.Instance.OnlineService.JoinLobby(address);
@@ -29,17 +43,9 @@ namespace Menus.Main_Menu {
                 version = Application.version
             };
         }
-        
-        private void Start() {
-            FdNetworkManager.OnClientConnected += HandleClientConnected;
-            FdNetworkManager.OnClientDisconnected += HandleFailedConnection;
-            FdNetworkManager.OnClientConnectionRejected += HandleClientRejected;
-        }
-        
-        private void OnDestroy() {
-            FdNetworkManager.OnClientConnected -= HandleClientConnected;
-            FdNetworkManager.OnClientDisconnected -= HandleFailedConnection;
-            FdNetworkManager.OnClientConnectionRejected -= HandleClientRejected;
+
+        protected override void OnClose() {
+            FdNetworkManager.Instance.ShutdownNetwork();
         }
 
         private void HandleClientConnected(FdNetworkManager.JoinGameSuccessMessage successMessage) {

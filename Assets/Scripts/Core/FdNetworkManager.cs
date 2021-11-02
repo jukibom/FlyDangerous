@@ -188,6 +188,11 @@ namespace Core {
         #endregion
         
         #region State Management
+        
+        public void ShutdownNetwork() {
+            StopAll();
+            Game.Instance.SessionStatus = SessionStatus.Offline;
+        }
 
         public void StopAll() {
             if (mode != NetworkManagerMode.Offline) {

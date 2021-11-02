@@ -33,6 +33,10 @@ namespace Menus.Main_Menu {
             }
         }
 
+        protected override void OnClose() {
+            FdNetworkManager.Instance.ShutdownNetwork();
+        }
+
         public void JoinPlayer() {
             headerText.text = "MULTIPLAYER LOBBY";
         }
@@ -68,6 +72,7 @@ namespace Menus.Main_Menu {
 
         public void CloseLobby([CanBeNull] string reason = null) {
             if (!string.IsNullOrEmpty(reason)) {
+                FdNetworkManager.Instance.ShutdownNetwork();
                 PlayCancelSound();
                 mainMenu.ShowDisconnectedDialog(reason);
                 Hide();
@@ -75,9 +80,6 @@ namespace Menus.Main_Menu {
             else {
                 Cancel();
             }
-
-            FdNetworkManager.Instance.StopAll();
-            Game.Instance.SessionStatus = SessionStatus.Offline;
         }
 
         public void SendChatMessage() {

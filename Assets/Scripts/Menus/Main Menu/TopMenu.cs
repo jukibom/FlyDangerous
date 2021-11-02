@@ -1,8 +1,10 @@
+using System;
 using Audio;
 using Core;
 using Menus.Options;
 using Mirror;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Menus.Main_Menu {
     public class TopMenu : MenuBase
@@ -13,6 +15,18 @@ namespace Menus.Main_Menu {
         [SerializeField] private ProfileMenu profileMenu;
         [SerializeField] private OptionsMenu optionsMenu;
 
+        private void OnEnable() {
+            // always ensure a clean network state at the top menu, user is always offline here
+            if (FdNetworkManager.Instance != null) {
+                FdNetworkManager.Instance.ShutdownNetwork();
+            }
+        }
+
+        public void Start() {
+            // needed on game start
+            defaultActiveButton.Select();
+        }
+        
         public void OpenSinglePlayerPanel() {
             NetworkServer.dontListen = true;
             FdNetworkManager.Instance.StartHost();
@@ -51,8 +65,12 @@ namespace Menus.Main_Menu {
         }
 
         public void Quit() {
-            PlayApplySound();
+            PlayCancelSound();
             Game.Instance.QuitGame();
+        }
+
+        public override void OnCancel(BaseEventData eventData) {
+            Quit();
         }
     }
 }

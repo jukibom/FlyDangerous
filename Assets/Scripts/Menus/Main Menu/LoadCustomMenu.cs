@@ -2,17 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Audio;
 using Core;
 using Core.MapData;
 using JetBrains.Annotations;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace Menus.Main_Menu {
     public class LoadCustomMenu : MenuBase {
-        [SerializeField] private SinglePlayerMenu singlePlayerMenu;
         [SerializeField] private InputField mapInfo;
         [SerializeField] private InputField saveInput;
         [SerializeField] private Text saveWarning;

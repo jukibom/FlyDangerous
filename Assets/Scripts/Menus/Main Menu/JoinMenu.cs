@@ -22,14 +22,8 @@ namespace Menus.Main_Menu {
             serverPort.text = Preferences.Instance.GetString("lastUsedServerJoinPort");
             serverPassword.text = Preferences.Instance.GetString("lastUsedServerPassword");
         }
-
-        // protected override void OnOpen() {
-        //     joinButton.button.interactable = true;
-        //     joinButton.label.text = "CONNECT";
-        //     joinButton.button.Select();
-        // }
-
-        protected override void OnCancel() {
+        
+        protected override void OnClose() {
             Game.Instance.SessionStatus = SessionStatus.Offline;
             FdNetworkManager.Instance.StopAll();
         }

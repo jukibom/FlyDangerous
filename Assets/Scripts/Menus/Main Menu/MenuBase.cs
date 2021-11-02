@@ -2,10 +2,11 @@
 using Core;
 using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Menus.Main_Menu {
-    public class MenuBase : MonoBehaviour {
+    public class MenuBase : MonoBehaviour, ICancelHandler {
         
         [SerializeField] protected Button defaultActiveButton;
         protected MenuBase caller;
@@ -45,7 +46,7 @@ namespace Menus.Main_Menu {
             }
             PlayCancelSound();
             Hide();
-            OnCancel();
+            OnClose();
         }
         
         // Just hide the dialog / menu: no sound or events raised
@@ -74,6 +75,11 @@ namespace Menus.Main_Menu {
 
         protected virtual void OnOpen() {}
         protected virtual void OnProgress() {}
-        protected virtual void OnCancel() {}
+        protected virtual void OnClose() {}
+        
+        // Event from user input, may be overridden 
+        public virtual void OnCancel(BaseEventData eventData) {
+            Cancel();
+        }
     }
 }
