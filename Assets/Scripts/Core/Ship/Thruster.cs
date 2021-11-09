@@ -16,6 +16,7 @@ namespace Core.Ship {
             get => thrustColor;
             set {
                 thrustColor = value;
+                lightSource.color = thrustColor;
                 _thrusterMaterial?.SetColor(thrustColorProperty, thrustColor);
             }
         }
