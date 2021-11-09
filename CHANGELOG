@@ -3,13 +3,17 @@ New:
     * Added new Checkpoint 3d model (much larger, circular)
     * Added Steam integration
     * Added Server Browser (Steam only)
+    * Added UI Cancel navigation behaviour (navigate back one page) in main menu
     
 Changes:
     * Tweaked layout of lobby + time trial menus
     * Converted ray check to box check for checkpoint collision
+    * Thruster luminance capped at minimum 50%
     
 Fixed:
+    * All supported Gamepads + Joysticks can now be used in main menu UI navigation
     * Incorrect shadows on terrain worlds (light source below the generated terrain meant no shadows - fixed by making terrain two-sided for shadow generation)
+    * Thruster lights emitters now respects user color selection
 
 0.4.1
 Fixed:
