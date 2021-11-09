@@ -1,8 +1,9 @@
 using System.Collections;
+using System.Linq;
 using Core;
-using Menus.Pause_Menu;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Users;
 using UnityEngine.SceneManagement;
 using UnityEngine.XR.Interaction.Toolkit;
 using Random = UnityEngine.Random;
@@ -128,8 +129,13 @@ namespace Menus.Main_Menu {
             FloatingOrigin.Instance.FocalTransform = transform;
             Game.Instance.FadeFromBlack();
 
-            // I hate everything
+            // enable input and forcefully pair ALL devices (I have no idea why we have to do this)
             playerInput.enabled = true;
+            foreach (var inputDevice in InputSystem.devices) {
+                if (!playerInput.devices.Contains(inputDevice)) {
+                    InputUser.PerformPairingWithDevice(inputDevice, playerInput.user);
+                }
+            }
         }
 
         private void OnEnvironmentLoadComplete(Scene scene, LoadSceneMode mode) {

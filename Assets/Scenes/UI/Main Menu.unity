@@ -970,6 +970,11 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 3058519774251067382, guid: 5007e87831ab57f469bfebde9406cbfe, type: 3}
   m_PrefabInstance: {fileID: 1674230043}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &97391067 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 609786914283039947, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+  m_PrefabInstance: {fileID: 338566789}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &109655505
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1758,6 +1763,7 @@ MonoBehaviour:
   defaultActiveButton: {fileID: 914873054}
   lobbyMenu: {fileID: 1954131159}
   connectingDialog: {fileID: 1866099728}
+  lanMenu: {fileID: 0}
   refreshingIndicator: {fileID: 1018604433}
   serverEntryContainer: {fileID: 524840268}
   serverBrowserEntryPrefab: {fileID: 4612357496105082316, guid: 555a2ff09f5f147469ba13bbfc5721b9, type: 3}
@@ -3832,12 +3838,12 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 501630636}
-  - {fileID: 579945050}
+  - {fileID: 1630960264}
   - {fileID: 495656922}
   - {fileID: 892093859}
   - {fileID: 1187056806}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &339787322
 MonoBehaviour:
@@ -7116,7 +7122,7 @@ GameObject:
   - component: {fileID: 579945052}
   - component: {fileID: 579945051}
   m_Layer: 5
-  m_Name: UI
+  m_Name: UI Event System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7132,9 +7138,8 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 1630960264}
-  m_Father: {fileID: 339787321}
+  m_Children: []
+  m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &579945051
@@ -7177,7 +7182,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FirstSelected: {fileID: 0}
+  m_FirstSelected: {fileID: 97391067}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
 --- !u!1001 &589133296
@@ -8789,7 +8794,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 609786914283039943, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
   m_PrefabInstance: {fileID: 338566789}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 97391067}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
@@ -10261,7 +10266,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultActiveButton: {fileID: 551433314}
-  singlePlayerMenu: {fileID: 752552622}
   mapInfo: {fileID: 2019552798}
   saveInput: {fileID: 505994559}
   saveWarning: {fileID: 1782432020}
@@ -14811,7 +14815,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 177074050465568753, guid: b0e2f4acb0320844fa3d799e82f58e18, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 177074050465568753, guid: b0e2f4acb0320844fa3d799e82f58e18, type: 3}
       propertyPath: m_LocalPosition.x
@@ -18747,7 +18751,7 @@ GameObject:
   - component: {fileID: 1630960270}
   - component: {fileID: 1630960269}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18778,8 +18782,8 @@ RectTransform:
   - {fileID: 925893206}
   - {fileID: 815904692}
   - {fileID: 1771068053}
-  m_Father: {fileID: 579945050}
-  m_RootOrder: 0
+  m_Father: {fileID: 339787321}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
