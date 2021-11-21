@@ -212,8 +212,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 884.5, y: 0}
-  m_SizeDelta: {x: 1769, y: 0}
+  m_AnchoredPosition: {x: 854.5, y: 0}
+  m_SizeDelta: {x: 1709, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &7962850668730717185
 MonoBehaviour:
@@ -288,10 +288,8 @@ GameObject:
   - component: {fileID: 77819930462981759}
   - component: {fileID: 8172819014535211018}
   - component: {fileID: 4367878110182957797}
-  - component: {fileID: 7463585054003819088}
   - component: {fileID: 4904362129324025585}
   - component: {fileID: 3463162136626968254}
-  - component: {fileID: 8526163971410706088}
   - component: {fileID: 2805097040344320731}
   - component: {fileID: 8281479423480039965}
   m_Layer: 0
@@ -364,7 +362,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8172819014535211018}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6314700969043515491}
+        m_TargetAssemblyTypeName: Menus.Options.ExpandingLine, Assembly-CSharp
+        m_MethodName: Toggle
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!222 &77819930462981759
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -418,19 +428,6 @@ MonoBehaviour:
   m_EffectColor: {r: 0.504717, g: 0.76028305, b: 1, a: 1}
   m_EffectDistance: {x: 4, y: 4}
   m_UseGraphicAlpha: 1
---- !u!114 &7463585054003819088
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2877537044725137492}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates: []
 --- !u!114 &4904362129324025585
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -465,21 +462,6 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
---- !u!114 &8526163971410706088
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2877537044725137492}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9cd980d92dc12694ea5c5c5608f9ec24, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isOpen: 0
-  icon: {fileID: 5031977206542708604}
-  container: {fileID: 1267458087484041997}
 --- !u!114 &2805097040344320731
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -658,6 +640,7 @@ GameObject:
   - component: {fileID: 6591806439551337038}
   - component: {fileID: 7999976235408077897}
   - component: {fileID: 7209552821338227594}
+  - component: {fileID: 6314700969043515491}
   m_Layer: 0
   m_Name: Expanding Line
   m_TagString: Untagged
@@ -737,6 +720,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 0
   m_VerticalFit: 2
+--- !u!114 &6314700969043515491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8031816776331519999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cd980d92dc12694ea5c5c5608f9ec24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animatePercentPerFrame: 0.1
+  isOpen: 0
+  icon: {fileID: 5031977206542708604}
+  container: {fileID: 1267458087484041997}
+  scaleElementsContainers:
+  - {fileID: 1267458087484041997}
 --- !u!1 &8031816776609342323
 GameObject:
   m_ObjectHideFlags: 0

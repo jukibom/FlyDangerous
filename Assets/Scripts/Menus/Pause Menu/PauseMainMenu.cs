@@ -3,6 +3,7 @@ using Core;
 using Core.MapData;
 using Core.Player;
 using Menus.Pause_Menu;
+using UI;
 using UnityEngine;
 using UnityEngine.UI;
 

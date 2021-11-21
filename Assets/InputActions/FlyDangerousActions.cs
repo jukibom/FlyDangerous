@@ -541,9 +541,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""negative"",
-                    ""id"": ""acb04a75-4a54-43b8-83cf-d9966afa224b"",
-                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""name"": ""positive"",
+                    ""id"": ""60058f84-5d0d-4c06-aa72-4365a03feda5"",
+                    ""path"": ""<Keyboard>/rightArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
@@ -552,9 +552,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""positive"",
-                    ""id"": ""60058f84-5d0d-4c06-aa72-4365a03feda5"",
-                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""name"": ""negative"",
+                    ""id"": ""acb04a75-4a54-43b8-83cf-d9966afa224b"",
+                    ""path"": ""<Keyboard>/leftArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
@@ -574,8 +574,8 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""negative"",
-                    ""id"": ""77de266c-1c09-49a2-8c89-03dd6259d1e9"",
+                    ""name"": ""positive"",
+                    ""id"": ""346226f4-2b6f-4152-8233-1bf4fbb387ff"",
                     ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
@@ -585,8 +585,8 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""positive"",
-                    ""id"": ""346226f4-2b6f-4152-8233-1bf4fbb387ff"",
+                    ""name"": ""negative"",
+                    ""id"": ""77de266c-1c09-49a2-8c89-03dd6259d1e9"",
                     ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
@@ -1124,8 +1124,8 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""negative"",
-                    ""id"": ""dfaef3f9-dc2e-4768-91ee-f019e09142d2"",
+                    ""name"": ""positive"",
+                    ""id"": ""ffa49b9b-f541-4f68-bf8f-6e73f226eba6"",
                     ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
@@ -1135,8 +1135,8 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""positive"",
-                    ""id"": ""ffa49b9b-f541-4f68-bf8f-6e73f226eba6"",
+                    ""name"": ""negative"",
+                    ""id"": ""dfaef3f9-dc2e-4768-91ee-f019e09142d2"",
                     ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",

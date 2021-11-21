@@ -54,7 +54,29 @@ namespace Menus.Options {
             }
         }
 
-        public string primaryBbindingId {
+        public int PrimaryBindingIndex {
+            set {
+                var action = m_Action?.action;
+                if (action != null) {
+                    if (value < action.bindings.Count) {
+                        primaryBindingId = action.bindings[value].id.ToString();
+                    }
+                }
+            }
+        }
+        
+        public int SecondaryBindingIndex {
+            set {
+                var action = m_Action?.action;
+                if (action != null) {
+                    if (value < action.bindings.Count) {
+                        secondaryBindingId = action.bindings[value].id.ToString();
+                    }
+                }
+            }
+        }
+
+        public string primaryBindingId {
             get => m_PrimaryBindingId;
             set {
                 m_PrimaryBindingId = value;
@@ -62,7 +84,7 @@ namespace Menus.Options {
             }
         }
 
-        public string secondaryBinding {
+        public string secondaryBindingId {
             get => m_SecondaryBindingId;
             set {
                 m_SecondaryBindingId = value;
@@ -109,6 +131,11 @@ namespace Menus.Options {
         public GameObject rebindOverlay {
             get => m_RebindOverlay;
             set => m_RebindOverlay = value;
+        }
+
+        public Text rebindText {
+            get => m_RebindText;
+            set => m_RebindText = value;
         }
 
         public UpdateBindingUIEvent updateBindingUIEvent {

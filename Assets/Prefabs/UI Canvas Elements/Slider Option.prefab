@@ -92,8 +92,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6984579573262395420}
-        m_TargetAssemblyTypeName: SliderOption, Assembly-CSharp
+      - m_Target: {fileID: 1235410031485389764}
+        m_TargetAssemblyTypeName: UI.FdSlider, Assembly-CSharp
         m_MethodName: OnSliderChanged
         m_Mode: 1
         m_Arguments:
@@ -398,6 +398,7 @@ GameObject:
   - component: {fileID: 4535296158600249019}
   - component: {fileID: 2734570949607610202}
   - component: {fileID: 6984579573262395420}
+  - component: {fileID: 1235410031485389764}
   m_Layer: 0
   m_Name: Slider Option
   m_TagString: Untagged
@@ -458,10 +459,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   preference: default-preference
+  slider: {fileID: 1235410031485389764}
+--- !u!114 &1235410031485389764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4535296158600249018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f37258020facf641985dd03a0a54531, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   numberTextBox: {fileID: 1981730958247924594}
   slider: {fileID: 6115605090509290636}
   minValue: 0
   maxValue: 1
+  onValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &4535296159011167533
 GameObject:
   m_ObjectHideFlags: 0
@@ -861,11 +878,11 @@ PrefabInstance:
     - target: {fileID: 5406349707295731392, guid: 7979c4c410718cc4a8e1307f7cf5175b, type: 3}
       propertyPath: m_OnSubmit.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 6984579573262395420}
+      objectReference: {fileID: 1235410031485389764}
     - target: {fileID: 5406349707295731392, guid: 7979c4c410718cc4a8e1307f7cf5175b, type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 6984579573262395420}
+      objectReference: {fileID: 1235410031485389764}
     - target: {fileID: 5406349707295731392, guid: 7979c4c410718cc4a8e1307f7cf5175b, type: 3}
       propertyPath: m_OnSubmit.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -900,11 +917,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5406349707295731392, guid: 7979c4c410718cc4a8e1307f7cf5175b, type: 3}
       propertyPath: m_OnSubmit.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: SliderOption, Assembly-CSharp
+      value: UI.FdSlider, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 5406349707295731392, guid: 7979c4c410718cc4a8e1307f7cf5175b, type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: SliderOption, Assembly-CSharp
+      value: UI.FdSlider, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 5406349707295731392, guid: 7979c4c410718cc4a8e1307f7cf5175b, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName

@@ -12,7 +12,7 @@ namespace UI {
         [SerializeField] private float maxValue = 0f;
         
         [SerializeField] 
-        private UnityEvent<float> onValueChanged;
+        public UnityEvent<float> onValueChanged;
 
     
         public float Value {

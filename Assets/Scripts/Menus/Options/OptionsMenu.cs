@@ -1,10 +1,8 @@
-﻿using System;
-using Audio;
-using Core;
+﻿using Core;
 using Core.Player;
 using Menus.Main_Menu;
+using UI;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 

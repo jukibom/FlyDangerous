@@ -1,6 +1,4 @@
-using System;
 using Core;
-using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UI;
 

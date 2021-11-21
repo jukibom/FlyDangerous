@@ -1,6 +1,4 @@
-using System.Diagnostics.Eventing;
 using Audio;
-using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace UI {

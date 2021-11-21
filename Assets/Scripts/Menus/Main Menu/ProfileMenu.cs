@@ -6,6 +6,7 @@ using Core;
 using Core.Ship;
 using Menus.Main_Menu.Components;
 using Menus.Pause_Menu;
+using UI;
 using UnityEngine;
 using UnityEngine.UI;
 using Button = UnityEngine.UI.Button;

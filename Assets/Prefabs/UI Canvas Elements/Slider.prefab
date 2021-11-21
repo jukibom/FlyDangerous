@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3564839357901728737}
   - component: {fileID: 6010500497749325595}
   - component: {fileID: 961638548814569451}
+  - component: {fileID: 5355700035838458099}
   m_Layer: 0
   m_Name: Slider
   m_TagString: Untagged
@@ -85,6 +86,25 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &5355700035838458099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 87186656109932630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f37258020facf641985dd03a0a54531, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numberTextBox: {fileID: 1348031353609850475}
+  slider: {fileID: 2589702243156230612}
+  minValue: 0
+  maxValue: 1
+  onValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &770237766065090966
 GameObject:
   m_ObjectHideFlags: 0
@@ -253,7 +273,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 5355700035838458099}
         m_TargetAssemblyTypeName: UI.FdSlider, Assembly-CSharp
         m_MethodName: OnSliderChanged
         m_Mode: 1
@@ -721,11 +741,11 @@ PrefabInstance:
     - target: {fileID: 5406349707295731392, guid: 7979c4c410718cc4a8e1307f7cf5175b, type: 3}
       propertyPath: m_OnSubmit.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 5355700035838458099}
     - target: {fileID: 5406349707295731392, guid: 7979c4c410718cc4a8e1307f7cf5175b, type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 5355700035838458099}
     - target: {fileID: 5406349707295731392, guid: 7979c4c410718cc4a8e1307f7cf5175b, type: 3}
       propertyPath: m_OnSubmit.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
