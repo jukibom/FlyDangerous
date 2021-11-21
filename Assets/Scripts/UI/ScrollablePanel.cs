@@ -19,7 +19,7 @@ namespace UI {
         public void OnSelect(BaseEventData eventData) {
             var selectedElement = EventSystem.current.currentSelectedGameObject;
             var positionInScrollRect = _scrollRect.content.InverseTransformPoint(selectedElement.transform.position) * -1;
-            
+
             AnimateScrollbarToNormalizedPosition(1 - (positionInScrollRect.y / (_scrollRect.content.rect.height - 60)));
         }
 
@@ -33,7 +33,7 @@ namespace UI {
                 yield return new WaitForEndOfFrame();
                 while(Mathf.Abs(_scrollRect.verticalNormalizedPosition - targetPosition) > 0.01) {
                     _scrollRect.verticalNormalizedPosition = Mathf.Lerp(
-                        _scrollRect.verticalNormalizedPosition, targetPosition, Time.deltaTime / lerpTime);
+                        _scrollRect.verticalNormalizedPosition, targetPosition, Time.fixedDeltaTime / lerpTime);
                     yield return new WaitForEndOfFrame();
                 }
             }
