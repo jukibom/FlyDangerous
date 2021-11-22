@@ -525,7 +525,7 @@ namespace Menus.Options {
 
         private void UpdateActionLabel()
         {
-            if (m_ActionLabel != null && m_ActionLabel.text == null || m_ActionLabel.text.Length == 0)
+            if (m_ActionLabel != null && string.IsNullOrEmpty(m_ActionLabel.text))
             {
                 var action = m_Action?.action;
                 m_ActionLabel.text = action != null ? action.name : string.Empty;
