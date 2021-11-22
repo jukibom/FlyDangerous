@@ -27,13 +27,13 @@ This project aims to provide a ground-up reimplementation of a similar-enough fl
 
 ## Building
 
-Unity build: 2021.1.24f1
+Unity build: 2021.2.3f1
 
 Relies on following assets:
 
-* Map Magic 2 Bundle 2.1.7 - https://assetstore.unity.com/packages/tools/terrain/mapmagic-2-bundle-178682 
-* Allsky - https://assetstore.unity.com/packages/2d/textures-materials/sky/allsky-200-sky-skybox-set-10109
-* SC Post Effects - https://assetstore.unity.com/packages/vfx/shaders/fullscreen-camera-effects/sc-post-effects-pack-108753
+* Map Magic 2 Bundle 2.1.8 - https://assetstore.unity.com/packages/tools/terrain/mapmagic-2-bundle-178682 
+* AllSky 5.1.0 - https://assetstore.unity.com/packages/2d/textures-materials/sky/allsky-200-sky-skybox-set-10109
+* SC Post Effects 2.1.9 - https://assetstore.unity.com/packages/vfx/shaders/fullscreen-camera-effects/sc-post-effects-pack-108753
 
 IF YOU DO NOT HAVE THESE ASSETS (and, why would you?) and do not wish to buy them, follow these instructions to build:
 
