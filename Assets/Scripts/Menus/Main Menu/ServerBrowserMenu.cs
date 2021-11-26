@@ -10,7 +10,8 @@ namespace Menus.Main_Menu {
     public class ServerBrowserMenu : MenuBase {
         [SerializeField] private LobbyMenu lobbyMenu;
         [SerializeField] private ConnectingDialog connectingDialog;
-
+        [SerializeField] private MultiPlayerMenu lanMenu;
+        
         [SerializeField] private GameObject refreshingIndicator;
         [SerializeField] private Transform serverEntryContainer;
         [SerializeField] private ServerBrowserEntry serverBrowserEntryPrefab;
@@ -22,7 +23,26 @@ namespace Menus.Main_Menu {
             RefreshList();
         }
 
-        public async void RefreshList() {
+        public void OnRefresh() {
+            PlayApplySound();
+            RefreshList();
+        }
+        
+        public void OpenLanPanel() {
+            Progress(lanMenu);
+        }
+
+        public void OpenHostPanel() {
+            Game.Instance.SessionStatus = SessionStatus.LobbyMenu;
+            Progress(lobbyMenu);
+            lobbyMenu.StartHost();
+        }
+
+        public void ClosePanel() {
+            Cancel();
+        }
+
+        private async void RefreshList() {
             PlayApplySound();
             if (FdNetworkManager.Instance.OnlineService != null) {
                 try {
@@ -50,16 +70,6 @@ namespace Menus.Main_Menu {
                 // This is intended.
                 catch ( OperationCanceledException ) {} 
             }
-        }
-
-        public void OpenHostPanel() {
-            Game.Instance.SessionStatus = SessionStatus.LobbyMenu;
-            Progress(lobbyMenu);
-            lobbyMenu.StartHost();
-        }
-
-        public void ClosePanel() {
-            Cancel();
         }
     }
 }

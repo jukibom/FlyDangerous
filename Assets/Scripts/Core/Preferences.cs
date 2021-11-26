@@ -147,8 +147,10 @@ namespace Core {
         public Vector3 GetDefaultVector3(string key) {
             switch (key) {
                 case "hmdPosition": 
-                case "hmdRotation": 
+                case "hmdRotation":
+                    return Vector3.zero;
                 default:
+                    Debug.LogWarning("Attempted to get preference " + key + " with no default specified");
                     return Vector3.zero;
             }
         }
