@@ -31,11 +31,16 @@ namespace Core {
     }
     
     public class Game : Singleton<Game> {
-        
+
+        public delegate void PlayerJoinAction();
+        public delegate void PlayerLeaveAction();
         public delegate void RestartLevelAction();
         public delegate void GameSettingsApplyAction();
         public delegate void GamePauseAction(bool enabled);
         public delegate void VRToggledAction(bool enabled);
+
+        public static event PlayerJoinAction OnPlayerLoaded;
+        public static event PlayerLeaveAction OnPlayerLeave;
         public static event RestartLevelAction OnRestart;
         public static event GameSettingsApplyAction OnGameSettingsApplied;
         public static event GamePauseAction OnPauseToggle;
@@ -77,7 +82,7 @@ namespace Core {
         [SerializeField] private Animator crossfade;
 
         // show certain things if first time hitting the menu
-        public bool menuFirstRun { get; private set; } = true;
+        public bool MenuFirstRun { get; private set; } = true;
 
         private static readonly int fadeToBlack = Animator.StringToHash("FadeToBlack");
         private static readonly int fadeFromBlack = Animator.StringToHash("FadeFromBlack");
@@ -99,6 +104,9 @@ namespace Core {
             if (args.ToList().Contains("-vr") || args.ToList().Contains("-VR")) {
                 EnableVR();
             }
+            
+            // Subscribe to network events
+            FdNetworkManager.OnClientDisconnected += () => OnPlayerLeave?.Invoke();
             
             // load hmd position from preferences
             _hmdPosition = Preferences.Instance.GetVector3("hmdPosition");
@@ -272,6 +280,9 @@ namespace Core {
 
                 // enable user input
                 ship.User.EnableGameInput();
+                
+                // notify other players for e.g. targeting systems
+                ship.CmdNotifyShipLoaded();
             }
 
             _loadingRoutine = StartCoroutine(LoadGame());
@@ -328,7 +339,7 @@ namespace Core {
                 StopCoroutine(_loadingRoutine);
             }
 
-            menuFirstRun = false;
+            MenuFirstRun = false;
             var mapMagic = FindObjectOfType<MapMagicObject>();
             if (mapMagic) {
                 mapMagic.StopGenerate();
@@ -430,6 +441,10 @@ namespace Core {
 
                 StartCoroutine(ResetHMDPosition());
             }
+        }
+
+        public void NotifyPlayerLoaded() {
+            OnPlayerLoaded?.Invoke();
         }
     }
 }

@@ -858,13 +858,13 @@ namespace Core.Player {
         #region Network Position Sync etc
         // This is server-side and should really validate the positions coming in before blindly firing to all the clients!
         [Command]
-        void CmdSetPosition(Vector3 origin, Vector3 position, Quaternion rotation, Vector3 velocity, Vector3 angularVelocity, Vector3 thrust, Vector3 torque) {
+        private void CmdSetPosition(Vector3 origin, Vector3 position, Quaternion rotation, Vector3 velocity, Vector3 angularVelocity, Vector3 thrust, Vector3 torque) {
             RpcUpdate(origin, position, rotation, velocity, angularVelocity, thrust, torque);
         }
 
         // On each client, update the position of this object if it's not the local player.
         [ClientRpc]
-        void RpcUpdate(Vector3 remoteOrigin, Vector3 position, Quaternion rotation, Vector3 velocity, Vector3 angularVelocity, Vector3 thrust, Vector3 torque) {
+        private void RpcUpdate(Vector3 remoteOrigin, Vector3 position, Quaternion rotation, Vector3 velocity, Vector3 angularVelocity, Vector3 thrust, Vector3 torque) {
             if (!isLocalPlayer && IsReady) {
                 // Calculate the local difference to position based on the local clients' floating origin.
                 // If these values are gigantic, the doesn't really matter as they only update at fixed distances.
@@ -893,22 +893,22 @@ namespace Core.Player {
         }
 
         [Command]
-        void CmdBoost(float boostTime) {
+        private void CmdBoost(float boostTime) {
             RpcBoost(boostTime);
         }
 
         [ClientRpc]
-        void RpcBoost(float boostTime) {
+        private void RpcBoost(float boostTime) {
             Ship?.Boost(boostTime);
         }
         
         [Command]
-        void CmdSetLights(bool active) {
+        private void CmdSetLights(bool active) {
             RpcSetLights(active);
         }
 
         [ClientRpc]
-        void RpcSetLights(bool active) {
+        private void RpcSetLights(bool active) {
             Ship?.SetLights(active);
         }
         
@@ -928,7 +928,7 @@ namespace Core.Player {
         }
 
         [Command]
-        void CmdLoadShipModelPreferences(string shipModel, string primaryColor, string accentColor,
+        private void CmdLoadShipModelPreferences(string shipModel, string primaryColor, string accentColor,
             string thrusterColor, string trailColor, string headLightsColor) {
             _shipModel = shipModel;
             _primaryColor = primaryColor;
@@ -936,6 +936,16 @@ namespace Core.Player {
             _thrusterColor = thrusterColor;
             _trailColor = trailColor;
             _headLightsColor = headLightsColor;
+        }
+
+        [Command]
+        public void CmdNotifyShipLoaded() {
+            RpcNotifyShipLoaded();
+        }
+
+        [ClientRpc]
+        private void RpcNotifyShipLoaded() {
+            Game.Instance.NotifyPlayerLoaded();
         }
 
         #endregion

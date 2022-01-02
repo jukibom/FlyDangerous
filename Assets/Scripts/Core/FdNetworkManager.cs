@@ -223,7 +223,6 @@ namespace Core {
         public override void OnClientDisconnect(NetworkConnection conn) {
             Debug.Log("[CLIENT] LOCAL CLIENT HAS DISCONNECTED");
             base.OnClientDisconnect(conn);
-            OnClientDisconnected?.Invoke();
         }
         
         // Server shutdown, notify all players
@@ -302,6 +301,8 @@ namespace Core {
             }
             
             base.OnServerDisconnect(conn);
+            
+            OnClientDisconnected?.Invoke();
         }
 
         public override void OnStopServer() {

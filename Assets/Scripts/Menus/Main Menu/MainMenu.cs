@@ -24,7 +24,7 @@ namespace Menus.Main_Menu {
         [SerializeField] private TopMenu topMenu;
         [SerializeField] private DisconnectionDialog disconnectionDialog;
 
-        public static bool FirstRun => Game.Instance?.menuFirstRun ?? true;
+        public static bool FirstRun => Game.Instance?.MenuFirstRun ?? true;
 
         private void Start() {
             //

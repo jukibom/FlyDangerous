@@ -7,34 +7,31 @@ using UnityEngine;
 namespace Game_UI {
     public class TargettingSystem : MonoBehaviour {
         [SerializeField] private Target targetPrefab;
-        Dictionary<ShipPlayer, Target> _players = new Dictionary<ShipPlayer, Target>();
+        private readonly Dictionary<ShipPlayer, Target> _players = new();
 
         private void OnEnable() {
             Game.OnVRStatus += OnVRStatusChanged;
+            Game.OnPlayerLoaded += OnPlayerLoaded;
+            Game.OnPlayerLeave += OnPlayerLeave;
         }
         
         private void OnDisable() {
             Game.OnVRStatus -= OnVRStatusChanged;
+            Game.OnPlayerLoaded -= OnPlayerLoaded;
+            Game.OnPlayerLeave -= OnPlayerLeave;
         }
 
         // Update is called once per frame
         void Update() {
-            var players = FindObjectsOfType<ShipPlayer>();
-            
-            // if we don't have (players - 1) targets, rebuild 
-            if (_players.Count != players.Length - 1) {
-                ResetTargets();
-            }
-            
+
             // update target objects for players
             foreach (var keyValuePair in _players) {
                 var player = keyValuePair.Key;
                 var target = keyValuePair.Value;
                 
                 var playerName = player.playerName;
-                var originTransform = ShipPlayer.FindLocal.User.UserHeadTransform;
+                var originPosition = ShipPlayer.FindLocal ? ShipPlayer.FindLocal.User.UserHeadTransform.position : Vector3.zero;
                 
-                var originPosition = originTransform.position;
                 var targetPosition = player.User.transform.position;
                 
                 var distance = Vector3.Distance(originPosition, targetPosition);
@@ -51,7 +48,7 @@ namespace Game_UI {
         }
 
         private void ResetTargets() {
-            var players = FindObjectsOfType<ShipPlayer>();
+            var players = FdNetworkManager.Instance.ShipPlayers;
             foreach (var keyValuePair in _players) {
                 Destroy(keyValuePair.Value.gameObject);
             }
@@ -62,6 +59,14 @@ namespace Game_UI {
                     _players.Add(shipPlayer, target);
                 }
             }
+        }
+        
+        private void OnPlayerLoaded() {
+            ResetTargets();
+        }
+
+        private void OnPlayerLeave() {
+            ResetTargets();
         }
 
         private void OnVRStatusChanged(bool vrEnabled) {
