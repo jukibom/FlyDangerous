@@ -39,7 +39,7 @@ namespace Core.MapData {
         }
 
         public IEnumerator RestartLevel(Action onRestart) {
-            var ship = ShipPlayer.FindLocal;
+            var ship = FdPlayer.FindLocalShipPlayer;
             if (ship) {
                 // first let's check if this is a terrain world and handle that appropriately
                 var mapMagic = FindObjectOfType<MapMagicObject>();
@@ -136,7 +136,7 @@ namespace Core.MapData {
          public IEnumerator ShowLoadingScreen(bool keepScene = false) {
             
              // disable user input if we're in-game while handling everything else
-             var ship = ShipPlayer.FindLocal;
+             var ship = FdPlayer.FindLocalShipPlayer;
              if (ship != null) {
                  ship.User.DisableGameInput();
                  ship.User.DisableUIInput();
@@ -165,7 +165,7 @@ namespace Core.MapData {
             levelData.terrainSeed = _levelData.terrainSeed;
             levelData.checkpoints = _levelData.checkpoints;
 
-            var ship = ShipPlayer.FindLocal;
+            var ship = FdPlayer.FindLocalShipPlayer;
             if (ship) {
                 var position = ship.AbsoluteWorldPosition;
                 var rotation = ship.transform.rotation;

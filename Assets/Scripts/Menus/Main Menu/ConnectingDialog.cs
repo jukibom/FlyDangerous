@@ -57,7 +57,7 @@ namespace Menus.Main_Menu {
                 _lobbyMenu.Open(caller);
                 _lobbyMenu.JoinPlayer();
                 
-                var localPlayer = LobbyPlayer.FindLocal;
+                var localPlayer = FdPlayer.FindLocalLobbyPlayer;
                 if (localPlayer) {
                     localPlayer.UpdateLobby(successMessage.levelData, successMessage.maxPlayers);
                 }

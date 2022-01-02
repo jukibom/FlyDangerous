@@ -49,7 +49,7 @@ public class Track : MonoBehaviour {
     public void InitialiseTrack() {
         var start = Checkpoints.Find(c => c.Type == CheckpointType.Start);
         if (start) {
-            var ship = ShipPlayer.FindLocal;
+            var ship = FdPlayer.FindLocalShipPlayer;
             if (ship) {
                 ship.transform.position = start.transform.position;
             }
@@ -251,7 +251,7 @@ public class Track : MonoBehaviour {
     private void FixedUpdate() {
         // failing to get user in early stages due to modular loading? 
         if (!_user) {
-            var ship = ShipPlayer.FindLocal;
+            var ship = FdPlayer.FindLocalShipPlayer;
             if (ship) {
                 _user = ship.User;
                 UpdateTargetTimeElements();

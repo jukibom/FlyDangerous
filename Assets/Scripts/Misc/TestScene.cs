@@ -39,7 +39,7 @@ namespace Misc {
                 yield return new WaitForEndOfFrame();
                 
                 // enable input and position it where this entity is
-                var player = ShipPlayer.FindLocal;
+                var player = FdPlayer.FindLocalShipPlayer;
                 if (player) {
                     player.User.EnableGameInput();
                     var pos = spawnLocation.position;
@@ -70,7 +70,7 @@ namespace Misc {
         }
         
         private void CreateTestSecondShip() {
-            var player = ShipPlayer.FindLocal;
+            var player = FdPlayer.FindLocalShipPlayer;
             if (player) {
                 var testPlayer = Instantiate(shipPlayerPrefab, player.transform.position + new Vector3(0, 0, 10), Quaternion.identity);
                 testPlayer.Ship?.SetCockpitMode(CockpitMode.External);

@@ -54,12 +54,8 @@ namespace Core.Player {
 
     [RequireComponent(typeof(Transform))]
     [RequireComponent(typeof(Rigidbody))]
-    public class ShipPlayer : NetworkBehaviour {
-        
-        [CanBeNull]
-        public static ShipPlayer FindLocal =>
-            Array.Find(FindObjectsOfType<ShipPlayer>(), shipPlayer => shipPlayer.isLocalPlayer);
-        
+    public class ShipPlayer : FdPlayer {
+
         // TODO: remove this stuff once params are finalised (this is for debug panel in release)
         public static ShipParameters ShipParameterDefaults => new ShipParameters {
             mass = 1100f,
@@ -352,6 +348,7 @@ namespace Core.Player {
 
         // When a client connects, update all other ships on that local client
         public override void OnStartClient() {
+            base.OnStartClient();
             foreach (var shipPlayer in FindObjectsOfType<ShipPlayer>()) {
                 if (!shipPlayer.isLocalPlayer) {
                     shipPlayer.RefreshShipModel();
@@ -936,16 +933,6 @@ namespace Core.Player {
             _thrusterColor = thrusterColor;
             _trailColor = trailColor;
             _headLightsColor = headLightsColor;
-        }
-
-        [Command]
-        public void CmdNotifyShipLoaded() {
-            RpcNotifyShipLoaded();
-        }
-
-        [ClientRpc]
-        private void RpcNotifyShipLoaded() {
-            Game.Instance.NotifyPlayerLoaded();
         }
 
         #endregion

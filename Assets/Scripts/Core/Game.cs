@@ -67,10 +67,10 @@ namespace Core {
         public bool IsGameHotJoinable => LoadedLevelData.gameType.IsHotJoinable;
 
         public ShipParameters ShipParameters {
-            get => _shipParameters ?? (ShipPlayer.FindLocal?.Parameters ?? ShipPlayer.ShipParameterDefaults);
+            get => _shipParameters ?? (FdPlayer.FindLocalShipPlayer?.Parameters ?? ShipPlayer.ShipParameterDefaults);
             set {
                 _shipParameters = value;
-                var ship = ShipPlayer.FindLocal;
+                var ship = FdPlayer.FindLocalShipPlayer;
                 if (ship) ship.Parameters = _shipParameters;
             }
         }
@@ -230,7 +230,7 @@ namespace Core {
                 // _levelLoader.
                 yield return WaitForAllPlayersLoaded();
 
-                var loadingPlayer = LoadingPlayer.FindLocal;
+                var loadingPlayer = FdPlayer.FindLocalLoadingPlayer;
                 if (loadingPlayer) {
                     loadingPlayer.RequestTransitionToShipPlayer();
                 }
@@ -242,10 +242,11 @@ namespace Core {
                 SessionStatus = SessionStatus.InGame;
                 
                 // wait for local ship client object
-                while (!ShipPlayer.FindLocal) {
+                while (!FdPlayer.FindLocalShipPlayer) {
+                    Debug.Log("Session loaded, waiting for player init");
                     yield return new WaitForEndOfFrame();
                 }
-                var ship = ShipPlayer.FindLocal;
+                var ship = FdPlayer.FindLocalShipPlayer;
                 
                 // Allow the rigid body to initialise before setting new parameters!
                 yield return new WaitForEndOfFrame();
@@ -282,7 +283,7 @@ namespace Core {
                 ship.User.EnableGameInput();
                 
                 // notify other players for e.g. targeting systems
-                ship.CmdNotifyShipLoaded();
+                ship.CmdNotifyPlayerLoaded();
             }
 
             _loadingRoutine = StartCoroutine(LoadGame());
@@ -346,7 +347,7 @@ namespace Core {
                 mapMagic.enabled = false;
             }
 
-            var ship = ShipPlayer.FindLocal;
+            var ship = FdPlayer.FindLocalShipPlayer;
             if (ship) {
                 ship.User.DisableGameInput();
             }

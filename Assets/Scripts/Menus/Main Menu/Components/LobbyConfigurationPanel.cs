@@ -119,7 +119,7 @@ namespace Menus.Main_Menu.Components {
         }
 
         private void UpdateLobby() {
-            var localPlayer = LobbyPlayer.FindLocal;
+            var localPlayer = FdPlayer.FindLocalLobbyPlayer;
             if (localPlayer && localPlayer.isHost) {
                 localPlayer.UpdateLobby(LobbyLevelData, maxPlayers);
             }

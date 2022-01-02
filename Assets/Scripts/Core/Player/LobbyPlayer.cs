@@ -11,12 +11,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace Core.Player {
-    public class LobbyPlayer : NetworkBehaviour {
-        
-        [CanBeNull]
-        public static LobbyPlayer FindLocal => 
-            Array.Find(FindObjectsOfType<LobbyPlayer>(), lobbyPlayer => lobbyPlayer.isLocalPlayer);
-        
+    public class LobbyPlayer : FdPlayer {
+
         [SyncVar] public bool isHost;
 
         [SyncVar(hook = nameof(OnPlayerNameChanged))]
@@ -61,6 +57,7 @@ namespace Core.Player {
         }
 
         public override void OnStartClient() {
+            base.OnStartClient();
             // show or hide the input field or static label depending on authority
             playerNameLabel.transform.parent.gameObject.SetActive(!hasAuthority);
             playerNameTextEntry.gameObject.SetActive(hasAuthority);

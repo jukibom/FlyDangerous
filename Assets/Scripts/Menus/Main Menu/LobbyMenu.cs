@@ -27,7 +27,7 @@ namespace Menus.Main_Menu {
         public UIButton StartButton => startButton;
 
         protected override void OnOpen() {
-            var localPlayer = LobbyPlayer.FindLocal;
+            var localPlayer = FdPlayer.FindLocalLobbyPlayer;
             if (localPlayer) {
                 lobbyConfigurationPanel.IsHost = localPlayer.isHost;
             }
@@ -53,7 +53,7 @@ namespace Menus.Main_Menu {
         }
 
         public void StartGame() {
-            var localLobbyPlayer = LobbyPlayer.FindLocal;
+            var localLobbyPlayer = FdPlayer.FindLocalLobbyPlayer;
             var lobbyLevelData = lobbyConfigurationPanel.LobbyLevelData;
             if (localLobbyPlayer) {
                 // host will attempt to start game if all are ready
@@ -82,9 +82,9 @@ namespace Menus.Main_Menu {
             }
         }
 
-        public void SendChatMessage() {
-            var message = chatSendMessageInput.text;
-            var player = LobbyPlayer.FindLocal;
+        public void SendChatMessage(string message) {
+            // var message = chatSendMessageInput.text;
+            var player = FdPlayer.FindLocalLobbyPlayer;
             if (player && message != "") {
                 player.SendChatMessage(message);
             }

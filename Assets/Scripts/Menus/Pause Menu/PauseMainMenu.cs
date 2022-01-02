@@ -29,7 +29,7 @@ namespace Menus.Pause_Menu {
 
         public void OnEnable() {
             // multiplayer specific UI changes
-            var player = ShipPlayer.FindLocal;
+            var player = FdPlayer.FindLocalShipPlayer;
             if (player && Game.Instance.SessionType == SessionType.Multiplayer) {
                 // in free roam, restart for clients is changed to warping to the leader (on non-host client)
                 if (!player.isHost && Game.Instance.LoadedLevelData.gameType.CanWarpToHost) {

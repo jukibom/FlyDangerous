@@ -5,11 +5,7 @@ using Mirror;
 using UnityEngine;
 
 namespace Core.Player {
-    public class LoadingPlayer : NetworkBehaviour {
-
-        [CanBeNull]
-        public static LoadingPlayer FindLocal => 
-            Array.Find(FindObjectsOfType<LoadingPlayer>(), loadingPlayer => loadingPlayer.isLocalPlayer);
+    public class LoadingPlayer : FdPlayer {
 
         [SyncVar] public string playerName;
 

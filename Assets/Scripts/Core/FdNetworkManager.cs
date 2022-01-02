@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Core.MapData;
 using Core.OnlineServices;
 using Core.Player;
@@ -62,9 +63,9 @@ namespace Core {
         public static event Action<JoinGameSuccessMessage> OnClientConnected;
         public static event Action OnClientDisconnected;
         public static event Action<string> OnClientConnectionRejected;
-        public List<LobbyPlayer> LobbyPlayers { get; } = new List<LobbyPlayer>();
-        public List<LoadingPlayer> LoadingPlayers { get; } = new List<LoadingPlayer>();
-        public List<ShipPlayer> ShipPlayers { get; } = new List<ShipPlayer>();
+        public List<LobbyPlayer> LobbyPlayers { get; private set; } = new();
+        public List<LoadingPlayer> LoadingPlayers { get; private set; } = new();
+        public List<ShipPlayer> ShipPlayers { get; private set;  } = new();
         public string NetworkAddress {
             get => networkAddress;
             set => networkAddress = value;
@@ -235,7 +236,7 @@ namespace Core {
             switch (sessionStatus) {
                 
                 case SessionStatus.LobbyMenu:
-                    var localPlayer = LobbyPlayer.FindLocal;
+                    var localPlayer = FdPlayer.FindLocalLobbyPlayer;
                     if (localPlayer) {
                         localPlayer.HostCloseLobby();
                     }
@@ -251,7 +252,6 @@ namespace Core {
                     
             }
 
-            Game.Instance.SessionStatus = SessionStatus.Offline;
         }
 
         #endregion
@@ -279,33 +279,12 @@ namespace Core {
                 }
             }
         }
-        
+
         // player leaves
         public override void OnServerDisconnect(NetworkConnection conn) {
             Debug.Log("[SERVER] PLAYER DISCONNECT");
-                        
-            // TODO: notify other players than someone has left
-            if (conn.identity != null) {
-                switch (Game.Instance.SessionStatus) {
-                    case SessionStatus.SinglePlayerMenu:
-                        var loadingPlayer = conn.identity.GetComponent<LoadingPlayer>();
-                        RemovePlayer(loadingPlayer);
-                        break;
-                    
-                    case SessionStatus.LobbyMenu:
-                        var lobbyPlayer = conn.identity.GetComponent<LobbyPlayer>();
-                        RemovePlayer(lobbyPlayer);
-                        break;  
-                    
-                    case SessionStatus.InGame:
-                        var shipPlayer = conn.identity.GetComponent<ShipPlayer>();
-                        RemovePlayer(shipPlayer);
-                        break;
-                }
-            }
-            
             base.OnServerDisconnect(conn);
-            
+            UpdatePlayerLists();
             OnClientDisconnected?.Invoke();
         }
 
@@ -318,6 +297,14 @@ namespace Core {
         #endregion
 
         #region Player Transition + List Management
+
+        public void UpdatePlayerLists() {
+            Debug.Log("REFRESH PLAYER LISTS");
+            // player added, refresh all our internal lists
+            LobbyPlayers = FindObjectsOfType<LobbyPlayer>().ToList();
+            LoadingPlayers = FindObjectsOfType<LoadingPlayer>().ToList();
+            ShipPlayers = FindObjectsOfType<ShipPlayer>().ToList().FindAll(shipPlayer => shipPlayer.netIdentity.isActiveAndEnabled);
+        }
 
         private LobbyPlayer TransitionToLobbyPlayer<T>(T previousPlayer) where T: NetworkBehaviour {
             var lobbyPlayer = Instantiate(lobbyPlayerPrefab);
@@ -343,12 +330,11 @@ namespace Core {
             if (previousPlayer.connectionToClient.identity != null) {
                 NetworkServer.Destroy(previousPlayer.connectionToClient.identity.gameObject);
                 NetworkServer.ReplacePlayerForConnection(conn, newPlayer.gameObject, true);
-                AddPlayer(newPlayer);
             }
             else {
                 Debug.LogWarning("Null connection found when replacing player - skipping.");
             }
-            RemovePlayer(previousPlayer);
+            UpdatePlayerLists();
             return newPlayer;
         }
 
@@ -357,7 +343,7 @@ namespace Core {
             NetworkServer.AddPlayerForConnection(conn, playerConnectionPrefab.gameObject);
             if (conn.identity != null) {
                 var player = conn.identity.GetComponent<T>();
-                AddPlayer(player);
+                UpdatePlayerLists();
                 return player;
             }
             else {
@@ -365,37 +351,6 @@ namespace Core {
             }
         }
         
-        private void AddPlayer<T>(T player) where T : NetworkBehaviour {
-            switch (player) {
-                case LobbyPlayer lobbyPlayer: LobbyPlayers.Add(lobbyPlayer);
-                    break;
-                case LoadingPlayer loadingPlayer: LoadingPlayers.Add(loadingPlayer);
-                    break;
-                case ShipPlayer shipPlayer: ShipPlayers.Add(shipPlayer);
-                    break;
-                default:
-                    throw new Exception("Unsupported player object type!");
-            }
-        }
-
-        private void RemovePlayer<T>(T player) where T : NetworkBehaviour {
-            if (player != null) {
-                switch (player) {
-                    case LobbyPlayer lobbyPlayer:
-                        LobbyPlayers.Remove(lobbyPlayer);
-                        break;
-                    case LoadingPlayer loadingPlayer:
-                        LoadingPlayers.Remove(loadingPlayer);
-                        break;
-                    case ShipPlayer shipPlayer:
-                        ShipPlayers.Remove(shipPlayer);
-                        break;
-                    default:
-                        throw new Exception("Unsupported player object type!");
-                }
-            }
-        }
-
         private bool GetHostStatus<T>(T player) where T : NetworkBehaviour {
             if (player != null) {
                 switch (player) {
@@ -486,7 +441,7 @@ namespace Core {
 
                         // if we're joining mid-game (or single player), attempt to start the single client
                         if (sessionStatus != SessionStatus.SinglePlayerMenu) {
-                            conn.identity.connectionToClient.Send( new StartGameMessage {
+                            conn.identity.connectionToClient.Send(new StartGameMessage {
                                 sessionType = SessionType.Multiplayer, 
                                 levelData = levelData
                             });
@@ -545,7 +500,7 @@ namespace Core {
         }
         
         private void OnSetShipPositionClientMsg(SetShipPositionMessage message) {
-            var ship = ShipPlayer.FindLocal;
+            var ship = FdPlayer.FindLocalShipPlayer;
             if (ship) {
                 ship.AbsoluteWorldPosition = message.position;
                 ship.transform.rotation = message.rotation;

@@ -47,7 +47,7 @@ namespace Menus.Options {
         public void OnFlightAssistDefaultsChange(Dropdown dropdown) {
             
             // if the game is running, apply the chosen defaults to the local player ship
-            var player = ShipPlayer.FindLocal;
+            var player = FdPlayer.FindLocalShipPlayer;
             if (player) {
                 var preference = "";
                 switch (dropdown.value) {

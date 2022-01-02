@@ -27,8 +27,7 @@ namespace UI {
         public void OnSubmit(BaseEventData eventData) {
             Toggle();
         }
-
-
+        
         public void OnPointerClick(PointerEventData eventData) {
             Toggle();
         }

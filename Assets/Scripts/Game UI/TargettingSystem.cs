@@ -21,16 +21,15 @@ namespace Game_UI {
             Game.OnPlayerLeave -= OnPlayerLeave;
         }
 
-        // Update is called once per frame
         void Update() {
 
             // update target objects for players
             foreach (var keyValuePair in _players) {
                 var player = keyValuePair.Key;
                 var target = keyValuePair.Value;
-                
+
                 var playerName = player.playerName;
-                var originPosition = ShipPlayer.FindLocal ? ShipPlayer.FindLocal.User.UserHeadTransform.position : Vector3.zero;
+                var originPosition = FdPlayer.FindLocalShipPlayer ? FdPlayer.FindLocalShipPlayer.User.UserHeadTransform.position : Vector3.zero;
                 
                 var targetPosition = player.User.transform.position;
                 
