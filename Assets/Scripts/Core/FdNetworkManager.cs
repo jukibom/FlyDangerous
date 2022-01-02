@@ -228,7 +228,11 @@ namespace Core {
         // Server shutdown, notify all players
         public override void OnStopClient() {
             Debug.Log("[CLIENT] SERVER SHUTDOWN");
-            switch (Game.Instance.SessionStatus) {
+            
+            // prevent loops with callbacks
+            var sessionStatus = Game.Instance.SessionStatus;
+            Game.Instance.SessionStatus = SessionStatus.Offline;
+            switch (sessionStatus) {
                 
                 case SessionStatus.LobbyMenu:
                     var localPlayer = LobbyPlayer.FindLocal;
