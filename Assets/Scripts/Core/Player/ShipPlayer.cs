@@ -145,6 +145,8 @@ namespace Core.Player {
         }
 
         [SerializeField] private GameObject playerLogic;
+        [SerializeField] private User user;
+        public User User => user;
 
         private float _maxSpeed = ShipParameterDefaults.maxSpeed;
         private float _maxBoostSpeed = ShipParameterDefaults.maxBoostSpeed;
@@ -221,7 +223,6 @@ namespace Core.Player {
         private bool IsReady => _transform && _rigidbody && _serverReady;
         public bool IsRotationalFlightAssistActive => _flightAssistRotationalDampening;
         public float Velocity => Mathf.Round(_rigidbody.velocity.magnitude);
-        public User User => GetComponentInChildren<User>(true);
 
         [CanBeNull] private IShip _ship;
         [CanBeNull] public IShip Ship {

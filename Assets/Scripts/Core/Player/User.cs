@@ -55,8 +55,8 @@ namespace Core.Player {
         
         public Transform UserHeadTransform => 
             Game.Instance.IsVREnabled
-                ? xrRig.gameObject.GetComponentInChildren<Camera>().transform
-                : flatScreenCamera.gameObject.GetComponentInChildren<Camera>().transform;
+                ? xrRig.cameraGameObject.transform
+                : flatScreenGameplayCamera.transform;
 
         private Action<InputAction.CallbackContext> _cancelAction;
 
