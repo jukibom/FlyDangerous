@@ -27,17 +27,18 @@ This project aims to provide a ground-up reimplementation of a similar-enough fl
 
 ## Building
 
-Unity build: 2021.2.3f1
+Unity build: 2021.2.7f1
 
-Relies on following assets:
+The release build is reliant on some paid assets (follow instructions underneath to build without for dev purposes!):
 
 * Map Magic 2 Bundle 2.1.8 - https://assetstore.unity.com/packages/tools/terrain/mapmagic-2-bundle-178682 
 * AllSky 5.1.0 - https://assetstore.unity.com/packages/2d/textures-materials/sky/allsky-200-sky-skybox-set-10109
 * SC Post Effects 2.1.9 - https://assetstore.unity.com/packages/vfx/shaders/fullscreen-camera-effects/sc-post-effects-pack-108753
+* GPU Instancer 1.7.0 - https://assetstore.unity.com/packages/tools/utilities/gpu-instancer-117566
 
-IF YOU DO NOT HAVE THESE ASSETS (and, why would you?) and do not wish to buy them, follow these instructions to build:
+**IF YOU DO NOT HAVE THESE ASSETS** (and, why would you?) and do not wish to buy them, follow these instructions to build:
 
-* Ensure you have https://assetstore.unity.com/packages/tools/terrain/mapmagic-2-165180 in your account (the free version of map magic will suffice, although you will miss some features and may not be able to load some terrains).
+* Ensure you have https://assetstore.unity.com/packages/tools/terrain/mapmagic-2-165180 in your Unity account (the free version of map magic will suffice, although you will miss some features and may not be able to load some terrains).
  
 * Clone the repository
 
@@ -47,13 +48,13 @@ IF YOU DO NOT HAVE THESE ASSETS (and, why would you?) and do not wish to buy the
 
 ![image](https://user-images.githubusercontent.com/5649179/121093848-8eabe400-c7e5-11eb-83a4-ba646ec68ffe.png)
 
-## Running in the Unity Editor
-
-Easiest way to get going is simply to load the Main Menu scene (`Assets/Scenes/UI/Main Menu`) but if you wanna be able to jump right in when testing stuff, load `@Test Scene` from the root scenes folder and additively load a map and environment from their respective folders (set the environment as active scene for correct lighting etc). A ship player will be spawned at the location of the entity inside the `@Test Scene` root entity.
-
-## Steam Integration
+### Steam Integration
 
 If you wish to build without Steam integration, add the Define Symbol `DISABLESTEAMWORKS`. This will completely disable all steam integration and UI functionality, and the multiplayer component will work with regular IPs + port forwarding.
+
+### Running in the Unity Editor
+
+The easiest way to get going is simply to load the Main Menu scene (`Assets/Scenes/UI/Main Menu`) but if you want to be able to jump right in when testing stuff, load `@Test Scene` from the root scenes folder and additively load a map and environment from their respective folders (set the environment as active scene for correct lighting etc). A ship player will be spawned at the location of the entity inside the `@Test Scene` root entity.
 
 ## License
 
