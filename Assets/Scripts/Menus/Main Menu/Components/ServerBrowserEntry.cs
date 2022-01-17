@@ -24,15 +24,15 @@ namespace Menus.Main_Menu.Components {
                 players.text = "";
                 joinButton.gameObject.SetActive(false);
 
-                if (FdNetworkManager.Instance.OnlineService != null) {
-                    _lobbyInfo = await FdNetworkManager.Instance.OnlineService.GetLobbyInfo(LobbyId);
+                if (FdNetworkManager.Instance.HasMultiplayerServices) {
+                    _lobbyInfo = await FdNetworkManager.Instance.OnlineService!.Multiplayer!.GetLobbyInfo(LobbyId);
                     UpdateUI();
                 }
             }
         }
 
         public void Join() {
-            if (FdNetworkManager.Instance.OnlineService != null) {
+            if (FdNetworkManager.Instance.HasMultiplayerServices) {
                 var caller = GetComponentInParent<ServerBrowserMenu>();
                 caller.Hide();
                 

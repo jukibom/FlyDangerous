@@ -46,9 +46,9 @@ namespace Menus.Main_Menu {
             // TODO: Use UI for maxConnections
             NetworkServer.dontListen = false;
             FdNetworkManager.Instance.StartHost();
-            if (FdNetworkManager.Instance.OnlineService != null) {
+            if (FdNetworkManager.Instance.HasMultiplayerServices) {
                 Debug.Log("Online service active");
-                FdNetworkManager.Instance.OnlineService.CreateLobby();
+                FdNetworkManager.Instance.OnlineService!.Multiplayer!.CreateLobby();
             }
         }
 

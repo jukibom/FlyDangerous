@@ -27,8 +27,8 @@ namespace Menus.Main_Menu {
             FdNetworkManager.Instance.ShutdownNetwork();
             
             _lobbyMenu = lobbyMenu;
-            if (FdNetworkManager.Instance.OnlineService != null) {
-                await FdNetworkManager.Instance.OnlineService.JoinLobby(address);
+            if (FdNetworkManager.Instance.HasMultiplayerServices) {
+                await FdNetworkManager.Instance.OnlineService!.Multiplayer!.JoinLobby(address);
                 FdNetworkManager.Instance.NetworkAddress = address;
             }
             else {

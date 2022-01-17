@@ -44,7 +44,7 @@ namespace Menus.Main_Menu {
 
         private async void RefreshList() {
             PlayApplySound();
-            if (FdNetworkManager.Instance.OnlineService != null) {
+            if (FdNetworkManager.Instance.HasMultiplayerServices) {
                 try {
                     var existingEntries = serverEntryContainer.gameObject.GetComponentsInChildren<ServerBrowserEntry>();
                     foreach (var serverBrowserEntry in existingEntries) {
@@ -52,7 +52,7 @@ namespace Menus.Main_Menu {
                     }
 
                     refreshingIndicator.SetActive(true);
-                    var servers = await FdNetworkManager.Instance.OnlineService.GetLobbyList();
+                    var servers = await FdNetworkManager.Instance.OnlineService!.Multiplayer!.GetLobbyList();
                     refreshingIndicator.SetActive(false);
 
                     foreach (var serverId in servers) {

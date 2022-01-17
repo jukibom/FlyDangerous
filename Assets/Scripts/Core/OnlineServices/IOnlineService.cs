@@ -1,22 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿
+using JetBrains.Annotations;
 
 namespace Core.OnlineServices {
 
-    public struct LobbyInfo {
-        public string lobbyId;
-        public string connectionAddress;
-        public string name;
-        public int players;
-        public int playersMax;
-        public string gameMode;
-    }
-    
     public interface IOnlineService {
-        public Task CreateLobby();
-        public Task JoinLobby(string lobbyAddress);
-        public Task<List<string>> GetLobbyList();
-        public Task<LobbyInfo> GetLobbyInfo(string lobbyId);
+        [CanBeNull] public ILeaderboardService Leaderboard { get; }
+        [CanBeNull] public IMultiplayerService Multiplayer { get; }
     }
 }

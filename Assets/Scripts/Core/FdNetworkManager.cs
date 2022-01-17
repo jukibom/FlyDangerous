@@ -77,6 +77,7 @@ namespace Core {
         }
 
         [CanBeNull] public IOnlineService OnlineService { get; private set; }
+        public bool HasMultiplayerServices => OnlineService?.Multiplayer != null;
         
         // Mirror's transport layer IMMEDIATELY severs the connection if the internal maxConnections limit is exceeded.
         // To work around this and have some sane messaging back to clients, we're using a server limit of 129 and

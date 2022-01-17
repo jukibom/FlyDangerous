@@ -36,7 +36,7 @@ namespace Menus.Main_Menu {
         }
 
         public void OpenMultiPlayerMenu() {
-            if (FdNetworkManager.Instance.OnlineService != null) {
+            if (FdNetworkManager.Instance.HasMultiplayerServices) {
                 // we have some online services hooked up, load the game browser
                 Progress(serverBrowserMenu);
             }
