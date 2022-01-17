@@ -82,7 +82,9 @@ namespace Core.Ship {
                 engineBoostAudioSource.Play();
                 externalBoostAudioSource.Play();
                 
-                yield return new WaitForSeconds(1);
+                // using real, non-scaled time here because this primarily affects the audio and frame time 
+                // inconsistencies are really noticeable! 
+                yield return new WaitForSecondsRealtime(1);
                 _shipShake.Shake(boostTime - 1, 0.005f);
                 
                 externalBoostThrusterAudioSource.Play();
