@@ -136,7 +136,7 @@ namespace Core.Ship {
             #endregion
             
             #region GForce
-            var gForce = Mathf.Lerp(_previousGForce, shipIndicatorData.gForce, 0.01f);
+            var gForce = Mathf.Lerp(_previousGForce, shipIndicatorData.gForce, 0.05f);
             _previousGForce = gForce;
             gForceNumberText.text = $"{gForce:0.0}";
             #endregion
