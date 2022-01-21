@@ -177,7 +177,7 @@ namespace Core.Player {
         private float _boostedMaxSpeedDelta;
         private float _boostCapacitorPercent = 100f;
 
-        private float _prevVelocity;
+        private Vector3 _prevVelocity;
         private float _gforce;
         private float _velocityLimitCap;
         
@@ -401,7 +401,7 @@ namespace Core.Player {
             _boostCharging = false;
             _isBoosting = false;
             _boostCapacitorPercent = 100f;
-            _prevVelocity = 0;
+            _prevVelocity = Vector3.zero;
             var shipCamera = GetComponentInChildren<ShipCamera>();
             if (shipCamera) {
                 shipCamera.Reset();
@@ -842,14 +842,17 @@ namespace Core.Player {
         private void ClampMaxSpeed(float boostedMaxSpeedDelta) {
             // clamp max speed if user is holding the velocity limiter button down
             if (_velocityLimiterActive) {
-                _velocityLimitCap = Math.Max(_prevVelocity, _minUserLimitedVelocity);
+                _velocityLimitCap = Math.Max(_prevVelocity.magnitude, _minUserLimitedVelocity);
                 _rigidbody.velocity = Vector3.ClampMagnitude(_rigidbody.velocity, _velocityLimitCap);
             }
 
             // clamp max speed in general including boost variance (max boost speed minus max speed)
             _rigidbody.velocity = Vector3.ClampMagnitude(_rigidbody.velocity, _maxSpeed + boostedMaxSpeedDelta);
-            _gforce = Math.Abs((_rigidbody.velocity.magnitude - _prevVelocity) / (Time.fixedDeltaTime * 9.8f));
-            _prevVelocity = _rigidbody.velocity.magnitude;
+            
+            // calculate g-force 
+            var currentVelocity = _rigidbody.velocity;
+            _gforce = Math.Abs((currentVelocity - _prevVelocity).magnitude / (Time.fixedDeltaTime * 9.8f));
+            _prevVelocity = currentVelocity;
         }
         #endregion
         
@@ -865,7 +868,7 @@ namespace Core.Player {
         private void RpcUpdate(Vector3 remoteOrigin, Vector3 position, Quaternion rotation, Vector3 velocity, Vector3 angularVelocity, Vector3 thrust, Vector3 torque) {
             if (!isLocalPlayer && IsReady) {
                 // Calculate the local difference to position based on the local clients' floating origin.
-                // If these values are gigantic, the doesn't really matter as they only update at fixed distances.
+                // If these values are gigantic, that doesn't really matter as they only update at fixed distances.
                 // We'll lose precision here but we add our position on top after-the-fact, so we always have
                 // local-level precision.
                 var offset = remoteOrigin - FloatingOrigin.Instance.Origin;
