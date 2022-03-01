@@ -21,7 +21,10 @@ namespace Misc {
         public ShipPlayer shipPlayerPrefab;
         
         private void Awake() {
-            SceneManager.LoadScene("Engine", LoadSceneMode.Additive);
+            // load engine if not already 
+            if (!FindObjectOfType<Engine>()) {
+                SceneManager.LoadScene("Engine", LoadSceneMode.Additive);
+            }
         }
 
         private void Start() {
