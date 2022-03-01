@@ -10,7 +10,7 @@ namespace Core.MapData {
 
         private MapMagicObject _mapMagicTerrain;
 
-        public void Start() {
+        public void Awake() {
             _mapMagicTerrain = GetComponent<MapMagicObject>();
             OnGameOptionsApplied();
         }

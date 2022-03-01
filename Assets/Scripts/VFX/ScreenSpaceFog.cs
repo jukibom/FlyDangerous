@@ -3,27 +3,28 @@ using MapMagic.Core;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-[RequireComponent(typeof(Volume))]
-public class ScreenSpaceFog : MonoBehaviour {
-    private Volume _volume;
+namespace VFX {
+    [RequireComponent(typeof(Volume))]
+    public class ScreenSpaceFog : MonoBehaviour {
+        private Volume _volume;
 
-    public void Start() {
-        _volume = GetComponent<Volume>();
-        UseRadialFog(!Game.Instance.IsVREnabled);
-    }
+        public void Awake() {
+            _volume = GetComponent<Volume>();
+            UseRadialFog(!Game.Instance.IsVREnabled);
+        }
 
-    public void OnEnable() {
-        Game.OnGameSettingsApplied += OnGameSettingsApplied;
-        Game.OnVRStatus += OnVRStatus;
-    }
+        public void OnEnable() {
+            Game.OnGameSettingsApplied += OnGameSettingsApplied;
+            Game.OnVRStatus += OnVRStatus;
+        }
     
-    public void OnDisable() {
-        Game.OnGameSettingsApplied -= OnGameSettingsApplied;
-        Game.OnVRStatus -= OnVRStatus;
-    }
+        public void OnDisable() {
+            Game.OnGameSettingsApplied -= OnGameSettingsApplied;
+            Game.OnVRStatus -= OnVRStatus;
+        }
 
-    private void OnGameSettingsApplied() {
-        #if (NO_PAID_ASSETS == false)
+        private void OnGameSettingsApplied() {
+#if (NO_PAID_ASSETS == false)
             var mapMagic = FindObjectOfType<MapMagicObject>();
             if (mapMagic && _volume.profile.TryGet<SCPE.Fog>(out var fog)) {
                 var tileChunkCount = Preferences.Instance.GetFloat("graphics-terrain-chunks") + 1; // include drafts
@@ -35,18 +36,19 @@ public class ScreenSpaceFog : MonoBehaviour {
                 fog.fogEndDistance.Override(fogEndDistance);
                 fog.fogStartDistance.Override(fogStartDistance);
             }
-        #endif
-    }
+#endif
+        }
 
-    private void OnVRStatus(bool vrEnabled) {
-        UseRadialFog(!vrEnabled);
-    }
+        private void OnVRStatus(bool vrEnabled) {
+            UseRadialFog(!vrEnabled);
+        }
 
-    private void UseRadialFog(bool useRadialFog) {
-        #if (NO_PAID_ASSETS == false)
+        private void UseRadialFog(bool useRadialFog) {
+#if (NO_PAID_ASSETS == false)
             if (_volume && _volume.profile.TryGet<SCPE.Fog>(out var fog)) {
                 fog.useRadialDistance.Override(useRadialFog);
             }
-        #endif
+#endif
+        }
     }
 }
