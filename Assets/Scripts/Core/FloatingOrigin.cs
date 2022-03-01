@@ -1,3 +1,5 @@
+using System;
+using Cinemachine;
 using Misc;
 using UnityEngine;
 
@@ -10,6 +12,7 @@ namespace Core {
 
         [SerializeField] private Vector3 origin;
         public Vector3 Origin => origin;
+        
         
         // The object to track - this should be the local client player
         [SerializeField] private Transform focalTransform; 
@@ -34,10 +37,11 @@ namespace Core {
                 origin += focalPosition;
 
                 UpdateTrails(focalPosition);
-                OnFloatingOriginCorrection?.Invoke(focalPosition);
 
                 // reset focal object (local player) to 0,0,0
                 FocalTransform.position = Vector3.zero;
+                
+                OnFloatingOriginCorrection?.Invoke(focalPosition);
             }
         }
 
@@ -52,6 +56,15 @@ namespace Core {
                     positions[i] -= offset;
 
                 trail.SetPositions(positions);
+            }
+        }
+
+        // Not currently used but may be needed for lateral dampening in the future 
+        private void UpdateVirtualCameras(Vector3 offset) {
+            // Inform any cinemachine virtual cameras that might be tracking this target
+            int numVCams = CinemachineCore.Instance.VirtualCameraCount;
+            for (int i = 0; i < numVCams; ++i) {
+                CinemachineCore.Instance.GetVirtualCamera(i).OnTargetObjectWarped(focalTransform, -offset);
             }
         }
     }
