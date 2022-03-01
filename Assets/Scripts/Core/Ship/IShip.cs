@@ -53,9 +53,6 @@ namespace Core.Ship {
          */
         public void UpdateMotionInformation(float velocity, Vector3 force, Vector3 torque);
 
-        /** Set the visible entity for internal vs external cam (stacking means need to pick one!).*/
-        public void SetCockpitMode(CockpitMode cockpitMode);
-
         /** Set the main color of the ship as a html color */
         public void SetPrimaryColor(string htmlColor);
         

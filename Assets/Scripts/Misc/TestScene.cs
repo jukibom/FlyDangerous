@@ -40,7 +40,7 @@ namespace Misc {
                 FdNetworkManager.Instance.StartHost();
 
                 yield return new WaitForEndOfFrame();
-                
+
                 // enable input and position it where this entity is
                 var player = FdPlayer.FindLocalShipPlayer;
                 if (player) {
@@ -76,7 +76,6 @@ namespace Misc {
             var player = FdPlayer.FindLocalShipPlayer;
             if (player) {
                 var testPlayer = Instantiate(shipPlayerPrefab, player.transform.position + new Vector3(0, 0, 10), Quaternion.identity);
-                testPlayer.Ship?.SetCockpitMode(CockpitMode.External);
             }
         }
     }

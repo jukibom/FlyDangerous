@@ -17,8 +17,6 @@ namespace Core.Ship {
         
         [SerializeField] private ThrusterController thrusterController;
         [SerializeField] private Light shipLights;
-        [SerializeField] private GameObject cockpitInternal;
-        [SerializeField] private GameObject cockpitExternal;
         [SerializeField] private List<TrailRenderer> trailRenderers;
         
         [SerializeField] private List<MeshRenderer> primaryColorMeshes = new List<MeshRenderer>();
@@ -110,11 +108,6 @@ namespace Core.Ship {
         #endregion
 
         #region Mesh Quirks
-
-        public void SetCockpitMode(CockpitMode cockpitMode) {
-            cockpitInternal.SetActive(cockpitMode == CockpitMode.Internal);
-            cockpitExternal.SetActive(cockpitMode == CockpitMode.External);
-        }
 
         #endregion
         

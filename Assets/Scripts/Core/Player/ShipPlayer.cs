@@ -253,15 +253,10 @@ namespace Core.Player {
                     }
                     
                     // set cockpit visibility mode
-                    if (isLocalPlayer) {
-                        _ship.SetCockpitMode(CockpitMode.Internal);
-                    }
-                    else {
+                    if (!isLocalPlayer) {
                         // rigidbody angular momentum constraints 
                         // TODO: Is this needed??
                         _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
-                        // show correct cockpit (renders on different layer)
-                        _ship.SetCockpitMode(CockpitMode.External);
                     }
                 }
             }
@@ -466,7 +461,7 @@ namespace Core.Player {
             // use the velocity * 4 to make damn sure we capture everything.
             // use a box cast to eliminate the problem of missing at the extreme edges.
             var raycastHitCount = Physics.BoxCastNonAlloc(start, new Vector3(5, frameVelocity.magnitude * 4, 3), frameVelocity.normalized, 
-                _raycastHits, Quaternion.identity, frameVelocity.magnitude, 1 << 9);
+                _raycastHits, Quaternion.identity, frameVelocity.magnitude, 1 << 7);    // 7th layer is checkpoint collider
             
             // Debug.DrawRay(start, frameVelocity * 2 * -1, Color.red);
 
