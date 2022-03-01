@@ -45,9 +45,9 @@ namespace Core.MapData {
         public GameType gameType = GameType.FreeRoam;
         
         public string terrainSeed = "";
-        public LevelDataVector3<float> gravity = new LevelDataVector3<float>(0, 0, 0);
-        public LevelDataVector3<float> startPosition = new LevelDataVector3<float>();
-        public LevelDataVector3<float> startRotation = new LevelDataVector3<float>();
+        public LevelDataVector3<float> gravity = new(0, 0, 0);
+        public LevelDataVector3<float> startPosition = new();
+        public LevelDataVector3<float> startRotation = new();
 
         public float authorTimeTarget;
         

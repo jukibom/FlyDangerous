@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Linq;
+using Cinemachine;
 using Core.MapData;
 using Core.Player;
 using JetBrains.Annotations;
@@ -48,6 +49,8 @@ namespace Core {
 
         [SerializeField] private InputActionAsset playerBindings;
         [SerializeField] private ScriptableRendererFeature ssao;
+
+        private CinemachineBrain _cinemachine;
         private ShipParameters _shipParameters;
         private Vector3 _hmdPosition;
         private Quaternion _hmdRotation;
@@ -88,6 +91,10 @@ namespace Core {
         private static readonly int fadeFromBlack = Animator.StringToHash("FadeFromBlack");
 
         public void Start() {
+            
+            // must be a cinemachine controller in the scene
+            _cinemachine = FindObjectOfType<CinemachineBrain>();
+            
             // must be a level loader in the scene
             _levelLoader = FindObjectOfType<LevelLoader>();
             
@@ -271,6 +278,7 @@ namespace Core {
 
                 // resume the game
                 Time.timeScale = 1;
+                SetFlatScreenCameraControllerActive(!IsVREnabled);
                 FadeFromBlack();
                 yield return new WaitForSeconds(0.7f);
 
@@ -359,6 +367,7 @@ namespace Core {
                 FadeToBlack();
                 yield return new WaitForSeconds(0.5f);
                 yield return SceneManager.LoadSceneAsync("Main Menu");
+                SetFlatScreenCameraControllerActive(false);
                 yield return new WaitForEndOfFrame();
                 ApplyGameOptions();
                 yield return new WaitForEndOfFrame();
@@ -416,6 +425,10 @@ namespace Core {
                 Time.timeScale = 1;
                 LockCursor();
             }
+        }
+
+        public void SetFlatScreenCameraControllerActive(bool active) {
+            _cinemachine.gameObject.SetActive(active);
         }
         
         private void NotifyVRStatus() {

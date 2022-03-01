@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Audio;
+using Cinemachine;
 using Game_UI;
 using Menus.Pause_Menu;
 using Misc;
@@ -20,8 +21,7 @@ namespace Core.Player {
 
         [SerializeField] public PauseMenu pauseMenu;
         [SerializeField] public Canvas uiCanvas;
-        [SerializeField] public GameObject flatScreenCamera;
-        [SerializeField] public Camera flatScreenGameplayCamera;
+        [SerializeField] public CinemachineVirtualCamera cockpitCamera;
         [SerializeField] public XRRig xrRig;
 
         [SerializeField] public InputSystemUIInputModule pauseUIInputModule;
@@ -56,7 +56,7 @@ namespace Core.Player {
         public Transform UserHeadTransform => 
             Game.Instance.IsVREnabled
                 ? xrRig.cameraGameObject.transform
-                : flatScreenGameplayCamera.transform;
+                : cockpitCamera.transform;
 
         private Action<InputAction.CallbackContext> _cancelAction;
 
@@ -89,9 +89,8 @@ namespace Core.Player {
         }
 
         public void OnGameSettingsApplied() {
-            foreach (var gameCamera in flatScreenGameplayCamera.GetComponentsInChildren<Camera>()) {
-                gameCamera.fieldOfView = Preferences.Instance.GetFloat("graphics-field-of-view");
-            }
+            // TODO: multiple cameras
+            cockpitCamera.m_Lens.FieldOfView = Preferences.Instance.GetFloat("graphics-field-of-view");
         }
 
         public void Update() {
@@ -206,9 +205,21 @@ namespace Core.Player {
                 pauseMenuCanvas.renderMode = RenderMode.WorldSpace;
                 uiCanvas.renderMode = RenderMode.WorldSpace;
                 var pauseMenuRect = pauseMenuCanvas.GetComponent<RectTransform>();
+                var uiRect = uiCanvas.GetComponent<RectTransform>();
+
+                pauseMenuRect.localScale = new Vector3(0.001f, 0.001f, 0.001f);
+                uiRect.localScale = new Vector3(0.001f, 0.001f, 0.001f);
+                
+                pauseMenuRect.localRotation = Quaternion.identity;
+                uiRect.localRotation = Quaternion.identity;
+
+                pauseMenuRect.localPosition = new Vector3(0, 0.3f, 0.5f);
+                uiRect.localPosition = new Vector3(0, 0.3f, 0.5f);
+                
                 pauseMenuRect.sizeDelta = new Vector2(1280, 1000);
-                pauseMenuRect.localScale /= 2;
-                flatScreenCamera.SetActive(false);
+                uiRect.sizeDelta = new Vector2(1280, 1000);
+                
+                Game.Instance.SetFlatScreenCameraControllerActive(false);
                 xrRig.gameObject.SetActive(true);
             }
             else {
@@ -216,9 +227,14 @@ namespace Core.Player {
                 pauseMenuCanvas.renderMode = RenderMode.ScreenSpaceCamera;
                 uiCanvas.renderMode = RenderMode.ScreenSpaceCamera;
                 var pauseMenuRect = pauseMenuCanvas.GetComponent<RectTransform>();
+                var uiRect = uiCanvas.GetComponent<RectTransform>();
+
+                pauseMenuRect.localScale = Vector3.one;
+                uiRect.localScale = Vector3.one;
+                pauseMenuRect.position = Vector3.zero;
                 pauseMenuRect.sizeDelta = new Vector2(1920, 1080);
-                pauseMenuRect.localScale *= 2;
-                flatScreenCamera.SetActive(true);
+                
+                Game.Instance.SetFlatScreenCameraControllerActive(true);
                 xrRig.gameObject.SetActive(false);
             }
         }
