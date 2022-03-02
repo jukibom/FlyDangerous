@@ -77,12 +77,11 @@ namespace Core.Ship {
         
         public void Boost(float boostTime) {
             IEnumerator DoBoost() {
-                engineBoostAudioSource.Play();
-                externalBoostAudioSource.Play();
-                
                 // using real, non-scaled time here because this primarily affects the audio and frame time 
                 // inconsistencies are really noticeable! 
+                yield return new WaitForEndOfFrame();
                 yield return new WaitForSecondsRealtime(1);
+                yield return new WaitForEndOfFrame();
                 _shipShake.Shake(boostTime - 1, 0.005f);
                 
                 externalBoostThrusterAudioSource.Play();
@@ -91,7 +90,9 @@ namespace Core.Ship {
                 yield return new WaitForSeconds(boostTime - 1);
                 trailRenderers.ForEach(trailRenderer => trailRenderer.emitting = false);
             }
-
+            
+            engineBoostAudioSource.Play();
+            externalBoostAudioSource.Play();
             _boostCoroutine = StartCoroutine(DoBoost());
         }
 
