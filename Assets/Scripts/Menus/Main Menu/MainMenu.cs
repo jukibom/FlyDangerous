@@ -29,7 +29,6 @@ namespace Menus.Main_Menu {
         public static bool FirstRun => Game.Instance?.MenuFirstRun ?? true;
 
         private void Start() {
-            //
             // if(SteamManager.Initialized) {
             //     string name = SteamFriends.GetPersonaName();
             //     Debug.Log($"Your Steam name is {name}.");
@@ -127,7 +126,9 @@ namespace Menus.Main_Menu {
                 }
             }
             yield return SceneManager.LoadSceneAsync(sceneEnvironment, LoadSceneMode.Additive);
-            
+            yield return new WaitForEndOfFrame();
+            Game.Instance.SetFlatScreenCameraControllerActive(false);
+
             FloatingOrigin.Instance.FocalTransform = transform;
             Game.Instance.FadeFromBlack();
 
