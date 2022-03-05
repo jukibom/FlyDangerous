@@ -29,14 +29,14 @@ namespace Core.Ship {
             _trailEffect.SetVector3("_startingVelocityMax", vesselSpeedLocal + maxEjectionSpeed * force.z);
             
             // only show with forward thrust and set the spawn rate to the ratio of thrust over max 
-            int spawnRate = force.z > 0.05 
+            int spawnRate = force.z > 0
                 ? Mathf.FloorToInt(
                     MathfExtensions.Remap(
                         0,
                         1,
                         minSpawnRate,
                         maxSpawnRate,
-                        vesselSpeed.magnitude / maxSpeed
+                        force.z
                     )
                 ) 
                 : 0;
