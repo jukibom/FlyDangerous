@@ -15,7 +15,7 @@ namespace Menus.Main_Menu.Components {
             _loadedShip = Instantiate(Resources.Load(shipData.PrefabToLoad, typeof(GameObject)) as GameObject);
             if (_loadedShip != null) {
                 _loadedShip.transform.SetParent(transform, false);
-                var layer = LayerMask.NameToLayer("Player");
+                var layer = LayerMask.NameToLayer("UI3D");
                 _loadedShip.gameObject.layer = layer;
                 foreach (Transform child in _loadedShip.transform) {
                     child.SetLayer(layer);
