@@ -46,6 +46,7 @@ namespace Core.Ship {
                 : 0;
 
             _trailEffect.SetInt("_spawnRate", spawnRate);
+            _trailEffect.SetVector3("_startingPositionJitter", new Vector3(0, 0, MathfExtensions.Remap(0, 1, 0, -5, force.z)));
         }
     }
 }
