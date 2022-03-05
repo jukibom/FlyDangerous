@@ -33,20 +33,24 @@ namespace Core.Ship {
             _trailEffect.SetVector3("_startingVelocityMax", vesselSpeedLocal + maxEjectionSpeed * Math.Max(0.1f, force.z));
             
             // only show with forward thrust and set the spawn rate to the ratio of thrust over max 
-            int spawnRate = force.z > 0.001f
-                ? Mathf.FloorToInt(
+            var spawnRate = force.z > 0.001f
+                ? 
                     MathfExtensions.Remap(
                         0,
                         1,
                         minSpawnRate,
                         maxSpawnRate,
                         force.z
-                    )
-                ) 
-                : minSpawnRate;
+                    ) 
+                // set minimum spawn rate as a factor of velocity 
+                : MathfExtensions.Remap(0, maxSpeed, minSpawnRate, maxSpawnRate / 2f, vesselSpeedLocal.z);
 
-            _trailEffect.SetInt("_spawnRate", spawnRate);
+            _trailEffect.SetInt("_spawnRate", Mathf.FloorToInt(spawnRate));
+            
+            // set jitter to a factor of the forward local velocity 
             _trailEffect.SetVector3("_startingPositionJitter", new Vector3(0, 0, MathfExtensions.Remap(0, 1, 0, -5, vesselSpeedLocal.z / maxSpeed)));
+            
+            
         }
     }
 }
