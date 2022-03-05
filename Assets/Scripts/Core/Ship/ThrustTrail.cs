@@ -22,6 +22,10 @@ namespace Core.Ship {
             _transform = transform;
         }
 
+        public void UpdateColor(Color color) {
+            _trailEffect.SetVector4("_color", color);
+        }
+
         public void UpdateThrustTrail(Vector3 vesselSpeed, float maxSpeed, Vector3 force) {
             var vesselSpeedLocal = _transform.InverseTransformDirection(vesselSpeed);
 

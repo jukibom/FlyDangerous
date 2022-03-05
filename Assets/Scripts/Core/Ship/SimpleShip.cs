@@ -141,11 +141,13 @@ namespace Core.Ship {
 
         /** Set the color of the trails which occur under boost */
         public virtual void SetTrailColor(string htmlColor) {
-            var thrusterColor = ParseColor(htmlColor);
+            var trailColor = ParseColor(htmlColor);
             foreach (var thruster in GetComponentsInChildren<TrailRenderer>()) {
-                thruster.startColor = thrusterColor;
-                thruster.endColor = thrusterColor;
+                thruster.startColor = trailColor;
+                thruster.endColor = trailColor;
             }
+            
+            thrustTrail.UpdateColor(trailColor);
         }
 
         /** Set the color of the ship head-lights */
