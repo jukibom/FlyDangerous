@@ -51,7 +51,7 @@ namespace Core.Ship {
         /** Anything related to motion - thrusters, sounds etc - based on the velocity, force and torque of the player.
          * This function is network-aware.
          */
-        public void UpdateMotionInformation(float velocity, Vector3 force, Vector3 torque);
+        public void UpdateMotionInformation(Vector3 velocity, float maxVelocity, Vector3 force, Vector3 torque);
 
         /** Set the main color of the ship as a html color */
         public void SetPrimaryColor(string htmlColor);

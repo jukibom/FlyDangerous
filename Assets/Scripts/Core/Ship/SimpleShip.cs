@@ -18,6 +18,7 @@ namespace Core.Ship {
         [SerializeField] private ThrusterController thrusterController;
         [SerializeField] private Light shipLights;
         [SerializeField] private List<TrailRenderer> trailRenderers;
+        [SerializeField] private ThrustTrail thrustTrail;
         
         [SerializeField] private List<MeshRenderer> primaryColorMeshes = new List<MeshRenderer>();
         [SerializeField] private List<MeshRenderer> accentColorMeshes = new List<MeshRenderer>();
@@ -102,8 +103,9 @@ namespace Core.Ship {
 
         public virtual void UpdateIndicators(ShipIndicatorData shipIndicatorData) { /* Indicators are entirely model-specific and should be implemented. */ }
 
-        public virtual void UpdateMotionInformation(float velocity, Vector3 force, Vector3 torque) {
+        public virtual void UpdateMotionInformation(Vector3 velocity, float maxVelocity, Vector3 force, Vector3 torque) {
             thrusterController.UpdateThrusters(force, torque);
+            thrustTrail.UpdateThrustTrail(velocity, maxVelocity, force);
         }
 
         #endregion
