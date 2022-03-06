@@ -1,8 +1,5 @@
-using System;
 using Cinemachine;
 using Core;
-using Core.Player;
-using JetBrains.Annotations;
 using Misc;
 using UnityEngine;
 
@@ -17,18 +14,16 @@ namespace Gameplay {
     public class ShipCamera : MonoBehaviour {
 
         [SerializeField] public CameraType cameraType;
+        [SerializeField] public Vector3 maxOffset = Vector3.one;
         
-        // public float smoothSpeed = 0.5f;
-        // public float accelerationDampener = 5f;
-        //
-        // private Vector3 _velocity = Vector3.zero;
-        // private Vector3 _lastVelocity;
-        //
-        // public Vector3 minPos = new Vector3(-0.1175f, -0.0678f, -0.2856f);
-        // public Vector3 maxPos = new Vector3(0.1175f, 0.04f, 0.0412f);
-
         private float _baseFov;
         private CinemachineVirtualCamera _camera;
+        
+        public float smoothSpeed = 0.5f;
+        public float accelerationDampener = 5f;
+        
+        private Vector3 _targetOffset = Vector3.zero;
+        private Vector3 _offset = Vector3.zero;
 
         public CinemachineVirtualCamera Camera {
             get {
@@ -48,12 +43,6 @@ namespace Gameplay {
             Game.OnGameSettingsApplied -= SetBaseFov;
         }
 
-        // public void Reset() {
-        //     _lastVelocity = Vector3.zero;
-        //     _lastVelocity = Vector3.zero;
-        //     transform.localPosition = Vector3.zero;
-        // }
-
         public void UpdateFov(Vector3 velocity, float maxVelocity) {
             Camera.m_Lens.FieldOfView = Mathf.Lerp(Camera.m_Lens.FieldOfView,
                 MathfExtensions.Remap(0, 1, _baseFov, _baseFov + 20, velocity.z / maxVelocity), 
@@ -63,7 +52,14 @@ namespace Gameplay {
         
         public Vector3 GetCameraOffset(Vector3 force, float maxForce) {
             
-            return Vector3.zero;
+            _targetOffset = new Vector3(
+                MathfExtensions.Remap(-1, 1, maxOffset.x, -maxOffset.x, force.x / maxForce),
+                MathfExtensions.Remap(-1, 1, maxOffset.y, -maxOffset.y, force.y / maxForce),
+                MathfExtensions.Remap(-1, 1, maxOffset.z, -maxOffset.z, force.z / maxForce)
+            );
+
+            _offset = Vector3.Lerp(_offset, _targetOffset, 0.04f);
+            return _offset;
         }
 
         private void SetBaseFov() {

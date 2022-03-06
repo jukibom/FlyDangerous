@@ -28,7 +28,6 @@ namespace Misc {
 
         private void UpdatePosition(Vector3 position) {
             _vfx.SetVector3("_worldOffset", -position);
-            Debug.Log("UPDATE! " + position);
             _unsetAttributeOnNextUpdate = true;
         }
 
