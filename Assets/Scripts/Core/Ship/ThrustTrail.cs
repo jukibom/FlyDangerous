@@ -29,8 +29,8 @@ namespace Core.Ship {
         public void UpdateThrustTrail(Vector3 vesselSpeed, float maxSpeed, Vector3 force) {
             var vesselSpeedLocal = _transform.InverseTransformDirection(vesselSpeed);
 
-            _trailEffect.SetVector3("_startingVelocityMin", vesselSpeedLocal + minEjectionSpeed * Math.Max(0.1f, force.z));
-            _trailEffect.SetVector3("_startingVelocityMax", vesselSpeedLocal + maxEjectionSpeed * Math.Max(0.1f, force.z));
+            _trailEffect.SetVector3("_startingVelocityMin", vesselSpeedLocal + minEjectionSpeed * Math.Max(0.2f, force.z));
+            _trailEffect.SetVector3("_startingVelocityMax", vesselSpeedLocal + maxEjectionSpeed * Math.Max(0.2f, force.z));
             
             // only show with forward thrust and set the spawn rate to the ratio of thrust over max 
             var spawnRate = force.z > 0.001f
