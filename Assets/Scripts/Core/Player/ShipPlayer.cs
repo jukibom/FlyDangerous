@@ -441,6 +441,7 @@ namespace Core.Player {
 
                 ClampMaxSpeed(boostedMaxSpeedDelta);
                 UpdateIndicators(thrust);
+                User.ShipCameraRig.UpdateCameras(thrust, maxThrustWithBoost);
 
                 // Send the current floating origin along with the new position and rotation to the server
                 CmdSetPosition(FloatingOrigin.Instance.Origin, _transform.localPosition, _transform.rotation, _rigidbody.velocity, _rigidbody.angularVelocity, thrust, torque);

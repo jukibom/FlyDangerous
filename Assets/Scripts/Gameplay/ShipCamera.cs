@@ -6,9 +6,17 @@ using Misc;
 using UnityEngine;
 
 namespace Gameplay {
+
+    public enum CameraType {
+        FirstPerson,
+        ThirdPerson
+    }
+    
     [RequireComponent(typeof(CinemachineVirtualCamera))]
     public class ShipCamera : MonoBehaviour {
 
+        [SerializeField] public CameraType cameraType;
+        
         public float smoothSpeed = 0.5f;
         public float accelerationDampener = 5f;
 
@@ -19,29 +27,16 @@ namespace Gameplay {
         public Vector3 maxPos = new Vector3(0.1175f, 0.04f, 0.0412f);
 
         private float _baseFov;
-        private Transform _transform;
         private CinemachineVirtualCamera _camera;
-    
-    
-        private Rigidbody _shipTarget;
-        [CanBeNull] private Rigidbody Target {
-            get {
-                if (_shipTarget == null) {
-                    var player = FdPlayer.FindLocalShipPlayer;
-                    if (player != null) {
-                        _shipTarget = player.GetComponent<Rigidbody>();
-                    }
-                }
 
-                return _shipTarget;
-            }
-        }
+        public CinemachineVirtualCamera Camera => _camera;
+
+        private Rigidbody _shipTarget;
 
         public void OnEnable() {
-            _transform = transform;
-            Game.OnGameSettingsApplied += SetBaseFov;
-            // TODO: replace with vcams 
             _camera = GetComponentInChildren<CinemachineVirtualCamera>();
+
+            Game.OnGameSettingsApplied += SetBaseFov;
             SetBaseFov();
         }
     
@@ -54,31 +49,23 @@ namespace Gameplay {
             _lastVelocity = Vector3.zero;
             transform.localPosition = Vector3.zero;
         }
-    
-        void FixedUpdate() {
-            if (Target != null) {
-                var acceleration = _transform.InverseTransformDirection(Target.velocity - _lastVelocity) /
-                                   Time.fixedDeltaTime;
-                var accelerationCameraDelta = -acceleration / accelerationDampener / 100f;
-                
-                var cameraPosition =
-                    Vector3.SmoothDamp(_transform.localPosition, accelerationCameraDelta, ref _velocity, smoothSpeed);
-                
-                cameraPosition = Vector3.Min(Vector3.Max(cameraPosition, minPos), maxPos);
-                transform.localPosition = cameraPosition;
 
-                _lastVelocity = Target.velocity;
-
-                // Fov
-                _camera.m_Lens.FieldOfView = Mathf.Lerp(_camera.m_Lens.FieldOfView,
-                    MathfExtensions.Remap(0, minPos.z, _baseFov, _baseFov + 20, cameraPosition.z), 
-                    0.1f
-                );
-            }
+        public void UpdateFov(Vector3 force, float maxForce) {
+            Camera.m_Lens.FieldOfView = Mathf.Lerp(Camera.m_Lens.FieldOfView,
+                MathfExtensions.Remap(0, maxForce, _baseFov, _baseFov + 20, force.magnitude / maxForce), 
+                0.1f
+            );
+        }
+        
+        public Vector3 GetCameraOffset(Vector3 force, float maxForce) {
+            
+            return Vector3.zero;
         }
 
         private void SetBaseFov() {
-            _baseFov = Preferences.Instance.GetFloat("graphics-field-of-view");
+            _baseFov = cameraType == CameraType.FirstPerson
+                ? Preferences.Instance.GetFloat("graphics-field-of-view")
+                : Preferences.Instance.GetFloat("graphics-field-of-view-ext");
         }
     }
 }

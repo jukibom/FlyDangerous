@@ -80,6 +80,8 @@ namespace Core {
                     return 1.0f;
                 case "graphics-field-of-view":
                     return 80.0f;
+                case "graphics-field-of-view-ext":
+                    return 80.0f;
                 case "graphics-render-scale":
                     return 1.0f;
                 case "mouseXSensitivity":

@@ -22,7 +22,6 @@ namespace Core.Player {
 
         [SerializeField] public PauseMenu pauseMenu;
         [SerializeField] public Canvas uiCanvas;
-        [SerializeField] public CinemachineVirtualCamera cockpitCamera;
         [SerializeField] public ShipCameraRig shipCameraRig;
         [SerializeField] public XRRig xrRig;
 
@@ -61,6 +60,8 @@ namespace Core.Player {
                 ? xrRig.cameraGameObject.transform
                 : shipCameraRig.ActiveCamera.transform;
 
+        public ShipCameraRig ShipCameraRig => shipCameraRig;
+
         private Action<InputAction.CallbackContext> _cancelAction;
 
         /** Boostrap global ESC / cancel action in UI */
@@ -79,7 +80,6 @@ namespace Core.Player {
 
         public void OnEnable() {
             pauseUIInputModule.cancel.action.performed += _cancelAction;
-            Game.OnGameSettingsApplied += OnGameSettingsApplied;
             Game.OnVRStatus += SetVRStatus;
             ResetMouseToCentre();
             FdConsole.Instance.Clear();
@@ -87,13 +87,7 @@ namespace Core.Player {
 
         public void OnDisable() {
             pauseUIInputModule.cancel.action.performed -= _cancelAction;
-            Game.OnGameSettingsApplied -= OnGameSettingsApplied;
             Game.OnVRStatus -= SetVRStatus;
-        }
-
-        public void OnGameSettingsApplied() {
-            // TODO: multiple cameras
-            cockpitCamera.m_Lens.FieldOfView = Preferences.Instance.GetFloat("graphics-field-of-view");
         }
 
         public void Update() {
