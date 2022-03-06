@@ -15,6 +15,8 @@ using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
 
 namespace Core.Player {
+    
+    [RequireComponent(typeof(ShipCameraController))]
     public class User : MonoBehaviour {
 
         [SerializeField] public ShipPlayer shipPlayer;
@@ -31,6 +33,7 @@ namespace Core.Player {
         [SerializeField] public TimeDisplay splitTimeDeltaDisplay;
         [SerializeField] public TimeDisplay targetTimeDisplay;
         [SerializeField] public Text targetTimeTypeDisplay;
+        
         private bool _alternateFlightControls;
 
         private Vector2 _mousePositionScreen;
@@ -48,30 +51,34 @@ namespace Core.Player {
         private bool _reverse;
         private float _targetThrottle;
         private float _targetThrottleIncrement;
-
+        
         [SerializeField] public bool movementEnabled;
         public bool pauseMenuEnabled = true;
         public bool boostButtonEnabledOverride;
+
+        public ShipCameraController ShipCameraController { get; private set; }
         
         public Transform UserHeadTransform => 
             Game.Instance.IsVREnabled
                 ? xrRig.cameraGameObject.transform
-                : cockpitCamera.transform;
+                : ShipCameraController.ActiveCamera.transform;
 
         private Action<InputAction.CallbackContext> _cancelAction;
 
         /** Boostrap global ESC / cancel action in UI */
         public void Awake() {
-            _cancelAction = context => { pauseMenu.OnGameMenuToggle(); };
+            _cancelAction = _ => { pauseMenu.OnGameMenuToggle(); };
             DisableGameInput();
             ResetMouseToCentre();
         }
 
         public void Start() {
-            // if there's no controlling gamestate loaded, enable own input (usually in editor) 
+            // if there's no controlling game state loaded, enable own input (usually in editor) 
             if (!FindObjectOfType<Game>()) {
                 EnableGameInput();
             }
+
+            ShipCameraController = GetComponent<ShipCameraController>();
         }
 
         public void OnEnable() {
@@ -370,6 +377,18 @@ namespace Core.Player {
             shipPlayer.ShipLightsToggle();
         }
 
+        public void OnChangeCamera(InputValue value) {
+            ShipCameraController.ToggleActiveCamera();
+        }
+
+        public void OnRotateCameraH(InputValue value) {
+            Debug.Log("H " + value.Get<float>());
+        }
+        
+        public void OnRotateCameraV(InputValue value) {
+            Debug.Log("V " + value.Get<float>());
+        }
+
         public void OnAltFlightControlsToggle(InputValue value) {
             _pitch = 0;
             _roll = 0;
@@ -429,7 +448,7 @@ namespace Core.Player {
             bool mouseYInvert = Preferences.Instance.GetBool("mouseXInvert");
 
             var mouseXIsRelative = Preferences.Instance.GetBool("relativeMouseXAxis") || (Preferences.Instance.GetBool("forceRelativeMouseWithFAOff") && !shipPlayer.IsRotationalFlightAssistActive);
-            var mouseYIsRelative = Preferences.Instance.GetBool("relativeMouseYAxis") || (Preferences.Instance.GetBool("forceRelativeMouseWithFAOff") && !shipPlayer.IsRotationalFlightAssistActive);;
+            var mouseYIsRelative = Preferences.Instance.GetBool("relativeMouseYAxis") || (Preferences.Instance.GetBool("forceRelativeMouseWithFAOff") && !shipPlayer.IsRotationalFlightAssistActive);
 
             float mouseRelativeRate = MathfExtensions.Clamp(1, 50f, Preferences.Instance.GetFloat("mouseRelativeRate"));
 
