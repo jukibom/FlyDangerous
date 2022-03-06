@@ -396,10 +396,6 @@ namespace Core.Player {
             _isBoosting = false;
             _boostCapacitorPercent = 100f;
             _prevVelocity = Vector3.zero;
-            var shipCamera = GetComponentInChildren<ShipCamera>();
-            if (shipCamera) {
-                shipCamera.Reset();
-            }
 
             if (_boostCoroutine != null) {
                 StopCoroutine(_boostCoroutine);
@@ -441,7 +437,7 @@ namespace Core.Player {
 
                 ClampMaxSpeed(boostedMaxSpeedDelta);
                 UpdateIndicators(thrust);
-                User.ShipCameraRig.UpdateCameras(thrust, maxThrustWithBoost);
+                User.ShipCameraRig.UpdateCameras(transform.InverseTransformDirection(_rigidbody.velocity), _maxSpeed, thrust, maxThrustWithBoost);
 
                 // Send the current floating origin along with the new position and rotation to the server
                 CmdSetPosition(FloatingOrigin.Instance.Origin, _transform.localPosition, _transform.rotation, _rigidbody.velocity, _rigidbody.angularVelocity, thrust, torque);

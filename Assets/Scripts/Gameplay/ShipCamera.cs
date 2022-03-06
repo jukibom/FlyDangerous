@@ -1,3 +1,4 @@
+using System;
 using Cinemachine;
 using Core;
 using Core.Player;
@@ -17,25 +18,28 @@ namespace Gameplay {
 
         [SerializeField] public CameraType cameraType;
         
-        public float smoothSpeed = 0.5f;
-        public float accelerationDampener = 5f;
-
-        private Vector3 _velocity = Vector3.zero;
-        private Vector3 _lastVelocity;
-
-        public Vector3 minPos = new Vector3(-0.1175f, -0.0678f, -0.2856f);
-        public Vector3 maxPos = new Vector3(0.1175f, 0.04f, 0.0412f);
+        // public float smoothSpeed = 0.5f;
+        // public float accelerationDampener = 5f;
+        //
+        // private Vector3 _velocity = Vector3.zero;
+        // private Vector3 _lastVelocity;
+        //
+        // public Vector3 minPos = new Vector3(-0.1175f, -0.0678f, -0.2856f);
+        // public Vector3 maxPos = new Vector3(0.1175f, 0.04f, 0.0412f);
 
         private float _baseFov;
         private CinemachineVirtualCamera _camera;
 
-        public CinemachineVirtualCamera Camera => _camera;
-
-        private Rigidbody _shipTarget;
+        public CinemachineVirtualCamera Camera {
+            get {
+                if (_camera == null) {
+                    _camera = GetComponent<CinemachineVirtualCamera>();
+                }
+                return _camera;
+            }
+        }
 
         public void OnEnable() {
-            _camera = GetComponentInChildren<CinemachineVirtualCamera>();
-
             Game.OnGameSettingsApplied += SetBaseFov;
             SetBaseFov();
         }
@@ -44,15 +48,15 @@ namespace Gameplay {
             Game.OnGameSettingsApplied -= SetBaseFov;
         }
 
-        public void Reset() {
-            _lastVelocity = Vector3.zero;
-            _lastVelocity = Vector3.zero;
-            transform.localPosition = Vector3.zero;
-        }
+        // public void Reset() {
+        //     _lastVelocity = Vector3.zero;
+        //     _lastVelocity = Vector3.zero;
+        //     transform.localPosition = Vector3.zero;
+        // }
 
-        public void UpdateFov(Vector3 force, float maxForce) {
+        public void UpdateFov(Vector3 velocity, float maxVelocity) {
             Camera.m_Lens.FieldOfView = Mathf.Lerp(Camera.m_Lens.FieldOfView,
-                MathfExtensions.Remap(0, maxForce, _baseFov, _baseFov + 20, force.magnitude / maxForce), 
+                MathfExtensions.Remap(0, 1, _baseFov, _baseFov + 20, velocity.z / maxVelocity), 
                 0.1f
             );
         }

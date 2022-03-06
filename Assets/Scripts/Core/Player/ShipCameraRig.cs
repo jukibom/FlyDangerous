@@ -16,10 +16,10 @@ namespace Core.Player {
             SetActiveCamera(cameras[0]);
         }
 
-        public void UpdateCameras(Vector3 force, float maxForce) {
-            ActiveCamera.UpdateFov(force, maxForce);
+        public void UpdateCameras(Vector3 velocity, float maxVelocity, Vector3 force, float maxForce) {
+            ActiveCamera.UpdateFov(velocity, maxVelocity);
             var offset = ActiveCamera.GetCameraOffset(force, maxForce);
-            Debug.Log(offset);
+            // Debug.Log(offset);
         }
 
         public void ToggleActiveCamera() {
