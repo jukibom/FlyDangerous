@@ -4,7 +4,7 @@ using Cinemachine;
 using UnityEngine;
 
 namespace Core.Player {
-    public class ShipCameraController : MonoBehaviour {
+    public class ShipCameraRig : MonoBehaviour {
         
         [SerializeField] public List<CinemachineVirtualCamera> cameras;
         public CinemachineVirtualCamera ActiveCamera { get; private set; }

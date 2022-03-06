@@ -16,7 +16,6 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 namespace Core.Player {
     
-    [RequireComponent(typeof(ShipCameraController))]
     public class User : MonoBehaviour {
 
         [SerializeField] public ShipPlayer shipPlayer;
@@ -24,6 +23,7 @@ namespace Core.Player {
         [SerializeField] public PauseMenu pauseMenu;
         [SerializeField] public Canvas uiCanvas;
         [SerializeField] public CinemachineVirtualCamera cockpitCamera;
+        [SerializeField] public ShipCameraRig shipCameraRig;
         [SerializeField] public XRRig xrRig;
 
         [SerializeField] public InputSystemUIInputModule pauseUIInputModule;
@@ -55,13 +55,11 @@ namespace Core.Player {
         [SerializeField] public bool movementEnabled;
         public bool pauseMenuEnabled = true;
         public bool boostButtonEnabledOverride;
-
-        public ShipCameraController ShipCameraController { get; private set; }
         
         public Transform UserHeadTransform => 
             Game.Instance.IsVREnabled
                 ? xrRig.cameraGameObject.transform
-                : ShipCameraController.ActiveCamera.transform;
+                : shipCameraRig.ActiveCamera.transform;
 
         private Action<InputAction.CallbackContext> _cancelAction;
 
@@ -77,8 +75,6 @@ namespace Core.Player {
             if (!FindObjectOfType<Game>()) {
                 EnableGameInput();
             }
-
-            ShipCameraController = GetComponent<ShipCameraController>();
         }
 
         public void OnEnable() {
@@ -378,7 +374,7 @@ namespace Core.Player {
         }
 
         public void OnChangeCamera(InputValue value) {
-            ShipCameraController.ToggleActiveCamera();
+            shipCameraRig.ToggleActiveCamera();
         }
 
         public void OnRotateCameraH(InputValue value) {
