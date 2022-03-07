@@ -56,15 +56,14 @@ namespace Core.Player {
             else if (ActiveCamera.cameraType == CameraType.ThirdPerson) {
                 // input is used to rotate the view around the ship
                 // bias towards looking forward
-                var x = CameraUserRotation.x;
-                var y = Mathf.Abs(CameraUserRotation.y) > 0.2f ? CameraUserRotation.y : 0.2f;
-                
+                if (Mathf.Abs(CameraUserRotation.x) < 0.2f && Mathf.Abs(CameraUserRotation.y) < 0.2f) {
+                    CameraUserRotation = new Vector2(0, 1);
+                }
+
                 _currentRotation = new Vector2(
-                    Mathf.Lerp(_currentRotation.x, x, 0.01f),
-                    Mathf.Lerp(_currentRotation.y, y, 0.01f)
+                    Mathf.Lerp(_currentRotation.x, CameraUserRotation.x, 0.02f),
+                    Mathf.Lerp(_currentRotation.y, CameraUserRotation.y, 0.02f)
                 );
-                var angleY = _currentRotation.y * 90;
-                var angleX = _currentRotation.x * 90;
                 
 
                 var rotationRads = Mathf.Atan2(_currentRotation.x, _currentRotation.y);
@@ -87,6 +86,7 @@ namespace Core.Player {
         }
 
         private void SetActiveCamera(ShipCamera newCamera) {
+            _currentRotation = Vector2.zero;
             ActiveCamera = newCamera;
             ActiveCamera.Camera.MoveToTopOfPrioritySubqueue();
         }
