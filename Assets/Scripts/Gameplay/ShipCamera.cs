@@ -1,3 +1,4 @@
+using System;
 using Cinemachine;
 using Core;
 using Misc;
@@ -19,11 +20,13 @@ namespace Gameplay {
         private float _baseFov;
         private CinemachineVirtualCamera _camera;
         
-        public float smoothSpeed = 0.5f;
-        public float accelerationDampener = 5f;
+        public float smoothSpeed = 0.1f;
         
         private Vector3 _targetOffset = Vector3.zero;
         private Vector3 _offset = Vector3.zero;
+        private Vector3 _baseLocalPosition;
+        
+        public Vector3 BaseLocalPosition => _baseLocalPosition;
 
         public CinemachineVirtualCamera Camera {
             get {
@@ -32,6 +35,10 @@ namespace Gameplay {
                 }
                 return _camera;
             }
+        }
+
+        public void Awake() {
+            _baseLocalPosition = transform.localPosition;
         }
 
         public void OnEnable() {
@@ -46,7 +53,7 @@ namespace Gameplay {
         public void UpdateFov(Vector3 velocity, float maxVelocity) {
             Camera.m_Lens.FieldOfView = Mathf.Lerp(Camera.m_Lens.FieldOfView,
                 MathfExtensions.Remap(0, 1, _baseFov, _baseFov + 20, velocity.z / maxVelocity), 
-                0.1f
+                smoothSpeed
             );
         }
         

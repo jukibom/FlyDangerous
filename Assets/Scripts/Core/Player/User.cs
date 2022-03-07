@@ -50,6 +50,9 @@ namespace Core.Player {
         private bool _reverse;
         private float _targetThrottle;
         private float _targetThrottleIncrement;
+
+        private float _cameraX;
+        private float _cameraY;
         
         [SerializeField] public bool movementEnabled;
         public bool pauseMenuEnabled = true;
@@ -125,6 +128,8 @@ namespace Core.Player {
                 shipPlayer.SetLateralH(lateralH);
                 shipPlayer.SetLateralV(lateralV);
                 shipPlayer.Boost(_boost);
+
+                shipCameraRig.CameraUserRotation = new Vector2(_cameraX, _cameraY);
             }
 
             if (boostButtonEnabledOverride) {
@@ -372,11 +377,11 @@ namespace Core.Player {
         }
 
         public void OnRotateCameraH(InputValue value) {
-            Debug.Log("H " + value.Get<float>());
+            _cameraX = value.Get<float>();
         }
         
         public void OnRotateCameraV(InputValue value) {
-            Debug.Log("V " + value.Get<float>());
+            _cameraY = value.Get<float>();
         }
 
         public void OnAltFlightControlsToggle(InputValue value) {
