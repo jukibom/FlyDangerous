@@ -67,5 +67,12 @@ namespace Core {
                 CinemachineCore.Instance.GetVirtualCamera(i).OnTargetObjectWarped(focalTransform, -offset);
             }
         }
+        
+        private void OnDrawGizmosSelected()
+        {
+            // Draw a yellow cube at the transform position
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(transform.position, correctionDistance);
+        }
     }
 }
