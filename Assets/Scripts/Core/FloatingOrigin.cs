@@ -35,9 +35,7 @@ namespace Core {
             if (FocalTransform && FocalTransform.position.magnitude > correctionDistance) {
                 var focalPosition = FocalTransform.position;
                 origin += focalPosition;
-
-                UpdateTrails(focalPosition);
-
+                
                 // reset focal object (local player) to 0,0,0
                 FocalTransform.position = Vector3.zero;
                 
@@ -45,32 +43,8 @@ namespace Core {
             }
         }
 
-        private void UpdateTrails(Vector3 offset) {
-            var trails = FindObjectsOfType<TrailRenderer>();
-            foreach (var trail in trails)
-            {
-                var positions = new Vector3[trail.positionCount];
-
-                int positionCount = trail.GetPositions(positions);
-                for (int i = 0; i < positionCount; ++i)
-                    positions[i] -= offset;
-
-                trail.SetPositions(positions);
-            }
-        }
-
-        // Not currently used but may be needed for lateral dampening in the future 
-        private void UpdateVirtualCameras(Vector3 offset) {
-            // Inform any cinemachine virtual cameras that might be tracking this target
-            int numVCams = CinemachineCore.Instance.VirtualCameraCount;
-            for (int i = 0; i < numVCams; ++i) {
-                CinemachineCore.Instance.GetVirtualCamera(i).OnTargetObjectWarped(focalTransform, -offset);
-            }
-        }
-        
-        private void OnDrawGizmosSelected()
-        {
-            // Draw a yellow cube at the transform position
+        // Draw a bounding sphere on selection in the editor
+        private void OnDrawGizmosSelected() {
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireSphere(transform.position, correctionDistance);
         }

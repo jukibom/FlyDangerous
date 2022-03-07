@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Core.Player;
-using Misc;
 using UnityEngine;
-using UnityEngine.Experimental.GlobalIllumination;
 using LightType = UnityEngine.LightType;
 
 namespace Core.Ship {
@@ -17,8 +14,7 @@ namespace Core.Ship {
         
         [SerializeField] private ThrusterController thrusterController;
         [SerializeField] private Light shipLights;
-        [SerializeField] private List<TrailRenderer> trailRenderers;
-        [SerializeField] private ThrustTrail thrustTrail;
+        [SerializeField] private SmokeEmitter smokeEmitter;
         
         [SerializeField] private List<MeshRenderer> primaryColorMeshes = new List<MeshRenderer>();
         [SerializeField] private List<MeshRenderer> accentColorMeshes = new List<MeshRenderer>();
@@ -40,7 +36,6 @@ namespace Core.Ship {
         public virtual void OnEnable() {
             Game.OnPauseToggle += PauseAudio;
             Game.OnRestart += Restart;
-            trailRenderers.ForEach(trailRenderer => trailRenderer.emitting = false);
             _shipShake = new ShipShake(transform);
         }
         
@@ -87,9 +82,7 @@ namespace Core.Ship {
                 
                 externalBoostThrusterAudioSource.Play();
                 thrusterController.AnimateBoostThrusters();
-                trailRenderers.ForEach(trailRenderer => trailRenderer.emitting = true);
                 yield return new WaitForSeconds(boostTime - 1);
-                trailRenderers.ForEach(trailRenderer => trailRenderer.emitting = false);
             }
             
             engineBoostAudioSource.Play();
@@ -105,7 +98,7 @@ namespace Core.Ship {
 
         public virtual void UpdateMotionInformation(Vector3 velocity, float maxVelocity, Vector3 force, Vector3 torque) {
             thrusterController.UpdateThrusters(force, torque);
-            thrustTrail.UpdateThrustTrail(velocity, maxVelocity, force);
+            smokeEmitter.UpdateThrustTrail(velocity, maxVelocity, force);
         }
 
         #endregion
@@ -142,12 +135,7 @@ namespace Core.Ship {
         /** Set the color of the trails which occur under boost */
         public virtual void SetTrailColor(string htmlColor) {
             var trailColor = ParseColor(htmlColor);
-            foreach (var thruster in GetComponentsInChildren<TrailRenderer>()) {
-                thruster.startColor = trailColor;
-                thruster.endColor = trailColor;
-            }
-            
-            thrustTrail.UpdateColor(trailColor);
+            smokeEmitter.UpdateColor(trailColor);
         }
 
         /** Set the color of the ship head-lights */
@@ -184,10 +172,6 @@ namespace Core.Ship {
 
         private void Restart() {
             _shipShake.Reset();
-            trailRenderers.ForEach(trail => {
-                trail.Clear();
-                trail.emitting = false;
-            });
             engineBoostAudioSource.Stop();
             externalBoostAudioSource.Stop();
             externalBoostThrusterAudioSource.Stop();

@@ -7,13 +7,13 @@ namespace Core.Ship {
 
     [RequireComponent(typeof(VisualEffect))]
     [RequireComponent(typeof(VfxFloatingOriginHandler))]
-    public class ThrustTrail : MonoBehaviour {
+    public class SmokeEmitter : MonoBehaviour {
 
         private VisualEffect _trailEffect;
         private Transform _transform;
         
-        [SerializeField] private Vector3 minEjectionSpeed = new Vector3(0, 0, -10);
-        [SerializeField] private Vector3 maxEjectionSpeed = new Vector3(0, 0, -30);
+        [SerializeField] private Vector3 minEjectionSpeed = new(0, 0, -10);
+        [SerializeField] private Vector3 maxEjectionSpeed = new(0, 0, -30);
         [SerializeField] private int minSpawnRate = 3;
         [SerializeField] private int maxSpawnRate = 150;
 
@@ -49,8 +49,6 @@ namespace Core.Ship {
             
             // set jitter to a factor of the forward local velocity 
             _trailEffect.SetVector3("_startingPositionJitter", new Vector3(0, 0, MathfExtensions.Remap(0, 1, 0, -5, vesselSpeedLocal.z / maxSpeed)));
-            
-            
         }
     }
 }
