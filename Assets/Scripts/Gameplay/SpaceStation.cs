@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class SpaceStation : MonoBehaviour {
     public float rotationAmountDegrees = 0.1f;
-    public Transform centralSection;
+    public Rigidbody centralSection;
 
     private Quaternion _initialRotation;
 
@@ -27,6 +27,6 @@ public class SpaceStation : MonoBehaviour {
     }
 
     private void FixedUpdate() {
-        centralSection.RotateAround(transform.position, transform.forward, rotationAmountDegrees);
-    }
+        Quaternion deltaRotation = Quaternion.Euler(new Vector3(0, 0, rotationAmountDegrees));
+        centralSection.MoveRotation(centralSection.rotation * deltaRotation); }
 }
