@@ -20,15 +20,14 @@ namespace Core.Player {
         public Vector2 CameraUserRotation { get; set; }
 
         public ShipCamera ActiveCamera { get; private set; }
-
         
-
         private void Start() {
             // Set active camera to preference
             // TODO: preference saving
-            SetActiveCamera(cameras[0]);
             _baseTargetPosition = cameraTarget.localPosition;
             _transform = transform;
+            
+            SetActiveCamera(cameras[0]);
         }
 
         private void Update() {
@@ -75,6 +74,12 @@ namespace Core.Player {
             cameraTarget.position -= cameraOffsetWorld;
         }
 
+        public void Reset() {
+            _cameraOffset = Vector3.zero;
+            _currentRotation = Vector2.zero;
+            cameraTarget.localPosition = _baseTargetPosition;
+        }
+
         public void UpdateCameras(Vector3 velocity, float maxVelocity, Vector3 force, float maxForce) {
             ActiveCamera.UpdateFov(velocity, maxVelocity);
             _cameraOffset = ActiveCamera.GetCameraOffset(force, maxForce);
@@ -86,7 +91,7 @@ namespace Core.Player {
         }
 
         private void SetActiveCamera(ShipCamera newCamera) {
-            _currentRotation = Vector2.zero;
+            Reset();
             ActiveCamera = newCamera;
             ActiveCamera.Camera.MoveToTopOfPrioritySubqueue();
         }

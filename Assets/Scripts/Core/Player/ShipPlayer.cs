@@ -401,6 +401,8 @@ namespace Core.Player {
                 StopCoroutine(_boostCoroutine);
             }
 
+            User.ShipCameraRig.Reset();
+
             UIAudioManager.Instance.Stop("ship-boost");
         }
 
