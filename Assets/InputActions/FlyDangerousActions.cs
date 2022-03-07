@@ -340,21 +340,21 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Rotate Camera H"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""1b1cb627-0185-4ca3-b07f-cead421e23ad"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": ""Axis"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""Rotate Camera V"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""f414bd1c-908b-4d29-8f4d-6efd9dfc713f"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": ""Axis"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
