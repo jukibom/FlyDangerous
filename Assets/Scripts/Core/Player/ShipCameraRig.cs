@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Cinemachine;
 using Gameplay;
 using UnityEngine;
 using CameraType = Gameplay.CameraType;
@@ -16,10 +14,7 @@ namespace Core.Player {
         private Transform _transform;
         private Vector3 _cameraOffset;
         private Vector2 _currentRotation;
-
-        // This should be a vec2 from -1 to 1
-        public Vector2 CameraUserRotation { get; set; }
-
+        
         public ShipCamera ActiveCamera { get; private set; }
         
         private void Start() {
@@ -35,48 +30,78 @@ namespace Core.Player {
             Preferences.Instance.Save();
         }
 
-        private void Update() {
+        public void SetCameraAbsolute(Vector2 absolutePosition) {
             // reset rotation before processing input
             cameraTarget.localPosition = baseTargetPosition;
             cameraTarget.transform.rotation = _transform.rotation;
+
+            UpdateAbsolute(absolutePosition);
             
+            // handle offset based on force
+            var cameraOffsetWorld = _transform.position - _transform.TransformPoint(_cameraOffset);
+            cameraTarget.position -= cameraOffsetWorld;
+        }
+        
+        public void SetCameraRelative(Vector2 relativePosition) {
+            // reset rotation before processing input
+            cameraTarget.localPosition = baseTargetPosition;
+            cameraTarget.transform.rotation = _transform.rotation;
+
+            UpdateRelative(relativePosition);
+            
+            // handle offset based on force
+            var cameraOffsetWorld = _transform.position - _transform.TransformPoint(_cameraOffset);
+            cameraTarget.position -= cameraOffsetWorld;
+        }
+
+        private void UpdateAbsolute(Vector2 absolutePosition) {
             if (ActiveCamera.cameraType == CameraType.FirstPerson) {
                 
                 _currentRotation = new Vector2(
-                    Mathf.Lerp(_currentRotation.x, CameraUserRotation.x, 0.01f),
-                    Mathf.Lerp(_currentRotation.y, CameraUserRotation.y, 0.01f)
+                    Mathf.Lerp(_currentRotation.x, absolutePosition.x, 0.01f),
+                    Mathf.Lerp(_currentRotation.y, absolutePosition.y, 0.01f)
                 );
                 var angleY = _currentRotation.y * 90;
                 var angleX = _currentRotation.x * 90;
                 
-                // Use the starting position of the active camera as the pivot otherwise the cinemachine system
-                // will FREAK THE FUCK OUT trying to update the position while basing that formula on the position itself
                 var pivot = _transform.TransformPoint(ActiveCamera.BaseLocalPosition);
 
                 cameraTarget.RotateAround(pivot, _transform.right, -angleY);
                 cameraTarget.RotateAround(pivot, _transform.up, angleX);
             }
             
-            else if (ActiveCamera.cameraType == CameraType.ThirdPerson) {
+            if (ActiveCamera.cameraType == CameraType.ThirdPerson) {
                 // input is used to rotate the view around the ship
                 // bias towards looking forward
-                if (Mathf.Abs(CameraUserRotation.x) < 0.2f && Mathf.Abs(CameraUserRotation.y) < 0.2f) {
-                    CameraUserRotation = new Vector2(0, 1);
+                if (Mathf.Abs(absolutePosition.x) < 0.2f && Mathf.Abs(absolutePosition.y) < 0.2f) {
+                    absolutePosition = new Vector2(0, 1);
                 }
 
                 _currentRotation = new Vector2(
-                    Mathf.Lerp(_currentRotation.x, CameraUserRotation.x, 0.02f),
-                    Mathf.Lerp(_currentRotation.y, CameraUserRotation.y, 0.02f)
+                    Mathf.Lerp(_currentRotation.x, absolutePosition.x, 0.02f),
+                    Mathf.Lerp(_currentRotation.y, absolutePosition.y, 0.02f)
                 );
                 
-
                 var rotationRads = Mathf.Atan2(_currentRotation.x, _currentRotation.y);
-                
                 cameraTarget.RotateAround(_transform.position, _transform.up, rotationRads * Mathf.Rad2Deg);
             }
+        }
 
-            var cameraOffsetWorld = _transform.position - _transform.TransformPoint(_cameraOffset);
-            cameraTarget.position -= cameraOffsetWorld;
+        private void UpdateRelative(Vector2 relativePosition) {
+            var pivot = _transform.TransformPoint(ActiveCamera.BaseLocalPosition);
+            if (ActiveCamera.cameraType == CameraType.ThirdPerson) {
+                pivot = _transform.position;
+            }
+
+            _currentRotation = new Vector2(
+                _currentRotation.x + relativePosition.x * 2 * Time.deltaTime,
+                _currentRotation.y + relativePosition.y * 2 * Time.deltaTime
+            );
+            var angleY = _currentRotation.y * 90;
+            var angleX = _currentRotation.x * 90;
+
+            cameraTarget.RotateAround(pivot, _transform.right, -angleY);
+            cameraTarget.RotateAround(pivot, _transform.up, angleX);
         }
 
         public void Reset() {

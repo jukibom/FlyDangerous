@@ -28,6 +28,9 @@ namespace Gameplay {
         private Vector3 _baseLocalPosition;
 
         public string Name => cameraName;
+        
+        // Use the starting position of the active camera as the pivot otherwise the cinemachine system
+        // will FREAK THE FUCK OUT trying to update the position while basing that formula on the position itself
         public Vector3 BaseLocalPosition => _baseLocalPosition;
 
         public CinemachineVirtualCamera Camera {
