@@ -18,6 +18,7 @@ namespace Core.Player {
         public float maxSpeed;
         public float maxBoostSpeed;
         public float maxThrust;
+        public float maxAngularVelocity;
         public float torqueThrustMultiplier;
         public float throttleMultiplier;
         public float latHMultiplier;
@@ -64,6 +65,7 @@ namespace Core.Player {
             maxSpeed = 800f,
             maxBoostSpeed = 932f,
             maxThrust = 220000f,
+            maxAngularVelocity = 7f,
             torqueThrustMultiplier = 0.04f,
             throttleMultiplier = 1f,
             latHMultiplier = 0.5f,
@@ -96,6 +98,7 @@ namespace Core.Player {
                 parameters.maxSpeed = _maxSpeed;
                 parameters.maxBoostSpeed = _maxBoostSpeed;
                 parameters.maxThrust = _maxThrust;
+                parameters.maxAngularVelocity = _maxAngularVelocity;
                 parameters.torqueThrustMultiplier = _torqueThrustMultiplier;
                 parameters.throttleMultiplier = _throttleMultiplier;
                 parameters.latHMultiplier = _latHMultiplier;
@@ -118,6 +121,7 @@ namespace Core.Player {
                 _rigidbody.mass = value.mass;
                 _rigidbody.drag = value.drag;
                 _rigidbody.angularDrag = value.angularDrag;
+                _rigidbody.maxAngularVelocity = _maxAngularVelocity;
                 _rigidbody.inertiaTensor = _initialInertiaTensor * value.inertiaTensorMultiplier;
                 _inertialTensorMultiplier = value.inertiaTensorMultiplier;
 
@@ -150,6 +154,7 @@ namespace Core.Player {
         private float _maxSpeed = ShipParameterDefaults.maxSpeed;
         private float _maxBoostSpeed = ShipParameterDefaults.maxBoostSpeed;
         private float _maxThrust = ShipParameterDefaults.maxThrust;
+        private float _maxAngularVelocity = ShipParameterDefaults.maxAngularVelocity;
         private float _torqueThrustMultiplier = ShipParameterDefaults.torqueThrustMultiplier;
         private float _throttleMultiplier = ShipParameterDefaults.throttleMultiplier;
         private float _latHMultiplier = ShipParameterDefaults.latHMultiplier;
@@ -222,6 +227,7 @@ namespace Core.Player {
         private bool IsReady => _transform && _rigidbody && _serverReady;
         public bool IsRotationalFlightAssistActive => _flightAssistRotationalDampening;
         public float Velocity => Mathf.Round(_rigidbody.velocity.magnitude);
+        public float VelocityNormalised => _rigidbody.velocity.sqrMagnitude / (_maxBoostSpeed * _maxBoostSpeed);
 
         [CanBeNull] private IShip _ship;
         [CanBeNull] public IShip Ship {
@@ -300,6 +306,7 @@ namespace Core.Player {
             _rigidbody.mass = ShipParameterDefaults.mass;
             _rigidbody.drag = ShipParameterDefaults.drag;
             _rigidbody.angularDrag = ShipParameterDefaults.angularDrag;
+            _rigidbody.maxAngularVelocity = ShipParameterDefaults.maxAngularVelocity;
 
             // setup angular momentum for collisions (higher multiplier = less spin)
             // This magic number is the original inertiaTensor of the puffin ship which, unbeknownst to me at the time,
