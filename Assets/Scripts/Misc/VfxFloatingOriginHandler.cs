@@ -28,7 +28,7 @@ namespace Misc {
 
         private void UpdatePosition(Vector3 position) {
             _vfx.SetVector3("_worldOffset", -position);
-            _unsetAttributeOnNextUpdate = true;
+            _unsetAttribute = true;
         }
 
         /**
@@ -40,14 +40,14 @@ namespace Misc {
              * It works. LEAVE IT ALONE.
              */
         private void LateUpdate() {
-            if (_unsetAttribute) {
+            if (_unsetAttributeOnNextUpdate ) {
                 _vfx.SetVector3("_worldOffset", Vector3.zero);
                 _unsetAttribute = false;
                 _unsetAttributeOnNextUpdate = false;
             }
 
-            if (_unsetAttributeOnNextUpdate) {
-                _unsetAttribute = true;
+            if (_unsetAttribute ) {
+                _unsetAttributeOnNextUpdate = true;
             }
         }
     }
