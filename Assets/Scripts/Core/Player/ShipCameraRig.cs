@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Cinemachine;
 using Gameplay;
 using UnityEngine;
@@ -11,8 +12,8 @@ namespace Core.Player {
         [SerializeField] public List<ShipCamera> cameras;
         [SerializeField] private Transform cameraTarget;
 
+        private static readonly Vector3 baseTargetPosition = new(0,0,20);
         private Transform _transform;
-        private Vector3 _baseTargetPosition;
         private Vector3 _cameraOffset;
         private Vector2 _currentRotation;
 
@@ -22,17 +23,21 @@ namespace Core.Player {
         public ShipCamera ActiveCamera { get; private set; }
         
         private void Start() {
-            // Set active camera to preference
-            // TODO: preference saving
-            _baseTargetPosition = cameraTarget.localPosition;
             _transform = transform;
-            
-            SetActiveCamera(cameras[0]);
+            // Set active camera from preference
+            var preferredCameraName = Preferences.Instance.GetString("preferredCamera");
+            var preferredCamera = cameras.Find(c => c.Name == preferredCameraName);
+            SetActiveCamera(preferredCamera != null ? preferredCamera : cameras.Last());
+        }
+        
+        private void OnDisable() {
+            Preferences.Instance.SetString("preferredCamera", ActiveCamera.Name);
+            Preferences.Instance.Save();
         }
 
         private void Update() {
             // reset rotation before processing input
-            cameraTarget.localPosition = _baseTargetPosition;
+            cameraTarget.localPosition = baseTargetPosition;
             cameraTarget.transform.rotation = _transform.rotation;
             
             if (ActiveCamera.cameraType == CameraType.FirstPerson) {
@@ -77,7 +82,7 @@ namespace Core.Player {
         public void Reset() {
             _cameraOffset = Vector3.zero;
             _currentRotation = Vector2.zero;
-            cameraTarget.localPosition = _baseTargetPosition;
+            cameraTarget.localPosition = baseTargetPosition;
         }
 
         public void UpdateCameras(Vector3 velocity, float maxVelocity, Vector3 force, float maxForce) {

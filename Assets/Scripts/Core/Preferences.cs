@@ -140,6 +140,8 @@ namespace Core {
                     return "#348A9F";
                 case "playerShipHeadLightsColor":
                     return "#FFF4D6";
+                case "preferredCamera":
+                    return "external far";
                 default: 
                     Debug.LogWarning("Attempted to get preference " + key + " with no default specified");
                     return "";

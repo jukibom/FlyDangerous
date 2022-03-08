@@ -13,7 +13,8 @@ namespace Gameplay {
     
     [RequireComponent(typeof(CinemachineVirtualCamera))]
     public class ShipCamera : MonoBehaviour {
-
+        
+        [SerializeField] private string cameraName;
         [SerializeField] public CameraType cameraType;
         [SerializeField] public Vector3 maxOffset = Vector3.one;
         
@@ -25,7 +26,8 @@ namespace Gameplay {
         private Vector3 _targetOffset = Vector3.zero;
         private Vector3 _offset = Vector3.zero;
         private Vector3 _baseLocalPosition;
-        
+
+        public string Name => cameraName;
         public Vector3 BaseLocalPosition => _baseLocalPosition;
 
         public CinemachineVirtualCamera Camera {
