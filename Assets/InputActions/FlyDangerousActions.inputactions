@@ -272,7 +272,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "ShipLightsToggle",
+                    "name": "ShipLights Toggle",
                     "type": "Button",
                     "id": "1f75d6cb-59c2-45e8-9859-131c53953c5a",
                     "expectedControlType": "Button",
@@ -302,6 +302,15 @@
                     "name": "Recenter Mouse",
                     "type": "Button",
                     "id": "b43d1338-0375-4761-a9be-0daaaeef9a89",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Mouselook Toggle",
+                    "type": "Button",
+                    "id": "4ddcaf9f-d35b-428a-a645-4eb8680f2d68",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -339,7 +348,7 @@
                 {
                     "name": "",
                     "id": "89d913f5-1c0b-4f48-ad2b-3bcf86512369",
-                    "path": "<Gamepad>/leftStick/y",
+                    "path": "<Gamepad>/rightStick/y",
                     "interactions": "",
                     "processors": "",
                     "groups": "Everything",
@@ -515,7 +524,7 @@
                 {
                     "name": "",
                     "id": "7abb1e17-bf1a-4f18-bde7-9f3833f1f333",
-                    "path": "<Gamepad>/leftStick/x",
+                    "path": "",
                     "interactions": "",
                     "processors": "",
                     "groups": "Everything",
@@ -581,7 +590,7 @@
                 {
                     "name": "positive",
                     "id": "346226f4-2b6f-4152-8233-1bf4fbb387ff",
-                    "path": "",
+                    "path": "<Gamepad>/rightShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "Everything",
@@ -592,7 +601,7 @@
                 {
                     "name": "negative",
                     "id": "77de266c-1c09-49a2-8c89-03dd6259d1e9",
-                    "path": "",
+                    "path": "<Gamepad>/leftShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "Everything",
@@ -691,7 +700,7 @@
                 {
                     "name": "",
                     "id": "9e1dd72a-05e2-49c6-9f65-3ddd13ca1e69",
-                    "path": "",
+                    "path": "<Gamepad>/leftStick/x",
                     "interactions": "",
                     "processors": "",
                     "groups": "Everything",
@@ -779,7 +788,7 @@
                 {
                     "name": "",
                     "id": "72ef87a3-80f5-4c79-a91f-a35cb8d509a5",
-                    "path": "<Gamepad>/rightStick/y",
+                    "path": "<Gamepad>/leftStick/y",
                     "interactions": "",
                     "processors": "",
                     "groups": "Everything",
@@ -922,7 +931,7 @@
                 {
                     "name": "",
                     "id": "0730b15e-e346-45d7-8c13-4941c78ef35b",
-                    "path": "",
+                    "path": "<Gamepad>/start",
                     "interactions": "",
                     "processors": "",
                     "groups": "Everything",
@@ -944,7 +953,7 @@
                 {
                     "name": "",
                     "id": "80cfc569-feb9-4e09-872d-61f839d95488",
-                    "path": "",
+                    "path": "<Gamepad>/select",
                     "interactions": "",
                     "processors": "",
                     "groups": "Everything",
@@ -1564,18 +1573,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Everything",
-                    "action": "ShipLightsToggle",
+                    "action": "ShipLights Toggle",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
                     "id": "0320387c-8eec-4715-af11-e020d209fa17",
-                    "path": "",
+                    "path": "<Gamepad>/leftStickPress",
                     "interactions": "",
                     "processors": "",
                     "groups": "Everything",
-                    "action": "ShipLightsToggle",
+                    "action": "ShipLights Toggle",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -1725,7 +1734,7 @@
                 {
                     "name": "",
                     "id": "ad8a82a3-1750-4407-bab3-98200061debe",
-                    "path": "",
+                    "path": "<Gamepad>/buttonNorth",
                     "interactions": "",
                     "processors": "",
                     "groups": "Everything",
@@ -1767,9 +1776,9 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "negative",
-                    "id": "1ee3d877-dfae-44b0-81a5-e2fad358aa35",
-                    "path": "<Keyboard>/numpad4",
+                    "name": "positive",
+                    "id": "296c415e-6c2f-4994-b0e0-7c4f3fe9923b",
+                    "path": "<Keyboard>/numpad6",
                     "interactions": "",
                     "processors": "",
                     "groups": "Everything",
@@ -1778,9 +1787,9 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "positive",
-                    "id": "296c415e-6c2f-4994-b0e0-7c4f3fe9923b",
-                    "path": "<Keyboard>/numpad6",
+                    "name": "negative",
+                    "id": "1ee3d877-dfae-44b0-81a5-e2fad358aa35",
+                    "path": "<Keyboard>/numpad4",
                     "interactions": "",
                     "processors": "",
                     "groups": "Everything",
@@ -1800,9 +1809,9 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "negative",
-                    "id": "37dc9965-3122-48bd-9868-77676f7d5317",
-                    "path": "",
+                    "name": "positive",
+                    "id": "bc35179d-c1af-4c25-a8be-eff089e15add",
+                    "path": "<Gamepad>/dpad/right",
                     "interactions": "",
                     "processors": "",
                     "groups": "Everything",
@@ -1811,9 +1820,9 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "positive",
-                    "id": "bc35179d-c1af-4c25-a8be-eff089e15add",
-                    "path": "",
+                    "name": "negative",
+                    "id": "37dc9965-3122-48bd-9868-77676f7d5317",
+                    "path": "<Gamepad>/dpad/left",
                     "interactions": "",
                     "processors": "",
                     "groups": "Everything",
@@ -1855,9 +1864,9 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "negative",
-                    "id": "e4f0bb6e-49fa-48cc-a988-523e5eb6f2ce",
-                    "path": "<Keyboard>/numpad2",
+                    "name": "positive",
+                    "id": "e4f70892-bf8c-4c54-b586-3d0e53a1492b",
+                    "path": "<Keyboard>/numpad8",
                     "interactions": "",
                     "processors": "",
                     "groups": "Everything",
@@ -1866,9 +1875,9 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "positive",
-                    "id": "e4f70892-bf8c-4c54-b586-3d0e53a1492b",
-                    "path": "<Keyboard>/numpad8",
+                    "name": "negative",
+                    "id": "e4f0bb6e-49fa-48cc-a988-523e5eb6f2ce",
+                    "path": "<Keyboard>/numpad2",
                     "interactions": "",
                     "processors": "",
                     "groups": "Everything",
@@ -1888,9 +1897,9 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "negative",
-                    "id": "0c887bc7-c68d-43f8-ba2f-8e87b5c288e0",
-                    "path": "",
+                    "name": "positive",
+                    "id": "f4a9d276-0a74-4058-9d04-23c3f83b050b",
+                    "path": "<Gamepad>/dpad/up",
                     "interactions": "",
                     "processors": "",
                     "groups": "Everything",
@@ -1899,15 +1908,37 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "positive",
-                    "id": "f4a9d276-0a74-4058-9d04-23c3f83b050b",
-                    "path": "",
+                    "name": "negative",
+                    "id": "0c887bc7-c68d-43f8-ba2f-8e87b5c288e0",
+                    "path": "<Gamepad>/dpad/down",
                     "interactions": "",
                     "processors": "",
                     "groups": "Everything",
                     "action": "Rotate Camera V",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "531f2f5f-1e37-4ea5-8e6f-be42d65e8edb",
+                    "path": "<Keyboard>/m",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Everything",
+                    "action": "Mouselook Toggle",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e4ba72a4-2edc-4e77-8b70-4d0d78d2cbc7",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Everything",
+                    "action": "Mouselook Toggle",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },

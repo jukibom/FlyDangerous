@@ -294,7 +294,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""ShipLightsToggle"",
+                    ""name"": ""ShipLights Toggle"",
                     ""type"": ""Button"",
                     ""id"": ""1f75d6cb-59c2-45e8-9859-131c53953c5a"",
                     ""expectedControlType"": ""Button"",
@@ -324,6 +324,15 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""name"": ""Recenter Mouse"",
                     ""type"": ""Button"",
                     ""id"": ""b43d1338-0375-4761-a9be-0daaaeef9a89"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Mouselook Toggle"",
+                    ""type"": ""Button"",
+                    ""id"": ""4ddcaf9f-d35b-428a-a645-4eb8680f2d68"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -361,7 +370,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""89d913f5-1c0b-4f48-ad2b-3bcf86512369"",
-                    ""path"": ""<Gamepad>/leftStick/y"",
+                    ""path"": ""<Gamepad>/rightStick/y"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
@@ -537,7 +546,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""7abb1e17-bf1a-4f18-bde7-9f3833f1f333"",
-                    ""path"": ""<Gamepad>/leftStick/x"",
+                    ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
@@ -603,7 +612,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": ""positive"",
                     ""id"": ""346226f4-2b6f-4152-8233-1bf4fbb387ff"",
-                    ""path"": """",
+                    ""path"": ""<Gamepad>/rightShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
@@ -614,7 +623,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": ""negative"",
                     ""id"": ""77de266c-1c09-49a2-8c89-03dd6259d1e9"",
-                    ""path"": """",
+                    ""path"": ""<Gamepad>/leftShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
@@ -713,7 +722,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""9e1dd72a-05e2-49c6-9f65-3ddd13ca1e69"",
-                    ""path"": """",
+                    ""path"": ""<Gamepad>/leftStick/x"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
@@ -801,7 +810,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""72ef87a3-80f5-4c79-a91f-a35cb8d509a5"",
-                    ""path"": ""<Gamepad>/rightStick/y"",
+                    ""path"": ""<Gamepad>/leftStick/y"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
@@ -944,7 +953,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""0730b15e-e346-45d7-8c13-4941c78ef35b"",
-                    ""path"": """",
+                    ""path"": ""<Gamepad>/start"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
@@ -966,7 +975,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""80cfc569-feb9-4e09-872d-61f839d95488"",
-                    ""path"": """",
+                    ""path"": ""<Gamepad>/select"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
@@ -1586,18 +1595,18 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
-                    ""action"": ""ShipLightsToggle"",
+                    ""action"": ""ShipLights Toggle"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
                     ""id"": ""0320387c-8eec-4715-af11-e020d209fa17"",
-                    ""path"": """",
+                    ""path"": ""<Gamepad>/leftStickPress"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
-                    ""action"": ""ShipLightsToggle"",
+                    ""action"": ""ShipLights Toggle"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1747,7 +1756,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""ad8a82a3-1750-4407-bab3-98200061debe"",
-                    ""path"": """",
+                    ""path"": ""<Gamepad>/buttonNorth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
@@ -1789,9 +1798,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""negative"",
-                    ""id"": ""1ee3d877-dfae-44b0-81a5-e2fad358aa35"",
-                    ""path"": ""<Keyboard>/numpad4"",
+                    ""name"": ""positive"",
+                    ""id"": ""296c415e-6c2f-4994-b0e0-7c4f3fe9923b"",
+                    ""path"": ""<Keyboard>/numpad6"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
@@ -1800,9 +1809,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""positive"",
-                    ""id"": ""296c415e-6c2f-4994-b0e0-7c4f3fe9923b"",
-                    ""path"": ""<Keyboard>/numpad6"",
+                    ""name"": ""negative"",
+                    ""id"": ""1ee3d877-dfae-44b0-81a5-e2fad358aa35"",
+                    ""path"": ""<Keyboard>/numpad4"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
@@ -1822,9 +1831,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""negative"",
-                    ""id"": ""37dc9965-3122-48bd-9868-77676f7d5317"",
-                    ""path"": """",
+                    ""name"": ""positive"",
+                    ""id"": ""bc35179d-c1af-4c25-a8be-eff089e15add"",
+                    ""path"": ""<Gamepad>/dpad/right"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
@@ -1833,9 +1842,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""positive"",
-                    ""id"": ""bc35179d-c1af-4c25-a8be-eff089e15add"",
-                    ""path"": """",
+                    ""name"": ""negative"",
+                    ""id"": ""37dc9965-3122-48bd-9868-77676f7d5317"",
+                    ""path"": ""<Gamepad>/dpad/left"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
@@ -1877,9 +1886,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""negative"",
-                    ""id"": ""e4f0bb6e-49fa-48cc-a988-523e5eb6f2ce"",
-                    ""path"": ""<Keyboard>/numpad2"",
+                    ""name"": ""positive"",
+                    ""id"": ""e4f70892-bf8c-4c54-b586-3d0e53a1492b"",
+                    ""path"": ""<Keyboard>/numpad8"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
@@ -1888,9 +1897,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""positive"",
-                    ""id"": ""e4f70892-bf8c-4c54-b586-3d0e53a1492b"",
-                    ""path"": ""<Keyboard>/numpad8"",
+                    ""name"": ""negative"",
+                    ""id"": ""e4f0bb6e-49fa-48cc-a988-523e5eb6f2ce"",
+                    ""path"": ""<Keyboard>/numpad2"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
@@ -1910,9 +1919,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""negative"",
-                    ""id"": ""0c887bc7-c68d-43f8-ba2f-8e87b5c288e0"",
-                    ""path"": """",
+                    ""name"": ""positive"",
+                    ""id"": ""f4a9d276-0a74-4058-9d04-23c3f83b050b"",
+                    ""path"": ""<Gamepad>/dpad/up"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
@@ -1921,15 +1930,37 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""positive"",
-                    ""id"": ""f4a9d276-0a74-4058-9d04-23c3f83b050b"",
-                    ""path"": """",
+                    ""name"": ""negative"",
+                    ""id"": ""0c887bc7-c68d-43f8-ba2f-8e87b5c288e0"",
+                    ""path"": ""<Gamepad>/dpad/down"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
                     ""action"": ""Rotate Camera V"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""531f2f5f-1e37-4ea5-8e6f-be42d65e8edb"",
+                    ""path"": ""<Keyboard>/m"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Mouselook Toggle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e4ba72a4-2edc-4e77-8b70-4d0d78d2cbc7"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Mouselook Toggle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -2590,10 +2621,11 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         m_Ship_AllFlightAssistToggle = m_Ship.FindAction("All Flight Assist Toggle", throwIfNotFound: true);
         m_Ship_VectorFlightAssistToggle = m_Ship.FindAction("Vector Flight Assist Toggle", throwIfNotFound: true);
         m_Ship_RotationalFlightAssistToggle = m_Ship.FindAction("Rotational Flight Assist Toggle", throwIfNotFound: true);
-        m_Ship_ShipLightsToggle = m_Ship.FindAction("ShipLightsToggle", throwIfNotFound: true);
+        m_Ship_ShipLightsToggle = m_Ship.FindAction("ShipLights Toggle", throwIfNotFound: true);
         m_Ship_AltFlightControlsToggle = m_Ship.FindAction("Alt Flight Controls Toggle", throwIfNotFound: true);
         m_Ship_MouseRawDelta = m_Ship.FindAction("Mouse Raw Delta", throwIfNotFound: true);
         m_Ship_RecenterMouse = m_Ship.FindAction("Recenter Mouse", throwIfNotFound: true);
+        m_Ship_MouselookToggle = m_Ship.FindAction("Mouselook Toggle", throwIfNotFound: true);
         m_Ship_ChangeCamera = m_Ship.FindAction("Change Camera", throwIfNotFound: true);
         m_Ship_RotateCameraH = m_Ship.FindAction("Rotate Camera H", throwIfNotFound: true);
         m_Ship_RotateCameraV = m_Ship.FindAction("Rotate Camera V", throwIfNotFound: true);
@@ -2736,6 +2768,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Ship_AltFlightControlsToggle;
     private readonly InputAction m_Ship_MouseRawDelta;
     private readonly InputAction m_Ship_RecenterMouse;
+    private readonly InputAction m_Ship_MouselookToggle;
     private readonly InputAction m_Ship_ChangeCamera;
     private readonly InputAction m_Ship_RotateCameraH;
     private readonly InputAction m_Ship_RotateCameraV;
@@ -2770,6 +2803,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         public InputAction @AltFlightControlsToggle => m_Wrapper.m_Ship_AltFlightControlsToggle;
         public InputAction @MouseRawDelta => m_Wrapper.m_Ship_MouseRawDelta;
         public InputAction @RecenterMouse => m_Wrapper.m_Ship_RecenterMouse;
+        public InputAction @MouselookToggle => m_Wrapper.m_Ship_MouselookToggle;
         public InputAction @ChangeCamera => m_Wrapper.m_Ship_ChangeCamera;
         public InputAction @RotateCameraH => m_Wrapper.m_Ship_RotateCameraH;
         public InputAction @RotateCameraV => m_Wrapper.m_Ship_RotateCameraV;
@@ -2863,6 +2897,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @RecenterMouse.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnRecenterMouse;
                 @RecenterMouse.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnRecenterMouse;
                 @RecenterMouse.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnRecenterMouse;
+                @MouselookToggle.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnMouselookToggle;
+                @MouselookToggle.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnMouselookToggle;
+                @MouselookToggle.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnMouselookToggle;
                 @ChangeCamera.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnChangeCamera;
                 @ChangeCamera.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnChangeCamera;
                 @ChangeCamera.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnChangeCamera;
@@ -2957,6 +2994,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @RecenterMouse.started += instance.OnRecenterMouse;
                 @RecenterMouse.performed += instance.OnRecenterMouse;
                 @RecenterMouse.canceled += instance.OnRecenterMouse;
+                @MouselookToggle.started += instance.OnMouselookToggle;
+                @MouselookToggle.performed += instance.OnMouselookToggle;
+                @MouselookToggle.canceled += instance.OnMouselookToggle;
                 @ChangeCamera.started += instance.OnChangeCamera;
                 @ChangeCamera.performed += instance.OnChangeCamera;
                 @ChangeCamera.canceled += instance.OnChangeCamera;
@@ -3163,6 +3203,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         void OnAltFlightControlsToggle(InputAction.CallbackContext context);
         void OnMouseRawDelta(InputAction.CallbackContext context);
         void OnRecenterMouse(InputAction.CallbackContext context);
+        void OnMouselookToggle(InputAction.CallbackContext context);
         void OnChangeCamera(InputAction.CallbackContext context);
         void OnRotateCameraH(InputAction.CallbackContext context);
         void OnRotateCameraV(InputAction.CallbackContext context);
