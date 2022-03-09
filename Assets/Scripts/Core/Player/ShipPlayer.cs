@@ -757,7 +757,7 @@ namespace Core.Player {
             /* TORQUE */
             // torque is applied entirely independently, this may be looked at later.
             var torque = new Vector3(
-                _pitchInput * _pitchMultiplier * maxTorqueWithBoost,
+                _pitchInput * _pitchMultiplier * maxTorqueWithBoost * -1,
                 _yawInput * _yawMultiplier * maxTorqueWithBoost,
                 _rollInput * _rollMultiplier * maxTorqueWithBoost * -1
             ) * _inertialTensorMultiplier; // if we don't counteract the inertial tensor of the rigidbody, the rotation spin would increase in lockstep
@@ -785,7 +785,7 @@ namespace Core.Player {
             // convert global rigid body velocity into local space
             Vector3 localAngularVelocity = transform.InverseTransformDirection(_rigidbody.angularVelocity);
 
-            CalculateAssistedAxis(_pitchTargetFactor, localAngularVelocity.x, 0.3f, 2.0f, out _pitchInput);
+            CalculateAssistedAxis(_pitchTargetFactor, localAngularVelocity.x * -1, 0.3f, 2.0f, out _pitchInput);
             CalculateAssistedAxis(_yawTargetFactor, localAngularVelocity.y, 0.3f, 2.0f, out _yawInput);
             CalculateAssistedAxis(_rollTargetFactor, localAngularVelocity.z * -1, 0.3f, 2.0f, out _rollInput);
         }

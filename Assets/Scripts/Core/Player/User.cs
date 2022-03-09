@@ -492,7 +492,7 @@ namespace Core.Player {
 
                 switch (axis) {
                     case "pitch":
-                        pitch += amount * -1 * invert;
+                        pitch += amount * invert;
                         break;
                     case "roll":
                         roll += amount * invert;
