@@ -121,13 +121,14 @@ namespace Core.Player {
                 _rigidbody.mass = value.mass;
                 _rigidbody.drag = value.drag;
                 _rigidbody.angularDrag = value.angularDrag;
-                _rigidbody.maxAngularVelocity = _maxAngularVelocity;
+                _rigidbody.maxAngularVelocity = value.maxAngularVelocity;
                 _rigidbody.inertiaTensor = _initialInertiaTensor * value.inertiaTensorMultiplier;
                 _inertialTensorMultiplier = value.inertiaTensorMultiplier;
-
+                Debug.Log(_rigidbody.maxAngularVelocity);
                 _maxSpeed = value.maxSpeed;
                 _maxBoostSpeed = value.maxBoostSpeed;
                 _maxThrust = value.maxThrust;
+                _maxAngularVelocity = value.maxAngularVelocity;
                 _torqueThrustMultiplier = value.torqueThrustMultiplier;
                 _throttleMultiplier = value.throttleMultiplier;
                 _latHMultiplier = value.latHMultiplier;
