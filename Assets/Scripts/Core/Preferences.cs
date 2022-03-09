@@ -60,6 +60,7 @@ namespace Core {
                 case "relativeMouseYAxis":
                 case "mouseXInvert:":
                 case "mouseYInvert:":
+                case "mouseLook":
                 case "forceRelativeMouseWithFAOff":
                 case "enableExperimentalTerrain":
                     return false;
@@ -142,6 +143,8 @@ namespace Core {
                     return "#FFF4D6";
                 case "preferredCamera":
                     return "external far";
+                case "cameraMode":
+                    return "absolute";
                 default: 
                     Debug.LogWarning("Attempted to get preference " + key + " with no default specified");
                     return "";

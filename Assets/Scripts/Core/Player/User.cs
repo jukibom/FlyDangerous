@@ -50,10 +50,11 @@ namespace Core.Player {
         private bool _reverse;
         private float _targetThrottle;
         private float _targetThrottleIncrement;
-
+        
         private float _cameraX;
         private float _cameraY;
-        
+        private Vector2 _cameraMouse;
+
         [SerializeField] public bool movementEnabled;
         public bool pauseMenuEnabled = true;
         public bool boostButtonEnabledOverride;
@@ -102,25 +103,31 @@ namespace Core.Player {
                 var lateralH = _lateralH;
                 var lateralV = _lateralV;
 
+                // handle advanced throttle control
                 if (Preferences.Instance.GetString("throttleType") == "forward only") {
                     throttle = MathfExtensions.Remap(-1, 1, 0, 1, throttle);
                     if (_reverse) {
                         throttle *= -1;
                     }
                 }
-
                 _targetThrottle = MathfExtensions.Clamp(-1, 1, _targetThrottle + _targetThrottleIncrement);
                 if (_targetThrottle != 0) {
                     throttle = _targetThrottle;
                 }
                 
-                if (!pauseMenu.IsPaused && Preferences.Instance.GetBool("enableMouseFlightControls")) {
+                // handle mouse flight input
+                if (
+                    !pauseMenu.IsPaused && 
+                    Preferences.Instance.GetBool("enableMouseFlightControls") && 
+                    !Preferences.Instance.GetBool("mouseLook")
+                ) {
                     CalculateMouseInput(out var mousePitch, out var mouseRoll, out var mouseYaw);
                     pitch += mousePitch;
                     roll += mouseRoll;
                     yaw += mouseYaw;
                 }
 
+                // update the player
                 shipPlayer.SetPitch(pitch);
                 shipPlayer.SetRoll(roll);
                 shipPlayer.SetYaw(yaw);
@@ -128,8 +135,23 @@ namespace Core.Player {
                 shipPlayer.SetLateralH(lateralH);
                 shipPlayer.SetLateralV(lateralV);
                 shipPlayer.Boost(_boost);
+                
+                // handle camera rig
+                if (Preferences.Instance.GetString("cameraMode") == "absolute" && !Preferences.Instance.GetBool("mouseLook")) {
+                    shipCameraRig.SetCameraAbsolute(new Vector2(_cameraX, _cameraY));
+                }
+                if (Preferences.Instance.GetString("cameraMode") == "relative" || Preferences.Instance.GetBool("mouseLook")) {
+                    shipCameraRig.SetCameraRelative(new Vector2(_cameraX, _cameraY));
+                }
 
-                shipCameraRig.CameraUserRotation = new Vector2(_cameraX, _cameraY);
+                if (Preferences.Instance.GetBool("mouseLook")) {
+                    shipCameraRig.SetCameraRelative(
+                        new Vector2(
+                            _mousePositionDelta.x / Screen.width * Preferences.Instance.GetFloat("mouseXSensitivity") * 100,
+                            _mousePositionDelta.y / Screen.height * Preferences.Instance.GetFloat("mouseYSensitivity") * 100
+                        )
+                    );
+                }
             }
 
             if (boostButtonEnabledOverride) {
@@ -408,6 +430,15 @@ namespace Core.Player {
                 ((_mousePositionScreen.x / Screen.width * 2) - 1),
                 (_mousePositionScreen.y / Screen.height * 2 - 1)
             );
+        }
+
+        public void OnMouselookToggle(InputValue value) {
+            var mouseLookEnabled = Preferences.Instance.GetBool("mouseLook");
+            if (mouseLookEnabled) {
+                shipCameraRig.SoftReset();
+            }
+            Preferences.Instance.SetBool("mouseLook", !mouseLookEnabled);
+            Preferences.Instance.Save();
         }
 
         public void OnRecenterMouse(InputValue value) {

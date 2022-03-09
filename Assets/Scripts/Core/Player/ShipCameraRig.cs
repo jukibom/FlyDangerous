@@ -105,9 +105,13 @@ namespace Core.Player {
         }
 
         public void Reset() {
+            SoftReset();
             _cameraOffset = Vector3.zero;
-            _currentRotation = Vector2.zero;
             cameraTarget.localPosition = baseTargetPosition;
+        }
+
+        public void SoftReset() {
+            _currentRotation = Vector2.zero;
         }
 
         public void UpdateCameras(Vector3 velocity, float maxVelocity, Vector3 force, float maxForce) {
