@@ -57,7 +57,7 @@ namespace Gameplay {
 
         public void UpdateFov(Vector3 velocity, float maxVelocity) {
             Camera.m_Lens.FieldOfView = Mathf.Lerp(Camera.m_Lens.FieldOfView,
-                MathfExtensions.Remap(0, 1, _baseFov, _baseFov + 20, velocity.z / maxVelocity), 
+                MathfExtensions.Remap(0, 1, _baseFov, _baseFov + 10, velocity.z / maxVelocity), 
                 smoothSpeed
             );
         }
