@@ -24,11 +24,6 @@ namespace Core.Player {
             var preferredCamera = cameras.Find(c => c.Name == preferredCameraName);
             SetActiveCamera(preferredCamera != null ? preferredCamera : cameras.Last());
         }
-        
-        private void OnDisable() {
-            Preferences.Instance.SetString("preferredCamera", ActiveCamera.Name);
-            Preferences.Instance.Save();
-        }
 
         public void SetCameraAbsolute(Vector2 absolutePosition) {
             // reset rotation before processing input
@@ -122,6 +117,7 @@ namespace Core.Player {
         public void ToggleActiveCamera() {
             var index = cameras.IndexOf(ActiveCamera);
             SetActiveCamera(index == cameras.Count - 1 ? cameras[0] : cameras[index + 1]);
+            Preferences.Instance.SetString("preferredCamera", ActiveCamera.Name);
         }
 
         private void SetActiveCamera(ShipCamera newCamera) {

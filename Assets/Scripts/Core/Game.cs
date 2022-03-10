@@ -332,6 +332,9 @@ namespace Core {
         // This should be used in ALL cases where disconnection has unexpectedly occurred or where network services
         // are no longer required (graceful client quit)
         public void QuitToMenu([CanBeNull] string withDisconnectionReason = null) {
+            // save any pending preferences (e.g. mouselook, camera etc)
+            Preferences.Instance.Save();
+            
             if (!FindObjectOfType<MainMenu>()) {
                 IEnumerator QuitAndShutdownNetwork() {
                     yield return LoadMainMenu(withDisconnectionReason);
