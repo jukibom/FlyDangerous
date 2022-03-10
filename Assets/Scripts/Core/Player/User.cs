@@ -54,6 +54,7 @@ namespace Core.Player {
         private float _cameraX;
         private float _cameraY;
         private Vector2 _cameraMouse;
+        private bool _mouseLookActive;
 
         [SerializeField] public bool movementEnabled;
         public bool pauseMenuEnabled = true;
@@ -83,6 +84,7 @@ namespace Core.Player {
         }
 
         public void OnEnable() {
+            _mouseLookActive = Preferences.Instance.GetBool("mouseLook");
             pauseUIInputModule.cancel.action.performed += _cancelAction;
             Game.OnVRStatus += SetVRStatus;
             ResetMouseToCentre();
@@ -137,14 +139,14 @@ namespace Core.Player {
                 shipPlayer.Boost(_boost);
                 
                 // handle camera rig
-                if (Preferences.Instance.GetString("cameraMode") == "absolute" && !Preferences.Instance.GetBool("mouseLook")) {
+                if (Preferences.Instance.GetString("cameraMode") == "absolute" && !_mouseLookActive) {
                     shipCameraRig.SetCameraAbsolute(new Vector2(_cameraX, _cameraY));
                 }
-                if (Preferences.Instance.GetString("cameraMode") == "relative" || Preferences.Instance.GetBool("mouseLook")) {
+                if (Preferences.Instance.GetString("cameraMode") == "relative" || _mouseLookActive) {
                     shipCameraRig.SetCameraRelative(new Vector2(_cameraX, _cameraY));
                 }
 
-                if (Preferences.Instance.GetBool("mouseLook")) {
+                if (_mouseLookActive) {
                     shipCameraRig.SetCameraRelative(
                         new Vector2(
                             _mousePositionDelta.x / Screen.width * Preferences.Instance.GetFloat("mouseXSensitivity") * 100,
@@ -432,13 +434,20 @@ namespace Core.Player {
             );
         }
 
-        public void OnMouselookToggle(InputValue value) {
-            var mouseLookEnabled = Preferences.Instance.GetBool("mouseLook");
-            if (mouseLookEnabled) {
-                shipCameraRig.SoftReset();
+        public void OnMouselook(InputValue value) {
+            Debug.Log("MOUSE LOOK TOGGLE D:");
+            var mouseLookType = Preferences.Instance.GetString("mouseLookBindType");
+            if (mouseLookType == "toggle") {
+                _mouseLookActive = !_mouseLookActive;
+                if (_mouseLookActive) {
+                    shipCameraRig.SoftReset();
+                }
+                Preferences.Instance.SetBool("mouseLook", _mouseLookActive);
             }
-            Preferences.Instance.SetBool("mouseLook", !mouseLookEnabled);
-            Preferences.Instance.Save();
+
+            if (mouseLookType == "hold") {
+                _mouseLookActive = value.isPressed;
+            }
         }
 
         public void OnRecenterMouse(InputValue value) {

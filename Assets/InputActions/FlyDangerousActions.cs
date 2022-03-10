@@ -330,13 +330,13 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Mouselook Toggle"",
-                    ""type"": ""Button"",
+                    ""name"": ""Mouselook"",
+                    ""type"": ""Value"",
                     ""id"": ""4ddcaf9f-d35b-428a-a645-4eb8680f2d68"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""Change Camera"",
@@ -1947,7 +1947,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
-                    ""action"": ""Mouselook Toggle"",
+                    ""action"": ""Mouselook"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1958,7 +1958,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
-                    ""action"": ""Mouselook Toggle"",
+                    ""action"": ""Mouselook"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -2625,7 +2625,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         m_Ship_AltFlightControlsToggle = m_Ship.FindAction("Alt Flight Controls Toggle", throwIfNotFound: true);
         m_Ship_MouseRawDelta = m_Ship.FindAction("Mouse Raw Delta", throwIfNotFound: true);
         m_Ship_RecenterMouse = m_Ship.FindAction("Recenter Mouse", throwIfNotFound: true);
-        m_Ship_MouselookToggle = m_Ship.FindAction("Mouselook Toggle", throwIfNotFound: true);
+        m_Ship_Mouselook = m_Ship.FindAction("Mouselook", throwIfNotFound: true);
         m_Ship_ChangeCamera = m_Ship.FindAction("Change Camera", throwIfNotFound: true);
         m_Ship_RotateCameraH = m_Ship.FindAction("Rotate Camera H", throwIfNotFound: true);
         m_Ship_RotateCameraV = m_Ship.FindAction("Rotate Camera V", throwIfNotFound: true);
@@ -2768,7 +2768,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Ship_AltFlightControlsToggle;
     private readonly InputAction m_Ship_MouseRawDelta;
     private readonly InputAction m_Ship_RecenterMouse;
-    private readonly InputAction m_Ship_MouselookToggle;
+    private readonly InputAction m_Ship_Mouselook;
     private readonly InputAction m_Ship_ChangeCamera;
     private readonly InputAction m_Ship_RotateCameraH;
     private readonly InputAction m_Ship_RotateCameraV;
@@ -2803,7 +2803,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         public InputAction @AltFlightControlsToggle => m_Wrapper.m_Ship_AltFlightControlsToggle;
         public InputAction @MouseRawDelta => m_Wrapper.m_Ship_MouseRawDelta;
         public InputAction @RecenterMouse => m_Wrapper.m_Ship_RecenterMouse;
-        public InputAction @MouselookToggle => m_Wrapper.m_Ship_MouselookToggle;
+        public InputAction @Mouselook => m_Wrapper.m_Ship_Mouselook;
         public InputAction @ChangeCamera => m_Wrapper.m_Ship_ChangeCamera;
         public InputAction @RotateCameraH => m_Wrapper.m_Ship_RotateCameraH;
         public InputAction @RotateCameraV => m_Wrapper.m_Ship_RotateCameraV;
@@ -2897,9 +2897,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @RecenterMouse.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnRecenterMouse;
                 @RecenterMouse.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnRecenterMouse;
                 @RecenterMouse.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnRecenterMouse;
-                @MouselookToggle.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnMouselookToggle;
-                @MouselookToggle.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnMouselookToggle;
-                @MouselookToggle.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnMouselookToggle;
+                @Mouselook.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnMouselook;
+                @Mouselook.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnMouselook;
+                @Mouselook.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnMouselook;
                 @ChangeCamera.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnChangeCamera;
                 @ChangeCamera.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnChangeCamera;
                 @ChangeCamera.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnChangeCamera;
@@ -2994,9 +2994,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @RecenterMouse.started += instance.OnRecenterMouse;
                 @RecenterMouse.performed += instance.OnRecenterMouse;
                 @RecenterMouse.canceled += instance.OnRecenterMouse;
-                @MouselookToggle.started += instance.OnMouselookToggle;
-                @MouselookToggle.performed += instance.OnMouselookToggle;
-                @MouselookToggle.canceled += instance.OnMouselookToggle;
+                @Mouselook.started += instance.OnMouselook;
+                @Mouselook.performed += instance.OnMouselook;
+                @Mouselook.canceled += instance.OnMouselook;
                 @ChangeCamera.started += instance.OnChangeCamera;
                 @ChangeCamera.performed += instance.OnChangeCamera;
                 @ChangeCamera.canceled += instance.OnChangeCamera;
@@ -3203,7 +3203,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         void OnAltFlightControlsToggle(InputAction.CallbackContext context);
         void OnMouseRawDelta(InputAction.CallbackContext context);
         void OnRecenterMouse(InputAction.CallbackContext context);
-        void OnMouselookToggle(InputAction.CallbackContext context);
+        void OnMouselook(InputAction.CallbackContext context);
         void OnChangeCamera(InputAction.CallbackContext context);
         void OnRotateCameraH(InputAction.CallbackContext context);
         void OnRotateCameraV(InputAction.CallbackContext context);

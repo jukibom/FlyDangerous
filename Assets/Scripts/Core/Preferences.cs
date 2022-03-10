@@ -145,6 +145,8 @@ namespace Core {
                     return "external far";
                 case "cameraMode":
                     return "absolute";
+                case "mouseLookBindType":
+                    return "toggle";
                 default: 
                     Debug.LogWarning("Attempted to get preference " + key + " with no default specified");
                     return "";
