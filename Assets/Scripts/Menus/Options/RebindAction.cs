@@ -223,20 +223,17 @@ namespace Menus.Options {
 
         private void ToggleInverseAxis(InputAction action, int bindingIndex) {
             var binding = action.bindings[bindingIndex];
-            binding.overrideProcessors = MakeAxisProcessorString(!IsInverseEnabled(binding), GetAxisDeadzone(binding));
-            action.ChangeBinding(bindingIndex).To(binding);
+            ApplyAxisOverrides(action, bindingIndex, !IsInvertEnabled(binding), GetAxisDeadzone(binding));
         }
 
-        private bool IsInverseEnabled(InputBinding binding) {
+        private bool IsInvertEnabled(InputBinding binding) {
             return (binding.overrideProcessors != null && binding.overrideProcessors.Contains("Invert"));
         }
 
         private void SetDeadzone(InputAction action, int bindingIndex, float deadzone) {
             deadzone = MathfExtensions.Clamp(0, 1, deadzone);
             var binding = action.bindings[bindingIndex];
-
-            binding.overrideProcessors = MakeAxisProcessorString(IsInverseEnabled(binding), deadzone);
-            action.ChangeBinding(bindingIndex).To(binding);
+            ApplyAxisOverrides(action, bindingIndex, IsInvertEnabled(binding), deadzone);
         }
 
         private float GetAxisDeadzone(InputBinding binding) {
@@ -255,6 +252,15 @@ namespace Menus.Options {
                 }
             }
             return 0;
+        }
+        
+        private void ApplyAxisOverrides(InputAction action, int bindingIndex, bool isInverted, float deadzone) {
+            var binding = action.bindings[bindingIndex];
+            action.ApplyBindingOverride(bindingIndex, new InputBinding {
+                // overwrite the path with whatever it currently is to prevent a processor string from disabling a default binding
+                overridePath = binding.overridePath ?? binding.path, 
+                overrideProcessors = MakeAxisProcessorString(isInverted, deadzone)
+            });
         }
 
         private string MakeAxisProcessorString(bool invert, float deadzone) {
@@ -452,11 +458,11 @@ namespace Menus.Options {
             var axisOptions = GetComponent<AxisOptions>();
             if (axisOptions != null) {
                 if (ResolveActionAndBinding(m_PrimaryBindingId, out var action, out var bindingIndex)) {
-                    axisOptions.primaryInverseCheckbox.isChecked = IsInverseEnabled(action.bindings[bindingIndex]);
+                    axisOptions.primaryInverseCheckbox.isChecked = IsInvertEnabled(action.bindings[bindingIndex]);
                     axisOptions.primaryDeadzoneSlider.Value = GetAxisDeadzone(action.bindings[bindingIndex]);
                 }
                 if (ResolveActionAndBinding(m_SecondaryBindingId, out action, out bindingIndex)) {
-                    axisOptions.secondaryInverseCheckbox.isChecked = IsInverseEnabled(action.bindings[bindingIndex]);
+                    axisOptions.secondaryInverseCheckbox.isChecked = IsInvertEnabled(action.bindings[bindingIndex]);
                     axisOptions.secondaryDeadzoneSlider.Value = GetAxisDeadzone(action.bindings[bindingIndex]);
                 }
             }
