@@ -56,6 +56,8 @@ namespace Core.Player {
     [RequireComponent(typeof(Rigidbody))]
     public class ShipPlayer : FdPlayer {
 
+        #region Attributes + Getters
+        
         // TODO: remove this stuff once params are finalised (this is for debug panel in release)
         public static ShipParameters ShipParameterDefaults => new ShipParameters {
             mass = 1100f,
@@ -291,6 +293,10 @@ namespace Core.Player {
                 transform.position = position;
             }
         }
+        #endregion
+        
+
+        #region Lifecycle + Misc
 
         public void Awake() {
             playerLogic.SetActive(false);
@@ -499,7 +505,10 @@ namespace Core.Player {
             
             Ship?.UpdateIndicators(_shipIndicatorData);
         }
+        
+        #endregion
 
+        
         #region Input
         public void SetPitch(float value) {
             if (_flightAssistRotationalDampening) {
@@ -653,6 +662,7 @@ namespace Core.Player {
         }
         #endregion
 
+        
         #region Flight Calculations
 
         private void CalculateBoost(
@@ -765,7 +775,6 @@ namespace Core.Player {
 
             _rigidbody.AddTorque(transform.TransformDirection(torque));
             
-                        
             // output var for indicators etc
             calculatedThrust = thrustInput * _maxThrust;
             calculatedTorque = torque / _inertialTensorMultiplier;
@@ -779,7 +788,6 @@ namespace Core.Player {
             CalculateAssistedAxis(_latHTargetFactor, localVelocity.x, 0.1f, maxSpeedWithBoost, out _latHInput);
             CalculateAssistedAxis(_latVTargetFactor, localVelocity.y, 0.1f, maxSpeedWithBoost, out _latVInput);
             CalculateAssistedAxis(_throttleTargetFactor, localVelocity.z, 0.1f, maxSpeedWithBoost, out _throttleInput);
-
         }
 
         private void CalculateRotationalDampeningFlightAssist() {
@@ -790,20 +798,20 @@ namespace Core.Player {
             CalculateAssistedAxis(_yawTargetFactor, localAngularVelocity.y, 0.3f, 2.0f, out _yawInput);
             CalculateAssistedAxis(_rollTargetFactor, localAngularVelocity.z * -1, 0.3f, 2.0f, out _rollInput);
         }
-
+        
         /**
-     * Given a target factor between 0 and 1 for a given axis, the current gross value and the maximum, calculate a
-     * new axis value to apply as input.
-     * @param targetFactor value between 0 and 1 (effectively the users' input)
-     * @param currentAxisVelocity the non-normalised raw value of the current motion of the axis
-     * @param interpolateAtPercent the point at which to begin linearly interpolating the acceleration
-     *      (e.g. 0.1 = at 10% of the MAXIMUM velocity of the axis away from the target, interpolate the axis -
-     *      if the current speed is 0, the target is 0.5 and this value is 0.1, this means that at 40% of the maximum
-     *      speed -- when the axis is at 0.4 -- decrease the output linearly such that it moves from 1 to 0 and slowly
-     *      decelerates.
-     * @param max the maximum non-normalised value for this axis e.g. the maximum speed or maximum rotation in radians etc
-     * @param out axis the value to apply the calculated new axis of input to
-     */
+         * Given a target factor between 0 and 1 for a given axis, the current gross value and the maximum, calculate a
+         * new axis value to apply as input.
+         * @param targetFactor value between 0 and 1 (effectively the users' input)
+         * @param currentAxisVelocity the non-normalised raw value of the current motion of the axis
+         * @param interpolateAtPercent the point at which to begin linearly interpolating the acceleration
+         *      (e.g. 0.1 = at 10% of the MAXIMUM velocity of the axis away from the target, interpolate the axis -
+         *      if the current speed is 0, the target is 0.5 and this value is 0.1, this means that at 40% of the maximum
+         *      speed -- when the axis is at 0.4 -- decrease the output linearly such that it moves from 1 to 0 and slowly
+         *      decelerates.
+         * @param max the maximum non-normalised value for this axis e.g. the maximum speed or maximum rotation in radians etc
+         * @param out axis the value to apply the calculated new axis of input to
+         */
         private void CalculateAssistedAxis(
             float targetFactor,
             float currentAxisVelocity,
@@ -856,6 +864,7 @@ namespace Core.Player {
             _prevVelocity = currentVelocity;
         }
         #endregion
+        
         
         #region Network Position Sync etc
         // This is server-side and should really validate the positions coming in before blindly firing to all the clients!
