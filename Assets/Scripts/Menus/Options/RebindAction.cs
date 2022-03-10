@@ -318,6 +318,9 @@ namespace Menus.Options {
                 }
             }
 
+            var inverted = IsInvertEnabled(action.bindings[bindingIndex]);
+            var deadzone = GetAxisDeadzone(action.bindings[bindingIndex]);
+
             // Configure the rebind.
             m_RebindOperation = action.PerformInteractiveRebinding(bindingIndex)
                 .WithoutGeneralizingPathOfSelectedControl()
@@ -344,6 +347,10 @@ namespace Menus.Options {
                 })
                 .OnComplete(
                     operation => {
+                        // restore previous axis settings if applicable (kill me now)
+                        if (m_RebindOperation.expectedControlType == "Axis") {
+                            ApplyAxisOverrides(action, bindingIndex, inverted, deadzone);
+                        }
                         m_RebindOverlay?.SetActive(false);
                         m_RebindStopEvent?.Invoke(this, operation);
                         UpdateBindingDisplay();
