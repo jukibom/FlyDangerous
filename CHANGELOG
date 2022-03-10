@@ -1,11 +1,14 @@
 ﻿0.5.0
 New:
     * Added Steam integration
+        * No need to forward IPs on steam!
+        * New server browser shows games in progress (steam version only) 
     * Added new ship camera rig
         * 5 camera positions (nose, bonnet, cockpit, external, external-far)
         * Added bindings for rotating the camera (or looking around in first person)
         * Added ability to switch between absolute and relative camera rotation
         * Added mouse look toggle button (default M, default off)
+        * Added mouse look bind type (hold vs toggle)
     * Added third person cam FoV slider alongside first person FoV slider
     * Added new Checkpoint 3d model (much larger, circular)
     * Added Server Browser (Steam only)
@@ -18,6 +21,7 @@ Changes:
     * Tweaked layout of lobby + time trial menus
     * Converted ray check to box check for checkpoint collision
     * Thruster luminance capped at minimum 50%
+    * Removed the "glass" renderer for UI elements - it was very expensive for very little gain, UI elements (e.g. mouse widget) are now always drawn on top
     * Update to Unity 2021.2 (bold or stupid? you decide)
     
 Fixed:
@@ -25,9 +29,9 @@ Fixed:
     * Incorrect shadows on terrain worlds (light source below the generated terrain meant no shadows - fixed by making terrain two-sided for shadow generation)
     * Thruster lights emitters now respects user color selection
     * Optimisations around component lookups in update loops (yes I was lazy and yes I paid the price, shut up)
-    * Occasional incorrect timing on boost (realtime timer)
-    * G force indicator incorrectly calculating individual axes 
+    * G force indicator now correctly calculates individual axes 
     * Updated Unity Input System, should resolve issues with certain HID joysticks (e.g. Virpil) with weird path descriptors
+    * Boost sfx occasionally being mistimed / too fast
 
 0.4.1
 Fixed:
