@@ -140,18 +140,19 @@ namespace Core.Player {
                 
                 // handle camera rig
                 if (Preferences.Instance.GetString("cameraMode") == "absolute" && !_mouseLookActive) {
-                    shipCameraRig.SetCameraAbsolute(new Vector2(_cameraX, _cameraY));
+                    shipCameraRig.SetPosition(new Vector2(_cameraX, _cameraY), CameraPositionUpdate.Absolute);
                 }
                 if (Preferences.Instance.GetString("cameraMode") == "relative" || _mouseLookActive) {
-                    shipCameraRig.SetCameraRelative(new Vector2(_cameraX, _cameraY));
+                    shipCameraRig.SetPosition(new Vector2(_cameraX, _cameraY), CameraPositionUpdate.Relative);
                 }
 
                 if (_mouseLookActive) {
-                    shipCameraRig.SetCameraRelative(
+                    shipCameraRig.SetPosition(
                         new Vector2(
                             _mousePositionDelta.x / Screen.width * Preferences.Instance.GetFloat("mouseXSensitivity") * 100,
                             _mousePositionDelta.y / Screen.height * Preferences.Instance.GetFloat("mouseYSensitivity") * 100
-                        )
+                        ),
+                        CameraPositionUpdate.Relative
                     );
                 }
             }

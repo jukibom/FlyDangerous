@@ -5,7 +5,14 @@ using UnityEngine;
 using CameraType = Gameplay.CameraType;
 
 namespace Core.Player {
+
+    public enum CameraPositionUpdate {
+        Relative,
+        Absolute
+    }
+    
     public class ShipCameraRig : MonoBehaviour {
+
         
         [SerializeField] public List<ShipCamera> cameras;
         [SerializeField] private Transform cameraTarget;
@@ -25,24 +32,15 @@ namespace Core.Player {
             SetActiveCamera(preferredCamera != null ? preferredCamera : cameras.Last());
         }
 
-        public void SetCameraAbsolute(Vector2 absolutePosition) {
+        public void SetPosition(Vector2 position, CameraPositionUpdate cameraType) {
             // reset rotation before processing input
             cameraTarget.localPosition = baseTargetPosition;
             cameraTarget.transform.rotation = _transform.rotation;
 
-            UpdateAbsolute(absolutePosition);
-            
-            // handle offset based on force
-            var cameraOffsetWorld = _transform.position - _transform.TransformPoint(_cameraOffset);
-            cameraTarget.position -= cameraOffsetWorld;
-        }
-        
-        public void SetCameraRelative(Vector2 relativePosition) {
-            // reset rotation before processing input
-            cameraTarget.localPosition = baseTargetPosition;
-            cameraTarget.transform.rotation = _transform.rotation;
-
-            UpdateRelative(relativePosition);
+            switch (cameraType) {
+                case CameraPositionUpdate.Absolute: UpdateAbsolute(position); break;
+                case CameraPositionUpdate.Relative: UpdateRelative(position); break;
+            }
             
             // handle offset based on force
             var cameraOffsetWorld = _transform.position - _transform.TransformPoint(_cameraOffset);
@@ -67,18 +65,19 @@ namespace Core.Player {
             
             if (ActiveCamera.cameraType == CameraType.ThirdPerson) {
                 // input is used to rotate the view around the ship
-                // bias towards looking forward
-                if (Mathf.Abs(absolutePosition.x) < 0.2f && Mathf.Abs(absolutePosition.y) < 0.2f) {
-                    absolutePosition = new Vector2(0, 1);
-                }
+                // bias towards looking forward (only activate over a sensible deadzone)
+                if (Mathf.Abs(absolutePosition.x) > 0.2f || Mathf.Abs(absolutePosition.y) > 0.2f) {
+                    _currentRotation = new Vector2(
+                        Mathf.Lerp(_currentRotation.x, absolutePosition.x, 0.02f),
+                        Mathf.Lerp(_currentRotation.y, absolutePosition.y, 0.02f)
+                    );
 
-                _currentRotation = new Vector2(
-                    Mathf.Lerp(_currentRotation.x, absolutePosition.x, 0.02f),
-                    Mathf.Lerp(_currentRotation.y, absolutePosition.y, 0.02f)
-                );
-                
-                var rotationRads = Mathf.Atan2(_currentRotation.x, _currentRotation.y);
-                cameraTarget.RotateAround(_transform.position, _transform.up, rotationRads * Mathf.Rad2Deg);
+                    var rotationRads = Mathf.Atan2(_currentRotation.x, _currentRotation.y);
+                    cameraTarget.RotateAround(_transform.position, _transform.up, rotationRads * Mathf.Rad2Deg);
+                }
+                else {
+                    _currentRotation = Vector2.zero;
+                }
             }
         }
 
