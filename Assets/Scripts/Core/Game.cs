@@ -49,6 +49,8 @@ namespace Core {
 
         [SerializeField] private InputActionAsset playerBindings;
         [SerializeField] private ScriptableRendererFeature ssao;
+        [SerializeField] private Camera inGameUiCamera;
+        [SerializeField] private Animator crossfade;
 
         private CinemachineBrain _cinemachine;
         private ShipParameters _shipParameters;
@@ -78,11 +80,11 @@ namespace Core {
             }
         }
 
+        public Camera InGameUICamera => inGameUiCamera;
+
         public bool IsTerrainMap => _levelLoader.LoadedLevelData.location.IsTerrain;
 
         public string Seed => _levelLoader.LoadedLevelData.terrainSeed;
-
-        [SerializeField] private Animator crossfade;
 
         // show certain things if first time hitting the menu
         public bool MenuFirstRun { get; private set; } = true;

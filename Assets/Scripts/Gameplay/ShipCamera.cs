@@ -56,10 +56,12 @@ namespace Gameplay {
         }
 
         public void UpdateFov(Vector3 velocity, float maxVelocity) {
-            Camera.m_Lens.FieldOfView = Mathf.Lerp(Camera.m_Lens.FieldOfView,
+            var fov = Mathf.Lerp(Camera.m_Lens.FieldOfView,
                 MathfExtensions.Remap(0, 1, _baseFov, _baseFov + 10, velocity.z / maxVelocity), 
                 smoothSpeed
             );
+            Camera.m_Lens.FieldOfView = fov; 
+            Game.Instance.InGameUICamera.fieldOfView = fov;
         }
         
         public Vector3 GetCameraOffset(Vector3 force, float maxForce) {

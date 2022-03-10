@@ -16,8 +16,8 @@ namespace Core.Ship {
         [SerializeField] private Light shipLights;
         [SerializeField] private SmokeEmitter smokeEmitter;
         
-        [SerializeField] private List<MeshRenderer> primaryColorMeshes = new List<MeshRenderer>();
-        [SerializeField] private List<MeshRenderer> accentColorMeshes = new List<MeshRenderer>();
+        [SerializeField] private List<MeshRenderer> primaryColorMeshes = new();
+        [SerializeField] private List<MeshRenderer> accentColorMeshes = new();
         
         [SerializeField] private AudioSource engineBoostAudioSource;
         [SerializeField] private AudioSource externalBoostAudioSource;
