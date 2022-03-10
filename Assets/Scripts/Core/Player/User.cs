@@ -120,8 +120,8 @@ namespace Core.Player {
                 // handle mouse flight input
                 if (
                     !pauseMenu.IsPaused && 
-                    Preferences.Instance.GetBool("enableMouseFlightControls") && 
-                    !Preferences.Instance.GetBool("mouseLook")
+                    !_mouseLookActive &&
+                    Preferences.Instance.GetBool("enableMouseFlightControls")
                 ) {
                     CalculateMouseInput(out var mousePitch, out var mouseRoll, out var mouseYaw);
                     pitch += mousePitch;
@@ -436,7 +436,6 @@ namespace Core.Player {
         }
 
         public void OnMouselook(InputValue value) {
-            Debug.Log("MOUSE LOOK TOGGLE D:");
             var mouseLookType = Preferences.Instance.GetString("mouseLookBindType");
             if (mouseLookType == "toggle") {
                 _mouseLookActive = !_mouseLookActive;
