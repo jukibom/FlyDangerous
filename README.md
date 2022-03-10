@@ -38,7 +38,7 @@ The release build is reliant on some paid assets (follow instructions underneath
 
 **IF YOU DO NOT HAVE THESE ASSETS** (and, why would you?) and do not wish to buy them, follow these instructions to build:
 
-* Ensure you have https://assetstore.unity.com/packages/tools/terrain/mapmagic-2-165180 in your Unity account (the free version of map magic will suffice, although you will miss some features and may not be able to load some terrains).
+* Ensure you have https://assetstore.unity.com/packages/tools/terrain/mapmagic-2-165180 in your Unity account and download it with the in-build package manager under the "My Assets" tab (the free version of map magic will suffice, although you will miss some features and may not be able to load some terrains).
  
 * Clone the repository
 
