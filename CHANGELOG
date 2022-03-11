@@ -4,10 +4,11 @@ New:
         * No need to forward IPs on steam!
         * New server browser shows games in progress (steam version only) 
     * Added new ship camera rig
-        * 5 camera positions (nose, bonnet, cockpit, external, external-far)
-        * Added bindings for rotating the camera (or looking around in first person)
+        * 5 camera positions + cycle binding: nose, bonnet, cockpit, external, external-far (default keyboard C or pad Y / triangle)
+        * Added bindings for rotating the camera or looking around in first person (default numpad arrows)
         * Added ability to switch between absolute and relative camera rotation
-        * Added mouse look toggle button (default M, default off)
+        * Added camera controls toggle button (default unbound, default state ON)
+        * Added mouse look toggle button (default keyboard M, default state off)
         * Added mouse look bind type (hold vs toggle)
     * Added third person cam FoV slider alongside first person FoV slider
     * Added new Checkpoint 3d model (much larger, circular)
@@ -25,13 +26,15 @@ Changes:
     * Update to Unity 2021.2 (bold or stupid? you decide)
     
 Fixed:
-    * All supported Gamepads + Joysticks can now be used in main menu UI navigation
+    * All supported Gamepads + Joysticks can now be used in main menu UI navigation (still some work to do here, navigation in options menu is awful and may get stuck on textboxes etc)
     * Incorrect shadows on terrain worlds (light source below the generated terrain meant no shadows - fixed by making terrain two-sided for shadow generation)
     * Thruster lights emitters now respects user color selection
-    * Optimisations around component lookups in update loops (yes I was lazy and yes I paid the price, shut up)
     * G force indicator now correctly calculates individual axes 
     * Updated Unity Input System, should resolve issues with certain HID joysticks (e.g. Virpil) with weird path descriptors
     * Boost sfx occasionally being mistimed / too fast
+    * Axis Deadzones failing to save
+    * Optimisations around component lookups in update loops (yes I was lazy and yes I paid the price, shut up)
+
 
 0.4.1
 Fixed:
