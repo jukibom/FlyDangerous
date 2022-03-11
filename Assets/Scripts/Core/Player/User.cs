@@ -54,6 +54,7 @@ namespace Core.Player {
         
         private float _cameraX;
         private float _cameraY;
+        private bool _cameraRotateAxisControlsEnabled = true;
         private Vector2 _cameraMouse;
         private bool _mouseLookActive;
 
@@ -145,11 +146,17 @@ namespace Core.Player {
                 shipPlayer.Boost(_boost);
 
                 // handle camera rig
-                if (Preferences.Instance.GetString("cameraMode") == "absolute" && !_mouseLookActive) {
-                    shipCameraRig.SetPosition(new Vector2(_cameraX, _cameraY), CameraPositionUpdate.Absolute);
+                if (_cameraRotateAxisControlsEnabled) {
+                    if (Preferences.Instance.GetString("cameraMode") == "absolute" && !_mouseLookActive) {
+                        shipCameraRig.SetPosition(new Vector2(_cameraX, _cameraY), CameraPositionUpdate.Absolute);
+                    }
+
+                    if (Preferences.Instance.GetString("cameraMode") == "relative" || _mouseLookActive) {
+                        shipCameraRig.SetPosition(new Vector2(_cameraX, _cameraY), CameraPositionUpdate.Relative);
+                    }
                 }
-                if (Preferences.Instance.GetString("cameraMode") == "relative" || _mouseLookActive) {
-                    shipCameraRig.SetPosition(new Vector2(_cameraX, _cameraY), CameraPositionUpdate.Relative);
+                else {
+                    shipCameraRig.SetPosition(Vector2.zero, CameraPositionUpdate.Absolute);
                 }
 
                 if (_mouseLookActive) {
@@ -423,6 +430,10 @@ namespace Core.Player {
         
         public void OnRotateCameraV(InputValue value) {
             _cameraY = value.Get<float>();
+        }
+
+        public void OnToggleCameraRotateControls(InputValue value) {
+            _cameraRotateAxisControlsEnabled = !_cameraRotateAxisControlsEnabled;
         }
 
         public void OnAltFlightControlsToggle(InputValue value) {

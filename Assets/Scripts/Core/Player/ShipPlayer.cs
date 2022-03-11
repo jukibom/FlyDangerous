@@ -126,7 +126,6 @@ namespace Core.Player {
                 _rigidbody.maxAngularVelocity = value.maxAngularVelocity;
                 _rigidbody.inertiaTensor = _initialInertiaTensor * value.inertiaTensorMultiplier;
                 _inertialTensorMultiplier = value.inertiaTensorMultiplier;
-                Debug.Log(_rigidbody.maxAngularVelocity);
                 _maxSpeed = value.maxSpeed;
                 _maxBoostSpeed = value.maxBoostSpeed;
                 _maxThrust = value.maxThrust;

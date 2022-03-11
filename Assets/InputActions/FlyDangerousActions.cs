@@ -364,6 +364,15 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Toggle Camera Rotate Controls"",
+                    ""type"": ""Button"",
+                    ""id"": ""bee0c1a6-c66a-4892-bebc-64756555eca3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1961,6 +1970,28 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""action"": ""Mouselook"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4f5998ce-9401-4dd5-b12d-7dd9443214d4"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Toggle Camera Rotate Controls"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""33455776-b82f-4c2e-b6e4-1fdf395501bc"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Toggle Camera Rotate Controls"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -3289,6 +3320,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         m_Ship_ChangeCamera = m_Ship.FindAction("Change Camera", throwIfNotFound: true);
         m_Ship_RotateCameraH = m_Ship.FindAction("Rotate Camera H", throwIfNotFound: true);
         m_Ship_RotateCameraV = m_Ship.FindAction("Rotate Camera V", throwIfNotFound: true);
+        m_Ship_ToggleCameraRotateControls = m_Ship.FindAction("Toggle Camera Rotate Controls", throwIfNotFound: true);
         // ShipArcade
         m_ShipArcade = asset.FindActionMap("ShipArcade", throwIfNotFound: true);
         m_ShipArcade_ShowGameMenu = m_ShipArcade.FindAction("Show Game Menu", throwIfNotFound: true);
@@ -3449,6 +3481,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Ship_ChangeCamera;
     private readonly InputAction m_Ship_RotateCameraH;
     private readonly InputAction m_Ship_RotateCameraV;
+    private readonly InputAction m_Ship_ToggleCameraRotateControls;
     public struct ShipActions
     {
         private @FlyDangerousActions m_Wrapper;
@@ -3484,6 +3517,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         public InputAction @ChangeCamera => m_Wrapper.m_Ship_ChangeCamera;
         public InputAction @RotateCameraH => m_Wrapper.m_Ship_RotateCameraH;
         public InputAction @RotateCameraV => m_Wrapper.m_Ship_RotateCameraV;
+        public InputAction @ToggleCameraRotateControls => m_Wrapper.m_Ship_ToggleCameraRotateControls;
         public InputActionMap Get() { return m_Wrapper.m_Ship; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -3586,6 +3620,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @RotateCameraV.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnRotateCameraV;
                 @RotateCameraV.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnRotateCameraV;
                 @RotateCameraV.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnRotateCameraV;
+                @ToggleCameraRotateControls.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnToggleCameraRotateControls;
+                @ToggleCameraRotateControls.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnToggleCameraRotateControls;
+                @ToggleCameraRotateControls.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnToggleCameraRotateControls;
             }
             m_Wrapper.m_ShipActionsCallbackInterface = instance;
             if (instance != null)
@@ -3683,6 +3720,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @RotateCameraV.started += instance.OnRotateCameraV;
                 @RotateCameraV.performed += instance.OnRotateCameraV;
                 @RotateCameraV.canceled += instance.OnRotateCameraV;
+                @ToggleCameraRotateControls.started += instance.OnToggleCameraRotateControls;
+                @ToggleCameraRotateControls.performed += instance.OnToggleCameraRotateControls;
+                @ToggleCameraRotateControls.canceled += instance.OnToggleCameraRotateControls;
             }
         }
     }
@@ -4029,6 +4069,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         void OnChangeCamera(InputAction.CallbackContext context);
         void OnRotateCameraH(InputAction.CallbackContext context);
         void OnRotateCameraV(InputAction.CallbackContext context);
+        void OnToggleCameraRotateControls(InputAction.CallbackContext context);
     }
     public interface IShipArcadeActions
     {
