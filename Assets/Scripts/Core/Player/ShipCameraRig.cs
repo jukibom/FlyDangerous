@@ -21,7 +21,7 @@ namespace Core.Player {
         private Transform _transform;
         private Vector3 _cameraOffset;
         private Vector2 _currentRotation;
-        
+
         public ShipCamera ActiveCamera { get; private set; }
         
         private void Start() {
@@ -51,8 +51,8 @@ namespace Core.Player {
             if (ActiveCamera.cameraType == CameraType.FirstPerson) {
                 
                 _currentRotation = new Vector2(
-                    Mathf.Lerp(_currentRotation.x, absolutePosition.x, 0.01f),
-                    Mathf.Lerp(_currentRotation.y, absolutePosition.y, 0.01f)
+                    Mathf.Lerp(_currentRotation.x, absolutePosition.x, 0.02f),
+                    Mathf.Lerp(_currentRotation.y, absolutePosition.y, 0.02f)
                 );
                 var angleY = _currentRotation.y * 90;
                 var angleX = _currentRotation.x * 90;
@@ -68,8 +68,8 @@ namespace Core.Player {
                 // bias towards looking forward (only activate over a sensible deadzone)
                 if (Mathf.Abs(absolutePosition.x) > 0.2f || Mathf.Abs(absolutePosition.y) > 0.2f) {
                     _currentRotation = new Vector2(
-                        Mathf.Lerp(_currentRotation.x, absolutePosition.x, 0.02f),
-                        Mathf.Lerp(_currentRotation.y, absolutePosition.y, 0.02f)
+                        Mathf.Lerp(_currentRotation.x, absolutePosition.x, 0.3f),
+                        Mathf.Lerp(_currentRotation.y, absolutePosition.y, 0.3f)
                     );
 
                     var rotationRads = Mathf.Atan2(_currentRotation.x, _currentRotation.y);

@@ -56,6 +56,7 @@ namespace Core {
                 case "graphics-terrain-details":
                     return true;
                 
+                case "useAdvancedControlScheme":
                 case "relativeMouseXAxis":
                 case "relativeMouseYAxis":
                 case "mouseXInvert:":

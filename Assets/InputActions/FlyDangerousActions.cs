@@ -1965,6 +1965,666 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
             ]
         },
         {
+            ""name"": ""ShipArcade"",
+            ""id"": ""ed3ae988-95c1-41dc-8cc9-e43a984e423e"",
+            ""actions"": [
+                {
+                    ""name"": ""Show Game Menu"",
+                    ""type"": ""Button"",
+                    ""id"": ""701c181f-7aa4-450b-bff6-58d327324f36"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Restart Track"",
+                    ""type"": ""Button"",
+                    ""id"": ""d5811d88-1d2d-4c2d-9a5f-e38421aae4a6"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Restart From Last Checkpoint"",
+                    ""type"": ""Button"",
+                    ""id"": ""268d0ec3-f896-47f7-94e0-4aa3ecf7843f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pitch"",
+                    ""type"": ""Value"",
+                    ""id"": ""a5e9f02b-5919-4273-94af-ade7c3fd18ad"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Yaw"",
+                    ""type"": ""Value"",
+                    ""id"": ""e48f381f-1da7-4151-99f2-83cefc1552e0"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Throttle"",
+                    ""type"": ""Value"",
+                    ""id"": ""f7cd8adb-4f7e-4b58-89e5-4b68ff469de7"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Boost"",
+                    ""type"": ""Value"",
+                    ""id"": ""67d4115b-a831-46cf-a078-8fad1e50f91c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Velocity Limiter"",
+                    ""type"": ""Value"",
+                    ""id"": ""04d46e24-6796-4bbb-987d-30a978788342"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""ShipLights Toggle"",
+                    ""type"": ""Button"",
+                    ""id"": ""a9065cab-d4d3-4670-88a5-c33519ac4741"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Mouse Raw Delta"",
+                    ""type"": ""Value"",
+                    ""id"": ""1cbfb8a7-cfb8-410c-93ce-b2147720e0a8"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Recenter Mouse"",
+                    ""type"": ""Button"",
+                    ""id"": ""e7d873fc-356f-42cd-ae99-e25ed0507529"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Mouselook"",
+                    ""type"": ""Value"",
+                    ""id"": ""11079eeb-a517-4ba3-8e36-fd522eb5dc20"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Change Camera"",
+                    ""type"": ""Button"",
+                    ""id"": ""8ebd5596-0bef-49f8-8d39-dc53a4068c48"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Rotate Camera H"",
+                    ""type"": ""Value"",
+                    ""id"": ""a6057397-d4ab-468d-bc88-9d69711b1998"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Rotate Camera V"",
+                    ""type"": ""Value"",
+                    ""id"": ""c35d0053-91a7-40dc-b7b5-5d9170985795"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""0f7c8c4f-4471-4e57-a1be-c0298705dea3"",
+                    ""path"": ""<Gamepad>/leftStick/y"",
+                    ""interactions"": """",
+                    ""processors"": ""AxisDeadzone"",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Pitch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Keyboard"",
+                    ""id"": ""6718e203-6a23-4c3f-ae91-9bddfcea0a1c"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pitch"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""bea09b6d-6e38-4721-a53f-384f684282be"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Pitch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""9acad715-a053-4146-b7ec-b89272637b4a"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Pitch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Triggers"",
+                    ""id"": ""620eb8f2-f043-4bd8-9d97-acdfc12cb669"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": ""AxisDeadzone"",
+                    ""groups"": """",
+                    ""action"": ""Throttle"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""7a964203-6a12-4d62-a544-790b003c6c06"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Throttle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""b2226775-77df-492c-92be-02d51a7cde39"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Throttle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Keyboard"",
+                    ""id"": ""ae086d24-72c2-4e7b-9b6a-5489ce1e5b5f"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Throttle"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""3adfa1d3-7a14-4827-a7ce-ab80e14b33a9"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Throttle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""ac2cfdb4-49b3-4445-af1e-560616807f12"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Throttle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2643f811-7ce0-4b84-bcf1-c5285614891b"",
+                    ""path"": ""<Gamepad>/leftStick/x"",
+                    ""interactions"": """",
+                    ""processors"": ""AxisDeadzone"",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Yaw"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Keyboard"",
+                    ""id"": ""78c48b51-4421-420b-8b20-e6b8835500ef"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Yaw"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""939df07a-5b55-49eb-b9af-2adc20f0182a"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Yaw"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""d94f4b6f-1d7f-4cf0-943e-b27974878e45"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Yaw"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7d77782c-67c9-4c57-8a82-558d92f1d4e9"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Boost"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""06915413-1083-41ce-ba5b-4a9cec0f72ea"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Boost"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9849abc8-d3fc-4353-9b4e-7e57538ffb5f"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Show Game Menu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b2edd8db-39e5-4682-ad4a-e0dd64fa8f24"",
+                    ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Restart Track"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c23950d7-b5db-4e33-92f4-34ee10dfcf09"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Restart From Last Checkpoint"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3b24c0e1-9440-4125-a234-035360babd71"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Restart From Last Checkpoint"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4746cdae-66f3-4d39-b703-5f673918b618"",
+                    ""path"": ""<Pointer>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Mouse Raw Delta"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""26759a8d-7f43-4fda-b91b-bafdb6198a9d"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Recenter Mouse"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""33d924b3-032f-422f-93e1-c66930d5ed1e"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Recenter Mouse"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""77d4ca22-ea51-46b6-99b6-9afdbc35b4b5"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Change Camera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f8d2119f-742f-4bbe-af87-0bc3d03526b2"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Change Camera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b5256c43-efdb-41d5-a730-d2cd9a1c4d50"",
+                    ""path"": ""<Gamepad>/rightStick/x"",
+                    ""interactions"": """",
+                    ""processors"": ""AxisDeadzone"",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Rotate Camera H"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""DPad"",
+                    ""id"": ""1467889d-cd8c-4736-8cd0-2ab2d6c43ce9"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Rotate Camera H"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""c130ed8f-96ce-4567-9058-8c5c84b32c6a"",
+                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Rotate Camera H"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""d85fbef7-6622-4ccd-8182-026330d08eb3"",
+                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Rotate Camera H"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Keyboard"",
+                    ""id"": ""cd6a9560-97ef-440a-be72-2413504cc08b"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Rotate Camera H"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""f95286d4-4b62-4181-9bb8-4b3800b577e4"",
+                    ""path"": ""<Keyboard>/numpad6"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Rotate Camera H"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""5e5ad62b-43d2-4d29-9486-268e97fb955c"",
+                    ""path"": ""<Keyboard>/numpad4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Rotate Camera H"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cde9f5dc-7232-4ebc-9a1a-4467953eff0d"",
+                    ""path"": ""<Gamepad>/rightStick/y"",
+                    ""interactions"": """",
+                    ""processors"": ""AxisDeadzone"",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Rotate Camera V"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""DPad"",
+                    ""id"": ""6a62de8c-5723-44ae-b0b2-8ffd94855031"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Rotate Camera V"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""824d09f7-3acd-4ed4-95df-487b565bb6a8"",
+                    ""path"": ""<Gamepad>/dpad/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Rotate Camera V"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""1f94c98c-7579-4458-8edd-e6c7cd93d43e"",
+                    ""path"": ""<Gamepad>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Rotate Camera V"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Keyboard"",
+                    ""id"": ""18bcd9c9-c5be-44a5-a24f-ddf2024b113b"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Rotate Camera V"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""07785ec4-7602-4561-a19a-5e1287e26794"",
+                    ""path"": ""<Keyboard>/numpad8"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Rotate Camera V"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""17f2cedc-1ebb-4e4f-9df1-abbb9413d1f0"",
+                    ""path"": ""<Keyboard>/numpad2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Rotate Camera V"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""af7ec0af-0a39-4d68-9553-fe0a3426c440"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Mouselook"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""93eb8ff1-845e-4fb8-a318-58f5428ff429"",
+                    ""path"": ""<Keyboard>/m"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Mouselook"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""704dd8b0-897d-4266-b8b6-321e5fd5f9b7"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Restart Track"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""22c3467a-dc1f-478c-b0ca-9447691e4dfd"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Show Game Menu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7d884f62-38f7-4fa0-9bb0-185b89c6510f"",
+                    ""path"": ""<Keyboard>/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Velocity Limiter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3d930447-9f35-4c88-aaf5-c49832e8adfa"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Velocity Limiter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""15a81ba8-7a43-4849-98a4-c7dfc2b6b3a8"",
+                    ""path"": ""<Keyboard>/l"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""ShipLights Toggle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ec799843-3754-4efd-9cfd-6f5f1f54ae82"",
+                    ""path"": ""<Gamepad>/leftStickPress"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""ShipLights Toggle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
             ""name"": ""UI"",
             ""id"": ""888bea3e-ec58-4da0-a920-6757edbeb6ca"",
             ""actions"": [
@@ -2629,6 +3289,23 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         m_Ship_ChangeCamera = m_Ship.FindAction("Change Camera", throwIfNotFound: true);
         m_Ship_RotateCameraH = m_Ship.FindAction("Rotate Camera H", throwIfNotFound: true);
         m_Ship_RotateCameraV = m_Ship.FindAction("Rotate Camera V", throwIfNotFound: true);
+        // ShipArcade
+        m_ShipArcade = asset.FindActionMap("ShipArcade", throwIfNotFound: true);
+        m_ShipArcade_ShowGameMenu = m_ShipArcade.FindAction("Show Game Menu", throwIfNotFound: true);
+        m_ShipArcade_RestartTrack = m_ShipArcade.FindAction("Restart Track", throwIfNotFound: true);
+        m_ShipArcade_RestartFromLastCheckpoint = m_ShipArcade.FindAction("Restart From Last Checkpoint", throwIfNotFound: true);
+        m_ShipArcade_Pitch = m_ShipArcade.FindAction("Pitch", throwIfNotFound: true);
+        m_ShipArcade_Yaw = m_ShipArcade.FindAction("Yaw", throwIfNotFound: true);
+        m_ShipArcade_Throttle = m_ShipArcade.FindAction("Throttle", throwIfNotFound: true);
+        m_ShipArcade_Boost = m_ShipArcade.FindAction("Boost", throwIfNotFound: true);
+        m_ShipArcade_VelocityLimiter = m_ShipArcade.FindAction("Velocity Limiter", throwIfNotFound: true);
+        m_ShipArcade_ShipLightsToggle = m_ShipArcade.FindAction("ShipLights Toggle", throwIfNotFound: true);
+        m_ShipArcade_MouseRawDelta = m_ShipArcade.FindAction("Mouse Raw Delta", throwIfNotFound: true);
+        m_ShipArcade_RecenterMouse = m_ShipArcade.FindAction("Recenter Mouse", throwIfNotFound: true);
+        m_ShipArcade_Mouselook = m_ShipArcade.FindAction("Mouselook", throwIfNotFound: true);
+        m_ShipArcade_ChangeCamera = m_ShipArcade.FindAction("Change Camera", throwIfNotFound: true);
+        m_ShipArcade_RotateCameraH = m_ShipArcade.FindAction("Rotate Camera H", throwIfNotFound: true);
+        m_ShipArcade_RotateCameraV = m_ShipArcade.FindAction("Rotate Camera V", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -3011,6 +3688,151 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
     }
     public ShipActions @Ship => new ShipActions(this);
 
+    // ShipArcade
+    private readonly InputActionMap m_ShipArcade;
+    private IShipArcadeActions m_ShipArcadeActionsCallbackInterface;
+    private readonly InputAction m_ShipArcade_ShowGameMenu;
+    private readonly InputAction m_ShipArcade_RestartTrack;
+    private readonly InputAction m_ShipArcade_RestartFromLastCheckpoint;
+    private readonly InputAction m_ShipArcade_Pitch;
+    private readonly InputAction m_ShipArcade_Yaw;
+    private readonly InputAction m_ShipArcade_Throttle;
+    private readonly InputAction m_ShipArcade_Boost;
+    private readonly InputAction m_ShipArcade_VelocityLimiter;
+    private readonly InputAction m_ShipArcade_ShipLightsToggle;
+    private readonly InputAction m_ShipArcade_MouseRawDelta;
+    private readonly InputAction m_ShipArcade_RecenterMouse;
+    private readonly InputAction m_ShipArcade_Mouselook;
+    private readonly InputAction m_ShipArcade_ChangeCamera;
+    private readonly InputAction m_ShipArcade_RotateCameraH;
+    private readonly InputAction m_ShipArcade_RotateCameraV;
+    public struct ShipArcadeActions
+    {
+        private @FlyDangerousActions m_Wrapper;
+        public ShipArcadeActions(@FlyDangerousActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @ShowGameMenu => m_Wrapper.m_ShipArcade_ShowGameMenu;
+        public InputAction @RestartTrack => m_Wrapper.m_ShipArcade_RestartTrack;
+        public InputAction @RestartFromLastCheckpoint => m_Wrapper.m_ShipArcade_RestartFromLastCheckpoint;
+        public InputAction @Pitch => m_Wrapper.m_ShipArcade_Pitch;
+        public InputAction @Yaw => m_Wrapper.m_ShipArcade_Yaw;
+        public InputAction @Throttle => m_Wrapper.m_ShipArcade_Throttle;
+        public InputAction @Boost => m_Wrapper.m_ShipArcade_Boost;
+        public InputAction @VelocityLimiter => m_Wrapper.m_ShipArcade_VelocityLimiter;
+        public InputAction @ShipLightsToggle => m_Wrapper.m_ShipArcade_ShipLightsToggle;
+        public InputAction @MouseRawDelta => m_Wrapper.m_ShipArcade_MouseRawDelta;
+        public InputAction @RecenterMouse => m_Wrapper.m_ShipArcade_RecenterMouse;
+        public InputAction @Mouselook => m_Wrapper.m_ShipArcade_Mouselook;
+        public InputAction @ChangeCamera => m_Wrapper.m_ShipArcade_ChangeCamera;
+        public InputAction @RotateCameraH => m_Wrapper.m_ShipArcade_RotateCameraH;
+        public InputAction @RotateCameraV => m_Wrapper.m_ShipArcade_RotateCameraV;
+        public InputActionMap Get() { return m_Wrapper.m_ShipArcade; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(ShipArcadeActions set) { return set.Get(); }
+        public void SetCallbacks(IShipArcadeActions instance)
+        {
+            if (m_Wrapper.m_ShipArcadeActionsCallbackInterface != null)
+            {
+                @ShowGameMenu.started -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnShowGameMenu;
+                @ShowGameMenu.performed -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnShowGameMenu;
+                @ShowGameMenu.canceled -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnShowGameMenu;
+                @RestartTrack.started -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnRestartTrack;
+                @RestartTrack.performed -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnRestartTrack;
+                @RestartTrack.canceled -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnRestartTrack;
+                @RestartFromLastCheckpoint.started -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnRestartFromLastCheckpoint;
+                @RestartFromLastCheckpoint.performed -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnRestartFromLastCheckpoint;
+                @RestartFromLastCheckpoint.canceled -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnRestartFromLastCheckpoint;
+                @Pitch.started -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnPitch;
+                @Pitch.performed -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnPitch;
+                @Pitch.canceled -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnPitch;
+                @Yaw.started -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnYaw;
+                @Yaw.performed -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnYaw;
+                @Yaw.canceled -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnYaw;
+                @Throttle.started -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnThrottle;
+                @Throttle.performed -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnThrottle;
+                @Throttle.canceled -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnThrottle;
+                @Boost.started -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnBoost;
+                @Boost.performed -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnBoost;
+                @Boost.canceled -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnBoost;
+                @VelocityLimiter.started -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnVelocityLimiter;
+                @VelocityLimiter.performed -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnVelocityLimiter;
+                @VelocityLimiter.canceled -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnVelocityLimiter;
+                @ShipLightsToggle.started -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnShipLightsToggle;
+                @ShipLightsToggle.performed -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnShipLightsToggle;
+                @ShipLightsToggle.canceled -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnShipLightsToggle;
+                @MouseRawDelta.started -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnMouseRawDelta;
+                @MouseRawDelta.performed -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnMouseRawDelta;
+                @MouseRawDelta.canceled -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnMouseRawDelta;
+                @RecenterMouse.started -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnRecenterMouse;
+                @RecenterMouse.performed -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnRecenterMouse;
+                @RecenterMouse.canceled -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnRecenterMouse;
+                @Mouselook.started -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnMouselook;
+                @Mouselook.performed -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnMouselook;
+                @Mouselook.canceled -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnMouselook;
+                @ChangeCamera.started -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnChangeCamera;
+                @ChangeCamera.performed -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnChangeCamera;
+                @ChangeCamera.canceled -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnChangeCamera;
+                @RotateCameraH.started -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnRotateCameraH;
+                @RotateCameraH.performed -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnRotateCameraH;
+                @RotateCameraH.canceled -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnRotateCameraH;
+                @RotateCameraV.started -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnRotateCameraV;
+                @RotateCameraV.performed -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnRotateCameraV;
+                @RotateCameraV.canceled -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnRotateCameraV;
+            }
+            m_Wrapper.m_ShipArcadeActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @ShowGameMenu.started += instance.OnShowGameMenu;
+                @ShowGameMenu.performed += instance.OnShowGameMenu;
+                @ShowGameMenu.canceled += instance.OnShowGameMenu;
+                @RestartTrack.started += instance.OnRestartTrack;
+                @RestartTrack.performed += instance.OnRestartTrack;
+                @RestartTrack.canceled += instance.OnRestartTrack;
+                @RestartFromLastCheckpoint.started += instance.OnRestartFromLastCheckpoint;
+                @RestartFromLastCheckpoint.performed += instance.OnRestartFromLastCheckpoint;
+                @RestartFromLastCheckpoint.canceled += instance.OnRestartFromLastCheckpoint;
+                @Pitch.started += instance.OnPitch;
+                @Pitch.performed += instance.OnPitch;
+                @Pitch.canceled += instance.OnPitch;
+                @Yaw.started += instance.OnYaw;
+                @Yaw.performed += instance.OnYaw;
+                @Yaw.canceled += instance.OnYaw;
+                @Throttle.started += instance.OnThrottle;
+                @Throttle.performed += instance.OnThrottle;
+                @Throttle.canceled += instance.OnThrottle;
+                @Boost.started += instance.OnBoost;
+                @Boost.performed += instance.OnBoost;
+                @Boost.canceled += instance.OnBoost;
+                @VelocityLimiter.started += instance.OnVelocityLimiter;
+                @VelocityLimiter.performed += instance.OnVelocityLimiter;
+                @VelocityLimiter.canceled += instance.OnVelocityLimiter;
+                @ShipLightsToggle.started += instance.OnShipLightsToggle;
+                @ShipLightsToggle.performed += instance.OnShipLightsToggle;
+                @ShipLightsToggle.canceled += instance.OnShipLightsToggle;
+                @MouseRawDelta.started += instance.OnMouseRawDelta;
+                @MouseRawDelta.performed += instance.OnMouseRawDelta;
+                @MouseRawDelta.canceled += instance.OnMouseRawDelta;
+                @RecenterMouse.started += instance.OnRecenterMouse;
+                @RecenterMouse.performed += instance.OnRecenterMouse;
+                @RecenterMouse.canceled += instance.OnRecenterMouse;
+                @Mouselook.started += instance.OnMouselook;
+                @Mouselook.performed += instance.OnMouselook;
+                @Mouselook.canceled += instance.OnMouselook;
+                @ChangeCamera.started += instance.OnChangeCamera;
+                @ChangeCamera.performed += instance.OnChangeCamera;
+                @ChangeCamera.canceled += instance.OnChangeCamera;
+                @RotateCameraH.started += instance.OnRotateCameraH;
+                @RotateCameraH.performed += instance.OnRotateCameraH;
+                @RotateCameraH.canceled += instance.OnRotateCameraH;
+                @RotateCameraV.started += instance.OnRotateCameraV;
+                @RotateCameraV.performed += instance.OnRotateCameraV;
+                @RotateCameraV.canceled += instance.OnRotateCameraV;
+            }
+        }
+    }
+    public ShipArcadeActions @ShipArcade => new ShipArcadeActions(this);
+
     // UI
     private readonly InputActionMap m_UI;
     private IUIActions m_UIActionsCallbackInterface;
@@ -3201,6 +4023,24 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         void OnRotationalFlightAssistToggle(InputAction.CallbackContext context);
         void OnShipLightsToggle(InputAction.CallbackContext context);
         void OnAltFlightControlsToggle(InputAction.CallbackContext context);
+        void OnMouseRawDelta(InputAction.CallbackContext context);
+        void OnRecenterMouse(InputAction.CallbackContext context);
+        void OnMouselook(InputAction.CallbackContext context);
+        void OnChangeCamera(InputAction.CallbackContext context);
+        void OnRotateCameraH(InputAction.CallbackContext context);
+        void OnRotateCameraV(InputAction.CallbackContext context);
+    }
+    public interface IShipArcadeActions
+    {
+        void OnShowGameMenu(InputAction.CallbackContext context);
+        void OnRestartTrack(InputAction.CallbackContext context);
+        void OnRestartFromLastCheckpoint(InputAction.CallbackContext context);
+        void OnPitch(InputAction.CallbackContext context);
+        void OnYaw(InputAction.CallbackContext context);
+        void OnThrottle(InputAction.CallbackContext context);
+        void OnBoost(InputAction.CallbackContext context);
+        void OnVelocityLimiter(InputAction.CallbackContext context);
+        void OnShipLightsToggle(InputAction.CallbackContext context);
         void OnMouseRawDelta(InputAction.CallbackContext context);
         void OnRecenterMouse(InputAction.CallbackContext context);
         void OnMouselook(InputAction.CallbackContext context);

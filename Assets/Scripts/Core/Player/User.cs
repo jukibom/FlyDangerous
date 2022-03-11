@@ -19,7 +19,8 @@ namespace Core.Player {
     public class User : MonoBehaviour {
 
         [SerializeField] public ShipPlayer shipPlayer;
-
+        [SerializeField] public ShipArcadeFlightComputer shipArcadeFlightComputer;
+        
         [SerializeField] public PauseMenu pauseMenu;
         [SerializeField] public Canvas uiCanvas;
         [SerializeField] public ShipCameraRig shipCameraRig;
@@ -130,14 +131,19 @@ namespace Core.Player {
                 }
 
                 // update the player
-                shipPlayer.SetPitch(pitch);
-                shipPlayer.SetRoll(roll);
-                shipPlayer.SetYaw(yaw);
-                shipPlayer.SetThrottle(throttle);
-                shipPlayer.SetLateralH(lateralH);
-                shipPlayer.SetLateralV(lateralV);
+                if (Preferences.Instance.GetBool("useAdvancedControlScheme")) {
+                    shipPlayer.SetPitch(pitch);
+                    shipPlayer.SetRoll(roll);
+                    shipPlayer.SetYaw(yaw);
+                    shipPlayer.SetThrottle(throttle);
+                    shipPlayer.SetLateralH(lateralH);
+                    shipPlayer.SetLateralV(lateralV);
+                }
+                else {
+                    shipArcadeFlightComputer.UpdateShipFlightInput(shipPlayer, pitch, yaw, throttle);
+                }
                 shipPlayer.Boost(_boost);
-                
+
                 // handle camera rig
                 if (Preferences.Instance.GetString("cameraMode") == "absolute" && !_mouseLookActive) {
                     shipCameraRig.SetPosition(new Vector2(_cameraX, _cameraY), CameraPositionUpdate.Absolute);
@@ -170,9 +176,19 @@ namespace Core.Player {
             var playerInput = GetComponent<PlayerInput>();
             playerInput.ActivateInput();
             
+            // choose the correct action set depending on advanced control scheme preference
+            if (Preferences.Instance.GetBool("useAdvancedControlScheme")) {
+                var advancedControlActionMap = playerInput.actions.FindActionMap("Ship");
+                playerInput.currentActionMap = advancedControlActionMap ?? playerInput.currentActionMap;
+            }
+            else {
+                var advancedControlActionMap = playerInput.actions.FindActionMap("ShipArcade");
+                playerInput.currentActionMap = advancedControlActionMap ?? playerInput.currentActionMap;
+            }
+            
             // enable multiple input action sets
             playerInput.actions.FindActionMap("Global").Enable();
-            playerInput.actions.FindActionMap("Ship").Enable();
+            playerInput.currentActionMap.Enable();
             
             movementEnabled = true;
             pauseMenuEnabled = true;
