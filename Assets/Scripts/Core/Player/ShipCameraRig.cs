@@ -119,9 +119,10 @@ namespace Core.Player {
         }
 
         private void SetActiveCamera(ShipCamera newCamera) {
+            if (ActiveCamera != null) ActiveCamera.SetCameraActive(false);
             Reset();
             ActiveCamera = newCamera;
-            ActiveCamera.Camera.MoveToTopOfPrioritySubqueue();
+            ActiveCamera.SetCameraActive(true);
         }
     }
 }

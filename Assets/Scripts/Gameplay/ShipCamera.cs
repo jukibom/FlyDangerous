@@ -10,17 +10,18 @@ namespace Gameplay {
     }
 
     [RequireComponent(typeof(CinemachineVirtualCamera))]
+    [RequireComponent(typeof(AudioListener))]
     public class ShipCamera : MonoBehaviour {
         [SerializeField] private string cameraName;
         [SerializeField] public CameraType cameraType;
         [SerializeField] public Vector3 maxOffset = Vector3.one;
+        [SerializeField] public bool useLowPassAudio;
 
         public float smoothSpeed = 0.1f;
-
         private float _baseFov;
+
         private CinemachineVirtualCamera _camera;
         private Vector3 _offset = Vector3.zero;
-
         private Vector3 _targetOffset = Vector3.zero;
 
         public string Name => cameraName;
@@ -28,6 +29,8 @@ namespace Gameplay {
         // Use the starting position of the active camera as the pivot otherwise the cinemachine system
         // will FREAK THE FUCK OUT trying to update the position while basing that formula on the position itself
         public Vector3 BaseLocalPosition { get; private set; }
+
+        public AudioListener AudioListener { get; private set; }
 
         public CinemachineVirtualCamera Camera {
             get {
@@ -38,6 +41,7 @@ namespace Gameplay {
 
         public void Awake() {
             BaseLocalPosition = transform.localPosition;
+            AudioListener = GetComponent<AudioListener>();
         }
 
         public void OnEnable() {
@@ -47,6 +51,12 @@ namespace Gameplay {
 
         public void OnDisable() {
             Game.OnGameSettingsApplied -= SetBaseFov;
+        }
+
+        public void SetCameraActive(bool active) {
+            if (active) Camera.MoveToTopOfPrioritySubqueue();
+            AudioListener.enabled = active;
+            foreach (var audioLowPassFilter in FindObjectsOfType<AudioLowPassFilter>()) audioLowPassFilter.enabled = useLowPassAudio && active;
         }
 
         public void UpdateFov(Vector3 velocity, float maxVelocity) {
@@ -59,11 +69,11 @@ namespace Gameplay {
         }
 
         public Vector3 GetCameraOffset(Vector3 force, float maxForce) {
-            _targetOffset = new Vector3(
+            _targetOffset = Vector3.Lerp(_targetOffset, new Vector3(
                 MathfExtensions.Remap(-1, 1, maxOffset.x, -maxOffset.x, force.x / maxForce),
                 MathfExtensions.Remap(-1, 1, maxOffset.y, -maxOffset.y, force.y / maxForce),
                 MathfExtensions.Remap(-1, 1, maxOffset.z, -maxOffset.z, force.z / maxForce)
-            );
+            ), 0.1f);
 
             _offset = Vector3.Lerp(_offset, _targetOffset, 0.04f);
             return _offset;
