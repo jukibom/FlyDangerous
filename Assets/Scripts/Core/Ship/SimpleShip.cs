@@ -70,13 +70,13 @@ namespace Core.Ship {
         public void Boost(float boostTime) {
             IEnumerator AnimateBoost() {
                 yield return new WaitForSecondsRealtime(1);
+                externalBoostThrusterAudioSource.Play();
                 _shipShake.Shake(boostTime - 1, 0.005f);
                 thrusterController.AnimateBoostThrusters();
             }
 
             engineBoostAudioSource.Play();
             externalBoostAudioSource.Play();
-            externalBoostThrusterAudioSource.PlayDelayed(1);
             _boostCoroutine = StartCoroutine(AnimateBoost());
         }
 
