@@ -298,6 +298,7 @@ GameObject:
   - component: {fileID: 3951948620901803372}
   - component: {fileID: 8483895382664347478}
   - component: {fileID: 5844552701233443650}
+  - component: {fileID: 6716738686324455316}
   m_Layer: 0
   m_Name: Nose Camera
   m_TagString: Untagged
@@ -313,7 +314,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2287725764578271757}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.534, z: 5.6519995}
+  m_LocalPosition: {x: 0, y: -0.534, z: 5.6520004}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -374,7 +375,16 @@ MonoBehaviour:
   cameraName: nose
   cameraType: 0
   maxOffset: {x: 0.1, y: 0.1, z: 0.1}
+  useLowPassAudio: 0
   smoothSpeed: 0.5
+--- !u!81 &6716738686324455316
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2287725764578271757}
+  m_Enabled: 0
 --- !u!1 &3762637123202857496
 GameObject:
   m_ObjectHideFlags: 0
@@ -488,6 +498,7 @@ GameObject:
   - component: {fileID: 2318256397742361825}
   - component: {fileID: 3194244236577179173}
   - component: {fileID: 7673219991363343321}
+  - component: {fileID: 7132778034662572288}
   m_Layer: 0
   m_Name: Bonnet Camera
   m_TagString: Untagged
@@ -564,7 +575,16 @@ MonoBehaviour:
   cameraName: bonnet
   cameraType: 0
   maxOffset: {x: 0.2, y: 0.1, z: 0.2}
+  useLowPassAudio: 0
   smoothSpeed: 0.5
+--- !u!81 &7132778034662572288
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5227323905924148687}
+  m_Enabled: 0
 --- !u!1 &6072433287246695175
 GameObject:
   m_ObjectHideFlags: 0
@@ -780,6 +800,7 @@ GameObject:
   - component: {fileID: 2358256372701191151}
   - component: {fileID: 524126629033503275}
   - component: {fileID: 1529865154023744939}
+  - component: {fileID: 3542858845368782975}
   m_Layer: 0
   m_Name: Cockpit Camera
   m_TagString: Untagged
@@ -856,7 +877,16 @@ MonoBehaviour:
   cameraName: cockpit
   cameraType: 0
   maxOffset: {x: 0.2, y: 0.2, z: 0.2}
+  useLowPassAudio: 0
   smoothSpeed: 0.5
+--- !u!81 &3542858845368782975
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6349769869117470759}
+  m_Enabled: 0
 --- !u!1 &6538293319729984130
 GameObject:
   m_ObjectHideFlags: 0
@@ -869,6 +899,7 @@ GameObject:
   - component: {fileID: 5274539686976819936}
   - component: {fileID: 7597197493421026120}
   - component: {fileID: 3081616600077473386}
+  - component: {fileID: 4766117071036271466}
   m_Layer: 0
   m_Name: External Camera (Distant)
   m_TagString: Untagged
@@ -975,7 +1006,16 @@ MonoBehaviour:
   cameraName: external far
   cameraType: 1
   maxOffset: {x: 5, y: 5, z: 5}
+  useLowPassAudio: 0
   smoothSpeed: 0.5
+--- !u!81 &4766117071036271466
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6538293319729984130}
+  m_Enabled: 0
 --- !u!1 &6977493067678210079
 GameObject:
   m_ObjectHideFlags: 0
@@ -988,6 +1028,7 @@ GameObject:
   - component: {fileID: 6462955289642752414}
   - component: {fileID: 1156402147635546038}
   - component: {fileID: 7955175266960112450}
+  - component: {fileID: 5785946076535298501}
   m_Layer: 0
   m_Name: External Camera (Close)
   m_TagString: Untagged
@@ -1094,7 +1135,16 @@ MonoBehaviour:
   cameraName: external near
   cameraType: 1
   maxOffset: {x: 1, y: 1, z: 1}
+  useLowPassAudio: 0
   smoothSpeed: 0.5
+--- !u!81 &5785946076535298501
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6977493067678210079}
+  m_Enabled: 0
 --- !u!1 &7390972303149866664
 GameObject:
   m_ObjectHideFlags: 0

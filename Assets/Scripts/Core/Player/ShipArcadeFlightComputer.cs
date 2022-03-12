@@ -5,29 +5,32 @@ using UnityEngine;
 namespace Core.Player {
     public class ShipArcadeFlightComputer : MonoBehaviour {
         [SerializeField] private Transform shipTransform;
+        [SerializeField] private Transform targetTransform;
 
-        [SerializeField] private bool drawDebugCube;
-        [Range(1, 10)] [SerializeField] private float drawCubePositionDistance = 10;
+        [SerializeField] private bool drawDebugCubes;
+        [SerializeField] private Transform planeRotationDebugCube;
+        [SerializeField] private Transform freeRotationDebugCube;
+
+        [Range(1, 10)] [SerializeField] private float drawCubePositionDistance = 5;
 
         [SerializeField] private bool translateTarget = true;
         [SerializeField] private bool rotateTarget = true;
         [SerializeField] private bool translateShip = true;
         [SerializeField] private bool rotateShip = true;
-        [Range(0, 90)] [SerializeField] private float fixedToPlaneAngle;
-        [Range(0, 90)] [SerializeField] private float freeMoveAngle = 30;
+        [Range(0, 89.9f)] [SerializeField] private float fixedToPlaneAngle;
+        [Range(0.1f, 90)] [SerializeField] private float freeMoveAngle = 30;
         [Range(0, 1)] [SerializeField] private float planeTransformDamping = 0.8f;
         [Range(0, 90)] [SerializeField] private int maxTargetRotationDegrees = 45;
         private MeshRenderer _meshRenderer;
 
-        private Transform _transform;
-
         private void Update() {
-            _meshRenderer.enabled = drawDebugCube;
+            _meshRenderer.enabled = drawDebugCubes;
+            planeRotationDebugCube.gameObject.SetActive(drawDebugCubes);
+            freeRotationDebugCube.gameObject.SetActive(drawDebugCubes);
         }
 
         private void OnEnable() {
-            _transform = GetComponent<Transform>();
-            _meshRenderer = GetComponent<MeshRenderer>();
+            _meshRenderer = targetTransform.gameObject.GetComponent<MeshRenderer>();
         }
 
         public void UpdateShipFlightInput(ShipPlayer shipPlayer, float pitch, float yaw, float throttle) {
@@ -39,6 +42,10 @@ namespace Core.Player {
             var shipRotation = shipTransform.rotation;
             var shipRotEuler = shipRotation.eulerAngles;
 
+            // blending is based primarily on ship angle from the world "ground" plane
+            var shipAngleFromPlane = Mathf.Abs(Mathf.DeltaAngle(0, shipRotEuler.x));
+
+            #region Rotation
 
             // Trend the transform roll back to 0 (world) when the ship is oriented on the world plane xz
             // Bear with me because there's some freaking big brain energy going on here.
@@ -50,51 +57,72 @@ namespace Core.Player {
             if (rotateTarget) {
                 var planeRotation = Quaternion.Euler(shipRotEuler.x, shipRotEuler.y, 0);
                 var freeRotation = shipRotation;
-                _transform.rotation = Quaternion.Lerp(planeRotation, freeRotation,
-                    MathfExtensions.Remap(fixedToPlaneAngle, freeMoveAngle, planeTransformDamping, 1,
-                        Mathf.Abs(Mathf.DeltaAngle(0, shipRotEuler.x))));
+                var rotationResolutionBlendFactor = MathfExtensions.Remap(fixedToPlaneAngle, freeMoveAngle, planeTransformDamping, 1, shipAngleFromPlane);
+                targetTransform.rotation = Quaternion.Lerp(planeRotation, freeRotation, rotationResolutionBlendFactor);
 
-                // apply an auto roll to the transform when pitch / yaw-ing
                 var pitchRotate = MathfExtensions.Remap(-1, 1, -maxTargetRotationDegrees, maxTargetRotationDegrees, pitch);
                 var yawRotate = MathfExtensions.Remap(-1, 1, -maxTargetRotationDegrees, maxTargetRotationDegrees, yaw);
-                _transform.Rotate(pitchRotate * -1, yawRotate, yawRotate * -1);
+
+                // apply an auto roll to the transform when pitch / yaw-ing
+                targetTransform.Rotate(pitchRotate * -1, yawRotate, yawRotate * -1);
+
+                if (drawDebugCubes) {
+                    planeRotationDebugCube.rotation = planeRotation;
+                    freeRotationDebugCube.rotation = freeRotation;
+                    planeRotationDebugCube.Rotate(pitchRotate * -1, yawRotate, yawRotate * -1);
+                    freeRotationDebugCube.Rotate(pitchRotate * -1, yawRotate, yawRotate * -1);
+                }
             }
 
-            var localRotation = _transform.localRotation;
-            var deltaXRot = Mathf.DeltaAngle(0, localRotation.eulerAngles.x);
-            var deltaYRot = Mathf.DeltaAngle(0, localRotation.eulerAngles.y);
-            var deltaZRot = Mathf.DeltaAngle(0, localRotation.eulerAngles.z);
+            var localRotation = targetTransform.localRotation;
+            var deltaRotation = new Vector3(
+                Mathf.DeltaAngle(0, localRotation.eulerAngles.x),
+                Mathf.DeltaAngle(0, localRotation.eulerAngles.y),
+                Mathf.DeltaAngle(0, localRotation.eulerAngles.z)
+            );
 
+            #endregion
 
-            // move the transform
+            #region Translation
+
             if (translateTarget) {
-                var freeLocalPosition = new Vector3(yaw, pitch, throttle) * drawCubePositionDistance;
-
                 var zRotationFromPlane = Mathf.DeltaAngle(0, shipTransform.localRotation.eulerAngles.z);
                 var yOffset = Mathf.Sin(zRotationFromPlane * Mathf.Deg2Rad) * (yaw * drawCubePositionDistance);
-                var planeLocalPosition =
-                    new Vector3(freeLocalPosition.x, freeLocalPosition.y - yOffset, freeLocalPosition.z);
 
-                _transform.localPosition = Vector3.Lerp(planeLocalPosition, freeLocalPosition,
-                    MathfExtensions.Remap(fixedToPlaneAngle, freeMoveAngle, planeTransformDamping, 1,
-                        Mathf.Abs(Mathf.DeltaAngle(0, shipRotEuler.x))));
+                var freeLocalPosition = new Vector3(yaw, pitch, throttle) * drawCubePositionDistance;
+                var planeLocalPosition = new Vector3(freeLocalPosition.x, freeLocalPosition.y - yOffset, freeLocalPosition.z);
+
+                var positionResolutionBlendFactor = MathfExtensions.Remap(fixedToPlaneAngle, freeMoveAngle / 2, planeTransformDamping, 1, shipAngleFromPlane);
+                targetTransform.localPosition = Vector3.Lerp(planeLocalPosition, freeLocalPosition, positionResolutionBlendFactor);
+
+                if (drawDebugCubes) {
+                    planeRotationDebugCube.localPosition = planeLocalPosition * 0.66f;
+                    freeRotationDebugCube.localPosition = freeLocalPosition * 0.33f;
+                }
             }
 
-            var localPosition = _transform.localPosition;
+            var localPosition = targetTransform.localPosition;
 
+            #endregion
+
+
+            #region input
 
             // apply input to the ship in the direction of the transform
-            if (translateShip) {
-                shipPlayer.SetLateralH(localPosition.x / drawCubePositionDistance);
-                shipPlayer.SetLateralV(localPosition.y / drawCubePositionDistance);
-                shipPlayer.SetThrottle(localPosition.z / drawCubePositionDistance);
-            }
+            var inputTranslation = Vector3.zero;
+            var inputRotation = Vector3.zero;
 
-            if (rotateShip) {
-                shipPlayer.SetPitch(deltaXRot / maxTargetRotationDegrees * -1);
-                shipPlayer.SetYaw(deltaYRot / maxTargetRotationDegrees);
-                shipPlayer.SetRoll(deltaZRot / maxTargetRotationDegrees * -1);
-            }
+            if (translateShip) inputTranslation = localPosition / drawCubePositionDistance;
+            if (rotateShip) inputRotation = deltaRotation / maxTargetRotationDegrees;
+
+            shipPlayer.SetLateralH(inputTranslation.x);
+            shipPlayer.SetLateralV(inputTranslation.y);
+            shipPlayer.SetThrottle(inputTranslation.z);
+            shipPlayer.SetPitch(inputRotation.x * -1);
+            shipPlayer.SetYaw(inputRotation.y);
+            shipPlayer.SetRoll(inputRotation.z * -1);
+
+            #endregion
         }
     }
 }
