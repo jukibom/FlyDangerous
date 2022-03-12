@@ -26,15 +26,15 @@ namespace Core.Ship {
         [SerializeField] private Image shipLightIcon;
         [SerializeField] private Text gForceNumberText;
 
-        // Lerping fun
-        private float _previousAccelerationBarAmount;
-        private float _previousGForce;
-
         private readonly Color32 activeColor = new(0, 153, 225, 255);
         private readonly Color32 disabledColor = new(39, 72, 91, 255);
         private readonly Color32 notificationColor = new(195, 195, 30, 255);
         private readonly Color32 positiveColor = new(30, 195, 28, 255);
         private readonly Color32 warningColor = new(195, 28, 30, 255);
+
+        // Lerping fun
+        private float _previousAccelerationBarAmount;
+        private float _previousGForce;
 
         public override void OnEnable() {
             Game.OnRestart += Restart;
@@ -73,7 +73,7 @@ namespace Core.Ship {
 
             accelerationBarAmount = Mathf.Lerp(_previousAccelerationBarAmount, accelerationBarAmount, 0.1f);
 
-            _previousAccelerationBarAmount = MathfExtensions.Clamp(-1, 1, accelerationBarAmount);
+            _previousAccelerationBarAmount = Mathf.Clamp(accelerationBarAmount, -1, 1);
 
             // if reverse, switch to a yellow colour and invert
             accelerationBar.transform.localRotation = Quaternion.Euler(0, 0, 45);

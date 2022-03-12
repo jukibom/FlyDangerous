@@ -31,7 +31,7 @@ namespace Core.Ship {
 
         public float TargetThrust {
             get => targetThrust;
-            set => targetThrust = MathfExtensions.Clamp(0, 1, value);
+            set => targetThrust = Mathf.Clamp(value, 0, 1);
         }
 
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Misc;
 using UnityEngine;
 
 namespace Core.Ship {
@@ -56,12 +55,12 @@ namespace Core.Ship {
         }
 
         public void UpdateThrusters(Vector3 lateralThrust, Vector3 rotationalThrust) {
-            targetForwardThrust = MathfExtensions.Clamp(-1, 1, lateralThrust.z);
-            targetUpThrust = MathfExtensions.Clamp(-1, 1, lateralThrust.y);
-            targetRightThrust = MathfExtensions.Clamp(-1, 1, lateralThrust.x);
-            targetPitchThrust = MathfExtensions.Clamp(-1, 1, -rotationalThrust.x);
-            targetRollThrust = MathfExtensions.Clamp(-1, 1, rotationalThrust.z);
-            targetYawThrust = MathfExtensions.Clamp(-1, 1, rotationalThrust.y);
+            targetForwardThrust = Mathf.Clamp(lateralThrust.z, -1, 1);
+            targetUpThrust = Mathf.Clamp(lateralThrust.y, -1, 1);
+            targetRightThrust = Mathf.Clamp(lateralThrust.x, -1, 1);
+            targetPitchThrust = Mathf.Clamp(-rotationalThrust.x, -1, 1);
+            targetRollThrust = Mathf.Clamp(rotationalThrust.z, -1, 1);
+            targetYawThrust = Mathf.Clamp(rotationalThrust.y, -1, 1);
 
             // reset our thrusters as operations from here on are additive
             ForEachThruster(thruster => thruster.TargetThrust = 0);

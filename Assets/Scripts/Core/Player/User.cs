@@ -97,7 +97,7 @@ namespace Core.Player {
                     if (_reverse) throttle *= -1;
                 }
 
-                _targetThrottle = MathfExtensions.Clamp(-1, 1, _targetThrottle + _targetThrottleIncrement);
+                _targetThrottle = Mathf.Clamp(_targetThrottle + _targetThrottleIncrement, -1, 1);
                 if (_targetThrottle != 0) throttle = _targetThrottle;
 
                 // handle mouse flight input
@@ -481,10 +481,10 @@ namespace Core.Player {
             var mouseYIsRelative = Preferences.Instance.GetBool("relativeMouseYAxis") ||
                                    Preferences.Instance.GetBool("forceRelativeMouseWithFAOff") && !shipPlayer.IsRotationalFlightAssistActive;
 
-            var mouseRelativeRate = MathfExtensions.Clamp(1, 50f, Preferences.Instance.GetFloat("mouseRelativeRate"));
+            var mouseRelativeRate = Mathf.Clamp(Preferences.Instance.GetFloat("mouseRelativeRate"), 1, 50f);
 
-            var mouseDeadzone = MathfExtensions.Clamp(0, 1, Preferences.Instance.GetFloat("mouseDeadzone"));
-            var mousePowerCurve = MathfExtensions.Clamp(1, 3, Preferences.Instance.GetFloat("mousePowerCurve"));
+            var mouseDeadzone = Mathf.Clamp(Preferences.Instance.GetFloat("mouseDeadzone"), 0, 1);
+            var mousePowerCurve = Mathf.Clamp(Preferences.Instance.GetFloat("mousePowerCurve"), 1, 3);
 
             // // get deadzone as a pixel value including sensitivity change
             var mouseDeadzoneX = mouseDeadzone * Mathf.Pow(sensitivityX, -1);
@@ -550,8 +550,8 @@ namespace Core.Player {
             mouseWidget.UpdateWidgetSprites(widgetPosition);
 
             // store relative rate for relative return rate next frame
-            _previousRelativeRate.x = MathfExtensions.Clamp(-Screen.width, Screen.width, relativeMouse.x);
-            _previousRelativeRate.y = MathfExtensions.Clamp(-Screen.height, Screen.height, relativeMouse.y);
+            _previousRelativeRate.x = Mathf.Clamp(relativeMouse.x, -Screen.width, Screen.width);
+            _previousRelativeRate.y = Mathf.Clamp(relativeMouse.y, -Screen.height, Screen.height);
 
             // clamp to virtual screen 
             var extentsX = Screen.width * Mathf.Pow(sensitivityX, -1);

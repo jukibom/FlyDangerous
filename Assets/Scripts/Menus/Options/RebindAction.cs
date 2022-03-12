@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using Misc;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -245,7 +244,7 @@ namespace Menus.Options {
         }
 
         private void SetDeadzone(InputAction action, int bindingIndex, float deadzone) {
-            deadzone = MathfExtensions.Clamp(0, 1, deadzone);
+            deadzone = Mathf.Clamp(deadzone, 0, 1);
             var binding = action.bindings[bindingIndex];
             ApplyAxisOverrides(action, bindingIndex, IsInvertEnabled(binding), deadzone);
         }
