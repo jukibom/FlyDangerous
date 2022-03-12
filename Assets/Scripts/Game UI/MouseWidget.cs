@@ -5,26 +5,24 @@ using UnityEngine.UI;
 
 namespace Game_UI {
     public class MouseWidget : MonoBehaviour {
-
         public GameObject crosshair;
         public GameObject arrow;
-
-        private Image _crosshairImage;
-        private Image _arrowImage;
 
         public Vector2 mousePositionNormalised = Vector2.zero;
 
         public float maxDistanceUnits = 1f;
+        private Image _arrowImage;
+
+        private Image _crosshairImage;
 
         // Start is called before the first frame update
-        void Start() {
+        private void Start() {
             _crosshairImage = crosshair.GetComponent<Image>();
             _arrowImage = arrow.GetComponent<Image>();
         }
 
         // Update is called once per frame
-        void Update() {
-
+        private void Update() {
             // pref determines draw active
             var shouldShow = Preferences.Instance.GetBool("showMouseWidget");
             crosshair.SetActive(shouldShow);
@@ -40,7 +38,7 @@ namespace Game_UI {
             // rotation
             if (mousePositionNormalised != Vector2.zero) {
                 var dir = arrow.transform.localPosition;
-                float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+                var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
                 arrow.transform.localRotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
             }
 

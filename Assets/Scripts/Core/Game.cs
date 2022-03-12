@@ -14,38 +14,39 @@ using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.XR.Management;
+using Environment = System.Environment;
 
 namespace Core {
-
     public enum SessionType {
         Singleplayer,
         Multiplayer
     }
-    
+
     public enum SessionStatus {
         Development,
         Offline,
         SinglePlayerMenu,
         LobbyMenu,
         Loading,
-        InGame,
+        InGame
     }
-    
+
     public class Game : Singleton<Game> {
+        public delegate void GamePauseAction(bool enabled);
+
+        public delegate void GameSettingsApplyAction();
 
         public delegate void PlayerJoinAction();
+
         public delegate void PlayerLeaveAction();
+
         public delegate void RestartLevelAction();
-        public delegate void GameSettingsApplyAction();
-        public delegate void GamePauseAction(bool enabled);
+
         public delegate void VRToggledAction(bool enabled);
 
-        public static event PlayerJoinAction OnPlayerLoaded;
-        public static event PlayerLeaveAction OnPlayerLeave;
-        public static event RestartLevelAction OnRestart;
-        public static event GameSettingsApplyAction OnGameSettingsApplied;
-        public static event GamePauseAction OnPauseToggle;
-        public static event VRToggledAction OnVRStatus;
+        private static readonly int fadeToBlack = Animator.StringToHash("FadeToBlack");
+        private static readonly int fadeFromBlack = Animator.StringToHash("FadeFromBlack");
 
         [SerializeField] private InputActionAsset playerBindings;
         [SerializeField] private ScriptableRendererFeature ssao;
@@ -53,17 +54,18 @@ namespace Core {
         [SerializeField] private Animator crossfade;
 
         private CinemachineBrain _cinemachine;
-        private ShipParameters _shipParameters;
         private Vector3 _hmdPosition;
         private Quaternion _hmdRotation;
         private LevelLoader _levelLoader;
         private Coroutine _loadingRoutine;
-        
+        private ShipParameters _shipParameters;
+
         // The level data most recently used to load a map
         public LevelData LoadedLevelData => _levelLoader.LoadedLevelData;
+
         // The level data hydrated with the current player position and track layout
         public LevelData LevelDataAtCurrentPosition => _levelLoader.LevelDataAtCurrentPosition;
-        
+
         public SessionType SessionType { get; private set; } = SessionType.Singleplayer;
         public SessionStatus SessionStatus { get; set; } = SessionStatus.Offline;
 
@@ -89,17 +91,13 @@ namespace Core {
         // show certain things if first time hitting the menu
         public bool MenuFirstRun { get; private set; } = true;
 
-        private static readonly int fadeToBlack = Animator.StringToHash("FadeToBlack");
-        private static readonly int fadeFromBlack = Animator.StringToHash("FadeFromBlack");
-
         public void Start() {
-            
             // must be a cinemachine controller in the scene
             _cinemachine = FindObjectOfType<CinemachineBrain>();
-            
+
             // must be a level loader in the scene
             _levelLoader = FindObjectOfType<LevelLoader>();
-            
+
             // if there's a user object when the game starts, enable input (usually in the editor!)
             FindObjectOfType<ShipPlayer>()?.User.EnableGameInput();
             LoadBindings();
@@ -109,14 +107,12 @@ namespace Core {
             Cursor.visible = false;
 
             // check for command line args
-            var args = System.Environment.GetCommandLineArgs();
-            if (args.ToList().Contains("-vr") || args.ToList().Contains("-VR")) {
-                EnableVR();
-            }
-            
+            var args = Environment.GetCommandLineArgs();
+            if (args.ToList().Contains("-vr") || args.ToList().Contains("-VR")) EnableVR();
+
             // Subscribe to network events
             FdNetworkManager.OnClientDisconnected += () => OnPlayerLeave?.Invoke();
-            
+
             // load hmd position from preferences
             _hmdPosition = Preferences.Instance.GetVector3("hmdPosition");
             _hmdRotation = Quaternion.Euler(Preferences.Instance.GetVector3("hmdRotation"));
@@ -130,22 +126,25 @@ namespace Core {
             DisableVRIfNeeded();
         }
 
+        public static event PlayerJoinAction OnPlayerLoaded;
+        public static event PlayerLeaveAction OnPlayerLeave;
+        public static event RestartLevelAction OnRestart;
+        public static event GameSettingsApplyAction OnGameSettingsApplied;
+        public static event GamePauseAction OnPauseToggle;
+        public static event VRToggledAction OnVRStatus;
+
         public void LoadBindings() {
             var bindings = Preferences.Instance.GetString("inputBindings");
-            if (!string.IsNullOrEmpty(bindings)) {
-                playerBindings.LoadBindingOverridesFromJson(bindings);
-            }
+            if (!string.IsNullOrEmpty(bindings)) playerBindings.LoadBindingOverridesFromJson(bindings);
         }
 
         public void ApplyGameOptions() {
-            if (OnGameSettingsApplied != null) {
-                OnGameSettingsApplied();
-            }
+            if (OnGameSettingsApplied != null) OnGameSettingsApplied();
             ApplyGraphicsOptions();
         }
 
         private void ApplyGraphicsOptions() {
-            var urp = (UniversalRenderPipelineAsset) GraphicsSettings.currentRenderPipeline;
+            var urp = (UniversalRenderPipelineAsset)GraphicsSettings.currentRenderPipeline;
             urp.renderScale = Preferences.Instance.GetFloat("graphics-render-scale");
             var msaa = Preferences.Instance.GetString("graphics-anti-aliasing");
             switch (msaa) {
@@ -169,8 +168,8 @@ namespace Core {
 
         public void EnableVR() {
             IEnumerator StartXR() {
-                yield return UnityEngine.XR.Management.XRGeneralSettings.Instance.Manager.InitializeLoader();
-                UnityEngine.XR.Management.XRGeneralSettings.Instance.Manager.StartSubsystems();
+                yield return XRGeneralSettings.Instance.Manager.InitializeLoader();
+                XRGeneralSettings.Instance.Manager.StartSubsystems();
                 IsVREnabled = true;
                 NotifyVRStatus();
             }
@@ -180,22 +179,21 @@ namespace Core {
 
         public void DisableVRIfNeeded() {
             if (IsVREnabled) {
-                UnityEngine.XR.Management.XRGeneralSettings.Instance.Manager.StopSubsystems();
-                UnityEngine.XR.Management.XRGeneralSettings.Instance.Manager.DeinitializeLoader();
+                XRGeneralSettings.Instance.Manager.StopSubsystems();
+                XRGeneralSettings.Instance.Manager.DeinitializeLoader();
                 IsVREnabled = false;
                 NotifyVRStatus();
             }
         }
 
         public void ResetHmdView(XRRig xrRig, Transform targetTransform) {
-            
             xrRig.MoveCameraToWorldLocation(targetTransform.position);
             xrRig.MatchRigUpCameraForward(targetTransform.up, targetTransform.forward);
-            
+
             var xrRigTransform = xrRig.transform;
             _hmdPosition = xrRigTransform.localPosition;
             _hmdRotation = xrRigTransform.localRotation;
-            
+
             Preferences.Instance.SetVector3("hmdPosition", _hmdPosition);
             Preferences.Instance.SetVector3("hmdRotation", _hmdRotation.eulerAngles);
             Preferences.Instance.Save();
@@ -210,16 +208,16 @@ namespace Core {
             SessionStatus = SessionStatus.Loading;
 
             LockCursor();
-            
+
             IEnumerator WaitForAllPlayersLoaded() {
-                yield return FindObjectsOfType<LoadingPlayer>().All(loadingPlayer => loadingPlayer.IsLoaded) 
-                    ? null 
+                yield return FindObjectsOfType<LoadingPlayer>().All(loadingPlayer => loadingPlayer.IsLoaded)
+                    ? null
                     : new WaitForFixedUpdate();
             }
 
             IEnumerator LoadGame() {
                 yield return _levelLoader.ShowLoadingScreen();
-                
+
                 // Position the active camera to the designated start location so we can be sure to load in anything
                 // important at that location as part of the load sequence 
                 var loadingRoom = FindObjectOfType<LoadingRoom>();
@@ -227,7 +225,7 @@ namespace Core {
                     var loadingPlayerCameraTransform = loadingRoom.transform;
                     loadingPlayerCameraTransform.position = new Vector3(
                         levelData.startPosition.x,
-                        levelData.startPosition.y, 
+                        levelData.startPosition.y,
                         levelData.startPosition.z
                     );
                 }
@@ -247,16 +245,17 @@ namespace Core {
                     QuitToMenu("Failed to create connection");
                     yield break;
                 }
-                
+
                 SessionStatus = SessionStatus.InGame;
-                
+
                 // wait for local ship client object
                 while (!FdPlayer.FindLocalShipPlayer) {
                     Debug.Log("Session loaded, waiting for player init");
                     yield return new WaitForEndOfFrame();
                 }
+
                 var ship = FdPlayer.FindLocalShipPlayer;
-                
+
                 // Allow the rigid body to initialise before setting new parameters!
                 yield return new WaitForEndOfFrame();
 
@@ -271,12 +270,10 @@ namespace Core {
                 NotifyVRStatus();
 
                 yield return _levelLoader.HideLoadingScreen();
-                
+
                 // if there's a track, initialise it
                 var track = FindObjectOfType<Track>();
-                if (track) {
-                    track.InitialiseTrack();
-                }
+                if (track) track.InitialiseTrack();
 
                 // resume the game
                 Time.timeScale = 1;
@@ -285,13 +282,11 @@ namespace Core {
                 yield return new WaitForSeconds(0.7f);
 
                 // if there's a track in the game world, start it
-                if (track) {
-                    yield return track.StartTrackWithCountdown();
-                }
+                if (track) yield return track.StartTrackWithCountdown();
 
                 // enable user input
                 ship.User.EnableGameInput();
-                
+
                 // notify other players for e.g. targeting systems
                 ship.CmdNotifyPlayerLoaded();
             }
@@ -301,22 +296,18 @@ namespace Core {
 
         public void RestartSession() {
             StartCoroutine(_levelLoader.RestartLevel(() => {
-                if (OnRestart != null) {
-                    OnRestart();
-                }
+                if (OnRestart != null) OnRestart();
             }));
         }
 
         // Graceful leave game and decide if to transition back to lobby
         public void LeaveSession() {
-            if (SessionType == SessionType.Multiplayer && NetworkClient.isHostClient) {
+            if (SessionType == SessionType.Multiplayer && NetworkClient.isHostClient)
                 FdNetworkManager.Instance.StartReturnToLobbySequence();
-            }
-            else {
+            else
                 QuitToMenu();
-            }
         }
-        
+
         // Drop back to the menu but retain the network connection and transition players back to the lobby
         public void QuitToLobby() {
             IEnumerator ReturnPlayersToLobby() {
@@ -336,7 +327,7 @@ namespace Core {
         public void QuitToMenu([CanBeNull] string withDisconnectionReason = null) {
             // save any pending preferences (e.g. mouselook, camera etc)
             Preferences.Instance.Save();
-            
+
             if (!FindObjectOfType<MainMenu>()) {
                 IEnumerator QuitAndShutdownNetwork() {
                     yield return LoadMainMenu(withDisconnectionReason);
@@ -349,9 +340,7 @@ namespace Core {
         }
 
         private IEnumerator LoadMainMenu([CanBeNull] string withDisconnectionReason = null) {
-            if (_loadingRoutine != null) {
-                StopCoroutine(_loadingRoutine);
-            }
+            if (_loadingRoutine != null) StopCoroutine(_loadingRoutine);
 
             MenuFirstRun = false;
             var mapMagic = FindObjectOfType<MapMagicObject>();
@@ -361,14 +350,12 @@ namespace Core {
             }
 
             var ship = FdPlayer.FindLocalShipPlayer;
-            if (ship) {
-                ship.User.DisableGameInput();
-            }
+            if (ship) ship.User.DisableGameInput();
 
             IEnumerator LoadMenuScene() {
                 // during load we pause scaled time to prevent *absolutely anything* from interacting incorrectly
                 Time.timeScale = 1;
-                
+
                 FadeToBlack();
                 yield return new WaitForSeconds(0.5f);
                 yield return SceneManager.LoadSceneAsync("Main Menu");
@@ -380,9 +367,7 @@ namespace Core {
                 FreeCursor();
 
                 var mainMenu = FindObjectOfType<MainMenu>();
-                if (mainMenu && withDisconnectionReason != null) {
-                    mainMenu.ShowDisconnectedDialog(withDisconnectionReason);
-                }
+                if (mainMenu && withDisconnectionReason != null) mainMenu.ShowDisconnectedDialog(withDisconnectionReason);
             }
 
             yield return LoadMenuScene();
@@ -415,15 +400,11 @@ namespace Core {
         }
 
         public void PauseGameToggle(bool paused) {
-            if (OnPauseToggle != null) {
-                OnPauseToggle(paused);
-            }
+            if (OnPauseToggle != null) OnPauseToggle(paused);
 
             if (paused) {
                 // actual game logic pause only applies to single player
-                if (SessionType == SessionType.Singleplayer) {
-                    Time.timeScale = 0;
-                }
+                if (SessionType == SessionType.Singleplayer) Time.timeScale = 0;
                 FreeCursor();
             }
             else {
@@ -435,11 +416,9 @@ namespace Core {
         public void SetFlatScreenCameraControllerActive(bool active) {
             _cinemachine.gameObject.SetActive(active);
         }
-        
+
         private void NotifyVRStatus() {
-            if (OnVRStatus != null) {
-                OnVRStatus(IsVREnabled);
-            }
+            if (OnVRStatus != null) OnVRStatus(IsVREnabled);
 
             // if user has previously applied a HMD position, reapply
             if (IsVREnabled) {
@@ -449,7 +428,7 @@ namespace Core {
                     var xrRig = FindObjectOfType<XRRig>(true);
                     if (xrRig) {
                         var xrTransform = xrRig.transform;
-                        
+
                         _hmdPosition = Preferences.Instance.GetVector3("hmdPosition");
                         _hmdRotation = Quaternion.Euler(Preferences.Instance.GetVector3("hmdRotation"));
 

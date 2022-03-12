@@ -1,20 +1,14 @@
-using System;
 using Core.MapData;
-using JetBrains.Annotations;
 using Mirror;
-using UnityEngine;
 
 namespace Core.Player {
     public class LoadingPlayer : FdPlayer {
-
         [SyncVar] public string playerName;
 
         [SyncVar] public bool isHost;
-            
-        [SyncVar]
-        private bool _isLoaded;
-        public bool IsLoaded => _isLoaded;
-        
+
+        [field: SyncVar] public bool IsLoaded { get; private set; }
+
         private void Start() {
             // We want to keep this around when jumping to the loading scene and manually destroy it later.
             DontDestroyOnLoad(gameObject);
@@ -27,7 +21,7 @@ namespace Core.Player {
         private void OnDisable() {
             LevelLoader.OnLevelLoaded -= OnLevelLoaded;
         }
-        
+
         // On local client start
         public override void OnStartAuthority() {
             CmdSetPlayerName(Preferences.Instance.GetString("playerName"));
@@ -39,14 +33,12 @@ namespace Core.Player {
 
         private void OnLevelLoaded() {
             // store loaded state, inform network layer
-            _isLoaded = true;
+            IsLoaded = true;
         }
 
         [Command]
         private void CmdSetPlayerName(string name) {
-            if (name == "") {
-                name = "UNNAMED SCRUB";
-            }
+            if (name == "") name = "UNNAMED SCRUB";
 
             playerName = name;
         }

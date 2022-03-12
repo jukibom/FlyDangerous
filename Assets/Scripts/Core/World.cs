@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace Core {
@@ -10,11 +9,9 @@ namespace Core {
         private void OnDisable() {
             FloatingOrigin.OnFloatingOriginCorrection -= PerformCorrection;
         }
-        
+
         private void PerformCorrection(Vector3 offset) {
-            foreach (Transform child in transform) {
-                child.position -= offset;
-            }
+            foreach (Transform child in transform) child.position -= offset;
         }
     }
 }

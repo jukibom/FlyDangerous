@@ -5,25 +5,29 @@ using UnityEngine;
 using CameraType = Gameplay.CameraType;
 
 namespace Core.Player {
-
     public enum CameraPositionUpdate {
         Relative,
         Absolute
     }
-    
-    public class ShipCameraRig : MonoBehaviour {
 
-        
+    public class ShipCameraRig : MonoBehaviour {
+        private static readonly Vector3 baseTargetPosition = new(0, 0, 20);
+
+
         [SerializeField] public List<ShipCamera> cameras;
         [SerializeField] private Transform cameraTarget;
-
-        private static readonly Vector3 baseTargetPosition = new(0,0,20);
-        private Transform _transform;
         private Vector3 _cameraOffset;
         private Vector2 _currentRotation;
+        private Transform _transform;
 
         public ShipCamera ActiveCamera { get; private set; }
-        
+
+        public void Reset() {
+            SoftReset();
+            _cameraOffset = Vector3.zero;
+            cameraTarget.localPosition = baseTargetPosition;
+        }
+
         private void Start() {
             _transform = transform;
             // Set active camera from preference
@@ -38,10 +42,14 @@ namespace Core.Player {
             cameraTarget.transform.rotation = _transform.rotation;
 
             switch (cameraType) {
-                case CameraPositionUpdate.Absolute: UpdateAbsolute(position); break;
-                case CameraPositionUpdate.Relative: UpdateRelative(position); break;
+                case CameraPositionUpdate.Absolute:
+                    UpdateAbsolute(position);
+                    break;
+                case CameraPositionUpdate.Relative:
+                    UpdateRelative(position);
+                    break;
             }
-            
+
             // handle offset based on force
             var cameraOffsetWorld = _transform.position - _transform.TransformPoint(_cameraOffset);
             cameraTarget.position -= cameraOffsetWorld;
@@ -49,20 +57,19 @@ namespace Core.Player {
 
         private void UpdateAbsolute(Vector2 absolutePosition) {
             if (ActiveCamera.cameraType == CameraType.FirstPerson) {
-                
                 _currentRotation = new Vector2(
                     Mathf.Lerp(_currentRotation.x, absolutePosition.x, 0.02f),
                     Mathf.Lerp(_currentRotation.y, absolutePosition.y, 0.02f)
                 );
                 var angleY = _currentRotation.y * 90;
                 var angleX = _currentRotation.x * 90;
-                
+
                 var pivot = _transform.TransformPoint(ActiveCamera.BaseLocalPosition);
 
                 cameraTarget.RotateAround(pivot, _transform.right, -angleY);
                 cameraTarget.RotateAround(pivot, _transform.up, angleX);
             }
-            
+
             if (ActiveCamera.cameraType == CameraType.ThirdPerson) {
                 // input is used to rotate the view around the ship
                 // bias towards looking forward (only activate over a sensible deadzone)
@@ -83,9 +90,7 @@ namespace Core.Player {
 
         private void UpdateRelative(Vector2 relativePosition) {
             var pivot = _transform.TransformPoint(ActiveCamera.BaseLocalPosition);
-            if (ActiveCamera.cameraType == CameraType.ThirdPerson) {
-                pivot = _transform.position;
-            }
+            if (ActiveCamera.cameraType == CameraType.ThirdPerson) pivot = _transform.position;
 
             _currentRotation = new Vector2(
                 _currentRotation.x + relativePosition.x * 2 * Time.deltaTime,
@@ -96,12 +101,6 @@ namespace Core.Player {
 
             cameraTarget.RotateAround(pivot, _transform.right, -angleY);
             cameraTarget.RotateAround(pivot, _transform.up, angleX);
-        }
-
-        public void Reset() {
-            SoftReset();
-            _cameraOffset = Vector3.zero;
-            cameraTarget.localPosition = baseTargetPosition;
         }
 
         public void SoftReset() {

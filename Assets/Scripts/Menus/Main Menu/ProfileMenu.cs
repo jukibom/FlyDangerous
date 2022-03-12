@@ -1,25 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Audio;
 using Core;
 using Core.Ship;
 using Menus.Main_Menu.Components;
-using Menus.Pause_Menu;
 using UI;
 using UnityEngine;
 using UnityEngine.UI;
-using Button = UnityEngine.UI.Button;
-using Image = UnityEngine.UI.Image;
 
 namespace Menus.Main_Menu {
     public class ProfileMenu : MenuBase {
-
         [SerializeField] private TopMenu topMenu;
 
         [SerializeField] private InputField playerNameTextField;
         [SerializeField] private Dropdown countryDropdown;
-        
+
         [SerializeField] private ShipSelectionRenderer shipSelectionRenderer;
         [SerializeField] private Text shipName;
         [SerializeField] private Text shipDescription;
@@ -37,26 +32,21 @@ namespace Menus.Main_Menu {
         [SerializeField] private FlexibleColorPicker playerShipThrusterColorPicker;
         [SerializeField] private FlexibleColorPicker playerShipTrailColorPicker;
         [SerializeField] private FlexibleColorPicker playerShipHeadLightsColorPicker;
-        
-        private string _playerShipPrimaryColor;
         private string _playerShipAccentColor;
+        private string _playerShipHeadLightsColor;
+
+        private string _playerShipPrimaryColor;
         private string _playerShipThrusterColor;
         private string _playerShipTrailColor;
-        private string _playerShipHeadLightsColor;
-        
-        private List<ShipMeta> _ships;
-        private ShipMeta _selectedShip;
         private bool _ready;
-        
-        protected override void OnOpen() {
-            _ships = ShipMeta.List().ToList();
-            LoadFromPreferences();
-        }
+        private ShipMeta _selectedShip;
+
+        private List<ShipMeta> _ships;
 
         private void FixedUpdate() {
             // wait for color pickers to be set god damnit
             if (_ready) {
-                bool shouldUpdate = false;
+                var shouldUpdate = false;
 
                 var playerShipPrimaryColor = $"#{ColorUtility.ToHtmlStringRGB(playerShipPrimaryColorPicker.color)}";
                 var playerShipAccentColor = $"#{ColorUtility.ToHtmlStringRGB(playerShipAccentColorPicker.color)}";
@@ -90,10 +80,13 @@ namespace Menus.Main_Menu {
                     shouldUpdate = true;
                 }
 
-                if (shouldUpdate) {
-                    RefreshColors();
-                }
+                if (shouldUpdate) RefreshColors();
             }
+        }
+
+        protected override void OnOpen() {
+            _ships = ShipMeta.List().ToList();
+            LoadFromPreferences();
         }
 
         public void Apply() {
@@ -112,28 +105,24 @@ namespace Menus.Main_Menu {
 
         public void NextShip() {
             var index = _ships.FindIndex(ship => ship.Id == _selectedShip.Id);
-            if (_ships.Count > index + 1) {
-                SetShip(_ships[index + 1]);
-            }
+            if (_ships.Count > index + 1) SetShip(_ships[index + 1]);
         }
 
         public void PrevShip() {
             var index = _ships.FindIndex(ship => ship.Id == _selectedShip.Id);
-            if (index > 0) {
-                SetShip(_ships[index - 1]);
-            }
+            if (index > 0) SetShip(_ships[index - 1]);
         }
-        
+
         public void SetShipPrimaryColor(string htmlColor) {
             _playerShipPrimaryColor = htmlColor;
             shipSelectionRenderer.SetShipPrimaryColor(htmlColor);
         }
-        
+
         public void SetShipAccentColor(string htmlColor) {
             _playerShipAccentColor = htmlColor;
             shipSelectionRenderer.SetShipAccentColor(htmlColor);
         }
-        
+
         public void SetThrusterColor(string htmlColor) {
             _playerShipThrusterColor = htmlColor;
             thruster.ThrustColor = ParseColor(htmlColor);
@@ -177,12 +166,13 @@ namespace Menus.Main_Menu {
 
             StartCoroutine(Load());
         }
+
         private void SetShip(ShipMeta ship) {
             _selectedShip = ship;
             shipSelectionRenderer.SetShip(ship);
             shipName.text = ship.FullName;
             shipDescription.text = ship.Description;
-            
+
             UpdateShipSelectionButtonState();
             UpdateShipCounter();
             RefreshColors();
@@ -200,20 +190,16 @@ namespace Menus.Main_Menu {
         private void UpdateShipSelectionButtonState() {
             prevButton.button.interactable = true;
             nextButton.button.interactable = true;
-            if (_selectedShip.Id == 0) {
-                prevButton.button.interactable = false;
-            }
+            if (_selectedShip.Id == 0) prevButton.button.interactable = false;
 
-            if (_selectedShip.Id == _ships.Count - 1) {
-                nextButton.button.interactable = false;
-            }
+            if (_selectedShip.Id == _ships.Count - 1) nextButton.button.interactable = false;
         }
 
         private void UpdateShipCounter() {
             shipCounter.text = $"{_selectedShip.Id + 1} of {_ships.Count}";
         }
 
-        Color ParseColor(string htmlColor) {
+        private Color ParseColor(string htmlColor) {
             if (!ColorUtility.TryParseHtmlString(htmlColor, out var color)) {
                 color = Color.red;
                 Debug.LogWarning("Failed to parse html color " + htmlColor);

@@ -1,14 +1,10 @@
-using System;
-using Audio;
-using Core;
-using Menus.Pause_Menu;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Menus.Main_Menu {
     public class DisconnectionDialog : MenuBase {
         [SerializeField] private Text reasonText;
-        
+
         public string Reason {
             get => reasonText.text;
             set => reasonText.text = value;

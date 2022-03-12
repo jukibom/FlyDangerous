@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Core;
 using UnityEngine;
 
@@ -10,6 +7,15 @@ public class SpaceStation : MonoBehaviour {
 
     private Quaternion _initialRotation;
 
+    private void Start() {
+        _initialRotation = centralSection.rotation;
+    }
+
+    private void FixedUpdate() {
+        var deltaRotation = Quaternion.Euler(new Vector3(0, 0, rotationAmountDegrees));
+        centralSection.MoveRotation(centralSection.rotation * deltaRotation);
+    }
+
     private void OnEnable() {
         Game.OnRestart += ResetStation;
     }
@@ -18,15 +24,7 @@ public class SpaceStation : MonoBehaviour {
         Game.OnRestart -= ResetStation;
     }
 
-    private void Start() {
-        _initialRotation = centralSection.rotation;
-    }
-
     private void ResetStation() {
         centralSection.rotation = _initialRotation;
     }
-
-    private void FixedUpdate() {
-        Quaternion deltaRotation = Quaternion.Euler(new Vector3(0, 0, rotationAmountDegrees));
-        centralSection.MoveRotation(centralSection.rotation * deltaRotation); }
 }

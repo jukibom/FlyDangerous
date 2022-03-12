@@ -1,9 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using Core.MapData;
-using JetBrains.Annotations;
 using Menus.Main_Menu;
 using Menus.Main_Menu.Components;
 using Mirror;
@@ -12,12 +7,11 @@ using UnityEngine.UI;
 
 namespace Core.Player {
     public class LobbyPlayer : FdPlayer {
-
         [SyncVar] public bool isHost;
 
         [SyncVar(hook = nameof(OnPlayerNameChanged))]
         public string playerName = "Connecting ...";
-        
+
         [SyncVar(hook = nameof(OnReadyStatusChanged))]
         public bool isReady;
 
@@ -26,25 +20,21 @@ namespace Core.Player {
         [SerializeField] private RawImage readyStatus;
 
         private LobbyMenu _lobby;
+
         private LobbyMenu LobbyUI {
-            get
-            {
-                if (_lobby == null) {
-                    _lobby = FindObjectOfType<LobbyMenu>();
-                }
+            get {
+                if (_lobby == null) _lobby = FindObjectOfType<LobbyMenu>();
 
                 return _lobby;
             }
         }
 
-        void Start() {
+        private void Start() {
             DontDestroyOnLoad(this);
         }
 
         private void FixedUpdate() {
-            if (!transform.parent) {
-                AttachToLobbyContainer();
-            }
+            if (!transform.parent) AttachToLobbyContainer();
         }
 
         public void UpdateLobby(LevelData lobbyLevelData, short maxPlayers) {
@@ -61,9 +51,7 @@ namespace Core.Player {
             // show or hide the input field or static label depending on authority
             playerNameLabel.transform.parent.gameObject.SetActive(!hasAuthority);
             playerNameTextEntry.gameObject.SetActive(hasAuthority);
-            if (hasAuthority) {
-                CmdSetReadyStatus(isHost);
-            }
+            if (hasAuthority) CmdSetReadyStatus(isHost);
             UpdateDisplay();
         }
 
@@ -85,12 +73,15 @@ namespace Core.Player {
             Preferences.Instance.Save();
         }
 
-        private void OnPlayerNameChanged(string oldName, string newName) => UpdateDisplay();
+        private void OnPlayerNameChanged(string oldName, string newName) {
+            UpdateDisplay();
+        }
+
         private void OnReadyStatusChanged(bool oldStatus, bool newStatus) {
             isReady = newStatus;
             UpdateDisplay();
         }
-        
+
         private void AttachToLobbyContainer() {
             var container = GameObject.FindGameObjectWithTag("LobbyPlayerContainer");
             if (container) {
@@ -98,31 +89,26 @@ namespace Core.Player {
                 UpdateDisplay();
             }
         }
-        
+
         private void UpdateDisplay() {
             playerNameLabel.text = playerName;
             playerNameTextEntry.text = playerName;
             readyStatus.enabled = isReady;
-            
+
             // Client-side UI changes to start button
             if (LobbyUI && hasAuthority) {
-                if (isHost) {
+                if (isHost)
                     LobbyUI.StartButton.label.text = "START GAME";
-                }
-                else if (!isReady) {
+                else if (!isReady)
                     LobbyUI.StartButton.label.text = "READY";
-                }
-                else {
+                else
                     LobbyUI.StartButton.label.text = "UN-READY";
-                }
             }
         }
 
         [Command]
         private void CmdSetPlayerName(string name) {
-            if (name == "") {
-                name = "UNNAMED SCRUB";
-            }
+            if (name == "") name = "UNNAMED SCRUB";
 
             playerName = name;
             UpdateDisplay();
@@ -145,9 +131,7 @@ namespace Core.Player {
 
         [ClientRpc]
         private void RpcReceiveMessage(string message) {
-            if (LobbyUI) {
-                LobbyUI.ReceiveChatMessage(message);
-            }
+            if (LobbyUI) LobbyUI.ReceiveChatMessage(message);
         }
 
         [ClientRpc]
@@ -163,9 +147,7 @@ namespace Core.Player {
 
         // On each client
         public void HostCloseLobby() {
-            if (LobbyUI && LobbyUI.gameObject.activeSelf) {
-                LobbyUI.CloseLobby("The host has closed the lobby.");
-            }
+            if (LobbyUI && LobbyUI.gameObject.activeSelf) LobbyUI.CloseLobby("The host has closed the lobby.");
         }
     }
 }

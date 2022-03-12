@@ -1,8 +1,6 @@
 ﻿using System;
-using Audio;
 using Core;
 using Core.Player;
-using Menus.Pause_Menu;
 using UnityEngine;
 
 namespace Menus.Main_Menu {
@@ -25,18 +23,18 @@ namespace Menus.Main_Menu {
 
         public async void Connect(LobbyMenu lobbyMenu, string address, string portText = "", string password = "") {
             FdNetworkManager.Instance.ShutdownNetwork();
-            
+
             _lobbyMenu = lobbyMenu;
             if (FdNetworkManager.Instance.HasMultiplayerServices) {
                 await FdNetworkManager.Instance.OnlineService!.Multiplayer!.JoinLobby(address);
                 FdNetworkManager.Instance.NetworkAddress = address;
             }
             else {
-                ushort port = Convert.ToUInt16(Int16.Parse(portText));
+                var port = Convert.ToUInt16(short.Parse(portText));
                 FdNetworkManager.Instance.NetworkAddress = address;
                 FdNetworkManager.Instance.NetworkPort = port;
             }
-            
+
             FdNetworkManager.Instance.StartClient();
             FdNetworkManager.Instance.joinGameRequestMessage = new FdNetworkManager.JoinGameRequestMessage {
                 password = password,
@@ -50,17 +48,15 @@ namespace Menus.Main_Menu {
 
         private void HandleClientConnected(FdNetworkManager.JoinGameSuccessMessage successMessage) {
             Hide();
-            
+
             // if the server has created a lobby player for us, show the lobby
             if (successMessage.showLobby) {
                 Game.Instance.SessionStatus = SessionStatus.LobbyMenu;
                 _lobbyMenu.Open(caller);
                 _lobbyMenu.JoinPlayer();
-                
+
                 var localPlayer = FdPlayer.FindLocalLobbyPlayer;
-                if (localPlayer) {
-                    localPlayer.UpdateLobby(successMessage.levelData, successMessage.maxPlayers);
-                }
+                if (localPlayer) localPlayer.UpdateLobby(successMessage.levelData, successMessage.maxPlayers);
             }
         }
 

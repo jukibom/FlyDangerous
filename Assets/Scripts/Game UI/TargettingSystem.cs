@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Core;
 using Core.Player;
@@ -9,20 +8,7 @@ namespace Game_UI {
         [SerializeField] private Target targetPrefab;
         private readonly Dictionary<ShipPlayer, Target> _players = new();
 
-        private void OnEnable() {
-            Game.OnVRStatus += OnVRStatusChanged;
-            Game.OnPlayerLoaded += OnPlayerLoaded;
-            Game.OnPlayerLeave += OnPlayerLeave;
-        }
-        
-        private void OnDisable() {
-            Game.OnVRStatus -= OnVRStatusChanged;
-            Game.OnPlayerLoaded -= OnPlayerLoaded;
-            Game.OnPlayerLeave -= OnPlayerLeave;
-        }
-
-        void Update() {
-
+        private void Update() {
             // update target objects for players
             foreach (var keyValuePair in _players) {
                 var player = keyValuePair.Key;
@@ -30,9 +16,9 @@ namespace Game_UI {
 
                 var playerName = player.playerName;
                 var originPosition = FdPlayer.FindLocalShipPlayer ? FdPlayer.FindLocalShipPlayer.User.UserHeadTransform.position : Vector3.zero;
-                
+
                 var targetPosition = player.User.transform.position;
-                
+
                 var distance = Vector3.Distance(originPosition, targetPosition);
                 var direction = (targetPosition - originPosition).normalized;
 
@@ -41,25 +27,34 @@ namespace Game_UI {
 
                 var minDistance = 10f;
                 var maxDistance = 30f + minDistance;
-                
-                target.transform.position = Vector3.MoveTowards(originPosition, targetPosition + (direction * minDistance), maxDistance);
+
+                target.transform.position = Vector3.MoveTowards(originPosition, targetPosition + direction * minDistance, maxDistance);
             }
+        }
+
+        private void OnEnable() {
+            Game.OnVRStatus += OnVRStatusChanged;
+            Game.OnPlayerLoaded += OnPlayerLoaded;
+            Game.OnPlayerLeave += OnPlayerLeave;
+        }
+
+        private void OnDisable() {
+            Game.OnVRStatus -= OnVRStatusChanged;
+            Game.OnPlayerLoaded -= OnPlayerLoaded;
+            Game.OnPlayerLeave -= OnPlayerLeave;
         }
 
         private void ResetTargets() {
             var players = FdNetworkManager.Instance.ShipPlayers;
-            foreach (var keyValuePair in _players) {
-                Destroy(keyValuePair.Value.gameObject);
-            }
+            foreach (var keyValuePair in _players) Destroy(keyValuePair.Value.gameObject);
             _players.Clear();
-            foreach (var shipPlayer in players) {
+            foreach (var shipPlayer in players)
                 if (!shipPlayer.isLocalPlayer) {
                     var target = Instantiate(targetPrefab, transform);
                     _players.Add(shipPlayer, target);
                 }
-            }
         }
-        
+
         private void OnPlayerLoaded() {
             ResetTargets();
         }
@@ -70,9 +65,7 @@ namespace Game_UI {
 
         private void OnVRStatusChanged(bool vrEnabled) {
             // rebuild targets to reset all rotations
-            if (!vrEnabled) {
-                ResetTargets();
-            }
+            if (!vrEnabled) ResetTargets();
         }
     }
 }

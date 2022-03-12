@@ -10,9 +10,8 @@ using UnityEngine.UI;
 
 namespace Menus.Main_Menu {
     public class LobbyMenu : MenuBase {
+        [Header("UI")] [SerializeField] private MainMenu mainMenu;
 
-        [Header("UI")]
-        [SerializeField] private MainMenu mainMenu;
         [SerializeField] private MultiPlayerMenu topMenu;
         [SerializeField] private UIButton startButton;
         [SerializeField] private Text headerText;
@@ -23,14 +22,12 @@ namespace Menus.Main_Menu {
         [SerializeField] private InputField chatSendMessageInput;
         [SerializeField] private Text chatMessageBox;
         [SerializeField] private ScrollRect chatScrollRect;
-        
+
         public UIButton StartButton => startButton;
 
         protected override void OnOpen() {
             var localPlayer = FdPlayer.FindLocalLobbyPlayer;
-            if (localPlayer) {
-                lobbyConfigurationPanel.IsHost = localPlayer.isHost;
-            }
+            if (localPlayer) lobbyConfigurationPanel.IsHost = localPlayer.isHost;
         }
 
         protected override void OnClose() {
@@ -59,13 +56,12 @@ namespace Menus.Main_Menu {
                 // host will attempt to start game if all are ready
                 if (localLobbyPlayer.isHost) {
                     var lobbyPlayers = FindObjectsOfType<LobbyPlayer>();
-                    if (lobbyPlayers.All(lobbyPlayer => lobbyPlayer.isReady)) {
+                    if (lobbyPlayers.All(lobbyPlayer => lobbyPlayer.isReady))
                         FdNetworkManager.Instance.StartGameLoadSequence(SessionType.Multiplayer, lobbyLevelData);
-                    }
                     localLobbyPlayer.SendChatMessage("<HOST WANTS TO START THE GAME>");
                 }
                 else {
-                    localLobbyPlayer.ToggleReady();   
+                    localLobbyPlayer.ToggleReady();
                 }
             }
         }
@@ -85,9 +81,7 @@ namespace Menus.Main_Menu {
         public void SendChatMessage(string message) {
             // var message = chatSendMessageInput.text;
             var player = FdPlayer.FindLocalLobbyPlayer;
-            if (player && message != "") {
-                player.SendChatMessage(message);
-            }
+            if (player && message != "") player.SendChatMessage(message);
 
             chatSendMessageInput.text = "";
             chatSendMessageInput.ActivateInputField();

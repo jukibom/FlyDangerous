@@ -1,5 +1,3 @@
-using System;
-using Audio;
 using Core;
 using Menus.Options;
 using Mirror;
@@ -7,49 +5,42 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace Menus.Main_Menu {
-    public class TopMenu : MenuBase
-    {
+    public class TopMenu : MenuBase {
         [SerializeField] private SinglePlayerMenu singlePlayerMenu;
         [SerializeField] private MultiPlayerMenu multiPlayerMenu;
         [SerializeField] private ServerBrowserMenu serverBrowserMenu;
         [SerializeField] private ProfileMenu profileMenu;
         [SerializeField] private OptionsMenu optionsMenu;
 
-        private void OnEnable() {
-            // always ensure a clean network state at the top menu, user is always offline here
-            if (FdNetworkManager.Instance != null) {
-                FdNetworkManager.Instance.ShutdownNetwork();
-            }
-        }
-
         public void Start() {
             // needed on game start
             defaultActiveButton.Select();
         }
-        
+
+        private void OnEnable() {
+            // always ensure a clean network state at the top menu, user is always offline here
+            if (FdNetworkManager.Instance != null) FdNetworkManager.Instance.ShutdownNetwork();
+        }
+
         public void OpenSinglePlayerPanel() {
             NetworkServer.dontListen = true;
             FdNetworkManager.Instance.StartHost();
             Game.Instance.SessionStatus = SessionStatus.SinglePlayerMenu;
-        
+
             Progress(singlePlayerMenu);
         }
 
         public void OpenMultiPlayerMenu() {
-            if (FdNetworkManager.Instance.HasMultiplayerServices) {
-                // we have some online services hooked up, load the game browser
+            if (FdNetworkManager.Instance.HasMultiplayerServices) // we have some online services hooked up, load the game browser
                 Progress(serverBrowserMenu);
-            }
-            else {
-                // revert to old-school
+            else // revert to old-school
                 Progress(multiPlayerMenu);
-            }
         }
 
         public void OpenProfileMenu() {
             Progress(profileMenu);
         }
-        
+
         public void OpenOptionsPanel() {
             Progress(optionsMenu);
         }
@@ -58,7 +49,7 @@ namespace Menus.Main_Menu {
             optionsMenu.Hide();
             Show();
         }
-        
+
         public void OpenDiscordLink() {
             PlayOpenSound();
             Application.OpenURL("https://discord.gg/4daSEUKZ6A");

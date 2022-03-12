@@ -1,26 +1,24 @@
-﻿using System;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using Mirror;
 using UnityEngine;
 
 namespace Core.Player {
     public class FdPlayer : NetworkBehaviour {
-        
         private static LobbyPlayer _localLobbyPlayer;
         private static LoadingPlayer _localLoadingPlayer;
         private static ShipPlayer _localShipPlayer;
-        
+
         [CanBeNull]
         public static LobbyPlayer FindLocalLobbyPlayer {
             get {
-            Debug.Log("FIND LOBBY PLAYER " + FdNetworkManager.Instance.LobbyPlayers.Count);
+                Debug.Log("FIND LOBBY PLAYER " + FdNetworkManager.Instance.LobbyPlayers.Count);
                 return _localLobbyPlayer
                     ? _localLobbyPlayer
                     : _localLobbyPlayer = FdNetworkManager.Instance.LobbyPlayers.Find(
                         lobbyPlayer => lobbyPlayer.isLocalPlayer);
             }
         }
-        
+
         [CanBeNull]
         public static LoadingPlayer FindLocalLoadingPlayer {
             get {
@@ -30,7 +28,7 @@ namespace Core.Player {
                         loadingPlayer => loadingPlayer.isLocalPlayer);
             }
         }
-        
+
         [CanBeNull]
         public static ShipPlayer FindLocalShipPlayer {
             get {
@@ -42,9 +40,7 @@ namespace Core.Player {
         }
 
         public override void OnStartClient() {
-            if (isLocalPlayer) {
-                CmdNotifyPlayerLoaded();
-            }
+            if (isLocalPlayer) CmdNotifyPlayerLoaded();
         }
 
         [Command]

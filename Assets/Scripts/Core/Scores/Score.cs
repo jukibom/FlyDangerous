@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using Core.MapData;
@@ -8,18 +7,34 @@ using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Core.Scores {
-
     public struct ScoreData {
         public float raceTime;
         public List<float> splits;
         public string hash;
-        
+
         public string ToJsonString() {
             return JsonConvert.SerializeObject(this, Formatting.Indented);
         }
     }
-    
+
     public class Score {
+        private readonly LevelData _levelData;
+
+        private ScoreData _scoreData;
+
+        private Score(LevelData levelData) {
+            _levelData = levelData;
+            _scoreData = LoadJson(levelData);
+        }
+
+        private Score(LevelData levelData, float raceTimeMs, List<float> splitTimeMs) {
+            _levelData = levelData;
+            _scoreData = new ScoreData { raceTime = raceTimeMs, splits = splitTimeMs };
+        }
+
+        public bool HasPlayedPreviously => _scoreData.raceTime > 0;
+        public float PersonalBestTotalTime => _scoreData.raceTime;
+        public List<float> PersonalBestTimeSplits => _scoreData.splits;
 
         public static Score ScoreForLevel(LevelData levelData) {
             return new Score(levelData);
@@ -32,32 +47,15 @@ namespace Core.Scores {
         public static float GoldTimeTarget(LevelData level) {
             return level.authorTimeTarget * 1.05f;
         }
-        
+
         public static float SilverTimeTarget(LevelData level) {
             return level.authorTimeTarget * 1.25f;
         }
-        
+
         public static float BronzeTimeTarget(LevelData level) {
             return level.authorTimeTarget * 1.7f;
         }
-        
-        private ScoreData _scoreData;
-        private LevelData _levelData;
 
-        public bool HasPlayedPreviously => _scoreData.raceTime > 0;
-        public float PersonalBestTotalTime => _scoreData.raceTime;
-        public List<float> PersonalBestTimeSplits => _scoreData.splits;
-
-        private Score(LevelData levelData) {
-            _levelData = levelData;
-            _scoreData = LoadJson(levelData);
-        }
-        
-        private Score(LevelData levelData, float raceTimeMs, List<float> splitTimeMs) {
-            _levelData = levelData;
-            _scoreData = new ScoreData { raceTime = raceTimeMs, splits = splitTimeMs };
-        }
-        
         private static ScoreData LoadJson(LevelData levelData) {
             // try to find file at save location
             try {
@@ -67,12 +65,13 @@ namespace Core.Scores {
                 using var reader = new StreamReader(file);
                 var json = reader.ReadToEnd();
                 var scoreData = JsonConvert.DeserializeObject<ScoreData>(json);
-                
+
                 var scoreHash = ScoreHash(scoreData.raceTime, levelData);
                 if (scoreHash != scoreData.hash) {
                     Debug.LogWarning("Failed integrity check on save data.");
                     return new ScoreData();
                 }
+
                 return scoreData;
             }
             catch {
@@ -85,9 +84,7 @@ namespace Core.Scores {
             var checkpoints =
                 levelData.checkpoints.ConvertAll(checkpoint => checkpoint.position.ToString() + checkpoint.rotation);
             var checkpointText = "";
-            foreach (var checkpoint in checkpoints) {
-                checkpointText += checkpoint;
-            }
+            foreach (var checkpoint in checkpoints) checkpointText += checkpoint;
             return Hash.ComputeSha256Hash(
                 levelData.name + checkpointText + levelData.location.Name);
         }
@@ -97,9 +94,7 @@ namespace Core.Scores {
             var checkpoints =
                 levelData.checkpoints.ConvertAll(checkpoint => checkpoint.position.ToString() + checkpoint.rotation);
             var checkpointText = "";
-                foreach (var checkpoint in checkpoints) {
-                    checkpointText += checkpoint;
-                }
+            foreach (var checkpoint in checkpoints) checkpointText += checkpoint;
             return Hash.ComputeSha256Hash(score.ToString(CultureInfo.InvariantCulture) + checkpointText + levelData.location.Name);
         }
 
@@ -108,9 +103,7 @@ namespace Core.Scores {
             var filename = FilenameHash(_levelData);
             var saveLoc = Path.Combine(Application.persistentDataPath, "Save", "Records", $"{filename}");
             var directoryLoc = Path.GetDirectoryName(saveLoc);
-            if (directoryLoc != null) {
-                Directory.CreateDirectory(directoryLoc);
-            }
+            if (directoryLoc != null) Directory.CreateDirectory(directoryLoc);
 
             _scoreData.hash = ScoreHash(_scoreData.raceTime, _levelData);
 

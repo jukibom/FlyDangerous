@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 
 namespace Core.OnlineServices {
-    
     public struct LobbyInfo {
         public string lobbyId;
         public string connectionAddress;
@@ -11,7 +10,7 @@ namespace Core.OnlineServices {
         public int playersMax;
         public string gameMode;
     }
-    
+
     public interface IMultiplayerService {
         public Task CreateLobby();
         public Task JoinLobby(string lobbyAddress);

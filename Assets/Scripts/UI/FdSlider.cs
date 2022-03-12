@@ -5,16 +5,14 @@ using UnityEngine.UI;
 
 namespace UI {
     public class FdSlider : MonoBehaviour {
-
         [SerializeField] private InputField numberTextBox;
         [SerializeField] private Slider slider;
-        [SerializeField] private float minValue = 0f;
-        [SerializeField] private float maxValue = 0f;
-        
-        [SerializeField] 
-        public UnityEvent<float> onValueChanged;
+        [SerializeField] private float minValue;
+        [SerializeField] private float maxValue;
 
-    
+        [SerializeField] public UnityEvent<float> onValueChanged;
+
+
         public float Value {
             get => slider.value;
             set {
@@ -31,8 +29,8 @@ namespace UI {
         }
 
         public void OnSliderChanged() {
-            numberTextBox.text = slider.wholeNumbers 
-                ? slider.value.ToString("0") 
+            numberTextBox.text = slider.wholeNumbers
+                ? slider.value.ToString("0")
                 : slider.value.ToString("0.00");
             OnValueChanged();
         }

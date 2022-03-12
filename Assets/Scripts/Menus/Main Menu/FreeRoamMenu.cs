@@ -1,5 +1,4 @@
 using System;
-using Audio;
 using Core;
 using Core.MapData;
 using JetBrains.Annotations;
@@ -8,16 +7,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using Environment = Core.MapData.Environment;
 
-
 namespace Menus.Main_Menu {
     public class FreeRoamMenu : MenuBase {
         [SerializeField] private SinglePlayerMenu singlePlayerMenu;
         [SerializeField] private InputField seedInput;
         [SerializeField] private Button startButton;
-
-        [CanBeNull] private LevelData _levelData;
         [SerializeField] private Dropdown locationDropdown;
         [SerializeField] private Dropdown environmentDropdown;
+
+        [CanBeNull] private LevelData _levelData;
 
         protected override void OnOpen() {
             FdEnum.PopulateDropDown(Location.List(), locationDropdown, option => option.ToUpper());
@@ -25,15 +23,13 @@ namespace Menus.Main_Menu {
             UpdateSeedField();
             _levelData = null;
         }
-        
+
         public void ClosePanel() {
             Cancel();
         }
 
         public void OnSeedInputFieldChanged(string seed) {
-            if (seedInput.text.Length == 0) {
-                seedInput.text = Guid.NewGuid().ToString();
-            }
+            if (seedInput.text.Length == 0) seedInput.text = Guid.NewGuid().ToString();
         }
 
         public void OnLocationChanged() {
@@ -42,10 +38,10 @@ namespace Menus.Main_Menu {
 
         public void StartFreeRoam() {
             startButton.interactable = false;
-            
+
             var levelData = _levelData ?? new LevelData();
             var location = Location.FromId(locationDropdown.value);
-            
+
             levelData.gameType = GameType.FreeRoam;
             levelData.terrainSeed = location.IsTerrain ? seedInput.text : "";
             levelData.environment = Environment.FromId(environmentDropdown.value);

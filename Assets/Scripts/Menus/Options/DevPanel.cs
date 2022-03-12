@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class DevPanel : MonoBehaviour {
-
     [SerializeField] private InputField massTextField;
     [SerializeField] private InputField maxSpeedTextField;
     [SerializeField] private InputField maxBoostSpeedTextField;
@@ -32,9 +31,9 @@ public class DevPanel : MonoBehaviour {
     [SerializeField] private InputField minUserLimitedVelocityTextField;
 
     private bool _initialised;
-    
+
     // Start is called before the first frame update
-    void Start() {
+    private void Start() {
         var defaults = ShipPlayer.ShipParameterDefaults;
 
         massTextField.placeholder.GetComponent<Text>().text = defaults.mass.ToString(CultureInfo.InvariantCulture);
@@ -58,10 +57,11 @@ public class DevPanel : MonoBehaviour {
         boostMaxSpeedDropOffTimeTextField.placeholder.GetComponent<Text>().text = defaults.boostMaxSpeedDropOffTime.ToString(CultureInfo.InvariantCulture);
         boostRechargeTimeTextField.placeholder.GetComponent<Text>().text = defaults.boostRechargeTime.ToString(CultureInfo.InvariantCulture);
         boostCapacitorCostTextField.placeholder.GetComponent<Text>().text = defaults.boostCapacitorPercentCost.ToString(CultureInfo.InvariantCulture);
-        boostCapacitorRechargeRateTextField.placeholder.GetComponent<Text>().text = defaults.boostCapacityPercentChargeRate.ToString(CultureInfo.InvariantCulture);
+        boostCapacitorRechargeRateTextField.placeholder.GetComponent<Text>().text =
+            defaults.boostCapacityPercentChargeRate.ToString(CultureInfo.InvariantCulture);
         intertialTensorMultiplierTextField.placeholder.GetComponent<Text>().text = defaults.inertiaTensorMultiplier.ToString(CultureInfo.InvariantCulture);
         minUserLimitedVelocityTextField.placeholder.GetComponent<Text>().text = defaults.minUserLimitedVelocity.ToString(CultureInfo.InvariantCulture);
-        
+
         UpdateTextFields(Game.Instance.ShipParameters);
     }
 
@@ -74,11 +74,9 @@ public class DevPanel : MonoBehaviour {
     }
 
     public void LoadFromClipboard() {
-        string data = GUIUtility.systemCopyBuffer;
+        var data = GUIUtility.systemCopyBuffer;
         var parameters = ShipParameters.FromJsonString(data);
-        if (parameters != null) {
-            UpdateTextFields(parameters);
-        }
+        if (parameters != null) UpdateTextFields(parameters);
     }
 
     // Update is called once per frame
@@ -112,10 +110,8 @@ public class DevPanel : MonoBehaviour {
     }
 
     public ShipParameters GetFlightParams() {
-        if (!_initialised) {
-            return ShipPlayer.ShipParameterDefaults;
-        }
-        
+        if (!_initialised) return ShipPlayer.ShipParameterDefaults;
+
         return new ShipParameters {
             mass = float.Parse(massTextField.text),
             maxSpeed = float.Parse(maxSpeedTextField.text),
@@ -140,7 +136,7 @@ public class DevPanel : MonoBehaviour {
             boostCapacitorPercentCost = float.Parse(boostCapacitorCostTextField.text),
             boostCapacityPercentChargeRate = float.Parse(boostCapacitorRechargeRateTextField.text),
             inertiaTensorMultiplier = float.Parse(intertialTensorMultiplierTextField.text),
-            minUserLimitedVelocity = float.Parse(minUserLimitedVelocityTextField.text),
+            minUserLimitedVelocity = float.Parse(minUserLimitedVelocityTextField.text)
         };
     }
 }

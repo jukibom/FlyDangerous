@@ -18,73 +18,70 @@ namespace Core.Ship {
         [SerializeField] private List<Thruster> rollRightThrusters;
         [SerializeField] private List<Thruster> yawLeftThrusters;
         [SerializeField] private List<Thruster> yawRightThrusters;
-        
+
+        [SerializeField] private float baseForwardThrustScaleZ;
+        [SerializeField] private float boostForwardThrustScaleZ;
+
         private float targetForwardThrust;
-        private float targetUpThrust;
-        private float targetRightThrust;
         private float targetPitchThrust;
+        private float targetRightThrust;
         private float targetRollThrust;
+        private float targetUpThrust;
         private float targetYawThrust;
-
-        [SerializeField] float baseForwardThrustScaleZ;
-        [SerializeField] float boostForwardThrustScaleZ;
-        
-        public void AnimateBoostThrusters() {
-            forwardThrusters.ForEach(thruster => {
-                var thrusterTransform = thruster.transform;
-                var localScale = thrusterTransform.localScale;
-                localScale = new Vector3(
-                    localScale.x, 
-                    localScale.y,
-                    boostForwardThrustScaleZ
-                );
-                thrusterTransform.localScale = localScale;
-            });
-        }
-        
-        public void UpdateThrusters(Vector3 lateralThrust, Vector3 rotationalThrust) {
-            
-            targetForwardThrust = MathfExtensions.Clamp(-1, 1, lateralThrust.z);
-            targetUpThrust = MathfExtensions.Clamp(-1, 1, lateralThrust.y);
-            targetRightThrust = MathfExtensions.Clamp(-1, 1, lateralThrust.x);
-            targetPitchThrust = MathfExtensions.Clamp(-1, 1, -rotationalThrust.x);
-            targetRollThrust = MathfExtensions.Clamp(-1, 1, rotationalThrust.z);
-            targetYawThrust = MathfExtensions.Clamp(-1, 1, rotationalThrust.y);
-            
-            // reset our thrusters as operations from here on are additive
-            ForEachThruster(thruster => thruster.TargetThrust = 0);
-
-            DistributeThrust(forwardThrusters, reverseThrusters, targetForwardThrust);
-            DistributeThrust(rightThrusters, leftThrusters, targetRightThrust);
-            DistributeThrust(upThrusters, downThrusters, targetUpThrust);
-            
-            // torque isn't always neat -1:1
-            DistributeThrust(pitchUpThrusters, pitchDownThrusters, targetPitchThrust);
-            DistributeThrust(rollLeftThrusters, rollRightThrusters, targetRollThrust);
-            DistributeThrust(yawRightThrusters, yawLeftThrusters, targetYawThrust);
-        }
 
         private void FixedUpdate() {
             forwardThrusters.ForEach(thruster => {
                 var thrusterTransform = thruster.transform;
                 var localScale = thrusterTransform.localScale;
                 localScale = new Vector3(
-                    localScale.x, 
+                    localScale.x,
                     localScale.y,
-                    Mathf.Lerp(localScale.z,  baseForwardThrustScaleZ, 0.01f)
+                    Mathf.Lerp(localScale.z, baseForwardThrustScaleZ, 0.01f)
                 );
                 thrusterTransform.localScale = localScale;
             });
         }
 
+        public void AnimateBoostThrusters() {
+            forwardThrusters.ForEach(thruster => {
+                var thrusterTransform = thruster.transform;
+                var localScale = thrusterTransform.localScale;
+                localScale = new Vector3(
+                    localScale.x,
+                    localScale.y,
+                    boostForwardThrustScaleZ
+                );
+                thrusterTransform.localScale = localScale;
+            });
+        }
+
+        public void UpdateThrusters(Vector3 lateralThrust, Vector3 rotationalThrust) {
+            targetForwardThrust = MathfExtensions.Clamp(-1, 1, lateralThrust.z);
+            targetUpThrust = MathfExtensions.Clamp(-1, 1, lateralThrust.y);
+            targetRightThrust = MathfExtensions.Clamp(-1, 1, lateralThrust.x);
+            targetPitchThrust = MathfExtensions.Clamp(-1, 1, -rotationalThrust.x);
+            targetRollThrust = MathfExtensions.Clamp(-1, 1, rotationalThrust.z);
+            targetYawThrust = MathfExtensions.Clamp(-1, 1, rotationalThrust.y);
+
+            // reset our thrusters as operations from here on are additive
+            ForEachThruster(thruster => thruster.TargetThrust = 0);
+
+            DistributeThrust(forwardThrusters, reverseThrusters, targetForwardThrust);
+            DistributeThrust(rightThrusters, leftThrusters, targetRightThrust);
+            DistributeThrust(upThrusters, downThrusters, targetUpThrust);
+
+            // torque isn't always neat -1:1
+            DistributeThrust(pitchUpThrusters, pitchDownThrusters, targetPitchThrust);
+            DistributeThrust(rollLeftThrusters, rollRightThrusters, targetRollThrust);
+            DistributeThrust(yawRightThrusters, yawLeftThrusters, targetYawThrust);
+        }
+
         private void DistributeThrust(List<Thruster> positiveThrusters, List<Thruster> negativeThrusters,
             float thrust) {
-            if (thrust > 0) {
+            if (thrust > 0)
                 positiveThrusters.ForEach(thruster => thruster.TargetThrust += thrust);
-            }
-            else {
+            else
                 negativeThrusters.ForEach(thruster => thruster.TargetThrust += Math.Abs(thrust));
-            }
         }
 
         private void ForEachThruster(Action<Thruster> action) {
@@ -94,7 +91,7 @@ namespace Core.Ship {
             downThrusters.ForEach(action);
             leftThrusters.ForEach(action);
             rightThrusters.ForEach(action);
-            
+
             pitchUpThrusters.ForEach(action);
             pitchDownThrusters.ForEach(action);
             rollLeftThrusters.ForEach(action);

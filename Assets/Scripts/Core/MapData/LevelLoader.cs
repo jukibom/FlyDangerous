@@ -2,33 +2,32 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Core.MapData;
 using Core.Player;
 using Den.Tools;
+using Den.Tools.Tasks;
 using MapMagic.Core;
 using Misc;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using Environment = System.Environment;
 
 namespace Core.MapData {
     public class LevelLoader : MonoBehaviour {
-        
         public delegate void LevelLoadedAction();
-        public static event LevelLoadedAction OnLevelLoaded;
-        
-        private LevelData _levelData = new LevelData();
-        private List<AsyncOperation> _scenesLoading = new List<AsyncOperation>();
-        public LevelData LoadedLevelData => _levelData;
-        public LevelData LevelDataAtCurrentPosition => GenerateLevelData();
+
         public GameObject checkpointPrefab;
 
-        public IEnumerator StartGame(LevelData levelData) {
-            _levelData = levelData;
+        private readonly List<AsyncOperation> _scenesLoading = new();
+        public LevelData LoadedLevelData { get; private set; } = new();
 
-            string locationSceneToLoad = levelData.location.SceneToLoad;
-            string environmentSceneToLoad = levelData.environment.SceneToLoad;
+        public LevelData LevelDataAtCurrentPosition => GenerateLevelData();
+        public static event LevelLoadedAction OnLevelLoaded;
+
+        public IEnumerator StartGame(LevelData levelData) {
+            LoadedLevelData = levelData;
+
+            var locationSceneToLoad = levelData.location.SceneToLoad;
+            var environmentSceneToLoad = levelData.environment.SceneToLoad;
 
             // now we can finally start the level load
             _scenesLoading.Add(SceneManager.LoadSceneAsync(environmentSceneToLoad, LoadSceneMode.Additive));
@@ -43,7 +42,7 @@ namespace Core.MapData {
             if (ship) {
                 // first let's check if this is a terrain world and handle that appropriately
                 var mapMagic = FindObjectOfType<MapMagicObject>();
-                
+
                 void DoReset(Vector3 position, Quaternion rotation) {
                     ship.AbsoluteWorldPosition = position;
                     ship.transform.rotation = rotation;
@@ -68,26 +67,19 @@ namespace Core.MapData {
 
                     // unload the loading screen
                     var unload = SceneManager.UnloadSceneAsync("Loading");
-                    while (!unload.isDone) {
-                        yield return null;
-                    }
+                    while (!unload.isDone) yield return null;
 
                     Game.Instance.FadeFromBlack();
                     yield return new WaitForSeconds(0.7f);
-
                 }
 
                 IEnumerator ResetTrackIfNeeded() {
                     // if there's a track in the game world, start it
                     var track = FindObjectOfType<Track>();
-                    if (track) {
-                        yield return track.StartTrackWithCountdown();
-                    }
+                    if (track) yield return track.StartTrackWithCountdown();
 
                     var user = ship.User;
-                    if (user) {
-                        user.EnableGameInput();
-                    }
+                    if (user) user.EnableGameInput();
                 }
 
                 var positionToWarpTo = new Vector3 {
@@ -98,9 +90,9 @@ namespace Core.MapData {
 
                 var rotationToWarpTo = Quaternion.Euler(LoadedLevelData.startRotation.x,
                     LoadedLevelData.startRotation.y, LoadedLevelData.startRotation.z);
-                
+
                 // if multiplayer free-roam and not the host, warp to the host
-                if (Game.Instance.SessionType == SessionType.Multiplayer && LoadedLevelData.gameType.CanWarpToHost && !ship.isHost) {
+                if (Game.Instance.SessionType == SessionType.Multiplayer && LoadedLevelData.gameType.CanWarpToHost && !ship.isHost)
                     FindObjectsOfType<ShipPlayer>().ToList().ForEach(otherShipPlayer => {
                         if (otherShipPlayer.isHost) {
                             var emptyPosition = PositionalHelpers.FindClosestEmptyPosition(otherShipPlayer.AbsoluteWorldPosition, 10);
@@ -108,7 +100,6 @@ namespace Core.MapData {
                             positionToWarpTo = emptyPosition + FloatingOrigin.Instance.Origin;
                         }
                     });
-                }
 
                 var shipPosition = ship.AbsoluteWorldPosition;
                 var distanceToStart = Vector3.Distance(shipPosition, positionToWarpTo);
@@ -131,39 +122,38 @@ namespace Core.MapData {
         }
 
         // This is a separate action so that we can safely move to a new active loading scene and fully unload everything
-         // before moving to any other map or whatever we need to do.
-         // On completion it executes callback `then` with a reference to the loading text.
-         public IEnumerator ShowLoadingScreen(bool keepScene = false) {
-            
-             // disable user input if we're in-game while handling everything else
-             var ship = FdPlayer.FindLocalShipPlayer;
-             if (ship != null) {
-                 ship.User.DisableGameInput();
-                 ship.User.DisableUIInput();
-             }
+        // before moving to any other map or whatever we need to do.
+        // On completion it executes callback `then` with a reference to the loading text.
+        public IEnumerator ShowLoadingScreen(bool keepScene = false) {
+            // disable user input if we're in-game while handling everything else
+            var ship = FdPlayer.FindLocalShipPlayer;
+            if (ship != null) {
+                ship.User.DisableGameInput();
+                ship.User.DisableUIInput();
+            }
 
-             Game.Instance.FadeToBlack();
-             yield return new WaitForSeconds(0.5f);
-            
-             // load loading screen (lol)
-             var loadMode = keepScene ? LoadSceneMode.Additive : LoadSceneMode.Single;
-             yield return SceneManager.LoadSceneAsync("Loading", loadMode);
-         }
+            Game.Instance.FadeToBlack();
+            yield return new WaitForSeconds(0.5f);
 
-         public IEnumerator HideLoadingScreen() {
-             // unload the loading screen
-             yield return SceneManager.UnloadSceneAsync("Loading");
-         }
+            // load loading screen (lol)
+            var loadMode = keepScene ? LoadSceneMode.Additive : LoadSceneMode.Single;
+            yield return SceneManager.LoadSceneAsync("Loading", loadMode);
+        }
+
+        public IEnumerator HideLoadingScreen() {
+            // unload the loading screen
+            yield return SceneManager.UnloadSceneAsync("Loading");
+        }
 
         // Return a new level data object hydrated with all the information of the current game state
         private LevelData GenerateLevelData() {
             var levelData = new LevelData();
-            levelData.name = _levelData.name;
-            levelData.gameType = _levelData.gameType;
-            levelData.location = _levelData.location;
-            levelData.environment = _levelData.environment;
-            levelData.terrainSeed = _levelData.terrainSeed;
-            levelData.checkpoints = _levelData.checkpoints;
+            levelData.name = LoadedLevelData.name;
+            levelData.gameType = LoadedLevelData.gameType;
+            levelData.location = LoadedLevelData.location;
+            levelData.environment = LoadedLevelData.environment;
+            levelData.terrainSeed = LoadedLevelData.terrainSeed;
+            levelData.checkpoints = LoadedLevelData.checkpoints;
 
             var ship = FdPlayer.FindLocalShipPlayer;
             if (ship) {
@@ -199,11 +189,11 @@ namespace Core.MapData {
                     levelData.checkpoints.Add(checkpointLocation);
                 }
             }
+
             return levelData;
         }
-        
-        IEnumerator LoadGameScenes() {
-        
+
+        private IEnumerator LoadGameScenes() {
             // disable all game interactions
             Time.timeScale = 0;
 
@@ -211,35 +201,33 @@ namespace Core.MapData {
             var loadText = GameObject.FindGameObjectWithTag("DynamicLoadingText").GetComponent<Text>();
 
             float progress = 0;
-            for (int i = 0; i < _scenesLoading.Count; ++i) {
-                while (_scenesLoading[i].progress < 0.9f) { // this is literally what the unity docs recommend
+            for (var i = 0; i < _scenesLoading.Count; ++i)
+                while (_scenesLoading[i].progress < 0.9f) {
+                    // this is literally what the unity docs recommend
                     yield return null;
-                        
+
                     progress += _scenesLoading[i].progress;
                     var totalProgress = progress / _scenesLoading.Count;
                     var progressPercent = Mathf.Min(100, Mathf.Round(totalProgress * 100));
-                    
+
                     // set loading text (last scene is always the engine)
                     loadText.text = i == _scenesLoading.Count
                         ? $"Loading Engine ({progressPercent}%)"
                         : $"Loading Assets ({progressPercent}%)";
-                    
+
                     yield return null;
                 }
-            }
-            
+
             // all scenes have loaded as far as they can without activation, allow them to activate
-            for (int i = 0; i < _scenesLoading.Count; ++i) {
+            for (var i = 0; i < _scenesLoading.Count; ++i) {
                 _scenesLoading[i].allowSceneActivation = true;
-                while (!_scenesLoading[i].isDone) {
-                    yield return null;
-                }
+                while (!_scenesLoading[i].isDone) yield return null;
             }
 
             // checkpoint placement
             var track = FindObjectOfType<Track>();
-            if (track && _levelData.checkpoints?.Count > 0) {
-                _levelData.checkpoints.ForEach(c => {
+            if (track && LoadedLevelData.checkpoints?.Count > 0)
+                LoadedLevelData.checkpoints.ForEach(c => {
                     var checkpointObject = Instantiate(checkpointPrefab, track.transform);
                     var checkpoint = checkpointObject.GetComponent<Checkpoint>();
                     checkpoint.Type = c.type;
@@ -256,32 +244,29 @@ namespace Core.MapData {
                     );
                     checkpoint.transform.parent = track.transform;
                 });
-            }
 
             // if terrain needs to generate, toggle special logic and wait for it to load all primary tiles
             var mapMagic = FindObjectOfType<MapMagicObject>();
             if (mapMagic) {
                 // our terrain gen may start disabled to prevent painful threading fun
                 mapMagic.enabled = true;
-                
+
                 // Stop auto-loading with default seed
                 mapMagic.StopGenerate();
-                Den.Tools.Tasks.ThreadManager.Abort();
+                ThreadManager.Abort();
                 yield return new WaitForEndOfFrame();
                 mapMagic.ClearAll();
 
                 // replace with user seed
-                mapMagic.graph.random = new Noise(_levelData.terrainSeed.GetHashCode(), 32768);
+                mapMagic.graph.random = new Noise(LoadedLevelData.terrainSeed.GetHashCode(), 32768);
                 mapMagic.StartGenerate();
-                
+
                 // wait for fully loaded local terrain
                 while (mapMagic.IsGenerating()) {
                     var progressPercent = Mathf.Min(100, Mathf.Round(mapMagic.GetProgress() * 100));
-                    
+
                     // this entity may be destroyed by server shutdown...
-                    if (loadText != null) {
-                        loadText.text = $"Generating terrain ({progressPercent}%)\n\n\nSeed: \"{_levelData.terrainSeed}\"";
-                    }
+                    if (loadText != null) loadText.text = $"Generating terrain ({progressPercent}%)\n\n\nSeed: \"{LoadedLevelData.terrainSeed}\"";
 
                     yield return null;
                 }
@@ -289,9 +274,7 @@ namespace Core.MapData {
 
             _scenesLoading.Clear();
 
-            if (OnLevelLoaded != null) {
-                OnLevelLoaded();
-            } 
+            if (OnLevelLoaded != null) OnLevelLoaded();
         }
     }
 }

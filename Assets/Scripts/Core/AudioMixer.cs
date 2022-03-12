@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.Audio;
 
 public class AudioMixer : Singleton<AudioMixer> {
-
     [SerializeField] private AudioMixerGroup masterMixerGroup;
 
     private void OnEnable() {

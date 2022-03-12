@@ -4,29 +4,25 @@ using UnityEngine.UI;
 
 namespace UI {
     public class FdConsole : Singleton<FdConsole> {
-
         // TODO: make this log entry an array and trim as we go
         [SerializeField] private Text logEntry;
-        
-        private bool _show;
-        public bool Visible => _show; 
+
+        public bool Visible { get; private set; }
 
         // Update is called once per frame
-        void Update() {
+        private void Update() {
             var t = transform;
-            if (_show) {
-                if (t.localScale.y < 1) {
+            if (Visible) {
+                if (t.localScale.y < 1)
                     t.localScale = new Vector3(
                         1,
                         t.localScale.y + 0.05f,
                         1
                     );
-                }
-                else {
+                else
                     transform.localScale = Vector3.one;
-                }
             }
-            else if (!_show && transform.localScale.y > 0 ) {               
+            else if (!Visible && transform.localScale.y > 0) {
                 t.localScale = new Vector3(
                     1,
                     t.localScale.y - 0.05f,
@@ -36,11 +32,11 @@ namespace UI {
         }
 
         public void Show() {
-            _show = true;
+            Visible = true;
         }
 
         public void Hide() {
-            _show = false;
+            Visible = false;
         }
 
         public void LogMessage(string message) {

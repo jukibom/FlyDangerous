@@ -1,5 +1,4 @@
 ﻿#if !DISABLESTEAMWORKS
-
 namespace Core.OnlineServices.SteamOnlineService {
     public class SteamOnlineService : IOnlineService {
         private readonly SteamMultiplayer _multiplayer = new SteamMultiplayer();

@@ -13,13 +13,14 @@ namespace Core.Player {
         [SerializeField] private bool rotateTarget = true;
         [SerializeField] private bool translateShip = true;
         [SerializeField] private bool rotateShip = true;
-        private MeshRenderer _meshRenderer;
-
-        private Transform _transform;
-        [Range(0, 90)] [SerializeField] private float fixedToPlaneAngle = 0;
+        [Range(0, 90)] [SerializeField] private float fixedToPlaneAngle;
         [Range(0, 90)] [SerializeField] private float freeMoveAngle = 30;
         [Range(0, 1)] [SerializeField] private float planeTransformDamping = 0.8f;
         [Range(0, 90)] [SerializeField] private int maxTargetRotationDegrees = 45;
+        private MeshRenderer _meshRenderer;
+
+        private Transform _transform;
+
         private void Update() {
             _meshRenderer.enabled = drawDebugCube;
         }

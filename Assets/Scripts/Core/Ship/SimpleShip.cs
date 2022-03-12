@@ -2,23 +2,19 @@
 using System.Collections.Generic;
 using Core.Player;
 using UnityEngine;
-using LightType = UnityEngine.LightType;
 
 namespace Core.Ship {
-    
     /**
      * Provide some basic ship functionality expected from all mesh objects in an override-able fashion.
      */
-    
     public class SimpleShip : MonoBehaviour, IShip {
-        
         [SerializeField] private ThrusterController thrusterController;
         [SerializeField] private Light shipLights;
         [SerializeField] private SmokeEmitter smokeEmitter;
-        
+
         [SerializeField] private List<MeshRenderer> primaryColorMeshes = new();
         [SerializeField] private List<MeshRenderer> accentColorMeshes = new();
-        
+
         [SerializeField] private AudioSource engineBoostAudioSource;
         [SerializeField] private AudioSource externalBoostAudioSource;
         [SerializeField] private AudioSource externalBoostThrusterAudioSource;
@@ -30,22 +26,24 @@ namespace Core.Ship {
 
         private Coroutine _boostCoroutine;
         private ShipShake _shipShake;
-        
-        public MonoBehaviour Entity() => this;
+
+        public virtual void FixedUpdate() {
+            _shipShake.Update();
+        }
 
         public virtual void OnEnable() {
             Game.OnPauseToggle += PauseAudio;
             Game.OnRestart += Restart;
             _shipShake = new ShipShake(transform);
         }
-        
+
         public virtual void OnDisable() {
             Game.OnPauseToggle -= PauseAudio;
             Game.OnRestart -= Restart;
         }
 
-        public virtual void FixedUpdate() {
-            _shipShake.Update();
+        public MonoBehaviour Entity() {
+            return this;
         }
 
         #region IShip Basic Functions
@@ -53,31 +51,29 @@ namespace Core.Ship {
         public virtual void SetLights(bool active) {
             simpleToggleAudioSource.Play();
             shipLights.enabled = !shipLights.enabled;
-            
+
             // ensure that the local player ship lights take priority over all others
             var player = GetComponentInParent<ShipPlayer>();
-            if (player && player.isLocalPlayer) {
-                shipLights.renderMode = LightRenderMode.ForcePixel;
-            }
+            if (player && player.isLocalPlayer) shipLights.renderMode = LightRenderMode.ForcePixel;
         }
-        
+
         public virtual void SetAssist(bool active) {
             if (active) assistActivateAudioSource.Play();
             else assistDeactivateAudioSource.Play();
         }
-        
+
         public virtual void SetVelocityLimiter(bool active) {
             if (active) velocityLimitActivateAudioSource.Play();
             else velocityLimitDeactivateAudioSource.Play();
         }
-        
+
         public void Boost(float boostTime) {
             IEnumerator AnimateBoost() {
                 yield return new WaitForSecondsRealtime(1);
                 _shipShake.Shake(boostTime - 1, 0.005f);
                 thrusterController.AnimateBoostThrusters();
             }
-            
+
             engineBoostAudioSource.Play();
             externalBoostAudioSource.Play();
             externalBoostThrusterAudioSource.PlayDelayed(1);
@@ -88,7 +84,9 @@ namespace Core.Ship {
 
         #region Rolling Updates
 
-        public virtual void UpdateIndicators(ShipIndicatorData shipIndicatorData) { /* Indicators are entirely model-specific and should be implemented. */ }
+        public virtual void UpdateIndicators(ShipIndicatorData shipIndicatorData) {
+            /* Indicators are entirely model-specific and should be implemented. */
+        }
 
         public virtual void UpdateMotionInformation(Vector3 velocity, float maxVelocity, Vector3 force, Vector3 torque) {
             thrusterController.UpdateThrusters(force, torque);
@@ -100,7 +98,7 @@ namespace Core.Ship {
         #region Mesh Quirks
 
         #endregion
-        
+
         #region User Preferences
 
         public virtual void SetPrimaryColor(string htmlColor) {
@@ -110,7 +108,7 @@ namespace Core.Ship {
                 mat.color = color;
             });
         }
-        
+
         public virtual void SetAccentColor(string htmlColor) {
             var color = ParseColor(htmlColor);
             accentColorMeshes.ForEach(mesh => {
@@ -121,38 +119,36 @@ namespace Core.Ship {
 
         public virtual void SetThrusterColor(string htmlColor) {
             var color = ParseColor(htmlColor);
-            foreach (var thruster in GetComponentsInChildren<Thruster>()) {
-                thruster.ThrustColor = color;
-            }
+            foreach (var thruster in GetComponentsInChildren<Thruster>()) thruster.ThrustColor = color;
         }
 
-        /** Set the color of the trails which occur under boost */
+        /**
+         * Set the color of the trails which occur under boost
+         */
         public virtual void SetTrailColor(string htmlColor) {
             var trailColor = ParseColor(htmlColor);
             smokeEmitter.UpdateColor(trailColor);
         }
 
-        /** Set the color of the ship head-lights */
+        /**
+         * Set the color of the ship head-lights
+         */
         public virtual void SetHeadLightsColor(string htmlColor) {
             var color = ParseColor(htmlColor);
-            foreach (var shipLight in GetComponentsInChildren<Light>()) {
-                if (shipLight.type == LightType.Spot) {
+            foreach (var shipLight in GetComponentsInChildren<Light>())
+                if (shipLight.type == LightType.Spot)
                     shipLight.color = color;
-                }
-            }
         }
-        
+
         #endregion
 
         #region Internal Helper
 
         protected void PauseAudio(bool paused) {
-            if (Game.Instance.SessionType == SessionType.Singleplayer) {
-                foreach (var audioSource in GetComponentsInChildren<AudioSource>()) {
+            if (Game.Instance.SessionType == SessionType.Singleplayer)
+                foreach (var audioSource in GetComponentsInChildren<AudioSource>())
                     if (paused) audioSource.Pause();
                     else audioSource.UnPause();
-                }
-            }
         }
 
         protected Color ParseColor(string htmlColor) {
@@ -169,9 +165,7 @@ namespace Core.Ship {
             engineBoostAudioSource.Stop();
             externalBoostAudioSource.Stop();
             externalBoostThrusterAudioSource.Stop();
-            if (_boostCoroutine != null) {
-                StopCoroutine(_boostCoroutine);
-            }
+            if (_boostCoroutine != null) StopCoroutine(_boostCoroutine);
         }
 
         #endregion

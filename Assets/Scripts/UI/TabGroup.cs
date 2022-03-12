@@ -1,22 +1,18 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace UI {
     public class TabGroup : MonoBehaviour {
-        public List<TabButton> tabButtons = new List<TabButton>();
+        public List<TabButton> tabButtons = new();
         public TabButton defaultTab;
 
         public void Start() {
             tabButtons.ForEach(tab => tab.Subscribe(this));
-            if (this.defaultTab != null) {
-                this.OnTabSelected(this.defaultTab);
-            }
+            if (defaultTab != null) OnTabSelected(defaultTab);
         }
 
         public void OnTabSelected(TabButton button) {
-            this.ResetTabs();
+            ResetTabs();
             button.SetSelectedState(true);
         }
 

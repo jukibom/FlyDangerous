@@ -6,26 +6,15 @@ using UnityEngine.VFX;
 
 namespace VFX {
     public class SpaceDust : MonoBehaviour {
-        [SerializeField]
-        private bool forceOn;
-        private VisualEffect _vfx;
+        [SerializeField] private bool forceOn;
+
         private ShipPlayer _player;
-        private Transform _playerShipTransform;
         private Rigidbody _playerShipRigidbody;
+        private Transform _playerShipTransform;
+        private VisualEffect _vfx;
 
-        private void OnEnable() {
-            _vfx = GetComponent<VisualEffect>(); 
-            _player = FdPlayer.FindLocalShipPlayer;
-            if (_player) {
-                _playerShipTransform = _player.GetComponent<Transform>();
-                _playerShipRigidbody = _player.GetComponent<Rigidbody>();
-            }
-        }
-
-        void Update() {
-            if (!forceOn) {
-                _vfx.enabled = Preferences.Instance.GetBool("showSpaceDust");
-            }
+        private void Update() {
+            if (!forceOn) _vfx.enabled = Preferences.Instance.GetBool("showSpaceDust");
 
             if (_player) {
                 _vfx.SetVector3("_playerVelocity",
@@ -35,7 +24,16 @@ namespace VFX {
             }
 
             // lock the transform in world space so we don't rotate with the ship
-            transform.rotation = Quaternion.identity; 
+            transform.rotation = Quaternion.identity;
+        }
+
+        private void OnEnable() {
+            _vfx = GetComponent<VisualEffect>();
+            _player = FdPlayer.FindLocalShipPlayer;
+            if (_player) {
+                _playerShipTransform = _player.GetComponent<Transform>();
+                _playerShipRigidbody = _player.GetComponent<Rigidbody>();
+            }
         }
     }
 }

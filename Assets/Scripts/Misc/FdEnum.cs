@@ -13,12 +13,10 @@ namespace Misc {
     }
 
     public static class FdEnum {
-        
         public static T FromId<T>(IEnumerable<T> enums, int id) where T : IFdEnum {
             var fdEnums = enums as T[] ?? enums.ToArray();
             try {
                 return fdEnums.Single(l => l.Id == id);
-
             }
             catch {
                 var firstElement = fdEnums.First();
@@ -26,7 +24,7 @@ namespace Misc {
                 return firstElement;
             }
         }
-        
+
         public static T FromString<T>(IEnumerable<T> enums, string name) where T : IFdEnum {
             var fdEnums = enums as T[] ?? enums.ToArray();
             try {
@@ -38,36 +36,32 @@ namespace Misc {
                 return firstElement;
             }
         }
-        
+
         public static void PopulateDropDown<T>(
             IEnumerable<T> enums,
-            Dropdown dropdown, 
+            Dropdown dropdown,
             Func<string, string>? textTransform = null
         ) where T : IFdEnum {
             var newOptions = new List<Dropdown.OptionData>();
-            
+
             foreach (var location in enums) {
                 var option = textTransform != null ? textTransform(location.Name) : location.Name;
                 newOptions.Add(new Dropdown.OptionData(option));
             }
- 
+
             dropdown.ClearOptions();
             dropdown.AddOptions(newOptions);
         }
     }
-    
+
     public class FdEnumJsonConverter : JsonConverter {
         public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer) {
-            if (value is IFdEnum fdEnum) {
-                writer.WriteValue(fdEnum.Name);
-            }
+            if (value is IFdEnum fdEnum) writer.WriteValue(fdEnum.Name);
         }
 
         public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer) {
-            if (reader.TokenType != JsonToken.String) {
-                throw new JsonSerializationException();
-            }
-            
+            if (reader.TokenType != JsonToken.String) throw new JsonSerializationException();
+
             // find the static FromString method on the enum derived type with DISGUSTING REFLECTION.
             // I'm at peace with this.
             var name = serializer.Deserialize<string>(reader);

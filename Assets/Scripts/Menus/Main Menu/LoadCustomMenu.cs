@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using Core;
 using Core.MapData;
@@ -16,18 +13,18 @@ namespace Menus.Main_Menu {
         [SerializeField] private Button startButton;
         [CanBeNull] private LevelData _levelData;
 
-        protected override void OnOpen() {
-            startButton.interactable = true;
-        }
-        
-        public void ClosePanel() {
-            Cancel();
-        }
-
         private void OnEnable() {
             saveInput.text = "";
             mapInfo.text = "";
             _levelData = null;
+        }
+
+        protected override void OnOpen() {
+            startButton.interactable = true;
+        }
+
+        public void ClosePanel() {
+            Cancel();
         }
 
         public void OnSaveInputFieldChanged(string levelString) {
@@ -39,15 +36,12 @@ namespace Menus.Main_Menu {
             var text = saveInput.text;
             if (text.Length > 0) {
                 if (text.FirstOrDefault() == '{' && text.Last() == '}') {
-
                     _levelData = LevelData.FromJsonString(text);
 
-                    if (_levelData == null || _levelData.version == 0) {
+                    if (_levelData == null || _levelData.version == 0)
                         SetInvalidState();
-                    }
-                    else {
+                    else
                         SetValidState();
-                    }
                 }
                 else {
                     SetInvalidState();

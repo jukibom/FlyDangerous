@@ -1,6 +1,4 @@
 using System.Linq;
-using System.Security.Cryptography;
-using Audio;
 using Core;
 using Core.MapData;
 using Core.Scores;
@@ -8,7 +6,6 @@ using Misc;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-
 
 namespace Menus.Main_Menu {
     public class TimeTrialMenu : MenuBase {
@@ -25,13 +22,11 @@ namespace Menus.Main_Menu {
         [SerializeField] private Text silverTarget;
         [SerializeField] private Text bronzeTarget;
         [SerializeField] private GameObject platinumMedalContainer;
-        
+
         private Level _level;
 
         protected override void OnOpen() {
-            foreach (var levelUI in levelPrefabContainer.gameObject.GetComponentsInChildren<LevelUIElement>()) {
-                Destroy(levelUI.gameObject);
-            }
+            foreach (var levelUI in levelPrefabContainer.gameObject.GetComponentsInChildren<LevelUIElement>()) Destroy(levelUI.gameObject);
             var levels = Level.List();
             foreach (var level in levels) {
                 var levelButton = Instantiate(levelUIElementPrefab, levelPrefabContainer);
@@ -46,7 +41,7 @@ namespace Menus.Main_Menu {
         public void ClosePanel() {
             Cancel();
         }
-        
+
         public void StartTimeTrial() {
             startButton.interactable = false;
             FdNetworkManager.Instance.StartGameLoadSequence(SessionType.Singleplayer, _level.Data);
@@ -76,10 +71,10 @@ namespace Menus.Main_Menu {
             goldTarget.text = TimeExtensions.TimeSecondsToString(goldTargetTime);
             silverTarget.text = TimeExtensions.TimeSecondsToString(silverTargetTime);
             bronzeTarget.text = TimeExtensions.TimeSecondsToString(bronzeTargetTime);
-            
+
             // if user hasn't beaten platinum, hide it!
-            platinumMedalContainer.gameObject.SetActive(score.HasPlayedPreviously &&  bestTime <= platinumTargetTime);
-            
+            platinumMedalContainer.gameObject.SetActive(score.HasPlayedPreviously && bestTime <= platinumTargetTime);
+
             // TODO: show a medal icon associated with users' time
         }
     }

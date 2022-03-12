@@ -7,15 +7,15 @@ using UnityEngine.UI;
 
 namespace Menus.Main_Menu.Components {
     public class ServerBrowserEntry : MonoBehaviour {
-        private LobbyInfo _lobbyInfo;
         [SerializeField] private LoadingSpinner loadingSpinner;
         [SerializeField] private Text serverName;
         [SerializeField] private Text gameMode;
         [SerializeField] private Text players;
         [SerializeField] private Button joinButton;
-        
+        private LobbyInfo _lobbyInfo;
+
         public string LobbyId { get; set; }
-        
+
         public async Task Refresh() {
             if (joinButton != null) {
                 loadingSpinner.gameObject.SetActive(true);
@@ -35,7 +35,7 @@ namespace Menus.Main_Menu.Components {
             if (FdNetworkManager.Instance.HasMultiplayerServices) {
                 var caller = GetComponentInParent<ServerBrowserMenu>();
                 caller.Hide();
-                
+
                 var connectingDialog = caller.ConnectingDialog;
                 connectingDialog.Open(caller);
                 UIAudioManager.Instance.Play("ui-confirm");

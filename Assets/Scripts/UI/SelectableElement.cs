@@ -24,7 +24,7 @@ namespace UI {
 
         public override void OnSelect(BaseEventData eventData) {
             PlaySound();
-            
+
             // User is currently interacting with the element (dropdown, slider, text field etc)
             _elementInteracting = false;
             ExecuteEvents.ExecuteHierarchy(transform.parent.gameObject, eventData, ExecuteEvents.selectHandler);
@@ -38,24 +38,20 @@ namespace UI {
 
         public override void OnCancel(BaseEventData eventData) {
             // only propagate the event if the user is not interacting (e.g. cancel is to stop interacting with this element)
-            if (!_elementInteracting) {
-                ExecuteEvents.ExecuteHierarchy(transform.parent.gameObject, eventData, ExecuteEvents.cancelHandler);
-            }
+            if (!_elementInteracting) ExecuteEvents.ExecuteHierarchy(transform.parent.gameObject, eventData, ExecuteEvents.cancelHandler);
         }
 
         public override void OnMove(AxisEventData eventData) {
             ExecuteEvents.ExecuteHierarchy(transform.parent.gameObject, eventData, ExecuteEvents.moveHandler);
         }
-        
+
         public override void OnScroll(PointerEventData eventData) {
             ExecuteEvents.ExecuteHierarchy(transform.parent.gameObject, eventData, ExecuteEvents.scrollHandler);
         }
-        
+
         private void PlaySound() {
             var audioManager = UIAudioManager.Instance;
-            if (audioManager != null) {
-                audioManager.Play("ui-nav");
-            }
+            if (audioManager != null) audioManager.Play("ui-nav");
         }
     }
 }

@@ -1,25 +1,23 @@
 using System.Collections;
-using Audio;
-using Menus.Options;
-using UnityEngine;
-using UnityEngine.EventSystems;
 using Core;
 using Core.Player;
 using Menus.Main_Menu;
+using Menus.Options;
+using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Menus.Pause_Menu {
     public enum PauseMenuState {
         Unpaused,
         PausedMainMenu,
-        PausedOptionsMenu,
+        PausedOptionsMenu
     }
-    
+
     public class PauseMenu : MenuBase, IPointerMoveHandler {
-        
         [Tooltip("Used to animate the main panel")] [SerializeField]
         private GameObject mainCanvas;
-        
+
         [Tooltip("Used to show a background (if not VR)")] [SerializeField]
         private GameObject backgroundCanvas;
 
@@ -31,8 +29,10 @@ namespace Menus.Pause_Menu {
         [SerializeField] private CursorIcon cursor;
 
         private PauseMenuState _menuState = PauseMenuState.Unpaused;
+        private RectTransform _rectTransform;
 
         public bool IsPaused => _menuState != PauseMenuState.Unpaused;
+
         public PauseMenuState MenuState {
             get => _menuState;
             private set {
@@ -40,24 +40,34 @@ namespace Menus.Pause_Menu {
                 UpdatePauseGameState();
             }
         }
-        private RectTransform _rectTransform;
+
+        private void Start() {
+            animator = mainCanvas.GetComponent<Animator>();
+            seedText.text = Game.Instance.IsTerrainMap ? "SEED: " + Game.Instance.Seed : "";
+            _rectTransform = GetComponent<RectTransform>();
+
+            // basic non-paused without enabling input or playing sounds etc
+            Game.Instance.LockCursor();
+            backgroundCanvas.SetActive(false);
+            user.DisableUIInput();
+        }
+
+        public void OnPointerMove(PointerEventData eventData) {
+            if (
+                RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                    _rectTransform,
+                    eventData.position,
+                    eventData.enterEventCamera,
+                    out var canvasPosition)
+            )
+                cursor.OnPointerMove(canvasPosition);
+        }
 
         protected override void OnOpen() {
             _menuState = PauseMenuState.PausedMainMenu;
             mainPanel.Show();
         }
 
-        private void Start() {
-            animator = mainCanvas.GetComponent<Animator>();
-            seedText.text = Game.Instance.IsTerrainMap ? "SEED: " + Game.Instance.Seed : "";
-            _rectTransform = GetComponent<RectTransform>();
-            
-            // basic non-paused without enabling input or playing sounds etc
-            Game.Instance.LockCursor();
-            backgroundCanvas.SetActive(false);
-            user.DisableUIInput();
-        }
-        
         public void OnGameMenuToggle() {
             switch (MenuState) {
                 case PauseMenuState.Unpaused:
@@ -69,18 +79,6 @@ namespace Menus.Pause_Menu {
                 case PauseMenuState.PausedOptionsMenu:
                     optionsPanel.Cancel();
                     break;
-            }
-        }
-
-        public void OnPointerMove(PointerEventData eventData) {
-            if (
-                RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                    _rectTransform, 
-                    eventData.position, 
-                    eventData.enterEventCamera, 
-                    out var canvasPosition)
-                ) {
-                cursor.OnPointerMove(canvasPosition);
             }
         }
 
@@ -122,28 +120,28 @@ namespace Menus.Pause_Menu {
             var copyConfirmTransform = copyConfirmationText.transform;
             copyConfirmTransform.localPosition = new Vector3(copyConfirmTransform.localPosition.x, 55, copyConfirmTransform.position.z);
             copyConfirmationText.color = new Color(1f, 1f, 1f, 1f);
-            
+
             IEnumerator FadeText() {
                 while (copyConfirmationText.color.a > 0.0f) {
                     copyConfirmationText.color = new Color(1f, 1f, 1f, copyConfirmationText.color.a - Time.unscaledDeltaTime);
 
                     var localPosition = gameObject.transform.localPosition;
                     copyConfirmTransform.localPosition = new Vector3(
-                        localPosition.x + 160, 
-                        copyConfirmationText.gameObject.transform.localPosition.y + (Time.unscaledDeltaTime * 20), 
+                        localPosition.x + 160,
+                        copyConfirmationText.gameObject.transform.localPosition.y + Time.unscaledDeltaTime * 20,
                         localPosition.z
                     );
                     yield return null;
                 }
             }
-            
+
             StartCoroutine(FadeText());
         }
-        
+
         // toggle ship controller input and timescales
         private void UpdatePauseGameState() {
             switch (MenuState) {
-                case PauseMenuState.PausedMainMenu: 
+                case PauseMenuState.PausedMainMenu:
                     Game.Instance.PauseGameToggle(true);
                     cursor.OnPointerMove(Vector2.zero);
                     backgroundCanvas.SetActive(true);

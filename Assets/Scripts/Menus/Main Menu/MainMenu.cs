@@ -6,11 +6,9 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Users;
 using UnityEngine.SceneManagement;
 using UnityEngine.XR.Interaction.Toolkit;
-using Random = UnityEngine.Random;
 
 namespace Menus.Main_Menu {
     public class MainMenu : MonoBehaviour {
-
         // Animating the ship
         [SerializeField] private GameObject shipMesh;
 
@@ -19,7 +17,7 @@ namespace Menus.Main_Menu {
         [SerializeField] private Camera flatScreenCamera;
         [SerializeField] private Camera uiCamera;
         [SerializeField] private XRRig xrRig;
-        
+
         // Disconnection Handling
         [SerializeField] private TopMenu topMenu;
         [SerializeField] private DisconnectionDialog disconnectionDialog;
@@ -35,17 +33,6 @@ namespace Menus.Main_Menu {
             // }
         }
 
-        void OnEnable() {
-            SceneManager.sceneLoaded += OnEnvironmentLoadComplete;
-            Game.OnVRStatus += OnVRStatus;
-            StartCoroutine(MenuLoad());
-        }
-
-        private void OnDisable() {
-            SceneManager.sceneLoaded -= OnEnvironmentLoadComplete;
-            Game.OnVRStatus -= OnVRStatus;
-        }
-
         private void FixedUpdate() {
             // move along at a fixed rate to animate the stars
             // dirty hack job but who cares it's a menu screen
@@ -54,6 +41,17 @@ namespace Menus.Main_Menu {
             // gently rock the ship mesh back and forth
             var rotationAmount = (0.25f - Mathf.PingPong(Time.time / 20, 0.5f)) / 5;
             shipMesh.transform.Rotate(Vector3.forward, rotationAmount);
+        }
+
+        private void OnEnable() {
+            SceneManager.sceneLoaded += OnEnvironmentLoadComplete;
+            Game.OnVRStatus += OnVRStatus;
+            StartCoroutine(MenuLoad());
+        }
+
+        private void OnDisable() {
+            SceneManager.sceneLoaded -= OnEnvironmentLoadComplete;
+            Game.OnVRStatus -= OnVRStatus;
         }
 
         public void ShowDisconnectedDialog(string reason) {
@@ -74,11 +72,9 @@ namespace Menus.Main_Menu {
         }
 
         public void OnResetHMDView(InputValue inputValue) {
-            if (xrRig) {
-                Game.Instance.ResetHmdView(xrRig, xrRig.transform.parent);
-            }
+            if (xrRig) Game.Instance.ResetHmdView(xrRig, xrRig.transform.parent);
         }
-        
+
         public void OnVRStatus(bool isVREnabled) {
             // if VR is enabled, we need to swap our active cameras and make UI panels operate in world space
             if (isVREnabled) {
@@ -88,6 +84,7 @@ namespace Menus.Main_Menu {
                     canvasRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 1920);
                     canvasRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 1080);
                 }
+
                 canvas.transform.localScale = new Vector3(0.005f, 0.005f, 0.005f);
                 flatScreenCamera.enabled = false;
                 uiCamera.enabled = false;
@@ -101,30 +98,39 @@ namespace Menus.Main_Menu {
             }
         }
 
-        IEnumerator MenuLoad() {
+        private IEnumerator MenuLoad() {
             // input jank - disable and re-enable
             var playerInput = GetComponent<PlayerInput>();
             playerInput.user.ActivateControlScheme("Everything");
             playerInput.enabled = false;
-            
+
             // load engine if not already 
-            if (!FindObjectOfType<Engine>()) {
-                yield return SceneManager.LoadSceneAsync("Engine", LoadSceneMode.Additive);
-            }
-            
-            string sceneEnvironment = "Planet_Orbit_Bottom";
-            
+            if (!FindObjectOfType<Engine>()) yield return SceneManager.LoadSceneAsync("Engine", LoadSceneMode.Additive);
+
+            var sceneEnvironment = "Planet_Orbit_Bottom";
+
             if (!FirstRun) {
                 // If it's not the first run, switch up the title screen :D
-                int environmentIndex = Random.Range(0, 5);
+                var environmentIndex = Random.Range(0, 5);
                 switch (environmentIndex) {
-                    case 0: sceneEnvironment = "Planet_Orbit_Bottom"; break;
-                    case 1: sceneEnvironment = "Sunrise_Clear"; break;
-                    case 2: sceneEnvironment = "Noon_Clear"; break;
-                    case 3: sceneEnvironment = "Noon_Cloudy"; break;
-                    case 4: sceneEnvironment = "Sunset_Clear"; break;
+                    case 0:
+                        sceneEnvironment = "Planet_Orbit_Bottom";
+                        break;
+                    case 1:
+                        sceneEnvironment = "Sunrise_Clear";
+                        break;
+                    case 2:
+                        sceneEnvironment = "Noon_Clear";
+                        break;
+                    case 3:
+                        sceneEnvironment = "Noon_Cloudy";
+                        break;
+                    case 4:
+                        sceneEnvironment = "Sunset_Clear";
+                        break;
                 }
             }
+
             yield return SceneManager.LoadSceneAsync(sceneEnvironment, LoadSceneMode.Additive);
             yield return new WaitForEndOfFrame();
             Game.Instance.SetFlatScreenCameraControllerActive(false);
@@ -134,11 +140,9 @@ namespace Menus.Main_Menu {
 
             // enable input and forcefully pair ALL devices (I have no idea why we have to do this)
             playerInput.enabled = true;
-            foreach (var inputDevice in InputSystem.devices) {
-                if (!playerInput.devices.Contains(inputDevice)) {
+            foreach (var inputDevice in InputSystem.devices)
+                if (!playerInput.devices.Contains(inputDevice))
                     InputUser.PerformPairingWithDevice(inputDevice, playerInput.user);
-                }
-            }
         }
 
         private void OnEnvironmentLoadComplete(Scene scene, LoadSceneMode mode) {

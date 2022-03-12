@@ -1,18 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UI;
 using UnityEngine;
 
-public class ToggleOption : MonoBehaviour
-{
-
+public class ToggleOption : MonoBehaviour {
     public string Preference {
         get {
             var checkbox = GetComponentInChildren<Checkbox>(true);
             return checkbox ? checkbox.preference : "default-preference";
         }
     }
-    
+
     public bool IsEnabled {
         get {
             var checkbox = GetComponentInChildren<Checkbox>(true);
@@ -20,9 +16,7 @@ public class ToggleOption : MonoBehaviour
         }
         set {
             var checkbox = GetComponentInChildren<Checkbox>(true);
-            if (checkbox != null) {
-                checkbox.isChecked = value;
-            }
+            if (checkbox != null) checkbox.isChecked = value;
         }
     }
 }

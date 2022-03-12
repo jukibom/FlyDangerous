@@ -7,7 +7,6 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace Menus.Options {
-    
     public class OptionsMenu : MenuBase {
         public InputActionAsset actions;
         private SaveData _previousPrefs;
@@ -17,12 +16,10 @@ namespace Menus.Options {
         }
 
         public void ToggleVR() {
-            if (Game.Instance.IsVREnabled) {
+            if (Game.Instance.IsVREnabled)
                 Game.Instance.DisableVRIfNeeded();
-            }
-            else {
+            else
                 Game.Instance.EnableVR();
-            }
         }
 
         public void Apply() {
@@ -35,27 +32,34 @@ namespace Menus.Options {
         protected override void OnClose() {
             // not sure about this - the hack here is to save the preferences, compare with previous and revert if the user chooses to discard.
             SavePreferences();
-            if (_previousPrefs.ToJsonString() != Preferences.Instance.GetCurrent().ToJsonString()) {
+            if (_previousPrefs.ToJsonString() != Preferences.Instance.GetCurrent().ToJsonString())
                 Debug.Log("Discarded changed preferences! (TODO: confirmation dialog)");
-                // TODO: Confirmation dialog (if there is state to commit)
-            }
-            
+            // TODO: Confirmation dialog (if there is state to commit)
+
             RevertPreferences();
             Preferences.Instance.Save();
         }
 
         public void OnFlightAssistDefaultsChange(Dropdown dropdown) {
-            
             // if the game is running, apply the chosen defaults to the local player ship
             var player = FdPlayer.FindLocalShipPlayer;
             if (player) {
                 var preference = "";
                 switch (dropdown.value) {
-                    case 0: preference = "all on"; break;
-                    case 1: preference = "rotational assist only"; break;
-                    case 2: preference = "vector assist only"; break;
-                    case 3: preference = "all off"; break;
+                    case 0:
+                        preference = "all on";
+                        break;
+                    case 1:
+                        preference = "rotational assist only";
+                        break;
+                    case 2:
+                        preference = "vector assist only";
+                        break;
+                    case 3:
+                        preference = "all off";
+                        break;
                 }
+
                 player.SetFlightAssistDefaults(preference);
             }
         }
@@ -63,21 +67,15 @@ namespace Menus.Options {
         private void LoadPreferences() {
             Debug.Log("Load preferences");
             var toggleOptions = GetComponentsInChildren<ToggleOption>(true);
-            foreach (var toggleOption in toggleOptions) {
-                toggleOption.IsEnabled = Preferences.Instance.GetBool(toggleOption.Preference);
-            }
-            
+            foreach (var toggleOption in toggleOptions) toggleOption.IsEnabled = Preferences.Instance.GetBool(toggleOption.Preference);
+
             var dropdownOptions = GetComponentsInChildren<DropdownOption>(true);
-            foreach (var dropdownOption in dropdownOptions) {
-                if (dropdownOption.savePreference) {
+            foreach (var dropdownOption in dropdownOptions)
+                if (dropdownOption.savePreference)
                     dropdownOption.Value = Preferences.Instance.GetString(dropdownOption.Preference);
-                }
-            }
-            
+
             var sliderOptions = GetComponentsInChildren<SliderOption>(true);
-            foreach (var sliderOption in sliderOptions) {
-                sliderOption.Value = Preferences.Instance.GetFloat(sliderOption.preference);
-            }
+            foreach (var sliderOption in sliderOptions) sliderOption.Value = Preferences.Instance.GetFloat(sliderOption.preference);
 
             _previousPrefs = Preferences.Instance.GetCurrent().Clone();
         }
@@ -88,34 +86,25 @@ namespace Menus.Options {
         }
 
         private void SavePreferences() {
-
             Preferences.Instance.SetString("inputBindings", actions.SaveBindingOverridesAsJson());
 
             var toggleOptions = GetComponentsInChildren<ToggleOption>(true);
-            foreach (var toggleOption in toggleOptions) {
-                Preferences.Instance.SetBool(toggleOption.Preference, toggleOption.IsEnabled);
-            }
+            foreach (var toggleOption in toggleOptions) Preferences.Instance.SetBool(toggleOption.Preference, toggleOption.IsEnabled);
 
             var dropdownOptions = GetComponentsInChildren<DropdownOption>(true);
-            foreach (var dropdownOption in dropdownOptions) {
-                if (dropdownOption.savePreference) {
+            foreach (var dropdownOption in dropdownOptions)
+                if (dropdownOption.savePreference)
                     Preferences.Instance.SetString(dropdownOption.Preference, dropdownOption.Value);
-                }
-            }
-            
+
             var sliderOptions = GetComponentsInChildren<SliderOption>(true);
-            foreach (var sliderOption in sliderOptions) {
-                Preferences.Instance.SetFloat(sliderOption.preference, sliderOption.Value);
-            }
+            foreach (var sliderOption in sliderOptions) Preferences.Instance.SetFloat(sliderOption.preference, sliderOption.Value);
 
             Preferences.Instance.Save();
         }
 
         private void SetDebugFlightParameters() {
             var debugFlightOptions = GetComponentInChildren<DevPanel>(true);
-            if (debugFlightOptions) {
-                Game.Instance.ShipParameters = debugFlightOptions.GetFlightParams();
-            }
+            if (debugFlightOptions) Game.Instance.ShipParameters = debugFlightOptions.GetFlightParams();
         }
     }
 }

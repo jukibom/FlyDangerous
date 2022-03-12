@@ -5,35 +5,29 @@ using System.Linq;
 using Audio;
 using UI;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Menus.Options {
     public class ExpandingLine : MonoBehaviour {
-        private enum ExpandingLineDirection {
-            Open,
-            Close
-        }
-
         [SerializeField] private float animatePercentPerFrame = 0.01f;
         public bool isOpen;
         public Text icon;
-        
+
         // Primary Container (should have a canvas group for opacity)
         public GameObject container;
-        
+
         // Containers to iterate through in order to modify child element heights.
         // This may just contain the primary container children of it.
-        public List<GameObject> scaleElementsContainers; 
-        
-        // Map of child elements => initial (target) height
-        private Dictionary<RectTransform, float> _elements;
-
-        private float _currentAnimationHeightPercent;
+        public List<GameObject> scaleElementsContainers;
 
         private Coroutine _animation;
 
-        void Start() {
+        private float _currentAnimationHeightPercent;
+
+        // Map of child elements => initial (target) height
+        private Dictionary<RectTransform, float> _elements;
+
+        private void Start() {
             isOpen = false;
             container.SetActive(false);
         }
@@ -47,7 +41,7 @@ namespace Menus.Options {
                     .FindAll(rectTransform => rectTransform.transform.parent == childContainer.transform)
                 );
             });
-            
+
             // var children = container.GetComponentsInChildren<RectTransform>();
             if (_elements == null || _elements.Count != children.Count) {
                 _elements = new Dictionary<RectTransform, float>();
@@ -61,10 +55,7 @@ namespace Menus.Options {
         }
 
         private void HandleToggleLogic() {
-
-            if (_animation != null) {
-                StopCoroutine(_animation);
-            }
+            if (_animation != null) StopCoroutine(_animation);
 
             IEnumerator AnimatePanel(ExpandingLineDirection direction, Action onComplete = null) {
                 var canvasGroup = container.GetComponent<CanvasGroup>();
@@ -72,14 +63,15 @@ namespace Menus.Options {
                 float targetHeightPercent = direction == ExpandingLineDirection.Open ? 1 : 0;
                 float startingHeightPercent = direction == ExpandingLineDirection.Open ? 0 : 1;
                 // float currentAnimationHeightPercent = startingHeightPercent;
-                
-                bool HeightAssertion() =>
-                    startingHeightPercent > targetHeightPercent
+
+                bool HeightAssertion() {
+                    return startingHeightPercent > targetHeightPercent
                         ? _currentAnimationHeightPercent >= targetHeightPercent
                         : _currentAnimationHeightPercent <= targetHeightPercent;
+                }
 
-                float increment = animatePercentPerFrame * (direction == ExpandingLineDirection.Open ? 1 : -1);
-                
+                var increment = animatePercentPerFrame * (direction == ExpandingLineDirection.Open ? 1 : -1);
+
                 while (HeightAssertion()) {
                     foreach (var rectTransformHeightPair in _elements) {
                         var rectTransformCanonicalHeight = rectTransformHeightPair.Value;
@@ -122,9 +114,12 @@ namespace Menus.Options {
 
         private void RefreshView() {
             var parentContentFitters = GetComponentsInParent<ContentFitterRefresh>();
-            foreach (var contentFitterRefresh in parentContentFitters) {
-                contentFitterRefresh.RefreshContentFitters();
-            }
+            foreach (var contentFitterRefresh in parentContentFitters) contentFitterRefresh.RefreshContentFitters();
+        }
+
+        private enum ExpandingLineDirection {
+            Open,
+            Close
         }
     }
 }

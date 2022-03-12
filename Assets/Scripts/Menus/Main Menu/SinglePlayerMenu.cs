@@ -1,5 +1,4 @@
-﻿using Audio;
-using Core;
+﻿using Core;
 using UnityEngine;
 
 namespace Menus.Main_Menu {
@@ -12,7 +11,7 @@ namespace Menus.Main_Menu {
             Game.Instance.SessionStatus = SessionStatus.Offline;
             FdNetworkManager.Instance.StopAll();
         }
-        
+
         public void ClosePanel() {
             Cancel();
         }

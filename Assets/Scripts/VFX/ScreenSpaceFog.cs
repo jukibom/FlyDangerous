@@ -1,5 +1,6 @@
 using Core;
 using MapMagic.Core;
+using SCPE;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -17,7 +18,7 @@ namespace VFX {
             Game.OnGameSettingsApplied += OnGameSettingsApplied;
             Game.OnVRStatus += OnVRStatus;
         }
-    
+
         public void OnDisable() {
             Game.OnGameSettingsApplied -= OnGameSettingsApplied;
             Game.OnVRStatus -= OnVRStatus;
@@ -26,13 +27,13 @@ namespace VFX {
         private void OnGameSettingsApplied() {
 #if (NO_PAID_ASSETS == false)
             var mapMagic = FindObjectOfType<MapMagicObject>();
-            if (mapMagic && _volume.profile.TryGet<SCPE.Fog>(out var fog)) {
+            if (mapMagic && _volume.profile.TryGet<Fog>(out var fog)) {
                 var tileChunkCount = Preferences.Instance.GetFloat("graphics-terrain-chunks") + 1; // include drafts
                 var tileSize = mapMagic.tileSize.x;
-                
-                var fogEndDistance = (tileSize * tileChunkCount) - tileSize / 2;
-                var fogStartDistance = Mathf.Max(1000f, fogEndDistance - fogEndDistance / 1.5f); 
-                
+
+                var fogEndDistance = tileSize * tileChunkCount - tileSize / 2;
+                var fogStartDistance = Mathf.Max(1000f, fogEndDistance - fogEndDistance / 1.5f);
+
                 fog.fogEndDistance.Override(fogEndDistance);
                 fog.fogStartDistance.Override(fogStartDistance);
             }
@@ -45,9 +46,7 @@ namespace VFX {
 
         private void UseRadialFog(bool useRadialFog) {
 #if (NO_PAID_ASSETS == false)
-            if (_volume && _volume.profile.TryGet<SCPE.Fog>(out var fog)) {
-                fog.useRadialDistance.Override(useRadialFog);
-            }
+            if (_volume && _volume.profile.TryGet<Fog>(out var fog)) fog.useRadialDistance.Override(useRadialFog);
 #endif
         }
     }

@@ -1,12 +1,9 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using Core;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class GraphicsPanel : MonoBehaviour {
-
     [SerializeField] private Dropdown resolutionDropdown;
     [SerializeField] private Dropdown screenModeDropdown;
 
@@ -19,30 +16,27 @@ public class GraphicsPanel : MonoBehaviour {
 
         // Strip non-unique values (we don't care about refresh rate)
         var uniqueResolutions = new List<Resolution>();
-        foreach (var resolution in _resolutions) {
-            if (!uniqueResolutions.Exists(r => r.width == resolution.width && r.height == resolution.height)) {
+        foreach (var resolution in _resolutions)
+            if (!uniqueResolutions.Exists(r => r.width == resolution.width && r.height == resolution.height))
                 uniqueResolutions.Add(resolution);
-            }
-        }
         _resolutions = uniqueResolutions.ToArray();
-        
+
         resolutionDropdown.ClearOptions();
 
         var options = new List<string>();
         var currentResolutionIndex = 0;
-        
-        for (int i = 0; i < _resolutions.Length; i++) {
+
+        for (var i = 0; i < _resolutions.Length; i++) {
             var resolution = _resolutions[i];
             var option = resolution.width + " x " + resolution.height;
             options.Add(option);
-            
+
             if (resolution.width == Screen.width &&
                 resolution.height == Screen.height
-            ) {
+               )
                 currentResolutionIndex = i;
-            }
         }
-        
+
         resolutionDropdown.AddOptions(options);
         resolutionDropdown.value = currentResolutionIndex;
         resolutionDropdown.RefreshShownValue();
@@ -50,33 +44,40 @@ public class GraphicsPanel : MonoBehaviour {
         // handle screen mode (hard-coded ids)
         var mode = Screen.fullScreenMode;
         switch (mode) {
-            case FullScreenMode.FullScreenWindow: screenModeDropdown.value = 0; 
+            case FullScreenMode.FullScreenWindow:
+                screenModeDropdown.value = 0;
                 break;
-            case FullScreenMode.ExclusiveFullScreen: screenModeDropdown.value = 1; 
+            case FullScreenMode.ExclusiveFullScreen:
+                screenModeDropdown.value = 1;
                 break;
-            case FullScreenMode.Windowed: screenModeDropdown.value = 2; 
+            case FullScreenMode.Windowed:
+                screenModeDropdown.value = 2;
                 break;
-            default: screenModeDropdown.value = 0; 
+            default:
+                screenModeDropdown.value = 0;
                 break;
         }
+
         screenModeDropdown.RefreshShownValue();
     }
 
     public void OnResolutionChange(int resolutionIndex) {
-        if (!Game.Instance.IsVREnabled) {
-            Screen.SetResolution(_resolutions[resolutionIndex].width, _resolutions[resolutionIndex].height, _screenMode);
-        }
+        if (!Game.Instance.IsVREnabled) Screen.SetResolution(_resolutions[resolutionIndex].width, _resolutions[resolutionIndex].height, _screenMode);
     }
 
     public void OnScreenModeChange(int screenModeIndex) {
         switch (screenModeIndex) {
-            case 0: _screenMode = FullScreenMode.FullScreenWindow;
+            case 0:
+                _screenMode = FullScreenMode.FullScreenWindow;
                 break;
-            case 1: _screenMode = FullScreenMode.ExclusiveFullScreen;
+            case 1:
+                _screenMode = FullScreenMode.ExclusiveFullScreen;
                 break;
-            case 2: _screenMode = FullScreenMode.Windowed;
+            case 2:
+                _screenMode = FullScreenMode.Windowed;
                 break;
-            default: _screenMode = FullScreenMode.FullScreenWindow;
+            default:
+                _screenMode = FullScreenMode.FullScreenWindow;
                 break;
         }
 
