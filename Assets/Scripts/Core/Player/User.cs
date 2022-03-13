@@ -212,6 +212,7 @@ namespace Core.Player {
 
             // enable multiple input action sets
             playerInput.actions.FindActionMap("Ship").Disable();
+            playerInput.actions.FindActionMap("ShipArcade").Disable();
 
             movementEnabled = false;
             pauseMenuEnabled = false;
