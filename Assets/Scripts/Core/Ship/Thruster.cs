@@ -1,5 +1,6 @@
 ﻿using Misc;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace Core.Ship {
     public class Thruster : MonoBehaviour {
@@ -10,6 +11,7 @@ namespace Core.Ship {
         [SerializeField] private MeshRenderer thrusterRenderer;
         [SerializeField] private AudioSource audioSource;
         [SerializeField] private Light lightSource;
+        [SerializeField] private LensFlareComponentSRP lensFlare;
         [SerializeField] public Color thrustColor;
         [SerializeField] public Color thrustRingColor;
 
@@ -50,6 +52,7 @@ namespace Core.Ship {
             audioSource.volume = MathfExtensions.Remap(0, 1, 0, 0.2f, _thrust);
             audioSource.pitch = MathfExtensions.Remap(0, 1, 0.8f, 2f, _thrust);
             lightSource.intensity = MathfExtensions.Remap(0, 1, 0, 2, _thrust);
+            if (lensFlare != null) lensFlare.intensity = lightSource.intensity;
 
             if (isLarge) {
                 audioSource.volume *= 2;
