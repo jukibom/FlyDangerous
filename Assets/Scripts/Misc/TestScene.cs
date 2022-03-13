@@ -2,6 +2,7 @@ using System.Collections;
 using Core;
 using Core.MapData;
 using Core.Player;
+using Gameplay;
 using MapMagic.Core;
 using Mirror;
 using UnityEngine;
@@ -53,6 +54,10 @@ namespace Misc {
 
                 // apply graphics options
                 Game.Instance.ApplyGameOptions();
+
+                // if there's a track, initialise it
+                var track = FindObjectOfType<Track>();
+                if (track) track.InitialiseTrack();
 
                 // create a test other player
                 // CreateTestSecondShip();

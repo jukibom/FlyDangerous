@@ -1,8 +1,7 @@
 using System;
 using System.Linq;
 using Audio;
-using Game_UI;
-using Menus.Pause_Menu;
+using GameUI;
 using Misc;
 using UI;
 using UnityEngine;
@@ -10,30 +9,20 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.InputSystem.Users;
-using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
 
 namespace Core.Player {
     public class User : MonoBehaviour {
-        [SerializeField] public ShipPlayer shipPlayer;
-        [SerializeField] public ShipArcadeFlightComputer shipArcadeFlightComputer;
-
-        [SerializeField] public PauseMenu pauseMenu;
-        [SerializeField] public Canvas uiCanvas;
-        [SerializeField] public ShipCameraRig shipCameraRig;
-        [SerializeField] public XRRig xrRig;
-
-        [SerializeField] public InputSystemUIInputModule pauseUIInputModule;
-        [SerializeField] public MouseWidget mouseWidget;
-        [SerializeField] public TimeDisplay totalTimeDisplay;
-        [SerializeField] public TimeDisplay splitTimeDisplay;
-        [SerializeField] public TimeDisplay splitTimeDeltaDisplay;
-        [SerializeField] public TimeDisplay targetTimeDisplay;
-        [SerializeField] public Text targetTimeTypeDisplay;
+        [SerializeField] private ShipPlayer shipPlayer;
+        [SerializeField] private ShipArcadeFlightComputer shipArcadeFlightComputer;
+        [SerializeField] private ShipCameraRig shipCameraRig;
+        [SerializeField] private XRRig xrRig;
+        [SerializeField] private InputSystemUIInputModule pauseUIInputModule;
+        [SerializeField] private GameUI.GameUI gameUI;
 
         [SerializeField] public bool movementEnabled;
-        public bool pauseMenuEnabled = true;
-        public bool boostButtonEnabledOverride;
+        [SerializeField] public bool pauseMenuEnabled = true;
+        [SerializeField] public bool boostButtonEnabledOverride;
 
         private bool _alternateFlightControls;
         private bool _boost;
@@ -61,6 +50,8 @@ namespace Core.Player {
         private float _throttle;
         private float _yaw;
 
+        public GameUI.GameUI GameUI => gameUI;
+
         public Transform UserHeadTransform =>
             Game.Instance.IsVREnabled
                 ? xrRig.cameraGameObject.transform
@@ -72,7 +63,7 @@ namespace Core.Player {
          * Boostrap global ESC / cancel action in UI
          */
         public void Awake() {
-            _cancelAction = _ => { pauseMenu.OnGameMenuToggle(); };
+            _cancelAction = _ => { gameUI.PauseMenu.OnGameMenuToggle(); };
             DisableGameInput();
             ResetMouseToCentre();
         }
@@ -102,7 +93,7 @@ namespace Core.Player {
 
                 // handle mouse flight input
                 if (
-                    !pauseMenu.IsPaused &&
+                    !gameUI.PauseMenu.IsPaused &&
                     !_mouseLookActive &&
                     Preferences.Instance.GetBool("enableMouseFlightControls")
                 ) {
@@ -179,8 +170,8 @@ namespace Core.Player {
                 playerInput.currentActionMap = advancedControlActionMap ?? playerInput.currentActionMap;
             }
             else {
-                var advancedControlActionMap = playerInput.actions.FindActionMap("ShipArcade");
-                playerInput.currentActionMap = advancedControlActionMap ?? playerInput.currentActionMap;
+                var arcadeActionMap = playerInput.actions.FindActionMap("ShipArcade");
+                playerInput.currentActionMap = arcadeActionMap ?? playerInput.currentActionMap;
             }
 
             // enable multiple input action sets
@@ -215,7 +206,6 @@ namespace Core.Player {
             playerInput.actions.FindActionMap("ShipArcade").Disable();
 
             movementEnabled = false;
-            pauseMenuEnabled = false;
             boostButtonEnabledOverride = false;
 
             // clear inputs
@@ -239,40 +229,12 @@ namespace Core.Player {
 
         public void SetVRStatus(bool isVREnabled) {
             // if VR is enabled, we need to swap our active cameras and make UI panels operate in world space
+            gameUI.SetMode(isVREnabled ? GameUIMode.VR : GameUIMode.Pancake);
             if (isVREnabled) {
-                var pauseMenuCanvas = pauseMenu.GetComponent<Canvas>();
-                pauseMenuCanvas.renderMode = RenderMode.WorldSpace;
-                uiCanvas.renderMode = RenderMode.WorldSpace;
-                var pauseMenuRect = pauseMenuCanvas.GetComponent<RectTransform>();
-                var uiRect = uiCanvas.GetComponent<RectTransform>();
-
-                pauseMenuRect.localScale = new Vector3(0.001f, 0.001f, 0.001f);
-                uiRect.localScale = new Vector3(0.001f, 0.001f, 0.001f);
-
-                pauseMenuRect.localRotation = Quaternion.identity;
-                uiRect.localRotation = Quaternion.identity;
-
-                pauseMenuRect.localPosition = new Vector3(0, 0.3f, 0.5f);
-                uiRect.localPosition = new Vector3(0, 0.3f, 0.5f);
-
-                pauseMenuRect.sizeDelta = new Vector2(1280, 1000);
-                uiRect.sizeDelta = new Vector2(1280, 1000);
-
                 Game.Instance.SetFlatScreenCameraControllerActive(false);
                 xrRig.gameObject.SetActive(true);
             }
             else {
-                var pauseMenuCanvas = pauseMenu.GetComponent<Canvas>();
-                pauseMenuCanvas.renderMode = RenderMode.ScreenSpaceCamera;
-                uiCanvas.renderMode = RenderMode.ScreenSpaceCamera;
-                var pauseMenuRect = pauseMenuCanvas.GetComponent<RectTransform>();
-                var uiRect = uiCanvas.GetComponent<RectTransform>();
-
-                pauseMenuRect.localScale = Vector3.one;
-                uiRect.localScale = Vector3.one;
-                pauseMenuRect.position = Vector3.zero;
-                pauseMenuRect.sizeDelta = new Vector2(1920, 1080);
-
                 Game.Instance.SetFlatScreenCameraControllerActive(true);
                 xrRig.gameObject.SetActive(false);
             }
@@ -285,7 +247,8 @@ namespace Core.Player {
             _mousePositionScreen = warpedPosition;
             _mousePositionNormalized = new Vector2(0, 0);
             _mousePositionDelta = new Vector2(0, 0);
-            mouseWidget.ResetToCentre();
+            gameUI.MouseWidgetScreen.ResetToCentre();
+            gameUI.MouseWidgetWorld.ResetToCentre();
         }
 
         /**
@@ -293,7 +256,7 @@ namespace Core.Player {
          * UI Requires additional bootstrap as above because UI events in Unity are fucking bonkers.
          */
         public void OnShowGameMenu() {
-            if (pauseMenuEnabled) pauseMenu.OnGameMenuToggle();
+            if (pauseMenuEnabled) gameUI.PauseMenu.OnGameMenuToggle();
         }
 
         public void OnRestartTrack() {
@@ -548,7 +511,8 @@ namespace Core.Player {
                 mouseXIsRelative ? relativeMouse.x / Screen.width : continuousMouseX,
                 mouseYIsRelative ? relativeMouse.y / Screen.height : continuousMouseY
             );
-            mouseWidget.UpdateWidgetSprites(widgetPosition);
+            gameUI.MouseWidgetWorld.UpdateWidgetSprites(widgetPosition);
+            gameUI.MouseWidgetScreen.UpdateWidgetSprites(widgetPosition);
 
             // store relative rate for relative return rate next frame
             _previousRelativeRate.x = Mathf.Clamp(relativeMouse.x, -Screen.width, Screen.width);

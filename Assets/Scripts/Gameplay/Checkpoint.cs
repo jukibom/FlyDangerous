@@ -1,3 +1,4 @@
+using Gameplay;
 using UnityEngine;
 
 public enum CheckpointType {

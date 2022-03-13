@@ -3,11 +3,12 @@ using Core;
 using Core.Player;
 using Menus.Main_Menu;
 using Menus.Options;
+using Menus.Pause_Menu;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace Menus.Pause_Menu {
+namespace GameUI {
     public enum PauseMenuState {
         Unpaused,
         PausedMainMenu,

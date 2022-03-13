@@ -1,5 +1,6 @@
 ﻿using Core;
 using Core.Player;
+using GameUI;
 using UI;
 using UnityEngine;
 using UnityEngine.UI;

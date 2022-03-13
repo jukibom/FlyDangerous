@@ -1,9 +1,9 @@
 using System.Collections.Generic;
-using Core;
 using Core.Player;
+using Game_UI;
 using UnityEngine;
 
-namespace Game_UI {
+namespace Core.Ship {
     public class TargettingSystem : MonoBehaviour {
         [SerializeField] private Target targetPrefab;
         private readonly Dictionary<ShipPlayer, Target> _players = new();
