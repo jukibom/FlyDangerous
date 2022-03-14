@@ -1,4 +1,3 @@
-using System;
 using Game_UI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,6 +21,7 @@ namespace GameUI {
 
         private void OnEnable() {
             _canvasGroup = GetComponent<CanvasGroup>();
+            HideTimers();
         }
 
         public void ShowTimers(bool animate = true) {
