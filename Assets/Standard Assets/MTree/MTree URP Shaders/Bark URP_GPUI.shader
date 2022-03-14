@@ -53,6 +53,12 @@ Shader "GPUInstancer/Mtree/SRP/Bark URP"
 			
 
 			HLSLPROGRAM
+#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+
+#include "./../../GPUInstancer/Shaders/Include/GPUInstancerInclude.cginc"
+#pragma instancing_options procedural:setupGPUI
+#pragma multi_compile_instancing
+
 			#pragma multi_compile _ LOD_FADE_CROSSFADE
 			#pragma multi_compile_fog
 			#define ASE_FOG 1
@@ -386,11 +392,7 @@ Shader "GPUInstancer/Mtree/SRP/Bark URP"
 				return color;
 			}
 
-			
-#include "./../../GPUInstancer/Shaders/Include/GPUInstancerInclude.cginc"
-#pragma instancing_options procedural:setupGPUI
-#pragma multi_compile_instancing
-ENDHLSL
+			ENDHLSL
 		}
 
 		
@@ -404,6 +406,12 @@ ENDHLSL
 			ZTest LEqual
 
 			HLSLPROGRAM
+#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+
+#include "./../../GPUInstancer/Shaders/Include/GPUInstancerInclude.cginc"
+#pragma instancing_options procedural:setupGPUI
+#pragma multi_compile_instancing
+
 			#pragma multi_compile _ LOD_FADE_CROSSFADE
 			#pragma multi_compile_fog
 			#define ASE_FOG 1
@@ -629,11 +637,7 @@ ENDHLSL
 				return 0;
 			}
 
-			
-#include "./../../GPUInstancer/Shaders/Include/GPUInstancerInclude.cginc"
-#pragma instancing_options procedural:setupGPUI
-#pragma multi_compile_instancing
-ENDHLSL
+			ENDHLSL
 		}
 
 		
@@ -647,6 +651,12 @@ ENDHLSL
 			ColorMask 0
 
 			HLSLPROGRAM
+#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+
+#include "./../../GPUInstancer/Shaders/Include/GPUInstancerInclude.cginc"
+#pragma instancing_options procedural:setupGPUI
+#pragma multi_compile_instancing
+
 			#pragma multi_compile _ LOD_FADE_CROSSFADE
 			#pragma multi_compile_fog
 			#define ASE_FOG 1
@@ -862,11 +872,7 @@ ENDHLSL
 				#endif
 				return 0;
 			}
-			
-#include "./../../GPUInstancer/Shaders/Include/GPUInstancerInclude.cginc"
-#pragma instancing_options procedural:setupGPUI
-#pragma multi_compile_instancing
-ENDHLSL
+			ENDHLSL
 		}
 
 		
@@ -879,6 +885,12 @@ ENDHLSL
 			Cull Off
 
 			HLSLPROGRAM
+#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+
+#include "./../../GPUInstancer/Shaders/Include/GPUInstancerInclude.cginc"
+#pragma instancing_options procedural:setupGPUI
+#pragma multi_compile_instancing
+
 			#pragma multi_compile _ LOD_FADE_CROSSFADE
 			#pragma multi_compile_fog
 			#define ASE_FOG 1
@@ -1115,11 +1127,7 @@ ENDHLSL
 				
 				return MetaFragment(metaInput);
 			}
-			
-#include "./../../GPUInstancer/Shaders/Include/GPUInstancerInclude.cginc"
-#pragma instancing_options procedural:setupGPUI
-#pragma multi_compile_instancing
-ENDHLSL
+			ENDHLSL
 		}
 
 		
@@ -1136,6 +1144,12 @@ ENDHLSL
 			ColorMask RGBA
 
 			HLSLPROGRAM
+#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+
+#include "./../../GPUInstancer/Shaders/Include/GPUInstancerInclude.cginc"
+#pragma instancing_options procedural:setupGPUI
+#pragma multi_compile_instancing
+
 			#pragma multi_compile _ LOD_FADE_CROSSFADE
 			#pragma multi_compile_fog
 			#define ASE_FOG 1
@@ -1372,11 +1386,7 @@ ENDHLSL
 
 				return color;
 			}
-			
-#include "./../../GPUInstancer/Shaders/Include/GPUInstancerInclude.cginc"
-#pragma instancing_options procedural:setupGPUI
-#pragma multi_compile_instancing
-ENDHLSL
+			ENDHLSL
 		}
 		
 	}

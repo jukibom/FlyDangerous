@@ -1,8 +1,10 @@
 using System.Collections;
+using Cinemachine;
 using Core;
 using Core.MapData;
 using Core.Player;
 using Gameplay;
+using GPUInstancer;
 using MapMagic.Core;
 using Mirror;
 using UnityEngine;
@@ -26,6 +28,12 @@ namespace Misc {
             IEnumerator StartGame() {
                 // allow game state to initialise
                 yield return new WaitForEndOfFrame();
+
+#if !NO_PAID_ASSETS
+                // gpu instancer fun (paid asset!)
+                var cam = FindObjectOfType<CinemachineBrain>().gameObject.GetComponent<Camera>();
+                GPUInstancerAPI.SetCamera(cam);
+#endif
 
                 // instruct the server to create a ship player immediately on start
                 Game.Instance.SessionStatus = SessionStatus.Development;
