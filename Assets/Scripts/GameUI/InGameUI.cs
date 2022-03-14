@@ -1,17 +1,14 @@
 using Core.Ship;
 using Game_UI;
-using Menus.Pause_Menu;
 using UnityEngine;
 
 namespace GameUI {
-
     public enum GameUIMode {
         Pancake,
         VR
     }
-    
-    public class GameUI : MonoBehaviour {
-        
+
+    public class InGameUI : MonoBehaviour {
         [SerializeField] private Canvas screenSpaceCanvas;
         [SerializeField] private Canvas worldSpaceCanvas;
         [SerializeField] private DebugUI debugUI;

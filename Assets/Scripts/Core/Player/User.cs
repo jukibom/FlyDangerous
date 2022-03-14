@@ -18,7 +18,7 @@ namespace Core.Player {
         [SerializeField] private ShipCameraRig shipCameraRig;
         [SerializeField] private XRRig xrRig;
         [SerializeField] private InputSystemUIInputModule pauseUIInputModule;
-        [SerializeField] private GameUI.GameUI gameUI;
+        [SerializeField] private InGameUI inGameUI;
 
         [SerializeField] public bool movementEnabled;
         [SerializeField] public bool pauseMenuEnabled = true;
@@ -50,7 +50,7 @@ namespace Core.Player {
         private float _throttle;
         private float _yaw;
 
-        public GameUI.GameUI GameUI => gameUI;
+        public InGameUI InGameUI => inGameUI;
 
         public Transform UserHeadTransform =>
             Game.Instance.IsVREnabled
@@ -63,7 +63,7 @@ namespace Core.Player {
          * Boostrap global ESC / cancel action in UI
          */
         public void Awake() {
-            _cancelAction = _ => { gameUI.PauseMenu.OnGameMenuToggle(); };
+            _cancelAction = _ => { inGameUI.PauseMenu.OnGameMenuToggle(); };
             DisableGameInput();
             ResetMouseToCentre();
         }
@@ -93,7 +93,7 @@ namespace Core.Player {
 
                 // handle mouse flight input
                 if (
-                    !gameUI.PauseMenu.IsPaused &&
+                    !inGameUI.PauseMenu.IsPaused &&
                     !_mouseLookActive &&
                     Preferences.Instance.GetBool("enableMouseFlightControls")
                 ) {
@@ -229,7 +229,7 @@ namespace Core.Player {
 
         public void SetVRStatus(bool isVREnabled) {
             // if VR is enabled, we need to swap our active cameras and make UI panels operate in world space
-            gameUI.SetMode(isVREnabled ? GameUIMode.VR : GameUIMode.Pancake);
+            inGameUI.SetMode(isVREnabled ? GameUIMode.VR : GameUIMode.Pancake);
             if (isVREnabled) {
                 Game.Instance.SetFlatScreenCameraControllerActive(false);
                 xrRig.gameObject.SetActive(true);
@@ -247,8 +247,8 @@ namespace Core.Player {
             _mousePositionScreen = warpedPosition;
             _mousePositionNormalized = new Vector2(0, 0);
             _mousePositionDelta = new Vector2(0, 0);
-            gameUI.MouseWidgetScreen.ResetToCentre();
-            gameUI.MouseWidgetWorld.ResetToCentre();
+            inGameUI.MouseWidgetScreen.ResetToCentre();
+            inGameUI.MouseWidgetWorld.ResetToCentre();
         }
 
         /**
@@ -256,7 +256,7 @@ namespace Core.Player {
          * UI Requires additional bootstrap as above because UI events in Unity are fucking bonkers.
          */
         public void OnShowGameMenu() {
-            if (pauseMenuEnabled) gameUI.PauseMenu.OnGameMenuToggle();
+            if (pauseMenuEnabled) inGameUI.PauseMenu.OnGameMenuToggle();
         }
 
         public void OnRestartTrack() {
@@ -511,8 +511,8 @@ namespace Core.Player {
                 mouseXIsRelative ? relativeMouse.x / Screen.width : continuousMouseX,
                 mouseYIsRelative ? relativeMouse.y / Screen.height : continuousMouseY
             );
-            gameUI.MouseWidgetWorld.UpdateWidgetSprites(widgetPosition);
-            gameUI.MouseWidgetScreen.UpdateWidgetSprites(widgetPosition);
+            inGameUI.MouseWidgetWorld.UpdateWidgetSprites(widgetPosition);
+            inGameUI.MouseWidgetScreen.UpdateWidgetSprites(widgetPosition);
 
             // store relative rate for relative return rate next frame
             _previousRelativeRate.x = Mathf.Clamp(relativeMouse.x, -Screen.width, Screen.width);

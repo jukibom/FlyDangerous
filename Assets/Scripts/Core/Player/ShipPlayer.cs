@@ -488,6 +488,7 @@ namespace Core.Player {
             _shipIndicatorData.gForce = _gforce;
 
             Ship?.UpdateIndicators(_shipIndicatorData);
+            User.InGameUI.ShipStats.UpdateIndicators(_shipIndicatorData);
         }
 
         #endregion

@@ -16,6 +16,7 @@ namespace Gameplay {
         [SerializeField] public CameraType cameraType;
         [SerializeField] public Vector3 maxOffset = Vector3.one;
         [SerializeField] public bool useLowPassAudio;
+        [SerializeField] public bool showShipDataUI = true;
 
         public float smoothSpeed = 0.1f;
         private float _baseFov;

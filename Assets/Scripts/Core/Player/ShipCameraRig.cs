@@ -13,7 +13,7 @@ namespace Core.Player {
     public class ShipCameraRig : MonoBehaviour {
         private static readonly Vector3 baseTargetPosition = new(0, 0, 20);
 
-
+        [SerializeField] public User user;
         [SerializeField] public List<ShipCamera> cameras;
         [SerializeField] private Transform cameraTarget;
         private Vector3 _cameraOffset;
@@ -122,6 +122,7 @@ namespace Core.Player {
             if (ActiveCamera != null) ActiveCamera.SetCameraActive(false);
             Reset();
             ActiveCamera = newCamera;
+            user.InGameUI.ShipStats.SetStatsVisible(newCamera.showShipDataUI);
             ActiveCamera.SetCameraActive(true);
         }
     }

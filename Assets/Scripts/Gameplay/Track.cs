@@ -39,7 +39,7 @@ namespace Gameplay {
                 if (_timers == null) {
                     var ship = FdPlayer.FindLocalShipPlayer;
                     if (ship) {
-                        _timers = ship.User.GameUI.Timers;
+                        _timers = ship.User.InGameUI.Timers;
                         UpdateTargetTimeElements();
                     }
                 }

@@ -26,11 +26,11 @@ namespace Core.Ship {
         [SerializeField] private Image shipLightIcon;
         [SerializeField] private Text gForceNumberText;
 
-        private readonly Color32 activeColor = new(0, 153, 225, 255);
-        private readonly Color32 disabledColor = new(39, 72, 91, 255);
-        private readonly Color32 notificationColor = new(195, 195, 30, 255);
-        private readonly Color32 positiveColor = new(30, 195, 28, 255);
-        private readonly Color32 warningColor = new(195, 28, 30, 255);
+        private readonly Color32 _activeColor = new(0, 153, 225, 255);
+        private readonly Color32 _disabledColor = new(39, 72, 91, 255);
+        private readonly Color32 _notificationColor = new(195, 195, 30, 255);
+        private readonly Color32 _positiveColor = new(30, 195, 28, 255);
+        private readonly Color32 _warningColor = new(195, 28, 30, 255);
 
         // Lerping fun
         private float _previousAccelerationBarAmount;
@@ -49,16 +49,16 @@ namespace Core.Ship {
         public override void UpdateIndicators(ShipIndicatorData shipIndicatorData) {
             #region Simple Indicators
 
-            vectorAssistIcon.color = shipIndicatorData.vectorFlightAssistActive ? positiveColor : warningColor;
+            vectorAssistIcon.color = shipIndicatorData.vectorFlightAssistActive ? _positiveColor : _warningColor;
             vectorAssistText.text = shipIndicatorData.vectorFlightAssistActive ? "VFA\nON" : "VFA\nOFF";
 
-            rotationalAssistIcon.color = shipIndicatorData.rotationalFlightAssistActive ? positiveColor : warningColor;
+            rotationalAssistIcon.color = shipIndicatorData.rotationalFlightAssistActive ? _positiveColor : _warningColor;
             rotationAssistText.text = shipIndicatorData.rotationalFlightAssistActive ? "RFA\nON" : "RFA\nOFF";
 
-            velocityLimiterIcon.color = shipIndicatorData.velocityLimiterActive ? activeColor : disabledColor;
+            velocityLimiterIcon.color = shipIndicatorData.velocityLimiterActive ? _activeColor : _disabledColor;
             velocityLimiterText.text = shipIndicatorData.velocityLimiterActive ? "V-LIM\nON" : "V-LIM\nOFF";
 
-            shipLightIcon.color = shipIndicatorData.lightsActive ? activeColor : disabledColor;
+            shipLightIcon.color = shipIndicatorData.lightsActive ? _activeColor : _disabledColor;
 
             #endregion
 
@@ -78,10 +78,10 @@ namespace Core.Ship {
             // if reverse, switch to a yellow colour and invert
             accelerationBar.transform.localRotation = Quaternion.Euler(0, 0, 45);
             accelerationBar.fillClockwise = true;
-            var accelerationBarBaseActiveColor = activeColor;
+            var accelerationBarBaseActiveColor = _activeColor;
             if (shipIndicatorData.vectorFlightAssistActive && accelerationBarAmount < 0) {
-                accelerationBar.color = notificationColor;
-                accelerationBarBaseActiveColor = notificationColor;
+                accelerationBar.color = _notificationColor;
+                accelerationBarBaseActiveColor = _notificationColor;
                 accelerationBar.transform.localRotation = Quaternion.Euler(0, 0, 135);
                 accelerationBar.fillClockwise = false;
             }
@@ -92,7 +92,7 @@ namespace Core.Ship {
 
             // fade to red near end of bar 
             if (accelerationDrawFillAmount > 0.7f)
-                accelerationBar.color = Color.Lerp(accelerationBarBaseActiveColor, warningColor,
+                accelerationBar.color = Color.Lerp(accelerationBarBaseActiveColor, _warningColor,
                     MathfExtensions.Remap(0.95f, 1, 0, 1, accelerationDrawFillAmount));
             else
                 accelerationBar.color = accelerationBarBaseActiveColor;
@@ -109,7 +109,7 @@ namespace Core.Ship {
             );
 
             if (shipIndicatorData.boostCapacitorPercent > 80)
-                boostCapacitorBar.color = Color.Lerp(activeColor, positiveColor,
+                boostCapacitorBar.color = Color.Lerp(_activeColor, _positiveColor,
                     MathfExtensions.Remap(
                         80,
                         90,
@@ -117,13 +117,13 @@ namespace Core.Ship {
                     )
                 );
             else if (shipIndicatorData.boostCapacitorPercent < 30f)
-                boostCapacitorBar.color = Color.Lerp(activeColor, warningColor,
+                boostCapacitorBar.color = Color.Lerp(_activeColor, _warningColor,
                     MathfExtensions.Remap(30, 15, 0, 1, shipIndicatorData.boostCapacitorPercent));
             else
-                boostCapacitorBar.color = activeColor;
+                boostCapacitorBar.color = _activeColor;
 
-            var boostWarningColor = shipIndicatorData.boostTimerReady ? notificationColor : warningColor;
-            boostReadyIcon.color = shipIndicatorData.boostTimerReady && shipIndicatorData.boostChargeReady ? positiveColor : boostWarningColor;
+            var boostWarningColor = shipIndicatorData.boostTimerReady ? _notificationColor : _warningColor;
+            boostReadyIcon.color = shipIndicatorData.boostTimerReady && shipIndicatorData.boostChargeReady ? _positiveColor : boostWarningColor;
             boostChargeText.text = shipIndicatorData.boostTimerReady && shipIndicatorData.boostChargeReady
                 ? "BOOST READY"
                 : !shipIndicatorData.boostTimerReady
