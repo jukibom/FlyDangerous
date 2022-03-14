@@ -28,14 +28,19 @@ namespace GameUI {
         // Lerping fun
         private float _previousAccelerationBarAmount;
         private float _previousGForce;
+        private float _targetUIAlpha;
+
+        private void FixedUpdate() {
+            // _canvasGroup.alpha = Mathf.Lerp(_canvasGroup.alpha, _targetUIAlpha, 0.1f);
+            _canvasGroup.alpha = Mathf.Clamp(_canvasGroup.alpha + _targetUIAlpha * Time.fixedDeltaTime * 2, 0, 1);
+        }
 
         private void OnEnable() {
             _canvasGroup = GetComponent<CanvasGroup>();
         }
 
         public void SetStatsVisible(bool visible) {
-            // TODO: shiny blendy magic yay
-            _canvasGroup.alpha = visible ? 1 : 0;
+            _targetUIAlpha = visible ? 1 : -1;
         }
 
         public void UpdateIndicators(ShipIndicatorData shipIndicatorData) {
