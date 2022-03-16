@@ -27,14 +27,14 @@ This project aims to provide a ground-up reimplementation of a similar-enough fl
 
 ## Building
 
-Unity build: 2021.2.7f1
+Unity build: 2021.2.14f1
 
 The release build is reliant on some paid assets (follow instructions underneath to build without for dev purposes!):
 
 * Map Magic 2 Bundle 2.1.8 - https://assetstore.unity.com/packages/tools/terrain/mapmagic-2-bundle-178682 
 * AllSky 5.1.0 - https://assetstore.unity.com/packages/2d/textures-materials/sky/allsky-200-sky-skybox-set-10109
 * SC Post Effects 2.1.9 - https://assetstore.unity.com/packages/vfx/shaders/fullscreen-camera-effects/sc-post-effects-pack-108753
-* GPU Instancer 1.7.0 - https://assetstore.unity.com/packages/tools/utilities/gpu-instancer-117566
+* GPU Instancer 1.7.2 - https://assetstore.unity.com/packages/tools/utilities/gpu-instancer-117566
 
 **IF YOU DO NOT HAVE THESE ASSETS** (and, why would you?) and do not wish to buy them, follow these instructions to build:
 
