@@ -55,7 +55,15 @@ namespace Core {
          * performance hit and disable culling until the next render update.
          */
         private IEnumerator HandleGPUCulling() {
+            // Store and restore whatever the settings in the editor were
+            var shouldFrustumCullTrees = false;
+            var shouldOcclusionCullTrees = false;
+            var shouldFrustumCullDetails = false;
+            var shouldOcclusionCullDetails = false;
+
             if (GPUInstancerTreeManager) {
+                shouldFrustumCullTrees = GPUInstancerTreeManager.isFrustumCulling;
+                shouldOcclusionCullTrees = GPUInstancerTreeManager.isOcclusionCulling;
                 GPUInstancerTreeManager.isFrustumCulling = false;
                 GPUInstancerTreeManager.isOcclusionCulling = false;
             }
@@ -64,6 +72,8 @@ namespace Core {
             if (mapMagicObject != null) {
                 mapMagicObject.GetComponentsInChildren(false, _detailManagers);
                 foreach (var gpuInstancerDetailManager in _detailManagers) {
+                    shouldFrustumCullDetails = gpuInstancerDetailManager.isFrustumCulling;
+                    shouldOcclusionCullDetails = gpuInstancerDetailManager.isOcclusionCulling;
                     gpuInstancerDetailManager.isFrustumCulling = false;
                     gpuInstancerDetailManager.isOcclusionCulling = false;
                 }
@@ -72,13 +82,13 @@ namespace Core {
             yield return new WaitForEndOfFrame();
 
             if (GPUInstancerTreeManager) {
-                GPUInstancerTreeManager.isFrustumCulling = true;
-                GPUInstancerTreeManager.isOcclusionCulling = true;
+                GPUInstancerTreeManager.isFrustumCulling = shouldFrustumCullTrees;
+                GPUInstancerTreeManager.isOcclusionCulling = shouldOcclusionCullTrees;
             }
 
             foreach (var gpuInstancerDetailManager in _detailManagers) {
-                gpuInstancerDetailManager.isFrustumCulling = true;
-                gpuInstancerDetailManager.isOcclusionCulling = true;
+                gpuInstancerDetailManager.isFrustumCulling = shouldFrustumCullDetails;
+                gpuInstancerDetailManager.isOcclusionCulling = shouldOcclusionCullDetails;
             }
         }
 #endif
