@@ -4,11 +4,13 @@ using Core;
 using Core.MapData;
 using Core.Player;
 using Gameplay;
-using GPUInstancer;
 using MapMagic.Core;
 using Mirror;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+#if !NO_PAID_ASSETS
+using GPUInstancer;
+#endif
 
 namespace Misc {
     /**

@@ -1,7 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Core.Player;
+using Misc;
 using UnityEngine;
+#if !NO_PAID_ASSETS
+using GPUInstancer;
+#endif
 
 namespace Core.Ship {
     /**
@@ -11,6 +15,7 @@ namespace Core.Ship {
         [SerializeField] private ThrusterController thrusterController;
         [SerializeField] private Light shipLights;
         [SerializeField] private SmokeEmitter smokeEmitter;
+        [SerializeField] public CapsuleCollider foliageCollider;
 
         [SerializeField] private List<MeshRenderer> primaryColorMeshes = new();
         [SerializeField] private List<MeshRenderer> accentColorMeshes = new();
@@ -26,6 +31,28 @@ namespace Core.Ship {
 
         private Coroutine _boostCoroutine;
         private ShipShake _shipShake;
+
+        public virtual void Start() {
+            // Init GPU Instance removal colliders 
+#if !NO_PAID_ASSETS
+            var grassInstanceRemover = foliageCollider.gameObject.AddComponent<GPUInstancerInstanceRemover>();
+            grassInstanceRemover.selectedColliders = new List<Collider> { foliageCollider };
+            grassInstanceRemover.removeFromDetailManagers = true;
+            grassInstanceRemover.removeFromPrefabManagers = false;
+            grassInstanceRemover.removeFromTreeManagers = false;
+            grassInstanceRemover.offset = 15;
+            grassInstanceRemover.removeAtUpdate = true;
+            grassInstanceRemover.useBounds = true;
+
+            var treeInstanceRemover = foliageCollider.gameObject.AddComponent<GPUInstancerInstanceRemover>();
+            treeInstanceRemover.selectedColliders = new List<Collider> { foliageCollider };
+            treeInstanceRemover.removeFromDetailManagers = false;
+            treeInstanceRemover.removeFromPrefabManagers = false;
+            treeInstanceRemover.removeFromTreeManagers = true;
+            treeInstanceRemover.removeAtUpdate = true;
+            treeInstanceRemover.useBounds = true;
+#endif
+        }
 
         public virtual void FixedUpdate() {
             _shipShake.Update();
@@ -91,6 +118,7 @@ namespace Core.Ship {
         public virtual void UpdateMotionInformation(Vector3 velocity, float maxVelocity, Vector3 force, Vector3 torque) {
             thrusterController.UpdateThrusters(force, torque);
             smokeEmitter.UpdateThrustTrail(velocity, maxVelocity, force);
+            foliageCollider.radius = MathfExtensions.Remap(0, maxVelocity / 2, 4, 15, velocity.magnitude);
         }
 
         #endregion

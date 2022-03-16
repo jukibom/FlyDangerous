@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
-using GPUInstancer;
 using JetBrains.Annotations;
 using MapMagic.Core;
 using UnityEngine;
+#if !NO_PAID_ASSETS
+using GPUInstancer;
+#endif
 
 namespace Core {
     public class World : MonoBehaviour {

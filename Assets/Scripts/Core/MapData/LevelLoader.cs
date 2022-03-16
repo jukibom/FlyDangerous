@@ -6,12 +6,14 @@ using Cinemachine;
 using Core.Player;
 using Den.Tools;
 using Gameplay;
-using GPUInstancer;
 using MapMagic.Core;
 using Misc;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+#if !NO_PAID_ASSETS
+using GPUInstancer;
+#endif
 
 namespace Core.MapData {
     public class LevelLoader : MonoBehaviour {
