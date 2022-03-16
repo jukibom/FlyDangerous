@@ -49,13 +49,14 @@ namespace Core {
         public bool GetDefaultBool(string key) {
             switch (key) {
                 case "showSpaceDust":
-                case "enableMouseFlightControls":
-                case "showMouseWidget":
+                case "threeAxesMode":
                 case "graphics-ssao":
                 case "graphics-terrain-details":
                     return true;
 
                 case "useAdvancedControlScheme":
+                case "enableMouseFlightControls":
+                case "showMouseWidget":
                 case "relativeMouseXAxis":
                 case "relativeMouseYAxis":
                 case "mouseXInvert:":

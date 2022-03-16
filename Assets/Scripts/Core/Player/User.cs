@@ -104,18 +104,20 @@ namespace Core.Player {
                 }
 
                 // update the player
-                if (Preferences.Instance.GetBool("useAdvancedControlScheme")) {
-                    shipPlayer.SetPitch(pitch);
-                    shipPlayer.SetRoll(roll);
-                    shipPlayer.SetYaw(yaw);
-                    shipPlayer.SetThrottle(throttle);
-                    shipPlayer.SetLateralH(lateralH);
-                    shipPlayer.SetLateralV(lateralV);
-                }
-                else {
+                if (Preferences.Instance.GetBool("threeAxesMode")) {
                     shipArcadeFlightComputer.UpdateShipFlightInput(shipPlayer, pitch, yaw, throttle);
                 }
+                else {
+                    shipPlayer.SetLateralH(lateralH);
+                    shipPlayer.SetLateralV(lateralV);
+                    shipPlayer.SetRoll(roll);
+                }
 
+                // other axes should be unbound with threeAxesMode but we don't explicitly deny it 
+                // (some users may want just the added option to control roll, for example)
+                shipPlayer.SetPitch(pitch);
+                shipPlayer.SetYaw(yaw);
+                shipPlayer.SetThrottle(throttle);
                 shipPlayer.Boost(_boost);
 
                 // handle camera rig
