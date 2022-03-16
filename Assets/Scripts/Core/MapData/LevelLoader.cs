@@ -2,10 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Cinemachine;
 using Core.Player;
 using Den.Tools;
-using Den.Tools.Tasks;
 using Gameplay;
+using GPUInstancer;
 using MapMagic.Core;
 using Misc;
 using UnityEngine;
@@ -249,14 +250,10 @@ namespace Core.MapData {
             // if terrain needs to generate, toggle special logic and wait for it to load all primary tiles
             var mapMagic = FindObjectOfType<MapMagicObject>();
             if (mapMagic) {
+                mapMagic.graph.random = new Noise(LoadedLevelData.terrainSeed.GetHashCode(), 32768);
+
                 // our terrain gen may start disabled to prevent painful threading fun
                 mapMagic.enabled = true;
-
-                // Stop auto-loading with default seed
-                mapMagic.StopGenerate();
-                ThreadManager.Abort();
-                yield return new WaitForEndOfFrame();
-                mapMagic.ClearAll();
 
                 // replace with user seed
                 mapMagic.graph.random = new Noise(LoadedLevelData.terrainSeed.GetHashCode(), 32768);
@@ -272,6 +269,14 @@ namespace Core.MapData {
                     yield return null;
                 }
             }
+
+            // gpu instancer initialisation (paid asset!)
+#if !NO_PAID_ASSETS
+            var cam = FindObjectOfType<CinemachineBrain>(true).gameObject.GetComponent<Camera>();
+            var gpuInstancer = FindObjectOfType<GPUInstancerMapMagic2Integration>();
+            if (mapMagic && gpuInstancer) gpuInstancer.floatingOriginTransform = mapMagic.transform;
+            GPUInstancerAPI.SetCamera(cam);
+#endif
 
             _scenesLoading.Clear();
 
