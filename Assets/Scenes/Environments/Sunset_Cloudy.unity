@@ -23,7 +23,7 @@ RenderSettings:
   m_AmbientSkyColor: {r: 0.8113208, g: 0.5860341, b: 0.56256676, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
-  m_AmbientIntensity: 0.4
+  m_AmbientIntensity: 1.82
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.2924528, g: 0, b: 0, a: 1}
   m_SkyboxMaterial: {fileID: 2100000, guid: 8e48450d3fc8541d2b8081e2b3a2b5fa, type: 2}
@@ -152,7 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isGlobal: 1
+  m_IsGlobal: 1
   priority: 0
   blendDistance: 0
   weight: 1
@@ -167,6 +167,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
@@ -181,6 +182,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0.99088943, z: -0.13467793, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1.0627016}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -195,6 +197,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8952600818483338152}
   - component: {fileID: 8952600818483338155}
+  - component: {fileID: 8952600818483338156}
   m_Layer: 0
   m_Name: MainLightSource
   m_TagString: Untagged
@@ -213,7 +216,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 0.909804, g: 0.4784314, b: 0.21176472, a: 1}
+  m_Color: {r: 0.9098039, g: 0.59369147, b: 0.21176468, a: 1}
   m_Intensity: 2.21
   m_Range: 10
   m_SpotAngle: 30
@@ -264,3 +267,23 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!114 &8952600818483338156
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8952600818483338153}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 1
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
