@@ -35,22 +35,26 @@ namespace Core.Ship {
         public virtual void Start() {
             // Init GPU Instance removal colliders 
 #if !NO_PAID_ASSETS
-            var grassInstanceRemover = foliageCollider.gameObject.AddComponent<GPUInstancerInstanceRemover>();
-            grassInstanceRemover.selectedColliders = new List<Collider> { foliageCollider };
-            grassInstanceRemover.removeFromDetailManagers = true;
-            grassInstanceRemover.removeFromPrefabManagers = false;
-            grassInstanceRemover.removeFromTreeManagers = false;
-            grassInstanceRemover.offset = 15;
-            grassInstanceRemover.removeAtUpdate = true;
-            grassInstanceRemover.useBounds = true;
+            if (FindObjectOfType<GPUInstancerDetailManager>()) {
+                var grassInstanceRemover = foliageCollider.gameObject.AddComponent<GPUInstancerInstanceRemover>();
+                grassInstanceRemover.selectedColliders = new List<Collider> { foliageCollider };
+                grassInstanceRemover.removeFromDetailManagers = true;
+                grassInstanceRemover.removeFromPrefabManagers = false;
+                grassInstanceRemover.removeFromTreeManagers = false;
+                grassInstanceRemover.offset = 10;
+                grassInstanceRemover.removeAtUpdate = true;
+                grassInstanceRemover.useBounds = true;
+            }
 
-            var treeInstanceRemover = foliageCollider.gameObject.AddComponent<GPUInstancerInstanceRemover>();
-            treeInstanceRemover.selectedColliders = new List<Collider> { foliageCollider };
-            treeInstanceRemover.removeFromDetailManagers = false;
-            treeInstanceRemover.removeFromPrefabManagers = false;
-            treeInstanceRemover.removeFromTreeManagers = true;
-            treeInstanceRemover.removeAtUpdate = true;
-            treeInstanceRemover.useBounds = true;
+            if (FindObjectOfType<GPUInstancerTreeManager>()) {
+                var treeInstanceRemover = foliageCollider.gameObject.AddComponent<GPUInstancerInstanceRemover>();
+                treeInstanceRemover.selectedColliders = new List<Collider> { foliageCollider };
+                treeInstanceRemover.removeFromDetailManagers = false;
+                treeInstanceRemover.removeFromPrefabManagers = false;
+                treeInstanceRemover.removeFromTreeManagers = true;
+                treeInstanceRemover.removeAtUpdate = true;
+                treeInstanceRemover.useBounds = true;
+            }
 #endif
         }
 
