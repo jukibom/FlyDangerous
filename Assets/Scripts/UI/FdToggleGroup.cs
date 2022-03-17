@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -11,11 +10,18 @@ namespace UI {
         [SerializeField] private List<FdToggle> options = new();
 
         public string Preference => preference;
-        public string Value => 
-            GetComponent<ToggleGroup>()
-                .ActiveToggles()
+
+        public string Value {
+            get => GetComponentsInChildren<FdToggle>()
                 .ToList()
-                .Find(t => t.isOn)
-                .GetComponent<FdToggle>()?.Value ?? throw new Exception("FdToggle script missing on child Toggle!");
+                .Find(t => t.GetComponent<Toggle>().isOn)
+                .GetComponent<FdToggle>().Value;
+
+            set => GetComponentsInChildren<FdToggle>()
+                .ToList()
+                .Find(t => t.GetComponent<FdToggle>().Value == value)
+                .GetComponent<Toggle>()
+                .isOn = true;
+        }
     }
 }

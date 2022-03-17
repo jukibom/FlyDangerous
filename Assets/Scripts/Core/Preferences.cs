@@ -54,7 +54,6 @@ namespace Core {
                 case "graphics-terrain-details":
                     return true;
 
-                case "useAdvancedControlScheme":
                 case "enableMouseFlightControls":
                 case "showMouseWidget":
                 case "relativeMouseXAxis":
@@ -110,6 +109,8 @@ namespace Core {
             switch (key) {
                 case "playerName":
                     return "PLAYER NAME";
+                case "controlSchemeType":
+                    return "arcade";
                 case "flightAssistDefault":
                     return "all on";
                 case "inputBindings":

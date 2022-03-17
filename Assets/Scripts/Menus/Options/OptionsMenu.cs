@@ -77,6 +77,9 @@ namespace Menus.Options {
             var sliderOptions = GetComponentsInChildren<SliderOption>(true);
             foreach (var sliderOption in sliderOptions) sliderOption.Value = Preferences.Instance.GetFloat(sliderOption.preference);
 
+            var toggleRadialOptions = GetComponentsInChildren<FdToggleGroup>(true);
+            foreach (var toggleRadialOption in toggleRadialOptions) toggleRadialOption.Value = Preferences.Instance.GetString(toggleRadialOption.Preference);
+
             _previousPrefs = Preferences.Instance.GetCurrent().Clone();
         }
 
@@ -98,6 +101,10 @@ namespace Menus.Options {
 
             var sliderOptions = GetComponentsInChildren<SliderOption>(true);
             foreach (var sliderOption in sliderOptions) Preferences.Instance.SetFloat(sliderOption.preference, sliderOption.Value);
+
+            var toggleRadialOptions = GetComponentsInChildren<FdToggleGroup>(true);
+            foreach (var toggleRadialOption in toggleRadialOptions) Preferences.Instance.SetString(toggleRadialOption.Preference, toggleRadialOption.Value);
+
 
             Preferences.Instance.Save();
         }

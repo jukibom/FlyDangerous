@@ -167,7 +167,7 @@ namespace Core.Player {
             playerInput.ActivateInput();
 
             // choose the correct action set depending on advanced control scheme preference
-            if (Preferences.Instance.GetBool("useAdvancedControlScheme")) {
+            if (Preferences.Instance.GetString("controlSchemeType") == "advanced") {
                 var advancedControlActionMap = playerInput.actions.FindActionMap("Ship");
                 playerInput.currentActionMap = advancedControlActionMap ?? playerInput.currentActionMap;
             }
