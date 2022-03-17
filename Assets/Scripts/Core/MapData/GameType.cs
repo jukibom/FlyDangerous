@@ -3,18 +3,22 @@ using Misc;
 
 namespace Core.MapData {
     public class GameType : IFdEnum {
-        private GameType(int id, string name, bool isHotJoinable, bool canWarpToHost) {
-            Id = id;
+        private static int _id;
+
+        public static readonly GameType FreeRoam = new("Free Roam", true, true);
+        public static readonly GameType TimeTrial = new("Time Trial", false, false);
+        public static readonly GameType Sprint = new("Sprint", false, false);
+        public static readonly GameType Laps = new("Laps", false, false);
+        public static readonly GameType HoonAttack = new("Hoon Attack", false, false);
+
+        private GameType(string name, bool isHotJoinable, bool canWarpToHost) {
+            Id = GenerateId;
             Name = name;
             IsHotJoinable = isHotJoinable;
             CanWarpToHost = canWarpToHost;
         }
 
-        public static GameType FreeRoam => new(0, "Free Roam", true, true);
-        public static GameType TimeTrial => new(1, "Time Trial", false, false);
-        public static GameType Sprint => new(2, "Sprint", false, false);
-        public static GameType Laps => new(3, "Laps", false, false);
-        public static GameType HoonAttack => new(4, "Hoon Attack", false, false);
+        private static int GenerateId => _id++;
         public bool IsHotJoinable { get; }
         public bool CanWarpToHost { get; }
 

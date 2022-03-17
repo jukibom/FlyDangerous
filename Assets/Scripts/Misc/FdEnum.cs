@@ -1,4 +1,4 @@
-﻿#nullable enable
+#nullable enable
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,9 +44,10 @@ namespace Misc {
         ) where T : IFdEnum {
             var newOptions = new List<Dropdown.OptionData>();
 
-            foreach (var location in enums) {
+            foreach (var option in enums) {
                 var option = textTransform != null ? textTransform(location.Name) : location.Name;
-                newOptions.Add(new Dropdown.OptionData(option));
+                var dropDownOption = textTransform != null ? textTransform(option.Name) : option.Name;
+                newOptions.Add(new Dropdown.OptionData(dropDownOption));
             }
 
             dropdown.ClearOptions();
