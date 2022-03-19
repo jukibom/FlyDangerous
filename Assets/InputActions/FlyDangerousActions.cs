@@ -819,7 +819,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": ""positive"",
                     ""id"": ""eba04c70-1cff-462b-bfd5-86e5c2d2a139"",
-                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
@@ -830,7 +830,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": ""negative"",
                     ""id"": ""5f43ec82-7fb8-466f-9ddd-fc08b5f72652"",
-                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
@@ -2018,7 +2018,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Pitch"",
+                    ""name"": ""LateralV"",
                     ""type"": ""Value"",
                     ""id"": ""a5e9f02b-5919-4273-94af-ade7c3fd18ad"",
                     ""expectedControlType"": ""Axis"",
@@ -2027,7 +2027,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Yaw"",
+                    ""name"": ""LateralH"",
                     ""type"": ""Value"",
                     ""id"": ""e48f381f-1da7-4151-99f2-83cefc1552e0"",
                     ""expectedControlType"": ""Axis"",
@@ -2134,7 +2134,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": ""AxisDeadzone"",
                     ""groups"": ""Everything"",
-                    ""action"": ""Pitch"",
+                    ""action"": ""LateralV"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -2145,7 +2145,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Pitch"",
+                    ""action"": ""LateralV"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -2156,7 +2156,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
-                    ""action"": ""Pitch"",
+                    ""action"": ""LateralV"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -2167,7 +2167,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
-                    ""action"": ""Pitch"",
+                    ""action"": ""LateralV"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -2244,7 +2244,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": ""AxisDeadzone"",
                     ""groups"": ""Everything"",
-                    ""action"": ""Yaw"",
+                    ""action"": ""LateralH"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -2255,7 +2255,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Yaw"",
+                    ""action"": ""LateralH"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -2266,7 +2266,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
-                    ""action"": ""Yaw"",
+                    ""action"": ""LateralH"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -2277,7 +2277,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
-                    ""action"": ""Yaw"",
+                    ""action"": ""LateralH"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -3294,8 +3294,8 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         m_ShipArcade = asset.FindActionMap("ShipArcade", throwIfNotFound: true);
         m_ShipArcade_RestartTrack = m_ShipArcade.FindAction("Restart Track", throwIfNotFound: true);
         m_ShipArcade_RestartFromLastCheckpoint = m_ShipArcade.FindAction("Restart From Last Checkpoint", throwIfNotFound: true);
-        m_ShipArcade_Pitch = m_ShipArcade.FindAction("Pitch", throwIfNotFound: true);
-        m_ShipArcade_Yaw = m_ShipArcade.FindAction("Yaw", throwIfNotFound: true);
+        m_ShipArcade_LateralV = m_ShipArcade.FindAction("LateralV", throwIfNotFound: true);
+        m_ShipArcade_LateralH = m_ShipArcade.FindAction("LateralH", throwIfNotFound: true);
         m_ShipArcade_Throttle = m_ShipArcade.FindAction("Throttle", throwIfNotFound: true);
         m_ShipArcade_Boost = m_ShipArcade.FindAction("Boost", throwIfNotFound: true);
         m_ShipArcade_VelocityLimiter = m_ShipArcade.FindAction("Velocity Limiter", throwIfNotFound: true);
@@ -3701,8 +3701,8 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
     private IShipArcadeActions m_ShipArcadeActionsCallbackInterface;
     private readonly InputAction m_ShipArcade_RestartTrack;
     private readonly InputAction m_ShipArcade_RestartFromLastCheckpoint;
-    private readonly InputAction m_ShipArcade_Pitch;
-    private readonly InputAction m_ShipArcade_Yaw;
+    private readonly InputAction m_ShipArcade_LateralV;
+    private readonly InputAction m_ShipArcade_LateralH;
     private readonly InputAction m_ShipArcade_Throttle;
     private readonly InputAction m_ShipArcade_Boost;
     private readonly InputAction m_ShipArcade_VelocityLimiter;
@@ -3719,8 +3719,8 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         public ShipArcadeActions(@FlyDangerousActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @RestartTrack => m_Wrapper.m_ShipArcade_RestartTrack;
         public InputAction @RestartFromLastCheckpoint => m_Wrapper.m_ShipArcade_RestartFromLastCheckpoint;
-        public InputAction @Pitch => m_Wrapper.m_ShipArcade_Pitch;
-        public InputAction @Yaw => m_Wrapper.m_ShipArcade_Yaw;
+        public InputAction @LateralV => m_Wrapper.m_ShipArcade_LateralV;
+        public InputAction @LateralH => m_Wrapper.m_ShipArcade_LateralH;
         public InputAction @Throttle => m_Wrapper.m_ShipArcade_Throttle;
         public InputAction @Boost => m_Wrapper.m_ShipArcade_Boost;
         public InputAction @VelocityLimiter => m_Wrapper.m_ShipArcade_VelocityLimiter;
@@ -3746,12 +3746,12 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @RestartFromLastCheckpoint.started -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnRestartFromLastCheckpoint;
                 @RestartFromLastCheckpoint.performed -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnRestartFromLastCheckpoint;
                 @RestartFromLastCheckpoint.canceled -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnRestartFromLastCheckpoint;
-                @Pitch.started -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnPitch;
-                @Pitch.performed -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnPitch;
-                @Pitch.canceled -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnPitch;
-                @Yaw.started -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnYaw;
-                @Yaw.performed -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnYaw;
-                @Yaw.canceled -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnYaw;
+                @LateralV.started -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnLateralV;
+                @LateralV.performed -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnLateralV;
+                @LateralV.canceled -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnLateralV;
+                @LateralH.started -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnLateralH;
+                @LateralH.performed -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnLateralH;
+                @LateralH.canceled -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnLateralH;
                 @Throttle.started -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnThrottle;
                 @Throttle.performed -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnThrottle;
                 @Throttle.canceled -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnThrottle;
@@ -3792,12 +3792,12 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @RestartFromLastCheckpoint.started += instance.OnRestartFromLastCheckpoint;
                 @RestartFromLastCheckpoint.performed += instance.OnRestartFromLastCheckpoint;
                 @RestartFromLastCheckpoint.canceled += instance.OnRestartFromLastCheckpoint;
-                @Pitch.started += instance.OnPitch;
-                @Pitch.performed += instance.OnPitch;
-                @Pitch.canceled += instance.OnPitch;
-                @Yaw.started += instance.OnYaw;
-                @Yaw.performed += instance.OnYaw;
-                @Yaw.canceled += instance.OnYaw;
+                @LateralV.started += instance.OnLateralV;
+                @LateralV.performed += instance.OnLateralV;
+                @LateralV.canceled += instance.OnLateralV;
+                @LateralH.started += instance.OnLateralH;
+                @LateralH.performed += instance.OnLateralH;
+                @LateralH.canceled += instance.OnLateralH;
                 @Throttle.started += instance.OnThrottle;
                 @Throttle.performed += instance.OnThrottle;
                 @Throttle.canceled += instance.OnThrottle;
@@ -4035,8 +4035,8 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
     {
         void OnRestartTrack(InputAction.CallbackContext context);
         void OnRestartFromLastCheckpoint(InputAction.CallbackContext context);
-        void OnPitch(InputAction.CallbackContext context);
-        void OnYaw(InputAction.CallbackContext context);
+        void OnLateralV(InputAction.CallbackContext context);
+        void OnLateralH(InputAction.CallbackContext context);
         void OnThrottle(InputAction.CallbackContext context);
         void OnBoost(InputAction.CallbackContext context);
         void OnVelocityLimiter(InputAction.CallbackContext context);

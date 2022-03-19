@@ -49,7 +49,7 @@ namespace Core {
         public bool GetDefaultBool(string key) {
             switch (key) {
                 case "showSpaceDust":
-                case "threeAxesMode":
+                case "autoShipRotation":
                 case "graphics-ssao":
                 case "graphics-terrain-details":
                     return true;

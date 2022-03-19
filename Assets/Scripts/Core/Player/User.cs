@@ -103,21 +103,19 @@ namespace Core.Player {
                     yaw += mouseYaw;
                 }
 
-                // update the player
-                if (Preferences.Instance.GetBool("threeAxesMode")) {
-                    shipArcadeFlightComputer.UpdateShipFlightInput(shipPlayer, pitch, yaw, throttle);
-                }
-                else {
-                    shipPlayer.SetLateralH(lateralH);
-                    shipPlayer.SetLateralV(lateralV);
-                    shipPlayer.SetRoll(roll);
-                }
+                SimpleDebugLog(lateralH, lateralV, throttle, pitch, yaw, roll);
 
-                // other axes should be unbound with threeAxesMode but we don't explicitly deny it 
-                // (some users may want just the added option to control roll, for example)
+                // update the player
+                if (Preferences.Instance.GetBool("autoShipRotation"))
+                    shipArcadeFlightComputer.UpdateShipFlightInput(ref lateralH, ref lateralV, ref throttle, ref pitch, ref yaw, ref roll);
+
+                shipPlayer.SetLateralH(lateralH);
+                shipPlayer.SetLateralV(lateralV);
+                shipPlayer.SetThrottle(throttle);
                 shipPlayer.SetPitch(pitch);
                 shipPlayer.SetYaw(yaw);
-                shipPlayer.SetThrottle(throttle);
+                shipPlayer.SetRoll(roll);
+
                 shipPlayer.Boost(_boost);
 
                 // handle camera rig
@@ -156,6 +154,16 @@ namespace Core.Player {
         public void OnDisable() {
             pauseUIInputModule.cancel.action.performed -= _cancelAction;
             Game.OnVRStatus -= SetVRStatus;
+        }
+
+        public void SimpleDebugLog(params object[] args) {
+            var formatString = "";
+            for (var i = 0; i < args.Length; i++) {
+                if (i > 0) formatString += ", ";
+                formatString += "{" + i + "}";
+            }
+
+            Debug.LogFormat(formatString, args);
         }
 
         /**

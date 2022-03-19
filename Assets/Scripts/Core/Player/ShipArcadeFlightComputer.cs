@@ -33,10 +33,16 @@ namespace Core.Player {
             _meshRenderer = targetTransform.gameObject.GetComponent<MeshRenderer>();
         }
 
-        public void UpdateShipFlightInput(ShipPlayer shipPlayer, float pitch, float yaw, float throttle) {
+        /**
+         * Given a set of flight inputs, return new overrides based on auto-rotation.
+         * lateralH, lateralV and throttle will be overwritten.
+         * pitch, yaw and roll with be added to based on first three vector inputs. This allows a user to also
+         * bind any of these axes individually if they so choose.
+         */
+        public void UpdateShipFlightInput(ref float lateralH, ref float lateralV, ref float throttle, ref float pitch, ref float yaw, ref float roll) {
             // clamp
-            pitch = Math.Clamp(pitch, -1f, 1f);
-            yaw = Math.Clamp(yaw, -1f, 1f);
+            lateralV = Math.Clamp(lateralV, -1f, 1f);
+            lateralH = Math.Clamp(lateralH, -1f, 1f);
             throttle = Math.Clamp(throttle, -1f, 1f);
 
             var shipRotation = shipTransform.rotation;
@@ -60,8 +66,8 @@ namespace Core.Player {
                 var rotationResolutionBlendFactor = MathfExtensions.Remap(fixedToPlaneAngle, freeMoveAngle, planeTransformDamping, 1, shipAngleFromPlane);
                 targetTransform.rotation = Quaternion.Lerp(planeRotation, freeRotation, rotationResolutionBlendFactor);
 
-                var pitchRotate = MathfExtensions.Remap(-1, 1, -maxTargetRotationDegrees, maxTargetRotationDegrees, pitch);
-                var yawRotate = MathfExtensions.Remap(-1, 1, -maxTargetRotationDegrees, maxTargetRotationDegrees, yaw);
+                var pitchRotate = MathfExtensions.Remap(-1, 1, -maxTargetRotationDegrees, maxTargetRotationDegrees, lateralV);
+                var yawRotate = MathfExtensions.Remap(-1, 1, -maxTargetRotationDegrees, maxTargetRotationDegrees, lateralH);
 
                 // apply an auto roll to the transform when pitch / yaw-ing
                 targetTransform.Rotate(pitchRotate * -1, yawRotate, yawRotate * -1);
@@ -87,9 +93,9 @@ namespace Core.Player {
 
             if (translateTarget) {
                 var zRotationFromPlane = Mathf.DeltaAngle(0, shipTransform.localRotation.eulerAngles.z);
-                var yOffset = Mathf.Sin(zRotationFromPlane * Mathf.Deg2Rad) * (yaw * drawCubePositionDistance);
+                var yOffset = Mathf.Sin(zRotationFromPlane * Mathf.Deg2Rad) * (lateralH * drawCubePositionDistance);
 
-                var freeLocalPosition = new Vector3(yaw, pitch, throttle) * drawCubePositionDistance;
+                var freeLocalPosition = new Vector3(lateralH, lateralV, throttle) * drawCubePositionDistance;
                 var planeLocalPosition = new Vector3(freeLocalPosition.x, freeLocalPosition.y - yOffset, freeLocalPosition.z);
 
                 var positionResolutionBlendFactor = MathfExtensions.Remap(fixedToPlaneAngle, freeMoveAngle / 2, planeTransformDamping, 1, shipAngleFromPlane);
@@ -115,12 +121,12 @@ namespace Core.Player {
             if (translateShip) inputTranslation = localPosition / drawCubePositionDistance;
             if (rotateShip) inputRotation = deltaRotation / maxTargetRotationDegrees;
 
-            shipPlayer.SetLateralH(inputTranslation.x);
-            shipPlayer.SetLateralV(inputTranslation.y);
-            shipPlayer.SetThrottle(inputTranslation.z);
-            shipPlayer.SetPitch(inputRotation.x * -1);
-            shipPlayer.SetYaw(inputRotation.y);
-            shipPlayer.SetRoll(inputRotation.z * -1);
+            lateralH = inputTranslation.x;
+            lateralV = inputTranslation.y;
+            throttle = inputTranslation.z;
+            pitch += inputRotation.x * -1;
+            yaw += inputRotation.y;
+            roll += inputRotation.z * -1;
 
             #endregion
         }
