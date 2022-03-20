@@ -16,10 +16,6 @@ namespace UI {
             button.SetSelectedState(true);
         }
 
-        public void OnTabHidden(TabButton button) {
-            button.SetSelectedState(false);
-        }
-
         private void ResetTabs() {
             tabButtons.ForEach(tab => { tab.SetSelectedState(false); });
         }

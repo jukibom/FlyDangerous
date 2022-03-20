@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using Core;
 using UI;
@@ -8,6 +7,8 @@ namespace Menus.Options {
     public class Controls : MonoBehaviour {
         [SerializeField] private FdToggleGroup controlSchemeToggleGroup;
         [SerializeField] private GameObject bindingsTab;
+        [SerializeField] private GameObject mouseSettingsTab;
+        [SerializeField] private GameObject controlsLayoutTab;
         [SerializeField] private GameObject autoRotateOption;
         [SerializeField] private GameObject flightAssistModeDropdown;
 
@@ -34,13 +35,14 @@ namespace Menus.Options {
         }
 
         private void SetAdvancedOptionsVisibility(bool show) {
+            mouseSettingsTab.SetActive(show);
             bindingsTab.SetActive(show);
             autoRotateOption.SetActive(show);
             flightAssistModeDropdown.SetActive(show);
         }
 
         private void SetArcadeOptionsVisibility(bool show) {
-            
+            controlsLayoutTab.SetActive(show);
         }
     }
 }

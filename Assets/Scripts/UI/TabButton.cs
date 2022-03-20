@@ -35,8 +35,8 @@ namespace UI {
             _tabGroup = tabGroup;
         }
 
-        public void SetSelectedState(bool enabled) {
-            if (enabled) {
+        public void SetSelectedState(bool selected) {
+            if (selected) {
                 _background.color = selectedColor;
                 tabPanel.SetActive(true);
             }

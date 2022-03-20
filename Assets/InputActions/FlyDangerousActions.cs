@@ -1567,7 +1567,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""1908f38c-c22f-4863-b106-cb0299e59d97"",
-                    ""path"": ""<Keyboard>/x"",
+                    ""path"": ""<Keyboard>/alt"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
@@ -2436,7 +2436,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""Keyboard"",
+                    ""name"": ""Keyboard Numpad"",
                     ""id"": ""cd6a9560-97ef-440a-be72-2413504cc08b"",
                     ""path"": ""1DAxis"",
                     ""interactions"": """",
@@ -2461,6 +2461,39 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""name"": ""negative"",
                     ""id"": ""5e5ad62b-43d2-4d29-9486-268e97fb955c"",
                     ""path"": ""<Keyboard>/numpad4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Rotate Camera H"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Keyboard Arrows"",
+                    ""id"": ""81ea4f0a-262c-4754-a722-92329f371881"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Rotate Camera H"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""ab47c51d-4884-44c4-8f52-ef01bd3809fa"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Rotate Camera H"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""a52882ce-e935-4d8f-9600-ec8ede8b158d"",
+                    ""path"": ""<Keyboard>/rightArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
@@ -2513,7 +2546,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""Keyboard"",
+                    ""name"": ""Keyboard Numpad"",
                     ""id"": ""18bcd9c9-c5be-44a5-a24f-ddf2024b113b"",
                     ""path"": ""1DAxis"",
                     ""interactions"": """",
@@ -2538,6 +2571,39 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""name"": ""negative"",
                     ""id"": ""17f2cedc-1ebb-4e4f-9df1-abbb9413d1f0"",
                     ""path"": ""<Keyboard>/numpad2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Rotate Camera V"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Keyboard Arrows"",
+                    ""id"": ""dd7fb690-bfa7-4bec-a3ec-730e3497188c"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Rotate Camera V"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""1f512e21-95fc-4dc7-829d-a3f81a77806f"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Rotate Camera V"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""1b229ac7-48c5-4604-bea9-658a3356dfb2"",
+                    ""path"": ""<Keyboard>/upArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
@@ -2581,7 +2647,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""7d884f62-38f7-4fa0-9bb0-185b89c6510f"",
-                    ""path"": ""<Keyboard>/x"",
+                    ""path"": ""<Keyboard>/alt"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
