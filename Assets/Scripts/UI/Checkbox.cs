@@ -5,11 +5,6 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace UI {
-    public interface ICheckboxHandler {
-        void OnEnabled();
-        void OnDisabled();
-    }
-
     public class Checkbox : MonoBehaviour, ISubmitHandler, IPointerClickHandler {
         [SerializeField] public UnityEvent<bool> onToggle;
         public string preference;
