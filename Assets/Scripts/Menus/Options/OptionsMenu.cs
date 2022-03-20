@@ -78,8 +78,8 @@ namespace Menus.Options {
             foreach (var sliderOption in sliderOptions) sliderOption.Value = Preferences.Instance.GetFloat(sliderOption.preference);
 
             var toggleRadialOptions = GetComponentsInChildren<FdToggleGroup>(true);
-            foreach (var toggleRadialOption in toggleRadialOptions) toggleRadialOption.Value = Preferences.Instance.GetString(toggleRadialOption.Preference);
-
+            foreach (var toggleRadialOption in toggleRadialOptions)
+                toggleRadialOption.Value = Preferences.Instance.GetString(toggleRadialOption.Preference);
             _previousPrefs = Preferences.Instance.GetCurrent().Clone();
         }
 

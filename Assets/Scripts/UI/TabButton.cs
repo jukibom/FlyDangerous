@@ -41,7 +41,7 @@ namespace UI {
                 tabPanel.SetActive(true);
             }
             else {
-                _background.color = _defaultColor;
+                if (_background != null) _background.color = _defaultColor;
                 tabPanel.SetActive(false);
             }
         }

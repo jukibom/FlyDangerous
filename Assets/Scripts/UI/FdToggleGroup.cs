@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,7 +6,6 @@ namespace UI {
     [RequireComponent(typeof(ToggleGroup))]
     public class FdToggleGroup : MonoBehaviour {
         [SerializeField] private string preference;
-        [SerializeField] private List<FdToggle> options = new();
 
         public string Preference => preference;
 
