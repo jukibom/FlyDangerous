@@ -95,7 +95,8 @@ namespace Core.Player {
                 if (
                     !inGameUI.PauseMenu.IsPaused &&
                     !_mouseLookActive &&
-                    Preferences.Instance.GetBool("enableMouseFlightControls")
+                    Preferences.Instance.GetBool("enableMouseFlightControls") &&
+                    Preferences.Instance.GetString("controlSchemeType") == "advanced"
                 ) {
                     CalculateMouseInput(out var mousePitch, out var mouseRoll, out var mouseYaw);
                     pitch += mousePitch;
@@ -103,10 +104,8 @@ namespace Core.Player {
                     yaw += mouseYaw;
                 }
 
-                SimpleDebugLog(lateralH, lateralV, throttle, pitch, yaw, roll);
-
                 // update the player
-                if (Preferences.Instance.GetBool("autoShipRotation"))
+                if (Preferences.Instance.GetBool("autoShipRotation") || Preferences.Instance.GetString("controlSchemeType") == "arcade")
                     shipArcadeFlightComputer.UpdateShipFlightInput(ref lateralH, ref lateralV, ref throttle, ref pitch, ref yaw, ref roll);
 
                 shipPlayer.SetLateralH(lateralH);
@@ -154,16 +153,6 @@ namespace Core.Player {
         public void OnDisable() {
             pauseUIInputModule.cancel.action.performed -= _cancelAction;
             Game.OnVRStatus -= SetVRStatus;
-        }
-
-        public void SimpleDebugLog(params object[] args) {
-            var formatString = "";
-            for (var i = 0; i < args.Length; i++) {
-                if (i > 0) formatString += ", ";
-                formatString += "{" + i + "}";
-            }
-
-            Debug.LogFormat(formatString, args);
         }
 
         /**

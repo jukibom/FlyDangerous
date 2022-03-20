@@ -186,6 +186,7 @@ namespace Core.Player {
         private bool _shipLightsActive;
         private bool _velocityLimiterActive;
         private bool _flightAssistVectorControl;
+        private bool _flightAssistRotationalControl;
 
         // input axes -1 to 1
         private float _throttleInput;
@@ -208,6 +209,12 @@ namespace Core.Player {
         private Transform _transform;
         private Rigidbody _rigidbody;
 
+        public bool IsVectorFlightAssistActive => _flightAssistVectorControl || Preferences.Instance.GetBool("autoShipRotation") ||
+                                                  Preferences.Instance.GetString("controlSchemeType") == "arcade";
+
+        public bool IsRotationalFlightAssistActive => _flightAssistRotationalControl || Preferences.Instance.GetBool("autoShipRotation") ||
+                                                      Preferences.Instance.GetString("controlSchemeType") == "arcade";
+
         [SyncVar] private bool _serverReady;
         [SyncVar] public string playerName;
         [SyncVar] public bool isHost;
@@ -222,7 +229,6 @@ namespace Core.Player {
         private readonly RaycastHit[] _raycastHits = new RaycastHit[50];
 
         private bool IsReady => _transform && _rigidbody && _serverReady;
-        public bool IsRotationalFlightAssistActive { get; private set; }
 
         public float Velocity => Mathf.Round(_rigidbody.velocity.magnitude);
         public float VelocityNormalised => _rigidbody.velocity.sqrMagnitude / (_maxBoostSpeed * _maxBoostSpeed);
@@ -412,15 +418,15 @@ namespace Core.Player {
                     _flightAssistVectorControl = true;
                     break;
                 case "rotational assist only":
-                    IsRotationalFlightAssistActive = true;
+                    _flightAssistRotationalControl = true;
                     break;
                 case "all off":
                     _flightAssistVectorControl = false;
-                    IsRotationalFlightAssistActive = false;
+                    _flightAssistRotationalControl = false;
                     break;
                 default:
                     _flightAssistVectorControl = true;
-                    IsRotationalFlightAssistActive = true;
+                    _flightAssistRotationalControl = true;
                     break;
             }
         }
@@ -483,7 +489,7 @@ namespace Core.Player {
             _shipIndicatorData.boostChargeReady = _boostCapacitorPercent > _boostCapacitorPercentCost;
             _shipIndicatorData.lightsActive = _shipLightsActive;
             _shipIndicatorData.velocityLimiterActive = _velocityLimiterActive;
-            _shipIndicatorData.vectorFlightAssistActive = _flightAssistVectorControl;
+            _shipIndicatorData.vectorFlightAssistActive = IsRotationalFlightAssistActive;
             _shipIndicatorData.rotationalFlightAssistActive = IsRotationalFlightAssistActive;
             _shipIndicatorData.gForce = _gforce;
 
@@ -518,21 +524,21 @@ namespace Core.Player {
         }
 
         public void SetThrottle(float value) {
-            if (_flightAssistVectorControl)
+            if (IsVectorFlightAssistActive)
                 _throttleTargetFactor = ClampInput(value);
             else
                 _throttleInput = ClampInput(value);
         }
 
         public void SetLateralH(float value) {
-            if (_flightAssistVectorControl)
+            if (IsVectorFlightAssistActive)
                 _latHTargetFactor = ClampInput(value);
             else
                 _latHInput = ClampInput(value);
         }
 
         public void SetLateralV(float value) {
-            if (_flightAssistVectorControl)
+            if (IsVectorFlightAssistActive)
                 _latVTargetFactor = ClampInput(value);
             else
                 _latVInput = ClampInput(value);
@@ -560,20 +566,18 @@ namespace Core.Player {
 
         public void AllFlightAssistToggle() {
             // if any flight assist is enabled, deactivate (any on = all off)
-            var isEnabled = !(_flightAssistVectorControl | IsRotationalFlightAssistActive);
+            var isEnabled = !(IsVectorFlightAssistActive | IsRotationalFlightAssistActive);
 
             // if user has all flight assists on by default, flip that logic on its head (any off = all on)
-            if (Preferences.Instance.GetString("flightAssistDefault") == "all on") isEnabled = !(_flightAssistVectorControl & IsRotationalFlightAssistActive);
+            if (Preferences.Instance.GetString("flightAssistDefault") == "all on")
+                isEnabled = !(IsVectorFlightAssistActive & IsRotationalFlightAssistActive);
 
             _flightAssistVectorControl = isEnabled;
-            IsRotationalFlightAssistActive = isEnabled;
+            _flightAssistVectorControl = isEnabled;
 
             Debug.Log("All Flight Assists " + (isEnabled ? "ON" : "OFF"));
 
-            if (isEnabled)
-                UIAudioManager.Instance.Play("ship-alternate-flight-on");
-            else
-                UIAudioManager.Instance.Play("ship-alternate-flight-off");
+            UIAudioManager.Instance.Play(isEnabled ? "ship-alternate-flight-on" : "ship-alternate-flight-off");
 
             if (Preferences.Instance.GetBool("forceRelativeMouseWithFAOff")) User.ResetMouseToCentre();
         }
@@ -589,10 +593,10 @@ namespace Core.Player {
         }
 
         public void FlightAssistRotationalDampeningToggle() {
-            IsRotationalFlightAssistActive = !IsRotationalFlightAssistActive;
-            Debug.Log("Rotational Dampening Flight Assist " + (IsRotationalFlightAssistActive ? "ON" : "OFF"));
+            _flightAssistRotationalControl = !_flightAssistRotationalControl;
+            Debug.Log("Rotational Dampening Flight Assist " + (_flightAssistRotationalControl ? "ON" : "OFF"));
 
-            if (IsRotationalFlightAssistActive)
+            if (_flightAssistRotationalControl)
                 UIAudioManager.Instance.Play("ship-alternate-flight-on");
             else
                 UIAudioManager.Instance.Play("ship-alternate-flight-off");
@@ -676,8 +680,7 @@ namespace Core.Player {
             _rigidbody.AddForce(_rigidbody.mass * gravity);
 
             /* FLIGHT ASSISTS */
-            if (_flightAssistVectorControl) CalculateVectorControlFlightAssist(maxSpeedWithBoost, gravity);
-
+            if (IsVectorFlightAssistActive) CalculateVectorControlFlightAssist(maxSpeedWithBoost, gravity);
             if (IsRotationalFlightAssistActive) CalculateRotationalDampeningFlightAssist();
 
             /* INPUTS */
