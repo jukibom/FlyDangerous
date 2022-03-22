@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Linq;
+using System.Reflection;
 using Cinemachine;
 using Core.MapData;
 using Core.Player;
@@ -147,6 +148,13 @@ namespace Core {
         private void ApplyGraphicsOptions() {
             var urp = (UniversalRenderPipelineAsset)GraphicsSettings.currentRenderPipeline;
             urp.renderScale = Preferences.Instance.GetFloat("graphics-render-scale");
+
+            // For some maddening reason soft shadows is not exposed by flipping this bool does work so here's some awful reflection. yay!
+            var type = urp.GetType();
+            var bindingFlags = BindingFlags.Instance | BindingFlags.NonPublic;
+            var fInfo = type.GetField("m_SoftShadowsSupported", bindingFlags);
+            if (fInfo != null) fInfo.SetValue(urp, Preferences.Instance.GetBool("graphics-soft-shadows"));
+
             var msaa = Preferences.Instance.GetString("graphics-anti-aliasing");
             switch (msaa) {
                 case "8x":

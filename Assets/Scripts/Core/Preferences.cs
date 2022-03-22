@@ -54,6 +54,7 @@ namespace Core {
                 case "graphics-terrain-details":
                     return true;
 
+                case "graphics-soft-shadows":
                 case "enableMouseFlightControls":
                 case "showMouseWidget":
                 case "relativeMouseXAxis":
