@@ -24,6 +24,9 @@ namespace UI {
 
         public void OnSelect(BaseEventData eventData) {
             if (OnTextChange != null) OnTextChange(toolTipText);
+
+            // propagate up the stack for auto scrolling
+            ExecuteEvents.ExecuteHierarchy(transform.parent.gameObject, eventData, ExecuteEvents.selectHandler);
         }
 
         public event OnTextChangeEvent OnTextChange;
