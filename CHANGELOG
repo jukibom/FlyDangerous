@@ -13,8 +13,10 @@ New:
     * Added third person cam FoV slider alongside first person FoV slider
     * Added new Checkpoint 3d model (much larger, circular)
     * Added Server Browser (Steam only)
+    * Added Soft Shadows - off by default
     * Added UI Cancel navigation behaviour (navigate back one page) in main menu
     * Ability to set max angular velocity in dev options
+    * Added new test GPU foliage terrain - performance feedback welcome please!
     
 Changes:
     * Replaced basic light trails with GPU physics smoke particles based on thrust
@@ -32,7 +34,8 @@ Fixed:
     * G force indicator now correctly calculates individual axes 
     * Updated Unity Input System, should resolve issues with certain HID joysticks (e.g. Virpil) with weird path descriptors
     * Boost sfx occasionally being mistimed / too fast
-    * Axis Deadzones failing to save
+    * Axis dead zones failing to save
+    * Axis dead zones not respecting defaults (0.05) unless overridden by user
     * Optimisations around component lookups in update loops (yes I was lazy and yes I paid the price, shut up)
 
 
