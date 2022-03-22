@@ -264,7 +264,7 @@ namespace Menus.Options {
                     }
             }
 
-            return 0;
+            return InputSystem.settings.defaultDeadzoneMin;
         }
 
         private void ApplyAxisOverrides(InputAction action, int bindingIndex, bool isInverted, float deadzone) {
