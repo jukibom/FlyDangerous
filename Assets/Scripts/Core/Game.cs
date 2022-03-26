@@ -250,7 +250,6 @@ namespace Core {
 
                 // wait for all known currently loading players to have finished loading
                 // TODO: show "Waiting for Players" text in loading screen
-                // _levelLoader.
                 yield return WaitForAllPlayersLoaded();
 
                 var loadingPlayer = FdPlayer.FindLocalLoadingPlayer;
@@ -438,7 +437,7 @@ namespace Core {
 
             // if user has previously applied a HMD position, reapply
             if (IsVREnabled) {
-                IEnumerator ResetHMDPosition() {
+                IEnumerator ResetHmdPosition() {
                     // allow xr rigs to be initialised before resetting hmd position
                     yield return new WaitForEndOfFrame();
                     var xrRig = FindObjectOfType<XRRig>(true);
@@ -453,7 +452,7 @@ namespace Core {
                     }
                 }
 
-                StartCoroutine(ResetHMDPosition());
+                StartCoroutine(ResetHmdPosition());
             }
         }
 

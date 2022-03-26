@@ -18,7 +18,7 @@ using Mirror.FizzySteam;
 
 namespace Core {
     public class FdNetworkManager : NetworkManager {
-        public const short MAXPlayerLimit = 128;
+        public const short maxPlayerLimit = 128;
 
         // set to non-empty string to force password validation on connecting clients
         public static string serverPassword;
@@ -33,7 +33,7 @@ namespace Core {
         // To work around this and have some sane messaging back to clients, we're using a server limit of 129 and
         // a "true" limit of 128. The additional slot is there just to allow a client to connect, receive a message
         // explaining why they're being kicked ... and then kicked. Aren't distributed systems fun?
-        public short maxPlayers = MAXPlayerLimit;
+        public short maxPlayers = maxPlayerLimit;
 
         public JoinGameRequestMessage joinGameRequestMessage;
 
@@ -236,45 +236,54 @@ namespace Core {
 
         [Server]
         public void LoadPlayerShip(LoadingPlayer loadingPlayer) {
-            try {
-                var ship = TransitionToShipPlayer(loadingPlayer);
-                var levelData = Game.Instance.LoadedLevelData;
+            // handle start position for each client
+            var levelData = Game.Instance.LoadedLevelData;
+            var position = new Vector3(
+                levelData.startPosition.x,
+                levelData.startPosition.y,
+                levelData.startPosition.z
+            );
+            var rotation = Quaternion.Euler(
+                levelData.startRotation.x,
+                levelData.startRotation.y,
+                levelData.startRotation.z
+            );
 
-                // handle start position for each client
-                var position = new Vector3(
-                    levelData.startPosition.x,
-                    levelData.startPosition.y,
-                    levelData.startPosition.z
-                );
-                var rotation = Quaternion.Euler(
-                    levelData.startRotation.x,
-                    levelData.startRotation.y,
-                    levelData.startRotation.z
-                );
+            var ship = TransitionToShipPlayer(loadingPlayer);
+            ship.AbsoluteWorldPosition = position;
+            ship.transform.rotation = rotation;
 
-                // TODO: radius should possibly be determined by the ship model itself!
-                position = PositionalHelpers.FindClosestEmptyPosition(position, 10);
+            IEnumerator SetPlayerPosition() {
+                // wait once to sync positions and again to init physics, I guess? Who knows
+                yield return new WaitForFixedUpdate();
+                yield return new WaitForFixedUpdate();
 
-                // update locally immediately for subsequent collision checks
-                ship.AbsoluteWorldPosition = position;
-                ship.transform.rotation = rotation;
+                try {
+                    // TODO: radius should possibly be determined by the ship model itself!
+                    position = PositionalHelpers.FindClosestEmptyPosition(position, 10);
 
-                // ensure each client receives their assigned position
-                ship.connectionToClient.Send(new SetShipPositionMessage {
-                    position = position,
-                    rotation = rotation
-                });
+                    // update locally immediately for subsequent collision checks
+                    ship.AbsoluteWorldPosition = position;
+                    ship.transform.rotation = rotation;
 
-                // Update physics engine so subsequent collision checks are up-to-date
-                Physics.SyncTransforms();
+                    // ensure each client receives their assigned position
+                    ship.connectionToClient.Send(new SetShipPositionMessage {
+                        position = position,
+                        rotation = rotation
+                    });
 
+                    // Update physics engine so subsequent collision checks are up-to-date
+                    Physics.SyncTransforms();
 
-                // all ships created and placed, notify ready (allows them to start syncing their own positions)
-                foreach (var shipPlayer in ShipPlayers) shipPlayer.ServerReady();
+                    // all ships created and placed, notify ready (allows them to start syncing their own positions)
+                    foreach (var shipPlayer in ShipPlayers) shipPlayer.ServerReady();
+                }
+                catch {
+                    Game.Instance.QuitToMenu("The server failed to initialise properly");
+                }
             }
-            catch {
-                Game.Instance.QuitToMenu("The server failed to initialise properly");
-            }
+
+            StartCoroutine(SetPlayerPosition());
         }
 
         #endregion

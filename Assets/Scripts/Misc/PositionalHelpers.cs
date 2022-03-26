@@ -48,6 +48,8 @@ namespace Misc {
 
         // generate a valid location to spawn an object by checking in a Fibonacci sphere of ever-increasing radius until a position is found.
         public static Vector3 FindClosestEmptyPosition(Vector3 originalPosition, int objectRadius) {
+            Physics.SyncTransforms();
+
             // -1 in this instance effectively means the original position with no transformation
             var n = -1;
             var max = 40;
