@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Core;
+using Core.MapData;
 using Core.Player;
 using JetBrains.Annotations;
 using Menus.Main_Menu.Components;
@@ -7,6 +9,7 @@ using Mirror;
 using UI;
 using UnityEngine;
 using UnityEngine.UI;
+using Environment = Core.MapData.Environment;
 
 namespace Menus.Main_Menu {
     public class LobbyMenu : MenuBase {
@@ -47,6 +50,14 @@ namespace Menus.Main_Menu {
                 Debug.Log("Online service active");
                 FdNetworkManager.Instance.OnlineService!.Multiplayer!.CreateLobby();
             }
+
+            // Set default multiplayer values
+            lobbyConfigurationPanel.LobbyLevelData = new LevelData {
+                gameType = GameType.FreeRoam,
+                environment = Environment.SunriseClear,
+                location = Location.TerrainV3,
+                terrainSeed = Guid.NewGuid().ToString()
+            };
         }
 
         public void StartGame() {

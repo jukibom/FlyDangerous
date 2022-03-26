@@ -25,12 +25,7 @@ namespace Menus.Main_Menu.Components {
 
         public short maxPlayers;
 
-        private LevelData _lobbyLevelData = new() {
-            gameType = GameType.FreeRoam,
-            environment = Environment.SunriseClear,
-            location = Location.TerrainV3,
-            terrainSeed = Guid.NewGuid().ToString()
-        };
+        private LevelData _lobbyLevelData;
 
         public bool IsHost {
             set {
@@ -108,7 +103,7 @@ namespace Menus.Main_Menu.Components {
 
         public void ClampMaxPlayersInput() {
             try {
-                var value = Math.Min(Math.Max(float.Parse(maxPlayersInputField.text), 1), FdNetworkManager.MAXPlayerLimit);
+                var value = Math.Min(Math.Max(float.Parse(maxPlayersInputField.text), 1), FdNetworkManager.maxPlayerLimit);
                 maxPlayersInputField.text = value.ToString("0");
             }
             catch {
