@@ -3,7 +3,7 @@ using Core.Player;
 using Game_UI;
 using UnityEngine;
 
-namespace Core.Ship {
+namespace Core.ShipModel {
     public class TargettingSystem : MonoBehaviour {
         [SerializeField] private Target targetPrefab;
         private readonly Dictionary<ShipPlayer, Target> _players = new();

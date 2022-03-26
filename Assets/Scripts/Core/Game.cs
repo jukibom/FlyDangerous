@@ -4,6 +4,7 @@ using System.Reflection;
 using Cinemachine;
 using Core.MapData;
 using Core.Player;
+using Core.ShipModel;
 using Gameplay;
 using JetBrains.Annotations;
 using MapMagic.Core;
@@ -76,11 +77,17 @@ namespace Core {
         public bool IsGameHotJoinable => LoadedLevelData.gameType.IsHotJoinable;
 
         public ShipParameters ShipParameters {
-            get => _shipParameters ?? (FdPlayer.FindLocalShipPlayer?.Parameters ?? ShipPlayer.ShipParameterDefaults);
+            get {
+                if (_shipParameters != null) return _shipParameters;
+                _shipParameters = ShipParameters.Defaults;
+                var player = FdPlayer.FindLocalShipPlayer;
+                if (player != null) _shipParameters = player.ShipPhysics.CurrentParameters;
+                return _shipParameters;
+            }
             set {
                 _shipParameters = value;
                 var ship = FdPlayer.FindLocalShipPlayer;
-                if (ship) ship.Parameters = _shipParameters;
+                if (ship) ship.ShipPhysics.CurrentParameters = _shipParameters;
             }
         }
 
@@ -268,7 +275,7 @@ namespace Core {
                 // Allow the rigid body to initialise before setting new parameters!
                 yield return new WaitForEndOfFrame();
 
-                ship.Parameters = ShipParameters;
+                ship.ShipPhysics.CurrentParameters = ShipParameters;
                 var shipPosition = ship.transform.position;
                 _levelLoader.LoadedLevelData.startPosition.x = shipPosition.x;
                 _levelLoader.LoadedLevelData.startPosition.y = shipPosition.y;

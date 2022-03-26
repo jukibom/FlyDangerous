@@ -1,17 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Core.Player;
+using Core.Ship;
+using GPUInstancer;
 using Misc;
 using UnityEngine;
 #if !NO_PAID_ASSETS
-using GPUInstancer;
 #endif
 
-namespace Core.Ship {
+namespace Core.ShipModel {
     /**
      * Provide some basic ship functionality expected from all mesh objects in an override-able fashion.
      */
-    public class SimpleShip : MonoBehaviour, IShip {
+    public class SimpleShipModel : MonoBehaviour, IShipModel {
         [SerializeField] private ThrusterController thrusterController;
         [SerializeField] private Light shipLights;
         [SerializeField] private SmokeEmitter smokeEmitter;

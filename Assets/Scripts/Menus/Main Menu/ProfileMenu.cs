@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Core;
-using Core.Ship;
+using Core.ShipModel;
 using Menus.Main_Menu.Components;
 using UI;
 using UnityEngine;

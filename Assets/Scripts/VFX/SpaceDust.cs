@@ -20,7 +20,7 @@ namespace VFX {
                 _vfx.SetVector3("_playerVelocity",
                     _playerShipTransform.InverseTransformDirection(_playerShipRigidbody.velocity));
                 _vfx.SetVector3("_playerVelocity", _playerShipRigidbody.velocity);
-                _vfx.SetFloat("_alphaMultiplier", MathfExtensions.Remap(0.1f, 1, 0, 0.4f, player.VelocityNormalised));
+                _vfx.SetFloat("_alphaMultiplier", MathfExtensions.Remap(0.1f, 1, 0, 0.4f, player.ShipPhysics.VelocityNormalised));
             }
 
             // lock the transform in world space so we don't rotate with the ship

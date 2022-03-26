@@ -1,189 +1,23 @@
 using System;
 using System.Collections;
 using Audio;
-using Core.Ship;
-using JetBrains.Annotations;
+using Core.ShipModel;
 using Mirror;
 using Misc;
-using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Core.Player {
-    public class ShipParameters {
-        public float angularDrag;
-        public float boostCapacitorPercentCost;
-        public float boostCapacityPercentChargeRate;
-        public float boostMaxSpeedDropOffTime;
-        public float boostRechargeTime;
-        public float drag;
-        public float inertiaTensorMultiplier;
-        public float latHMultiplier;
-        public float latVMultiplier;
-        public float mass;
-        public float maxAngularVelocity;
-        public float maxBoostSpeed;
-        public float maxSpeed;
-        public float maxThrust;
-        public float minUserLimitedVelocity;
-        public float pitchMultiplier;
-        public float rollMultiplier;
-        public float throttleMultiplier;
-        public float thrustBoostMultiplier;
-        public float torqueBoostMultiplier;
-        public float torqueThrustMultiplier;
-        public float totalBoostRotationalTime;
-        public float totalBoostTime;
-        public float yawMultiplier;
-
-        public string ToJsonString() {
-            return JsonConvert.SerializeObject(this, Formatting.Indented);
-        }
-
-        [CanBeNull]
-        public static ShipParameters FromJsonString(string json) {
-            try {
-                return JsonConvert.DeserializeObject<ShipParameters>(json);
-            }
-            catch (Exception e) {
-                Debug.LogWarning(e.Message);
-                return null;
-            }
-        }
-    }
-
-    [RequireComponent(typeof(Transform))]
     [RequireComponent(typeof(Rigidbody))]
     public class ShipPlayer : FdPlayer {
         #region Attributes + Getters
 
-        // TODO: remove this stuff once params are finalised (this is for debug panel in release)
-        public static ShipParameters ShipParameterDefaults => new() {
-            mass = 1100f,
-            drag = 0f,
-            angularDrag = 0f,
-            inertiaTensorMultiplier = 175f,
-            maxSpeed = 800f,
-            maxBoostSpeed = 932f,
-            maxThrust = 220000f,
-            maxAngularVelocity = 7f,
-            torqueThrustMultiplier = 0.04f,
-            throttleMultiplier = 1f,
-            latHMultiplier = 0.5f,
-            latVMultiplier = 0.7f,
-            pitchMultiplier = 1f,
-            rollMultiplier = 0.3f,
-            yawMultiplier = 0.8f,
-            thrustBoostMultiplier = 3.25f,
-            torqueBoostMultiplier = 2f,
-            totalBoostTime = 5f,
-            totalBoostRotationalTime = 6f,
-            boostMaxSpeedDropOffTime = 12f,
-            boostRechargeTime = 4f,
-            boostCapacitorPercentCost = 70f,
-            boostCapacityPercentChargeRate = 10f,
-            minUserLimitedVelocity = 250f
-        };
-
-        public ShipParameters Parameters {
-            get {
-                if (!_rigidbody) return ShipParameterDefaults;
-
-                var parameters = new ShipParameters();
-                parameters.mass = Mathf.Round(_rigidbody.mass);
-                parameters.drag = _rigidbody.drag;
-                parameters.angularDrag = _rigidbody.angularDrag;
-                parameters.inertiaTensorMultiplier = _inertialTensorMultiplier;
-                parameters.maxSpeed = _maxSpeed;
-                parameters.maxBoostSpeed = _maxBoostSpeed;
-                parameters.maxThrust = _maxThrust;
-                parameters.maxAngularVelocity = _maxAngularVelocity;
-                parameters.torqueThrustMultiplier = _torqueThrustMultiplier;
-                parameters.throttleMultiplier = _throttleMultiplier;
-                parameters.latHMultiplier = _latHMultiplier;
-                parameters.latVMultiplier = _latVMultiplier;
-                parameters.pitchMultiplier = _pitchMultiplier;
-                parameters.rollMultiplier = _rollMultiplier;
-                parameters.yawMultiplier = _yawMultiplier;
-                parameters.thrustBoostMultiplier = _thrustBoostMultiplier;
-                parameters.torqueBoostMultiplier = _torqueBoostMultiplier;
-                parameters.totalBoostTime = _totalBoostTime;
-                parameters.totalBoostRotationalTime = _totalBoostRotationalTime;
-                parameters.boostMaxSpeedDropOffTime = _boostMaxSpeedDropOffTime;
-                parameters.boostRechargeTime = _boostRechargeTime;
-                parameters.boostCapacitorPercentCost = _boostCapacitorPercentCost;
-                parameters.boostCapacityPercentChargeRate = _boostCapacityPercentChargeRate;
-                parameters.minUserLimitedVelocity = _minUserLimitedVelocity;
-                return parameters;
-            }
-            set {
-                _rigidbody.mass = value.mass;
-                _rigidbody.drag = value.drag;
-                _rigidbody.angularDrag = value.angularDrag;
-                _rigidbody.maxAngularVelocity = value.maxAngularVelocity;
-                _rigidbody.inertiaTensor = _initialInertiaTensor * value.inertiaTensorMultiplier;
-                _inertialTensorMultiplier = value.inertiaTensorMultiplier;
-                _maxSpeed = value.maxSpeed;
-                _maxBoostSpeed = value.maxBoostSpeed;
-                _maxThrust = value.maxThrust;
-                _maxAngularVelocity = value.maxAngularVelocity;
-                _torqueThrustMultiplier = value.torqueThrustMultiplier;
-                _throttleMultiplier = value.throttleMultiplier;
-                _latHMultiplier = value.latHMultiplier;
-                _latVMultiplier = value.latVMultiplier;
-                _pitchMultiplier = value.pitchMultiplier;
-                _rollMultiplier = value.rollMultiplier;
-                _yawMultiplier = value.yawMultiplier;
-                _thrustBoostMultiplier = value.thrustBoostMultiplier;
-                _torqueBoostMultiplier = value.torqueBoostMultiplier;
-                _totalBoostTime = value.totalBoostTime;
-                _totalBoostRotationalTime = value.totalBoostRotationalTime;
-                _boostMaxSpeedDropOffTime = value.boostMaxSpeedDropOffTime;
-                _boostRechargeTime = value.boostRechargeTime;
-                _boostCapacitorPercentCost = value.boostCapacitorPercentCost;
-                _boostCapacityPercentChargeRate = value.boostCapacityPercentChargeRate;
-                _minUserLimitedVelocity = value.minUserLimitedVelocity;
-            }
-        }
-
         [SerializeField] private GameObject playerLogic;
         [SerializeField] private User user;
+        [SerializeField] private ShipPhysics shipPhysics;
         public User User => user;
+        public ShipPhysics ShipPhysics => shipPhysics;
 
-        private float _maxSpeed = ShipParameterDefaults.maxSpeed;
-        private float _maxBoostSpeed = ShipParameterDefaults.maxBoostSpeed;
-        private float _maxThrust = ShipParameterDefaults.maxThrust;
-        private float _maxAngularVelocity = ShipParameterDefaults.maxAngularVelocity;
-        private float _torqueThrustMultiplier = ShipParameterDefaults.torqueThrustMultiplier;
-        private float _throttleMultiplier = ShipParameterDefaults.throttleMultiplier;
-        private float _latHMultiplier = ShipParameterDefaults.latHMultiplier;
-        private float _latVMultiplier = ShipParameterDefaults.latVMultiplier;
-        private float _pitchMultiplier = ShipParameterDefaults.pitchMultiplier;
-        private float _rollMultiplier = ShipParameterDefaults.rollMultiplier;
-        private float _yawMultiplier = ShipParameterDefaults.yawMultiplier;
-        private float _thrustBoostMultiplier = ShipParameterDefaults.thrustBoostMultiplier;
-        private float _torqueBoostMultiplier = ShipParameterDefaults.torqueBoostMultiplier;
-        private float _totalBoostTime = ShipParameterDefaults.totalBoostTime;
-        private float _totalBoostRotationalTime = ShipParameterDefaults.totalBoostRotationalTime;
-        private float _boostMaxSpeedDropOffTime = ShipParameterDefaults.boostMaxSpeedDropOffTime;
-        private float _boostRechargeTime = ShipParameterDefaults.boostRechargeTime;
-        private float _boostCapacitorPercentCost = ShipParameterDefaults.boostCapacitorPercentCost;
-        private float _boostCapacityPercentChargeRate = ShipParameterDefaults.boostCapacityPercentChargeRate;
-        private float _inertialTensorMultiplier = ShipParameterDefaults.inertiaTensorMultiplier;
-        private float _minUserLimitedVelocity = ShipParameterDefaults.minUserLimitedVelocity;
-
-        private Vector3 _initialInertiaTensor;
-
-        private bool _boostCharging;
-        private bool _isBoosting;
-        private float _currentBoostTime;
-        private float _boostedMaxSpeedDelta;
-        private float _boostCapacitorPercent = 100f;
-
-        private Vector3 _prevVelocity;
-        private float _gforce;
-        private float _velocityLimitCap;
-
-        private bool _shipLightsActive;
+        private bool _boostButtonHeld;
         private bool _velocityLimiterActive;
         private bool _flightAssistVectorControl;
         private bool _flightAssistRotationalControl;
@@ -204,8 +38,6 @@ namespace Core.Player {
         private float _rollTargetFactor;
         private float _yawTargetFactor;
 
-        [CanBeNull] private Coroutine _boostCoroutine;
-
         private Transform _transform;
         private Rigidbody _rigidbody;
 
@@ -218,62 +50,15 @@ namespace Core.Player {
         [SyncVar] private bool _serverReady;
         [SyncVar] public string playerName;
         [SyncVar] public bool isHost;
-        [SyncVar] private string _shipModel;
+
+        [SyncVar] private string _shipModelName;
         [SyncVar] private string _primaryColor;
         [SyncVar] private string _accentColor;
         [SyncVar] private string _thrusterColor;
         [SyncVar] private string _trailColor;
         [SyncVar] private string _headLightsColor;
 
-        // ray-casting without per-frame allocation
-        private readonly RaycastHit[] _raycastHits = new RaycastHit[50];
-
-        private bool IsReady => _transform && _rigidbody && _serverReady;
-
-        public float Velocity => Mathf.Round(_rigidbody.velocity.magnitude);
-        public float VelocityNormalised => _rigidbody.velocity.sqrMagnitude / (_maxBoostSpeed * _maxBoostSpeed);
-
-        [CanBeNull] private IShip _ship;
-
-        [CanBeNull]
-        public IShip Ship {
-            get {
-                // if no ship associated, try to grab one from the entity tree and initialise it
-                if (_ship == null) {
-                    _ship ??= GetComponentInChildren<Puffin>(true);
-                    _ship ??= GetComponentInChildren<Calidris>(true);
-
-                    Ship = _ship;
-                }
-
-                return _ship;
-            }
-            private set {
-                if (value != null) {
-                    var prev = _ship;
-
-                    // store and parent to main player transform
-                    _ship = value;
-                    var entity = _ship.Entity();
-                    entity.transform.SetParent(transform, false);
-
-                    // clean up existing ship
-                    if (prev != value && prev != null) {
-                        Debug.Log("Cleaning up existing ... " + prev);
-                        Destroy(prev.Entity().gameObject);
-                    }
-
-                    // set cockpit visibility mode
-                    if (!isLocalPlayer) // rigidbody angular momentum constraints 
-                        // TODO: Is this needed??
-                        _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
-                }
-            }
-        }
-
-        private bool BoostReady => !_boostCharging && _boostCapacitorPercent > _boostCapacitorPercentCost;
-
-        private ShipIndicatorData _shipIndicatorData;
+        private bool IsReady => _transform && _serverReady;
 
         // The position and rotation of the ship within the world, taking into account floating origin fix
         public Vector3 AbsoluteWorldPosition {
@@ -304,31 +89,17 @@ namespace Core.Player {
 
         public void Start() {
             DontDestroyOnLoad(this);
-
-            // rigidbody defaults
-            _rigidbody.centerOfMass = Vector3.zero;
-            _rigidbody.inertiaTensorRotation = Quaternion.identity;
-            _rigidbody.mass = ShipParameterDefaults.mass;
-            _rigidbody.drag = ShipParameterDefaults.drag;
-            _rigidbody.angularDrag = ShipParameterDefaults.angularDrag;
-            _rigidbody.maxAngularVelocity = ShipParameterDefaults.maxAngularVelocity;
-
-            // setup angular momentum for collisions (higher multiplier = less spin)
-            // This magic number is the original inertiaTensor of the puffin ship which, unbeknownst to me at the time,
-            // is actually calculated from the rigid body bounding boxes and impacts the torque rotation physics.
-            // Therefore, to maintains consistency with the flight parameters model this will likely never change.
-            // Good fun!
-            _initialInertiaTensor = new Vector3(5189.9f, 5825.6f, 1471.6f);
-            _rigidbody.inertiaTensor = _initialInertiaTensor * _inertialTensorMultiplier;
         }
 
         private void OnEnable() {
             // perform positional correction on non-local client player objects like anything else in the world
             FloatingOrigin.OnFloatingOriginCorrection += NonLocalPlayerPositionCorrection;
+            ShipPhysics.OnBoost += CmdBoost;
         }
 
         private void OnDisable() {
             FloatingOrigin.OnFloatingOriginCorrection -= NonLocalPlayerPositionCorrection;
+            ShipPhysics.OnBoost -= CmdBoost;
         }
 
         public override void OnStartLocalPlayer() {
@@ -359,22 +130,21 @@ namespace Core.Player {
             foreach (var shipPlayer in FindObjectsOfType<ShipPlayer>())
                 if (!shipPlayer.isLocalPlayer)
                     shipPlayer.RefreshShipModel();
+
+            // rigidbody angular momentum constraints 
+            // TODO: Is this needed??
+            if (!isLocalPlayer)
+                _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
         }
 
-        public void RefreshShipModel() {
+        private void RefreshShipModel() {
             IEnumerator RefreshShipAsync() {
-                while (string.IsNullOrEmpty(_shipModel)) yield return new WaitForFixedUpdate();
+                while (string.IsNullOrEmpty(_shipModelName)) yield return new WaitForFixedUpdate();
 
-                var shipData = ShipMeta.FromString(_shipModel);
+                var shipData = ShipMeta.FromString(_shipModelName);
                 // TODO: make this async
                 var shipModel = Instantiate(Resources.Load(shipData.PrefabToLoad, typeof(GameObject)) as GameObject);
-                var shipObject = shipModel.GetComponent<IShip>();
-                shipObject.SetPrimaryColor(_primaryColor);
-                shipObject.SetAccentColor(_accentColor);
-                shipObject.SetThrusterColor(_thrusterColor);
-                shipObject.SetTrailColor(_trailColor);
-                shipObject.SetHeadLightsColor(_headLightsColor);
-                Ship = shipObject;
+                ShipPhysics.RefreshShipModel(shipModel, _primaryColor, _accentColor, _thrusterColor, _trailColor, _headLightsColor);
             }
 
             StartCoroutine(RefreshShipAsync());
@@ -386,8 +156,6 @@ namespace Core.Player {
         }
 
         public void Reset() {
-            _rigidbody.velocity = Vector3.zero;
-            _rigidbody.angularVelocity = Vector3.zero;
             _pitchInput = 0;
             _rollInput = 0;
             _yawInput = 0;
@@ -400,16 +168,12 @@ namespace Core.Player {
             _pitchTargetFactor = 0;
             _rollTargetFactor = 0;
             _yawTargetFactor = 0;
-            _boostCharging = false;
-            _isBoosting = false;
-            _boostCapacitorPercent = 100f;
-            _prevVelocity = Vector3.zero;
+            _boostButtonHeld = false;
+            _velocityLimiterActive = false;
 
-            if (_boostCoroutine != null) StopCoroutine(_boostCoroutine);
+            ShipPhysics.Reset();
 
             User.ShipCameraRig.Reset();
-
-            UIAudioManager.Instance.Stop("ship-boost");
         }
 
         public void SetFlightAssistDefaults(string preference) {
@@ -434,67 +198,34 @@ namespace Core.Player {
         // Apply all physics updates in fixed intervals (WRITE)
         private void FixedUpdate() {
             if (isLocalPlayer && IsReady) {
-                CalculateBoost(out var maxThrustWithBoost, out var maxTorqueWithBoost, out var boostedMaxSpeedDelta);
-                CalculateFlightForces(
-                    maxThrustWithBoost,
-                    maxTorqueWithBoost,
-                    _maxSpeed + boostedMaxSpeedDelta,
-                    out var thrust,
-                    out var torque
+                var maxSpeedWithBoost = ShipPhysics.CurrentParameters.maxSpeed + ShipPhysics.BoostedMaxSpeedDelta;
+
+                /* FLIGHT ASSISTS */
+                if (IsVectorFlightAssistActive) CalculateVectorControlFlightAssist(maxSpeedWithBoost);
+                if (IsRotationalFlightAssistActive) CalculateRotationalDampeningFlightAssist();
+
+                ShipPhysics.indicatorThrottleLocation = new Optional<float>(
+                    _flightAssistVectorControl
+                        ? _throttleTargetFactor
+                        : _throttleInput
                 );
 
-                ClampMaxSpeed(boostedMaxSpeedDelta);
-                UpdateIndicators(thrust);
-                User.ShipCameraRig.UpdateCameras(transform.InverseTransformDirection(_rigidbody.velocity), _maxSpeed, thrust, _maxThrust);
+                ShipPhysics.UpdateShip(_pitchInput, _rollInput, _yawInput, _throttleInput, _latHInput, _latVInput, _boostButtonHeld, _velocityLimiterActive,
+                    IsVectorFlightAssistActive, IsRotationalFlightAssistActive);
+
+                user.InGameUI.ShipStats.UpdateIndicators(ShipPhysics.ShipIndicatorData);
+                ShipPhysics.ClampMaxSpeed(_velocityLimiterActive, ShipPhysics.BoostedMaxSpeedDelta);
+                User.ShipCameraRig.UpdateCameras(transform.InverseTransformDirection(_rigidbody.velocity), ShipPhysics.CurrentParameters.maxSpeed,
+                    ShipPhysics.CurrentFrameThrust,
+                    ShipPhysics.CurrentParameters.maxThrust);
 
                 // Send the current floating origin along with the new position and rotation to the server
-                CmdSetPosition(FloatingOrigin.Instance.Origin, _transform.localPosition, _transform.rotation, _rigidbody.velocity, _rigidbody.angularVelocity,
-                    thrust, torque);
+                CmdSetPosition(FloatingOrigin.Instance.Origin, _transform.localPosition, _transform.rotation, _rigidbody.velocity,
+                    _rigidbody.angularVelocity,
+                    ShipPhysics.CurrentFrameThrust, ShipPhysics.CurrentFrameTorque);
 
-                TriggerCollisionCheck();
+                ShipPhysics.CheckpointCollisionCheck();
             }
-        }
-
-        // standard OnTriggerEnter doesn't cut the mustard at these speeds so we need to do something a bit more precise
-        private void TriggerCollisionCheck() {
-            var shipTransform = transform;
-
-            var frameVelocity = _rigidbody.velocity * Time.fixedDeltaTime;
-            var start = shipTransform.position + frameVelocity * 2; // + 1 to include the current frame
-
-            // Check for checkpoint collisions (layer mask 9) using an inverse velocity ray rather than the inbuilt box check
-            // use the velocity * 4 to make damn sure we capture everything.
-            // use a box cast to eliminate the problem of missing at the extreme edges.
-            var raycastHitCount = Physics.BoxCastNonAlloc(start, new Vector3(5, frameVelocity.magnitude * 4, 3), frameVelocity.normalized,
-                _raycastHits, Quaternion.identity, frameVelocity.magnitude, 1 << 7); // 7th layer is checkpoint collider
-
-            // Debug.DrawRay(start, frameVelocity * 2 * -1, Color.red);
-
-            for (var i = 0; i < raycastHitCount; i++) {
-                var raycastHit = _raycastHits[i];
-                var checkpoint = raycastHit.collider.GetComponentInParent<Checkpoint>();
-                if (checkpoint) checkpoint.Hit();
-            }
-        }
-
-        private void UpdateIndicators(Vector3 thrust) {
-            _shipIndicatorData.throttlePosition = _flightAssistVectorControl
-                ? _throttleTargetFactor
-                : _throttleInput;
-            _shipIndicatorData.acceleration = (Math.Abs(thrust.x) + Math.Abs(thrust.y) + Math.Abs(thrust.z)) / _maxThrust;
-            _shipIndicatorData.velocity = Velocity;
-            _shipIndicatorData.throttle = _throttleInput;
-            _shipIndicatorData.boostCapacitorPercent = _boostCapacitorPercent;
-            _shipIndicatorData.boostTimerReady = !_boostCharging;
-            _shipIndicatorData.boostChargeReady = _boostCapacitorPercent > _boostCapacitorPercentCost;
-            _shipIndicatorData.lightsActive = _shipLightsActive;
-            _shipIndicatorData.velocityLimiterActive = _velocityLimiterActive;
-            _shipIndicatorData.vectorFlightAssistActive = IsRotationalFlightAssistActive;
-            _shipIndicatorData.rotationalFlightAssistActive = IsRotationalFlightAssistActive;
-            _shipIndicatorData.gForce = _gforce;
-
-            Ship?.UpdateIndicators(_shipIndicatorData);
-            User.InGameUI.ShipStats.UpdateIndicators(_shipIndicatorData);
         }
 
         #endregion
@@ -545,23 +276,7 @@ namespace Core.Player {
         }
 
         public void Boost(bool isPressed) {
-            var boost = isPressed;
-            if (boost && BoostReady) {
-                _boostCapacitorPercent -= _boostCapacitorPercentCost;
-                _boostCharging = true;
-
-                IEnumerator DoBoost() {
-                    CmdBoost(_totalBoostTime);
-                    yield return new WaitForSeconds(1);
-                    _currentBoostTime = 0f;
-                    _boostedMaxSpeedDelta = _maxBoostSpeed - _maxSpeed;
-                    _isBoosting = true;
-                    yield return new WaitForSeconds(_boostRechargeTime);
-                    _boostCharging = false;
-                }
-
-                _boostCoroutine = StartCoroutine(DoBoost());
-            }
+            _boostButtonHeld = isPressed;
         }
 
         public void AllFlightAssistToggle() {
@@ -605,17 +320,17 @@ namespace Core.Player {
         }
 
         public void ShipLightsToggle() {
-            _shipLightsActive = !_shipLightsActive;
-            CmdSetLights(_shipLightsActive);
+            ShipPhysics.ShipLightsToggle(CmdSetLights);
         }
 
         public void VelocityLimiterIsPressed(bool isPressed) {
-            _velocityLimiterActive = isPressed;
-
-            if (_velocityLimiterActive)
-                UIAudioManager.Instance.Play("ship-velocity-limit-on");
-            else
-                UIAudioManager.Instance.Play("ship-velocity-limit-off");
+            if (_velocityLimiterActive != isPressed) {
+                _velocityLimiterActive = isPressed;
+                if (_velocityLimiterActive)
+                    UIAudioManager.Instance.Play("ship-velocity-limit-on");
+                else
+                    UIAudioManager.Instance.Play("ship-velocity-limit-off");
+            }
         }
 
         /**
@@ -628,117 +343,11 @@ namespace Core.Player {
         #endregion
 
 
-        #region Flight Calculations
+        #region Flight Assist Calculations
 
-        private void CalculateBoost(
-            out float maxThrustWithBoost,
-            out float maxTorqueWithBoost,
-            out float boostedMaxSpeedDelta
-        ) {
-            _boostCapacitorPercent = Mathf.Min(100,
-                _boostCapacitorPercent + _boostCapacityPercentChargeRate * Time.fixedDeltaTime);
-
-            maxThrustWithBoost = _maxThrust;
-            maxTorqueWithBoost = _maxThrust * _torqueThrustMultiplier;
-            boostedMaxSpeedDelta = _boostedMaxSpeedDelta;
-
-            _currentBoostTime += Time.fixedDeltaTime;
-
-            // reduce boost potency over time period
-            if (_isBoosting) {
-                // Ease-in (boost drop-off is more dramatic)
-                var t = _currentBoostTime / _totalBoostTime;
-                var tBoost = 1f - Mathf.Cos(t * Mathf.PI * 0.5f);
-                var tTorque = 1f - Mathf.Cos(t * Mathf.PI * 0.5f);
-
-                maxThrustWithBoost *= Mathf.Lerp(_thrustBoostMultiplier, 1, tBoost);
-                maxTorqueWithBoost *= Mathf.Lerp(_torqueBoostMultiplier, 1, tTorque);
-            }
-
-            // reduce max speed over time until we're back at 0
-            if (_boostedMaxSpeedDelta > 0) {
-                var t = _currentBoostTime / _boostMaxSpeedDropOffTime;
-                // TODO: an actual curve rather than this ... idk what this is
-                // clamp at 1 as it's being used as a multiplier and the first ~2 seconds are at max speed 
-                var tBoostVelocityMax = Math.Min(1, 0.15f - Mathf.Cos(t * Mathf.PI * 0.6f) * -1);
-                boostedMaxSpeedDelta *= tBoostVelocityMax;
-
-                if (tBoostVelocityMax < 0) _boostedMaxSpeedDelta = 0;
-            }
-
-            if (_currentBoostTime > _totalBoostRotationalTime) _isBoosting = false;
-        }
-
-        private void CalculateFlightForces(float maxThrustWithBoost, float maxTorqueWithBoost, float maxSpeedWithBoost,
-            out Vector3 calculatedThrust, out Vector3 calculatedTorque) {
-            /* GRAVITY */
-            var gravity = new Vector3(
-                Game.Instance.LoadedLevelData.gravity.x,
-                Game.Instance.LoadedLevelData.gravity.y,
-                Game.Instance.LoadedLevelData.gravity.z
-            );
-            _rigidbody.AddForce(_rigidbody.mass * gravity);
-
-            /* FLIGHT ASSISTS */
-            if (IsVectorFlightAssistActive) CalculateVectorControlFlightAssist(maxSpeedWithBoost, gravity);
-            if (IsRotationalFlightAssistActive) CalculateRotationalDampeningFlightAssist();
-
-            /* INPUTS */
-
-            var latH = _latHInput;
-            var latV = _latVInput;
-            var throttle = _throttleInput;
-
-            // special case for throttle - no reverse while boosting but, while always going forward, the ship will change
-            // vector less harshly while holding back (up to 40%). The whole reverse axis is remapped to 40% for this calculation.
-            // any additional throttle thrust not used in boost to be distributed across laterals
-            if (_isBoosting && _currentBoostTime < _totalBoostTime) {
-                throttle = Mathf.Min(1f, MathfExtensions.Remap(-1, 0, 0.6f, 1, _throttleInput));
-
-                var delta = 1f - throttle;
-                if (delta > 0) {
-                    var latInputTotal = Mathf.Abs(latH) + Mathf.Abs(latV);
-                    if (latInputTotal > 0) {
-                        var latHComponent = Mathf.Abs(latH) / latInputTotal;
-                        var latVComponent = Mathf.Abs(latV) / latInputTotal;
-                        latH *= 1 + delta * latHComponent;
-                        latV *= 1 + delta * latVComponent;
-                    }
-                }
-            }
-
-            // Get the raw inputs multiplied by the ship params multipliers as a vector3.
-            // All components are between -1 and 1.
-            var thrustInput = new Vector3(
-                latH * _latHMultiplier,
-                latV * _latVMultiplier,
-                throttle * _throttleMultiplier
-            );
-
-            /* THRUST */
-            // standard thrust calculated per-axis (each axis has it's own max thrust component including boost)
-            var thrust = thrustInput * maxThrustWithBoost;
-            _rigidbody.AddForce(transform.TransformDirection(thrust));
-
-            /* TORQUE */
-            // torque is applied entirely independently, this may be looked at later.
-            var torque = new Vector3(
-                _pitchInput * _pitchMultiplier * maxTorqueWithBoost * -1,
-                _yawInput * _yawMultiplier * maxTorqueWithBoost,
-                _rollInput * _rollMultiplier * maxTorqueWithBoost * -1
-            ) * _inertialTensorMultiplier; // if we don't counteract the inertial tensor of the rigidbody, the rotation spin would increase in lockstep
-
-            _rigidbody.AddTorque(transform.TransformDirection(torque));
-
-            // output var for indicators etc
-            calculatedThrust = thrustInput * _maxThrust;
-            calculatedTorque = torque / _inertialTensorMultiplier;
-        }
-
-        private void CalculateVectorControlFlightAssist(float maxSpeedWithBoost, Vector3 gravity) {
-            // convert global rigid body velocity into local space
-            var localVelocity = transform.InverseTransformDirection(_rigidbody.velocity + gravity * 0.5715f); // WTF
+        private void CalculateVectorControlFlightAssist(float maxSpeedWithBoost) {
             // TODO: Correctly calculate gravity for FA (need the actual velocity from acceleration caused in the previous frame)
+            var localVelocity = transform.InverseTransformDirection(_rigidbody.velocity);
 
             CalculateAssistedAxis(_latHTargetFactor, localVelocity.x, 0.1f, maxSpeedWithBoost, out _latHInput);
             CalculateAssistedAxis(_latVTargetFactor, localVelocity.y, 0.1f, maxSpeedWithBoost, out _latVInput);
@@ -801,24 +410,6 @@ namespace Core.Player {
             }
         }
 
-        // TODO: clamping should be based on input rather than modifying the rigid body - if gravity pulls you down
-        //   then that's fine, similar to if a collision yeets you into a spinning mess.
-        private void ClampMaxSpeed(float boostedMaxSpeedDelta) {
-            // clamp max speed if user is holding the velocity limiter button down
-            if (_velocityLimiterActive) {
-                _velocityLimitCap = Math.Max(_prevVelocity.magnitude, _minUserLimitedVelocity);
-                _rigidbody.velocity = Vector3.ClampMagnitude(_rigidbody.velocity, _velocityLimitCap);
-            }
-
-            // clamp max speed in general including boost variance (max boost speed minus max speed)
-            _rigidbody.velocity = Vector3.ClampMagnitude(_rigidbody.velocity, _maxSpeed + boostedMaxSpeedDelta);
-
-            // calculate g-force 
-            var currentVelocity = _rigidbody.velocity;
-            _gforce = Math.Abs((currentVelocity - _prevVelocity).magnitude / (Time.fixedDeltaTime * 9.8f));
-            _prevVelocity = currentVelocity;
-        }
-
         #endregion
 
 
@@ -853,13 +444,15 @@ namespace Core.Player {
             }
 
             // Update Thrusters
-            var torqueNormalised = torque / (_maxThrust * _torqueThrustMultiplier);
+            var torqueNormalised = torque / (ShipPhysics.CurrentParameters.maxThrust * ShipPhysics.CurrentParameters.torqueThrustMultiplier);
             var torqueVec = new Vector3(
                 torqueNormalised.x,
                 MathfExtensions.Remap(-0.8f, 0.8f, -1, 1, torqueNormalised.y),
                 MathfExtensions.Remap(-0.3f, 0.3f, -1, 1, torqueNormalised.z)
             );
-            Ship?.UpdateMotionInformation(velocity, _maxBoostSpeed, thrust / _maxThrust, torqueVec);
+            ShipPhysics.ShipModel?.UpdateMotionInformation(velocity, ShipPhysics.CurrentParameters.maxBoostSpeed,
+                thrust / ShipPhysics.CurrentParameters.maxThrust,
+                torqueVec);
         }
 
         [Command]
@@ -869,7 +462,7 @@ namespace Core.Player {
 
         [ClientRpc]
         private void RpcBoost(float boostTime) {
-            Ship?.Boost(boostTime);
+            ShipPhysics.ShipModel?.Boost(boostTime);
         }
 
         [Command]
@@ -879,7 +472,7 @@ namespace Core.Player {
 
         [ClientRpc]
         private void RpcSetLights(bool active) {
-            Ship?.SetLights(active);
+            ShipPhysics.ShipModel?.SetLights(active);
         }
 
         private void NonLocalPlayerPositionCorrection(Vector3 offset) {
@@ -896,7 +489,7 @@ namespace Core.Player {
         [Command]
         private void CmdLoadShipModelPreferences(string shipModel, string primaryColor, string accentColor,
             string thrusterColor, string trailColor, string headLightsColor) {
-            _shipModel = shipModel;
+            _shipModelName = shipModel;
             _primaryColor = primaryColor;
             _accentColor = accentColor;
             _thrusterColor = thrusterColor;

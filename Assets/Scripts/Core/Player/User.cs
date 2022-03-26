@@ -35,16 +35,16 @@ namespace Core.Player {
         private Action<InputAction.CallbackContext> _cancelAction;
         private float _lateralH;
         private float _lateralV;
+        private bool _limiter;
         private bool _mouseLookActive;
         private Vector2 _mousePositionDelta;
         private Vector2 _mousePositionNormalized;
-
         private Vector2 _mousePositionScreen;
-
         private float _pitch;
         private Vector2 _previousRelativeRate;
         private bool _reverse;
         private float _roll;
+        private bool _shipLightsToggledThisFrame;
         private float _targetThrottle;
         private float _targetThrottleIncrement;
         private float _throttle;
@@ -114,8 +114,11 @@ namespace Core.Player {
                 shipPlayer.SetPitch(pitch);
                 shipPlayer.SetYaw(yaw);
                 shipPlayer.SetRoll(roll);
-
                 shipPlayer.Boost(_boost);
+                shipPlayer.VelocityLimiterIsPressed(_limiter);
+
+                if (_replayTimeline)
+                    _replayTimeline.SetFrameInput(pitch, roll, yaw, throttle, lateralH, lateralV, _boost, _limiter, _shipLightsToggledThisFrame);
 
                 // handle camera rig
                 if (_cameraRotateAxisControlsEnabled) {
@@ -140,6 +143,7 @@ namespace Core.Player {
             }
 
             if (boostButtonEnabledOverride) shipPlayer.Boost(_boost);
+            _shipLightsToggledThisFrame = false;
         }
 
         public void OnEnable() {
@@ -342,7 +346,7 @@ namespace Core.Player {
         }
 
         public void OnVelocityLimiter(InputValue value) {
-            shipPlayer.VelocityLimiterIsPressed(value.isPressed);
+            _limiter = value.isPressed;
         }
 
         public void OnAllFlightAssistToggle(InputValue value) {
@@ -358,6 +362,8 @@ namespace Core.Player {
         }
 
         public void OnShipLightsToggle(InputValue value) {
+            // this is a button type so only occurs once
+            _shipLightsToggledThisFrame = true;
             shipPlayer.ShipLightsToggle();
         }
 

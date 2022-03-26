@@ -1,4 +1,4 @@
-using Core.Ship;
+using Core.ShipModel;
 using Game_UI;
 using UnityEngine;
 

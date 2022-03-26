@@ -1,10 +1,11 @@
 ﻿using System.Globalization;
+using Core.Ship;
 using Misc;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Core.Ship {
-    public class Calidris : SimpleShip {
+namespace Core.ShipModel {
+    public class CalidrisShipModel : SimpleShipModel {
         [SerializeField] private Text velocityIndicatorText;
         [SerializeField] private Image accelerationBar;
 

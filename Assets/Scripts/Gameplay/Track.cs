@@ -7,6 +7,7 @@ using Core;
 using Core.MapData;
 using Core.Player;
 using Core.Scores;
+using Core.ShipModel;
 using Game_UI;
 using GameUI;
 using JetBrains.Annotations;
@@ -198,7 +199,7 @@ namespace Gameplay {
 
                         // TODO: Make this more generalised and implement a tinker tier for saving these times
                         if (!FindObjectOfType<Game>().ShipParameters.ToJsonString()
-                                .Equals(ShipPlayer.ShipParameterDefaults.ToJsonString())) {
+                                .Equals(ShipParameters.Defaults.ToJsonString())) {
                             // you dirty debug cheater!
                             Timers.TotalTimeDisplay.GetComponent<Text>().color = new Color(1, 1, 0, 1);
                         }

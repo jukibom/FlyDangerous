@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Core.Ship {
+namespace Core.ShipModel {
     public class ShipShake {
         private readonly Vector3 _originalPos;
         private float _shakeAmount;

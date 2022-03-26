@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.Rendering;
 
-namespace Core.Ship {
+namespace Core.ShipModel {
     public class Thruster : MonoBehaviour {
         private static readonly int thrustProperty = Shader.PropertyToID("_Thrust");
         private static readonly int thrustColorProperty = Shader.PropertyToID("_Base_Color");

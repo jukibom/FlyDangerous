@@ -1,6 +1,6 @@
 using System.Globalization;
 using Core;
-using Core.Player;
+using Core.ShipModel;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -34,7 +34,7 @@ public class DevPanel : MonoBehaviour {
 
     // Start is called before the first frame update
     private void Start() {
-        var defaults = ShipPlayer.ShipParameterDefaults;
+        var defaults = ShipParameters.Defaults;
 
         massTextField.placeholder.GetComponent<Text>().text = defaults.mass.ToString(CultureInfo.InvariantCulture);
         maxSpeedTextField.placeholder.GetComponent<Text>().text = defaults.maxSpeed.ToString(CultureInfo.InvariantCulture);
@@ -66,7 +66,7 @@ public class DevPanel : MonoBehaviour {
     }
 
     public void RestoreDefaults() {
-        UpdateTextFields(ShipPlayer.ShipParameterDefaults);
+        UpdateTextFields(ShipParameters.Defaults);
     }
 
     public void CopyToClipboard() {
@@ -110,7 +110,7 @@ public class DevPanel : MonoBehaviour {
     }
 
     public ShipParameters GetFlightParams() {
-        if (!_initialised) return ShipPlayer.ShipParameterDefaults;
+        if (!_initialised) return ShipParameters.Defaults;
 
         return new ShipParameters {
             mass = float.Parse(massTextField.text),

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Core.Ship {
+namespace Core.ShipModel {
     public struct ShipIndicatorData {
         public float throttlePosition; // -1 - 1
         public float velocity; // m/s
@@ -25,7 +25,7 @@ namespace Core.Ship {
      * Interface for various kinds of ships. This is updated from the Ship Player - some of which occurs via network
      * commands (those marked as network aware) and some of which on the local client only.
      */
-    public interface IShip {
+    public interface IShipModel {
         public MonoBehaviour Entity();
 
         /**

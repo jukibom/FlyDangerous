@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Misc;
 
-namespace Core.Ship {
+namespace Core.ShipModel {
     public class ShipMeta : IFdEnum {
         private static int _id;
         private string _prefabToLoad;

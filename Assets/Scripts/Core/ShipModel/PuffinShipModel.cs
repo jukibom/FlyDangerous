@@ -1,10 +1,11 @@
 ﻿using System.Globalization;
+using Core.Ship;
 using Misc;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Core.Ship {
-    public class Puffin : SimpleShip {
+namespace Core.ShipModel {
+    public class PuffinShipModel : SimpleShipModel {
         [SerializeField] private Text velocityIndicator;
         [SerializeField] private Image accelerationBar;
         [SerializeField] private Text boostIndicator;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Core.Ship {
+namespace Core.ShipModel {
     public class ThrusterController : MonoBehaviour {
         [SerializeField] private List<Thruster> forwardThrusters;
         [SerializeField] private List<Thruster> reverseThrusters;

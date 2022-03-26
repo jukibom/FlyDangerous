@@ -1,5 +1,5 @@
 using System.Globalization;
-using Core.Ship;
+using Core.ShipModel;
 using Misc;
 using UnityEngine;
 using UnityEngine.UI;

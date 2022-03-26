@@ -1,7 +1,6 @@
-using Core.Ship;
+using Core.ShipModel;
 using Misc;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 namespace Menus.Main_Menu.Components {
     public class ShipSelectionRenderer : MonoBehaviour {
@@ -31,11 +30,11 @@ namespace Menus.Main_Menu.Components {
         }
 
         public void SetShipPrimaryColor(string htmlColor) {
-            _loadedShip.GetComponent<IShip>().SetPrimaryColor(htmlColor);
+            _loadedShip.GetComponent<IShipModel>().SetPrimaryColor(htmlColor);
         }
 
         public void SetShipAccentColor(string htmlColor) {
-            _loadedShip.GetComponent<IShip>().SetAccentColor(htmlColor);
+            _loadedShip.GetComponent<IShipModel>().SetAccentColor(htmlColor);
         }
     }
 }
