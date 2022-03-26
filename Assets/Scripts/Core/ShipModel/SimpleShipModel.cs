@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using Core.Player;
 using Core.Ship;
-using GPUInstancer;
 using Misc;
 using UnityEngine;
 #if !NO_PAID_ASSETS
+using GPUInstancer;
 #endif
 
 namespace Core.ShipModel {
