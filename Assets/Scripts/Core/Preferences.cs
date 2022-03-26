@@ -50,10 +50,10 @@ namespace Core {
             switch (key) {
                 case "showSpaceDust":
                 case "autoShipRotation":
-                case "graphics-ssao":
                 case "graphics-terrain-details":
                     return true;
 
+                case "graphics-ssao":
                 case "graphics-soft-shadows":
                 case "enableMouseFlightControls":
                 case "showMouseWidget":
