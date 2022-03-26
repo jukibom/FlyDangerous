@@ -19,9 +19,6 @@ namespace Menus.Main_Menu.Components {
             if (_loadedShip) Destroy(_loadedShip);
 
             _loadedShip = Instantiate(Resources.Load(shipData.PrefabToLoad, typeof(GameObject)) as GameObject);
-            // disable lens flares
-            // TODO: https://issuetracker.unity3d.com/issues/hud-disapears-when-srp-lens-flare-is-on
-            foreach (var lensFlareComponentSrp in FindObjectsOfType<LensFlareComponentSRP>()) lensFlareComponentSrp.enabled = false;
 
             if (_loadedShip != null) {
                 _loadedShip.transform.SetParent(transform, false);
