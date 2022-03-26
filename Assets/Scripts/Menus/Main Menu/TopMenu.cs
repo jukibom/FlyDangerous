@@ -17,11 +17,6 @@ namespace Menus.Main_Menu {
             defaultActiveButton.Select();
         }
 
-        private void OnEnable() {
-            // always ensure a clean network state at the top menu, user is always offline here
-            if (FdNetworkManager.Instance != null) FdNetworkManager.Instance.ShutdownNetwork();
-        }
-
         public void OpenSinglePlayerPanel() {
             NetworkServer.dontListen = true;
             FdNetworkManager.Instance.StartHost();
