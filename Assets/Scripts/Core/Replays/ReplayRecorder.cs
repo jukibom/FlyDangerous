@@ -9,7 +9,6 @@ using UnityEngine;
 
 namespace Core.Replays {
     public class ReplayRecorder : MonoBehaviour {
-        private static readonly int keyFrameIntervalTicks = 25;
         private bool _recording;
 
         [CanBeNull] private Replay _replay;
@@ -43,9 +42,9 @@ namespace Core.Replays {
         private void RecordFrame(
             float pitch, float roll, float yaw, float throttle, float lateralH, float lateralV, bool boost, bool limiter, bool shipLightsEnabled
         ) {
-            if (_recording) {
+            if (_recording && _replay != null) {
                 // record a keyframe every specified amount of ticks
-                if (_ticks % keyFrameIntervalTicks == 0)
+                if (_ticks % _replay.ReplayMeta.KeyFrameIntervalTicks == 0)
                     RecordKeyFrame(new KeyFrame {
                         replayFloatingOrigin = FloatingOrigin.Instance.Origin,
                         position = _targetShip.Position,

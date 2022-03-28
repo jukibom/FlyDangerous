@@ -15,17 +15,13 @@ namespace Core.Replays {
     }
 
     public class ReplayTimeline : MonoBehaviour {
-        // TODO: Transfer this to a replay data file along with keyframe interval and version number
-        private const int SizeInputFrameBytes = 39;
-        private const int SizeKeyFrameBytes = 86;
-
-        private readonly byte[] _inputFrameByteBuffer = new byte[SizeInputFrameBytes];
-        private readonly byte[] _keyFrameByteBuffer = new byte[SizeKeyFrameBytes];
+        private byte[] _inputFrameByteBuffer;
 
         [CanBeNull] private BinaryReader _inputFrameReader;
 
         private uint _inputTicks;
         private bool _isPlaying;
+        private byte[] _keyFrameByteBuffer;
         [CanBeNull] private BinaryReader _keyFrameReader;
         private uint _keyFrameTicks;
 
@@ -57,6 +53,8 @@ namespace Core.Replays {
 
             _inputFrameReader = new BinaryReader(replay.InputFileStream, Encoding.UTF8, true);
             _keyFrameReader = new BinaryReader(replay.KeyFrameFileStream, Encoding.UTF8, true);
+            _inputFrameByteBuffer = new byte[replay.ReplayMeta.InputFrameBufferSizeBytes];
+            _keyFrameByteBuffer = new byte[replay.ReplayMeta.KeyFrameBufferSizeBytes];
 
             _inputTicks = 0;
             _keyFrameTicks = 0;
@@ -76,9 +74,9 @@ namespace Core.Replays {
         }
 
         private void UpdateKeyFrame() {
-            if (_inputTicks % 25 == 0 && _shipReplayObject != null) {
-                _keyFrameReader?.BaseStream.Seek(_keyFrameTicks * SizeKeyFrameBytes, SeekOrigin.Begin);
-                _keyFrameReader?.Read(_keyFrameByteBuffer, 0, SizeKeyFrameBytes);
+            if (_replay != null && _inputTicks % _replay.ReplayMeta.KeyFrameIntervalTicks == 0 && _shipReplayObject != null) {
+                _keyFrameReader?.BaseStream.Seek(_keyFrameTicks * _replay.ReplayMeta.KeyFrameBufferSizeBytes, SeekOrigin.Begin);
+                _keyFrameReader?.Read(_keyFrameByteBuffer, 0, _replay.ReplayMeta.KeyFrameBufferSizeBytes);
 
                 var keyFrame = MessagePackSerializer.Deserialize<KeyFrame>(_keyFrameByteBuffer);
 
@@ -94,19 +92,22 @@ namespace Core.Replays {
             // TODO: This is slow as all hell! We should abstract this and use SeekOrigin.Current in typical ghost run
 
             // Check for end of file
-            if (_inputTicks * SizeInputFrameBytes + SizeInputFrameBytes < _inputFrameReader?.BaseStream.Length) {
-                _inputFrameReader.BaseStream.Seek(_inputTicks * SizeInputFrameBytes, SeekOrigin.Begin);
-                _inputFrameReader.Read(_inputFrameByteBuffer, 0, SizeInputFrameBytes);
+            if (_replay != null) {
+                var maxRead = _inputTicks * _replay.ReplayMeta.InputFrameBufferSizeBytes + _replay.ReplayMeta.InputFrameBufferSizeBytes;
+                if (maxRead < _inputFrameReader?.BaseStream.Length) {
+                    _inputFrameReader.BaseStream.Seek(_inputTicks * _replay.ReplayMeta.InputFrameBufferSizeBytes, SeekOrigin.Begin);
+                    _inputFrameReader.Read(_inputFrameByteBuffer, 0, _replay.ReplayMeta.InputFrameBufferSizeBytes);
 
-                var inputFrame = MessagePackSerializer.Deserialize<InputFrame>(_inputFrameByteBuffer);
-                _shipReplayObject?.ShipPhysics.UpdateShip(inputFrame.pitch, inputFrame.roll, inputFrame.yaw, inputFrame.throttle, inputFrame.lateralH,
-                    inputFrame.lateralV, inputFrame.boostHeld, false, false, false);
+                    var inputFrame = MessagePackSerializer.Deserialize<InputFrame>(_inputFrameByteBuffer);
+                    _shipReplayObject?.ShipPhysics.UpdateShip(inputFrame.pitch, inputFrame.roll, inputFrame.yaw, inputFrame.throttle, inputFrame.lateralH,
+                        inputFrame.lateralV, inputFrame.boostHeld, false, false, false);
 
-                _inputTicks++;
-            }
-            else {
-                Debug.Log("Replay finished");
-                Stop();
+                    _inputTicks++;
+                }
+                else {
+                    Debug.Log("Replay finished");
+                    Stop();
+                }
             }
         }
     }
