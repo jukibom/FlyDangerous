@@ -3,6 +3,7 @@ using Cinemachine;
 using Core;
 using Core.MapData;
 using Core.Player;
+using Core.Replays;
 using Gameplay;
 using MapMagic.Core;
 using Mirror;
@@ -18,8 +19,12 @@ namespace Misc {
      * without having to go through the menus etc.
      */
     public class TestScene : MonoBehaviour {
+        public bool shouldShowTestShip;
+        public bool shouldRecordSession;
+        public bool shouldReplaySession;
         public Transform spawnLocation;
         public ShipPlayer shipPlayerPrefab;
+        public ShipGhost shipGhostPrefab;
 
         private void Awake() {
             // load engine if not already 
@@ -54,8 +59,8 @@ namespace Misc {
                     var rot = spawnLocation.rotation;
                     player.AbsoluteWorldPosition = pos;
                     player.transform.rotation = rot;
-                    Game.Instance.LoadedLevelData.startPosition = new LevelDataVector3<float>(pos.x, pos.y, pos.z);
-                    Game.Instance.LoadedLevelData.startRotation = new LevelDataVector3<float>(rot.eulerAngles.x, rot.eulerAngles.y, rot.eulerAngles.z);
+                    Game.Instance.LoadedLevelData.startPosition = new LevelDataVector3(pos.x, pos.y, pos.z);
+                    Game.Instance.LoadedLevelData.startRotation = new LevelDataVector3(rot.eulerAngles.x, rot.eulerAngles.y, rot.eulerAngles.z);
                 }
 
                 // if there's a map magic object going on here, enable it
@@ -70,7 +75,21 @@ namespace Misc {
                 if (track) track.InitialiseTrack();
 
                 // create a test other player
-                // CreateTestSecondShip();
+                if (shouldShowTestShip) CreateTestSecondShip();
+
+                // record the sessions for testing ghost data
+                if (player && shouldRecordSession) {
+                    var recorder = gameObject.AddComponent<ReplayRecorder>();
+                    recorder.StartNewRecording(player.ShipPhysics);
+                }
+
+                // playback the ghost in the tmp folder for testing
+                if (player && shouldReplaySession) {
+                    var replay = Replay.LoadFromFilepath(Replay.TMPSaveDirectory);
+                    var timeline = gameObject.AddComponent<ReplayTimeline>();
+                    var ghost = Instantiate(shipGhostPrefab);
+                    timeline.LoadReplay(ghost, replay);
+                }
 
                 // My work here is done
                 gameObject.SetActive(false);

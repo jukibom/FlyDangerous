@@ -135,11 +135,8 @@ namespace Core.Player {
         private void RefreshShipModel() {
             IEnumerator RefreshShipAsync() {
                 while (string.IsNullOrEmpty(_shipModelName)) yield return new WaitForFixedUpdate();
-
-                var shipData = ShipMeta.FromString(_shipModelName);
-                // TODO: make this async
-                var shipModel = Instantiate(Resources.Load(shipData.PrefabToLoad, typeof(GameObject)) as GameObject);
-                ShipPhysics.RefreshShipModel(shipModel, _primaryColor, _accentColor, _thrusterColor, _trailColor, _headLightsColor);
+                ShipPhysics.RefreshShipModel(new ShipProfile(playerName, _shipModelName, _primaryColor, _accentColor, _thrusterColor, _trailColor,
+                    _headLightsColor));
             }
 
             StartCoroutine(RefreshShipAsync());
@@ -209,7 +206,6 @@ namespace Core.Player {
                     IsVectorFlightAssistActive, IsRotationalFlightAssistActive);
 
                 user.InGameUI.ShipStats.UpdateIndicators(ShipPhysics.ShipIndicatorData);
-                ShipPhysics.ClampMaxSpeed(_velocityLimiterActive, ShipPhysics.BoostedMaxSpeedDelta);
                 User.ShipCameraRig.UpdateCameras(transform.InverseTransformDirection(_rigidbody.velocity), ShipPhysics.CurrentParameters.maxSpeed,
                     ShipPhysics.CurrentFrameThrust,
                     ShipPhysics.CurrentParameters.maxThrust);
@@ -437,17 +433,6 @@ namespace Core.Player {
                 // add velocity to position as position would have moved on server at that velocity
                 transform.localPosition += velocity * Time.fixedDeltaTime;
             }
-
-            // Update Thrusters
-            var torqueNormalised = torque / (ShipPhysics.CurrentParameters.maxThrust * ShipPhysics.CurrentParameters.torqueThrustMultiplier);
-            var torqueVec = new Vector3(
-                torqueNormalised.x,
-                MathfExtensions.Remap(-0.8f, 0.8f, -1, 1, torqueNormalised.y),
-                MathfExtensions.Remap(-0.3f, 0.3f, -1, 1, torqueNormalised.z)
-            );
-            ShipPhysics.ShipModel?.UpdateMotionInformation(velocity, ShipPhysics.CurrentParameters.maxBoostSpeed,
-                thrust / ShipPhysics.CurrentParameters.maxThrust,
-                torqueVec);
         }
 
         [Command]

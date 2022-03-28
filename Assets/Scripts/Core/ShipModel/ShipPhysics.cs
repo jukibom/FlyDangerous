@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using Core.Player;
 using JetBrains.Annotations;
 using Misc;
@@ -8,11 +7,40 @@ using UnityEngine;
 
 namespace Core.ShipModel {
     public class ShipPhysics : MonoBehaviour {
-        
         public delegate void BoostFiredAction(float boostTime);
-        public static event BoostFiredAction OnBoost;
-        
+
+        public delegate void ShipPhysicsUpdated(float pitch, float roll, float yaw, float throttle, float latH, float latV, bool boostHeld,
+            bool velocityLimiterHeld, bool shipLightsActive);
+
+        // This magic number is the original inertiaTensor of the puffin ship which, unbeknownst to me at the time,
+        // is actually calculated from the rigid body bounding boxes and impacts the torque rotation physics.
+        // Therefore, to maintains consistency with the flight parameters model this will likely never change.
+        // Good fun!
+        private static readonly Vector3 initialInertiaTensor = new(5189.9f, 5825.6f, 1471.6f);
+
         [SerializeField] private Rigidbody targetRigidbody;
+
+        public Optional<float> indicatorThrottleLocation;
+
+        // ray-casting without per-frame allocation
+        private readonly RaycastHit[] _raycastHits = new RaycastHit[50];
+        private float _boostCapacitorPercent = 100f;
+        private bool _boostCharging;
+
+        [CanBeNull] private Coroutine _boostCoroutine;
+        private float _boostedMaxSpeedDelta;
+        private float _currentBoostTime;
+        private float _gforce;
+        private bool _isBoosting;
+
+        private Vector3 _prevVelocity;
+        private ShipIndicatorData _shipIndicatorData;
+        private bool _shipLightsActive;
+
+        [CanBeNull] private IShipModel _shipModel;
+
+        private ShipParameters _shipParameters;
+        private float _velocityLimitCap;
 
         public ShipParameters CurrentParameters {
             get {
@@ -21,56 +49,41 @@ namespace Core.ShipModel {
             }
             set {
                 _shipParameters = value;
-                
+
                 // handle rigidbody params
                 targetRigidbody.mass = value.mass;
                 targetRigidbody.drag = value.drag;
                 targetRigidbody.angularDrag = value.angularDrag;
                 targetRigidbody.maxAngularVelocity = value.maxAngularVelocity;
-                
+
                 // setup angular momentum for collisions (higher multiplier = less spin)
                 targetRigidbody.inertiaTensor = initialInertiaTensor * value.inertiaTensorMultiplier;
             }
         }
 
-        private ShipParameters _shipParameters;
+        // used when recording - should only set these values on a higher-level ghost / replay object
+        public Vector3 AbsoluteWorldPosition {
+            get {
+                var position = transform.position;
+                // if floating origin fix is active, overwrite position with corrected world space
+                if (FloatingOrigin.Instance.FocalTransform == transform) position = FloatingOrigin.Instance.FocalObjectPosition;
+                return position;
+            }
+        }
 
-        // This magic number is the original inertiaTensor of the puffin ship which, unbeknownst to me at the time,
-        // is actually calculated from the rigid body bounding boxes and impacts the torque rotation physics.
-        // Therefore, to maintains consistency with the flight parameters model this will likely never change.
-        // Good fun!
-        private static readonly Vector3 initialInertiaTensor = new(5189.9f, 5825.6f, 1471.6f);
-
-        [CanBeNull] private Coroutine _boostCoroutine;
-        private bool _boostCharging;
-        private bool _isBoosting;
-        private float _currentBoostTime;
-        private float _boostedMaxSpeedDelta;
-        private float _boostCapacitorPercent = 100f;
-
-        private Vector3 _prevVelocity;
-        private float _gforce;
-        private float _velocityLimitCap;
-        private bool _shipLightsActive;
-        
-        // ray-casting without per-frame allocation
-        private readonly RaycastHit[] _raycastHits = new RaycastHit[50];
-        
-        public float Velocity => Mathf.Round(targetRigidbody.velocity.magnitude);
+        public Quaternion Rotation => transform.rotation;
+        public Vector3 Velocity => targetRigidbody.velocity;
+        public Vector3 AngularVelocity => targetRigidbody.angularVelocity;
+        public float VelocityMagnitude => Mathf.Round(targetRigidbody.velocity.magnitude);
         public float VelocityNormalised => targetRigidbody.velocity.sqrMagnitude / (CurrentParameters.maxBoostSpeed * CurrentParameters.maxBoostSpeed);
         private bool BoostReady => !_boostCharging && _boostCapacitorPercent > CurrentParameters.boostCapacitorPercentCost;
-        private ShipIndicatorData _shipIndicatorData;
         public ShipIndicatorData ShipIndicatorData => _shipIndicatorData;
-        
+
         public Vector3 CurrentFrameThrust { get; private set; }
         public Vector3 CurrentFrameTorque { get; private set; }
         public float MaxThrustWithBoost { get; private set; }
         public float MaxTorqueWithBoost { get; private set; }
         public float BoostedMaxSpeedDelta { get; private set; }
-
-        public Optional<float> indicatorThrottleLocation;
-
-        [CanBeNull] private IShipModel _shipModel;
 
         [CanBeNull]
         public IShipModel ShipModel {
@@ -102,27 +115,6 @@ namespace Core.ShipModel {
                 }
             }
         }
-        
-        public void RefreshShipModel(GameObject shipModel, string primaryColor, string accentColor, string thrusterColor, string trailColor, string headLightsColor) {
-            var shipObject = shipModel.GetComponent<IShipModel>();
-            shipObject.SetPrimaryColor(primaryColor);
-            shipObject.SetAccentColor(accentColor);
-            shipObject.SetThrusterColor(thrusterColor);
-            shipObject.SetTrailColor(trailColor);
-            shipObject.SetHeadLightsColor(headLightsColor);
-            ShipModel = shipObject;
-        }
-
-        public void Start() {
-            DontDestroyOnLoad(this);
-
-            // rigidbody non-configurable defaults
-            targetRigidbody.centerOfMass = Vector3.zero;
-            targetRigidbody.inertiaTensorRotation = Quaternion.identity;
-            
-            // init physics
-            CurrentParameters = ShipParameters.Defaults;
-        }
 
         public void Reset() {
             targetRigidbody.velocity = Vector3.zero;
@@ -131,10 +123,38 @@ namespace Core.ShipModel {
             _isBoosting = false;
             _boostCapacitorPercent = 100f;
             _prevVelocity = Vector3.zero;
-            
+
             if (_boostCoroutine != null) StopCoroutine(_boostCoroutine);
         }
-        
+
+        public void Start() {
+            DontDestroyOnLoad(this);
+
+            // rigidbody non-configurable defaults
+            targetRigidbody.centerOfMass = Vector3.zero;
+            targetRigidbody.inertiaTensorRotation = Quaternion.identity;
+
+            // init physics
+            CurrentParameters = ShipParameters.Defaults;
+        }
+
+        public event BoostFiredAction OnBoost;
+        public event ShipPhysicsUpdated OnShipPhysicsUpdated;
+
+        public void RefreshShipModel(ShipProfile shipProfile) {
+            var shipData = ShipMeta.FromString(shipProfile.shipModel);
+            // TODO: make this async
+            var shipModel = Instantiate(Resources.Load(shipData.PrefabToLoad, typeof(GameObject)) as GameObject);
+
+            var shipObject = shipModel.GetComponent<IShipModel>();
+            shipObject.SetPrimaryColor(shipProfile.primaryColor);
+            shipObject.SetAccentColor(shipProfile.accentColor);
+            shipObject.SetThrusterColor(shipProfile.thrusterColor);
+            shipObject.SetTrailColor(shipProfile.trailColor);
+            shipObject.SetHeadLightsColor(shipProfile.headLightsColor);
+            ShipModel = shipObject;
+        }
+
         // standard OnTriggerEnter doesn't cut the mustard at these speeds so we need to do something a bit more precise
         public void CheckpointCollisionCheck() {
             var shipTransform = transform;
@@ -156,7 +176,7 @@ namespace Core.ShipModel {
                 if (checkpoint) checkpoint.Hit();
             }
         }
-        
+
         public void AttemptBoost() {
             if (BoostReady) {
                 _boostCapacitorPercent -= CurrentParameters.boostCapacitorPercentCost;
@@ -179,19 +199,20 @@ namespace Core.ShipModel {
         public void ShipLightsToggle(Action<bool> shipLightStatus) {
             _shipLightsActive = !_shipLightsActive;
             shipLightStatus(_shipLightsActive);
-        } 
-        
+        }
+
         // TODO: clamping should be based on input rather than modifying the rigid body - if gravity pulls you down
         //   then that's fine, similar to if a collision yeets you into a spinning mess.
-        public void ClampMaxSpeed(bool velocityLimiterActive, float boostedMaxSpeedDelta) {
+        public void ClampMaxSpeed(bool velocityLimiterActive) {
             // clamp max speed if user is holding the velocity limiter button down
             if (velocityLimiterActive) {
                 _velocityLimitCap = Math.Max(_prevVelocity.magnitude, CurrentParameters.minUserLimitedVelocity);
                 targetRigidbody.velocity = Vector3.ClampMagnitude(targetRigidbody.velocity, _velocityLimitCap);
             }
 
+            Debug.Log(BoostedMaxSpeedDelta);
             // clamp max speed in general including boost variance (max boost speed minus max speed)
-            targetRigidbody.velocity = Vector3.ClampMagnitude(targetRigidbody.velocity, CurrentParameters.maxSpeed + boostedMaxSpeedDelta);
+            targetRigidbody.velocity = Vector3.ClampMagnitude(targetRigidbody.velocity, CurrentParameters.maxSpeed + BoostedMaxSpeedDelta);
 
             // calculate g-force 
             var currentVelocity = targetRigidbody.velocity;
@@ -235,19 +256,35 @@ namespace Core.ShipModel {
             if (_currentBoostTime > CurrentParameters.totalBoostRotationalTime) _isBoosting = false;
         }
 
-        public void UpdateShip(float pitch, float roll, float yaw, float throttle, float latH, float latV, bool boostButtonHeld, bool velocityLimitActive, bool isVectorFlightAssistActive, bool isRotationalFlightAssistActive) {
+        public void UpdateShip(float pitch, float roll, float yaw, float throttle, float latH, float latV, bool boostButtonHeld, bool velocityLimitActive,
+            bool isVectorFlightAssistActive, bool isRotationalFlightAssistActive) {
+            OnShipPhysicsUpdated?.Invoke(pitch, roll, yaw, throttle, latH, latV, boostButtonHeld, velocityLimitActive, _shipLightsActive);
+
             if (boostButtonHeld) AttemptBoost();
             UpdateBoostStatus();
+            ApplyFlightForces(pitch, roll, yaw, throttle, latH, latV, velocityLimitActive);
+
             UpdateIndicators(throttle, velocityLimitActive, isVectorFlightAssistActive, isRotationalFlightAssistActive);
-            ApplyFlightForces(pitch, roll, yaw, throttle, latH, latV);
+            UpdateMotionInformation();
         }
-        
-        
+
+        private void UpdateMotionInformation() {
+            var torqueNormalised = CurrentFrameTorque / (CurrentParameters.maxThrust * CurrentParameters.torqueThrustMultiplier);
+            var torqueVec = new Vector3(
+                torqueNormalised.x,
+                MathfExtensions.Remap(-0.8f, 0.8f, -1, 1, torqueNormalised.y),
+                MathfExtensions.Remap(-0.3f, 0.3f, -1, 1, torqueNormalised.z)
+            );
+            ShipModel?.UpdateMotionInformation(Velocity, CurrentParameters.maxBoostSpeed, CurrentFrameThrust / CurrentParameters.maxThrust, torqueVec);
+        }
+
+
         private void UpdateIndicators(float throttleInput, bool velocityLimitActive, bool isVectorFlightAssistActive, bool isRotationalFlightAssistActive) {
             _shipIndicatorData.throttlePosition = indicatorThrottleLocation.Enabled ? indicatorThrottleLocation.Value : throttleInput;
-            
-            _shipIndicatorData.acceleration = (Math.Abs(CurrentFrameThrust.x) + Math.Abs(CurrentFrameThrust.y) + Math.Abs(CurrentFrameThrust.z)) / CurrentParameters.maxThrust;
-            _shipIndicatorData.velocity = Velocity;
+
+            _shipIndicatorData.acceleration = (Math.Abs(CurrentFrameThrust.x) + Math.Abs(CurrentFrameThrust.y) + Math.Abs(CurrentFrameThrust.z)) /
+                                              CurrentParameters.maxThrust;
+            _shipIndicatorData.velocity = VelocityMagnitude;
             _shipIndicatorData.throttle = throttleInput;
             _shipIndicatorData.boostCapacitorPercent = _boostCapacitorPercent;
             _shipIndicatorData.boostTimerReady = !_boostCharging;
@@ -257,11 +294,12 @@ namespace Core.ShipModel {
             _shipIndicatorData.vectorFlightAssistActive = isVectorFlightAssistActive;
             _shipIndicatorData.rotationalFlightAssistActive = isRotationalFlightAssistActive;
             _shipIndicatorData.gForce = _gforce;
-            
+
             ShipModel?.UpdateIndicators(_shipIndicatorData);
         }
 
-        private void ApplyFlightForces(float pitchInput, float rollInput, float yawInput, float throttleInput, float latHInput, float latVInput) {
+        private void ApplyFlightForces(float pitchInput, float rollInput, float yawInput, float throttleInput, float latHInput, float latVInput,
+            bool velocityLimiterActive) {
             /* GRAVITY */
             var gravity = new Vector3(
                 Game.Instance.LoadedLevelData.gravity.x,
@@ -313,9 +351,12 @@ namespace Core.ShipModel {
                 pitchInput * CurrentParameters.pitchMultiplier * MaxTorqueWithBoost * -1,
                 yawInput * CurrentParameters.yawMultiplier * MaxTorqueWithBoost,
                 rollInput * CurrentParameters.rollMultiplier * MaxTorqueWithBoost * -1
-            ) * CurrentParameters.inertiaTensorMultiplier; // if we don't counteract the inertial tensor of the rigidbody, the rotation spin would increase in lockstep
+            ) * CurrentParameters
+                .inertiaTensorMultiplier; // if we don't counteract the inertial tensor of the rigidbody, the rotation spin would increase in lockstep
 
             targetRigidbody.AddTorque(transform.TransformDirection(torque));
+
+            ClampMaxSpeed(velocityLimiterActive);
 
             // output var for indicators etc
             CurrentFrameThrust = thrustInput * CurrentParameters.maxThrust;
