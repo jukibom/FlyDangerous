@@ -239,11 +239,7 @@ namespace Core {
                 var loadingRoom = FindObjectOfType<LoadingRoom>();
                 if (loadingRoom) {
                     var loadingPlayerCameraTransform = loadingRoom.transform;
-                    loadingPlayerCameraTransform.position = new Vector3(
-                        levelData.startPosition.x,
-                        levelData.startPosition.y,
-                        levelData.startPosition.z
-                    );
+                    loadingPlayerCameraTransform.position = levelData.startPosition.ToVector3();
                 }
 
                 yield return _levelLoader.StartGame(levelData);
@@ -276,9 +272,7 @@ namespace Core {
 
                 ship.ShipPhysics.CurrentParameters = ShipParameters;
                 var shipPosition = ship.transform.position;
-                _levelLoader.LoadedLevelData.startPosition.x = shipPosition.x;
-                _levelLoader.LoadedLevelData.startPosition.y = shipPosition.y;
-                _levelLoader.LoadedLevelData.startPosition.z = shipPosition.z;
+                _levelLoader.LoadedLevelData.startPosition = LevelDataVector3.FromVector3(shipPosition);
 
                 // set up graphics settings (e.g. camera FoV) + VR status (cameras, radial fog etc)
                 ApplyGameOptions();

@@ -15,20 +15,20 @@ namespace Core.Scores {
         public string ToJsonString() {
             return JsonConvert.SerializeObject(this, Formatting.Indented);
         }
+
+        public static ScoreData FromJsonString(string json) {
+            return JsonConvert.DeserializeObject<ScoreData>(json);
+        }
     }
 
     public class Score {
-        private readonly LevelData _levelData;
-
         private ScoreData _scoreData;
 
         private Score(LevelData levelData) {
-            _levelData = levelData;
             _scoreData = LoadJson(levelData);
         }
 
-        private Score(LevelData levelData, float raceTimeMs, List<float> splitTimeMs) {
-            _levelData = levelData;
+        private Score(float raceTimeMs, List<float> splitTimeMs) {
             _scoreData = new ScoreData { raceTime = raceTimeMs, splits = splitTimeMs };
         }
 
@@ -40,8 +40,8 @@ namespace Core.Scores {
             return new Score(levelData);
         }
 
-        public static Score NewPersonalBest(LevelData levelData, float raceTime, List<float> splitTime) {
-            return new Score(levelData, raceTime, splitTime);
+        public static Score NewPersonalBest(float raceTime, List<float> splitTime) {
+            return new Score(raceTime, splitTime);
         }
 
         public static float GoldTimeTarget(LevelData level) {
@@ -64,7 +64,7 @@ namespace Core.Scores {
                 using var file = new FileStream(fileLoc, FileMode.Open, FileAccess.Read, FileShare.Read);
                 using var reader = new StreamReader(file);
                 var json = reader.ReadToEnd();
-                var scoreData = JsonConvert.DeserializeObject<ScoreData>(json);
+                var scoreData = ScoreData.FromJsonString(json);
 
                 var scoreHash = ScoreHash(scoreData.raceTime, levelData);
                 if (scoreHash != scoreData.hash) {
@@ -98,16 +98,19 @@ namespace Core.Scores {
             return Hash.ComputeSha256Hash(score.ToString(CultureInfo.InvariantCulture) + checkpointText + levelData.location.Name);
         }
 
-        public void Save() {
+        public ScoreData Save(LevelData levelData) {
+            _scoreData.hash = ScoreHash(_scoreData.raceTime, levelData);
+            return _scoreData;
+        }
+
+        public static void SaveToDisk(ScoreData scoreData, LevelData levelData) {
             // Creates the path to the save file (make dir if needed).
-            var filename = FilenameHash(_levelData);
+            var filename = FilenameHash(levelData);
             var saveLoc = Path.Combine(Application.persistentDataPath, "Save", "Records", $"{filename}");
             var directoryLoc = Path.GetDirectoryName(saveLoc);
             if (directoryLoc != null) Directory.CreateDirectory(directoryLoc);
 
-            _scoreData.hash = ScoreHash(_scoreData.raceTime, _levelData);
-
-            var json = _scoreData.ToJsonString();
+            var json = scoreData.ToJsonString();
 
             using (var file = new FileStream(saveLoc, FileMode.Create, FileAccess.Write, FileShare.Read)) {
                 using (var writer = new StreamWriter(file)) {

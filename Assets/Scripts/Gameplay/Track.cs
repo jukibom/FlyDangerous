@@ -208,9 +208,10 @@ namespace Gameplay {
                             Timers.TotalTimeDisplay.GetComponent<Text>().color = new Color(0, 1, 0, 1);
                             // if new run OR better score, save!
                             if (_previousBestScore.PersonalBestTotalTime == 0 || _timeSeconds < _previousBestScore.PersonalBestTotalTime) {
-                                var score = Score.NewPersonalBest(Game.Instance.LoadedLevelData, _timeSeconds, _splits);
+                                var score = Score.NewPersonalBest(_timeSeconds, _splits);
                                 _previousBestScore = score;
-                                score.Save();
+                                var scoreData = score.Save(Game.Instance.LoadedLevelData);
+                                Score.SaveToDisk(scoreData, Game.Instance.LoadedLevelData);
                             }
 
                             UpdateTargetTimeElements();

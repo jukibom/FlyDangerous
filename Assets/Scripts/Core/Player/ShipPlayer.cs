@@ -111,15 +111,10 @@ namespace Core.Player {
 
             SetFlightAssistDefaults(Preferences.Instance.GetString("flightAssistDefault"));
 
-            CmdSetPlayerName(Preferences.Instance.GetString("playerName"));
-            CmdLoadShipModelPreferences(
-                Preferences.Instance.GetString("playerShipDesign"),
-                Preferences.Instance.GetString("playerShipPrimaryColor"),
-                Preferences.Instance.GetString("playerShipAccentColor"),
-                Preferences.Instance.GetString("playerShipThrusterColor"),
-                Preferences.Instance.GetString("playerShipTrailColor"),
-                Preferences.Instance.GetString("playerShipHeadLightsColor")
-            );
+            var profile = ShipProfile.FromPreferences();
+            CmdSetPlayerName(profile.playerName);
+            CmdLoadShipModelPreferences(profile.shipModel, profile.primaryColor, profile.accentColor, profile.thrusterColor, profile.trailColor,
+                profile.headLightsColor);
 
             RefreshShipModel();
         }

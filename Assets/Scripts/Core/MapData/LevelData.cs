@@ -7,33 +7,45 @@ using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Core.MapData {
-    public class LevelDataVector3<T> {
-        public T x;
-        public T y;
-        public T z;
+    public class LevelDataVector3 {
+        public float x;
+        public float y;
+        public float z;
 
         public LevelDataVector3() {
         }
 
-        public LevelDataVector3(T x, T y, T z) {
+        public LevelDataVector3(float x, float y, float z) {
             this.x = x;
             this.y = y;
             this.z = z;
         }
 
+        public Vector3 ToVector3() {
+            return new Vector3(
+                x,
+                y,
+                z
+            );
+        }
+
         public override string ToString() {
             return "[ " + x + ", " + y + ", " + z + " ]";
+        }
+
+        public static LevelDataVector3 FromVector3(Vector3 value) {
+            return new LevelDataVector3(value.x, value.y, value.z);
         }
     }
 
     public class CheckpointLocation {
-        public LevelDataVector3<float> position;
-        public LevelDataVector3<float> rotation;
+        public LevelDataVector3 position;
+        public LevelDataVector3 rotation;
         public CheckpointType type;
     }
 
     public class LevelData {
-        public float authorTimeTarget;
+        public float authorTimeTarget = 0f;
 
         public List<CheckpointLocation> checkpoints;
 
@@ -43,14 +55,14 @@ namespace Core.MapData {
         [JsonConverter(typeof(FdEnumJsonConverter))]
         public GameType gameType = GameType.FreeRoam;
 
-        public LevelDataVector3<float> gravity = new(0, 0, 0);
+        public LevelDataVector3 gravity = new(0, 0, 0);
 
         [JsonConverter(typeof(FdEnumJsonConverter))]
         public Location location = Location.Space;
 
         public string name = "";
-        public LevelDataVector3<float> startPosition = new();
-        public LevelDataVector3<float> startRotation = new();
+        public LevelDataVector3 startPosition = new();
+        public LevelDataVector3 startRotation = new();
 
         public string terrainSeed = "";
         public int version = 1;

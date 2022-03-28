@@ -151,13 +151,14 @@ namespace Core.MapData {
 
         // Return a new level data object hydrated with all the information of the current game state
         private LevelData GenerateLevelData() {
-            var levelData = new LevelData();
-            levelData.name = LoadedLevelData.name;
-            levelData.gameType = LoadedLevelData.gameType;
-            levelData.location = LoadedLevelData.location;
-            levelData.environment = LoadedLevelData.environment;
-            levelData.terrainSeed = LoadedLevelData.terrainSeed;
-            levelData.checkpoints = LoadedLevelData.checkpoints;
+            var levelData = new LevelData {
+                name = LoadedLevelData.name,
+                gameType = LoadedLevelData.gameType,
+                location = LoadedLevelData.location,
+                environment = LoadedLevelData.environment,
+                terrainSeed = LoadedLevelData.terrainSeed,
+                checkpoints = LoadedLevelData.checkpoints
+            };
 
             var ship = FdPlayer.FindLocalShipPlayer;
             if (ship) {
@@ -178,18 +179,14 @@ namespace Core.MapData {
                 foreach (var checkpoint in checkpoints) {
                     var checkpointLocation = new CheckpointLocation();
                     checkpointLocation.type = checkpoint.Type;
-                    checkpointLocation.position = new LevelDataVector3<float>();
-                    checkpointLocation.rotation = new LevelDataVector3<float>();
+                    checkpointLocation.position = new LevelDataVector3();
+                    checkpointLocation.rotation = new LevelDataVector3();
 
                     var checkpointTransform = checkpoint.transform;
                     var position = checkpointTransform.localPosition;
                     var rotation = checkpointTransform.rotation.eulerAngles;
-                    checkpointLocation.position.x = position.x;
-                    checkpointLocation.position.y = position.y;
-                    checkpointLocation.position.z = position.z;
-                    checkpointLocation.rotation.x = rotation.x;
-                    checkpointLocation.rotation.y = rotation.y;
-                    checkpointLocation.rotation.z = rotation.z;
+                    checkpointLocation.position = LevelDataVector3.FromVector3(position);
+                    checkpointLocation.rotation = LevelDataVector3.FromVector3(rotation);
                     levelData.checkpoints.Add(checkpointLocation);
                 }
             }
@@ -236,11 +233,7 @@ namespace Core.MapData {
                     var checkpoint = checkpointObject.GetComponent<Checkpoint>();
                     checkpoint.Type = c.type;
                     var checkpointObjectTransform = checkpointObject.transform;
-                    checkpointObjectTransform.position = new Vector3(
-                        c.position.x,
-                        c.position.y,
-                        c.position.z
-                    );
+                    checkpointObjectTransform.position = c.position.ToVector3();
                     checkpointObjectTransform.rotation = Quaternion.Euler(
                         c.rotation.x,
                         c.rotation.y,

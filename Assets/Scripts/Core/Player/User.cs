@@ -44,7 +44,6 @@ namespace Core.Player {
         private Vector2 _previousRelativeRate;
         private bool _reverse;
         private float _roll;
-        private bool _shipLightsToggledThisFrame;
         private float _targetThrottle;
         private float _targetThrottleIncrement;
         private float _throttle;
@@ -117,9 +116,6 @@ namespace Core.Player {
                 shipPlayer.Boost(_boost);
                 shipPlayer.VelocityLimiterIsPressed(_limiter);
 
-                if (_replayTimeline)
-                    _replayTimeline.SetFrameInput(pitch, roll, yaw, throttle, lateralH, lateralV, _boost, _limiter, _shipLightsToggledThisFrame);
-
                 // handle camera rig
                 if (_cameraRotateAxisControlsEnabled) {
                     if (Preferences.Instance.GetString("cameraMode") == "absolute" && !_mouseLookActive)
@@ -143,7 +139,6 @@ namespace Core.Player {
             }
 
             if (boostButtonEnabledOverride) shipPlayer.Boost(_boost);
-            _shipLightsToggledThisFrame = false;
         }
 
         public void OnEnable() {
@@ -362,8 +357,6 @@ namespace Core.Player {
         }
 
         public void OnShipLightsToggle(InputValue value) {
-            // this is a button type so only occurs once
-            _shipLightsToggledThisFrame = true;
             shipPlayer.ShipLightsToggle();
         }
 
