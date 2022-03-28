@@ -283,7 +283,7 @@ namespace Core.Player {
                 isEnabled = !(IsVectorFlightAssistActive & IsRotationalFlightAssistActive);
 
             _flightAssistVectorControl = isEnabled;
-            _flightAssistVectorControl = isEnabled;
+            _flightAssistRotationalControl = isEnabled;
 
             Debug.Log("All Flight Assists " + (isEnabled ? "ON" : "OFF"));
 
