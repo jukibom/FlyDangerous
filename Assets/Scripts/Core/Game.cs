@@ -4,6 +4,7 @@ using System.Reflection;
 using Cinemachine;
 using Core.MapData;
 using Core.Player;
+using Core.Replays;
 using Core.ShipModel;
 using Gameplay;
 using JetBrains.Annotations;
@@ -40,6 +41,10 @@ namespace Core {
 
         public delegate void GameSettingsApplyAction();
 
+        public delegate void GhostAddedAction();
+
+        public delegate void GhostRemovedAction();
+
         public delegate void PlayerJoinAction();
 
         public delegate void PlayerLeaveAction();
@@ -55,6 +60,7 @@ namespace Core {
         [SerializeField] private ScriptableRendererFeature ssao;
         [SerializeField] private Camera inGameUiCamera;
         [SerializeField] private Animator crossfade;
+        [SerializeField] private ShipGhost shipGhostPrefab;
 
         private CinemachineBrain _cinemachine;
         private Vector3 _hmdPosition;
@@ -137,6 +143,8 @@ namespace Core {
 
         public static event PlayerJoinAction OnPlayerLoaded;
         public static event PlayerLeaveAction OnPlayerLeave;
+        public static event GhostAddedAction OnGhostAdded;
+        public static event GhostRemovedAction OnGhostRemoved;
         public static event RestartLevelAction OnRestart;
         public static event GameSettingsApplyAction OnGameSettingsApplied;
         public static event GamePauseAction OnPauseToggle;
@@ -448,6 +456,16 @@ namespace Core {
 
                 StartCoroutine(ResetHmdPosition());
             }
+        }
+
+        // TODO: What does this interface really look like?
+        public void LoadGhost(string filePath) {
+            var replay = Replay.LoadFromFilepath(filePath);
+            var timeline = gameObject.AddComponent<ReplayTimeline>();
+            var ghost = Instantiate(shipGhostPrefab);
+            OnGhostAdded?.Invoke();
+            timeline.LoadReplay(ghost, replay);
+            timeline.Play();
         }
 
         public void NotifyPlayerLoaded() {

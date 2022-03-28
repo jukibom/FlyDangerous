@@ -24,7 +24,6 @@ namespace Misc {
         public bool shouldReplaySession;
         public Transform spawnLocation;
         public ShipPlayer shipPlayerPrefab;
-        public ShipGhost shipGhostPrefab;
 
         private void Awake() {
             // load engine if not already 
@@ -84,15 +83,10 @@ namespace Misc {
                 }
 
                 // playback the ghost in the tmp folder for testing
-                if (player && shouldReplaySession) {
-                    var replay = Replay.LoadFromFilepath(Replay.TMPSaveDirectory);
-                    var timeline = gameObject.AddComponent<ReplayTimeline>();
-                    var ghost = Instantiate(shipGhostPrefab);
-                    timeline.LoadReplay(ghost, replay);
-                }
+                if (player && shouldReplaySession) Game.Instance.LoadGhost(Replay.TMPSaveDirectory);
 
                 // My work here is done
-                gameObject.SetActive(false);
+                // gameObject.SetActive(false);
             }
 
             StartCoroutine(StartGame());

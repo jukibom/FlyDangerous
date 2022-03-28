@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Text;
 using Core.ShipModel;
 using JetBrains.Annotations;
@@ -7,24 +6,42 @@ using MessagePack;
 using UnityEngine;
 
 namespace Core.Replays {
-
     public interface IReplayShip {
-        // ReSharper disable once InconsistentNaming
-        Transform transform { get; }
+        string PlayerName { get; set; }
+        Transform Transform { get; }
+        Rigidbody Rigidbody { get; }
         ShipPhysics ShipPhysics { get; }
-        public void SetAbsolutePosition(Vector3 position);
+        public void SetAbsolutePosition(Vector3 ghostFloatingOrigin, Vector3 position);
     }
-    
-    public class ReplayTimeline : MonoBehaviour {
 
+    public class ReplayTimeline : MonoBehaviour {
+        // TODO: Transfer this to a replay data file along with keyframe interval and version number
         private const int SizeInputFrameBytes = 39;
-        private const int SizeKeyFrameBytes = 71;
-        
+        private const int SizeKeyFrameBytes = 86;
+
+        private readonly byte[] _inputFrameByteBuffer = new byte[SizeInputFrameBytes];
+        private readonly byte[] _keyFrameByteBuffer = new byte[SizeKeyFrameBytes];
+
+        [CanBeNull] private BinaryReader _inputFrameReader;
+
+        private uint _inputTicks;
+        private bool _isPlaying;
+        [CanBeNull] private BinaryReader _keyFrameReader;
+        private uint _keyFrameTicks;
+
+        // private float _playSpeed = 1f;
+
         [CanBeNull] private Replay _replay;
         [CanBeNull] private IReplayShip _shipReplayObject;
-        private int _ticks = 0;
-        private float _playSpeed = 1f;
-        private bool _isPlaying;
+
+        public void FixedUpdate() {
+            if (_isPlaying)
+                if (_replay != null && _shipReplayObject != null && _inputFrameReader != null && _keyFrameReader != null) {
+                    UpdateKeyFrame();
+                    UpdateInputFrame();
+                }
+        }
+
         private void OnDestroy() {
             if (_replay != null) {
                 _replay.InputFileStream.Close();
@@ -36,13 +53,13 @@ namespace Core.Replays {
             _replay = replay;
             _shipReplayObject = ship;
             ship.ShipPhysics.RefreshShipModel(replay.ShipProfile);
-            ship.SetAbsolutePosition(replay.LevelData.startPosition.ToVector3());
-            ship.transform.rotation = Quaternion.Euler(
-                replay.LevelData.startRotation.x,
-                replay.LevelData.startRotation.y,
-                replay.LevelData.startRotation.z
-            );
-            _ticks = 0;
+            ship.PlayerName = replay.ShipProfile.playerName;
+
+            _inputFrameReader = new BinaryReader(replay.InputFileStream, Encoding.UTF8, true);
+            _keyFrameReader = new BinaryReader(replay.KeyFrameFileStream, Encoding.UTF8, true);
+
+            _inputTicks = 0;
+            _keyFrameTicks = 0;
         }
 
         public void Play() {
@@ -54,24 +71,42 @@ namespace Core.Replays {
         }
 
         public void Stop() {
-            _ticks = 0;
+            _inputTicks = 0;
             _isPlaying = false;
         }
 
-        public void FixedUpdate() {
-            Debug.Log("yay " + _replay + " " + _shipReplayObject);
-            if (_replay != null && _shipReplayObject != null) {
-                using BinaryReader br = new BinaryReader(_replay.InputFileStream, Encoding.UTF8, true);
-                byte[] inputFrameBytes = new byte[SizeInputFrameBytes];
-                
-                // TODO: This is slow as all hell! We should abstract this and use SeekOrigin.Current in typical ghost run
-                // TODO: Detect end of file
-                br.BaseStream.Seek(_ticks * SizeInputFrameBytes, SeekOrigin.Begin);
-                br.Read(inputFrameBytes, 0, SizeInputFrameBytes);
-                
-                var inputFrame = MessagePackSerializer.Deserialize<InputFrame>(inputFrameBytes);
-                _shipReplayObject.ShipPhysics.UpdateShip(inputFrame.pitch, inputFrame.roll, inputFrame.yaw, inputFrame.throttle, inputFrame.lateralH, inputFrame.lateralV, inputFrame.boostHeld, false, false, false);
-                _ticks ++;
+        private void UpdateKeyFrame() {
+            if (_inputTicks % 25 == 0 && _shipReplayObject != null) {
+                _keyFrameReader?.BaseStream.Seek(_keyFrameTicks * SizeKeyFrameBytes, SeekOrigin.Begin);
+                _keyFrameReader?.Read(_keyFrameByteBuffer, 0, SizeKeyFrameBytes);
+
+                var keyFrame = MessagePackSerializer.Deserialize<KeyFrame>(_keyFrameByteBuffer);
+
+                _shipReplayObject.SetAbsolutePosition(keyFrame.replayFloatingOrigin, keyFrame.position);
+                _shipReplayObject.Transform.rotation = keyFrame.rotation;
+                _shipReplayObject.Rigidbody.velocity = keyFrame.velocity;
+                _shipReplayObject.Rigidbody.angularVelocity = keyFrame.angularVelocity;
+                _keyFrameTicks++;
+            }
+        }
+
+        private void UpdateInputFrame() {
+            // TODO: This is slow as all hell! We should abstract this and use SeekOrigin.Current in typical ghost run
+
+            // Check for end of file
+            if (_inputTicks * SizeInputFrameBytes + SizeInputFrameBytes < _inputFrameReader?.BaseStream.Length) {
+                _inputFrameReader.BaseStream.Seek(_inputTicks * SizeInputFrameBytes, SeekOrigin.Begin);
+                _inputFrameReader.Read(_inputFrameByteBuffer, 0, SizeInputFrameBytes);
+
+                var inputFrame = MessagePackSerializer.Deserialize<InputFrame>(_inputFrameByteBuffer);
+                _shipReplayObject?.ShipPhysics.UpdateShip(inputFrame.pitch, inputFrame.roll, inputFrame.yaw, inputFrame.throttle, inputFrame.lateralH,
+                    inputFrame.lateralV, inputFrame.boostHeld, false, false, false);
+
+                _inputTicks++;
+            }
+            else {
+                Debug.Log("Replay finished");
+                Stop();
             }
         }
     }

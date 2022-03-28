@@ -61,16 +61,7 @@ namespace Core.ShipModel {
             }
         }
 
-        // used when recording - should only set these values on a higher-level ghost / replay object
-        public Vector3 AbsoluteWorldPosition {
-            get {
-                var position = transform.position;
-                // if floating origin fix is active, overwrite position with corrected world space
-                if (FloatingOrigin.Instance.FocalTransform == transform) position = FloatingOrigin.Instance.FocalObjectPosition;
-                return position;
-            }
-        }
-
+        public Vector3 Position => transform.position;
         public Quaternion Rotation => transform.rotation;
         public Vector3 Velocity => targetRigidbody.velocity;
         public Vector3 AngularVelocity => targetRigidbody.angularVelocity;
@@ -146,6 +137,13 @@ namespace Core.ShipModel {
             // TODO: make this async
             var shipModel = Instantiate(Resources.Load(shipData.PrefabToLoad, typeof(GameObject)) as GameObject);
 
+            void SetLayerMaskRecursive(int layer, GameObject targetGameObject) {
+                targetGameObject.layer = layer;
+                foreach (Transform child in targetGameObject.transform) SetLayerMaskRecursive(layer, child.gameObject);
+            }
+
+            SetLayerMaskRecursive(gameObject.layer, shipModel);
+
             var shipObject = shipModel.GetComponent<IShipModel>();
             shipObject.SetPrimaryColor(shipProfile.primaryColor);
             shipObject.SetAccentColor(shipProfile.accentColor);
@@ -210,7 +208,6 @@ namespace Core.ShipModel {
                 targetRigidbody.velocity = Vector3.ClampMagnitude(targetRigidbody.velocity, _velocityLimitCap);
             }
 
-            Debug.Log(BoostedMaxSpeedDelta);
             // clamp max speed in general including boost variance (max boost speed minus max speed)
             targetRigidbody.velocity = Vector3.ClampMagnitude(targetRigidbody.velocity, CurrentParameters.maxSpeed + BoostedMaxSpeedDelta);
 
@@ -259,7 +256,6 @@ namespace Core.ShipModel {
         public void UpdateShip(float pitch, float roll, float yaw, float throttle, float latH, float latV, bool boostButtonHeld, bool velocityLimitActive,
             bool isVectorFlightAssistActive, bool isRotationalFlightAssistActive) {
             OnShipPhysicsUpdated?.Invoke(pitch, roll, yaw, throttle, latH, latV, boostButtonHeld, velocityLimitActive, _shipLightsActive);
-
             if (boostButtonHeld) AttemptBoost();
             UpdateBoostStatus();
             ApplyFlightForces(pitch, roll, yaw, throttle, latH, latV, velocityLimitActive);
