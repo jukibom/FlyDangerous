@@ -71,6 +71,10 @@ namespace Core.Replays {
         public void Stop() {
             _inputTicks = 0;
             _isPlaying = false;
+            if (_shipReplayObject != null) {
+                _shipReplayObject.Rigidbody.velocity = Vector3.zero;
+                _shipReplayObject.Rigidbody.angularVelocity = Vector3.zero;
+            }
         }
 
         private void UpdateKeyFrame() {
