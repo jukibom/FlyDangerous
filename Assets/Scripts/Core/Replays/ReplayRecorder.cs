@@ -72,7 +72,7 @@ namespace Core.Replays {
         private void RecordInputFrame(InputFrame inputFrame) {
             if (_replay is { CanWrite: true }) {
                 var inputFrameBytes = MessagePackSerializer.Serialize(inputFrame);
-                using var bw = new BinaryWriter(_replay.InputFileStream, Encoding.UTF8, true);
+                using var bw = new BinaryWriter(_replay.InputFrameStream, Encoding.UTF8, true);
                 bw.Write(inputFrameBytes);
             }
         }
@@ -80,7 +80,7 @@ namespace Core.Replays {
         private void RecordKeyFrame(KeyFrame keyFrame) {
             if (_replay is { CanWrite: true }) {
                 var keyFrameBytes = MessagePackSerializer.Serialize(keyFrame);
-                using var bw = new BinaryWriter(_replay.KeyFrameFileStream, Encoding.UTF8, true);
+                using var bw = new BinaryWriter(_replay.KeyFrameStream, Encoding.UTF8, true);
                 bw.Write(keyFrameBytes);
             }
         }

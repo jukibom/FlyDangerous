@@ -1,4 +1,5 @@
 using System.Collections;
+using System.IO;
 using Cinemachine;
 using Core;
 using Core.MapData;
@@ -78,12 +79,16 @@ namespace Misc {
 
                 // record the sessions for testing ghost data
                 if (player && shouldRecordSession) {
+                    // TODO: move this to game class?
                     var recorder = gameObject.AddComponent<ReplayRecorder>();
                     recorder.StartNewRecording(player.ShipPhysics);
                 }
 
-                // playback the ghost in the tmp folder for testing
-                if (player && shouldReplaySession) Game.Instance.LoadGhost(Replay.TMPSaveDirectory);
+                // playback all the ghosts of the current loaded level
+                if (player && shouldReplaySession) {
+                    var ghosts = Directory.GetFiles(Path.Combine(Replay.ReplayDirectory, Game.Instance.LoadedLevelData.LevelHash()));
+                    foreach (var ghost in ghosts) Game.Instance.LoadGhost(ghost);
+                }
 
                 // My work here is done
                 // gameObject.SetActive(false);

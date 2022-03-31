@@ -47,7 +47,7 @@ namespace Core.MapData {
     public class LevelData {
         public float authorTimeTarget = 0f;
 
-        public List<CheckpointLocation> checkpoints;
+        public List<CheckpointLocation> checkpoints = new();
 
         [JsonConverter(typeof(FdEnumJsonConverter))]
         public Environment environment = Environment.NoonClear;
@@ -66,6 +66,16 @@ namespace Core.MapData {
 
         public string terrainSeed = "";
         public int version = 1;
+
+        public string LevelHash() {
+            // generate the filename from a hash combination of name, checkpoints and location - this way they'll always be unique.
+            var checkpointStrings =
+                checkpoints.ConvertAll(checkpoint => checkpoint.position.ToString() + checkpoint.rotation);
+            var checkpointText = "";
+            foreach (var checkpointString in checkpointStrings) checkpointText += checkpointString;
+            return Hash.ComputeSha256Hash(
+                name + checkpointText + location.Name);
+        }
 
         public string ToJsonString() {
             return JsonConvert.SerializeObject(this, Formatting.Indented);

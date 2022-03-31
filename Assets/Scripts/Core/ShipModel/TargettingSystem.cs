@@ -65,10 +65,12 @@ namespace Core.ShipModel {
         }
 
         private void ResetTargets() {
-            var players = FdNetworkManager.Instance.ShipPlayers;
             foreach (var keyValuePair in _players) Destroy(keyValuePair.Value.gameObject);
+            foreach (var keyValuePair in _ghosts) Destroy(keyValuePair.Value.gameObject);
             _players.Clear();
-            foreach (var shipPlayer in players)
+            _ghosts.Clear();
+
+            foreach (var shipPlayer in FdNetworkManager.Instance.ShipPlayers)
                 if (!shipPlayer.isLocalPlayer) {
                     var target = Instantiate(targetPrefab, transform);
                     _players.Add(shipPlayer, target);

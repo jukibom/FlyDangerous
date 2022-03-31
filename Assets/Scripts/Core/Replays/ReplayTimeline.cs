@@ -40,8 +40,8 @@ namespace Core.Replays {
 
         private void OnDestroy() {
             if (_replay != null) {
-                _replay.InputFileStream.Close();
-                _replay.KeyFrameFileStream.Close();
+                _replay.InputFrameStream.Close();
+                _replay.KeyFrameStream.Close();
             }
         }
 
@@ -51,8 +51,8 @@ namespace Core.Replays {
             ship.ShipPhysics.RefreshShipModel(replay.ShipProfile);
             ship.PlayerName = replay.ShipProfile.playerName;
 
-            _inputFrameReader = new BinaryReader(replay.InputFileStream, Encoding.UTF8, true);
-            _keyFrameReader = new BinaryReader(replay.KeyFrameFileStream, Encoding.UTF8, true);
+            _inputFrameReader = new BinaryReader(replay.InputFrameStream, Encoding.UTF8, true);
+            _keyFrameReader = new BinaryReader(replay.KeyFrameStream, Encoding.UTF8, true);
             _inputFrameByteBuffer = new byte[replay.ReplayMeta.InputFrameBufferSizeBytes];
             _keyFrameByteBuffer = new byte[replay.ReplayMeta.KeyFrameBufferSizeBytes];
 

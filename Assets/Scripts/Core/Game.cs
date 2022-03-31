@@ -461,11 +461,11 @@ namespace Core {
         // TODO: What does this interface really look like?
         public void LoadGhost(string filePath) {
             var replay = Replay.LoadFromFilepath(filePath);
-            var timeline = gameObject.AddComponent<ReplayTimeline>();
             var ghost = Instantiate(shipGhostPrefab);
+            // var timeline = ghost.gameObject.AddComponent<ReplayTimeline>();
             OnGhostAdded?.Invoke();
-            timeline.LoadReplay(ghost, replay);
-            timeline.Play();
+            ghost.LoadReplay(replay);
+            ghost.ReplayTimeline.Play();
         }
 
         public void NotifyPlayerLoaded() {

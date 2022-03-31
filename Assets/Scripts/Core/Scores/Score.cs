@@ -59,7 +59,7 @@ namespace Core.Scores {
         private static ScoreData LoadJson(LevelData levelData) {
             // try to find file at save location
             try {
-                var filename = FilenameHash(levelData);
+                var filename = levelData.LevelHash();
                 var fileLoc = Path.Combine(Application.persistentDataPath, "Save", "Records", $"{filename}");
                 using var file = new FileStream(fileLoc, FileMode.Open, FileAccess.Read, FileShare.Read);
                 using var reader = new StreamReader(file);
@@ -79,16 +79,6 @@ namespace Core.Scores {
             }
         }
 
-        private static string FilenameHash(LevelData levelData) {
-            // generate the filename from a hash combination of name, checkpoints and location - this way they'll always be unique.
-            var checkpoints =
-                levelData.checkpoints.ConvertAll(checkpoint => checkpoint.position.ToString() + checkpoint.rotation);
-            var checkpointText = "";
-            foreach (var checkpoint in checkpoints) checkpointText += checkpoint;
-            return Hash.ComputeSha256Hash(
-                levelData.name + checkpointText + levelData.location.Name);
-        }
-
         private static string ScoreHash(float score, LevelData levelData) {
             // generate the filename from a hash combination of score, checkpoints and location.
             var checkpoints =
@@ -105,19 +95,17 @@ namespace Core.Scores {
 
         public static void SaveToDisk(ScoreData scoreData, LevelData levelData) {
             // Creates the path to the save file (make dir if needed).
-            var filename = FilenameHash(levelData);
+            var filename = levelData.LevelHash();
             var saveLoc = Path.Combine(Application.persistentDataPath, "Save", "Records", $"{filename}");
             var directoryLoc = Path.GetDirectoryName(saveLoc);
             if (directoryLoc != null) Directory.CreateDirectory(directoryLoc);
 
             var json = scoreData.ToJsonString();
 
-            using (var file = new FileStream(saveLoc, FileMode.Create, FileAccess.Write, FileShare.Read)) {
-                using (var writer = new StreamWriter(file)) {
-                    writer.Write(json);
-                    writer.Flush();
-                }
-            }
+            using var file = new FileStream(saveLoc, FileMode.Create, FileAccess.Write, FileShare.Read);
+            using var writer = new StreamWriter(file);
+            writer.Write(json);
+            writer.Flush();
         }
     }
 }
