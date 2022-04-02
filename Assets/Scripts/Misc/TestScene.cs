@@ -91,7 +91,7 @@ namespace Misc {
                 }
 
                 // My work here is done
-                // gameObject.SetActive(false);
+                spawnLocation.gameObject.SetActive(false);
             }
 
             StartCoroutine(StartGame());
