@@ -22,6 +22,7 @@ namespace Menus.Main_Menu {
         [SerializeField] private TopMenu topMenu;
         [SerializeField] private DisconnectionDialog disconnectionDialog;
 
+        [SerializeField] private bool shouldMove;
         [SerializeField] private float shipSpeed = 6f;
 
         public static bool FirstRun => Game.Instance?.MenuFirstRun ?? true;
@@ -34,13 +35,15 @@ namespace Menus.Main_Menu {
         }
 
         private void FixedUpdate() {
-            // move along at a fixed rate to animate the stars
-            // dirty hack job but who cares it's a menu screen
-            transform.Translate(0.1f, 0, shipSpeed);
+            if (shouldMove) {
+                // move along at a fixed rate to animate the stars
+                // dirty hack job but who cares it's a menu screen
+                transform.Translate(0.1f, 0, shipSpeed);
 
-            // gently rock the ship mesh back and forth
-            var rotationAmount = (0.25f - Mathf.PingPong(Time.time / 20, 0.5f)) / 5;
-            shipMesh.transform.Rotate(Vector3.forward, rotationAmount);
+                // gently rock the ship mesh back and forth
+                var rotationAmount = (0.25f - Mathf.PingPong(Time.time / 20, 0.5f)) / 5;
+                shipMesh.transform.Rotate(Vector3.forward, rotationAmount);
+            }
         }
 
         private void OnEnable() {
