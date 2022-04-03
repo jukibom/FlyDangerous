@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Security.Cryptography;
 using Core.MapData;
 using Core.Player;
@@ -183,6 +185,15 @@ namespace Core.Replays {
             var keyFrameFileStream = new FileStream(tmpKeyFrameDataSaveLoc, FileMode.Append, FileAccess.Write, FileShare.Read);
 
             return new Replay(replayMeta, shipParameters, levelData, shipProfile, new ScoreData(), inputFileStream, keyFrameFileStream);
+        }
+
+        /**
+         * Fetch all replays on the file system for the specified level
+         */
+        public static List<Replay> ReplaysForLevel(LevelData levelData) {
+            return Directory.GetFiles(Path.Combine(ReplayDirectory, levelData.LevelHash()))
+                .ToList()
+                .ConvertAll(LoadFromFilepath);
         }
     }
 }
