@@ -13,11 +13,6 @@ using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
 
 namespace Menus.Main_Menu.Components {
-    internal enum LevelSelectionMode {
-        LevelSelect,
-        Summary
-    }
-
     public class LevelSelectPanel : MonoBehaviour {
         public delegate void OnLevelSelectedAction();
 
@@ -59,15 +54,23 @@ namespace Menus.Main_Menu.Components {
                 levelButton.gameObject.GetComponent<UIButton>().OnButtonUnHighlightedEvent += OnLevelUnHighLighted;
             }
 
-            var firstLevel = levels.First();
-            if (firstLevel != null) HighlightSelectedLevel(firstLevel);
-
             levelFlowLayoutGroup.enabled = true;
             levelGridLayoutElement.preferredWidth = 2000;
             summaryScreenGridLayoutElement.preferredWidth = 0;
 
             levelGridLayoutElement.gameObject.SetActive(true);
             summaryScreenGridLayoutElement.gameObject.SetActive(false);
+
+            // Select the first level on load
+            // Yes, this is what giving up looks like.
+            // Don't you judge me.
+            IEnumerator SelectFirst() {
+                yield return new WaitForEndOfFrame();
+                var firstLevel = levelPrefabContainer.GetComponentsInChildren<LevelUIElement>().First();
+                if (firstLevel != null) firstLevel.GetComponent<Button>().Select();
+            }
+
+            StartCoroutine(SelectFirst());
         }
 
         private void OnLevelHighLighted(UIButton uiButton) {

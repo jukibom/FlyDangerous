@@ -8,7 +8,7 @@ namespace Menus.Main_Menu {
     public class MenuBase : MonoBehaviour, ICancelHandler {
         private static readonly int open = Animator.StringToHash("Open");
 
-        [SerializeField] protected Button defaultActiveButton;
+        [CanBeNull] [SerializeField] protected Button defaultActiveButton;
         protected Animator animator;
         protected MenuBase caller;
 
@@ -56,7 +56,7 @@ namespace Menus.Main_Menu {
         protected void Show() {
             gameObject.SetActive(true);
             animator.SetBool(open, true);
-            defaultActiveButton.Select();
+            if (defaultActiveButton != null) defaultActiveButton.Select();
         }
 
         protected void PlayOpenSound() {
