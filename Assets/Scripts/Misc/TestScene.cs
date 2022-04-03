@@ -86,8 +86,11 @@ namespace Misc {
 
                 // playback all the ghosts of the current loaded level
                 if (player && shouldReplaySession) {
-                    var ghosts = Directory.GetFiles(Path.Combine(Replay.ReplayDirectory, Game.Instance.LoadedLevelData.LevelHash()));
-                    foreach (var ghost in ghosts) Game.Instance.LoadGhost(ghost);
+                    var path = Path.Combine(Replay.ReplayDirectory, Game.Instance.LoadedLevelData.LevelHash());
+                    if (Directory.Exists(path)) {
+                        var ghostPaths = Directory.GetFiles(path);
+                        foreach (var ghostPath in ghostPaths) Game.Instance.LoadGhost(Replay.LoadFromFilepath(ghostPath));
+                    }
                 }
 
                 // My work here is done

@@ -57,7 +57,6 @@ namespace Menus.Main_Menu {
         }
 
         private void NavBack() {
-            Debug.Log("Nav back");
             if (levelSelectPanel.SelectedLevel != null) {
                 PlayCancelSound();
                 levelSelectPanel.DeSelectLevel();

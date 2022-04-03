@@ -97,7 +97,6 @@ namespace Core.Replays {
             writeFile(tmpLevelDataSaveLoc, levelDataJson);
             writeFile(tmpShipProfileSaveLoc, shipProfileJson);
             writeFile(tmpScoreDataSaveLoc, scoreDataJson);
-            writeFile(Path.Combine(TMPSaveDirectory, "lol.txt"), "testing lol");
 
             // pack files in tmp into zip file
             // name the archive the SHA256 hash of the zipped file 
@@ -120,7 +119,6 @@ namespace Core.Replays {
             // CreateDirectory
             Directory.CreateDirectory(Path.Combine(ReplayDirectory, folder));
 
-            Debug.Log(tmpArchiveDataSaveLoc + " " + filePath);
             File.Move(tmpArchiveDataSaveLoc, filePath);
             Directory.Delete(TMPSaveDirectory, true);
             return filePath;
@@ -191,9 +189,13 @@ namespace Core.Replays {
          * Fetch all replays on the file system for the specified level
          */
         public static List<Replay> ReplaysForLevel(LevelData levelData) {
-            return Directory.GetFiles(Path.Combine(ReplayDirectory, levelData.LevelHash()))
-                .ToList()
-                .ConvertAll(LoadFromFilepath);
+            Debug.Log(Path.Combine(ReplayDirectory, levelData.LevelHash()));
+
+            if (Directory.Exists(Path.Combine(ReplayDirectory, levelData.LevelHash())))
+                return Directory.GetFiles(Path.Combine(ReplayDirectory, levelData.LevelHash()))
+                    .ToList()
+                    .ConvertAll(LoadFromFilepath);
+            return new List<Replay>();
         }
     }
 }

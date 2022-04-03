@@ -284,6 +284,7 @@ namespace Core {
 
                 ship.ShipPhysics.CurrentParameters = ShipParameters;
                 var shipPosition = ship.transform.position;
+
                 _levelLoader.LoadedLevelData.startPosition = LevelDataVector3.FromVector3(shipPosition);
 
                 // set up graphics settings (e.g. camera FoV) + VR status (cameras, radial fog etc)
@@ -301,7 +302,7 @@ namespace Core {
                 SetFlatScreenCameraControllerActive(!IsVREnabled);
                 FadeFromBlack();
                 yield return new WaitForSeconds(0.7f);
-                
+
                 if (mapMagic) mapMagic.enabled = true;
 
                 // if there's a track in the game world, start it
@@ -464,14 +465,12 @@ namespace Core {
             }
         }
 
-        // TODO: What does this interface really look like?
-        public void LoadGhost(string filePath) {
-            var replay = Replay.LoadFromFilepath(filePath);
+        public ShipGhost LoadGhost(Replay replay) {
             var ghost = Instantiate(shipGhostPrefab);
-            // var timeline = ghost.gameObject.AddComponent<ReplayTimeline>();
             OnGhostAdded?.Invoke();
             ghost.LoadReplay(replay);
             ghost.ReplayTimeline.Play();
+            return ghost;
         }
 
         public void NotifyPlayerLoaded() {

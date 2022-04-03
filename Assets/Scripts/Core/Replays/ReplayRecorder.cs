@@ -17,7 +17,7 @@ namespace Core.Replays {
         private uint _ticks;
 
         private void OnDestroy() {
-            StopRecording();
+            CancelRecording();
         }
 
         public void StartNewRecording(ShipPhysics targetShip) {
@@ -25,7 +25,17 @@ namespace Core.Replays {
             _targetShip.OnShipPhysicsUpdated += RecordFrame;
             _recording = true;
             _ticks = 0;
-            _replay = Replay.CreateNewWritable(Game.Instance.ShipParameters, Game.Instance.LevelDataAtCurrentPosition, ShipProfile.FromPreferences());
+            _replay = Replay.CreateNewWritable(Game.Instance.ShipParameters, Game.Instance.LoadedLevelData, ShipProfile.FromPreferences());
+        }
+
+        public void CancelRecording() {
+            if (_replay != null) {
+                _replay.InputFrameStream.Close();
+                _replay.KeyFrameStream.Close();
+                _replay.InputFrameStream.Dispose();
+                _replay.KeyFrameStream.Dispose();
+                _replay = null;
+            }
         }
 
         public void StopRecording(ScoreData scoreData = new()) {

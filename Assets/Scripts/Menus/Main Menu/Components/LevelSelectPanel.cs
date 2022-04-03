@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Audio;
 using Core.MapData;
 using Core.Scores;
@@ -12,17 +13,14 @@ using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
 
 namespace Menus.Main_Menu.Components {
-
-    enum LevelSelectionMode {
+    internal enum LevelSelectionMode {
         LevelSelect,
         Summary
     }
-    
+
     public class LevelSelectPanel : MonoBehaviour {
-        
         public delegate void OnLevelSelectedAction();
-        public event OnLevelSelectedAction OnLevelSelectedEvent;
-        
+
         [SerializeField] private LevelUIElement levelUIElementPrefab;
         [SerializeField] private RectTransform levelPrefabContainer;
 
@@ -38,14 +36,17 @@ namespace Menus.Main_Menu.Components {
 
         [SerializeField] private LayoutElement levelGridLayoutElement;
         [SerializeField] private LayoutElement summaryScreenGridLayoutElement;
+        [SerializeField] private LevelCompetitionPanel competitionPanel;
+
         [SerializeField] private FlowLayoutGroup levelFlowLayoutGroup;
         [SerializeField] private AnimationCurve screenTransitionCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
         [SerializeField] private float panelAnimationTimeSeconds = 0.5f;
         private readonly float openPanelPreferredWidthValue = 2000;
-
-        public Level SelectedLevel { get; private set; }
         private Coroutine _panelAnimationHideCoroutine;
         private Coroutine _panelAnimationShowCoroutine;
+
+        public Level SelectedLevel { get; private set; }
+        public event OnLevelSelectedAction OnLevelSelectedEvent;
 
         public void LoadLevels(List<Level> levels) {
             foreach (var levelUI in levelPrefabContainer.gameObject.GetComponentsInChildren<LevelUIElement>()) Destroy(levelUI.gameObject);
@@ -58,6 +59,9 @@ namespace Menus.Main_Menu.Components {
                 levelButton.gameObject.GetComponent<UIButton>().OnButtonUnHighlightedEvent += OnLevelUnHighLighted;
             }
 
+            var firstLevel = levels.First();
+            if (firstLevel != null) HighlightSelectedLevel(firstLevel);
+
             levelFlowLayoutGroup.enabled = true;
             levelGridLayoutElement.preferredWidth = 2000;
             summaryScreenGridLayoutElement.preferredWidth = 0;
@@ -68,8 +72,8 @@ namespace Menus.Main_Menu.Components {
 
         private void OnLevelHighLighted(UIButton uiButton) {
             HighlightSelectedLevel(uiButton.GetComponent<LevelUIElement>().LevelData);
-        }        
-        
+        }
+
         private void OnLevelUnHighLighted(UIButton uiButton) {
             HighlightSelectedLevel(SelectedLevel);
         }
@@ -80,7 +84,7 @@ namespace Menus.Main_Menu.Components {
         }
 
         private void HighlightSelectedLevel(Level level) {
-            if (level != null) {
+            if (level != null && SelectedLevel == null) {
                 levelName.text = level.Name;
                 levelThumbnail.sprite = level.Thumbnail;
 
@@ -107,13 +111,12 @@ namespace Menus.Main_Menu.Components {
 
         public void DeSelectLevel() {
             // select the previous level if there is one
-            if (SelectedLevel != null) {
+            if (SelectedLevel != null)
                 levelPrefabContainer.GetComponentsInChildren<LevelUIElement>()
                     .FindMember(levelButton => levelButton.LevelData == SelectedLevel)
                     ?.GetComponent<Button>()
                     ?.Select();
-            }
-            
+
             SwitchToLevelSelectScreen();
             SelectedLevel = null;
         }
@@ -121,6 +124,7 @@ namespace Menus.Main_Menu.Components {
         private void SetSelectedLevel(Level level) {
             SelectedLevel = level;
             SwitchToSummaryScreen();
+            competitionPanel.PopulateGhostsForLevel(SelectedLevel);
         }
 
         private void SwitchToSummaryScreen() {

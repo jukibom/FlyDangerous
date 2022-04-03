@@ -6,6 +6,7 @@ using Audio;
 using Core;
 using Core.MapData;
 using Core.Player;
+using Core.Replays;
 using Core.Scores;
 using Core.ShipModel;
 using Game_UI;
@@ -15,6 +16,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace Gameplay {
+    [RequireComponent(typeof(ReplayRecorder))]
     public class Track : MonoBehaviour {
         private static readonly Color goldColor = new(1, 0.98f, 0.4f, 1);
         private static readonly Color silverColor = new(0.6f, 0.6f, 0.6f, 1);
@@ -24,12 +26,17 @@ namespace Gameplay {
 
         // Set to true by the level loader but may be overridden for testing
         [SerializeField] private bool isActive;
+
         private bool _complete;
+        private List<ShipGhost> _ghosts = new();
 
         private Score _previousBestScore;
+
+        private ReplayRecorder _replayRecorder;
+        private Replay _replayToRecord;
         [CanBeNull] private Coroutine _splitDeltaFader;
         [CanBeNull] private Coroutine _splitFader;
-        private List<float> _splits;
+        private List<float> _splits = new();
         private Timers _timers;
 
         private float _timeSeconds;
@@ -54,6 +61,8 @@ namespace Gameplay {
             set => ReplaceCheckpoints(value);
         }
 
+        public List<Replay> ActiveGhosts { get; set; } = new();
+
         public bool IsEndCheckpointValid => hitCheckpoints.Count >= Checkpoints.Count - 2; // remove start and end
 
         private void FixedUpdate() {
@@ -66,6 +75,7 @@ namespace Gameplay {
         }
 
         private void OnEnable() {
+            _replayRecorder = GetComponent<ReplayRecorder>();
             Game.OnRestart += InitialiseTrack;
         }
 
@@ -82,7 +92,15 @@ namespace Gameplay {
             var start = Checkpoints.Find(c => c.Type == CheckpointType.Start);
             if (start) {
                 var ship = FdPlayer.FindLocalShipPlayer;
-                if (ship) ship.transform.position = start.transform.position;
+                if (ship) {
+                    ship.transform.position = start.transform.position;
+                    _replayRecorder.CancelRecording();
+                    _replayRecorder.StartNewRecording(ship.ShipPhysics);
+                    foreach (var replayRecorder in GetComponents<ReplayTimeline>()) Destroy(replayRecorder);
+                    foreach (var shipGhost in _ghosts) Destroy(shipGhost);
+                    _ghosts = new List<ShipGhost>();
+                    foreach (var activeGhost in ActiveGhosts) _ghosts.Add(Game.Instance.LoadGhost(activeGhost));
+                }
             }
             else if (Checkpoints.Count > 0) {
                 Debug.LogWarning("Checkpoints loaded with no start block! Is this intentional?");
@@ -118,7 +136,6 @@ namespace Gameplay {
 
         public IEnumerator StartTrackWithCountdown() {
             if (Checkpoints.Count > 0) {
-                ResetTimer();
                 _timeSeconds = -2.5f;
                 isActive = true;
                 _complete = false;
@@ -212,13 +229,15 @@ namespace Gameplay {
                                 _previousBestScore = score;
                                 var scoreData = score.Save(Game.Instance.LoadedLevelData);
                                 Score.SaveToDisk(scoreData, Game.Instance.LoadedLevelData);
+
+                                if (_replayRecorder) _replayRecorder.StopRecording(scoreData);
                             }
 
                             UpdateTargetTimeElements();
                         }
 
                         FinishTimer();
-                        // TODO: End screen
+                        // TODO: End screen with ability to save replay 
                     }
                 }
             }
