@@ -1,81 +1,73 @@
 using System.Linq;
 using Core;
 using Core.MapData;
-using Core.Scores;
-using Misc;
+using Menus.Main_Menu.Components;
+using UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 namespace Menus.Main_Menu {
     public class TimeTrialMenu : MenuBase {
-        [SerializeField] private Button startButton;
-        [SerializeField] private LevelUIElement levelUIElementPrefab;
-        [SerializeField] private RectTransform levelPrefabContainer;
+        [SerializeField] private UIButton startButton;
+        [SerializeField] private UIButton backButton;
 
-        [SerializeField] private Text levelName;
-        [SerializeField] private Image levelThumbnail;
+        [SerializeField] private LevelSelectPanel levelSelectPanel;
 
-        [SerializeField] private Text personalBest;
-        [SerializeField] private Text platinumTarget;
-        [SerializeField] private Text goldTarget;
-        [SerializeField] private Text silverTarget;
-        [SerializeField] private Text bronzeTarget;
-        [SerializeField] private GameObject platinumMedalContainer;
-
-        private Level _level;
-
-        protected override void OnOpen() {
-            foreach (var levelUI in levelPrefabContainer.gameObject.GetComponentsInChildren<LevelUIElement>()) Destroy(levelUI.gameObject);
-            var levels = Level.List();
-            foreach (var level in levels) {
-                var levelButton = Instantiate(levelUIElementPrefab, levelPrefabContainer);
-                levelButton.LevelData = level;
-                levelButton.gameObject.GetComponent<Button>().onClick.AddListener(OnLevelSelected);
-            }
-
-            SetSelectedLevel(levels.First());
-            startButton.interactable = true;
+        private void OnEnable() {
+            levelSelectPanel.OnLevelSelectedEvent += OnLevelSelected;
+            startButton.OnButtonSubmitEvent += OnStartSelected;
+            backButton.OnButtonSubmitEvent += OnBackSelected;
+            startButton.button.gameObject.SetActive(false);
+            backButton.label.text = "CANCEL";
         }
 
-        public void ClosePanel() {
-            Cancel();
-        }
-
-        public void StartTimeTrial() {
-            startButton.interactable = false;
-            FdNetworkManager.Instance.StartGameLoadSequence(SessionType.Singleplayer, _level.Data);
+        private void OnDisable() {
+            levelSelectPanel.OnLevelSelectedEvent -= OnLevelSelected;
+            startButton.OnButtonSubmitEvent -= OnStartSelected;
+            backButton.OnButtonSubmitEvent -= OnBackSelected;
         }
 
         private void OnLevelSelected() {
-            PlayApplySound();
-            var selectedLevel = EventSystem.current.currentSelectedGameObject.GetComponent<LevelUIElement>();
-            SetSelectedLevel(selectedLevel.LevelData);
+            startButton.button.gameObject.SetActive(true);
+            startButton.button.Select();
+            backButton.label.text = "BACK";
         }
 
-        private void SetSelectedLevel(Level level) {
-            _level = level;
-            levelName.text = level.Name;
-            levelThumbnail.sprite = level.Thumbnail;
+        private void OnStartSelected(UIButton button) {
+            if (levelSelectPanel.SelectedLevel != null) {
+                startButton.button.gameObject.SetActive(false);
+                StartTimeTrial();
+            }
+        }
 
-            var score = level.Score;
-            var bestTime = score.PersonalBestTotalTime;
-            personalBest.text = bestTime > 0 ? TimeExtensions.TimeSecondsToString(bestTime) : "NONE";
+        private void OnBackSelected(UIButton button) {
+            NavBack();
+        }
 
-            var platinumTargetTime = level.Data.authorTimeTarget;
-            var goldTargetTime = Score.GoldTimeTarget(level.Data);
-            var silverTargetTime = Score.SilverTimeTarget(level.Data);
-            var bronzeTargetTime = Score.BronzeTimeTarget(level.Data);
+        private void StartTimeTrial() {
+            FdNetworkManager.Instance.StartGameLoadSequence(SessionType.Singleplayer, levelSelectPanel.SelectedLevel.Data);
+        }
 
-            platinumTarget.text = TimeExtensions.TimeSecondsToString(platinumTargetTime);
-            goldTarget.text = TimeExtensions.TimeSecondsToString(goldTargetTime);
-            silverTarget.text = TimeExtensions.TimeSecondsToString(silverTargetTime);
-            bronzeTarget.text = TimeExtensions.TimeSecondsToString(bronzeTargetTime);
+        protected override void OnOpen() {
+            levelSelectPanel.LoadLevels(Level.List().ToList().FindAll(level => level.GameType == GameType.TimeTrial));
+        }
 
-            // if user hasn't beaten platinum, hide it!
-            platinumMedalContainer.gameObject.SetActive(score.HasPlayedPreviously && bestTime <= platinumTargetTime);
+        public override void OnCancel(BaseEventData eventData) {
+            NavBack();
+        }
 
-            // TODO: show a medal icon associated with users' time
+        private void NavBack() {
+            Debug.Log("Nav back");
+            if (levelSelectPanel.SelectedLevel != null) {
+                PlayCancelSound();
+                levelSelectPanel.DeSelectLevel();
+                startButton.button.gameObject.SetActive(false);
+                backButton.label.text = "CANCEL";
+            }
+
+            else {
+                Cancel();
+            }
         }
     }
 }
