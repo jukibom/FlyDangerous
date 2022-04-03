@@ -77,7 +77,7 @@ namespace Gameplay {
             _previousBestScore = Score.ScoreForLevel(Game.Instance.LoadedLevelData);
 
             Timers.HideTimers(false);
-            if (Game.Instance.LoadedLevelData.gameType.Name == GameType.TimeTrial.Name) Timers.ShowTimers();
+            if (Game.Instance.LoadedLevelData.gameType == GameType.TimeTrial) Timers.ShowTimers();
 
             var start = Checkpoints.Find(c => c.Type == CheckpointType.Start);
             if (start) {

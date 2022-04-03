@@ -252,6 +252,10 @@ namespace Core {
 
                 yield return _levelLoader.StartGame(levelData);
 
+                // if we have a map magic object, stop it from doing anything until the ship is in position
+                var mapMagic = FindObjectOfType<MapMagicObject>();
+                if (mapMagic) mapMagic.enabled = false;
+
                 // wait for all known currently loading players to have finished loading
                 // TODO: show "Waiting for Players" text in loading screen
                 yield return WaitForAllPlayersLoaded();
@@ -297,6 +301,8 @@ namespace Core {
                 SetFlatScreenCameraControllerActive(!IsVREnabled);
                 FadeFromBlack();
                 yield return new WaitForSeconds(0.7f);
+                
+                if (mapMagic) mapMagic.enabled = true;
 
                 // if there's a track in the game world, start it
                 if (track) yield return track.StartTrackWithCountdown();
