@@ -242,6 +242,10 @@ namespace Core.MapData {
                     checkpoint.transform.parent = track.transform;
                 });
 
+            // set floating origin on loading player now to force world components to update position
+            var loadingPlayer = FdPlayer.FindLocalLoadingPlayer;
+            if (loadingPlayer) loadingPlayer.SetFloatingOrigin();
+
             // if terrain needs to generate, toggle special logic and wait for it to load all primary tiles
             var mapMagic = FindObjectOfType<MapMagicObject>();
             if (mapMagic) {

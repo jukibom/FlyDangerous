@@ -22,6 +22,11 @@ namespace Core.Player {
             LevelLoader.OnLevelLoaded -= OnLevelLoaded;
         }
 
+        public override void OnStartLocalPlayer() {
+            // set tag for finding for e.g. terrain generation focus
+            gameObject.tag = "LocalPlayer";
+        }
+
         // On local client start
         public override void OnStartAuthority() {
             CmdSetPlayerName(Preferences.Instance.GetString("playerName"));
@@ -29,6 +34,17 @@ namespace Core.Player {
 
         public void RequestTransitionToShipPlayer() {
             CmdRequestTransitionToShipPlayer();
+        }
+
+        // show the loading camera, geo etc. This should only apply to local client instance!
+        public void ShowLoadingRoom() {
+            var loadingRoom = FindObjectOfType<LoadingRoom>();
+            if (loadingRoom) loadingRoom.transform.SetParent(transform, false);
+        }
+
+        // register self as floating origin focus
+        public void SetFloatingOrigin() {
+            FloatingOrigin.Instance.FocalTransform = transform;
         }
 
         private void OnLevelLoaded() {

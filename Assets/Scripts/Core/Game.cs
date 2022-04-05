@@ -244,10 +244,10 @@ namespace Core {
 
                 // Position the active camera to the designated start location so we can be sure to load in anything
                 // important at that location as part of the load sequence 
-                var loadingRoom = FindObjectOfType<LoadingRoom>();
-                if (loadingRoom) {
-                    var loadingPlayerCameraTransform = loadingRoom.transform;
-                    loadingPlayerCameraTransform.position = levelData.startPosition.ToVector3();
+                var loadingPlayer = FdPlayer.FindLocalLoadingPlayer;
+                if (loadingPlayer) {
+                    loadingPlayer.ShowLoadingRoom();
+                    loadingPlayer.transform.position = levelData.startPosition.ToVector3();
                 }
 
                 yield return _levelLoader.StartGame(levelData);
@@ -260,7 +260,6 @@ namespace Core {
                 // TODO: show "Waiting for Players" text in loading screen
                 yield return WaitForAllPlayersLoaded();
 
-                var loadingPlayer = FdPlayer.FindLocalLoadingPlayer;
                 if (loadingPlayer) {
                     loadingPlayer.RequestTransitionToShipPlayer();
                 }
