@@ -274,7 +274,7 @@ namespace Core.MapData {
             var cam = FindObjectOfType<CinemachineBrain>(true).gameObject.GetComponent<Camera>();
             var gpuInstancer = FindObjectOfType<GPUInstancerMapMagic2Integration>();
             if (mapMagic && gpuInstancer) gpuInstancer.floatingOriginTransform = mapMagic.transform;
-            GPUInstancerAPI.SetCamera(cam);
+            gpuInstancer.SetCamera(cam);
 #endif
 
             _scenesLoading.Clear();
