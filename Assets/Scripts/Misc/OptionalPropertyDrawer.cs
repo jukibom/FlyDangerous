@@ -1,13 +1,11 @@
-﻿using UnityEditor;
+﻿#if UNITY_EDITOR
+using UnityEditor;
 using UnityEngine;
 
-namespace Misc
-{
+namespace Misc {
     [CustomPropertyDrawer(typeof(Optional<>))]
-    public class OptionalPropertyDrawer : PropertyDrawer
-    {
-        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
-        {
+    public class OptionalPropertyDrawer : PropertyDrawer {
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label) {
             var valueProperty = property.FindPropertyRelative("value");
             return EditorGUI.GetPropertyHeight(valueProperty);
         }
@@ -16,8 +14,7 @@ namespace Misc
             Rect position,
             SerializedProperty property,
             GUIContent label
-        )
-        {
+        ) {
             var valueProperty = property.FindPropertyRelative("value");
             var enabledProperty = property.FindPropertyRelative("enabled");
 
@@ -27,7 +24,7 @@ namespace Misc
             EditorGUI.PropertyField(position, valueProperty, label, true);
             EditorGUI.EndDisabledGroup();
 
-            int indent = EditorGUI.indentLevel;
+            var indent = EditorGUI.indentLevel;
             EditorGUI.indentLevel = 0;
             position.x += position.width + 24;
             position.width = position.height = EditorGUI.GetPropertyHeight(enabledProperty);
@@ -38,3 +35,4 @@ namespace Misc
         }
     }
 }
+#endif
