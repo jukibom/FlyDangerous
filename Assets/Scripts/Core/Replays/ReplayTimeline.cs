@@ -27,27 +27,27 @@ namespace Core.Replays {
 
         // private float _playSpeed = 1f;
 
-        [CanBeNull] private Replay _replay;
-        [CanBeNull] private IReplayShip _shipReplayObject;
+        [CanBeNull] public Replay Replay { get; private set; }
+        [CanBeNull] public IReplayShip ShipReplayObject { get; private set; }
 
         public void FixedUpdate() {
             if (_isPlaying)
-                if (_replay != null && _shipReplayObject != null && _inputFrameReader != null && _keyFrameReader != null) {
+                if (Replay != null && ShipReplayObject != null && _inputFrameReader != null && _keyFrameReader != null) {
                     UpdateKeyFrame();
                     UpdateInputFrame();
                 }
         }
 
         private void OnDestroy() {
-            if (_replay != null) {
-                _replay.InputFrameStream.Close();
-                _replay.KeyFrameStream.Close();
+            if (Replay != null) {
+                Replay.InputFrameStream.Close();
+                Replay.KeyFrameStream.Close();
             }
         }
 
         public void LoadReplay(IReplayShip ship, Replay replay) {
-            _replay = replay;
-            _shipReplayObject = ship;
+            Replay = replay;
+            ShipReplayObject = ship;
             ship.ShipPhysics.RefreshShipModel(replay.ShipProfile);
             ship.PlayerName = replay.ShipProfile.playerName;
 
@@ -71,23 +71,23 @@ namespace Core.Replays {
         public void Stop() {
             _inputTicks = 0;
             _isPlaying = false;
-            if (_shipReplayObject != null) {
-                _shipReplayObject.Rigidbody.velocity = Vector3.zero;
-                _shipReplayObject.Rigidbody.angularVelocity = Vector3.zero;
+            if (ShipReplayObject != null) {
+                ShipReplayObject.Rigidbody.velocity = Vector3.zero;
+                ShipReplayObject.Rigidbody.angularVelocity = Vector3.zero;
             }
         }
 
         private void UpdateKeyFrame() {
-            if (_replay != null && _inputTicks % _replay.ReplayMeta.KeyFrameIntervalTicks == 0 && _shipReplayObject != null) {
-                _keyFrameReader?.BaseStream.Seek(_keyFrameTicks * _replay.ReplayMeta.KeyFrameBufferSizeBytes, SeekOrigin.Begin);
-                _keyFrameReader?.Read(_keyFrameByteBuffer, 0, _replay.ReplayMeta.KeyFrameBufferSizeBytes);
+            if (Replay != null && _inputTicks % Replay.ReplayMeta.KeyFrameIntervalTicks == 0 && ShipReplayObject != null) {
+                _keyFrameReader?.BaseStream.Seek(_keyFrameTicks * Replay.ReplayMeta.KeyFrameBufferSizeBytes, SeekOrigin.Begin);
+                _keyFrameReader?.Read(_keyFrameByteBuffer, 0, Replay.ReplayMeta.KeyFrameBufferSizeBytes);
 
                 var keyFrame = MessagePackSerializer.Deserialize<KeyFrame>(_keyFrameByteBuffer);
 
-                _shipReplayObject.SetAbsolutePosition(keyFrame.replayFloatingOrigin, keyFrame.position);
-                _shipReplayObject.Transform.rotation = keyFrame.rotation;
-                _shipReplayObject.Rigidbody.velocity = keyFrame.velocity;
-                _shipReplayObject.Rigidbody.angularVelocity = keyFrame.angularVelocity;
+                ShipReplayObject.SetAbsolutePosition(keyFrame.replayFloatingOrigin, keyFrame.position);
+                ShipReplayObject.Transform.rotation = keyFrame.rotation;
+                ShipReplayObject.Rigidbody.velocity = keyFrame.velocity;
+                ShipReplayObject.Rigidbody.angularVelocity = keyFrame.angularVelocity;
                 _keyFrameTicks++;
             }
         }
@@ -96,14 +96,14 @@ namespace Core.Replays {
             // TODO: This is slow as all hell! We should abstract this and use SeekOrigin.Current in typical ghost run
 
             // Check for end of file
-            if (_replay != null) {
-                var maxRead = _inputTicks * _replay.ReplayMeta.InputFrameBufferSizeBytes + _replay.ReplayMeta.InputFrameBufferSizeBytes;
+            if (Replay != null) {
+                var maxRead = _inputTicks * Replay.ReplayMeta.InputFrameBufferSizeBytes + Replay.ReplayMeta.InputFrameBufferSizeBytes;
                 if (maxRead < _inputFrameReader?.BaseStream.Length) {
-                    _inputFrameReader.BaseStream.Seek(_inputTicks * _replay.ReplayMeta.InputFrameBufferSizeBytes, SeekOrigin.Begin);
-                    _inputFrameReader.Read(_inputFrameByteBuffer, 0, _replay.ReplayMeta.InputFrameBufferSizeBytes);
+                    _inputFrameReader.BaseStream.Seek(_inputTicks * Replay.ReplayMeta.InputFrameBufferSizeBytes, SeekOrigin.Begin);
+                    _inputFrameReader.Read(_inputFrameByteBuffer, 0, Replay.ReplayMeta.InputFrameBufferSizeBytes);
 
                     var inputFrame = MessagePackSerializer.Deserialize<InputFrame>(_inputFrameByteBuffer);
-                    _shipReplayObject?.ShipPhysics.UpdateShip(inputFrame.pitch, inputFrame.roll, inputFrame.yaw, inputFrame.throttle, inputFrame.lateralH,
+                    ShipReplayObject?.ShipPhysics.UpdateShip(inputFrame.pitch, inputFrame.roll, inputFrame.yaw, inputFrame.throttle, inputFrame.lateralH,
                         inputFrame.lateralV, inputFrame.boostHeld, false, false, false);
 
                     _inputTicks++;
