@@ -118,10 +118,12 @@ namespace Core.Player {
 
                 // handle camera rig
                 if (_cameraRotateAxisControlsEnabled) {
-                    if (Preferences.Instance.GetString("cameraMode") == "absolute" && !_mouseLookActive)
+                    if ((Preferences.Instance.GetString("cameraMode") == "absolute" ||
+                         Preferences.Instance.GetString("controlSchemeType") == "arcade") &&
+                        !_mouseLookActive)
                         shipCameraRig.SetPosition(new Vector2(_cameraX, _cameraY), CameraPositionUpdate.Absolute);
 
-                    if (Preferences.Instance.GetString("cameraMode") == "relative" || _mouseLookActive)
+                    else if (Preferences.Instance.GetString("cameraMode") == "relative" || _mouseLookActive)
                         shipCameraRig.SetPosition(new Vector2(_cameraX, _cameraY), CameraPositionUpdate.Relative);
                 }
                 else {
