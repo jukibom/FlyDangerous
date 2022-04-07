@@ -253,10 +253,12 @@ namespace Core.MapData {
 
                 // our terrain gen may start disabled to prevent painful threading fun
                 mapMagic.enabled = true;
+                yield return new WaitForEndOfFrame();
 
                 // replace with user seed
                 mapMagic.graph.random = new Noise(LoadedLevelData.terrainSeed.GetHashCode(), 32768);
                 mapMagic.StartGenerate();
+                yield return new WaitForEndOfFrame();
 
                 // wait for fully loaded local terrain
                 while (mapMagic.IsGenerating()) {
@@ -265,7 +267,7 @@ namespace Core.MapData {
                     // this entity may be destroyed by server shutdown...
                     if (loadText != null) loadText.text = $"Generating terrain ({progressPercent}%)\n\n\nSeed: \"{LoadedLevelData.terrainSeed}\"";
 
-                    yield return null;
+                    yield return new WaitForEndOfFrame();
                 }
             }
 
