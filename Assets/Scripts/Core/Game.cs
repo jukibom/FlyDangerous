@@ -474,6 +474,14 @@ namespace Core {
             return ghost;
         }
 
+        public void RemoveGhost(ReplayTimeline replayTimeline) {
+            replayTimeline.Stop();
+            var replayObject = replayTimeline.ShipReplayObject;
+            if (replayObject != null) Destroy(replayObject.Transform.gameObject);
+            Destroy(replayTimeline);
+            OnGhostRemoved?.Invoke();
+        }
+
         public void NotifyPlayerLoaded() {
             OnPlayerLoaded?.Invoke();
         }
