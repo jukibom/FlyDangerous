@@ -281,11 +281,6 @@ namespace Core {
                 // Allow the rigid body to initialise before setting new parameters!
                 yield return new WaitForEndOfFrame();
 
-                ship.ShipPhysics.CurrentParameters = ShipParameters;
-                var shipPosition = ship.transform.position;
-
-                _levelLoader.LoadedLevelData.startPosition = LevelDataVector3.FromVector3(shipPosition);
-
                 // set up graphics settings (e.g. camera FoV) + VR status (cameras, radial fog etc)
                 ApplyGameOptions();
                 NotifyVRStatus();
@@ -295,6 +290,8 @@ namespace Core {
                 // if there's a track, initialise it
                 var track = FindObjectOfType<Track>();
                 if (track) track.InitialiseTrack();
+
+                ship.ShipPhysics.CurrentParameters = ShipParameters;
 
                 // resume the game
                 Time.timeScale = 1;
@@ -306,6 +303,11 @@ namespace Core {
 
                 // if there's a track in the game world, start it
                 if (track) yield return track.StartTrackWithCountdown();
+
+                // store the starting position after any correction (e.g. move above terrain height)
+                // TODO: What impact, if any, does this have on level hashes??
+                var shipPosition = ship.AbsoluteWorldPosition;
+                _levelLoader.LoadedLevelData.startPosition = LevelDataVector3.FromVector3(shipPosition);
 
                 // enable user input
                 ship.User.EnableGameInput();
