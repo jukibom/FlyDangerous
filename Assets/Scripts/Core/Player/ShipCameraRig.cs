@@ -30,10 +30,12 @@ namespace Core.Player {
 
         private void Start() {
             _transform = transform;
-            // Set active camera from preference
-            var preferredCameraName = Preferences.Instance.GetString("preferredCamera");
-            var preferredCamera = cameras.Find(c => c.Name == preferredCameraName);
-            SetActiveCamera(preferredCamera != null ? preferredCamera : cameras.Last());
+            RecoverPreferredCameraFromPreferences();
+        }
+
+        private void OnEnable() {
+            // Set active camera from preference (this also happens on VR disable as the component is re-enabled)
+            RecoverPreferredCameraFromPreferences();
         }
 
         public void SetPosition(Vector2 position, CameraPositionUpdate cameraType) {
@@ -113,9 +115,11 @@ namespace Core.Player {
         }
 
         public void ToggleActiveCamera() {
-            var index = cameras.IndexOf(ActiveCamera);
-            SetActiveCamera(index == cameras.Count - 1 ? cameras[0] : cameras[index + 1]);
-            Preferences.Instance.SetString("preferredCamera", ActiveCamera.Name);
+            if (gameObject.activeSelf) {
+                var index = cameras.IndexOf(ActiveCamera);
+                SetActiveCamera(index == cameras.Count - 1 ? cameras[0] : cameras[index + 1]);
+                Preferences.Instance.SetString("preferredCamera", ActiveCamera.Name);
+            }
         }
 
         private void SetActiveCamera(ShipCamera newCamera) {
@@ -124,6 +128,14 @@ namespace Core.Player {
             ActiveCamera = newCamera;
             user.InGameUI.ShipStats.SetStatsVisible(newCamera.showShipDataUI);
             ActiveCamera.SetCameraActive(true);
+        }
+
+        private void RecoverPreferredCameraFromPreferences() {
+            if (cameras.Count > 0) {
+                var preferredCameraName = Preferences.Instance.GetString("preferredCamera");
+                var preferredCamera = cameras.Find(c => c.Name == preferredCameraName);
+                SetActiveCamera(preferredCamera != null ? preferredCamera : cameras.Last());
+            }
         }
     }
 }

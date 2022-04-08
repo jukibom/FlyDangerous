@@ -232,10 +232,12 @@ namespace Core.Player {
             inGameUI.SetMode(isVREnabled ? GameUIMode.VR : GameUIMode.Pancake);
             if (isVREnabled) {
                 Game.Instance.SetFlatScreenCameraControllerActive(false);
+                shipCameraRig.gameObject.SetActive(false);
                 xrRig.gameObject.SetActive(true);
             }
             else {
                 Game.Instance.SetFlatScreenCameraControllerActive(true);
+                shipCameraRig.gameObject.SetActive(true);
                 xrRig.gameObject.SetActive(false);
             }
         }

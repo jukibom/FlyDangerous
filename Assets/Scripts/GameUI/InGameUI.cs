@@ -47,6 +47,8 @@ namespace GameUI {
 
                     pauseMenuRect.sizeDelta = new Vector2(1280, 1000);
                     uiRect.sizeDelta = new Vector2(1280, 1000);
+
+                    ShipStats.SetStatsVisible(false);
                     break;
                 }
                 case GameUIMode.Pancake: {
