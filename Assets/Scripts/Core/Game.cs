@@ -20,6 +20,9 @@ using UnityEngine.SceneManagement;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Management;
 using Environment = System.Environment;
+#if !NO_PAID_ASSETS
+using GPUInstancer;
+#endif
 
 namespace Core {
     public enum SessionType {
@@ -156,7 +159,7 @@ namespace Core {
         }
 
         public void ApplyGameOptions() {
-            if (OnGameSettingsApplied != null) OnGameSettingsApplied();
+            OnGameSettingsApplied?.Invoke();
             ApplyGraphicsOptions();
         }
 
@@ -293,6 +296,21 @@ namespace Core {
 
                 ship.ShipPhysics.CurrentParameters = ShipParameters;
 
+                // gpu instancer initialisation (paid asset!)
+#if !NO_PAID_ASSETS
+                if (IsVREnabled) {
+                    var cam = FindObjectOfType<XRRig>(true).cameraGameObject.GetComponent<Camera>();
+
+                    var gpuInstancer = FindObjectOfType<GPUInstancerMapMagic2Integration>();
+                    if (mapMagic && gpuInstancer) {
+                        gpuInstancer.floatingOriginTransform = mapMagic.transform;
+                        GPUInstancerAPI.SetCamera(cam);
+                        gpuInstancer.SetCamera(cam);
+                    }
+
+                    FindObjectsOfType<GPUInstancerDetailManager>().ToList().ForEach(manager => manager.SetCamera(cam));
+                }
+#endif
                 // resume the game
                 Time.timeScale = 1;
                 SetFlatScreenCameraControllerActive(!IsVREnabled);
@@ -443,7 +461,7 @@ namespace Core {
         }
 
         private void NotifyVRStatus() {
-            if (OnVRStatus != null) OnVRStatus(IsVREnabled);
+            OnVRStatus?.Invoke(IsVREnabled);
 
             // if user has previously applied a HMD position, reapply
             if (IsVREnabled) {
