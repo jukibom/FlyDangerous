@@ -482,6 +482,10 @@ namespace Core {
 
                 StartCoroutine(ResetHmdPosition());
             }
+
+            // Handle global LOD bias for VR camera FOV (see https://forum.unity.com/threads/lodgroup-in-vr.455394/#post-2952522)
+            var lodBias = IsVREnabled ? 3.46f : 1;
+            QualitySettings.SetLODSettings(lodBias, 0);
         }
 
         public ShipGhost LoadGhost(Replay replay) {
