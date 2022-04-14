@@ -1,4 +1,4 @@
-
+using Core.Player;
 using UnityEngine;
 using UnityEngine.U2D;
 using UnityEngine.UI;
@@ -10,13 +10,11 @@ public class FlagIcon : MonoBehaviour {
 
     private void OnEnable() {
         _image = GetComponent<Image>();
-        SetFlag("gb");
     }
 
-    public void SetFlag(string isoFlag) {
-        var flag = flagSpriteAtlas.GetSprite(isoFlag);
-        if (flag != null) {
-            _image.sprite = flag;
-        }
+    public void SetFlag(Flag flag) {
+        var flagSprite = flagSpriteAtlas.GetSprite(flag.Filename);
+        _image.enabled = flagSprite != null;
+        if (flagSprite != null) _image.sprite = flagSprite;
     }
 }

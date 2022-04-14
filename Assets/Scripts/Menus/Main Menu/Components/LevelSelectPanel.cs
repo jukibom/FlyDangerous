@@ -128,6 +128,7 @@ namespace Menus.Main_Menu.Components {
             SelectedLevel = level;
             SwitchToSummaryScreen();
             competitionPanel.PopulateGhostsForLevel(SelectedLevel);
+            competitionPanel.PopulateLeaderboardForLevel(SelectedLevel);
         }
 
         private void SwitchToSummaryScreen() {

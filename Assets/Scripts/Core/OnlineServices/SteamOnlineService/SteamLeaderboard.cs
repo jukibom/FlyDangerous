@@ -1,33 +1,42 @@
-﻿#if !DISABLESTEAMWORKS
+#if !DISABLESTEAMWORKS
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Core.Player;
 using Steamworks;
 
 namespace Core.OnlineServices.SteamOnlineService {
     public class SteamLeaderboard : ILeaderboard {
-        private readonly Callback<LeaderboardScoresDownloaded_t> _entriesFetchResultsCallback;
+        private readonly CallResult<LeaderboardScoresDownloaded_t> _entriesFetchResultsCallback;
         private readonly SteamLeaderboard_t _leaderboard;
-        private readonly Callback<LeaderboardScoreUploaded_t> _uploadResultCallback;
+        private readonly CallResult<LeaderboardScoreUploaded_t> _uploadResultCallback;
 
         private TaskCompletionSource<List<ILeaderboardEntry>> _leaderboardEntryListTask;
         private TaskCompletionSource<bool> _uploadScoreTask;
 
         public SteamLeaderboard(SteamLeaderboard_t leaderboard) {
             _leaderboard = leaderboard;
-            _entriesFetchResultsCallback = Callback<LeaderboardScoresDownloaded_t>.Create(OnEntriesRetrieved);
-            _uploadResultCallback = Callback<LeaderboardScoreUploaded_t>.Create(OnUpload);
+            _entriesFetchResultsCallback = CallResult<LeaderboardScoresDownloaded_t>.Create(OnEntriesRetrieved);
+            _uploadResultCallback = CallResult<LeaderboardScoreUploaded_t>.Create(OnUpload);
         }
 
         public Task<List<ILeaderboardEntry>> GetEntries() {
-            SteamUserStats.DownloadLeaderboardEntries(_leaderboard, ELeaderboardDataRequest.k_ELeaderboardDataRequestGlobal, 0, 20);
+            TaskHandler.RecreateTask(ref _leaderboardEntryListTask);
+            var entriesRequest = ELeaderboardDataRequest.k_ELeaderboardDataRequestGlobal;
+            var handle = SteamUserStats.DownloadLeaderboardEntries(_leaderboard, entriesRequest, 0, 20);
+            _entriesFetchResultsCallback.Set(handle);
+
             return _leaderboardEntryListTask.Task;
         }
 
-        public Task UploadScore(int score, string flagIsoCode) {
-            var details = SteamLeaderboardEntry.GetEntryDetails(flagIsoCode);
-            SteamUserStats.UploadLeaderboardScore(_leaderboard, ELeaderboardUploadScoreMethod.k_ELeaderboardUploadScoreMethodKeepBest, score, details,
-                SteamLeaderboardEntry.SteamDetailsCount);
+        public Task UploadScore(int score, Flag flag) {
+            TaskHandler.RecreateTask(ref _uploadScoreTask);
+
+            var details = SteamLeaderboardEntry.GetEntryDetails(flag);
+            var method = ELeaderboardUploadScoreMethod.k_ELeaderboardUploadScoreMethodKeepBest;
+            var handle = SteamUserStats.UploadLeaderboardScore(_leaderboard, method, score, details, SteamLeaderboardEntry.SteamDetailsCount);
+            _uploadResultCallback.Set(handle);
+
             return _uploadScoreTask.Task;
         }
 
@@ -36,7 +45,7 @@ namespace Core.OnlineServices.SteamOnlineService {
             _uploadResultCallback.Dispose();
         }
 
-        private void OnEntriesRetrieved(LeaderboardScoresDownloaded_t ctx) {
+        private void OnEntriesRetrieved(LeaderboardScoresDownloaded_t ctx, bool ioFailure) {
             List<ILeaderboardEntry> entries = new();
             for (var i = 0; i < ctx.m_cEntryCount; i++) {
                 var details = new int[SteamLeaderboardEntry.SteamDetailsCount];
@@ -49,8 +58,8 @@ namespace Core.OnlineServices.SteamOnlineService {
             _leaderboardEntryListTask.SetResult(entries);
         }
 
-        private void OnUpload(LeaderboardScoreUploaded_t ctx) {
-            if (ctx.m_bSuccess == 1) _uploadScoreTask.SetResult(true);
+        private void OnUpload(LeaderboardScoreUploaded_t ctx, bool ioFailure) {
+            if (ctx.m_bSuccess == 1 && !ioFailure) _uploadScoreTask.SetResult(true);
             else _uploadScoreTask.SetException(new Exception("Failed to upload score"));
         }
     }

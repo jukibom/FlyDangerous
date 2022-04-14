@@ -54,6 +54,7 @@ namespace Core {
 
         [CanBeNull] public IOnlineService OnlineService { get; private set; }
         public bool HasMultiplayerServices => OnlineService?.Multiplayer != null;
+        public bool HasLeaderboardServices => OnlineService?.Leaderboard != null;
 
         // initialise steam network transport and online services if we're using steamworks
         public override void Start() {
