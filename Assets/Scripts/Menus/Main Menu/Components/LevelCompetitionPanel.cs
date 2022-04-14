@@ -12,7 +12,7 @@ namespace Menus.Main_Menu.Components {
         }
 
         public async void PopulateLeaderboardForLevel(Level level) {
-            Debug.Log(FdNetworkManager.Instance.HasLeaderboardServices);
+            leaderboard.gameObject.SetActive(FdNetworkManager.Instance.HasLeaderboardServices);
             if (FdNetworkManager.Instance.HasLeaderboardServices) {
                 var leaderboardData = await FdNetworkManager.Instance.OnlineService!.Leaderboard!.FindOrCreateLeaderboard(level.Data.LevelHash());
                 leaderboard.LoadLeaderboard(leaderboardData);
