@@ -49,6 +49,7 @@ namespace Core.Player {
 
         [SyncVar] private bool _serverReady;
         [SyncVar] public string playerName;
+        [SyncVar] public string playerFlag;
         [SyncVar] public bool isHost;
 
         [SyncVar] private string _shipModelName;
@@ -57,6 +58,7 @@ namespace Core.Player {
         [SyncVar] private string _thrusterColor;
         [SyncVar] private string _trailColor;
         [SyncVar] private string _headLightsColor;
+        public Flag PlayerFlag { get; private set; }
 
         private bool IsReady => _transform && _serverReady;
 
@@ -115,7 +117,7 @@ namespace Core.Player {
             SetFlightAssistDefaults(Preferences.Instance.GetString("flightAssistDefault"));
 
             var profile = ShipProfile.FromPreferences();
-            CmdSetPlayerName(profile.playerName);
+            CmdSetPlayerProfile(profile.playerName, profile.playerFlagFilename);
             CmdLoadShipModelPreferences(profile.shipModel, profile.primaryColor, profile.accentColor, profile.thrusterColor, profile.trailColor,
                 profile.headLightsColor);
 
@@ -138,7 +140,7 @@ namespace Core.Player {
         private void RefreshShipModel() {
             IEnumerator RefreshShipAsync() {
                 while (string.IsNullOrEmpty(_shipModelName)) yield return new WaitForFixedUpdate();
-                ShipPhysics.RefreshShipModel(new ShipProfile(playerName, _shipModelName, _primaryColor, _accentColor, _thrusterColor, _trailColor,
+                ShipPhysics.RefreshShipModel(new ShipProfile(playerName, playerFlag, _shipModelName, _primaryColor, _accentColor, _thrusterColor, _trailColor,
                     _headLightsColor));
             }
 
@@ -214,9 +216,7 @@ namespace Core.Player {
                     ShipPhysics.CurrentParameters.maxThrust);
 
                 // Send the current floating origin along with the new position and rotation to the server
-                CmdSetPosition(FloatingOrigin.Instance.Origin, _transform.localPosition, _transform.rotation, _rigidbody.velocity,
-                    _rigidbody.angularVelocity,
-                    ShipPhysics.CurrentFrameThrust, ShipPhysics.CurrentFrameTorque);
+                CmdSetPosition(FloatingOrigin.Instance.Origin, _transform.localPosition, _transform.rotation, _rigidbody.velocity, _rigidbody.angularVelocity);
 
                 ShipPhysics.CheckpointCollisionCheck();
             }
@@ -411,15 +411,13 @@ namespace Core.Player {
 
         // This is server-side and should really validate the positions coming in before blindly firing to all the clients!
         [Command]
-        private void CmdSetPosition(Vector3 origin, Vector3 position, Quaternion rotation, Vector3 velocity, Vector3 angularVelocity, Vector3 thrust,
-            Vector3 torque) {
-            RpcUpdate(origin, position, rotation, velocity, angularVelocity, thrust, torque);
+        private void CmdSetPosition(Vector3 origin, Vector3 position, Quaternion rotation, Vector3 velocity, Vector3 angularVelocity) {
+            RpcUpdate(origin, position, rotation, velocity, angularVelocity);
         }
 
         // On each client, update the position of this object if it's not the local player.
         [ClientRpc]
-        private void RpcUpdate(Vector3 remoteOrigin, Vector3 position, Quaternion rotation, Vector3 velocity, Vector3 angularVelocity, Vector3 thrust,
-            Vector3 torque) {
+        private void RpcUpdate(Vector3 remoteOrigin, Vector3 position, Quaternion rotation, Vector3 velocity, Vector3 angularVelocity) {
             if (!isLocalPlayer && IsReady) {
                 // Calculate the local difference to position based on the local clients' floating origin.
                 // If these values are gigantic, that doesn't really matter as they only update at fixed distances.
@@ -463,10 +461,17 @@ namespace Core.Player {
         }
 
         [Command]
-        private void CmdSetPlayerName(string newName) {
+        private void CmdSetPlayerProfile(string newName, string flag) {
             if (newName == "") newName = "UNNAMED SCRUB";
 
             playerName = newName;
+            playerFlag = flag;
+            RpcSetFlag(flag);
+        }
+
+        [ClientRpc]
+        private void RpcSetFlag(string flagFilename) {
+            PlayerFlag = Flag.FromFilename(flagFilename);
         }
 
         [Command]

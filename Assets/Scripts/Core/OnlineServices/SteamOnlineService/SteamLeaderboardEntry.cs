@@ -1,7 +1,6 @@
 ﻿#if !DISABLESTEAMWORKS
 using System;
 using System.Threading.Tasks;
-using Core.Player;
 using Steamworks;
 
 namespace Core.OnlineServices.SteamOnlineService {
@@ -20,7 +19,7 @@ namespace Core.OnlineServices.SteamOnlineService {
             Rank = _leaderboardEntry.m_nGlobalRank;
             Player = SteamFriends.GetFriendPersonaName(_leaderboardEntry.m_steamIDUser);
             Score = _leaderboardEntry.m_nScore;
-            Flag = Flag.FromFixedId(details[0]);
+            FlagId = details[0];
 
             _replayFetchCallback = CallResult<RemoteStorageDownloadUGCResult_t>.Create(OnReplayFetch);
         }
@@ -28,7 +27,7 @@ namespace Core.OnlineServices.SteamOnlineService {
         public int Rank { get; }
         public string Player { get; }
         public int Score { get; }
-        public Flag Flag { get; }
+        public int FlagId { get; }
 
         public Task<IOnlineFile> Replay() {
             TaskHandler.RecreateTask(ref _replayFetchTask);
@@ -48,9 +47,9 @@ namespace Core.OnlineServices.SteamOnlineService {
                 _replayFetchTask.SetResult(new SteamFileStore(ctx));
         }
 
-        public static int[] GetEntryDetails(Flag flag) {
+        public static int[] GetEntryDetails(int flagId) {
             var details = new int[SteamDetailsCount];
-            details[0] = flag.FixedId;
+            details[0] = flagId;
             return details;
         }
     }

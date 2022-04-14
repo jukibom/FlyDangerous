@@ -1,4 +1,5 @@
-﻿using Core.ShipModel;
+﻿using Core.Player;
+using Core.ShipModel;
 using UnityEngine;
 
 namespace Core.Replays {
@@ -6,8 +7,6 @@ namespace Core.Replays {
     [RequireComponent(typeof(ReplayTimeline))]
     public class ShipGhost : MonoBehaviour, IReplayShip {
         [SerializeField] private ShipPhysics shipPhysics;
-
-        public string PlayerName { get; set; }
         public ReplayTimeline ReplayTimeline { get; private set; }
 
         private void Awake() {
@@ -25,6 +24,9 @@ namespace Core.Replays {
             FloatingOrigin.OnFloatingOriginCorrection -= PerformCorrection;
             ShipPhysics.OnBoost -= ShowBoost;
         }
+
+        public string PlayerName { get; set; }
+        public Flag PlayerFlag { get; set; }
 
         public Transform Transform { get; private set; }
 

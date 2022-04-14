@@ -1,21 +1,23 @@
 ﻿using System;
-using Core.ShipModel;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Core.Player {
     public class ShipProfile {
-        public readonly string playerName;
-        public readonly string shipModel; 
-        public readonly string primaryColor; 
         public readonly string accentColor;
-        public readonly string thrusterColor; 
-        public readonly string trailColor; 
         public readonly string headLightsColor;
+        public readonly string playerFlagFilename;
+        public readonly string playerName;
+        public readonly string primaryColor;
+        public readonly string shipModel;
+        public readonly string thrusterColor;
+        public readonly string trailColor;
 
-        public ShipProfile(string playerName, string shipModel, string primaryColor, string accentColor, string thrusterColor, string trailColor, string headLightsColor) {
+        public ShipProfile(string playerName, string playerFlagFilename, string shipModel, string primaryColor, string accentColor, string thrusterColor,
+            string trailColor, string headLightsColor) {
             this.playerName = playerName;
+            this.playerFlagFilename = playerFlagFilename;
             this.shipModel = shipModel;
             this.primaryColor = primaryColor;
             this.accentColor = accentColor;
@@ -42,6 +44,7 @@ namespace Core.Player {
         public static ShipProfile FromPreferences() {
             return new ShipProfile(
                 Preferences.Instance.GetString("playerName"),
+                Preferences.Instance.GetString("playerFlag"),
                 Preferences.Instance.GetString("playerShipDesign"),
                 Preferences.Instance.GetString("playerShipPrimaryColor"),
                 Preferences.Instance.GetString("playerShipAccentColor"),

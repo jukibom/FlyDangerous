@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Text;
+using Core.Player;
 using Core.ShipModel;
 using JetBrains.Annotations;
 using MessagePack;
@@ -8,6 +9,7 @@ using UnityEngine;
 namespace Core.Replays {
     public interface IReplayShip {
         string PlayerName { get; set; }
+        Flag PlayerFlag { get; set; }
         Transform Transform { get; }
         Rigidbody Rigidbody { get; }
         ShipPhysics ShipPhysics { get; }
@@ -50,6 +52,7 @@ namespace Core.Replays {
             ShipReplayObject = ship;
             ship.ShipPhysics.RefreshShipModel(replay.ShipProfile);
             ship.PlayerName = replay.ShipProfile.playerName;
+            ship.PlayerFlag = Flag.FromFilename(replay.ShipProfile.playerFlagFilename);
 
             _inputFrameReader = new BinaryReader(replay.InputFrameStream, Encoding.UTF8, true);
             _keyFrameReader = new BinaryReader(replay.KeyFrameStream, Encoding.UTF8, true);
