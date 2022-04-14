@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using Core.Player;
 
 namespace Core.OnlineServices {
     public enum LeaderboardFetchType {
@@ -23,7 +22,7 @@ namespace Core.OnlineServices {
     public interface ILeaderboard {
         // TODO: Handle pagination - for now let's just show the top 20 and call it a day (we need lots of entries to properly test)
         public Task<List<ILeaderboardEntry>> GetEntries(LeaderboardFetchType fetchType);
-        public Task UploadScore(int score, Flag flag);
+        public Task UploadScore(int score, int flagId, string replayFilePath, string replayFileName);
     }
 
     public interface ILeaderboardService {

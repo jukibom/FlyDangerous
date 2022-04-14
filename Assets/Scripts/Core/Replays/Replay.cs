@@ -121,7 +121,7 @@ namespace Core.Replays {
 
             File.Move(tmpArchiveDataSaveLoc, filePath);
             Directory.Delete(TMPSaveDirectory, true);
-            return filePath;
+            return fileName;
         }
 
         /**

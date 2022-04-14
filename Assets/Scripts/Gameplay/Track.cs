@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Audio;
 using Core;
@@ -181,7 +182,7 @@ namespace Gameplay {
             }
         }
 
-        public void CheckpointHit(Checkpoint checkpoint, AudioSource checkpointHitAudio) {
+        public async void CheckpointHit(Checkpoint checkpoint, AudioSource checkpointHitAudio) {
             if (isActive && Timers) {
                 var hitCheckpoint = hitCheckpoints.Find(c => c == checkpoint);
                 if (!hitCheckpoint) {
@@ -230,7 +231,21 @@ namespace Gameplay {
                                 var scoreData = score.Save(Game.Instance.LoadedLevelData);
                                 Score.SaveToDisk(scoreData, Game.Instance.LoadedLevelData);
 
-                                if (_replayRecorder) _replayRecorder.StopRecording(scoreData);
+                                if (_replayRecorder) {
+                                    _replayRecorder.StopRecording();
+                                    var levelHash = Game.Instance.LoadedLevelData.LevelHash();
+                                    var replay = _replayRecorder.Replay;
+                                    var replayFileName = replay?.Save(scoreData);
+                                    var replayFilepath = Path.Combine(Replay.ReplayDirectory, levelHash, replayFileName ?? string.Empty);
+
+                                    if (FdNetworkManager.Instance.HasLeaderboardServices) {
+                                        var flagId = Flag.FromFilename(Preferences.Instance.GetString("playerFlag")).FixedId;
+                                        var leaderboard = await FdNetworkManager.Instance.OnlineService!.Leaderboard!.FindOrCreateLeaderboard(levelHash);
+
+                                        // TODO: This can ABSOLUTELY fail, handle it in the end screen below!
+                                        await leaderboard.UploadScore((int)(scoreData.raceTime * 1000), flagId, replayFileName, replayFilepath);
+                                    }
+                                }
                             }
 
                             UpdateTargetTimeElements();

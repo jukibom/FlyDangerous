@@ -1,23 +1,32 @@
 ﻿#if !DISABLESTEAMWORKS
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
-using Core.Player;
+using JetBrains.Annotations;
 using Steamworks;
 
 namespace Core.OnlineServices.SteamOnlineService {
     public class SteamLeaderboard : ILeaderboard {
+        private readonly CallResult<LeaderboardUGCSet_t> _attachGhostToEntryCallback;
         private readonly CallResult<LeaderboardScoresDownloaded_t> _entriesFetchResultsCallback;
         private readonly SteamLeaderboard_t _leaderboard;
+        private readonly CallResult<RemoteStorageFileShareResult_t> _shareGhostCallback;
+        private readonly CallResult<RemoteStorageFileWriteAsyncComplete_t> _uploadGhostCallback;
         private readonly CallResult<LeaderboardScoreUploaded_t> _uploadResultCallback;
 
         private TaskCompletionSource<List<ILeaderboardEntry>> _leaderboardEntryListTask;
+        [CanBeNull] private string _pendingReplayUploadFileName;
+        [CanBeNull] private string _pendingReplayUploadFilePath;
         private TaskCompletionSource<bool> _uploadScoreTask;
 
         public SteamLeaderboard(SteamLeaderboard_t leaderboard) {
             _leaderboard = leaderboard;
             _entriesFetchResultsCallback = CallResult<LeaderboardScoresDownloaded_t>.Create(OnEntriesRetrieved);
-            _uploadResultCallback = CallResult<LeaderboardScoreUploaded_t>.Create(OnUpload);
+            _uploadResultCallback = CallResult<LeaderboardScoreUploaded_t>.Create(OnLeaderboardUpload);
+            _uploadGhostCallback = CallResult<RemoteStorageFileWriteAsyncComplete_t>.Create(OnGhostUpload);
+            _shareGhostCallback = CallResult<RemoteStorageFileShareResult_t>.Create(OnGhostShared);
+            _attachGhostToEntryCallback = CallResult<LeaderboardUGCSet_t>.Create(OnGhostAttachedToEntry);
         }
 
         public Task<List<ILeaderboardEntry>> GetEntries(LeaderboardFetchType fetchType) {
@@ -42,20 +51,25 @@ namespace Core.OnlineServices.SteamOnlineService {
             return _leaderboardEntryListTask.Task;
         }
 
-        public Task UploadScore(int score, Flag flag) {
+        public Task UploadScore(int score, int flagId, string replayFilePath, string replayFileName) {
             TaskHandler.RecreateTask(ref _uploadScoreTask);
 
-            var details = SteamLeaderboardEntry.GetEntryDetails(flag);
+            _pendingReplayUploadFilePath = replayFilePath;
+            _pendingReplayUploadFileName = replayFileName;
+
+            var details = SteamLeaderboardEntry.GetEntryDetails(flagId);
             var method = ELeaderboardUploadScoreMethod.k_ELeaderboardUploadScoreMethodKeepBest;
             var handle = SteamUserStats.UploadLeaderboardScore(_leaderboard, method, score, details, SteamLeaderboardEntry.SteamDetailsCount);
             _uploadResultCallback.Set(handle);
-
             return _uploadScoreTask.Task;
         }
 
         ~SteamLeaderboard() {
             _entriesFetchResultsCallback.Dispose();
             _uploadResultCallback.Dispose();
+            _uploadGhostCallback.Dispose();
+            _shareGhostCallback.Dispose();
+            _attachGhostToEntryCallback.Dispose();
         }
 
         private void OnEntriesRetrieved(LeaderboardScoresDownloaded_t ctx, bool ioFailure) {
@@ -71,9 +85,43 @@ namespace Core.OnlineServices.SteamOnlineService {
             _leaderboardEntryListTask.SetResult(entries);
         }
 
-        private void OnUpload(LeaderboardScoreUploaded_t ctx, bool ioFailure) {
-            if (ctx.m_bSuccess == 1 && !ioFailure) _uploadScoreTask.SetResult(true);
-            else _uploadScoreTask.SetException(new Exception("Failed to upload score"));
+        // On upload we need to successively upload and then attach the ghost files before resolving the task.
+        private void OnLeaderboardUpload(LeaderboardScoreUploaded_t ctx, bool ioFailure) {
+            if (ctx.m_bSuccess == 1 && !ioFailure && _pendingReplayUploadFilePath != null && _pendingReplayUploadFileName != null) {
+                var replay = File.ReadAllBytes(Path.Combine(_pendingReplayUploadFilePath, _pendingReplayUploadFileName));
+                var handle = SteamRemoteStorage.FileWriteAsync(_pendingReplayUploadFileName, replay, (uint)replay.Length);
+                _uploadGhostCallback.Set(handle);
+            }
+            else {
+                _uploadScoreTask.SetException(new Exception("Failed to upload score"));
+            }
+        }
+
+        private void OnGhostUpload(RemoteStorageFileWriteAsyncComplete_t ctx, bool ioFailure) {
+            if (ctx.m_eResult == EResult.k_EResultOK && !ioFailure) {
+                var handle = SteamRemoteStorage.FileShare(_pendingReplayUploadFileName);
+                _shareGhostCallback.Set(handle);
+            }
+            else {
+                _uploadScoreTask.SetException(new Exception("Failed to upload score"));
+            }
+        }
+
+        private void OnGhostShared(RemoteStorageFileShareResult_t ctx, bool ioFailure) {
+            if (ctx.m_eResult == EResult.k_EResultOK && !ioFailure) {
+                var handle = SteamUserStats.AttachLeaderboardUGC(_leaderboard, ctx.m_hFile);
+                _attachGhostToEntryCallback.Set(handle);
+            }
+            else {
+                _uploadScoreTask.SetException(new Exception("Failed to upload ghost " + ctx.m_eResult));
+            }
+        }
+
+        private void OnGhostAttachedToEntry(LeaderboardUGCSet_t ctx, bool ioFailure) {
+            if (ctx.m_eResult == EResult.k_EResultOK && !ioFailure)
+                _uploadScoreTask.SetResult(true);
+            else
+                _uploadScoreTask.SetException(new Exception("Failed to attach replay to leaderboard entry"));
         }
     }
 }

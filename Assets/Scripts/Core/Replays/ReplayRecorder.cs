@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using System.Text;
 using Core.Player;
-using Core.Scores;
 using Core.ShipModel;
 using JetBrains.Annotations;
 using MessagePack;
@@ -11,10 +10,11 @@ namespace Core.Replays {
     public class ReplayRecorder : MonoBehaviour {
         private bool _recording;
 
-        [CanBeNull] private Replay _replay;
         private ShipPhysics _targetShip;
 
         private uint _ticks;
+
+        [CanBeNull] public Replay Replay { get; private set; }
 
         private void OnDestroy() {
             CancelRecording();
@@ -25,36 +25,34 @@ namespace Core.Replays {
             _targetShip.OnShipPhysicsUpdated += RecordFrame;
             _recording = true;
             _ticks = 0;
-            _replay = Replay.CreateNewWritable(Game.Instance.ShipParameters, Game.Instance.LoadedLevelData, ShipProfile.FromPreferences());
+            Replay = Replay.CreateNewWritable(Game.Instance.ShipParameters, Game.Instance.LoadedLevelData, ShipProfile.FromPreferences());
         }
 
         public void CancelRecording() {
-            if (_replay != null) {
-                _replay.InputFrameStream.Close();
-                _replay.KeyFrameStream.Close();
-                _replay.InputFrameStream.Dispose();
-                _replay.KeyFrameStream.Dispose();
-                _replay = null;
+            if (Replay != null) {
+                Replay.InputFrameStream.Close();
+                Replay.KeyFrameStream.Close();
+                Replay.InputFrameStream.Dispose();
+                Replay.KeyFrameStream.Dispose();
+                Replay = null;
             }
         }
 
-        public void StopRecording(ScoreData scoreData = new()) {
+        public void StopRecording() {
             if (_targetShip) _targetShip.OnShipPhysicsUpdated -= RecordFrame;
-            _recording = true;
+            _recording = false;
             _ticks = 0;
-
-            if (_replay != null) _replay.Save(scoreData);
         }
 
         /**
-         * Record the frame every physics time step
-         */
+     * Record the frame every physics time step
+     */
         private void RecordFrame(
             float pitch, float roll, float yaw, float throttle, float lateralH, float lateralV, bool boost, bool limiter, bool shipLightsEnabled
         ) {
-            if (_recording && _replay != null) {
+            if (_recording && Replay != null) {
                 // record a keyframe every specified amount of ticks
-                if (_ticks % _replay.ReplayMeta.KeyFrameIntervalTicks == 0)
+                if (_ticks % Replay.ReplayMeta.KeyFrameIntervalTicks == 0)
                     RecordKeyFrame(new KeyFrame {
                         replayFloatingOrigin = FloatingOrigin.Instance.Origin,
                         position = _targetShip.Position,
@@ -80,17 +78,17 @@ namespace Core.Replays {
         }
 
         private void RecordInputFrame(InputFrame inputFrame) {
-            if (_replay is { CanWrite: true }) {
+            if (Replay is { CanWrite: true }) {
                 var inputFrameBytes = MessagePackSerializer.Serialize(inputFrame);
-                using var bw = new BinaryWriter(_replay.InputFrameStream, Encoding.UTF8, true);
+                using var bw = new BinaryWriter(Replay.InputFrameStream, Encoding.UTF8, true);
                 bw.Write(inputFrameBytes);
             }
         }
 
         private void RecordKeyFrame(KeyFrame keyFrame) {
-            if (_replay is { CanWrite: true }) {
+            if (Replay is { CanWrite: true }) {
                 var keyFrameBytes = MessagePackSerializer.Serialize(keyFrame);
-                using var bw = new BinaryWriter(_replay.KeyFrameStream, Encoding.UTF8, true);
+                using var bw = new BinaryWriter(Replay.KeyFrameStream, Encoding.UTF8, true);
                 bw.Write(keyFrameBytes);
             }
         }
