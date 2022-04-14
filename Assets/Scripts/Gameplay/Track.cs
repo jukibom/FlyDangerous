@@ -243,7 +243,8 @@ namespace Gameplay {
                                         var leaderboard = await FdNetworkManager.Instance.OnlineService!.Leaderboard!.FindOrCreateLeaderboard(levelHash);
 
                                         // TODO: This can ABSOLUTELY fail, handle it in the end screen below!
-                                        await leaderboard.UploadScore((int)(scoreData.raceTime * 1000), flagId, replayFileName, replayFilepath);
+                                        await leaderboard.UploadScore((int)(scoreData.raceTime * 1000), flagId, replayFilepath, replayFileName);
+                                        Debug.Log("Leaderboard upload succeeded");
                                     }
                                 }
                             }

@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Audio;
 using Core.MapData;
+using Core.Replays;
 using Core.Scores;
 using Den.Tools;
 using Misc;
@@ -122,6 +124,12 @@ namespace Menus.Main_Menu.Components {
 
             SwitchToLevelSelectScreen();
             SelectedLevel = null;
+        }
+
+        public async void DownloadGhost(LeaderboardEntry leaderboardEntry) {
+            var path = Path.Combine(Replay.ReplayDirectory, SelectedLevel.Data.LevelHash());
+            var filename = await leaderboardEntry.DownloadReplay(path);
+            competitionPanel.PopulateGhostsForLevel(SelectedLevel);
         }
 
         private void SetSelectedLevel(Level level) {

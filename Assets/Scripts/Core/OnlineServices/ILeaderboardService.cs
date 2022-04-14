@@ -13,9 +13,7 @@ namespace Core.OnlineServices {
         public int Rank { get; }
         public string Player { get; }
         public int Score { get; }
-
         public int FlagId { get; }
-
         public Task<IOnlineFile> Replay();
     }
 

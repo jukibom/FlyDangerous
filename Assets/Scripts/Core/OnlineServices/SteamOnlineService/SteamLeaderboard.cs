@@ -88,8 +88,8 @@ namespace Core.OnlineServices.SteamOnlineService {
         // On upload we need to successively upload and then attach the ghost files before resolving the task.
         private void OnLeaderboardUpload(LeaderboardScoreUploaded_t ctx, bool ioFailure) {
             if (ctx.m_bSuccess == 1 && !ioFailure && _pendingReplayUploadFilePath != null && _pendingReplayUploadFileName != null) {
-                var replay = File.ReadAllBytes(Path.Combine(_pendingReplayUploadFilePath, _pendingReplayUploadFileName));
-                var handle = SteamRemoteStorage.FileWriteAsync(_pendingReplayUploadFileName, replay, (uint)replay.Length);
+                var replay = File.ReadAllBytes(_pendingReplayUploadFilePath);
+                var handle = SteamRemoteStorage.FileWriteAsync(_pendingReplayUploadFileName, replay, Convert.ToUInt32(replay.Length));
                 _uploadGhostCallback.Set(handle);
             }
             else {

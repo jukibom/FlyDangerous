@@ -1,3 +1,5 @@
+using System.IO;
+using System.Threading.Tasks;
 using Core.OnlineServices;
 using Core.Player;
 using JetBrains.Annotations;
@@ -11,8 +13,14 @@ namespace Menus.Main_Menu.Components {
         [SerializeField] private Text playerName;
         [SerializeField] private FlagIcon flagIcon;
         [SerializeField] private Text score;
+        [SerializeField] private Button downloadButton;
 
         [CanBeNull] private ILeaderboardEntry _entry;
+
+        private void OnEnable() {
+            var levelSelect = GetComponentInParent<LevelSelectPanel>();
+            if (levelSelect) downloadButton.onClick.AddListener(() => levelSelect.DownloadGhost(this));
+        }
 
         public void GetData(ILeaderboardEntry entry) {
             _entry = entry;
@@ -26,6 +34,27 @@ namespace Menus.Main_Menu.Components {
                 score.text = TimeExtensions.TimeSecondsToString(_entry.Score / 1000f);
                 flagIcon.SetFlag(Flag.FromFixedId(_entry.FlagId));
             }
+        }
+
+        public async Task<string> DownloadReplay(string toLocation) {
+            if (_entry != null) {
+                var onlineFile = await _entry.Replay();
+
+                var saveLoc = Path.Combine(toLocation, onlineFile.Filename);
+                var directoryLoc = Path.GetDirectoryName(saveLoc);
+                if (directoryLoc != null) Directory.CreateDirectory(directoryLoc);
+
+
+                await using var file = new FileStream(saveLoc, FileMode.Create, FileAccess.Write);
+                var bytes = new byte[onlineFile.Data.Length];
+                onlineFile.Data.Read(bytes, 0, (int)onlineFile.Data.Length);
+                file.Write(bytes, 0, bytes.Length);
+                file.Close();
+                onlineFile.Data.Close();
+                return onlineFile.Filename;
+            }
+
+            return "";
         }
     }
 }

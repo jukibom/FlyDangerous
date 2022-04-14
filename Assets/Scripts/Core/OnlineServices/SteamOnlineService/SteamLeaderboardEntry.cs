@@ -32,7 +32,8 @@ namespace Core.OnlineServices.SteamOnlineService {
         public Task<IOnlineFile> Replay() {
             TaskHandler.RecreateTask(ref _replayFetchTask);
 
-            SteamRemoteStorage.UGCDownload(_leaderboardEntry.m_hUGC, 1);
+            var handle = SteamRemoteStorage.UGCDownload(_leaderboardEntry.m_hUGC, 1);
+            _replayFetchCallback.Set(handle);
             return _replayFetchTask.Task;
         }
 
@@ -41,10 +42,10 @@ namespace Core.OnlineServices.SteamOnlineService {
         }
 
         private void OnReplayFetch(RemoteStorageDownloadUGCResult_t ctx, bool ioFailure) {
-            if (ioFailure)
-                _replayFetchTask.SetException(new Exception("Failed to fetch replay file"));
-            else
+            if (ctx.m_eResult == EResult.k_EResultOK && !ioFailure)
                 _replayFetchTask.SetResult(new SteamFileStore(ctx));
+            else
+                _replayFetchTask.SetException(new Exception("Failed to fetch replay file " + ctx.m_eResult));
         }
 
         public static int[] GetEntryDetails(int flagId) {
