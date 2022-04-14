@@ -1,51 +1,54 @@
-using Core;
 using Core.OnlineServices;
-using Core.Player;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Menus.Main_Menu.Components {
     public class Leaderboard : MonoBehaviour {
-
-        [CanBeNull] private ILeaderboard _leaderboard;
         [SerializeField] private RectTransform container;
         [SerializeField] private LeaderboardEntry leaderboardEntryPrefab;
         [SerializeField] private Text leaderboardText;
-        
+
+        [CanBeNull] private ILeaderboard _leaderboard;
+
         public void LoadLeaderboard(ILeaderboard leaderboard) {
             _leaderboard = leaderboard;
-            leaderboardText.text = "FETCHING ...";
             ClearEntries();
-            GetEntries();
-        }
-
-        private async void GetEntries() {
-            if (_leaderboard != null) {
-                var newEntries = await _leaderboard.GetEntries();
-                leaderboardText.text = (newEntries.Count > 0) ? "" : "NO LEADERBOARD ENTRIES FOUND";
-
-                if (newEntries.Count > 0) {
-                    foreach (var leaderboardEntry in newEntries) {
-                        var entry = Instantiate(leaderboardEntryPrefab, container);
-                        entry.GetData(leaderboardEntry);
-                    }
-                }
-            }
+            ShowTop20();
         }
 
         private void ClearEntries() {
             var entries = container.gameObject.GetComponentsInChildren<LeaderboardEntry>();
-            Debug.Log(entries.Length);
-            foreach (var leaderboardEntry in entries) {
-                Destroy(leaderboardEntry.gameObject);
-            }
+            foreach (var leaderboardEntry in entries) Destroy(leaderboardEntry.gameObject);
         }
 
-        public async void TestScoreUpload(int score) {
-            await _leaderboard.UploadScore(score, Flag.FromFilename(Preferences.Instance.GetString("playerFlag")));
+        public void ShowTop20() {
             ClearEntries();
-            GetEntries();
+            GetEntries(LeaderboardFetchType.Top);
+        }
+
+        public void ShowMe() {
+            ClearEntries();
+            GetEntries(LeaderboardFetchType.Me);
+        }
+
+        public void ShowFriends() {
+            ClearEntries();
+            GetEntries(LeaderboardFetchType.Friends);
+        }
+
+        private async void GetEntries(LeaderboardFetchType fetchType) {
+            if (_leaderboard != null) {
+                leaderboardText.text = "FETCHING ...";
+                var newEntries = await _leaderboard.GetEntries(fetchType);
+                leaderboardText.text = newEntries.Count > 0 ? "" : "NO LEADERBOARD ENTRIES FOUND";
+
+                if (newEntries.Count > 0)
+                    foreach (var leaderboardEntry in newEntries) {
+                        var entry = Instantiate(leaderboardEntryPrefab, container);
+                        entry.GetData(leaderboardEntry);
+                    }
+            }
         }
     }
 }

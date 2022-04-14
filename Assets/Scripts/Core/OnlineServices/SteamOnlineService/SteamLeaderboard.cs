@@ -1,4 +1,4 @@
-#if !DISABLESTEAMWORKS
+﻿#if !DISABLESTEAMWORKS
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -20,9 +20,22 @@ namespace Core.OnlineServices.SteamOnlineService {
             _uploadResultCallback = CallResult<LeaderboardScoreUploaded_t>.Create(OnUpload);
         }
 
-        public Task<List<ILeaderboardEntry>> GetEntries() {
+        public Task<List<ILeaderboardEntry>> GetEntries(LeaderboardFetchType fetchType) {
             TaskHandler.RecreateTask(ref _leaderboardEntryListTask);
+
             var entriesRequest = ELeaderboardDataRequest.k_ELeaderboardDataRequestGlobal;
+            switch (fetchType) {
+                case LeaderboardFetchType.Top:
+                    entriesRequest = ELeaderboardDataRequest.k_ELeaderboardDataRequestGlobal;
+                    break;
+                case LeaderboardFetchType.Me:
+                    entriesRequest = ELeaderboardDataRequest.k_ELeaderboardDataRequestGlobalAroundUser;
+                    break;
+                case LeaderboardFetchType.Friends:
+                    entriesRequest = ELeaderboardDataRequest.k_ELeaderboardDataRequestFriends;
+                    break;
+            }
+
             var handle = SteamUserStats.DownloadLeaderboardEntries(_leaderboard, entriesRequest, 0, 20);
             _entriesFetchResultsCallback.Set(handle);
 
