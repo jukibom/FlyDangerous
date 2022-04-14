@@ -2,15 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using Core;
+using Core.Player;
 using Core.ShipModel;
+using Den.Tools;
 using Menus.Main_Menu.Components;
+using Misc;
 using UI;
 using UnityEngine;
+using UnityEngine.U2D;
 using UnityEngine.UI;
 
 namespace Menus.Main_Menu {
     public class ProfileMenu : MenuBase {
-        [SerializeField] private TopMenu topMenu;
+        [SerializeField] private SpriteAtlas flagSpriteAtlas;
 
         [SerializeField] private InputField playerNameTextField;
         [SerializeField] private Dropdown countryDropdown;
@@ -81,17 +85,24 @@ namespace Menus.Main_Menu {
                 }
 
                 if (shouldUpdate) RefreshColors();
+
+                // Only show the 3d models if the country dropdown isn't showing
+                // Slow but who cares
+                var shouldHideModels = countryDropdown.gameObject.transform.FindChildRecursive("Dropdown List") != null;
+                shipSelectionRenderer.gameObject.SetActive(!shouldHideModels);
+                thruster.gameObject.SetActive(!shouldHideModels);
             }
         }
 
         protected override void OnOpen() {
+            FdEnum.PopulateDropDown(Flag.List(), countryDropdown, null, flag => flagSpriteAtlas.GetSprite(flag.Filename));
             _ships = ShipMeta.List().ToList();
             LoadFromPreferences();
         }
 
         public void Apply() {
             Preferences.Instance.SetString("playerName", playerNameTextField.text);
-            // TODO: Region
+            Preferences.Instance.SetString("playerFlag", Flag.FromId(countryDropdown.value).Filename);
             Preferences.Instance.SetString("playerShipDesign", _selectedShip.Name);
             Preferences.Instance.SetString("playerShipPrimaryColor", _playerShipPrimaryColor);
             Preferences.Instance.SetString("playerShipAccentColor", _playerShipAccentColor);
@@ -145,9 +156,10 @@ namespace Menus.Main_Menu {
                 yield return new WaitForEndOfFrame();
                 yield return new WaitForEndOfFrame();
 
+
                 // load details from prefs
-                // TODO: region
                 playerNameTextField.text = Preferences.Instance.GetString("playerName");
+                countryDropdown.value = Flag.FromFilename(Preferences.Instance.GetString("playerFlag")).Id;
                 _playerShipPrimaryColor = Preferences.Instance.GetString("playerShipPrimaryColor");
                 _playerShipAccentColor = Preferences.Instance.GetString("playerShipAccentColor");
                 _playerShipThrusterColor = Preferences.Instance.GetString("playerShipThrusterColor");

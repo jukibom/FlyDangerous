@@ -110,6 +110,8 @@ namespace Core {
             switch (key) {
                 case "playerName":
                     return "PLAYER NAME";
+                case "playerFlag":
+                    return "none";
                 case "controlSchemeType":
                     return "arcade";
                 case "flightAssistDefault":
