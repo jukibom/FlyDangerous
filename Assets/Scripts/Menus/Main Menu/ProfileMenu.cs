@@ -102,7 +102,7 @@ namespace Menus.Main_Menu {
 
         public void Apply() {
             Preferences.Instance.SetString("playerName", playerNameTextField.text);
-            Preferences.Instance.SetString("playerFlag", Flag.FromId(countryDropdown.value).Filename);
+            Preferences.Instance.SetString("playerFlag", FdEnum.FromDropdownId(Flag.List(), countryDropdown.value).Filename);
             Preferences.Instance.SetString("playerShipDesign", _selectedShip.Name);
             Preferences.Instance.SetString("playerShipPrimaryColor", _playerShipPrimaryColor);
             Preferences.Instance.SetString("playerShipAccentColor", _playerShipAccentColor);
@@ -159,7 +159,7 @@ namespace Menus.Main_Menu {
 
                 // load details from prefs
                 playerNameTextField.text = Preferences.Instance.GetString("playerName");
-                countryDropdown.value = Flag.FromFilename(Preferences.Instance.GetString("playerFlag")).Id;
+                countryDropdown.value = FdEnum.ToDropdownId(Flag.List(), Flag.FromFilename(Preferences.Instance.GetString("playerFlag")));
                 _playerShipPrimaryColor = Preferences.Instance.GetString("playerShipPrimaryColor");
                 _playerShipAccentColor = Preferences.Instance.GetString("playerShipAccentColor");
                 _playerShipThrusterColor = Preferences.Instance.GetString("playerShipThrusterColor");

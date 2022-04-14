@@ -60,6 +60,21 @@ namespace Misc {
             dropdown.ClearOptions();
             dropdown.AddOptions(newOptions);
         }
+
+        public static T FromDropdownId<T>(IEnumerable<T> enums, int id) {
+            var enumerable = enums as T[] ?? enums.ToArray();
+            if (enumerable.Count() >= id + 1) return enumerable.ToArray()[id];
+
+            return enumerable.First();
+        }
+
+        public static int ToDropdownId(IEnumerable<IFdEnum> enums, IFdEnum element) {
+            var targetId = element.Id;
+            var fdEnums = enums as IFdEnum[] ?? enums.ToArray();
+            var flag = fdEnums.First(f => f.Id == targetId);
+            var dropdownId = Array.IndexOf(fdEnums, flag);
+            return dropdownId != -1 ? dropdownId : 0;
+        }
     }
 
     public class FdEnumJsonConverter : JsonConverter {
