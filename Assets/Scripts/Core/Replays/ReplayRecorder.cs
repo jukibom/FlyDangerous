@@ -34,6 +34,7 @@ namespace Core.Replays {
                 Replay.KeyFrameStream.Close();
                 Replay.InputFrameStream.Dispose();
                 Replay.KeyFrameStream.Dispose();
+                _recording = false;
                 Replay = null;
             }
         }

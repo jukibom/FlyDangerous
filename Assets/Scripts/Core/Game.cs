@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Cinemachine;
@@ -101,6 +102,8 @@ namespace Core {
         }
 
         public Camera InGameUICamera => inGameUiCamera;
+
+        public List<Replay> ActiveGameReplays { get; set; }
 
         public bool IsTerrainMap => _levelLoader.LoadedLevelData.location.IsTerrain;
 
@@ -339,7 +342,7 @@ namespace Core {
 
         public void RestartSession() {
             StartCoroutine(_levelLoader.RestartLevel(() => {
-                if (OnRestart != null) OnRestart();
+                OnRestart?.Invoke();
             }));
         }
 
@@ -496,12 +499,19 @@ namespace Core {
             return ghost;
         }
 
-        public void RemoveGhost(ReplayTimeline replayTimeline) {
-            replayTimeline.Stop();
-            var replayObject = replayTimeline.ShipReplayObject;
-            if (replayObject != null) Destroy(replayObject.Transform.gameObject);
-            Destroy(replayTimeline);
-            OnGhostRemoved?.Invoke();
+        public void RemoveGhost(ShipGhost shipGhost) {
+            // we have to wait a frame for all deletions to occur before firing any events
+            IEnumerator DestroyGhost() {
+                shipGhost.ReplayTimeline.Stop();
+                var replayObject = shipGhost.ReplayTimeline.ShipReplayObject;
+                if (replayObject != null) Destroy(replayObject.Transform.gameObject);
+                Destroy(shipGhost.gameObject);
+
+                yield return new WaitForEndOfFrame();
+                OnGhostRemoved?.Invoke();
+            }
+
+            StartCoroutine(DestroyGhost());
         }
 
         public void NotifyPlayerLoaded() {

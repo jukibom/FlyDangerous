@@ -43,6 +43,7 @@ namespace Menus.Main_Menu.Components {
         private Coroutine _panelAnimationShowCoroutine;
 
         public Level SelectedLevel { get; private set; }
+        public List<Replay> SelectedReplays => competitionPanel.GetSelectedReplays();
         public event OnLevelSelectedAction OnLevelSelectedEvent;
 
         public void LoadLevels(List<Level> levels) {

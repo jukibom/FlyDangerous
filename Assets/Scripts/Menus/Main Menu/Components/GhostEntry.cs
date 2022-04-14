@@ -1,3 +1,4 @@
+using Core.Replays;
 using UI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,5 +9,6 @@ namespace Menus.Main_Menu.Components {
         [SerializeField] public Text entryDate;
         [SerializeField] public Text score;
         [SerializeField] public Checkbox isEnabled;
+        public Replay replay;
     }
 }

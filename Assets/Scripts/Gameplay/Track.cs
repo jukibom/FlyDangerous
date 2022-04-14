@@ -62,7 +62,7 @@ namespace Gameplay {
             set => ReplaceCheckpoints(value);
         }
 
-        public List<Replay> ActiveGhosts { get; set; } = new();
+        public List<ShipGhost> ActiveGhosts { get; set; } = new();
 
         public bool IsEndCheckpointValid => hitCheckpoints.Count >= Checkpoints.Count - 2; // remove start and end
 
@@ -97,10 +97,10 @@ namespace Gameplay {
                     ship.transform.position = start.transform.position;
                     _replayRecorder.CancelRecording();
                     _replayRecorder.StartNewRecording(ship.ShipPhysics);
-                    foreach (var replayRecorder in GetComponents<ReplayTimeline>()) Destroy(replayRecorder);
-                    foreach (var shipGhost in _ghosts) Destroy(shipGhost);
-                    _ghosts = new List<ShipGhost>();
-                    foreach (var activeGhost in ActiveGhosts) _ghosts.Add(Game.Instance.LoadGhost(activeGhost));
+                    foreach (var shipGhost in ActiveGhosts) Game.Instance.RemoveGhost(shipGhost);
+                    ActiveGhosts = new List<ShipGhost>();
+                    foreach (var activeReplay in Game.Instance.ActiveGameReplays)
+                        ActiveGhosts.Add(Game.Instance.LoadGhost(activeReplay));
                 }
             }
             else if (Checkpoints.Count > 0) {

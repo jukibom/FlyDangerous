@@ -41,10 +41,7 @@ namespace Core.Replays {
         }
 
         private void OnDestroy() {
-            if (Replay != null) {
-                Replay.InputFrameStream.Close();
-                Replay.KeyFrameStream.Close();
-            }
+            Stop();
         }
 
         public void LoadReplay(IReplayShip ship, Replay replay) {

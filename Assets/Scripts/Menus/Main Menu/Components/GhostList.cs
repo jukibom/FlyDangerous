@@ -31,6 +31,7 @@ namespace Menus.Main_Menu.Components {
                 ghostEntry.playerName.text = replay.ShipProfile.playerName;
                 ghostEntry.score.text = TimeExtensions.TimeSecondsToString(replay.ScoreData.raceTime);
                 ghostEntry.entryDate.text = replay.ReplayMeta.CreationDate.ToShortDateString();
+                ghostEntry.replay = replay;
 
                 // enable the best score by default
                 ghostEntry.isEnabled.isChecked = _replays.First() == replay;

@@ -12,9 +12,15 @@ namespace Core.ShipModel {
         private Camera _mainCamera;
 
         private void Update() {
+            // update camera if needed
+            if (_mainCamera == null || _mainCamera.enabled == false || _mainCamera.gameObject.activeSelf == false)
+                _mainCamera = Camera.main;
+
+
             // update target objects for players
             foreach (var keyValuePair in _players) {
                 var player = keyValuePair.Key;
+                if (player == null) continue;
                 var target = keyValuePair.Value;
                 var targetName = player.playerName;
                 var targetPosition = player.User.transform.position;
@@ -23,6 +29,7 @@ namespace Core.ShipModel {
 
             foreach (var keyValuePair in _ghosts) {
                 var ghost = keyValuePair.Key;
+                if (ghost == null) continue;
                 var target = keyValuePair.Value;
                 var targetName = ghost.PlayerName;
                 var targetPosition = ghost.transform.position;
