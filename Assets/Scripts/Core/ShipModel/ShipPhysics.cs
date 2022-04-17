@@ -187,7 +187,31 @@ namespace Core.ShipModel {
             }
         }
 
-        public void AttemptBoost() {
+        public void ShipLightsToggle(Action<bool> shipLightStatus) {
+            IsShipLightsActive = !IsShipLightsActive;
+            shipLightStatus(IsShipLightsActive);
+        }
+
+        public void Stop() {
+            targetRigidbody.velocity = Vector3.zero;
+            targetRigidbody.angularVelocity = Vector3.zero;
+            Pitch = 0;
+            Roll = 0;
+            Yaw = 0;
+            Throttle = 0;
+            LatH = 0;
+            LatV = 0;
+            BoostButtonHeld = false;
+            VelocityLimitActive = false;
+            VectorFlightAssistActive = false;
+            RotationalFlightAssistActive = false;
+            CurrentFrameThrust = Vector3.zero;
+            CurrentFrameTorque = Vector3.zero;
+            UpdateMotionInformation();
+            UpdateIndicators();
+        }
+
+        private void AttemptBoost() {
             if (BoostReady) {
                 _boostCapacitorPercent -= CurrentParameters.boostCapacitorPercentCost;
                 _boostCharging = true;
@@ -206,14 +230,9 @@ namespace Core.ShipModel {
             }
         }
 
-        public void ShipLightsToggle(Action<bool> shipLightStatus) {
-            IsShipLightsActive = !IsShipLightsActive;
-            shipLightStatus(IsShipLightsActive);
-        }
-
         // TODO: clamping should be based on input rather than modifying the rigid body - if gravity pulls you down
         //   then that's fine, similar to if a collision yeets you into a spinning mess.
-        public void ClampMaxSpeed(bool velocityLimiterActive) {
+        private void ClampMaxSpeed(bool velocityLimiterActive) {
             // clamp max speed if user is holding the velocity limiter button down
             if (velocityLimiterActive) {
                 _velocityLimitCap = Math.Max(_prevVelocity.magnitude, CurrentParameters.minUserLimitedVelocity);

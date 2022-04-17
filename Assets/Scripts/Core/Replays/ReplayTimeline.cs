@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using System.Text;
 using Core.Player;
 using Core.ShipModel;
@@ -75,10 +75,7 @@ namespace Core.Replays {
         public void Stop() {
             _inputTicks = 0;
             _isPlaying = false;
-            if (ShipReplayObject != null) {
-                ShipReplayObject.Rigidbody.velocity = Vector3.zero;
-                ShipReplayObject.Rigidbody.angularVelocity = Vector3.zero;
-            }
+            if (ShipReplayObject != null) ShipReplayObject.ShipPhysics.Stop();
         }
 
         private void UpdateKeyFrame() {
