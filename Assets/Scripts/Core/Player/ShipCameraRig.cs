@@ -127,6 +127,9 @@ namespace Core.Player {
             Reset();
             ActiveCamera = newCamera;
             user.InGameUI.ShipStats.SetStatsVisible(newCamera.showShipDataUI);
+            var type = newCamera.cameraType;
+            user.InGameUI.MouseWidgetScreen.gameObject.SetActive(type == CameraType.ThirdPerson);
+            user.InGameUI.MouseWidgetWorld.gameObject.SetActive(type == CameraType.FirstPerson);
             ActiveCamera.SetCameraActive(true);
         }
 
