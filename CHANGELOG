@@ -1,8 +1,14 @@
 ﻿0.5.0
 New:
-    * Added Steam integration
+    * Added Steam integration (Steam version features only, obviously ...)
         * No need to forward IPs on steam!
         * New server browser shows games in progress (steam version only) 
+        * Steam Leaderboard integration for Time Trial!
+    * Added ghost recording for Time Trial:
+        * As many ghosts as you wish may be enabled
+        * Personal Best is always recorded as a new ghost, and the fastest time is always enabled by default
+        * On Steam version, ghosts are automatically uploaded and retrievable from Leaderboard
+        * Ghosts can still be shared without steam, IF you can find the file. It must be placed in app data /StarGoat/FlyDangerous/Save/Records/[levelhash]/[filename].fdr, where `levelhash` is the same as the associated record time file. Uh, good luck?
     * Added new ship camera rig
         * 5 camera positions + cycle binding: nose, bonnet, cockpit, external, external-far (default keyboard C or pad Y / triangle)
         * Added bindings for rotating the camera or looking around in first person (default numpad arrows)
@@ -37,7 +43,7 @@ Fixed:
     * Axis dead zones failing to save
     * Axis dead zones not respecting defaults (0.05) unless overridden by user
     * Optimisations around component lookups in update loops (yes I was lazy and yes I paid the price, shut up)
-
+    * Were you getting occasionally faster times for the first checkpoint? You probably weren't going mad: converted all game-critical timers to fixed-physics-frame tick counters.
 
 0.4.1
 Fixed:
