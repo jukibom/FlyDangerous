@@ -1,4 +1,5 @@
 using System.Globalization;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,9 +26,14 @@ namespace GameUI.Components {
             }
         }
 
+        [CanBeNull]
         public Sprite Icon {
             get => icon.sprite;
-            set => icon.sprite = value;
+            set {
+                icon.gameObject.SetActive(value != null);
+                targetNameText.alignment = value != null ? TextAnchor.MiddleLeft : TextAnchor.MiddleCenter;
+                icon.sprite = value;
+            }
         }
 
         public float Opacity {
