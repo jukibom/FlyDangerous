@@ -144,7 +144,8 @@ namespace Menus.Main_Menu.Components {
             levelFlowLayoutGroup.enabled = false;
             if (_panelAnimationHideCoroutine != null) StopCoroutine(_panelAnimationHideCoroutine);
             if (_panelAnimationShowCoroutine != null) StopCoroutine(_panelAnimationShowCoroutine);
-            _panelAnimationHideCoroutine = StartCoroutine(HidePanel(levelGridLayoutElement, () => OnLevelSelectedEvent?.Invoke()));
+            OnLevelSelectedEvent?.Invoke();
+            _panelAnimationHideCoroutine = StartCoroutine(HidePanel(levelGridLayoutElement));
             _panelAnimationShowCoroutine = StartCoroutine(ShowPanel(summaryScreenGridLayoutElement));
         }
 
