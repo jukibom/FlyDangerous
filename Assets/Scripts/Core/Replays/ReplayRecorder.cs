@@ -16,12 +16,6 @@ namespace Core.Replays {
 
         [CanBeNull] public Replay Replay { get; private set; }
 
-        private void FixedUpdate() {
-            if (_recording && _targetShip != null) {
-                RecordFrame();
-            }
-        }
-
         private void OnDestroy() {
             CancelRecording();
         }
@@ -30,6 +24,7 @@ namespace Core.Replays {
             _targetShip = targetShip;
             _recording = true;
             _ticks = 0;
+            _targetShip.OnShipPhysicsUpdated += RecordFrame;
             Replay = Replay.CreateNewWritable(Game.Instance.ShipParameters, Game.Instance.LoadedLevelData, ShipProfile.FromPreferences());
         }
 
@@ -45,13 +40,14 @@ namespace Core.Replays {
         }
 
         public void StopRecording() {
+            _targetShip.OnShipPhysicsUpdated -= RecordFrame;
             _recording = false;
             _ticks = 0;
         }
 
         /**
-     * Record the frame every physics time step
-     */
+        * Record the frame every physics time step
+        */
         private void RecordFrame() {
             if (_recording && Replay != null) {
                 // record a keyframe every specified amount of ticks

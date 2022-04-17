@@ -9,8 +9,7 @@ namespace Core.ShipModel {
     public class ShipPhysics : MonoBehaviour {
         public delegate void BoostFiredAction(float boostTime);
 
-        public delegate void ShipPhysicsUpdated(float pitch, float roll, float yaw, float throttle, float latH, float latV, bool boostHeld,
-            bool velocityLimiterHeld, bool shipLightsActive);
+        public delegate void ShipPhysicsUpdated();
 
         // This magic number is the original inertiaTensor of the puffin ship which, unbeknownst to me at the time,
         // is actually calculated from the rigid body bounding boxes and impacts the torque rotation physics.
@@ -143,6 +142,7 @@ namespace Core.ShipModel {
         }
 
         public event BoostFiredAction OnBoost;
+        public event ShipPhysicsUpdated OnShipPhysicsUpdated;
 
         public void RefreshShipModel(ShipProfile shipProfile) {
             var shipData = ShipMeta.FromString(shipProfile.shipModel);
@@ -277,6 +277,8 @@ namespace Core.ShipModel {
             VelocityLimitActive = velocityLimitActive;
             VectorFlightAssistActive = vectorFlightAssistActive;
             RotationalFlightAssistActive = rotationalFlightAssistActive;
+
+            OnShipPhysicsUpdated?.Invoke();
 
             if (boostButtonHeld) AttemptBoost();
             UpdateBoostStatus();
