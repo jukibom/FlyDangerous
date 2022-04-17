@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -271,8 +271,8 @@ namespace Core.MapData {
                 }
             }
 
-            // gpu instancer initialisation (paid asset!)
 #if !NO_PAID_ASSETS
+            // gpu instancer initialisation (paid asset!)
             var cam = FindObjectOfType<CinemachineBrain>(true).gameObject.GetComponent<Camera>();
             var gpuInstancer = FindObjectOfType<GPUInstancerMapMagic2Integration>();
             if (mapMagic && gpuInstancer) {
@@ -284,7 +284,7 @@ namespace Core.MapData {
 
             _scenesLoading.Clear();
 
-            if (OnLevelLoaded != null) OnLevelLoaded();
+            OnLevelLoaded?.Invoke();
         }
     }
 }

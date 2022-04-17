@@ -304,6 +304,13 @@ namespace Core {
                 ApplyGameOptions();
                 NotifyVRStatus();
 
+#if !NO_PAID_ASSETS
+                // pull out GPU instancer object if needed 
+                var treeManager = FindObjectOfType<GPUInstancerTreeManager>();
+                var instancer = FindObjectOfType<GPUInstancerMapMagic2Integration>();
+                treeManager.transform.parent = instancer.transform;
+#endif
+
                 yield return _levelLoader.HideLoadingScreen();
 
                 // if there's a track, initialise it
