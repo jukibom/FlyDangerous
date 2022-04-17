@@ -171,6 +171,7 @@ namespace Core.Replays {
          * Create a writeable stream in a temporary directory
          */
         public static Replay CreateNewWritable(ShipParameters shipParameters, LevelData levelData, ShipProfile shipProfile) {
+            if (Directory.Exists(TMPSaveDirectory)) Directory.Delete(TMPSaveDirectory, true);
             Directory.CreateDirectory(TMPSaveDirectory);
 
             // V1 replay data
