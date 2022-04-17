@@ -41,6 +41,8 @@ namespace Menus.Main_Menu.Components {
             if (_leaderboard != null) {
                 leaderboardText.text = "FETCHING ...";
                 var newEntries = await _leaderboard.GetEntries(fetchType);
+                ClearEntries();
+
                 leaderboardText.text = newEntries.Count > 0 ? "" : "NO LEADERBOARD ENTRIES FOUND";
 
                 if (newEntries.Count > 0)
