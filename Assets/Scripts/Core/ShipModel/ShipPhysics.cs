@@ -35,7 +35,6 @@ namespace Core.ShipModel {
 
         private Vector3 _prevVelocity;
         private ShipIndicatorData _shipIndicatorData;
-        private bool _shipLightsActive;
 
         [CanBeNull] private IShipModel _shipModel;
 
@@ -75,6 +74,20 @@ namespace Core.ShipModel {
         public float MaxThrustWithBoost { get; private set; }
         public float MaxTorqueWithBoost { get; private set; }
         public float BoostedMaxSpeedDelta { get; private set; }
+
+
+        public float Pitch { get; private set; }
+        public float Roll { get; private set; }
+        public float Yaw { get; private set; }
+        public float Throttle { get; private set; }
+        public float LatH { get; private set; }
+        public float LatV { get; private set; }
+        public bool BoostButtonHeld { get; private set; }
+        public bool VelocityLimitActive { get; private set; }
+        public bool VectorFlightAssistActive { get; private set; }
+        public bool RotationalFlightAssistActive { get; private set; }
+        public bool IsShipLightsActive { get; private set; }
+
 
         [CanBeNull]
         public IShipModel ShipModel {
@@ -130,7 +143,6 @@ namespace Core.ShipModel {
         }
 
         public event BoostFiredAction OnBoost;
-        public event ShipPhysicsUpdated OnShipPhysicsUpdated;
 
         public void RefreshShipModel(ShipProfile shipProfile) {
             var shipData = ShipMeta.FromString(shipProfile.shipModel);
@@ -195,8 +207,8 @@ namespace Core.ShipModel {
         }
 
         public void ShipLightsToggle(Action<bool> shipLightStatus) {
-            _shipLightsActive = !_shipLightsActive;
-            shipLightStatus(_shipLightsActive);
+            IsShipLightsActive = !IsShipLightsActive;
+            shipLightStatus(IsShipLightsActive);
         }
 
         // TODO: clamping should be based on input rather than modifying the rigid body - if gravity pulls you down
@@ -254,13 +266,22 @@ namespace Core.ShipModel {
         }
 
         public void UpdateShip(float pitch, float roll, float yaw, float throttle, float latH, float latV, bool boostButtonHeld, bool velocityLimitActive,
-            bool isVectorFlightAssistActive, bool isRotationalFlightAssistActive) {
-            OnShipPhysicsUpdated?.Invoke(pitch, roll, yaw, throttle, latH, latV, boostButtonHeld, velocityLimitActive, _shipLightsActive);
+            bool vectorFlightAssistActive, bool rotationalFlightAssistActive) {
+            Pitch = pitch;
+            Roll = roll;
+            Yaw = yaw;
+            Throttle = throttle;
+            LatH = latH;
+            LatV = latV;
+            BoostButtonHeld = boostButtonHeld;
+            VelocityLimitActive = velocityLimitActive;
+            VectorFlightAssistActive = vectorFlightAssistActive;
+            RotationalFlightAssistActive = rotationalFlightAssistActive;
+
             if (boostButtonHeld) AttemptBoost();
             UpdateBoostStatus();
-            ApplyFlightForces(pitch, roll, yaw, throttle, latH, latV, velocityLimitActive);
-
-            UpdateIndicators(throttle, velocityLimitActive, isVectorFlightAssistActive, isRotationalFlightAssistActive);
+            ApplyFlightForces();
+            UpdateIndicators();
             UpdateMotionInformation();
         }
 
@@ -275,27 +296,26 @@ namespace Core.ShipModel {
         }
 
 
-        private void UpdateIndicators(float throttleInput, bool velocityLimitActive, bool isVectorFlightAssistActive, bool isRotationalFlightAssistActive) {
-            _shipIndicatorData.throttlePosition = indicatorThrottleLocation.Enabled ? indicatorThrottleLocation.Value : throttleInput;
+        private void UpdateIndicators() {
+            _shipIndicatorData.throttlePosition = indicatorThrottleLocation.Enabled ? indicatorThrottleLocation.Value : Throttle;
 
             _shipIndicatorData.acceleration = (Math.Abs(CurrentFrameThrust.x) + Math.Abs(CurrentFrameThrust.y) + Math.Abs(CurrentFrameThrust.z)) /
                                               CurrentParameters.maxThrust;
             _shipIndicatorData.velocity = VelocityMagnitude;
-            _shipIndicatorData.throttle = throttleInput;
+            _shipIndicatorData.throttle = Throttle;
             _shipIndicatorData.boostCapacitorPercent = _boostCapacitorPercent;
             _shipIndicatorData.boostTimerReady = !_boostCharging;
             _shipIndicatorData.boostChargeReady = _boostCapacitorPercent > CurrentParameters.boostCapacitorPercentCost;
-            _shipIndicatorData.lightsActive = _shipLightsActive;
-            _shipIndicatorData.velocityLimiterActive = velocityLimitActive;
-            _shipIndicatorData.vectorFlightAssistActive = isVectorFlightAssistActive;
-            _shipIndicatorData.rotationalFlightAssistActive = isRotationalFlightAssistActive;
+            _shipIndicatorData.lightsActive = IsShipLightsActive;
+            _shipIndicatorData.velocityLimiterActive = VelocityLimitActive;
+            _shipIndicatorData.vectorFlightAssistActive = VectorFlightAssistActive;
+            _shipIndicatorData.rotationalFlightAssistActive = RotationalFlightAssistActive;
             _shipIndicatorData.gForce = _gforce;
 
             ShipModel?.UpdateIndicators(_shipIndicatorData);
         }
 
-        private void ApplyFlightForces(float pitchInput, float rollInput, float yawInput, float throttleInput, float latHInput, float latVInput,
-            bool velocityLimiterActive) {
+        private void ApplyFlightForces() {
             /* GRAVITY */
             var gravity = new Vector3(
                 Game.Instance.LoadedLevelData.gravity.x,
@@ -306,15 +326,15 @@ namespace Core.ShipModel {
 
             /* INPUTS */
 
-            var latH = latHInput;
-            var latV = latVInput;
-            var throttle = throttleInput;
+            var latH = LatH;
+            var latV = LatV;
+            var throttle = Throttle;
 
             // special case for throttle - no reverse while boosting but, while always going forward, the ship will change
             // vector less harshly while holding back (up to 40%). The whole reverse axis is remapped to 40% for this calculation.
             // any additional throttle thrust not used in boost to be distributed across laterals
             if (_isBoosting && _currentBoostTime < CurrentParameters.totalBoostTime) {
-                throttle = Mathf.Min(1f, MathfExtensions.Remap(-1, 0, 0.6f, 1, throttleInput));
+                throttle = Mathf.Min(1f, MathfExtensions.Remap(-1, 0, 0.6f, 1, Throttle));
 
                 var delta = 1f - throttle;
                 if (delta > 0) {
@@ -344,15 +364,15 @@ namespace Core.ShipModel {
             /* TORQUE */
             // torque is applied entirely independently, this may be looked at later.
             var torque = new Vector3(
-                pitchInput * CurrentParameters.pitchMultiplier * MaxTorqueWithBoost * -1,
-                yawInput * CurrentParameters.yawMultiplier * MaxTorqueWithBoost,
-                rollInput * CurrentParameters.rollMultiplier * MaxTorqueWithBoost * -1
+                Pitch * CurrentParameters.pitchMultiplier * MaxTorqueWithBoost * -1,
+                Yaw * CurrentParameters.yawMultiplier * MaxTorqueWithBoost,
+                Roll * CurrentParameters.rollMultiplier * MaxTorqueWithBoost * -1
             ) * CurrentParameters
                 .inertiaTensorMultiplier; // if we don't counteract the inertial tensor of the rigidbody, the rotation spin would increase in lockstep
 
             targetRigidbody.AddTorque(transform.TransformDirection(torque));
 
-            ClampMaxSpeed(velocityLimiterActive);
+            ClampMaxSpeed(VelocityLimitActive);
 
             // output var for indicators etc
             CurrentFrameThrust = thrustInput * CurrentParameters.maxThrust;

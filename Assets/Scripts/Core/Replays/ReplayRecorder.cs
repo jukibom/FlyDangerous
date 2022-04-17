@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Text;
 using Core.Player;
 using Core.ShipModel;
@@ -16,13 +16,18 @@ namespace Core.Replays {
 
         [CanBeNull] public Replay Replay { get; private set; }
 
+        private void FixedUpdate() {
+            if (_recording && _targetShip != null) {
+                RecordFrame();
+            }
+        }
+
         private void OnDestroy() {
             CancelRecording();
         }
 
         public void StartNewRecording(ShipPhysics targetShip) {
             _targetShip = targetShip;
-            _targetShip.OnShipPhysicsUpdated += RecordFrame;
             _recording = true;
             _ticks = 0;
             Replay = Replay.CreateNewWritable(Game.Instance.ShipParameters, Game.Instance.LoadedLevelData, ShipProfile.FromPreferences());
@@ -40,7 +45,6 @@ namespace Core.Replays {
         }
 
         public void StopRecording() {
-            if (_targetShip) _targetShip.OnShipPhysicsUpdated -= RecordFrame;
             _recording = false;
             _ticks = 0;
         }
@@ -48,9 +52,7 @@ namespace Core.Replays {
         /**
      * Record the frame every physics time step
      */
-        private void RecordFrame(
-            float pitch, float roll, float yaw, float throttle, float lateralH, float lateralV, bool boost, bool limiter, bool shipLightsEnabled
-        ) {
+        private void RecordFrame() {
             if (_recording && Replay != null) {
                 // record a keyframe every specified amount of ticks
                 if (_ticks % Replay.ReplayMeta.KeyFrameIntervalTicks == 0)
@@ -63,15 +65,15 @@ namespace Core.Replays {
                     });
 
                 RecordInputFrame(new InputFrame {
-                    pitch = pitch,
-                    roll = roll,
-                    yaw = yaw,
-                    throttle = throttle,
-                    lateralH = lateralH,
-                    lateralV = lateralV,
-                    boostHeld = boost,
-                    limiterHeld = limiter,
-                    shipLightsEnabled = shipLightsEnabled
+                    pitch = _targetShip.Pitch,
+                    roll = _targetShip.Roll,
+                    yaw = _targetShip.Yaw,
+                    throttle = _targetShip.Throttle,
+                    lateralH = _targetShip.LatH,
+                    lateralV = _targetShip.LatV,
+                    boostHeld = _targetShip.BoostButtonHeld,
+                    limiterHeld = _targetShip.VelocityLimitActive,
+                    shipLightsEnabled = _targetShip.IsShipLightsActive
                 });
 
                 _ticks++;

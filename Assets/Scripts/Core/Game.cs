@@ -341,9 +341,7 @@ namespace Core {
         }
 
         public void RestartSession() {
-            StartCoroutine(_levelLoader.RestartLevel(() => {
-                OnRestart?.Invoke();
-            }));
+            StartCoroutine(_levelLoader.RestartLevel(() => { OnRestart?.Invoke(); }));
         }
 
         // Graceful leave game and decide if to transition back to lobby
