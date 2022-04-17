@@ -57,8 +57,8 @@ namespace Misc {
             var hitColliders = new Collider[1];
             var testPosition = originalPosition;
 
-            // check against everything except UI elements
-            var collisionLayerMask = ~(1 << 5);
+            // check against layers default (0) and player (6)
+            LayerMask collisionLayerMask = LayerMask.GetMask("Default", "Non-Local Player");
 
             // set the next position and perform a simple sphere collision check, return the number of
             bool NextPositionIsObstructed() {
