@@ -2,12 +2,13 @@ using System.Globalization;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Game_UI {
+namespace GameUI.Components {
+    [RequireComponent(typeof(CanvasGroup))]
     public class Target : MonoBehaviour {
         [SerializeField] private Text targetNameText;
         [SerializeField] private Text targetDistanceText;
-        [SerializeField] private RawImage targetOutline;
-        private Color _targetColorOpacityModifier = Color.white;
+        [SerializeField] private Image icon;
+        private CanvasGroup _canvasGroup;
 
         private float _targetDistanceMeters;
 
@@ -24,17 +25,18 @@ namespace Game_UI {
             }
         }
 
+        public Sprite Icon {
+            get => icon.sprite;
+            set => icon.sprite = value;
+        }
+
         public float Opacity {
-            get => _targetColorOpacityModifier.a;
-            set {
-                _targetColorOpacityModifier.a = value;
-                targetNameText.color = _targetColorOpacityModifier;
-                targetDistanceText.color = _targetColorOpacityModifier;
-                targetOutline.color = _targetColorOpacityModifier;
-            }
+            get => _canvasGroup.alpha;
+            set => _canvasGroup.alpha = value;
         }
 
         private void OnEnable() {
+            _canvasGroup = GetComponent<CanvasGroup>();
             Opacity = 0;
         }
 

@@ -1,13 +1,15 @@
 using System.Collections.Generic;
 using Core.Player;
 using Core.Replays;
-using Game_UI;
+using GameUI.Components;
 using Misc;
 using UnityEngine;
+using UnityEngine.U2D;
 
 namespace Core.ShipModel {
     public class TargettingSystem : MonoBehaviour {
         [SerializeField] private Target targetPrefab;
+        [SerializeField] private SpriteAtlas flags;
         private readonly Dictionary<ShipGhost, Target> _ghosts = new();
         private readonly Dictionary<ShipPlayer, Target> _players = new();
         private Camera _mainCamera;
@@ -17,7 +19,6 @@ namespace Core.ShipModel {
             if (_mainCamera == null || _mainCamera.enabled == false || _mainCamera.gameObject.activeSelf == false)
                 _mainCamera = Camera.main;
 
-
             // update target objects for players
             foreach (var keyValuePair in _players) {
                 var player = keyValuePair.Key;
@@ -25,7 +26,7 @@ namespace Core.ShipModel {
                 var target = keyValuePair.Value;
                 var targetName = player.playerName;
                 var targetPosition = player.User.transform.position;
-                UpdateTarget(target, targetPosition, targetName);
+                UpdateTarget(target, targetPosition, targetName, flags.GetSprite(player.PlayerFlag.Filename));
             }
 
             foreach (var keyValuePair in _ghosts) {
@@ -34,7 +35,7 @@ namespace Core.ShipModel {
                 var target = keyValuePair.Value;
                 var targetName = ghost.PlayerName;
                 var targetPosition = ghost.transform.position;
-                UpdateTarget(target, targetPosition, targetName);
+                UpdateTarget(target, targetPosition, targetName, flags.GetSprite(ghost.PlayerFlag.Filename));
             }
         }
 
@@ -55,7 +56,7 @@ namespace Core.ShipModel {
             Game.OnGhostRemoved -= ResetTargets;
         }
 
-        private void UpdateTarget(Target target, Vector3 targetPosition, string targetName) {
+        private void UpdateTarget(Target target, Vector3 targetPosition, string targetName, Sprite icon) {
             var player = FdPlayer.FindLocalShipPlayer;
             var originPosition = player ? player.User.UserCameraPosition : Vector3.zero;
             var shipPosition = player ? player.transform.position : Vector3.zero;
@@ -66,6 +67,7 @@ namespace Core.ShipModel {
 
             target.Name = targetName;
             target.DistanceMeters = distance;
+            target.Icon = icon;
 
             var minDistance = 10f;
             var maxDistance = 30f + minDistance;
