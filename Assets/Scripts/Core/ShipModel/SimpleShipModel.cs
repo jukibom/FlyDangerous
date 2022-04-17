@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using Core.Player;
 using Core.Ship;
@@ -101,7 +101,7 @@ namespace Core.ShipModel {
 
         public void Boost(float boostTime) {
             IEnumerator AnimateBoost() {
-                yield return new WaitForSecondsRealtime(1);
+                yield return new WaitForSeconds(1);
                 externalBoostThrusterAudioSource.Play();
                 _shipShake.Shake(boostTime - 1, 0.005f);
                 thrusterController.AnimateBoostThrusters();

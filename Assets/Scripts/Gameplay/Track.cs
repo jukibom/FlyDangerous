@@ -13,6 +13,7 @@ using Core.ShipModel;
 using Game_UI;
 using GameUI;
 using JetBrains.Annotations;
+using Misc;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -150,17 +151,17 @@ namespace Gameplay {
                     user.pauseMenuEnabled = false;
 
                     // half a second (2.5 second total) before countdown
-                    yield return new WaitForSeconds(0.5f);
+                    yield return YieldExtensions.WaitForFixedFrames(YieldExtensions.SecondsToFixedFrames(0.5f));
 
                     // start countdown sounds
                     UIAudioManager.Instance.Play("tt-countdown");
 
                     // second beep (boost available here)
-                    yield return new WaitForSeconds(1);
+                    yield return YieldExtensions.WaitForFixedFrames(YieldExtensions.SecondsToFixedFrames(1));
                     user.boostButtonEnabledOverride = true;
 
                     // GO!
-                    yield return new WaitForSeconds(1);
+                    yield return YieldExtensions.WaitForFixedFrames(YieldExtensions.SecondsToFixedFrames(1));
                     user.movementEnabled = true;
                     user.pauseMenuEnabled = true;
                 }

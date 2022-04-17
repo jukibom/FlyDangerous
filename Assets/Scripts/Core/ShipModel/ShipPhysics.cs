@@ -194,11 +194,11 @@ namespace Core.ShipModel {
 
                 IEnumerator DoBoost() {
                     OnBoost?.Invoke(CurrentParameters.totalBoostTime);
-                    yield return new WaitForSeconds(1);
+                    yield return YieldExtensions.WaitForFixedFrames(YieldExtensions.SecondsToFixedFrames(1));
                     _currentBoostTime = 0f;
                     _boostedMaxSpeedDelta = CurrentParameters.maxBoostSpeed - CurrentParameters.maxSpeed;
                     _isBoosting = true;
-                    yield return new WaitForSeconds(CurrentParameters.boostRechargeTime);
+                    yield return YieldExtensions.WaitForFixedFrames(YieldExtensions.SecondsToFixedFrames(CurrentParameters.boostRechargeTime));
                     _boostCharging = false;
                 }
 
