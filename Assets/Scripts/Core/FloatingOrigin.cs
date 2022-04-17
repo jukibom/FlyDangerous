@@ -7,7 +7,6 @@ namespace Core {
 
         [SerializeField] private Vector3 origin;
 
-
         // The object to track - this should be the local client player
         [SerializeField] private Transform focalTransform;
 
@@ -42,6 +41,15 @@ namespace Core {
         private void OnDrawGizmosSelected() {
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireSphere(transform.position, correctionDistance);
+        }
+
+        // Replace the focal transform without resetting the origin - the objects should always be at the same place when doing this!
+        public void SwapFocalTransform(Transform newTransform) {
+            focalTransform = newTransform;
+        }
+
+        public void ForceUpdate() {
+            FixedUpdate();
         }
 
         public static event FloatingOriginCorrectionAction OnFloatingOriginCorrection;

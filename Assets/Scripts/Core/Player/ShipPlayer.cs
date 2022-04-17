@@ -112,7 +112,10 @@ namespace Core.Player {
             playerLogic.SetActive(true);
 
             // register self as floating origin focus
-            FloatingOrigin.Instance.FocalTransform = transform;
+            if (FloatingOrigin.Instance.FocalTransform != null)
+                FloatingOrigin.Instance.SwapFocalTransform(transform);
+            else
+                FloatingOrigin.Instance.FocalTransform = transform;
 
             SetFlightAssistDefaults(Preferences.Instance.GetString("flightAssistDefault"));
 

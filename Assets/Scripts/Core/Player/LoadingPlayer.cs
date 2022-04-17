@@ -45,6 +45,7 @@ namespace Core.Player {
         // register self as floating origin focus
         public void SetFloatingOrigin() {
             FloatingOrigin.Instance.FocalTransform = transform;
+            FloatingOrigin.Instance.ForceUpdate();
         }
 
         private void OnLevelLoaded() {

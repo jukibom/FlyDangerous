@@ -258,9 +258,22 @@ namespace Core {
 
                 yield return _levelLoader.StartGame(levelData);
 
-                // if we have a map magic object, stop it from doing anything until the ship is in position
-                var mapMagic = FindObjectOfType<MapMagicObject>();
-                if (mapMagic) mapMagic.enabled = false;
+#if !NO_PAID_ASSETS
+                // gpu instancer initialisation (paid asset!)
+                if (IsVREnabled) {
+                    var cam = FindObjectOfType<XRRig>(true).cameraGameObject.GetComponent<Camera>();
+
+                    var gpuInstancer = FindObjectOfType<GPUInstancerMapMagic2Integration>();
+                    var mapMagic = FindObjectOfType<MapMagicObject>();
+                    if (mapMagic && gpuInstancer) {
+                        gpuInstancer.floatingOriginTransform = mapMagic.transform;
+                        GPUInstancerAPI.SetCamera(cam);
+                        gpuInstancer.SetCamera(cam);
+                    }
+
+                    FindObjectsOfType<GPUInstancerDetailManager>().ToList().ForEach(manager => manager.SetCamera(cam));
+                }
+#endif
 
                 // wait for all known currently loading players to have finished loading
                 // TODO: show "Waiting for Players" text in loading screen
@@ -299,28 +312,11 @@ namespace Core {
 
                 ship.ShipPhysics.CurrentParameters = ShipParameters;
 
-                // gpu instancer initialisation (paid asset!)
-#if !NO_PAID_ASSETS
-                if (IsVREnabled) {
-                    var cam = FindObjectOfType<XRRig>(true).cameraGameObject.GetComponent<Camera>();
-
-                    var gpuInstancer = FindObjectOfType<GPUInstancerMapMagic2Integration>();
-                    if (mapMagic && gpuInstancer) {
-                        gpuInstancer.floatingOriginTransform = mapMagic.transform;
-                        GPUInstancerAPI.SetCamera(cam);
-                        gpuInstancer.SetCamera(cam);
-                    }
-
-                    FindObjectsOfType<GPUInstancerDetailManager>().ToList().ForEach(manager => manager.SetCamera(cam));
-                }
-#endif
                 // resume the game
                 Time.timeScale = 1;
                 SetFlatScreenCameraControllerActive(!IsVREnabled);
                 FadeFromBlack();
                 yield return new WaitForSeconds(0.7f);
-
-                if (mapMagic) mapMagic.enabled = true;
 
                 // if there's a track in the game world, start it
                 if (track) yield return track.StartTrackWithCountdown();
