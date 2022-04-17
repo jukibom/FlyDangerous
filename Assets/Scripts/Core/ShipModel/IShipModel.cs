@@ -28,6 +28,8 @@ namespace Core.ShipModel {
     public interface IShipModel {
         public MonoBehaviour Entity();
 
+        public void SetVisible(bool visible);
+
         /**
          * Enable the lights on the ship
          * This function is network aware.

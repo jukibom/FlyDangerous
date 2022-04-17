@@ -13,6 +13,7 @@ namespace Core.ShipModel {
      * Provide some basic ship functionality expected from all mesh objects in an override-able fashion.
      */
     public class SimpleShipModel : MonoBehaviour, IShipModel {
+        [SerializeField] private GameObject drawableContainer;
         [SerializeField] private ThrusterController thrusterController;
         [SerializeField] private Light shipLights;
         [SerializeField] private SmokeEmitter smokeEmitter;
@@ -76,6 +77,10 @@ namespace Core.ShipModel {
 
         public MonoBehaviour Entity() {
             return this;
+        }
+
+        public void SetVisible(bool visible) {
+            drawableContainer.SetActive(visible);
         }
 
         #region IShip Basic Functions

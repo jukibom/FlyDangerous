@@ -15,6 +15,15 @@ namespace Core.Replays {
             ReplayTimeline = GetComponent<ReplayTimeline>();
         }
 
+        private void FixedUpdate() {
+            var player = FdPlayer.FindLocalShipPlayer;
+            if (player) {
+                var distance = Vector3.Distance(transform.position, player.transform.position);
+                var shouldShow = distance > 8;
+                if (shipPhysics.ShipModel != null) shipPhysics.ShipModel.SetVisible(shouldShow);
+            }
+        }
+
         private void OnEnable() {
             FloatingOrigin.OnFloatingOriginCorrection += PerformCorrection;
             ShipPhysics.OnBoost += ShowBoost;
