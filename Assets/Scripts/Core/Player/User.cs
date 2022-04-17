@@ -498,15 +498,8 @@ namespace Core.Player {
             };
 
             // send input depending on mouse mode
-            if (mouseXIsRelative)
-                setInput(mouseXAxisBind, relativeMouse.x, mouseXInvert);
-            else
-                setInput(mouseXAxisBind, continuousMouseX, mouseXInvert);
-
-            if (mouseYIsRelative)
-                setInput(mouseYAxisBind, relativeMouse.y, mouseYInvert);
-            else
-                setInput(mouseYAxisBind, continuousMouseY, mouseYInvert);
+            setInput(mouseXAxisBind, mouseXIsRelative ? relativeMouse.x : continuousMouseX, mouseXInvert);
+            setInput(mouseYAxisBind, mouseYIsRelative ? relativeMouse.y : continuousMouseY, mouseYInvert);
 
             // update widget graphics
             var widgetPosition = new Vector2(
