@@ -259,7 +259,7 @@ namespace Core {
                 yield return _levelLoader.StartGame(levelData);
 
 #if !NO_PAID_ASSETS
-                // gpu instancer initialisation (paid asset!)
+                // gpu instancer VR initialisation (paid asset!)
                 if (IsVREnabled) {
                     var cam = FindObjectOfType<XRRig>(true).cameraGameObject.GetComponent<Camera>();
 
@@ -305,10 +305,10 @@ namespace Core {
                 NotifyVRStatus();
 
 #if !NO_PAID_ASSETS
-                // pull out GPU instancer object if needed 
+                // pull out GPU instancer tree manager object before loading screen is destroyed 
                 var treeManager = FindObjectOfType<GPUInstancerTreeManager>();
                 var instancer = FindObjectOfType<GPUInstancerMapMagic2Integration>();
-                treeManager.transform.parent = instancer.transform;
+                if (treeManager && instancer) treeManager.transform.parent = instancer.transform;
 #endif
 
                 yield return _levelLoader.HideLoadingScreen();
