@@ -242,9 +242,9 @@ namespace Gameplay {
                                     if (FdNetworkManager.Instance.HasLeaderboardServices) {
                                         var flagId = Flag.FromFilename(Preferences.Instance.GetString("playerFlag")).FixedId;
                                         var leaderboard = await FdNetworkManager.Instance.OnlineService!.Leaderboard!.FindOrCreateLeaderboard(levelHash);
-
+                                        var timeMilliseconds = _timeSeconds * 1000;
                                         // TODO: This can ABSOLUTELY fail, handle it in the end screen below!
-                                        await leaderboard.UploadScore((int)(scoreData.raceTime * 1000), flagId, replayFilepath, replayFileName);
+                                        await leaderboard.UploadScore((int)timeMilliseconds, flagId, replayFilepath, replayFileName);
                                         Debug.Log("Leaderboard upload succeeded");
                                     }
                                 }
