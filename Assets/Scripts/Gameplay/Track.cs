@@ -94,15 +94,7 @@ namespace Gameplay {
             var start = Checkpoints.Find(c => c.Type == CheckpointType.Start);
             if (start) {
                 var ship = FdPlayer.FindLocalShipPlayer;
-                if (ship) {
-                    ship.transform.position = start.transform.position;
-                    _replayRecorder.CancelRecording();
-                    _replayRecorder.StartNewRecording(ship.ShipPhysics);
-                    foreach (var shipGhost in ActiveGhosts) Game.Instance.RemoveGhost(shipGhost);
-                    ActiveGhosts = new List<ShipGhost>();
-                    foreach (var activeReplay in Game.Instance.ActiveGameReplays)
-                        ActiveGhosts.Add(Game.Instance.LoadGhost(activeReplay));
-                }
+                if (ship) ship.transform.position = start.transform.position;
             }
             else if (Checkpoints.Count > 0) {
                 Debug.LogWarning("Checkpoints loaded with no start block! Is this intentional?");
@@ -149,6 +141,14 @@ namespace Gameplay {
                     user.EnableGameInput();
                     user.movementEnabled = false;
                     user.pauseMenuEnabled = false;
+
+                    // Trigger recording and ghost replays
+                    _replayRecorder.CancelRecording();
+                    _replayRecorder.StartNewRecording(player.ShipPhysics);
+                    foreach (var shipGhost in ActiveGhosts) Game.Instance.RemoveGhost(shipGhost);
+                    ActiveGhosts = new List<ShipGhost>();
+                    foreach (var activeReplay in Game.Instance.ActiveGameReplays)
+                        ActiveGhosts.Add(Game.Instance.LoadGhost(activeReplay));
 
                     // half a second (2.5 second total) before countdown
                     yield return YieldExtensions.WaitForFixedFrames(YieldExtensions.SecondsToFixedFrames(0.5f));
