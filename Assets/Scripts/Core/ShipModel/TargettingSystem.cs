@@ -19,23 +19,27 @@ namespace Core.ShipModel {
             if (_mainCamera == null || _mainCamera.enabled == false || _mainCamera.gameObject.activeSelf == false)
                 _mainCamera = Camera.main;
 
-            // update target objects for players
-            foreach (var keyValuePair in _players) {
-                var player = keyValuePair.Key;
-                if (player == null) continue;
-                var target = keyValuePair.Value;
-                var targetName = player.playerName;
-                var targetPosition = player.User.transform.position;
-                UpdateTarget(target, targetPosition, targetName, flags.GetSprite(player.PlayerFlag.Filename));
-            }
+            if (_mainCamera != null) {
+                // update target objects for players
+                foreach (var keyValuePair in _players) {
+                    var player = keyValuePair.Key;
+                    if (player == null) continue;
+                    var target = keyValuePair.Value;
+                    var targetName = player.playerName;
+                    var targetPosition = player.User.transform.position;
+                    var icon = player.PlayerFlag != null ? flags.GetSprite(player.PlayerFlag.Filename) : null;
+                    UpdateTarget(target, targetPosition, targetName, icon);
+                }
 
-            foreach (var keyValuePair in _ghosts) {
-                var ghost = keyValuePair.Key;
-                if (ghost == null) continue;
-                var target = keyValuePair.Value;
-                var targetName = ghost.PlayerName;
-                var targetPosition = ghost.transform.position;
-                UpdateTarget(target, targetPosition, targetName, flags.GetSprite(ghost.PlayerFlag.Filename));
+                foreach (var keyValuePair in _ghosts) {
+                    var ghost = keyValuePair.Key;
+                    if (ghost == null) continue;
+                    var target = keyValuePair.Value;
+                    var targetName = ghost.PlayerName;
+                    var targetPosition = ghost.transform.position;
+                    var icon = ghost.PlayerFlag != null ? flags.GetSprite(ghost.PlayerFlag.Filename) : null;
+                    UpdateTarget(target, targetPosition, targetName, icon);
+                }
             }
         }
 
