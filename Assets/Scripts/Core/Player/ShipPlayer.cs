@@ -141,7 +141,7 @@ namespace Core.Player {
                 _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
 
                 // force new layer for non-local player
-                var mask = LayerMask.GetMask("Non-Local Player");
+                var mask = LayerMask.NameToLayer("Non-Local Player");
                 foreach (var transformObject in GetComponentsInChildren<Transform>(true)) transformObject.gameObject.layer = mask;
             }
         }
