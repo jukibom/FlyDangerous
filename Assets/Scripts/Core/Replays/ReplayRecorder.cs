@@ -29,18 +29,18 @@ namespace Core.Replays {
         }
 
         public void CancelRecording() {
+            StopRecording();
             if (Replay != null) {
                 Replay.InputFrameStream.Close();
                 Replay.KeyFrameStream.Close();
                 Replay.InputFrameStream.Dispose();
                 Replay.KeyFrameStream.Dispose();
-                _recording = false;
                 Replay = null;
             }
         }
 
         public void StopRecording() {
-            _targetShip.OnShipPhysicsUpdated -= RecordFrame;
+            if (_targetShip != null) _targetShip.OnShipPhysicsUpdated -= RecordFrame;
             _recording = false;
             _ticks = 0;
         }
