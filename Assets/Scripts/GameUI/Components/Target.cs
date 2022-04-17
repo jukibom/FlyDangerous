@@ -34,8 +34,12 @@ namespace Game_UI {
             }
         }
 
+        private void OnEnable() {
+            Opacity = 0;
+        }
+
         private void UpdateDistanceText() {
-            string addPointZeroIfNeeded(float distance) {
+            string AddPointZeroIfNeeded(float distance) {
                 return distance % 1 == 0 ? distance + ".0" : distance.ToString(CultureInfo.CurrentCulture);
             }
 
@@ -43,11 +47,11 @@ namespace Game_UI {
             if (_targetDistanceMeters < 850)
                 text = Mathf.Round(_targetDistanceMeters) + "m";
             else if (_targetDistanceMeters < 850000)
-                text = addPointZeroIfNeeded(Mathf.Round(_targetDistanceMeters / 100) / 10) + "Km";
+                text = AddPointZeroIfNeeded(Mathf.Round(_targetDistanceMeters / 100) / 10) + "Km";
             else if (_targetDistanceMeters < 29979245.8f)
-                text = addPointZeroIfNeeded(Mathf.Round(_targetDistanceMeters / 100000) / 10) + "Mm";
+                text = AddPointZeroIfNeeded(Mathf.Round(_targetDistanceMeters / 100000) / 10) + "Mm";
             else
-                text = addPointZeroIfNeeded(Mathf.Max(0.1f, Mathf.Round(_targetDistanceMeters / 29980000f) / 10)) + "Ls";
+                text = AddPointZeroIfNeeded(Mathf.Max(0.1f, Mathf.Round(_targetDistanceMeters / 29980000f) / 10)) + "Ls";
 
             targetDistanceText.text = text;
         }

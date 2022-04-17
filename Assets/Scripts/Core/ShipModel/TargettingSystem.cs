@@ -56,9 +56,12 @@ namespace Core.ShipModel {
         }
 
         private void UpdateTarget(Target target, Vector3 targetPosition, string targetName) {
-            var originPosition = FdPlayer.FindLocalShipPlayer ? FdPlayer.FindLocalShipPlayer.User.UserCameraPosition : Vector3.zero;
+            var player = FdPlayer.FindLocalShipPlayer;
+            var originPosition = player ? player.User.UserCameraPosition : Vector3.zero;
+            var shipPosition = player ? player.transform.position : Vector3.zero;
 
             var distance = Vector3.Distance(originPosition, targetPosition);
+            var distanceToShip = Vector3.Distance(shipPosition, targetPosition);
             var direction = (targetPosition - originPosition).normalized;
 
             target.Name = targetName;
@@ -71,7 +74,7 @@ namespace Core.ShipModel {
             targetTransform.position = Vector3.MoveTowards(originPosition, targetPosition + direction * minDistance, maxDistance);
             targetTransform.rotation = _mainCamera.transform.rotation;
 
-            target.Opacity = MathfExtensions.Remap(5, minDistance, 0, 1, distance);
+            target.Opacity = MathfExtensions.Remap(5, minDistance, 0, 1, distanceToShip);
         }
 
         private void ResetTargets() {
