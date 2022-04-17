@@ -6,6 +6,9 @@ namespace Game_UI {
     public class Target : MonoBehaviour {
         [SerializeField] private Text targetNameText;
         [SerializeField] private Text targetDistanceText;
+        [SerializeField] private RawImage targetOutline;
+        private Color _targetColorOpacityModifier = Color.white;
+
         private float _targetDistanceMeters;
 
         public string Name {
@@ -18,6 +21,16 @@ namespace Game_UI {
             set {
                 _targetDistanceMeters = value;
                 UpdateDistanceText();
+            }
+        }
+
+        public float Opacity {
+            get => _targetColorOpacityModifier.a;
+            set {
+                _targetColorOpacityModifier.a = value;
+                targetNameText.color = _targetColorOpacityModifier;
+                targetDistanceText.color = _targetColorOpacityModifier;
+                targetOutline.color = _targetColorOpacityModifier;
             }
         }
 

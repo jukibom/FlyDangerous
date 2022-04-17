@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Core.Player;
 using Core.Replays;
 using Game_UI;
+using Misc;
 using UnityEngine;
 
 namespace Core.ShipModel {
@@ -69,6 +70,8 @@ namespace Core.ShipModel {
             var targetTransform = target.transform;
             targetTransform.position = Vector3.MoveTowards(originPosition, targetPosition + direction * minDistance, maxDistance);
             targetTransform.rotation = _mainCamera.transform.rotation;
+
+            target.Opacity = MathfExtensions.Remap(5, minDistance, 0, 1, distance);
         }
 
         private void ResetTargets() {
