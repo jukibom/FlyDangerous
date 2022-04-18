@@ -5,6 +5,33 @@ using UnityEngine;
 
 namespace Core.ShipModel {
     public class ShipParameters {
+        public static readonly ShipParameters Defaults = new() {
+            mass = 1100f,
+            drag = 0f,
+            angularDrag = 0f,
+            inertiaTensorMultiplier = 175f,
+            maxSpeed = 800f,
+            maxBoostSpeed = 932f,
+            maxThrust = 220000f,
+            maxAngularVelocity = 7f,
+            torqueThrustMultiplier = 0.08f,
+            throttleMultiplier = 1f,
+            latHMultiplier = 0.5f,
+            latVMultiplier = 0.7f,
+            pitchMultiplier = 1f,
+            rollMultiplier = 0.3f,
+            yawMultiplier = 0.8f,
+            thrustBoostMultiplier = 3.25f,
+            torqueBoostMultiplier = 2f,
+            totalBoostTime = 5f,
+            totalBoostRotationalTime = 6f,
+            boostMaxSpeedDropOffTime = 12f,
+            boostRechargeTime = 4f,
+            boostCapacitorPercentCost = 70f,
+            boostCapacityPercentChargeRate = 10f,
+            minUserLimitedVelocity = 250f
+        };
+
         public float angularDrag;
         public float boostCapacitorPercentCost;
         public float boostCapacityPercentChargeRate;
@@ -44,32 +71,5 @@ namespace Core.ShipModel {
                 return null;
             }
         }
-
-        public static readonly ShipParameters Defaults = new() {
-            mass = 1100f,
-            drag = 0f,
-            angularDrag = 0f,
-            inertiaTensorMultiplier = 175f,
-            maxSpeed = 800f,
-            maxBoostSpeed = 932f,
-            maxThrust = 220000f,
-            maxAngularVelocity = 7f,
-            torqueThrustMultiplier = 0.04f,
-            throttleMultiplier = 1f,
-            latHMultiplier = 0.5f,
-            latVMultiplier = 0.7f,
-            pitchMultiplier = 1f,
-            rollMultiplier = 0.3f,
-            yawMultiplier = 0.8f,
-            thrustBoostMultiplier = 3.25f,
-            torqueBoostMultiplier = 2f,
-            totalBoostTime = 5f,
-            totalBoostRotationalTime = 6f,
-            boostMaxSpeedDropOffTime = 12f,
-            boostRechargeTime = 4f,
-            boostCapacitorPercentCost = 70f,
-            boostCapacityPercentChargeRate = 10f,
-            minUserLimitedVelocity = 250f
-        };
     }
 }

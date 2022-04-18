@@ -362,9 +362,9 @@ namespace Core.Player {
             // convert global rigid body velocity into local space
             var localAngularVelocity = transform.InverseTransformDirection(_rigidbody.angularVelocity);
 
-            CalculateAssistedAxis(_pitchTargetFactor, localAngularVelocity.x * -1, 0.3f, 2.0f, out _pitchInput);
-            CalculateAssistedAxis(_yawTargetFactor, localAngularVelocity.y, 0.3f, 2.0f, out _yawInput);
-            CalculateAssistedAxis(_rollTargetFactor, localAngularVelocity.z * -1, 0.3f, 2.0f, out _rollInput);
+            CalculateAssistedAxis(_pitchTargetFactor, localAngularVelocity.x * -1, 1f, 3.0f, out _pitchInput);
+            CalculateAssistedAxis(_yawTargetFactor, localAngularVelocity.y, 1f, 3.0f, out _yawInput);
+            CalculateAssistedAxis(_rollTargetFactor, localAngularVelocity.z * -1, 1f, 3.0f, out _rollInput);
         }
 
         /**
