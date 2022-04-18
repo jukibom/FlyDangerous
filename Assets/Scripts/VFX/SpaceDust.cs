@@ -7,6 +7,7 @@ using UnityEngine.VFX;
 namespace VFX {
     public class SpaceDust : MonoBehaviour {
         [SerializeField] private bool forceOn;
+        [SerializeField] private Vector3 forceVelocity;
         [SerializeField] private ShipPlayer player;
 
         private Rigidbody _playerShipRigidbody;
@@ -21,6 +22,11 @@ namespace VFX {
                     _playerShipTransform.InverseTransformDirection(_playerShipRigidbody.velocity));
                 _vfx.SetVector3("_playerVelocity", _playerShipRigidbody.velocity);
                 _vfx.SetFloat("_alphaMultiplier", MathfExtensions.Remap(0.1f, 1, 0, 0.4f, player.ShipPhysics.VelocityNormalised));
+            }
+
+            if (forceOn && forceVelocity != Vector3.zero) {
+                _vfx.SetVector3("_playerVelocity", forceVelocity);
+                _vfx.SetFloat("_alphaMultiplier", 1);
             }
 
             // lock the transform in world space so we don't rotate with the ship
