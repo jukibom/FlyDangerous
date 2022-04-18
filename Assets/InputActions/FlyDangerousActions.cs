@@ -1567,7 +1567,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""1908f38c-c22f-4863-b106-cb0299e59d97"",
-                    ""path"": ""<Keyboard>/alt"",
+                    ""path"": ""<Keyboard>/v"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
@@ -2647,7 +2647,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""7d884f62-38f7-4fa0-9bb0-185b89c6510f"",
-                    ""path"": ""<Keyboard>/alt"",
+                    ""path"": ""<Keyboard>/v"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
