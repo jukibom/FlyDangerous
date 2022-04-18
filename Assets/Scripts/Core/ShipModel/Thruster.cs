@@ -12,7 +12,12 @@ namespace Core.ShipModel {
         [SerializeField] private AudioSource audioSource;
         [SerializeField] private Light lightSource;
         [SerializeField] private LensFlareComponentSRP lensFlare;
-        [SerializeField] public Color thrustColor;
+
+        [SerializeField] [ColorUsage(true, true)]
+        public Color thrustColor;
+
+        [SerializeField] private float thrustHdrMultiplier = 1;
+        [SerializeField] private Color thrustColorBuffer = new(0.1f, 0.1f, 0.1f);
         [SerializeField] public Color thrustRingColor;
 
         public bool isLarge;
@@ -26,8 +31,7 @@ namespace Core.ShipModel {
             get => thrustColor;
             set {
                 thrustColor = value;
-                lightSource.color = thrustColor;
-                if (_thrusterMaterial != null) _thrusterMaterial.SetColor(thrustColorProperty, thrustColor);
+                UpdateMaterials();
             }
         }
 
@@ -36,12 +40,8 @@ namespace Core.ShipModel {
             set => targetThrust = Mathf.Clamp(value, 0, 1);
         }
 
-
         private void Awake() {
             _thrusterMaterial = thrusterRenderer.material;
-            _thrusterMaterial.SetColor(thrustColorProperty, thrustColor);
-            _thrusterMaterial.SetColor(thrustRingColorProperty, thrustRingColor);
-            lightSource.color = thrustColor * 2;
         }
 
         private void Update() {
@@ -57,6 +57,19 @@ namespace Core.ShipModel {
             if (isLarge) {
                 audioSource.volume *= 2;
                 audioSource.pitch /= 3;
+            }
+        }
+
+        private void OnEnable() {
+            UpdateMaterials();
+        }
+
+        private void UpdateMaterials() {
+            lightSource.color = ThrustColor;
+            var color = (ThrustColor + thrustColorBuffer) * thrustHdrMultiplier;
+            if (_thrusterMaterial != null) {
+                _thrusterMaterial.SetColor(thrustColorProperty, color);
+                _thrusterMaterial.SetColor(thrustRingColorProperty, thrustRingColor);
             }
         }
     }
