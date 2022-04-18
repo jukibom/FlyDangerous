@@ -116,15 +116,16 @@ namespace Menus.Main_Menu.Components {
         }
 
         public void DeSelectLevel() {
-            // select the previous level if there is one
-            if (SelectedLevel != null)
-                levelPrefabContainer.GetComponentsInChildren<LevelUIElement>()
-                    .FindMember(levelButton => levelButton.LevelData == SelectedLevel)
-                    ?.GetComponent<Button>()
-                    ?.Select();
-
-            SwitchToLevelSelectScreen();
-            SelectedLevel = null;
+            SwitchToLevelSelectScreen(() => {
+                levelFlowLayoutGroup.enabled = true;
+                // select the previous level if there is one
+                if (SelectedLevel != null)
+                    levelPrefabContainer.GetComponentsInChildren<LevelUIElement>()
+                        .FindMember(levelButton => levelButton.LevelData == SelectedLevel)
+                        ?.GetComponent<Button>()
+                        ?.Select();
+                SelectedLevel = null;
+            });
         }
 
         public async void DownloadGhost(LeaderboardEntry leaderboardEntry) {
@@ -149,11 +150,11 @@ namespace Menus.Main_Menu.Components {
             _panelAnimationShowCoroutine = StartCoroutine(ShowPanel(summaryScreenGridLayoutElement));
         }
 
-        private void SwitchToLevelSelectScreen() {
+        private void SwitchToLevelSelectScreen(Action onComplete = null) {
             if (_panelAnimationHideCoroutine != null) StopCoroutine(_panelAnimationHideCoroutine);
             if (_panelAnimationShowCoroutine != null) StopCoroutine(_panelAnimationShowCoroutine);
             _panelAnimationHideCoroutine = StartCoroutine(HidePanel(summaryScreenGridLayoutElement));
-            _panelAnimationShowCoroutine = StartCoroutine(ShowPanel(levelGridLayoutElement, () => levelFlowLayoutGroup.enabled = true));
+            _panelAnimationShowCoroutine = StartCoroutine(ShowPanel(levelGridLayoutElement, onComplete));
         }
 
         private IEnumerator HidePanel(LayoutElement panel, Action onComplete = null) {

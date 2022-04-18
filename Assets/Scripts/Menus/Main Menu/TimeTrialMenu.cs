@@ -60,8 +60,8 @@ namespace Menus.Main_Menu {
         private void NavBack() {
             if (levelSelectPanel.SelectedLevel != null) {
                 PlayCancelSound();
-                levelSelectPanel.DeSelectLevel();
                 startButton.button.gameObject.SetActive(false);
+                levelSelectPanel.DeSelectLevel();
                 backButton.label.text = "CANCEL";
             }
 
