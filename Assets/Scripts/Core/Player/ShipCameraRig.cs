@@ -26,7 +26,7 @@ namespace Core.Player {
             SoftReset();
             _cameraOffset = Vector3.zero;
             cameraTarget.localPosition = baseTargetPosition;
-            cameraTarget.transform.rotation = _transform.rotation;
+            cameraTarget.transform.rotation = transform.rotation;
         }
 
         private void Start() {
