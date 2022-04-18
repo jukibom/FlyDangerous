@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Audio;
 using GameUI;
+using JetBrains.Annotations;
 using Misc;
 using UI;
 using UnityEngine;
@@ -257,54 +258,66 @@ namespace Core.Player {
          * Event responders for PlayerInput, only valid in-game.
          * UI Requires additional bootstrap as above because UI events in Unity are fucking bonkers.
          */
+        [UsedImplicitly]
         public void OnShowGameMenu() {
             if (pauseMenuEnabled) inGameUI.PauseMenu.OnGameMenuToggle();
         }
 
+        [UsedImplicitly]
         public void OnRestartTrack() {
             if (movementEnabled) Game.Instance.RestartSession();
         }
 
+        [UsedImplicitly]
         public void OnRestartFromLastCheckpoint() {
             if (movementEnabled) Debug.Log("Lol there are no checkpoints yet ^_^");
         }
 
+        [UsedImplicitly]
         public void OnPitch(InputValue value) {
             if (!_alternateFlightControls) _pitch = value.Get<float>();
         }
 
+        [UsedImplicitly]
         public void OnPitchAlt(InputValue value) {
             if (_alternateFlightControls) _pitch = value.Get<float>();
         }
 
+        [UsedImplicitly]
         public void OnRoll(InputValue value) {
             if (!_alternateFlightControls) _roll = value.Get<float>();
         }
 
+        [UsedImplicitly]
         public void OnRollAlt(InputValue value) {
             if (_alternateFlightControls) _roll = value.Get<float>();
         }
 
+        [UsedImplicitly]
         public void OnYaw(InputValue value) {
             if (!_alternateFlightControls) _yaw = value.Get<float>();
         }
 
+        [UsedImplicitly]
         public void OnYawAlt(InputValue value) {
             if (_alternateFlightControls) _yaw = value.Get<float>();
         }
 
+        [UsedImplicitly]
         public void OnThrottle(InputValue value) {
             _targetThrottle = 0;
             _targetThrottleIncrement = 0;
             if (!_alternateFlightControls) _throttle = value.Get<float>();
         }
 
+        [UsedImplicitly]
         public void OnThrottleAlt(InputValue value) {
             _targetThrottle = 0;
             _targetThrottleIncrement = 0;
             if (_alternateFlightControls) _throttle = value.Get<float>();
         }
 
+        [UsedImplicitly]
         public void OnThrottleIncrease(InputValue value) {
             if (value.isPressed)
                 _targetThrottleIncrement = MathfExtensions.Remap(0, 1, 0, 0.005f, value.Get<float>());
@@ -312,6 +325,7 @@ namespace Core.Player {
                 _targetThrottleIncrement = 0;
         }
 
+        [UsedImplicitly]
         public void OnThrottleDecrease(InputValue value) {
             if (value.isPressed)
                 _targetThrottleIncrement = MathfExtensions.Remap(0, 1, 0, -0.005f, value.Get<float>());
@@ -319,67 +333,83 @@ namespace Core.Player {
                 _targetThrottleIncrement = 0;
         }
 
+        [UsedImplicitly]
         public void OnLateralH(InputValue value) {
             if (!_alternateFlightControls) _lateralH = value.Get<float>();
         }
 
+        [UsedImplicitly]
         public void OnLateralHAlt(InputValue value) {
             if (_alternateFlightControls) _lateralH = value.Get<float>();
         }
 
+        [UsedImplicitly]
         public void OnLateralV(InputValue value) {
             if (!_alternateFlightControls) _lateralV = value.Get<float>();
         }
 
+        [UsedImplicitly]
         public void OnLateralVAlt(InputValue value) {
             if (_alternateFlightControls) _lateralV = value.Get<float>();
         }
 
+        [UsedImplicitly]
         public void OnToggleReverse(InputValue value) {
             UIAudioManager.Instance.Play("ui-nav");
             _reverse = !_reverse;
         }
 
+        [UsedImplicitly]
         public void OnBoost(InputValue value) {
             _boost = value.isPressed;
         }
 
+        [UsedImplicitly]
         public void OnVelocityLimiter(InputValue value) {
             _limiter = value.isPressed;
         }
 
+        [UsedImplicitly]
         public void OnAllFlightAssistToggle(InputValue value) {
             shipPlayer.AllFlightAssistToggle();
         }
 
+        [UsedImplicitly]
         public void OnVectorFlightAssistToggle(InputValue value) {
             shipPlayer.FlightAssistVectorControlToggle();
         }
 
+        [UsedImplicitly]
         public void OnRotationalFlightAssistToggle(InputValue value) {
             shipPlayer.FlightAssistRotationalDampeningToggle();
         }
 
+        [UsedImplicitly]
         public void OnShipLightsToggle(InputValue value) {
             shipPlayer.ShipLightsToggle();
         }
 
+        [UsedImplicitly]
         public void OnChangeCamera(InputValue value) {
             shipCameraRig.ToggleActiveCamera();
         }
 
+        [UsedImplicitly]
         public void OnRotateCameraH(InputValue value) {
             _cameraX = value.Get<float>();
         }
 
+        [UsedImplicitly]
         public void OnRotateCameraV(InputValue value) {
             _cameraY = value.Get<float>();
         }
 
+        [UsedImplicitly]
         public void OnToggleCameraRotateControls(InputValue value) {
             _cameraRotateAxisControlsEnabled = !_cameraRotateAxisControlsEnabled;
         }
 
+        [UsedImplicitly]
         public void OnAltFlightControlsToggle(InputValue value) {
             _pitch = 0;
             _roll = 0;
@@ -394,6 +424,7 @@ namespace Core.Player {
                 UIAudioManager.Instance.Play("ship-alternate-flight-off");
         }
 
+        [UsedImplicitly]
         public void OnMouseRawDelta(InputValue value) {
             _mousePositionDelta = value.Get<Vector2>();
             _mousePositionScreen.x += _mousePositionDelta.x;
@@ -404,25 +435,29 @@ namespace Core.Player {
             );
         }
 
+        [UsedImplicitly]
         public void OnMouselook(InputValue value) {
             var mouseLookType = Preferences.Instance.GetString("mouseLookBindType");
-            if (mouseLookType == "toggle") {
+            if (mouseLookType == "toggle" && value.isPressed) {
                 _mouseLookActive = !_mouseLookActive;
-                if (_mouseLookActive) shipCameraRig.SoftReset();
+                shipCameraRig.SoftReset();
                 Preferences.Instance.SetBool("mouseLook", _mouseLookActive);
             }
 
             if (mouseLookType == "hold") _mouseLookActive = value.isPressed;
         }
 
+        [UsedImplicitly]
         public void OnRecenterMouse(InputValue value) {
             ResetMouseToCentre();
         }
 
+        [UsedImplicitly]
         public void OnResetHMDView(InputValue value) {
             if (xrRig) Game.Instance.ResetHmdView(xrRig, transform);
         }
 
+        [UsedImplicitly]
         public void OnToggleConsole(InputValue value) {
             if (FdConsole.Instance.Visible)
                 FdConsole.Instance.Hide();
