@@ -1,6 +1,5 @@
 ﻿using JetBrains.Annotations;
 using Mirror;
-using UnityEngine;
 
 namespace Core.Player {
     public class FdPlayer : NetworkBehaviour {
@@ -11,7 +10,6 @@ namespace Core.Player {
         [CanBeNull]
         public static LobbyPlayer FindLocalLobbyPlayer {
             get {
-                Debug.Log("FIND LOBBY PLAYER " + FdNetworkManager.Instance.LobbyPlayers.Count);
                 return _localLobbyPlayer
                     ? _localLobbyPlayer
                     : _localLobbyPlayer = FdNetworkManager.Instance.LobbyPlayers.Find(
