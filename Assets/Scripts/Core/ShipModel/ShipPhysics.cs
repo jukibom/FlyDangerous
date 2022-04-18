@@ -207,7 +207,7 @@ namespace Core.ShipModel {
             RotationalFlightAssistActive = false;
             CurrentFrameThrust = Vector3.zero;
             CurrentFrameTorque = Vector3.zero;
-            UpdateMotionInformation();
+            UpdateMotionInformation(Vector3.zero, Vector3.zero, Vector3.zero);
             UpdateIndicators();
         }
 
@@ -303,17 +303,17 @@ namespace Core.ShipModel {
             UpdateBoostStatus();
             ApplyFlightForces();
             UpdateIndicators();
-            UpdateMotionInformation();
+            UpdateMotionInformation(Velocity, CurrentFrameThrust, CurrentFrameTorque);
         }
 
-        private void UpdateMotionInformation() {
-            var torqueNormalised = CurrentFrameTorque / (CurrentParameters.maxThrust * CurrentParameters.torqueThrustMultiplier);
+        public void UpdateMotionInformation(Vector3 velocity, Vector3 thrust, Vector3 torque) {
+            var torqueNormalised = torque / (CurrentParameters.maxThrust * CurrentParameters.torqueThrustMultiplier);
             var torqueVec = new Vector3(
                 torqueNormalised.x,
                 MathfExtensions.Remap(-0.8f, 0.8f, -1, 1, torqueNormalised.y),
                 MathfExtensions.Remap(-0.3f, 0.3f, -1, 1, torqueNormalised.z)
             );
-            ShipModel?.UpdateMotionInformation(Velocity, CurrentParameters.maxBoostSpeed, CurrentFrameThrust / CurrentParameters.maxThrust, torqueVec);
+            ShipModel?.UpdateMotionInformation(velocity, CurrentParameters.maxBoostSpeed, thrust / CurrentParameters.maxThrust, torqueVec);
         }
 
 

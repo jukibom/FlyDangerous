@@ -220,12 +220,13 @@ namespace Core.Player {
                     IsVectorFlightAssistActive, IsRotationalFlightAssistActive);
 
                 user.InGameUI.ShipStats.UpdateIndicators(ShipPhysics.ShipIndicatorData);
-                User.ShipCameraRig.UpdateCameras(transform.InverseTransformDirection(_rigidbody.velocity), ShipPhysics.CurrentParameters.maxSpeed,
+                User.ShipCameraRig.UpdateCameras(transform.InverseTransformDirection(ShipPhysics.Velocity), ShipPhysics.CurrentParameters.maxSpeed,
                     ShipPhysics.CurrentFrameThrust,
                     ShipPhysics.CurrentParameters.maxThrust);
 
                 // Send the current floating origin along with the new position and rotation to the server
-                CmdSetPosition(FloatingOrigin.Instance.Origin, _transform.localPosition, _transform.rotation, _rigidbody.velocity, _rigidbody.angularVelocity);
+                CmdUpdate(FloatingOrigin.Instance.Origin, _transform.localPosition, _transform.rotation, ShipPhysics.Velocity, ShipPhysics.AngularVelocity,
+                    ShipPhysics.CurrentFrameThrust, ShipPhysics.CurrentFrameTorque);
 
                 ShipPhysics.CheckpointCollisionCheck();
             }
@@ -420,13 +421,15 @@ namespace Core.Player {
 
         // This is server-side and should really validate the positions coming in before blindly firing to all the clients!
         [Command]
-        private void CmdSetPosition(Vector3 origin, Vector3 position, Quaternion rotation, Vector3 velocity, Vector3 angularVelocity) {
-            RpcUpdate(origin, position, rotation, velocity, angularVelocity);
+        private void CmdUpdate(Vector3 origin, Vector3 position, Quaternion rotation, Vector3 velocity, Vector3 angularVelocity, Vector3 thrust,
+            Vector3 torque) {
+            RpcUpdate(origin, position, rotation, velocity, angularVelocity, thrust, torque);
         }
 
         // On each client, update the position of this object if it's not the local player.
         [ClientRpc]
-        private void RpcUpdate(Vector3 remoteOrigin, Vector3 position, Quaternion rotation, Vector3 velocity, Vector3 angularVelocity) {
+        private void RpcUpdate(Vector3 remoteOrigin, Vector3 position, Quaternion rotation, Vector3 velocity, Vector3 angularVelocity, Vector3 thrust,
+            Vector3 torque) {
             if (!isLocalPlayer && IsReady) {
                 // Calculate the local difference to position based on the local clients' floating origin.
                 // If these values are gigantic, that doesn't really matter as they only update at fixed distances.
@@ -442,6 +445,8 @@ namespace Core.Player {
 
                 // add velocity to position as position would have moved on server at that velocity
                 transform.localPosition += velocity * Time.fixedDeltaTime;
+
+                ShipPhysics.UpdateMotionInformation(velocity, thrust, torque);
             }
         }
 
