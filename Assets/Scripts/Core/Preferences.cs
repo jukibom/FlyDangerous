@@ -46,7 +46,7 @@ namespace Core {
     public class Preferences : Singleton<Preferences> {
         private SaveData _saveData;
 
-        public bool GetDefaultBool(string key) {
+        private bool GetDefaultBool(string key) {
             switch (key) {
                 case "showSpaceDust":
                 case "autoShipRotation":
@@ -72,7 +72,7 @@ namespace Core {
             }
         }
 
-        public float GetDefaultFloat(string key) {
+        private float GetDefaultFloat(string key) {
             switch (key) {
                 case "graphics-terrain-geometry-lod":
                     return 70.0f;
@@ -106,8 +106,10 @@ namespace Core {
             }
         }
 
-        public string GetDefaultString(string key) {
+        private string GetDefaultString(string key) {
             switch (key) {
+                case "lastPlayedVersion":
+                    return "none";
                 case "playerName":
                     return "PLAYER NAME";
                 case "playerFlag":
@@ -158,7 +160,7 @@ namespace Core {
             }
         }
 
-        public Vector3 GetDefaultVector3(string key) {
+        private Vector3 GetDefaultVector3(string key) {
             switch (key) {
                 case "hmdPosition":
                 case "hmdRotation":
@@ -250,22 +252,10 @@ namespace Core {
             var json = _saveData.ToJsonString();
             Debug.Log("Saving to " + saveLoc);
 
-            /* A using statement is great if you plan on disposing of a stream within the same method.
-               A stream should always be disposed as to free up resources that are no longer needed.
-               Without using a `using` statement, you would have to manually dispose of it yourself by calling `Stream.Dispose()`.
-               While `StreamWriter` can open and write to a file itself, I prefer this as it gives me more control
-               over the file stream. It also allows you to reuse a stream if you want. Just make sure you tell
-               the `StreamWriter` it not dispose of the underlaying stream. */
-            using (var file = new FileStream(saveLoc, FileMode.Create, FileAccess.Write, FileShare.Read)) {
-                /* Another using block, this is because StreamWriter extends IDisposable,
-                   Which means that it will need to be disposed of later. */
-                using (var writer = new StreamWriter(file)) {
-                    // StreamWriter is able to write strings out to streams.
-                    writer.Write(json);
-                    // Flush the data within the underlaying buffer to it's end point.
-                    writer.Flush();
-                }
-            }
+            using var file = new FileStream(saveLoc, FileMode.Create, FileAccess.Write, FileShare.Read);
+            using var writer = new StreamWriter(file);
+            writer.Write(json);
+            writer.Flush();
         }
     }
 }

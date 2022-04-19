@@ -11,10 +11,17 @@ namespace Menus.Main_Menu {
         [SerializeField] private ServerBrowserMenu serverBrowserMenu;
         [SerializeField] private ProfileMenu profileMenu;
         [SerializeField] private OptionsMenu optionsMenu;
+        [SerializeField] private PatchNotesMenu patchNotesMenu;
+
+        [SerializeField] private GameObject patchNotesUpdatedText;
 
         public void Start() {
             // needed on game start
-            defaultActiveButton.Select();
+            if (defaultActiveButton != null) defaultActiveButton.Select();
+        }
+
+        public void SetPatchNotesUpdated(bool isUpdated) {
+            patchNotesUpdatedText.SetActive(isUpdated);
         }
 
         public void OpenSinglePlayerPanel() {
@@ -43,6 +50,11 @@ namespace Menus.Main_Menu {
         public void CloseOptionsPanel() {
             optionsMenu.Hide();
             Show();
+        }
+
+        public void OpenPatchNotes() {
+            SetPatchNotesUpdated(false);
+            Progress(patchNotesMenu);
         }
 
         public void OpenDiscordLink() {

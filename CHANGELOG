@@ -1,5 +1,6 @@
 ﻿0.5.0
 New:
+    * Added in-game patch notes (oooo how meta, hello!)
     * Added Steam integration (Steam version features only, obviously ...)
         * No need to forward IPs on steam!
         * New server browser shows games in progress (steam version only) 
@@ -170,7 +171,6 @@ Fixes:
     * Remove redundant default FA toggle (replaced with drop-down!)
 
 0.2.1
-
 New:
     * Added dev flag for additive thrusters ("trichording") which effectively re-enables old behaviour WRT thrust sharing.
         * This allows each axis to operate with it's own max thrust amount and the flight params are now balanced for shared thrust. Feedback purposes only, Use at your own peril.
@@ -184,8 +184,8 @@ Fixes:
         * This fixes the laterals being completely ineffective under boost.
     * Fixed incorrect rotation on VR HMD reset in certain ship orientations (quaternions are fun!)
 
-ALPHA 4 (v0.2.0)
--------
+
+0.2.0
 New: 
     * VR Mode: Set the `-vr` flag parameter when launching the exe to use OpenXR. Do this either with steam or by making a shortcut to the exe.
         * Added HMD recenter binding - this is F11 by default.
@@ -229,9 +229,8 @@ Fixes:
     * Fixed SSAO shadow artefacts 
     * Possible fix for loading terrain on Linux (MM C++ Native loader is windows only :|)
 
-(v0.1.5)
--------
 
+0.1.5
 Fixes:
     * Ship configuration default was not correct (boost time wrong by 1 second)
         * This should not affect times, but the end timer will be green if not changed ship params
@@ -240,9 +239,7 @@ Fixes:
         * Timer now displays clamped to top of screen
         * Options menu now fully scrolls to the bottom 
 
-ALPHA 3 (v0.1.4)
--------
-
+0.1.4
 New:
 	* Added multiple environment types and separated from map geometry (additive scene management).
 	* Added ship spotlight + associated input binding for night maps (Default 'L' on keyboard).

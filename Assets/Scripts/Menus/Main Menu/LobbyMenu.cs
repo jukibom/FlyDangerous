@@ -15,7 +15,6 @@ namespace Menus.Main_Menu {
     public class LobbyMenu : MenuBase {
         [Header("UI")] [SerializeField] private MainMenu mainMenu;
 
-        [SerializeField] private MultiPlayerMenu topMenu;
         [SerializeField] private UIButton startButton;
         [SerializeField] private Text headerText;
 

@@ -32,6 +32,11 @@ namespace Menus.Main_Menu {
             //     string name = SteamFriends.GetPersonaName();
             //     Debug.Log($"Your Steam name is {name}.");
             // }
+
+            var lastPlayedVersion = Preferences.Instance.GetString("lastPlayedVersion");
+            topMenu.SetPatchNotesUpdated(lastPlayedVersion != Application.version);
+            Preferences.Instance.SetString("lastPlayedVersion", Application.version);
+            Preferences.Instance.Save();
         }
 
         private void FixedUpdate() {
@@ -74,6 +79,7 @@ namespace Menus.Main_Menu {
             }
         }
 
+        [UsedImplicitly]
         public void OnResetHMDView(InputValue inputValue) {
             if (xrRig) Game.Instance.ResetHmdView(xrRig, xrRig.transform.parent);
         }

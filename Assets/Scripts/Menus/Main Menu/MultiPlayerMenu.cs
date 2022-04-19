@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace Menus.Main_Menu {
     public class MultiPlayerMenu : MenuBase {
-        [SerializeField] private TopMenu topMenu;
         [SerializeField] private LobbyMenu lobbyMenu;
         [SerializeField] private JoinMenu joinMenu;
 

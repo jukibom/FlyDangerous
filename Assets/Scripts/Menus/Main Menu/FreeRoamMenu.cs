@@ -28,6 +28,7 @@ namespace Menus.Main_Menu {
             Cancel();
         }
 
+        [UsedImplicitly]
         public void OnSeedInputFieldChanged(string seed) {
             if (seedInput.text.Length == 0) seedInput.text = Guid.NewGuid().ToString();
         }

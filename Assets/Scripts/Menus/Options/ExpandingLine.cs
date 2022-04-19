@@ -10,7 +10,7 @@ using UnityEngine.UI;
 namespace Menus.Options {
     public class ExpandingLine : MonoBehaviour {
         [SerializeField] private float animatePercentPerFrame = 0.01f;
-        public bool isOpen;
+        [SerializeField] private bool isOpen;
         public Text icon;
 
         // Primary Container (should have a canvas group for opacity)
@@ -27,9 +27,16 @@ namespace Menus.Options {
         // Map of child elements => initial (target) height
         private Dictionary<RectTransform, float> _elements;
 
+        public bool IsOpen {
+            get => isOpen;
+            set {
+                isOpen = value;
+                container.SetActive(isOpen);
+            }
+        }
+
         private void Start() {
-            isOpen = false;
-            container.SetActive(false);
+            IsOpen = isOpen;
         }
 
         private void OnEnable() {
