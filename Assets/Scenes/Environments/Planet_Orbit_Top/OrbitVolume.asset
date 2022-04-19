@@ -16,6 +16,40 @@ MonoBehaviour:
   mode:
     m_OverrideState: 1
     m_Value: 2
+--- !u!114 &-3610662541421298675
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 558a8e2b6826cf840aae193990ba9f2e, type: 3}
+  m_Name: ShadowsMidtonesHighlights
+  m_EditorClassIdentifier: 
+  active: 1
+  shadows:
+    m_OverrideState: 1
+    m_Value: {x: 1, y: 1, z: 1, w: -0.06597557}
+  midtones:
+    m_OverrideState: 0
+    m_Value: {x: 1, y: 1, z: 1, w: 0.131951}
+  highlights:
+    m_OverrideState: 1
+    m_Value: {x: 0.9623848, y: 1, z: 0.96903133, w: 0.047125336}
+  shadowsStart:
+    m_OverrideState: 0
+    m_Value: 0
+  shadowsEnd:
+    m_OverrideState: 0
+    m_Value: 0.3
+  highlightsStart:
+    m_OverrideState: 0
+    m_Value: 0.55
+  highlightsEnd:
+    m_OverrideState: 0
+    m_Value: 1
 --- !u!114 &-2416744274328414216
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -62,6 +96,7 @@ MonoBehaviour:
   - {fileID: -2416744274328414216}
   - {fileID: -7955398458138546779}
   - {fileID: 4737652968355207132}
+  - {fileID: -3610662541421298675}
 --- !u!114 &4737652968355207132
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -83,7 +118,7 @@ MonoBehaviour:
     m_Value: {x: 0.9577944, y: 1, z: 0.9477169, w: 0}
   gain:
     m_OverrideState: 1
-    m_Value: {x: 1, y: 0.917444, z: 0.781754, w: 0}
+    m_Value: {x: 1, y: 0.917444, z: 0.781754, w: 0.19547956}
 --- !u!114 &5253588499916142330
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -124,10 +159,10 @@ MonoBehaviour:
   active: 1
   threshold:
     m_OverrideState: 1
-    m_Value: 3.2
+    m_Value: 0.67
   intensity:
     m_OverrideState: 1
-    m_Value: 0.55
+    m_Value: 0.85
   scatter:
     m_OverrideState: 0
     m_Value: 0.844
@@ -148,4 +183,4 @@ MonoBehaviour:
     m_Value: {fileID: 2800000, guid: 245f062e1f0f56d4892629af4fa87183, type: 3}
   dirtIntensity:
     m_OverrideState: 1
-    m_Value: 3
+    m_Value: 1.1
