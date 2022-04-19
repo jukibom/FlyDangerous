@@ -5,8 +5,6 @@ namespace Core.MapData {
     public class Environment : IFdEnum {
         private static int _id;
 
-        public static readonly Environment PlanetOrbitBottom = new("Planet Orbit (Top)", "Planet_Orbit_Bottom");
-        public static readonly Environment PlanetOrbitTop = new("Planet Orbit (Bottom)", "Planet_Orbit_Top");
         public static readonly Environment SunriseClear = new("Sunrise Clear", "Sunrise_Clear");
         public static readonly Environment NoonClear = new("Noon Clear", "Noon_Clear");
         public static readonly Environment NoonCloudy = new("Noon Cloudy", "Noon_Cloudy");
@@ -15,6 +13,10 @@ namespace Core.MapData {
         public static readonly Environment SunsetCloudy = new("Sunset Cloudy", "Sunset_Cloudy");
         public static readonly Environment NightClear = new("Night Clear", "Night_Clear");
         public static readonly Environment NightCloudy = new("Night Cloudy", "Night_Cloudy");
+        public static readonly Environment PlanetOrbitBottom = new("Red Planet", "Planet_Orbit_Bottom");
+        public static readonly Environment PlanetOrbitTop = new("Blue Planet", "Planet_Orbit_Top");
+        public static readonly Environment RedBlueNebula = new("Red / Blue Nebula", "Red_Blue_Nebula");
+        public static readonly Environment YellowGreenNebula = new("Yellow / Green Nebula", "Yellow_Green_Nebula");
 
         private Environment(string name, string sceneToLoad) {
             Id = GenerateId;
@@ -30,7 +32,8 @@ namespace Core.MapData {
 
         public static IEnumerable<Environment> List() {
             return new[] {
-                PlanetOrbitBottom, PlanetOrbitTop, SunriseClear, NoonClear, NoonCloudy, NoonStormy, SunsetClear, SunsetCloudy, NightClear, NightCloudy
+                SunriseClear, NoonClear, NoonCloudy, NoonStormy, SunsetClear, SunsetCloudy, NightClear, NightCloudy, PlanetOrbitBottom, PlanetOrbitTop,
+                RedBlueNebula, YellowGreenNebula
             };
         }
 
