@@ -32,6 +32,7 @@ namespace Menus.Options {
             set {
                 isOpen = value;
                 container.SetActive(isOpen);
+                icon.text = isOpen ? "-" : "+";
             }
         }
 

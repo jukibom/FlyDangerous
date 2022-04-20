@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Linq;
 using Core;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Users;
@@ -18,14 +19,14 @@ namespace Menus.Main_Menu {
         [SerializeField] private Camera uiCamera;
         [SerializeField] private XRRig xrRig;
 
-        // Disconnection Handling
+        [SerializeField] private NewPlayerWelcomeDialog newPlayerWelcomeDialog;
         [SerializeField] private TopMenu topMenu;
         [SerializeField] private DisconnectionDialog disconnectionDialog;
 
         [SerializeField] private bool shouldMove;
         [SerializeField] private float shipSpeed = 6f;
 
-        public static bool FirstRun => Game.Instance?.MenuFirstRun ?? true;
+        private static bool FirstRun => Game.Instance.MenuFirstRun;
 
         private void Start() {
             // if(SteamManager.Initialized) {
@@ -35,6 +36,8 @@ namespace Menus.Main_Menu {
 
             var lastPlayedVersion = Preferences.Instance.GetString("lastPlayedVersion");
             topMenu.SetPatchNotesUpdated(lastPlayedVersion != Application.version);
+            if (lastPlayedVersion == "none") ShowNewPlayerWelcomeDialog();
+
             Preferences.Instance.SetString("lastPlayedVersion", Application.version);
             Preferences.Instance.Save();
         }
@@ -60,6 +63,11 @@ namespace Menus.Main_Menu {
         private void OnDisable() {
             SceneManager.sceneLoaded -= OnEnvironmentLoadComplete;
             Game.OnVRStatus -= OnVRStatus;
+        }
+
+        private void ShowNewPlayerWelcomeDialog() {
+            topMenu.gameObject.SetActive(false);
+            newPlayerWelcomeDialog.Open(topMenu);
         }
 
         public void ShowDisconnectedDialog(string reason) {
