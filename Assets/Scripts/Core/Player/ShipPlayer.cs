@@ -8,12 +8,14 @@ using UnityEngine;
 
 namespace Core.Player {
     [RequireComponent(typeof(Rigidbody))]
+    [RequireComponent(typeof(ReflectionProbe))]
     public class ShipPlayer : FdPlayer {
         #region Attributes + Getters
 
         [SerializeField] private GameObject playerLogic;
         [SerializeField] private User user;
         [SerializeField] private ShipPhysics shipPhysics;
+
         public User User => user;
         public ShipPhysics ShipPhysics => shipPhysics;
 

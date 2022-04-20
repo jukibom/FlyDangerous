@@ -251,8 +251,7 @@ namespace Core {
             );
 
             var ship = TransitionToShipPlayer(loadingPlayer);
-            ship.AbsoluteWorldPosition = position;
-            ship.transform.rotation = rotation;
+            ship.ShipPhysics.gameObject.SetActive(false);
 
             IEnumerator SetPlayerPosition() {
                 // wait once to sync positions and again to init physics, I guess? Who knows
@@ -264,6 +263,7 @@ namespace Core {
                     position = PositionalHelpers.FindClosestEmptyPosition(position, 10);
 
                     // update locally immediately for subsequent collision checks
+                    ship.ShipPhysics.gameObject.SetActive(true);
                     ship.AbsoluteWorldPosition = position;
                     ship.transform.rotation = rotation;
 
@@ -392,7 +392,6 @@ namespace Core {
         #region Player Transition + List Management
 
         public void UpdatePlayerLists() {
-            Debug.Log("REFRESH PLAYER LISTS");
             // player added, refresh all our internal lists
             LobbyPlayers = FindObjectsOfType<LobbyPlayer>().ToList();
             LoadingPlayers = FindObjectsOfType<LoadingPlayer>().ToList();
@@ -482,11 +481,21 @@ namespace Core {
         }
 
         private void OnSetShipPositionClientMsg(SetShipPositionMessage message) {
-            var ship = FdPlayer.FindLocalShipPlayer;
-            if (ship) {
-                ship.AbsoluteWorldPosition = message.position;
-                ship.transform.rotation = message.rotation;
+
+            // this may be received before the ship has finished loading - wait until it's available.
+            IEnumerator SetShipPosition(SetShipPositionMessage positionMessage) {
+                var ship = FdPlayer.FindLocalShipPlayer;
+
+                yield return new WaitUntil(() => {
+                    ship = FdPlayer.FindLocalShipPlayer;
+                    return ship != null;
+                });
+
+                ship.AbsoluteWorldPosition = positionMessage.position;
+                ship.transform.rotation = positionMessage.rotation;
             }
+
+            StartCoroutine(SetShipPosition(message));
         }
 
         #endregion

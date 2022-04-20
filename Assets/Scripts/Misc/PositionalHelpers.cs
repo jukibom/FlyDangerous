@@ -57,10 +57,9 @@ namespace Misc {
             var hitColliders = new Collider[1];
             var testPosition = originalPosition;
 
-            // check against layers default (0) and player (6)
-            LayerMask collisionLayerMask = LayerMask.GetMask("Default", "Non-Local Player");
+            LayerMask collisionLayerMask = LayerMask.GetMask("Default", "Player", "Non-Local Player");
 
-            // set the next position and perform a simple sphere collision check, return the number of
+            // set the next position and perform a simple sphere collision check, return the true if colliding
             bool NextPositionIsObstructed() {
                 if (n != -1) testPosition = originalPosition + FibSpherePosition(n, max, positionSphereRadius);
 

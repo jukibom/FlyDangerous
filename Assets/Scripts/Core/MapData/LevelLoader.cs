@@ -25,7 +25,6 @@ namespace Core.MapData {
         public LevelData LoadedLevelData { get; private set; } = new();
 
         public LevelData LevelDataAtCurrentPosition => GenerateLevelData();
-        public static event LevelLoadedAction OnLevelLoaded;
 
         public IEnumerator StartGame(LevelData levelData) {
             LoadedLevelData = levelData;
@@ -283,8 +282,6 @@ namespace Core.MapData {
 #endif
 
             _scenesLoading.Clear();
-
-            OnLevelLoaded?.Invoke();
         }
     }
 }

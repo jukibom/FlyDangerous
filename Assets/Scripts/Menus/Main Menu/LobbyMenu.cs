@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Core;
 using Core.MapData;
@@ -68,7 +68,7 @@ namespace Menus.Main_Menu {
                     var lobbyPlayers = FindObjectsOfType<LobbyPlayer>();
                     if (lobbyPlayers.All(lobbyPlayer => lobbyPlayer.isReady))
                         FdNetworkManager.Instance.StartGameLoadSequence(SessionType.Multiplayer, lobbyLevelData);
-                    localLobbyPlayer.SendChatMessage("<HOST WANTS TO START THE GAME>");
+                    else localLobbyPlayer.SendChatMessage("<HOST WANTS TO START THE GAME>");
                 }
                 else {
                     localLobbyPlayer.ToggleReady();

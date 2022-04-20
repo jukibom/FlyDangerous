@@ -1,4 +1,3 @@
-using Core.MapData;
 using Mirror;
 
 namespace Core.Player {
@@ -7,19 +6,12 @@ namespace Core.Player {
 
         [SyncVar] public bool isHost;
 
-        [field: SyncVar] public bool IsLoaded { get; private set; }
+        [SyncVar] public bool isLoaded;
 
         private void Start() {
             // We want to keep this around when jumping to the loading scene and manually destroy it later.
             DontDestroyOnLoad(gameObject);
-        }
-
-        private void OnEnable() {
-            LevelLoader.OnLevelLoaded += OnLevelLoaded;
-        }
-
-        private void OnDisable() {
-            LevelLoader.OnLevelLoaded -= OnLevelLoaded;
+            isLoaded = false;
         }
 
         public override void OnStartLocalPlayer() {
@@ -48,9 +40,13 @@ namespace Core.Player {
             FloatingOrigin.Instance.ForceUpdate();
         }
 
-        private void OnLevelLoaded() {
-            // store loaded state, inform network layer
-            IsLoaded = true;
+        public void SetLoaded() {
+            CmdSetIsLoaded();
+        }
+
+        [Command]
+        private void CmdSetIsLoaded() {
+            isLoaded = true;
         }
 
         [Command]

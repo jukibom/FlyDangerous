@@ -18,6 +18,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Management;
 using Environment = System.Environment;
@@ -258,21 +259,23 @@ namespace Core {
             LockCursor();
 
             IEnumerator WaitForAllPlayersLoaded() {
-                yield return FindObjectsOfType<LoadingPlayer>().All(loadingPlayer => loadingPlayer.IsLoaded)
-                    ? null
-                    : new WaitForFixedUpdate();
+                yield return new WaitUntil(() => FindObjectsOfType<LoadingPlayer>().All(loadingPlayer => loadingPlayer.isLoaded));
             }
 
             IEnumerator LoadGame() {
                 yield return _levelLoader.ShowLoadingScreen();
 
                 // Position the active camera to the designated start location so we can be sure to load in anything
-                // important at that location as part of the load sequence 
+                // important at that location as part of the load sequence
                 var loadingPlayer = FdPlayer.FindLocalLoadingPlayer;
-                if (loadingPlayer) {
-                    loadingPlayer.ShowLoadingRoom();
-                    loadingPlayer.transform.position = levelData.startPosition.ToVector3();
-                }
+
+                yield return new WaitUntil(() => {
+                    loadingPlayer = FdPlayer.FindLocalLoadingPlayer;
+                    return loadingPlayer != null;
+                });
+
+                loadingPlayer.ShowLoadingRoom();
+                loadingPlayer.transform.position = levelData.startPosition.ToVector3();
 
                 yield return _levelLoader.StartGame(levelData);
 
@@ -294,16 +297,15 @@ namespace Core {
 #endif
 
                 // wait for all known currently loading players to have finished loading
-                // TODO: show "Waiting for Players" text in loading screen
+                // TODO: make this a generic wait getter to guarantee not-null
+                loadingPlayer.SetLoaded();
+                var loadText = GameObject.FindGameObjectWithTag("DynamicLoadingText").GetComponent<Text>();
+                loadText.text = "Waiting for all players to load ...";
                 yield return WaitForAllPlayersLoaded();
 
-                if (loadingPlayer) {
-                    loadingPlayer.RequestTransitionToShipPlayer();
-                }
-                else {
-                    QuitToMenu("Failed to create connection");
-                    yield break;
-                }
+                Debug.Log(FindObjectsOfType<LoadingPlayer>().Length + " players loaded!");
+
+                loadingPlayer.RequestTransitionToShipPlayer();
 
                 SessionStatus = SessionStatus.InGame;
 
