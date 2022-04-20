@@ -9,8 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1767139775458680010}
-  - component: {fileID: 1767139775458680007}
   - component: {fileID: 1767139775458680005}
+  - component: {fileID: 1921420880839436229}
+  - component: {fileID: 1767139775458680007}
   - component: {fileID: 1767139775458680004}
   m_Layer: 6
   m_Name: Ship Player
@@ -36,22 +37,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!54 &1767139775458680007
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1767139775458680011}
-  serializedVersion: 2
-  m_Mass: 550
-  m_Drag: 0
-  m_AngularDrag: 0
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 1
-  m_Constraints: 0
-  m_CollisionDetection: 3
 --- !u!114 &1767139775458680005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -72,6 +57,55 @@ MonoBehaviour:
   playerName: 
   playerFlag: 
   isHost: 0
+--- !u!215 &1921420880839436229
+ReflectionProbe:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1767139775458680011}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Type: 0
+  m_Mode: 1
+  m_RefreshMode: 1
+  m_TimeSlicingMode: 0
+  m_Resolution: 512
+  m_UpdateFrequency: 0
+  m_BoxSize: {x: 1000, y: 1000, z: 1000}
+  m_BoxOffset: {x: 0, y: 0, z: 0}
+  m_NearClip: 0.3
+  m_FarClip: 5000
+  m_ShadowDistance: 100
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 1, g: 1, b: 1, a: 0}
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 695
+  m_IntensityMultiplier: 1
+  m_BlendDistance: 1000
+  m_HDR: 1
+  m_BoxProjection: 0
+  m_RenderDynamicObjects: 0
+  m_UseOcclusionCulling: 1
+  m_Importance: 1
+  m_CustomBakedTexture: {fileID: 0}
+--- !u!54 &1767139775458680007
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1767139775458680011}
+  serializedVersion: 2
+  m_Mass: 550
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 1
+  m_Constraints: 0
+  m_CollisionDetection: 3
 --- !u!114 &1767139775458680004
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -120,6 +154,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 302352530899828448, guid: 8974c09c235fb5142aa4dace5caec8ad, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 302352530899828449, guid: 8974c09c235fb5142aa4dace5caec8ad, type: 3}
       propertyPath: m_Layer
       value: 6
@@ -139,6 +177,10 @@ PrefabInstance:
     - target: {fileID: 3791747549141102356, guid: 8974c09c235fb5142aa4dace5caec8ad, type: 3}
       propertyPath: m_Layer
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4136914657196690306, guid: 8974c09c235fb5142aa4dace5caec8ad, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4969557051023498551, guid: 8974c09c235fb5142aa4dace5caec8ad, type: 3}
       propertyPath: m_RootOrder

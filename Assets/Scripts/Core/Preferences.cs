@@ -130,6 +130,8 @@ namespace Core {
                     return "borderless window";
                 case "graphics-anti-aliasing":
                     return "none";
+                case "graphics-reflections":
+                    return "low";
                 case "lastUsedServerJoinAddress":
                     return "0.0.0.0";
                 case "lastUsedServerJoinPort":

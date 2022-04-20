@@ -194,6 +194,24 @@ namespace Core {
             }
 
             ssao.SetActive(Preferences.Instance.GetBool("graphics-ssao"));
+
+            // reflections
+            var shipPlayer = FdPlayer.FindLocalShipPlayer;
+            if (shipPlayer) {
+                var reflectionSetting = Preferences.Instance.GetString("graphics-reflections");
+                shipPlayer.ReflectionProbe.enabled = reflectionSetting != "off";
+                switch (reflectionSetting) {
+                    case "high":
+                        shipPlayer.ReflectionProbe.resolution = 512;
+                        break;
+                    case "medium":
+                        shipPlayer.ReflectionProbe.resolution = 256;
+                        break;
+                    default: // low and any other string value
+                        shipPlayer.ReflectionProbe.resolution = 128;
+                        break;
+                }
+            }
         }
 
         public void EnableVR() {

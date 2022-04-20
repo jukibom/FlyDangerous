@@ -59,6 +59,7 @@ namespace Core.Player {
         [SyncVar] private string _trailColor;
         [SyncVar] private string _headLightsColor;
         public Flag PlayerFlag { get; private set; }
+        public ReflectionProbe ReflectionProbe { get; private set; }
 
         private bool IsReady => _transform && _serverReady;
 
@@ -87,6 +88,9 @@ namespace Core.Player {
             playerLogic.SetActive(false);
             _transform = transform;
             _rigidbody = GetComponent<Rigidbody>();
+            ReflectionProbe = GetComponent<ReflectionProbe>();
+            // always disable reflections until explicitly enabled by settings on the local client
+            ReflectionProbe.enabled = false;
         }
 
         public void Start() {
