@@ -16,7 +16,6 @@ public class CrossFade : MonoBehaviour {
     }
 
     public void FadeToBlack() {
-        Debug.Log("FADE TO BLACK LOL");
         if (_fader != null) StopCoroutine(_fader);
         _fader = StartCoroutine(FadeOut());
     }
