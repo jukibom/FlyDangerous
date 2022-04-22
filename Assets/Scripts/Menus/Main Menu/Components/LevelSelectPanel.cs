@@ -50,7 +50,7 @@ namespace Menus.Main_Menu.Components {
             foreach (var levelUI in levelPrefabContainer.gameObject.GetComponentsInChildren<LevelUIElement>()) Destroy(levelUI.gameObject);
             foreach (var level in levels) {
                 var levelButton = Instantiate(levelUIElementPrefab, levelPrefabContainer);
-                levelButton.LevelData = level;
+                levelButton.Level = level;
                 levelButton.gameObject.GetComponent<UIButton>().OnButtonSubmitEvent += OnLevelSelected;
                 levelButton.gameObject.GetComponent<UIButton>().OnButtonSelectEvent += OnLevelHighLighted;
                 levelButton.gameObject.GetComponent<UIButton>().OnButtonHighlightedEvent += OnLevelHighLighted;
@@ -77,7 +77,7 @@ namespace Menus.Main_Menu.Components {
         }
 
         private void OnLevelHighLighted(UIButton uiButton) {
-            HighlightSelectedLevel(uiButton.GetComponent<LevelUIElement>().LevelData);
+            HighlightSelectedLevel(uiButton.GetComponent<LevelUIElement>().Level);
         }
 
         private void OnLevelUnHighLighted(UIButton uiButton) {
@@ -86,7 +86,7 @@ namespace Menus.Main_Menu.Components {
 
         private void OnLevelSelected(UIButton uiButton) {
             UIAudioManager.Instance.Play("ui-dialog-open");
-            SetSelectedLevel(uiButton.GetComponent<LevelUIElement>().LevelData);
+            SetSelectedLevel(uiButton.GetComponent<LevelUIElement>().Level);
         }
 
         private void HighlightSelectedLevel(Level level) {
@@ -110,8 +110,6 @@ namespace Menus.Main_Menu.Components {
 
                 // if user hasn't beaten author time, hide it!
                 platinumMedalContainer.gameObject.SetActive(score.HasPlayedPreviously && bestTime <= platinumTargetTime);
-
-                // TODO: show a medal icon associated with users' time
             }
         }
 
@@ -121,7 +119,7 @@ namespace Menus.Main_Menu.Components {
                 // select the previous level if there is one
                 if (SelectedLevel != null)
                     levelPrefabContainer.GetComponentsInChildren<LevelUIElement>()
-                        .FindMember(levelButton => levelButton.LevelData == SelectedLevel)
+                        .FindMember(levelButton => levelButton.Level == SelectedLevel)
                         ?.GetComponent<Button>()
                         ?.Select();
                 SelectedLevel = null;

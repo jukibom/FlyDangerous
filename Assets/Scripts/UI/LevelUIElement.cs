@@ -1,18 +1,43 @@
 using Core.MapData;
+using Core.Scores;
+using Misc;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class LevelUIElement : MonoBehaviour {
     [SerializeField] private Text levelName;
     [SerializeField] private Image thumbnail;
-    private Level _levelData;
+    [SerializeField] private Image bronzeMedal;
+    [SerializeField] private Image silverMedal;
+    [SerializeField] private Image goldMedal;
+    [SerializeField] private Image authorMedal;
+    private Level _level;
 
-    public Level LevelData {
-        get => _levelData;
+    public Level Level {
+        get => _level;
         set {
-            _levelData = value;
-            levelName.text = _levelData.Name.ToUpper();
-            thumbnail.sprite = _levelData.Thumbnail;
+            _level = value;
+            RefreshUIElements();
         }
+    }
+
+    private void RefreshUIElements() {
+        levelName.text = Level.Name.ToUpper();
+        thumbnail.sprite = Level.Thumbnail;
+
+        var score = Level.Score;
+        var personalBest = score.PersonalBestTotalTime;
+
+        var platinumTargetTime = Level.Data.authorTimeTarget;
+        var goldTargetTime = Score.GoldTimeTarget(Level.Data);
+        var silverTargetTime = Score.SilverTimeTarget(Level.Data);
+        var bronzeTargetTime = Score.BronzeTimeTarget(Level.Data);
+
+        SimpleDebug.Log(platinumTargetTime, personalBest);
+
+        bronzeMedal.enabled = score.HasPlayedPreviously && personalBest < bronzeTargetTime;
+        silverMedal.enabled = score.HasPlayedPreviously && personalBest < silverTargetTime;
+        goldMedal.enabled = score.HasPlayedPreviously && personalBest < goldTargetTime;
+        authorMedal.enabled = score.HasPlayedPreviously && personalBest < platinumTargetTime;
     }
 }
