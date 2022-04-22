@@ -250,6 +250,17 @@ namespace Core.MapData {
             if (mapMagic) {
                 mapMagic.graph.random = new Noise(LoadedLevelData.terrainSeed.GetHashCode(), 32768);
 
+#if !NO_PAID_ASSETS
+                // gpu instancer initialisation (paid asset!)
+                var cam = FindObjectOfType<CinemachineBrain>(true).gameObject.GetComponent<Camera>();
+                var gpuInstancer = FindObjectOfType<GPUInstancerMapMagic2Integration>();
+                if (mapMagic && gpuInstancer) {
+                    gpuInstancer.floatingOriginTransform = mapMagic.transform;
+                    GPUInstancerAPI.SetCamera(cam);
+                    gpuInstancer.SetCamera(cam);
+                }
+#endif
+
                 // our terrain gen may start disabled to prevent painful threading fun
                 mapMagic.enabled = true;
                 yield return new WaitForEndOfFrame();
@@ -269,17 +280,6 @@ namespace Core.MapData {
                     yield return new WaitForEndOfFrame();
                 }
             }
-
-#if !NO_PAID_ASSETS
-            // gpu instancer initialisation (paid asset!)
-            var cam = FindObjectOfType<CinemachineBrain>(true).gameObject.GetComponent<Camera>();
-            var gpuInstancer = FindObjectOfType<GPUInstancerMapMagic2Integration>();
-            if (mapMagic && gpuInstancer) {
-                gpuInstancer.floatingOriginTransform = mapMagic.transform;
-                GPUInstancerAPI.SetCamera(cam);
-                gpuInstancer.SetCamera(cam);
-            }
-#endif
 
             _scenesLoading.Clear();
         }
