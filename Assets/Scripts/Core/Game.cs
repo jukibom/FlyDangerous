@@ -58,13 +58,10 @@ namespace Core {
 
         public delegate void VRToggledAction(bool enabled);
 
-        private static readonly int fadeToBlack = Animator.StringToHash("FadeToBlack");
-        private static readonly int fadeFromBlack = Animator.StringToHash("FadeFromBlack");
-
         [SerializeField] private InputActionAsset playerBindings;
         [SerializeField] private ScriptableRendererFeature ssao;
         [SerializeField] private Camera inGameUiCamera;
-        [SerializeField] private Animator crossfade;
+        [SerializeField] private CrossFade crossfade;
         [SerializeField] private ShipGhost shipGhostPrefab;
 
         private CinemachineBrain _cinemachine;
@@ -297,7 +294,6 @@ namespace Core {
 #endif
 
                 // wait for all known currently loading players to have finished loading
-                // TODO: make this a generic wait getter to guarantee not-null
                 loadingPlayer.SetLoaded();
                 var loadText = GameObject.FindGameObjectWithTag("DynamicLoadingText").GetComponent<Text>();
                 loadText.text = "Waiting for all players to load ...";
@@ -459,11 +455,11 @@ namespace Core {
         }
 
         public void FadeToBlack() {
-            crossfade.SetTrigger(fadeToBlack);
+            crossfade.FadeToBlack();
         }
 
         public void FadeFromBlack() {
-            crossfade.SetTrigger(fadeFromBlack);
+            crossfade.FadeFromBlack();
         }
 
         public void PauseGameToggle(bool paused) {
