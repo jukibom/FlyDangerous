@@ -276,23 +276,6 @@ namespace Core {
 
                 yield return _levelLoader.StartGame(levelData);
 
-#if !NO_PAID_ASSETS
-                // gpu instancer VR initialisation (paid asset!)
-                if (IsVREnabled) {
-                    var cam = FindObjectOfType<XRRig>(true).cameraGameObject.GetComponent<Camera>();
-
-                    var gpuInstancer = FindObjectOfType<GPUInstancerMapMagic2Integration>();
-                    var mapMagic = FindObjectOfType<MapMagicObject>();
-                    if (mapMagic && gpuInstancer) {
-                        gpuInstancer.floatingOriginTransform = mapMagic.transform;
-                        GPUInstancerAPI.SetCamera(cam);
-                        gpuInstancer.SetCamera(cam);
-                    }
-
-                    FindObjectsOfType<GPUInstancerDetailManager>().ToList().ForEach(manager => manager.SetCamera(cam));
-                }
-#endif
-
                 // wait for all known currently loading players to have finished loading
                 loadingPlayer.SetLoaded();
                 var loadText = GameObject.FindGameObjectWithTag("DynamicLoadingText").GetComponent<Text>();
@@ -321,6 +304,23 @@ namespace Core {
                 NotifyVRStatus();
 
 #if !NO_PAID_ASSETS
+                // gpu instancer VR initialisation (paid asset!)
+                if (IsVREnabled) {
+                    var cam = FindObjectOfType<XRRig>(true).cameraGameObject.GetComponent<Camera>();
+
+                    var gpuInstancer = FindObjectOfType<GPUInstancerMapMagic2Integration>();
+                    var mapMagic = FindObjectOfType<MapMagicObject>();
+                    if (mapMagic && gpuInstancer) {
+                        gpuInstancer.floatingOriginTransform = mapMagic.transform;
+                        GPUInstancerAPI.SetCamera(cam);
+                        gpuInstancer.SetCamera(cam);
+                    }
+
+                    Debug.Log("Setting vr camera on instancers " + cam);
+                    FindObjectsOfType<GPUInstancerDetailManager>(true).ToList().ForEach(manager => manager.SetCamera(cam));
+                    FindObjectOfType<GPUInstancerTreeManager>(true).SetCamera(cam);
+                }
+
                 // pull out GPU instancer tree manager object before loading screen is destroyed 
                 var treeManager = FindObjectOfType<GPUInstancerTreeManager>();
                 var instancer = FindObjectOfType<GPUInstancerMapMagic2Integration>();
