@@ -145,7 +145,7 @@ namespace Core.Player {
         }
 
         public void OnEnable() {
-            _mouseLookActive = Preferences.Instance.GetBool("mouseLook");
+            _mouseLookActive = Preferences.Instance.GetString("controlSchemeType") == "advanced" && Preferences.Instance.GetBool("mouseLook");
             pauseUIInputModule.cancel.action.performed += _cancelAction;
             Game.OnVRStatus += SetVRStatus;
             ResetMouseToCentre();
