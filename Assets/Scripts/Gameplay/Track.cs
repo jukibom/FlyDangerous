@@ -30,7 +30,6 @@ namespace Gameplay {
         [SerializeField] private bool isActive;
 
         private bool _complete;
-        private List<ShipGhost> _ghosts = new();
 
         private Score _previousBestScore;
 
