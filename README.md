@@ -18,8 +18,8 @@ This project aims to provide a ground-up reimplementation of a similar-enough fl
 * Basic time trial map types
   * Sprint: 1 start, checkpoints, 1 end (done!)
   * Laps 1 start block, checkpoints, lap counter
-* Leaderboards with automatic replay / ghost upload via Steam
-* Basic Multiplayer
+* Leaderboards with automatic replay / ghost upload via Steam (done!)
+* Basic Multiplayer (done!)
 * VR Support (done!)
 * Infinite terrain generation (done!)
   * Freeplay flight, seed generation (done!)

@@ -1,7 +1,13 @@
+using System;
+using System.Collections;
+using Misc;
+using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.VFX;
 
 public class MedalsScreen : MonoBehaviour {
+    [SerializeField] private VisualEffect dustImpactEffect;
     [SerializeField] private GameObject newPersonalBest;
     [SerializeField] private GameObject noMedalAwarded;
     [SerializeField] private GameObject bronzeMedal;
@@ -9,36 +15,102 @@ public class MedalsScreen : MonoBehaviour {
     [SerializeField] private GameObject goldMedal;
     [SerializeField] private GameObject authorMedal;
     [SerializeField] private Text resultText;
+    [SerializeField] private AudioSource medalDingAudio;
+    [SerializeField] private AudioSource medalThudAudio;
+    [SerializeField] private AudioSource medalAuthorAudio;
+    [SerializeField] private AudioSource scoreCheerAudio;
+
+    [Label("Duration of each medal animation (seconds)")] [SerializeField]
+    private float animationDuration = 0.1f;
+
+    [Label("Duration interval between medals (seconds)")] [SerializeField]
+    private float animationInterval = 0.2f;
+
 
     private void OnEnable() {
+        ClearMedalScreen();
+    }
+
+    private void ClearMedalScreen() {
         noMedalAwarded.SetActive(false);
         bronzeMedal.SetActive(false);
         silverMedal.SetActive(false);
         goldMedal.SetActive(false);
         authorMedal.SetActive(false);
+        newPersonalBest.SetActive(false);
     }
 
-    public void ShowAnimation(uint medalCount, bool personalBest, string result) {
-        newPersonalBest.SetActive(personalBest);
+    [Button("Test Animation")]
+    private void TestAnimation() {
+        StartCoroutine(ShowAnimation(4, true, "00:32:23"));
+    }
+
+    public IEnumerator ShowAnimation(uint medalCount, bool personalBest, string result) {
+        ClearMedalScreen();
         resultText.text = result;
 
-        // TODO: animations
+        noMedalAwarded.SetActive(medalCount == 0);
+
         switch (medalCount) {
-            case 1:
-                bronzeMedal.SetActive(true);
-                break;
-            case 2:
-                silverMedal.SetActive(true);
-                break;
-            case 3:
-                goldMedal.SetActive(true);
-                break;
             case 4:
-                authorMedal.SetActive(true);
+                yield return AnimateMedal(bronzeMedal, () => PlayMedalDing(0.7f));
+                yield return AnimateMedal(silverMedal, () => PlayMedalDing(0.8f));
+                yield return AnimateMedal(goldMedal, () => PlayMedalDing(0.9f));
+                yield return AnimateMedal(authorMedal, () => {
+                    PlayMedalDing(1f);
+                    medalAuthorAudio.Play();
+                });
                 break;
-            default:
-                noMedalAwarded.SetActive(true);
+
+            case 3:
+                yield return AnimateMedal(bronzeMedal, () => PlayMedalDing(0.7f));
+                yield return AnimateMedal(silverMedal, () => PlayMedalDing(0.8f));
+                yield return AnimateMedal(goldMedal, () => PlayMedalDing(0.9f));
+                break;
+
+            case 2:
+                yield return AnimateMedal(bronzeMedal, () => PlayMedalDing(0.7f));
+                yield return AnimateMedal(silverMedal, () => PlayMedalDing(0.8f));
+                break;
+            case 1:
+                yield return AnimateMedal(bronzeMedal, () => PlayMedalDing(0.7f));
                 break;
         }
+
+        yield return new WaitForSeconds(animationInterval);
+        newPersonalBest.SetActive(personalBest);
+        if (personalBest) scoreCheerAudio.Play();
+    }
+
+    private void PlayMedalDing(float pitch) {
+        medalDingAudio.pitch = pitch;
+        medalDingAudio.Play();
+    }
+
+    private IEnumerator AnimateMedal(GameObject medal, Action OnImpact) {
+        medal.SetActive(true);
+        var medalTransform = medal.transform;
+        var medalGroup = medal.GetComponent<CanvasGroup>();
+        var targetPosition = medalTransform.localPosition;
+        var startingPosition = targetPosition + new Vector3(0, 0, -750);
+
+        // we want this to animate very quickly as it may happen four times in the best case result!
+
+        // vr mode we use the z axis as the canvas is in world space. In pancake we use scale instead.
+        // var vrEnabled = Game.Instance.IsVREnabled;
+        var animationValue = 0f;
+
+        while (animationValue < animationDuration) {
+            animationValue += Time.deltaTime;
+            medalTransform.localScale = Vector3.one * MathfExtensions.Remap(0, animationDuration, 2.5f, 1f, animationValue);
+            medalTransform.localPosition = Vector3.Lerp(startingPosition, targetPosition, MathfExtensions.Remap(0, animationDuration, 0, 1, animationValue));
+            medalGroup.alpha = MathfExtensions.Remap(0, animationDuration, 0, 1, animationValue);
+            yield return new WaitForEndOfFrame();
+        }
+
+        OnImpact();
+        medalThudAudio.Play();
+        dustImpactEffect.SendEvent("OnPlay");
+        yield return new WaitForSeconds(animationInterval);
     }
 }
