@@ -18,6 +18,8 @@ namespace GameUI {
         [SerializeField] private MouseWidget mouseWidgetWorldSpace;
         [SerializeField] private MouseWidget mouseWidgetScreenSpace;
         [SerializeField] private TargettingSystem targettingSystem;
+        [SerializeField] private Transform gameModeUI;
+        [SerializeField] private Camera vrMouseCamera;
 
         public DebugUI DebugUI => debugUI;
         public PauseMenu PauseMenu => pauseMenu;
@@ -26,6 +28,7 @@ namespace GameUI {
         public MouseWidget MouseWidgetWorld => mouseWidgetWorldSpace;
         public MouseWidget MouseWidgetScreen => mouseWidgetScreenSpace;
         public TargettingSystem TargettingSystem => targettingSystem;
+        public Transform GameModeUI => gameModeUI;
 
         public void SetMode(GameUIMode mode) {
             switch (mode) {
@@ -45,8 +48,10 @@ namespace GameUI {
                     pauseMenuRect.localPosition = new Vector3(0, 0.3f, 0.5f);
                     uiRect.localPosition = new Vector3(0, 0.3f, 0.5f);
 
-                    pauseMenuRect.sizeDelta = new Vector2(1280, 1000);
+                    pauseMenuRect.sizeDelta = new Vector2(1440, 1080);
                     uiRect.sizeDelta = new Vector2(1280, 1000);
+
+                    pauseMenuCanvas.worldCamera = vrMouseCamera;
 
                     ShipStats.SetStatsVisible(false);
                     break;

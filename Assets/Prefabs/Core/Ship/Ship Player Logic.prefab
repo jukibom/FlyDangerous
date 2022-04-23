@@ -3052,6 +3052,115 @@ MonoBehaviour:
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
   m_PresetInfoIsWorld: 0
+--- !u!1 &7583287034392858557
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1792697858379321396}
+  - component: {fileID: 4470779943931733232}
+  - component: {fileID: 7317157295015928703}
+  m_Layer: 5
+  m_Name: VR Mouse Event Camera
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1792697858379321396
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7583287034392858557}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.35, z: -0.45}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8165869081008660847}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!20 &4470779943931733232
+Camera:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7583287034392858557}
+  m_Enabled: 0
+  serializedVersion: 2
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_projectionMatrixMode: 1
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
+  m_SensorSize: {x: 36, y: 24}
+  m_LensShift: {x: 0, y: 0}
+  m_FocalLength: 50
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 0
+  orthographic size: 5
+  m_Depth: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 1
+  m_AllowMSAA: 1
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+--- !u!114 &7317157295015928703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7583287034392858557}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
 --- !u!1 &7684893605757184670
 GameObject:
   m_ObjectHideFlags: 0
@@ -3760,19 +3869,7 @@ MonoBehaviour:
   - eventID: 16
     callback:
       m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: Menus.PauseMenu, Assembly-CSharp
-          m_MethodName: OnCancel
-          m_Mode: 0
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
+        m_Calls: []
 --- !u!1 &8165869081008660840
 GameObject:
   m_ObjectHideFlags: 0
@@ -3806,6 +3903,7 @@ Transform:
   - {fileID: 8165869080986684466}
   - {fileID: 8165869082081764884}
   - {fileID: 8888769329147409096}
+  - {fileID: 1792697858379321396}
   m_Father: {fileID: 6133412330555986360}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3831,6 +3929,7 @@ MonoBehaviour:
   mouseWidgetScreenSpace: {fileID: 3725157422820965420}
   targettingSystem: {fileID: 5723153387723614145}
   gameModeUI: {fileID: 7078125659167354753}
+  vrMouseCamera: {fileID: 4470779943931733232}
 --- !u!1 &8165869081141078391
 GameObject:
   m_ObjectHideFlags: 0
@@ -10347,7 +10446,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 91102794595403307, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: Right Button [Mouse]
       objectReference: {fileID: 0}
     - target: {fileID: 91102794634549189, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
@@ -13031,7 +13130,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 605509428182476825, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: '` [Keyboard]'
       objectReference: {fileID: 0}
     - target: {fileID: 605509428182476827, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Layer
@@ -13811,7 +13910,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 850318156510341670, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: Left Stick Press [Xbox Controller]
+      value: Button 3 [Saitek X52 Pro Flight Control System]
       objectReference: {fileID: 0}
     - target: {fileID: 938560313155105231, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_AnchorMax.x
@@ -13935,7 +14034,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1150661608115429824, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: D-Pad Right [Xbox Controller]
+      value: HatSwitch Right [Saitek X52 Pro Flight Control System]
       objectReference: {fileID: 0}
     - target: {fileID: 1163243722544576369, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Layer
@@ -13943,7 +14042,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1174969744701537406, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: Y [Xbox Controller]
+      value: Button 19 [Saitek X52 Pro Flight Control System]
       objectReference: {fileID: 0}
     - target: {fileID: 1182479172176564454, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_AnchorMax.y
@@ -14019,7 +14118,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1407801524019304998, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: Stick Y [Saitek X52 Pro Flight Control System]
       objectReference: {fileID: 0}
     - target: {fileID: 1457484439574886677, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_AnchorMax.y
@@ -14055,7 +14154,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1601925914448198086, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: Z [Saitek X52 Pro Flight Control System]
       objectReference: {fileID: 0}
     - target: {fileID: 1649146984953576532, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_AnchorMax.y
@@ -14195,7 +14294,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1880156739548136875, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: HatSwitch Left [Saitek X52 Pro Flight Control System]
       objectReference: {fileID: 0}
     - target: {fileID: 1893864020924440936, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_IsActive
@@ -14311,7 +14410,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2230551135799406242, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: Select [Xbox Controller]
+      value: Button 8 [Saitek X52 Pro Flight Control System]
       objectReference: {fileID: 0}
     - target: {fileID: 2295328327139227508, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Layer
@@ -14379,7 +14478,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2562642821637243851, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: Button 3 [Saitek X52 Pro Flight Control System]
       objectReference: {fileID: 0}
     - target: {fileID: 2590457255266798615, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
@@ -16119,7 +16218,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4426665218996987129, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: D-Pad Left [Xbox Controller]
+      value: HatSwitch Left [Saitek X52 Pro Flight Control System]
       objectReference: {fileID: 0}
     - target: {fileID: 4426665219036493079, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
@@ -16567,7 +16666,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5132777305455055736, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: D-Pad Up [Xbox Controller]
+      value: HatSwitch Up [Saitek X52 Pro Flight Control System]
       objectReference: {fileID: 0}
     - target: {fileID: 5132777305928532630, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
@@ -16612,6 +16711,10 @@ PrefabInstance:
     - target: {fileID: 5134300496295249914, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5149996076861436212, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 255.7143
       objectReference: {fileID: 0}
     - target: {fileID: 5185625841443318916, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
@@ -16727,7 +16830,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5565176337686639910, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: Button 25 [Saitek X52 Pro Flight Control System]
       objectReference: {fileID: 0}
     - target: {fileID: 5584236831275599315, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_AnchorMax.y
@@ -16883,7 +16986,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5811113644779168204, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: B [Xbox Controller]
+      value: Button 4 [Saitek X52 Pro Flight Control System]
       objectReference: {fileID: 0}
     - target: {fileID: 5814894887015808802, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_AnchorMax.y
@@ -20635,7 +20738,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6761278417890323873, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: Button 24 [Saitek X52 Pro Flight Control System]
       objectReference: {fileID: 0}
     - target: {fileID: 6825662031021833367, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Layer
@@ -20695,7 +20798,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7047911297782080549, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: Stick X [Saitek X52 Pro Flight Control System]
       objectReference: {fileID: 0}
     - target: {fileID: 7067612815329327209, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_AnchorMax.y
@@ -20855,7 +20958,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7369166143853887922, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: Button 7 [Saitek X52 Pro Flight Control System]
       objectReference: {fileID: 0}
     - target: {fileID: 7411357088344622784, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Layer
@@ -21271,7 +21374,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7776207559546959875, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: Rz [Saitek X52 Pro Flight Control System]
       objectReference: {fileID: 0}
     - target: {fileID: 7782224522303997665, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_AnchorMax.y
@@ -21427,7 +21530,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8020267545956984984, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: Button 26 [Saitek X52 Pro Flight Control System]
       objectReference: {fileID: 0}
     - target: {fileID: 8022312839161835678, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
@@ -22191,7 +22294,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8149485356441895252, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: HatSwitch Down [Saitek X52 Pro Flight Control System]
       objectReference: {fileID: 0}
     - target: {fileID: 8180136401615815721, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_AnchorMax.y
@@ -22235,7 +22338,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8196818771774468876, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: A [Xbox Controller]
+      value: Button 31 [Saitek X52 Pro Flight Control System]
       objectReference: {fileID: 0}
     - target: {fileID: 8208651647430819994, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_AnchorMax.x
@@ -22559,7 +22662,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8448171416081943121, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: HatSwitch Right [Saitek X52 Pro Flight Control System]
       objectReference: {fileID: 0}
     - target: {fileID: 8448171416548219839, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
@@ -22631,7 +22734,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8476370370517521985, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: D-Pad Down [Xbox Controller]
+      value: HatSwitch Down [Saitek X52 Pro Flight Control System]
+      objectReference: {fileID: 0}
+    - target: {fileID: 8494107856901583885, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 255.7143
       objectReference: {fileID: 0}
     - target: {fileID: 8566910288399073395, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_AnchorMax.y
@@ -22727,7 +22834,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8588546479039676625, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: HatSwitch Up [Saitek X52 Pro Flight Control System]
       objectReference: {fileID: 0}
     - target: {fileID: 8588546479403880767, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
@@ -22823,7 +22930,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8867788404206526548, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: Button 4 [Saitek X52 Pro Flight Control System]
       objectReference: {fileID: 0}
     - target: {fileID: 8879524148900045645, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_MinWidth
@@ -23167,7 +23274,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9196964336847466527, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: Button 27 [Saitek X52 Pro Flight Control System]
       objectReference: {fileID: 0}
     - target: {fileID: 9203215381458143760, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Layer

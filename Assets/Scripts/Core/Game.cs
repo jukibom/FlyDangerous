@@ -314,11 +314,9 @@ namespace Core {
                         gpuInstancer.floatingOriginTransform = mapMagic.transform;
                         GPUInstancerAPI.SetCamera(cam);
                         gpuInstancer.SetCamera(cam);
+                        FindObjectsOfType<GPUInstancerDetailManager>(true).ToList().ForEach(manager => manager.SetCamera(cam));
+                        FindObjectOfType<GPUInstancerTreeManager>(true)?.SetCamera(cam);
                     }
-
-                    Debug.Log("Setting vr camera on instancers " + cam);
-                    FindObjectsOfType<GPUInstancerDetailManager>(true).ToList().ForEach(manager => manager.SetCamera(cam));
-                    FindObjectOfType<GPUInstancerTreeManager>(true).SetCamera(cam);
                 }
 
                 // pull out GPU instancer tree manager object before loading screen is destroyed 
