@@ -35,6 +35,7 @@ namespace GameUI {
                 case GameUIMode.VR: {
                     var pauseMenuCanvas = pauseMenu.GetComponent<Canvas>();
                     pauseMenuCanvas.renderMode = RenderMode.WorldSpace;
+                    pauseMenuCanvas.worldCamera = vrMouseCamera;
                     screenSpaceCanvas.renderMode = RenderMode.WorldSpace;
                     var pauseMenuRect = pauseMenuCanvas.GetComponent<RectTransform>();
                     var uiRect = screenSpaceCanvas.GetComponent<RectTransform>();
@@ -51,14 +52,13 @@ namespace GameUI {
                     pauseMenuRect.sizeDelta = new Vector2(1440, 1080);
                     uiRect.sizeDelta = new Vector2(1280, 1000);
 
-                    pauseMenuCanvas.worldCamera = vrMouseCamera;
-
                     ShipStats.SetStatsVisible(false);
                     break;
                 }
                 case GameUIMode.Pancake: {
                     var pauseMenuCanvas = pauseMenu.GetComponent<Canvas>();
                     pauseMenuCanvas.renderMode = RenderMode.ScreenSpaceCamera;
+                    pauseMenuCanvas.worldCamera = null;
                     screenSpaceCanvas.renderMode = RenderMode.ScreenSpaceCamera;
                     var pauseMenuRect = pauseMenuCanvas.GetComponent<RectTransform>();
                     var uiRect = screenSpaceCanvas.GetComponent<RectTransform>();
