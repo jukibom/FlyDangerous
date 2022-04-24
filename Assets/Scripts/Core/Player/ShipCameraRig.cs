@@ -28,14 +28,11 @@ namespace Core.Player {
         public ShipCamera ActiveCamera { get; private set; }
 
         public void Reset() {
+            RecoverPreferredCameraFromPreferences();
             if (_endScreenCameraTransition != null) StopCoroutine(_endScreenCameraTransition);
-            if (ActiveCamera != null) ActiveCamera.SetCameraActive(true);
             endScreenCamera1.SetCameraActive(false);
             endScreenCamera2.SetCameraActive(false);
-            SoftReset();
-            _cameraOffset = Vector3.zero;
-            cameraTarget.localPosition = baseTargetPosition;
-            cameraTarget.transform.rotation = transform.rotation;
+            ResetTransforms();
         }
 
         private void Start() {
@@ -46,6 +43,13 @@ namespace Core.Player {
         private void OnEnable() {
             // Set active camera from preference (this also happens on VR disable as the component is re-enabled)
             RecoverPreferredCameraFromPreferences();
+        }
+
+        private void ResetTransforms() {
+            SoftReset();
+            _cameraOffset = Vector3.zero;
+            cameraTarget.localPosition = baseTargetPosition;
+            cameraTarget.transform.rotation = transform.rotation;
         }
 
         public void SetPosition(Vector2 position, CameraPositionUpdate cameraType) {
@@ -134,7 +138,8 @@ namespace Core.Player {
 
         private void SetActiveCamera(ShipCamera newCamera) {
             if (ActiveCamera != null) ActiveCamera.SetCameraActive(false);
-            Reset();
+
+            ResetTransforms();
             ActiveCamera = newCamera;
             user.InGameUI.ShipStats.SetStatsVisible(newCamera.showShipDataUI);
             var type = newCamera.cameraType;
@@ -152,8 +157,7 @@ namespace Core.Player {
         }
 
         public void SwitchToEndScreenCamera() {
-            ActiveCamera.SetCameraActive(false);
-            endScreenCamera1.SetCameraActive(true);
+            SetActiveCamera(endScreenCamera1);
 
             IEnumerator TransitionToSecondCamera() {
                 yield return new WaitForFixedUpdate();
@@ -161,8 +165,7 @@ namespace Core.Player {
                 if (cinemachine) {
                     var switchNextTime = cinemachine.ActiveBlend?.Duration ?? 2;
                     yield return new WaitForSeconds(switchNextTime);
-                    endScreenCamera1.SetCameraActive(false);
-                    endScreenCamera2.SetCameraActive(true);
+                    SetActiveCamera(endScreenCamera2);
                 }
             }
 
