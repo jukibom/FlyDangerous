@@ -87,7 +87,6 @@ namespace Gameplay {
         public void InitialiseTrack() {
             _previousBestScore = Score.ScoreForLevel(Game.Instance.LoadedLevelData);
 
-            Timers.HideTimers(false);
             if (Game.Instance.LoadedLevelData.gameType == GameType.TimeTrial) Timers.ShowTimers();
 
             var start = Checkpoints.Find(c => c.Type == CheckpointType.Start);
