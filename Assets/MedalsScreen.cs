@@ -53,27 +53,27 @@ public class MedalsScreen : MonoBehaviour {
 
         switch (medalCount) {
             case 4:
-                yield return AnimateMedal(bronzeMedal, () => PlayMedalDing(0.7f));
-                yield return AnimateMedal(silverMedal, () => PlayMedalDing(0.8f));
-                yield return AnimateMedal(goldMedal, () => PlayMedalDing(0.9f));
-                yield return AnimateMedal(authorMedal, () => {
+                yield return AnimateMedal(bronzeMedal, animationInterval, () => PlayMedalDing(0.7f));
+                yield return AnimateMedal(silverMedal, animationInterval * 1.5f, () => PlayMedalDing(0.8f));
+                yield return AnimateMedal(goldMedal, animationInterval * 2f, () => PlayMedalDing(0.9f));
+                yield return AnimateMedal(authorMedal, animationInterval, () => {
                     PlayMedalDing(1f);
                     medalAuthorAudio.Play();
                 });
                 break;
 
             case 3:
-                yield return AnimateMedal(bronzeMedal, () => PlayMedalDing(0.7f));
-                yield return AnimateMedal(silverMedal, () => PlayMedalDing(0.8f));
-                yield return AnimateMedal(goldMedal, () => PlayMedalDing(0.9f));
+                yield return AnimateMedal(bronzeMedal, animationInterval, () => PlayMedalDing(0.7f));
+                yield return AnimateMedal(silverMedal, animationInterval * 1.5f, () => PlayMedalDing(0.8f));
+                yield return AnimateMedal(goldMedal, animationInterval, () => PlayMedalDing(0.9f));
                 break;
 
             case 2:
-                yield return AnimateMedal(bronzeMedal, () => PlayMedalDing(0.7f));
-                yield return AnimateMedal(silverMedal, () => PlayMedalDing(0.8f));
+                yield return AnimateMedal(bronzeMedal, animationInterval, () => PlayMedalDing(0.7f));
+                yield return AnimateMedal(silverMedal, animationInterval, () => PlayMedalDing(0.8f));
                 break;
             case 1:
-                yield return AnimateMedal(bronzeMedal, () => PlayMedalDing(0.7f));
+                yield return AnimateMedal(bronzeMedal, animationInterval, () => PlayMedalDing(0.7f));
                 break;
         }
 
@@ -87,7 +87,7 @@ public class MedalsScreen : MonoBehaviour {
         medalDingAudio.Play();
     }
 
-    private IEnumerator AnimateMedal(GameObject medal, Action OnImpact) {
+    private IEnumerator AnimateMedal(GameObject medal, float interval, Action onImpact) {
         medal.SetActive(true);
         var medalTransform = medal.transform;
         var medalGroup = medal.GetComponent<CanvasGroup>();
@@ -108,9 +108,9 @@ public class MedalsScreen : MonoBehaviour {
             yield return new WaitForEndOfFrame();
         }
 
-        OnImpact();
+        onImpact();
         medalThudAudio.Play();
         dustImpactEffect.SendEvent("OnPlay");
-        yield return new WaitForSeconds(animationInterval);
+        yield return new WaitForSeconds(interval);
     }
 }
