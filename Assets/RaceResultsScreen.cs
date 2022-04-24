@@ -33,8 +33,7 @@ public class RaceResultsScreen : MonoBehaviour {
 
         var personalBest = score.PersonalBestTotalTime;
         var result = TimeExtensions.TimeSecondsToString(personalBest);
-        var isNewPersonalBest = previousBest is { HasPlayedPreviously: true } && previousBest.PersonalBestTotalTime > personalBest;
-
+        var isNewPersonalBest = previousBest is { HasPlayedPreviously: false } || previousBest?.PersonalBestTotalTime > personalBest;
         var levelData = Game.Instance.LoadedLevelData;
 
         var authorTargetTime = Score.AuthorTimeTarget(levelData);
