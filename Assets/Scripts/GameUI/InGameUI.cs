@@ -1,3 +1,4 @@
+using System;
 using Core.ShipModel;
 using Game_UI;
 using UnityEngine;
@@ -31,14 +32,18 @@ namespace GameUI {
         public Transform GameModeUI => gameModeUI;
 
         public void SetMode(GameUIMode mode) {
+            var pauseMenuCanvas = pauseMenu.GetComponent<Canvas>();
+            var pauseMenuRect = pauseMenuCanvas.GetComponent<RectTransform>();
+            var uiRect = screenSpaceCanvas.GetComponent<RectTransform>();
+
             switch (mode) {
                 case GameUIMode.VR: {
-                    var pauseMenuCanvas = pauseMenu.GetComponent<Canvas>();
                     pauseMenuCanvas.renderMode = RenderMode.WorldSpace;
-                    pauseMenuCanvas.worldCamera = vrMouseCamera;
                     screenSpaceCanvas.renderMode = RenderMode.WorldSpace;
-                    var pauseMenuRect = pauseMenuCanvas.GetComponent<RectTransform>();
-                    var uiRect = screenSpaceCanvas.GetComponent<RectTransform>();
+                    pauseMenuCanvas.worldCamera = vrMouseCamera;
+                    screenSpaceCanvas.worldCamera = vrMouseCamera;
+
+                    pauseMenuRect.pivot = new Vector2(0.5f, 0.5f);
 
                     pauseMenuRect.localScale = new Vector3(0.001f, 0.001f, 0.001f);
                     uiRect.localScale = new Vector3(0.001f, 0.001f, 0.001f);
@@ -56,17 +61,22 @@ namespace GameUI {
                     break;
                 }
                 case GameUIMode.Pancake: {
-                    var pauseMenuCanvas = pauseMenu.GetComponent<Canvas>();
-                    pauseMenuCanvas.renderMode = RenderMode.ScreenSpaceCamera;
-                    pauseMenuCanvas.worldCamera = null;
-                    screenSpaceCanvas.renderMode = RenderMode.ScreenSpaceCamera;
-                    var pauseMenuRect = pauseMenuCanvas.GetComponent<RectTransform>();
-                    var uiRect = screenSpaceCanvas.GetComponent<RectTransform>();
+                    var uiCamera = GameObject.FindGameObjectWithTag("UICamera")?.GetComponent<Camera>();
+                    if (uiCamera) {
+                        pauseMenuCanvas.renderMode = RenderMode.ScreenSpaceCamera;
+                        screenSpaceCanvas.renderMode = RenderMode.ScreenSpaceCamera;
+                        pauseMenuCanvas.worldCamera = uiCamera;
+                        screenSpaceCanvas.worldCamera = uiCamera;
 
-                    pauseMenuRect.localScale = Vector3.one;
-                    uiRect.localScale = Vector3.one;
-                    pauseMenuRect.position = Vector3.zero;
-                    pauseMenuRect.sizeDelta = new Vector2(1920, 1080);
+                        pauseMenuRect.localScale = Vector3.one;
+                        uiRect.localScale = Vector3.one;
+                        pauseMenuRect.position = Vector3.zero;
+                        pauseMenuRect.sizeDelta = new Vector2(1920, 1080);
+                    }
+                    else {
+                        throw new Exception("Failed to find UI camera while switching VR mode!");
+                    }
+
                     break;
                 }
             }

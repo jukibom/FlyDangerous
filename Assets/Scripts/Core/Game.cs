@@ -299,9 +299,8 @@ namespace Core {
                 // Allow the rigid body to initialise before setting new parameters!
                 yield return new WaitForEndOfFrame();
 
-                // set up graphics settings (e.g. camera FoV) + VR status (cameras, radial fog etc)
+                // set up graphics settings (e.g. camera FoV)
                 ApplyGameOptions();
-                NotifyVRStatus();
 
 #if !NO_PAID_ASSETS
                 // gpu instancer VR initialisation (paid asset!)
@@ -336,6 +335,10 @@ namespace Core {
                 // resume the game
                 Time.timeScale = 1;
                 SetFlatScreenCameraControllerActive(!IsVREnabled);
+
+                // notify VR status (e.g. setting canvas world space, cameras, radial fog etc)
+                NotifyVRStatus();
+
                 FadeFromBlack();
                 yield return new WaitForSeconds(0.7f);
 
