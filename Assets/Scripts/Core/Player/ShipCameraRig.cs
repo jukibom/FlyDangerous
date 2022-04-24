@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
+using Cinemachine;
 using Gameplay;
 using UnityEngine;
 using CameraType = Gameplay.CameraType;
@@ -13,16 +15,23 @@ namespace Core.Player {
     public class ShipCameraRig : MonoBehaviour {
         private static readonly Vector3 baseTargetPosition = new(0, 0, 20);
 
-        [SerializeField] public User user;
-        [SerializeField] public List<ShipCamera> cameras;
+        [SerializeField] private User user;
+        [SerializeField] private List<ShipCamera> cameras;
+        [SerializeField] private ShipCamera endScreenCamera1;
+        [SerializeField] private ShipCamera endScreenCamera2;
         [SerializeField] private Transform cameraTarget;
         private Vector3 _cameraOffset;
         private Vector2 _currentRotation;
+        private Coroutine _endScreenCameraTransition;
         private Transform _transform;
 
         public ShipCamera ActiveCamera { get; private set; }
 
         public void Reset() {
+            if (_endScreenCameraTransition != null) StopCoroutine(_endScreenCameraTransition);
+            if (ActiveCamera != null) ActiveCamera.SetCameraActive(true);
+            endScreenCamera1.SetCameraActive(false);
+            endScreenCamera2.SetCameraActive(false);
             SoftReset();
             _cameraOffset = Vector3.zero;
             cameraTarget.localPosition = baseTargetPosition;
@@ -140,6 +149,24 @@ namespace Core.Player {
                 var preferredCamera = cameras.Find(c => c.Name == preferredCameraName);
                 SetActiveCamera(preferredCamera != null ? preferredCamera : cameras.Last());
             }
+        }
+
+        public void SwitchToEndScreenCamera() {
+            ActiveCamera.SetCameraActive(false);
+            endScreenCamera1.SetCameraActive(true);
+
+            IEnumerator TransitionToSecondCamera() {
+                yield return new WaitForFixedUpdate();
+                var cinemachine = FindObjectOfType<CinemachineBrain>();
+                if (cinemachine) {
+                    var switchNextTime = cinemachine.ActiveBlend?.Duration ?? 2;
+                    yield return new WaitForSeconds(switchNextTime);
+                    endScreenCamera1.SetCameraActive(false);
+                    endScreenCamera2.SetCameraActive(true);
+                }
+            }
+
+            _endScreenCameraTransition = StartCoroutine(TransitionToSecondCamera());
         }
     }
 }

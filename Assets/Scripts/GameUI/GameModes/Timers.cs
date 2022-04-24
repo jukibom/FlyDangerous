@@ -26,6 +26,7 @@ namespace GameUI.GameModes {
         }
 
         public void ShowTimers(bool animate = true) {
+            gameObject.SetActive(true);
             if (!animate) {
                 _canvasGroup.alpha = 1;
                 return;

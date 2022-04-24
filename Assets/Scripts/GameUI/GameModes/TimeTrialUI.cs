@@ -1,3 +1,4 @@
+using Core.Player;
 using Core.Scores;
 using UnityEngine;
 
@@ -7,8 +8,12 @@ namespace GameUI.GameModes {
         public GameObject gameObject { get; }
 
         public Timers Timers { get; }
+
+        // Show and hide the game mode specific UI 
         void ShowMainUI();
         void HideMainUI();
+
+        // Show and hide whatever game mode result screen there is
         void ShowResultsScreen(Score score, Score previousBest);
         void HideResultsScreen();
     }
@@ -32,6 +37,13 @@ namespace GameUI.GameModes {
         }
 
         public void ShowResultsScreen(Score score, Score previousBest = null) {
+            var player = FdPlayer.FindLocalShipPlayer;
+            if (player) {
+                player.User.ShipCameraRig.SwitchToEndScreenCamera();
+                player.User.DisableGameInput();
+                player.User.EnableGameInput();
+            }
+
             HideMainUI();
             raceResultsScreen.gameObject.SetActive(true);
             raceResultsScreen.Show(score, previousBest);

@@ -99,8 +99,6 @@ namespace Gameplay {
 
             Checkpoints.ForEach(c => { c.Reset(); });
 
-            GameModeUI?.HideResultsScreen();
-
             hitCheckpoints = new List<Checkpoint>();
             if (isActive) {
                 ResetTimer();
