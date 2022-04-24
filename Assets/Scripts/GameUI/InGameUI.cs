@@ -2,6 +2,7 @@ using System;
 using Core;
 using Core.ShipModel;
 using Game_UI;
+using GameUI.GameModes;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -17,22 +18,20 @@ namespace GameUI {
         [SerializeField] private DebugUI debugUI;
         [SerializeField] private PauseSystem pauseSystem;
         [SerializeField] private ShipStats shipStats;
-        [SerializeField] private Timers timers;
         [SerializeField] private MouseWidget mouseWidgetWorldSpace;
         [SerializeField] private MouseWidget mouseWidgetScreenSpace;
         [SerializeField] private TargettingSystem targettingSystem;
-        [SerializeField] private Transform gameModeUI;
+        [SerializeField] private GameModeUIHandler gameModeUIHandler;
         [SerializeField] private CursorIcon cursor;
         [SerializeField] private Camera vrMouseCamera;
 
         public DebugUI DebugUI => debugUI;
         public PauseSystem PauseSystem => pauseSystem;
         public ShipStats ShipStats => shipStats;
-        public Timers Timers => timers;
         public MouseWidget MouseWidgetWorld => mouseWidgetWorldSpace;
         public MouseWidget MouseWidgetScreen => mouseWidgetScreenSpace;
         public TargettingSystem TargettingSystem => targettingSystem;
-        public Transform GameModeUI => gameModeUI;
+        public GameModeUIHandler GameModeUIHandler => gameModeUIHandler;
 
         private void Awake() {
             OnPause(false);

@@ -158,7 +158,6 @@ namespace Menus.Main_Menu.Components {
         private IEnumerator HidePanel(LayoutElement panel, Action onComplete = null) {
             var frameIncrement = Time.fixedDeltaTime / panelAnimationTimeSeconds;
 
-            // levelFlowLayoutGroup.enabled = false;
             var animationPosition = 0f;
             while (animationPosition <= 1) {
                 panel.preferredWidth = MathfExtensions.Remap(0, 1, openPanelPreferredWidthValue, 0, screenTransitionCurve.Evaluate(animationPosition));

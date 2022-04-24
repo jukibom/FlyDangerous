@@ -11,7 +11,7 @@ using Core.Replays;
 using Core.Scores;
 using Core.ShipModel;
 using Game_UI;
-using GameUI;
+using GameUI.GameModes;
 using JetBrains.Annotations;
 using Misc;
 using UnityEngine;
@@ -48,7 +48,7 @@ namespace Gameplay {
                 if (_timers == null) {
                     var ship = FdPlayer.FindLocalShipPlayer;
                     if (ship) {
-                        _timers = ship.User.InGameUI.Timers;
+                        _timers = ship.User.InGameUI.GameModeUIHandler.ActiveGameModeUI.Timers;
                         UpdateTargetTimeElements();
                     }
                 }

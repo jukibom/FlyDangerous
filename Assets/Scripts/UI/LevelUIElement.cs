@@ -1,6 +1,5 @@
 using Core.MapData;
 using Core.Scores;
-using Misc;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -32,8 +31,6 @@ public class LevelUIElement : MonoBehaviour {
         var goldTargetTime = Score.GoldTimeTarget(Level.Data);
         var silverTargetTime = Score.SilverTimeTarget(Level.Data);
         var bronzeTargetTime = Score.BronzeTimeTarget(Level.Data);
-
-        SimpleDebug.Log(platinumTargetTime, personalBest);
 
         bronzeMedal.enabled = score.HasPlayedPreviously && personalBest < bronzeTargetTime;
         silverMedal.enabled = score.HasPlayedPreviously && personalBest < silverTargetTime;

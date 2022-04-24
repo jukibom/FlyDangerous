@@ -3,7 +3,7 @@ using Misc;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace GameUI {
+namespace GameUI.GameModes {
     [RequireComponent(typeof(CanvasGroup))]
     public class Timers : MonoBehaviour {
         [SerializeField] private TimeDisplay totalTimeDisplay;

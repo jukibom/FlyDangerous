@@ -326,6 +326,9 @@ namespace Core {
 
                 yield return _levelLoader.HideLoadingScreen();
 
+                // set the game mode
+                ship.User.inGameUI.GameModeUIHandler.SetGameMode(LoadedLevelData.gameType);
+
                 // if there's a track, initialise it
                 var track = FindObjectOfType<Track>();
                 if (track) track.InitialiseTrack();
