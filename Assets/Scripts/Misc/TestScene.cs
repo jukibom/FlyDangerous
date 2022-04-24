@@ -96,6 +96,9 @@ namespace Misc {
 
                 Game.Instance.NotifyVRStatus();
 
+                // Fade in!
+                Game.Instance.FadeFromBlack();
+
                 // My work here is done
                 spawnLocation.gameObject.SetActive(false);
             }
