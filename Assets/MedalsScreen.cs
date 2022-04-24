@@ -29,6 +29,7 @@ public class MedalsScreen : MonoBehaviour {
 
     private void OnEnable() {
         ClearMedalScreen();
+        resultText.text = "";
     }
 
     private void ClearMedalScreen() {
