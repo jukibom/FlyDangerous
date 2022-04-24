@@ -44,6 +44,10 @@ namespace Core.Scores {
             return new Score(raceTime, splitTime);
         }
 
+        public static float AuthorTimeTarget(LevelData level) {
+            return level.authorTimeTarget;
+        }
+
         public static float GoldTimeTarget(LevelData level) {
             return level.authorTimeTarget * 1.05f;
         }

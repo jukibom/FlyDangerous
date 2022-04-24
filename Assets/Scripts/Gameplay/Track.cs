@@ -30,6 +30,7 @@ namespace Gameplay {
         [SerializeField] private bool isActive;
 
         private bool _complete;
+        private IGameModeUI _gameModeUI;
 
         private Score _previousBestScore;
 
@@ -38,22 +39,20 @@ namespace Gameplay {
         [CanBeNull] private Coroutine _splitDeltaFader;
         [CanBeNull] private Coroutine _splitFader;
         private List<float> _splits = new();
-        private Timers _timers;
 
         private float _timeSeconds;
 
-        // DONT use in Start or OnEnable
-        private Timers Timers {
+        private IGameModeUI GameModeUI {
             get {
-                if (_timers == null) {
+                if (_gameModeUI == null) {
                     var ship = FdPlayer.FindLocalShipPlayer;
                     if (ship) {
-                        _timers = ship.User.InGameUI.GameModeUIHandler.ActiveGameModeUI.Timers;
+                        _gameModeUI = ship.User.InGameUI.GameModeUIHandler.ActiveGameModeUI;
                         UpdateTargetTimeElements();
                     }
                 }
 
-                return _timers;
+                return _gameModeUI;
             }
         }
 
@@ -68,10 +67,10 @@ namespace Gameplay {
 
         private void FixedUpdate() {
             // failing to get user in early stages due to modular loading? 
-            if (isActive && !_complete && Timers != null && Timers.TotalTimeDisplay != null) {
-                Timers.TotalTimeDisplay.TextBox.color = new Color(1f, 1f, 1f, 1f);
+            if (isActive && !_complete && GameModeUI != null && GameModeUI.Timers.TotalTimeDisplay != null) {
+                GameModeUI.Timers.TotalTimeDisplay.TextBox.color = new Color(1f, 1f, 1f, 1f);
                 _timeSeconds += Time.fixedDeltaTime;
-                Timers.TotalTimeDisplay.SetTimeSeconds(Math.Abs(_timeSeconds));
+                GameModeUI.Timers.TotalTimeDisplay.SetTimeSeconds(Math.Abs(_timeSeconds));
             }
         }
 
@@ -87,7 +86,7 @@ namespace Gameplay {
         public void InitialiseTrack() {
             _previousBestScore = Score.ScoreForLevel(Game.Instance.LoadedLevelData);
 
-            if (Game.Instance.LoadedLevelData.gameType == GameType.TimeTrial) Timers.ShowTimers();
+            if (Game.Instance.LoadedLevelData.gameType == GameType.TimeTrial) GameModeUI.Timers.ShowTimers();
 
             var start = Checkpoints.Find(c => c.Type == CheckpointType.Start);
             if (start) {
@@ -99,6 +98,8 @@ namespace Gameplay {
             }
 
             Checkpoints.ForEach(c => { c.Reset(); });
+
+            GameModeUI?.HideResultsScreen();
 
             hitCheckpoints = new List<Checkpoint>();
             if (isActive) {
@@ -113,11 +114,11 @@ namespace Gameplay {
             _splits = new List<float>();
 
             // reset timer text to 0, hide split timer
-            if (Timers) {
-                Timers.TotalTimeDisplay.SetTimeSeconds(0);
-                Timers.TotalTimeDisplay.TextBox.color = new Color(1f, 1f, 1f, 1);
-                Timers.SplitTimeDisplay.TextBox.color = new Color(1f, 1f, 1f, 0);
-                Timers.SplitTimeDeltaDisplay.TextBox.color = new Color(1f, 1f, 1f, 0);
+            if (GameModeUI != null) {
+                GameModeUI.Timers.TotalTimeDisplay.SetTimeSeconds(0);
+                GameModeUI.Timers.TotalTimeDisplay.TextBox.color = new Color(1f, 1f, 1f, 1);
+                GameModeUI.Timers.SplitTimeDisplay.TextBox.color = new Color(1f, 1f, 1f, 0);
+                GameModeUI.Timers.SplitTimeDeltaDisplay.TextBox.color = new Color(1f, 1f, 1f, 0);
             }
         }
 
@@ -182,7 +183,7 @@ namespace Gameplay {
         }
 
         public async void CheckpointHit(Checkpoint checkpoint, AudioSource checkpointHitAudio) {
-            if (isActive && Timers) {
+            if (isActive && GameModeUI.Timers) {
                 var hitCheckpoint = hitCheckpoints.Find(c => c == checkpoint);
                 if (!hitCheckpoint) {
                     // new checkpoint, record it and split timer
@@ -197,35 +198,40 @@ namespace Gameplay {
                             var index = _splits.Count - 1;
                             var previousBestSplit = _previousBestScore.PersonalBestTimeSplits[index];
                             var deltaSplit = _timeSeconds - previousBestSplit;
-                            Timers.SplitTimeDeltaDisplay.SetTimeSeconds(deltaSplit, true);
+                            GameModeUI.Timers.SplitTimeDeltaDisplay.SetTimeSeconds(deltaSplit, true);
                             var color = deltaSplit > 0 ? Color.red : Color.green;
-                            Timers.SplitTimeDeltaDisplay.TextBox.color = color;
-                            _splitDeltaFader = StartCoroutine(FadeTimer(Timers.SplitTimeDeltaDisplay, color));
+                            GameModeUI.Timers.SplitTimeDeltaDisplay.TextBox.color = color;
+                            _splitDeltaFader = StartCoroutine(FadeTimer(GameModeUI.Timers.SplitTimeDeltaDisplay, color));
                         }
                     }
 
                     // update split display and fade out
                     if (checkpoint.Type == CheckpointType.Check) {
-                        Timers.SplitTimeDisplay.SetTimeSeconds(_timeSeconds);
+                        GameModeUI.Timers.SplitTimeDisplay.SetTimeSeconds(_timeSeconds);
                         if (_splitFader != null) StopCoroutine(_splitFader);
-                        _splitFader = StartCoroutine(FadeTimer(Timers.SplitTimeDisplay, Color.white));
+                        _splitFader = StartCoroutine(FadeTimer(GameModeUI.Timers.SplitTimeDisplay, Color.white));
                     }
 
                     if (checkpoint.Type == CheckpointType.End) {
                         if (_splitDeltaFader != null) StopCoroutine(_splitDeltaFader);
 
                         // TODO: Make this more generalised and implement a tinker tier for saving these times
+                        // TODO: Prevent saving a score from _any_ changes mid-game :| this will be a pain in the ass
                         if (!FindObjectOfType<Game>().ShipParameters.ToJsonString()
                                 .Equals(ShipParameters.Defaults.ToJsonString())) {
                             // you dirty debug cheater!
-                            Timers.TotalTimeDisplay.GetComponent<Text>().color = new Color(1, 1, 0, 1);
+                            GameModeUI.Timers.TotalTimeDisplay.GetComponent<Text>().color = new Color(1, 1, 0, 1);
                         }
 
                         else {
-                            Timers.TotalTimeDisplay.GetComponent<Text>().color = new Color(0, 1, 0, 1);
+                            GameModeUI.Timers.TotalTimeDisplay.GetComponent<Text>().color = new Color(0, 1, 0, 1);
+
+                            var score = Score.NewPersonalBest(_timeSeconds, _splits);
+                            GameModeUI.ShowResultsScreen(score, _previousBestScore);
+
                             // if new run OR better score, save!
+                            // TODO: move this to the end screen too
                             if (_previousBestScore.PersonalBestTotalTime == 0 || _timeSeconds < _previousBestScore.PersonalBestTotalTime) {
-                                var score = Score.NewPersonalBest(_timeSeconds, _splits);
                                 _previousBestScore = score;
                                 var scoreData = score.Save(Game.Instance.LoadedLevelData);
                                 Score.SaveToDisk(scoreData, Game.Instance.LoadedLevelData);
@@ -237,11 +243,12 @@ namespace Gameplay {
                                     var replayFileName = replay?.Save(scoreData);
                                     var replayFilepath = Path.Combine(Replay.ReplayDirectory, levelHash, replayFileName ?? string.Empty);
 
+                                    // TODO: yeet this to the result screen
                                     if (FdNetworkManager.Instance.HasLeaderboardServices) {
                                         var flagId = Flag.FromFilename(Preferences.Instance.GetString("playerFlag")).FixedId;
                                         var leaderboard = await FdNetworkManager.Instance.OnlineService!.Leaderboard!.FindOrCreateLeaderboard(levelHash);
                                         var timeMilliseconds = _timeSeconds * 1000;
-                                        // TODO: This can ABSOLUTELY fail, handle it in the end screen below!
+                                        // TODO: This can ABSOLUTELY fail, handle it in the end screen!
                                         await leaderboard.UploadScore((int)timeMilliseconds, flagId, replayFilepath, replayFileName);
                                         Debug.Log("Leaderboard upload succeeded");
                                     }
@@ -252,7 +259,6 @@ namespace Gameplay {
                         }
 
                         FinishTimer();
-                        // TODO: End screen with ability to save replay 
                     }
                 }
             }
@@ -270,8 +276,8 @@ namespace Gameplay {
                 var levelData = Game.Instance.LoadedLevelData;
                 var score = _previousBestScore;
 
-                var targetType = Timers.TargetTimeTypeDisplay;
-                var targetTimer = Timers.TargetTimeDisplay;
+                var targetType = GameModeUI.Timers.TargetTimeTypeDisplay;
+                var targetTimer = GameModeUI.Timers.TargetTimeDisplay;
                 targetTimer.TextBox.color = Color.white;
 
                 var personalBest = score.PersonalBestTotalTime;

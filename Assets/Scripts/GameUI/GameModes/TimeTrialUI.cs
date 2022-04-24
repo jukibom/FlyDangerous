@@ -1,8 +1,7 @@
-using System;
+using Core.Scores;
 using UnityEngine;
 
 namespace GameUI.GameModes {
-
     public interface IGameModeUI {
         // ReSharper disable once InconsistentNaming (used as mono behaviour interface)
         public GameObject gameObject { get; }
@@ -10,19 +9,19 @@ namespace GameUI.GameModes {
         public Timers Timers { get; }
         void ShowMainUI();
         void HideMainUI();
-        void ShowResultsScreen();
+        void ShowResultsScreen(Score score, Score previousBest);
         void HideResultsScreen();
     }
-    
+
     public class TimeTrialUI : MonoBehaviour, IGameModeUI {
         [SerializeField] private Timers timers;
         [SerializeField] private RaceResultsScreen raceResultsScreen;
 
-        public Timers Timers => timers;
-        
         private void Awake() {
             raceResultsScreen.Hide();
         }
+
+        public Timers Timers => timers;
 
         public void ShowMainUI() {
             timers.gameObject.SetActive(true);
@@ -32,8 +31,10 @@ namespace GameUI.GameModes {
             timers.gameObject.SetActive(false);
         }
 
-        public void ShowResultsScreen() {
+        public void ShowResultsScreen(Score score, Score previousBest = null) {
+            HideMainUI();
             raceResultsScreen.gameObject.SetActive(true);
+            raceResultsScreen.Show(score, previousBest);
         }
 
         public void HideResultsScreen() {
