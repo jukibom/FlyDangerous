@@ -55,6 +55,7 @@ namespace Misc {
                 var player = FdPlayer.FindLocalShipPlayer;
                 if (player) {
                     player.User.EnableGameInput();
+
                     var pos = spawnLocation.position;
                     var rot = spawnLocation.rotation;
                     player.AbsoluteWorldPosition = pos;
@@ -92,6 +93,8 @@ namespace Misc {
                         foreach (var ghostPath in ghostPaths) Game.Instance.LoadGhost(Replay.LoadFromFilepath(ghostPath));
                     }
                 }
+
+                Game.Instance.NotifyVRStatus();
 
                 // My work here is done
                 spawnLocation.gameObject.SetActive(false);

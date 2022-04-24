@@ -1,7 +1,9 @@
 using System;
+using Core;
 using Core.ShipModel;
 using Game_UI;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace GameUI {
     public enum GameUIMode {
@@ -9,21 +11,22 @@ namespace GameUI {
         VR
     }
 
-    public class InGameUI : MonoBehaviour {
+    public class InGameUI : MonoBehaviour, IPointerMoveHandler {
         [SerializeField] private Canvas screenSpaceCanvas;
         [SerializeField] private Canvas worldSpaceCanvas;
         [SerializeField] private DebugUI debugUI;
-        [SerializeField] private PauseMenu pauseMenu;
+        [SerializeField] private PauseSystem pauseSystem;
         [SerializeField] private ShipStats shipStats;
         [SerializeField] private Timers timers;
         [SerializeField] private MouseWidget mouseWidgetWorldSpace;
         [SerializeField] private MouseWidget mouseWidgetScreenSpace;
         [SerializeField] private TargettingSystem targettingSystem;
         [SerializeField] private Transform gameModeUI;
+        [SerializeField] private CursorIcon cursor;
         [SerializeField] private Camera vrMouseCamera;
 
         public DebugUI DebugUI => debugUI;
-        public PauseMenu PauseMenu => pauseMenu;
+        public PauseSystem PauseSystem => pauseSystem;
         public ShipStats ShipStats => shipStats;
         public Timers Timers => timers;
         public MouseWidget MouseWidgetWorld => mouseWidgetWorldSpace;
@@ -31,47 +34,59 @@ namespace GameUI {
         public TargettingSystem TargettingSystem => targettingSystem;
         public Transform GameModeUI => gameModeUI;
 
+        private void Awake() {
+            OnPause(false);
+        }
+
+        private void OnEnable() {
+            Game.OnPauseToggle += OnPause;
+        }
+
+        private void OnDisable() {
+            Game.OnPauseToggle -= OnPause;
+        }
+
+        public void OnPointerMove(PointerEventData eventData) {
+            if (
+                RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                    screenSpaceCanvas.GetComponent<RectTransform>(),
+                    eventData.position,
+                    eventData.enterEventCamera,
+                    out var canvasPosition)
+            )
+                cursor.OnPointerMove(canvasPosition);
+        }
+
+        private void OnPause(bool isPaused) {
+            cursor.gameObject.SetActive(isPaused);
+            cursor.OnPointerMove(Vector2.zero);
+        }
+
+        public void OnGameMenuToggle() {
+            if (!pauseSystem.IsPaused) pauseSystem.OnGameMenuToggle();
+        }
+
         public void SetMode(GameUIMode mode) {
-            var pauseMenuCanvas = pauseMenu.GetComponent<Canvas>();
-            var pauseMenuRect = pauseMenuCanvas.GetComponent<RectTransform>();
-            var uiRect = screenSpaceCanvas.GetComponent<RectTransform>();
+            var screenSpaceRect = screenSpaceCanvas.GetComponent<RectTransform>();
 
             switch (mode) {
                 case GameUIMode.VR: {
-                    pauseMenuCanvas.renderMode = RenderMode.WorldSpace;
                     screenSpaceCanvas.renderMode = RenderMode.WorldSpace;
-                    pauseMenuCanvas.worldCamera = vrMouseCamera;
                     screenSpaceCanvas.worldCamera = vrMouseCamera;
-
-                    pauseMenuRect.pivot = new Vector2(0.5f, 0.5f);
-
-                    pauseMenuRect.localScale = new Vector3(0.001f, 0.001f, 0.001f);
-                    uiRect.localScale = new Vector3(0.001f, 0.001f, 0.001f);
-
-                    pauseMenuRect.localRotation = Quaternion.identity;
-                    uiRect.localRotation = Quaternion.identity;
-
-                    pauseMenuRect.localPosition = new Vector3(0, 0.3f, 0.5f);
-                    uiRect.localPosition = new Vector3(0, 0.3f, 0.5f);
-
-                    pauseMenuRect.sizeDelta = new Vector2(1440, 1080);
-                    uiRect.sizeDelta = new Vector2(1280, 1000);
-
+                    screenSpaceRect.localScale = new Vector3(0.001f, 0.001f, 0.001f);
+                    screenSpaceRect.localRotation = Quaternion.identity;
+                    screenSpaceRect.localPosition = new Vector3(0, 0.3f, 0.5f);
+                    screenSpaceRect.sizeDelta = new Vector2(1280, 1000);
+                    // we rely on the cockpit UI in VR mode!
                     ShipStats.SetStatsVisible(false);
                     break;
                 }
                 case GameUIMode.Pancake: {
                     var uiCamera = GameObject.FindGameObjectWithTag("UICamera")?.GetComponent<Camera>();
                     if (uiCamera) {
-                        pauseMenuCanvas.renderMode = RenderMode.ScreenSpaceCamera;
                         screenSpaceCanvas.renderMode = RenderMode.ScreenSpaceCamera;
-                        pauseMenuCanvas.worldCamera = uiCamera;
                         screenSpaceCanvas.worldCamera = uiCamera;
-
-                        pauseMenuRect.localScale = Vector3.one;
-                        uiRect.localScale = Vector3.one;
-                        pauseMenuRect.position = Vector3.zero;
-                        pauseMenuRect.sizeDelta = new Vector2(1920, 1080);
+                        screenSpaceRect.localScale = Vector3.one;
                     }
                     else {
                         throw new Exception("Failed to find UI camera while switching VR mode!");

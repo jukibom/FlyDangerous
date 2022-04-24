@@ -183,17 +183,16 @@ namespace Core.ShipModel {
         #region Internal Helper
 
         protected void PauseAudio(bool paused) {
-            if (Game.Instance.SessionType == SessionType.Singleplayer)
-                foreach (var audioSource in GetComponentsInChildren<AudioSource>())
-                    if (paused) audioSource.Pause();
-                    else audioSource.UnPause();
+            if (Game.Instance.SessionType != SessionType.Singleplayer) return;
+            foreach (var audioSource in GetComponentsInChildren<AudioSource>())
+                if (paused) audioSource.Pause();
+                else audioSource.UnPause();
         }
 
         protected Color ParseColor(string htmlColor) {
-            if (!ColorUtility.TryParseHtmlString(htmlColor, out var color)) {
-                color = Color.red;
-                Debug.LogWarning("Failed to parse html color " + htmlColor);
-            }
+            if (ColorUtility.TryParseHtmlString(htmlColor, out var color)) return color;
+            color = Color.red;
+            Debug.LogWarning("Failed to parse html color " + htmlColor);
 
             return color;
         }

@@ -19,7 +19,7 @@ namespace Core.Player {
         [SerializeField] private ShipCameraRig shipCameraRig;
         [SerializeField] private XRRig xrRig;
         [SerializeField] private InputSystemUIInputModule pauseUIInputModule;
-        [SerializeField] private InGameUI inGameUI;
+        [SerializeField] public InGameUI inGameUI;
 
         [SerializeField] public bool movementEnabled;
         [SerializeField] public bool pauseMenuEnabled = true;
@@ -33,7 +33,6 @@ namespace Core.Player {
         private float _cameraX;
         private float _cameraY;
 
-        private Action<InputAction.CallbackContext> _cancelAction;
         private float _lateralH;
         private float _lateralV;
         private bool _limiter;
@@ -59,18 +58,10 @@ namespace Core.Player {
 
         public ShipCameraRig ShipCameraRig => shipCameraRig;
 
-        /**
-         * Boostrap global ESC / cancel action in UI
-         */
         public void Awake() {
-            _cancelAction = _ => { inGameUI.PauseMenu.OnGameMenuToggle(); };
             DisableGameInput();
+            DisableUIInput();
             ResetMouseToCentre();
-        }
-
-        public void Start() {
-            // if there's no controlling game state loaded, enable own input (usually in editor) 
-            if (!FindObjectOfType<Game>()) EnableGameInput();
         }
 
         public void Update() {
@@ -93,7 +84,7 @@ namespace Core.Player {
 
                 // handle mouse flight input
                 if (
-                    !inGameUI.PauseMenu.IsPaused &&
+                    !inGameUI.PauseSystem.IsPaused &&
                     !_mouseLookActive &&
                     Preferences.Instance.GetBool("enableMouseFlightControls") &&
                     Preferences.Instance.GetString("controlSchemeType") == "advanced"
@@ -146,14 +137,12 @@ namespace Core.Player {
 
         public void OnEnable() {
             _mouseLookActive = Preferences.Instance.GetString("controlSchemeType") == "advanced" && Preferences.Instance.GetBool("mouseLook");
-            pauseUIInputModule.cancel.action.performed += _cancelAction;
             Game.OnVRStatus += SetVRStatus;
             ResetMouseToCentre();
             FdConsole.Instance.Clear();
         }
 
         public void OnDisable() {
-            pauseUIInputModule.cancel.action.performed -= _cancelAction;
             Game.OnVRStatus -= SetVRStatus;
         }
 
@@ -222,15 +211,15 @@ namespace Core.Player {
 
         public void EnableUIInput() {
             pauseUIInputModule.enabled = true;
+            FdConsole.Instance.LogMessage("** UI INPUT ENABLED **");
         }
 
         public void DisableUIInput() {
             pauseUIInputModule.enabled = false;
+            FdConsole.Instance.LogMessage("** UI INPUT DISABLED **");
         }
 
         public void SetVRStatus(bool isVREnabled) {
-            // if VR is enabled, we need to swap our active cameras and make UI panels operate in world space
-            inGameUI.SetMode(isVREnabled ? GameUIMode.VR : GameUIMode.Pancake);
             if (isVREnabled) {
                 Game.Instance.SetFlatScreenCameraControllerActive(false);
                 shipCameraRig.gameObject.SetActive(false);
@@ -241,6 +230,9 @@ namespace Core.Player {
                 shipCameraRig.gameObject.SetActive(true);
                 xrRig.gameObject.SetActive(false);
             }
+
+            // if VR is enabled, we need to swap our active cameras and make UI panels operate in world space
+            inGameUI.SetMode(isVREnabled ? GameUIMode.VR : GameUIMode.Pancake);
         }
 
         public void ResetMouseToCentre() {
@@ -254,13 +246,10 @@ namespace Core.Player {
             inGameUI.MouseWidgetWorld.ResetToCentre();
         }
 
-        /**
-         * Event responders for PlayerInput, only valid in-game.
-         * UI Requires additional bootstrap as above because UI events in Unity are fucking bonkers.
-         */
+        // Event responders for PlayerInput, only valid in-game.
         [UsedImplicitly]
         public void OnShowGameMenu() {
-            if (pauseMenuEnabled) inGameUI.PauseMenu.OnGameMenuToggle();
+            if (pauseMenuEnabled) inGameUI.OnGameMenuToggle();
         }
 
         [UsedImplicitly]

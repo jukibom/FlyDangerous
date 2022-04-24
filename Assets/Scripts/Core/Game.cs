@@ -464,7 +464,7 @@ namespace Core {
         }
 
         public void PauseGameToggle(bool paused) {
-            if (OnPauseToggle != null) OnPauseToggle(paused);
+            OnPauseToggle?.Invoke(paused);
 
             if (paused) {
                 // actual game logic pause only applies to single player
@@ -481,7 +481,7 @@ namespace Core {
             _cinemachine.gameObject.SetActive(active);
         }
 
-        private void NotifyVRStatus() {
+        public void NotifyVRStatus() {
             OnVRStatus?.Invoke(IsVREnabled);
 
             // if user has previously applied a HMD position, reapply

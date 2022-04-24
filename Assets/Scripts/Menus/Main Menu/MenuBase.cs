@@ -12,8 +12,11 @@ namespace Menus.Main_Menu {
         protected Animator animator;
         protected MenuBase caller;
 
-        protected void Awake() {
-            animator = GetComponent<Animator>();
+        protected Animator Animator {
+            get {
+                if (animator == null) animator = GetComponent<Animator>();
+                return animator;
+            }
         }
 
         // Event from user input, may be overridden 
@@ -55,19 +58,19 @@ namespace Menus.Main_Menu {
         // Show the dialog via animation and activate the default button
         protected void Show() {
             gameObject.SetActive(true);
-            animator.SetBool(open, true);
+            Animator.SetBool(open, true);
             if (defaultActiveButton != null) defaultActiveButton.Select();
         }
 
-        protected void PlayOpenSound() {
+        public void PlayOpenSound() {
             UIAudioManager.Instance.Play("ui-dialog-open");
         }
 
-        protected void PlayApplySound() {
+        public void PlayApplySound() {
             UIAudioManager.Instance.Play("ui-confirm");
         }
 
-        protected void PlayCancelSound() {
+        public void PlayCancelSound() {
             UIAudioManager.Instance.Play("ui-cancel");
         }
 
