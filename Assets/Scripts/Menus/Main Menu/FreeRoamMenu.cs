@@ -18,8 +18,18 @@ namespace Menus.Main_Menu {
         [CanBeNull] private LevelData _levelData;
 
         protected override void OnOpen() {
+            var lastPlayedLocation = Preferences.Instance.GetString("lastPlayedFreeRoamLocation");
+            var lastPlayedEnvironment = Preferences.Instance.GetString("lastPlayedFreeRoamEnvironment");
+
+            var location = Location.FromString(lastPlayedLocation);
+            var environment = Environment.FromString(lastPlayedEnvironment);
+
             FdEnum.PopulateDropDown(Location.List(), locationDropdown, option => option.ToUpper());
             FdEnum.PopulateDropDown(Environment.List(), environmentDropdown, option => option.ToUpper());
+
+            locationDropdown.value = location.Id;
+            environmentDropdown.value = environment.Id;
+
             UpdateSeedField();
             _levelData = null;
         }
@@ -42,11 +52,16 @@ namespace Menus.Main_Menu {
 
             var levelData = _levelData ?? new LevelData();
             var location = Location.FromId(locationDropdown.value);
+            var environment = Environment.FromId(environmentDropdown.value);
 
             levelData.gameType = GameType.FreeRoam;
             levelData.terrainSeed = location.IsTerrain ? seedInput.text : "";
-            levelData.environment = Environment.FromId(environmentDropdown.value);
             levelData.location = location;
+            levelData.environment = environment;
+
+            Preferences.Instance.SetString("lastPlayedFreeRoamLocation", location.Name);
+            Preferences.Instance.SetString("lastPlayedFreeRoamEnvironment", environment.Name);
+            Preferences.Instance.Save();
 
             FdNetworkManager.Instance.StartGameLoadSequence(SessionType.Singleplayer, levelData);
         }

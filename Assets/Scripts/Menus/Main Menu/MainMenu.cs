@@ -145,7 +145,6 @@ namespace Menus.Main_Menu {
             Game.Instance.SetFlatScreenCameraControllerActive(false);
 
             FloatingOrigin.Instance.FocalTransform = transform;
-            Game.Instance.FadeFromBlack();
 
             // enable input and forcefully pair ALL devices (I have no idea why we have to do this)
             playerInput.enabled = true;
@@ -153,7 +152,8 @@ namespace Menus.Main_Menu {
                 if (!playerInput.devices.Contains(inputDevice))
                     InputUser.PerformPairingWithDevice(inputDevice, playerInput.user);
 
-            yield return new WaitForSecondsRealtime(0.5f);
+            yield return new WaitForSecondsRealtime(0.1f);
+            Game.Instance.FadeFromBlack();
             ShowStartingPanel();
         }
 
