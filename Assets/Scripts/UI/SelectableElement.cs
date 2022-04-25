@@ -7,10 +7,11 @@ namespace UI {
      * (these events are raised on selectable elements, not their parents)
      */
     public class SelectableElement : EventTrigger {
+        public bool playSound = true;
         private bool _elementInteracting;
 
         public override void OnPointerEnter(PointerEventData eventData) {
-            PlaySound();
+            if (playSound) PlaySound();
             ExecuteEvents.ExecuteHierarchy(transform.parent.gameObject, eventData, ExecuteEvents.pointerEnterHandler);
         }
 
@@ -23,7 +24,7 @@ namespace UI {
         }
 
         public override void OnSelect(BaseEventData eventData) {
-            PlaySound();
+            if (playSound) PlaySound();
 
             // User is currently interacting with the element (dropdown, slider, text field etc)
             _elementInteracting = false;
@@ -47,6 +48,10 @@ namespace UI {
 
         public override void OnScroll(PointerEventData eventData) {
             ExecuteEvents.ExecuteHierarchy(transform.parent.gameObject, eventData, ExecuteEvents.scrollHandler);
+        }
+
+        public override void OnUpdateSelected(BaseEventData eventData) {
+            ExecuteEvents.ExecuteHierarchy(transform.parent.gameObject, eventData, ExecuteEvents.updateSelectedHandler);
         }
 
         private void PlaySound() {

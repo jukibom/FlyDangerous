@@ -10,7 +10,7 @@ namespace UI {
         private int _index;
         private ScrollRect _scrollRect;
 
-        public void Start() {
+        public void OnEnable() {
             _scrollRect = GetComponent<ScrollRect>();
         }
 
