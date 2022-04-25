@@ -201,12 +201,15 @@ namespace Core {
                 switch (reflectionSetting) {
                     case "high":
                         shipPlayer.ReflectionProbe.resolution = 512;
+                        shipPlayer.ReflectionProbe.timeSlicingMode = ReflectionProbeTimeSlicingMode.AllFacesAtOnce;
                         break;
                     case "medium":
                         shipPlayer.ReflectionProbe.resolution = 256;
+                        shipPlayer.ReflectionProbe.timeSlicingMode = ReflectionProbeTimeSlicingMode.IndividualFaces;
                         break;
                     default: // low and any other string value
                         shipPlayer.ReflectionProbe.resolution = 128;
+                        shipPlayer.ReflectionProbe.timeSlicingMode = ReflectionProbeTimeSlicingMode.IndividualFaces;
                         break;
                 }
             }
