@@ -37,10 +37,6 @@ namespace Menus.Main_Menu {
 
             var lastPlayedVersion = Preferences.Instance.GetString("lastPlayedVersion");
             topMenu.SetPatchNotesUpdated(lastPlayedVersion != Application.version);
-            if (lastPlayedVersion == "none") ShowNewPlayerWelcomeDialog();
-
-            Preferences.Instance.SetString("lastPlayedVersion", Application.version);
-            Preferences.Instance.Save();
         }
 
         private void FixedUpdate() {
@@ -64,11 +60,6 @@ namespace Menus.Main_Menu {
         private void OnDisable() {
             SceneManager.sceneLoaded -= OnEnvironmentLoadComplete;
             Game.OnVRStatus -= OnVRStatus;
-        }
-
-        private void ShowNewPlayerWelcomeDialog() {
-            topMenu.gameObject.SetActive(false);
-            newPlayerWelcomeDialog.Open(profileMenu);
         }
 
         public void ShowDisconnectedDialog(string reason) {
@@ -161,6 +152,22 @@ namespace Menus.Main_Menu {
             foreach (var inputDevice in InputSystem.devices)
                 if (!playerInput.devices.Contains(inputDevice))
                     InputUser.PerformPairingWithDevice(inputDevice, playerInput.user);
+
+            yield return new WaitForSecondsRealtime(0.5f);
+            ShowStartingPanel();
+        }
+
+        private void ShowStartingPanel() {
+            topMenu.Hide();
+
+            // TODO: go back to last known panel? (e.g. time trial etc)
+            // (handling the offline server stuff will probably be pain!)
+            var lastPlayedVersion = Preferences.Instance.GetString("lastPlayedVersion");
+            if (lastPlayedVersion == "none") newPlayerWelcomeDialog.Open(profileMenu);
+            else topMenu.gameObject.SetActive(true);
+
+            Preferences.Instance.SetString("lastPlayedVersion", Application.version);
+            Preferences.Instance.Save();
         }
 
         private void OnEnvironmentLoadComplete(Scene scene, LoadSceneMode mode) {
