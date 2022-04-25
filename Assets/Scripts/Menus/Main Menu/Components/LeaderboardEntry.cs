@@ -36,7 +36,7 @@ namespace Menus.Main_Menu.Components {
             }
         }
 
-        public async Task DownloadReplay(string toLocation) {
+        public async Task<string> DownloadReplay(string toLocation) {
             if (_entry != null) {
                 var onlineFile = await _entry.Replay();
 
@@ -50,7 +50,11 @@ namespace Menus.Main_Menu.Components {
                 file.Write(bytes, 0, bytes.Length);
                 file.Close();
                 onlineFile.Data.Close();
+
+                return saveLoc;
             }
+
+            return "";
         }
     }
 }

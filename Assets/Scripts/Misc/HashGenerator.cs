@@ -2,7 +2,7 @@
 using System.Text;
 
 namespace Misc {
-    public static class Hash {
+    public static class HashGenerator {
         public static string ComputeSha256Hash(string rawData) {
             // Create a SHA256   
             using var sha256Hash = SHA256.Create();

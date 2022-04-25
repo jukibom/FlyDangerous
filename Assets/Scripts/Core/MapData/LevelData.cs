@@ -73,7 +73,7 @@ namespace Core.MapData {
                 checkpoints.ConvertAll(checkpoint => checkpoint.position.ToString() + checkpoint.rotation);
             var checkpointText = "";
             foreach (var checkpointString in checkpointStrings) checkpointText += checkpointString;
-            return Hash.ComputeSha256Hash(
+            return HashGenerator.ComputeSha256Hash(
                 name + checkpointText + location.Name);
         }
 

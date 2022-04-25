@@ -15,12 +15,31 @@ namespace Menus.Main_Menu.Components {
 
         public void Populate(LevelData levelData) {
             _levelData = levelData;
-            PopulateGhostsForLevel();
             PopulateLeaderboardForLevel();
+            PopulateGhostsForLevel();
+        }
+
+        public List<Replay> GetSelectedReplays() {
+            return ghostList.GetComponentsInChildren<GhostEntry>().ToList().FindAll(entry => entry.checkbox.isChecked).ConvertAll(entry => entry.replay);
+        }
+
+        public async void DownloadGhost(LeaderboardEntry leaderboardEntry) {
+            var currentSelectedReplays = GetSelectedReplays();
+            var directory = Path.Combine(Replay.ReplayDirectory, _levelData.LevelHash());
+            var filePath = await leaderboardEntry.DownloadReplay(directory);
+            if (filePath != "") {
+                var newReplay = Replay.LoadFromFilepath(filePath);
+                PopulateGhostsForLevel();
+
+                SelectReplaysInList(currentSelectedReplays);
+                SelectReplayInList(newReplay);
+            }
         }
 
         private void PopulateGhostsForLevel() {
             ghostList.PopulateGhostsForLevel(_levelData);
+            if (Game.Instance.ActiveGameReplays != null)
+                SelectReplaysInList(Game.Instance.ActiveGameReplays);
         }
 
         private async void PopulateLeaderboardForLevel() {
@@ -31,15 +50,17 @@ namespace Menus.Main_Menu.Components {
             }
         }
 
-        public List<Replay> GetSelectedReplays() {
-            return ghostList.GetComponentsInChildren<GhostEntry>().ToList().FindAll(entry => entry.isEnabled.isChecked).ConvertAll(entry => entry.replay);
+        private void SelectReplaysInList(List<Replay> replays) {
+            ghostList.GetComponentsInChildren<GhostEntry>().ToList().ForEach(ghost => {
+                if (replays.Exists(replay => replay.Hash == ghost.replay.Hash))
+                    ghost.checkbox.isChecked = true;
+            });
         }
 
-        public async void DownloadGhost(LeaderboardEntry leaderboardEntry) {
-            var path = Path.Combine(Replay.ReplayDirectory, _levelData.LevelHash());
-            await leaderboardEntry.DownloadReplay(path);
-            PopulateGhostsForLevel();
-            // TODO: set the ghost as enabled if possible
+        private void SelectReplayInList(Replay replay) {
+            ghostList.GetComponentsInChildren<GhostEntry>().ToList().ForEach(ghost => {
+                if (ghost.replay.Hash == replay.Hash) ghost.checkbox.isChecked = true;
+            });
         }
     }
 }

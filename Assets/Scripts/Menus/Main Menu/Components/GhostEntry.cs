@@ -8,7 +8,7 @@ namespace Menus.Main_Menu.Components {
         [SerializeField] public Text playerName;
         [SerializeField] public Text entryDate;
         [SerializeField] public Text score;
-        [SerializeField] public Checkbox isEnabled;
+        [SerializeField] public Checkbox checkbox;
         public Replay replay;
     }
 }

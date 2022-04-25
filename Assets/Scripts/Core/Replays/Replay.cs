@@ -67,6 +67,10 @@ namespace Core.Replays {
 
         public bool CanWrite => InputFrameStream.CanWrite && KeyFrameStream.CanWrite;
 
+        // generate a hash from the score hash and the creation date
+        public string Hash => HashGenerator.ComputeSha256Hash(ScoreData.hash + ReplayMeta.CreationDate.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss.fffffffK"));
+
+
         /**
          * Write the replay to a new folder with the completed score.
          * This may fail!
@@ -110,7 +114,7 @@ namespace Core.Replays {
 
             using var reader = new StreamReader(fileStream);
 
-            var fileName = Hash.ComputeSha256Hash(reader.ReadToEnd()) + ".fdr";
+            var fileName = HashGenerator.ComputeSha256Hash(reader.ReadToEnd()) + ".fdr";
             var folder = LevelData.LevelHash();
             var filePath = Path.Combine(ReplayDirectory, folder, fileName);
             fileStream.Close();
@@ -190,8 +194,6 @@ namespace Core.Replays {
          * Fetch all replays on the file system for the specified level
          */
         public static List<Replay> ReplaysForLevel(LevelData levelData) {
-            Debug.Log(Path.Combine(ReplayDirectory, levelData.LevelHash()));
-
             if (Directory.Exists(Path.Combine(ReplayDirectory, levelData.LevelHash())))
                 return Directory.GetFiles(Path.Combine(ReplayDirectory, levelData.LevelHash()))
                     .ToList()

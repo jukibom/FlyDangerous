@@ -89,7 +89,7 @@ namespace Core.Scores {
                 levelData.checkpoints.ConvertAll(checkpoint => checkpoint.position.ToString() + checkpoint.rotation);
             var checkpointText = "";
             foreach (var checkpoint in checkpoints) checkpointText += checkpoint;
-            return Hash.ComputeSha256Hash(score.ToString(CultureInfo.InvariantCulture) + checkpointText + levelData.location.Name);
+            return HashGenerator.ComputeSha256Hash(score.ToString(CultureInfo.InvariantCulture) + checkpointText + levelData.location.Name);
         }
 
         public ScoreData Save(LevelData levelData) {

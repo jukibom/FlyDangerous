@@ -34,7 +34,7 @@ namespace Menus.Main_Menu.Components {
                 ghostEntry.replay = replay;
 
                 // enable the best score by default
-                ghostEntry.isEnabled.isChecked = _replays.First() == replay;
+                ghostEntry.checkbox.isChecked = _replays.First() == replay;
             }
         }
     }
