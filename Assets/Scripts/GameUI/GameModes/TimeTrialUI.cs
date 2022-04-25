@@ -50,7 +50,7 @@ namespace GameUI.GameModes {
         }
 
         public void HideResultsScreen() {
-            raceResultsScreen.gameObject.SetActive(false);
+            raceResultsScreen.Hide();
         }
     }
 }

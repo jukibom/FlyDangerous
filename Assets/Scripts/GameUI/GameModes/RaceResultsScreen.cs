@@ -14,6 +14,7 @@ namespace GameUI.GameModes {
         [SerializeField] private GameObject uploadScreen;
         [SerializeField] private LevelCompetitionPanel competitionPanel;
         [SerializeField] private GameObject uiButtons;
+        [SerializeField] private Button defaultSelectedButton;
 
         public void Hide() {
             resultsScreenBackground.enabled = false;
@@ -28,20 +29,27 @@ namespace GameUI.GameModes {
             StartCoroutine(ShowEndResultsScreen(score, previousBest, isValid, replayFilename, replayFilepath));
         }
 
-        private IEnumerator ShowEndResultsScreen(Score score, Score previousBest, bool isValid, string replayFilename, string replayFilepath) {
+        private IEnumerator ShowEndResultsScreen(Score score, Score previousBest, bool isValid, string replayFileName, string replayFilePath) {
+            var levelData = Game.Instance.LoadedLevelData;
+
             yield return new WaitForSeconds(1f);
             yield return ShowMedalScreen(score, previousBest, isValid);
             yield return new WaitForSecondsRealtime(1);
             var player = FdPlayer.FindLocalShipPlayer;
-            if (player) {
-                player.User.EnableUIInput();
-                player.User.InGameUI.CursorIsActive(true);
-                Game.Instance.FreeCursor();
-            }
+            if (player) player.User.EnableUIInput();
 
-            medalsScreen.gameObject.SetActive(true);
+            medalsScreen.gameObject.SetActive(false);
 
-            // TODO: and the rest yay
+            var uploadTask = UploadLeaderboardResultIfValid(score.PersonalBestTotalTime, levelData.LevelHash(), replayFileName,
+                replayFilePath);
+            yield return new WaitUntil(() => uploadTask.IsCompleted);
+
+            // TODO: animation
+            competitionPanel.gameObject.SetActive(true);
+            uiButtons.gameObject.SetActive(true);
+            defaultSelectedButton.Select();
+
+            competitionPanel.Populate(levelData);
         }
 
         private IEnumerator ShowMedalScreen(Score score, Score previousBest, bool isValid) {
@@ -70,16 +78,38 @@ namespace GameUI.GameModes {
             yield return medalsScreen.ShowAnimation(medalCount, isNewPersonalBest, personalBest, previousPersonalBest, isValid);
         }
 
-        private async Task UploadLeaderboardResult(float timeSeconds, string levelHash, string replayFileName, string replayFilePath) {
+        private async Task UploadLeaderboardResultIfValid(float timeSeconds, string levelHash, string replayFileName, string replayFilePath) {
             if (FdNetworkManager.Instance.HasLeaderboardServices && replayFileName != "" && replayFilePath != "") {
+                // TODO: menu animation
+                uploadScreen.gameObject.SetActive(true);
+
                 var flagId = Flag.FromFilename(Preferences.Instance.GetString("playerFlag")).FixedId;
                 var leaderboard = await FdNetworkManager.Instance.OnlineService!.Leaderboard!.FindOrCreateLeaderboard(levelHash);
                 var timeMilliseconds = timeSeconds * 1000;
 
-                // TODO: This can ABSOLUTELY fail, handle it in the end screen!
-                await leaderboard.UploadScore((int)timeMilliseconds, flagId, replayFilePath, replayFileName);
-                Debug.Log("Leaderboard upload succeeded");
+                try {
+                    await leaderboard.UploadScore((int)timeMilliseconds, flagId, replayFilePath, replayFileName);
+                    Debug.Log("Leaderboard upload succeeded");
+                }
+                catch {
+                    // TODO: Retry screen
+                    Debug.Log("Failed to upload!");
+                }
+
+                uploadScreen.gameObject.SetActive(false);
             }
+        }
+
+        public void QuitToMenu() {
+            Game.Instance.QuitToMenu();
+        }
+
+        public void Retry() {
+            Game.Instance.ActiveGameReplays = competitionPanel.GetSelectedReplays();
+            Game.Instance.RestartSession();
+        }
+
+        public void NextLevel() {
         }
     }
 }

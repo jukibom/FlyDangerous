@@ -17,10 +17,10 @@ namespace Menus.Main_Menu.Components {
             noGhostText.SetActive(true);
         }
 
-        public void PopulateGhostsForLevel(Level level) {
+        public void PopulateGhostsForLevel(LevelData levelData) {
             foreach (var ghostEntry in ghostEntryContainer.GetComponentsInChildren<GhostEntry>()) Destroy(ghostEntry.gameObject);
 
-            _replays = Replay.ReplaysForLevel(level.Data);
+            _replays = Replay.ReplaysForLevel(levelData);
             if (_replays.Count > 0) noGhostText.SetActive(false);
 
             _replays = _replays.OrderBy(r => r.ScoreData.raceTime).ToList();

@@ -13,6 +13,7 @@ using MapMagic.Core;
 using Menus.Main_Menu;
 using Mirror;
 using Misc;
+using UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
@@ -344,6 +345,8 @@ namespace Core {
 
                 // notify VR status (e.g. setting canvas world space, cameras, radial fog etc)
                 NotifyVRStatus();
+
+                FdConsole.Instance.LogMessage("Loaded level " + levelData.LevelHash());
 
                 FadeFromBlack();
                 yield return new WaitForSeconds(0.7f);

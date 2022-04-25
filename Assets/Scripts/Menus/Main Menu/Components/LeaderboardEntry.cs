@@ -18,7 +18,7 @@ namespace Menus.Main_Menu.Components {
         [CanBeNull] private ILeaderboardEntry _entry;
 
         private void OnEnable() {
-            var levelSelect = GetComponentInParent<LevelSelectPanel>();
+            var levelSelect = GetComponentInParent<LevelCompetitionPanel>();
             if (levelSelect) downloadButton.onClick.AddListener(() => levelSelect.DownloadGhost(this));
         }
 
@@ -36,7 +36,7 @@ namespace Menus.Main_Menu.Components {
             }
         }
 
-        public async Task<string> DownloadReplay(string toLocation) {
+        public async Task DownloadReplay(string toLocation) {
             if (_entry != null) {
                 var onlineFile = await _entry.Replay();
 
@@ -44,17 +44,13 @@ namespace Menus.Main_Menu.Components {
                 var directoryLoc = Path.GetDirectoryName(saveLoc);
                 if (directoryLoc != null) Directory.CreateDirectory(directoryLoc);
 
-
                 await using var file = new FileStream(saveLoc, FileMode.Create, FileAccess.Write);
                 var bytes = new byte[onlineFile.Data.Length];
                 onlineFile.Data.Read(bytes, 0, (int)onlineFile.Data.Length);
                 file.Write(bytes, 0, bytes.Length);
                 file.Close();
                 onlineFile.Data.Close();
-                return onlineFile.Filename;
             }
-
-            return "";
         }
     }
 }

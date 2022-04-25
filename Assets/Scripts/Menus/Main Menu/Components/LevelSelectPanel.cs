@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Audio;
 using Core.MapData;
@@ -85,8 +84,10 @@ namespace Menus.Main_Menu.Components {
         }
 
         private void OnLevelSelected(UIButton uiButton) {
+            var level = uiButton.GetComponent<LevelUIElement>().Level;
+            HighlightSelectedLevel(level);
             UIAudioManager.Instance.Play("ui-dialog-open");
-            SetSelectedLevel(uiButton.GetComponent<LevelUIElement>().Level);
+            SetSelectedLevel(level);
         }
 
         private void HighlightSelectedLevel(Level level) {
@@ -126,17 +127,10 @@ namespace Menus.Main_Menu.Components {
             });
         }
 
-        public async void DownloadGhost(LeaderboardEntry leaderboardEntry) {
-            var path = Path.Combine(Replay.ReplayDirectory, SelectedLevel.Data.LevelHash());
-            var filename = await leaderboardEntry.DownloadReplay(path);
-            competitionPanel.PopulateGhostsForLevel(SelectedLevel);
-        }
-
         private void SetSelectedLevel(Level level) {
             SelectedLevel = level;
             SwitchToSummaryScreen();
-            competitionPanel.PopulateGhostsForLevel(SelectedLevel);
-            competitionPanel.PopulateLeaderboardForLevel(SelectedLevel);
+            competitionPanel.Populate(SelectedLevel.Data);
         }
 
         private void SwitchToSummaryScreen() {

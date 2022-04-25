@@ -205,6 +205,7 @@ namespace Core.Player {
             shipPlayer.SetThrottle(0);
             shipPlayer.SetLateralH(0);
             shipPlayer.SetLateralV(0);
+            shipPlayer.Boost(false);
 
             FdConsole.Instance.LogMessage("** USER INPUT DISABLED **");
         }

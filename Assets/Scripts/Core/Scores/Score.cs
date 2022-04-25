@@ -40,7 +40,7 @@ namespace Core.Scores {
             return new Score(levelData);
         }
 
-        public static Score NewPersonalBest(float raceTime, List<float> splitTime) {
+        public static Score FromRaceTime(float raceTime, List<float> splitTime) {
             return new Score(raceTime, splitTime);
         }
 
