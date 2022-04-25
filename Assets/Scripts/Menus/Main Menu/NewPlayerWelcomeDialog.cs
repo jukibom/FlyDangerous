@@ -13,6 +13,8 @@ namespace Menus.Main_Menu {
         [SerializeField] private Checkbox autoShipRotation;
         [SerializeField] private DropdownOption defaultFlightAssist;
 
+        [SerializeField] private TopMenu topMenu;
+
         private string _controlSchemeType = "arcade";
 
         private void Start() {
@@ -29,7 +31,7 @@ namespace Menus.Main_Menu {
             Preferences.Instance.Save();
 
             PlayApplySound();
-            if (caller != null) caller.Open(null);
+            if (caller != null) caller.Open(topMenu);
             Hide();
         }
 

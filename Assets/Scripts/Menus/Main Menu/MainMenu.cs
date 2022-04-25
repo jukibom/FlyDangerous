@@ -21,6 +21,7 @@ namespace Menus.Main_Menu {
 
         [SerializeField] private NewPlayerWelcomeDialog newPlayerWelcomeDialog;
         [SerializeField] private TopMenu topMenu;
+        [SerializeField] private ProfileMenu profileMenu;
         [SerializeField] private DisconnectionDialog disconnectionDialog;
 
         [SerializeField] private bool shouldMove;
@@ -67,7 +68,7 @@ namespace Menus.Main_Menu {
 
         private void ShowNewPlayerWelcomeDialog() {
             topMenu.gameObject.SetActive(false);
-            newPlayerWelcomeDialog.Open(topMenu);
+            newPlayerWelcomeDialog.Open(profileMenu);
         }
 
         public void ShowDisconnectedDialog(string reason) {
