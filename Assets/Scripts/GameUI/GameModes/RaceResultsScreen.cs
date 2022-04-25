@@ -2,7 +2,6 @@ using System.Collections;
 using Core;
 using Core.Scores;
 using Menus.Main_Menu.Components;
-using Misc;
 using UnityEngine;
 
 public class RaceResultsScreen : MonoBehaviour {
@@ -32,7 +31,7 @@ public class RaceResultsScreen : MonoBehaviour {
         medalsScreen.gameObject.SetActive(true);
 
         var personalBest = score.PersonalBestTotalTime;
-        var result = TimeExtensions.TimeSecondsToString(personalBest);
+        var previousPersonalBest = previousBest is { HasPlayedPreviously: true } ? previousBest.PersonalBestTotalTime : 0;
         var isNewPersonalBest = previousBest is { HasPlayedPreviously: false } || previousBest?.PersonalBestTotalTime > personalBest;
         var levelData = Game.Instance.LoadedLevelData;
 
@@ -51,6 +50,6 @@ public class RaceResultsScreen : MonoBehaviour {
         if (personalBest < authorTargetTime)
             medalCount++;
 
-        yield return medalsScreen.ShowAnimation(medalCount, isNewPersonalBest, result);
+        yield return medalsScreen.ShowAnimation(medalCount, isNewPersonalBest, personalBest, previousPersonalBest);
     }
 }

@@ -14,6 +14,7 @@ public class MedalsScreen : MonoBehaviour {
     [SerializeField] private GameObject silverMedal;
     [SerializeField] private GameObject goldMedal;
     [SerializeField] private GameObject authorMedal;
+    [SerializeField] private Text resultDeltaText;
     [SerializeField] private Text resultText;
     [SerializeField] private AudioSource medalDingAudio;
     [SerializeField] private AudioSource medalThudAudio;
@@ -30,6 +31,7 @@ public class MedalsScreen : MonoBehaviour {
     private void OnEnable() {
         ClearMedalScreen();
         resultText.text = "";
+        resultDeltaText.text = "";
     }
 
     private void ClearMedalScreen() {
@@ -43,12 +45,12 @@ public class MedalsScreen : MonoBehaviour {
 
     [Button("Test Animation")]
     private void TestAnimation() {
-        StartCoroutine(ShowAnimation(4, true, "00:32:23"));
+        StartCoroutine(ShowAnimation(4, true, 32.23f, 30));
     }
 
-    public IEnumerator ShowAnimation(uint medalCount, bool personalBest, string result) {
+    public IEnumerator ShowAnimation(uint medalCount, bool personalBest, float result, float previousResult) {
         ClearMedalScreen();
-        resultText.text = result;
+        resultText.text = TimeExtensions.TimeSecondsToString(result);
 
         noMedalAwarded.SetActive(medalCount == 0);
 
@@ -80,6 +82,13 @@ public class MedalsScreen : MonoBehaviour {
 
         yield return new WaitForSeconds(animationInterval);
         newPersonalBest.SetActive(personalBest);
+
+        if (previousResult > 0) {
+            var delta = result - previousResult;
+            resultDeltaText.text = TimeExtensions.TimeSecondsToString(delta);
+            resultDeltaText.color = delta > 0 ? Color.red : Color.green;
+        }
+
         if (personalBest) scoreCheerAudio.Play();
     }
 
