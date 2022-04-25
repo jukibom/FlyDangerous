@@ -118,7 +118,7 @@ namespace GameUI.GameModes {
             if (Game.Instance.loadedMainLevel != null) {
                 var nextLevel = Level.FromId(Game.Instance.loadedMainLevel.Id + 1);
 
-                var replaysForNextLevel = Replay.ReplaysForLevel(nextLevel.Data);
+                var replaysForNextLevel = Replay.ReplaysForLevel(nextLevel.Data).OrderBy(r => r.ScoreData.raceTime).ToList();
                 Game.Instance.ActiveGameReplays = new List<Replay>();
                 if (replaysForNextLevel.Count > 0) Game.Instance.ActiveGameReplays.Add(replaysForNextLevel.First());
 
