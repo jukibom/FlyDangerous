@@ -55,9 +55,9 @@ namespace GameUI.GameModes {
         private IEnumerator ShowMedalScreen(Score score, Score previousBest, bool isValid) {
             medalsScreen.gameObject.SetActive(true);
 
-            var personalBest = score.PersonalBestTotalTime;
+            var result = score.PersonalBestTotalTime;
             var previousPersonalBest = previousBest is { HasPlayedPreviously: true } ? previousBest.PersonalBestTotalTime : 0;
-            var isNewPersonalBest = previousBest is { HasPlayedPreviously: false } || previousBest?.PersonalBestTotalTime > personalBest;
+            var isNewPersonalBest = previousBest is { HasPlayedPreviously: false } || previousBest?.PersonalBestTotalTime > result;
             var levelData = Game.Instance.LoadedLevelData;
 
             var authorTargetTime = Score.AuthorTimeTarget(levelData);
@@ -66,16 +66,16 @@ namespace GameUI.GameModes {
             var bronzeTargetTime = Score.BronzeTimeTarget(levelData);
 
             uint medalCount = 0;
-            if (personalBest < bronzeTargetTime)
+            if (result < bronzeTargetTime)
                 medalCount++;
-            if (personalBest < silverTargetTime)
+            if (result < silverTargetTime)
                 medalCount++;
-            if (personalBest < goldTargetTime)
+            if (result < goldTargetTime)
                 medalCount++;
-            if (personalBest < authorTargetTime)
+            if (result < authorTargetTime)
                 medalCount++;
 
-            yield return medalsScreen.ShowAnimation(medalCount, isNewPersonalBest, personalBest, previousPersonalBest, isValid);
+            yield return medalsScreen.ShowAnimation(medalCount, isNewPersonalBest, result, previousPersonalBest, isValid);
         }
 
         private async Task UploadLeaderboardResultIfValid(float timeSeconds, string levelHash, string replayFileName, string replayFilePath) {

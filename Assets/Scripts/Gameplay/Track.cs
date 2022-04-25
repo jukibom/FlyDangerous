@@ -220,6 +220,7 @@ namespace Gameplay {
                         var replayFileName = "";
                         var replayFilePath = "";
                         var score = Score.FromRaceTime(_timeSeconds, _splits);
+                        var previous = _previousBestScore;
 
                         CheckValidity();
                         if (_isValid) {
@@ -242,7 +243,7 @@ namespace Gameplay {
                             UpdateTargetTimeElements();
                         }
 
-                        GameModeUI.ShowResultsScreen(score, _previousBestScore, _isValid, replayFileName, replayFilePath);
+                        GameModeUI.ShowResultsScreen(score, previous, _isValid, replayFileName, replayFilePath);
 
                         FinishTimer();
                     }
