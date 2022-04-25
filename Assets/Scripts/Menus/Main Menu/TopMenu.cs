@@ -41,6 +41,7 @@ namespace Menus.Main_Menu {
 
         public void OpenProfileMenu() {
             Progress(profileMenu);
+            profileMenu.SetCancelButtonEnabled(true);
         }
 
         public void OpenOptionsPanel() {

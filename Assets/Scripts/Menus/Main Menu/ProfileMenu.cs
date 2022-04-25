@@ -31,6 +31,8 @@ namespace Menus.Main_Menu {
         [SerializeField] private Image trailPreview;
         [SerializeField] private Image lightPreview;
 
+        [SerializeField] private Button cancelButton;
+
         [SerializeField] private FlexibleColorPicker playerShipPrimaryColorPicker;
         [SerializeField] private FlexibleColorPicker playerShipAccentColorPicker;
         [SerializeField] private FlexibleColorPicker playerShipThrusterColorPicker;
@@ -98,6 +100,7 @@ namespace Menus.Main_Menu {
             FdEnum.PopulateDropDown(Flag.List(), countryDropdown, null, flag => flagSpriteAtlas.GetSprite(flag.Filename));
             _ships = ShipMeta.List().ToList();
             LoadFromPreferences();
+            cancelButton.interactable = false;
         }
 
         public void Apply() {
@@ -147,6 +150,10 @@ namespace Menus.Main_Menu {
         public void SetShipLightColor(string htmlColor) {
             _playerShipHeadLightsColor = htmlColor;
             lightPreview.color = ParseColor(htmlColor);
+        }
+
+        public void SetCancelButtonEnabled(bool active) {
+            cancelButton.interactable = active;
         }
 
         private void LoadFromPreferences() {
@@ -202,9 +209,15 @@ namespace Menus.Main_Menu {
         private void UpdateShipSelectionButtonState() {
             prevButton.button.interactable = true;
             nextButton.button.interactable = true;
-            if (_selectedShip.Id == 0) prevButton.button.interactable = false;
+            if (_selectedShip.Id == 0) {
+                prevButton.button.interactable = false;
+                nextButton.button.Select();
+            }
 
-            if (_selectedShip.Id == _ships.Count - 1) nextButton.button.interactable = false;
+            if (_selectedShip.Id == _ships.Count - 1) {
+                nextButton.button.interactable = false;
+                prevButton.button.Select();
+            }
         }
 
         private void UpdateShipCounter() {
