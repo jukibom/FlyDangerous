@@ -30,6 +30,7 @@ namespace Menus.Main_Menu {
         private static bool FirstRun => Game.Instance.MenuFirstRun;
 
         private void Start() {
+            topMenu.Hide();
             // if(SteamManager.Initialized) {
             //     string name = SteamFriends.GetPersonaName();
             //     Debug.Log($"Your Steam name is {name}.");
