@@ -1,7 +1,11 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Core;
+using Core.MapData;
 using Core.Player;
+using Core.Replays;
 using Core.Scores;
 using Menus.Main_Menu.Components;
 using UnityEngine;
@@ -110,6 +114,17 @@ namespace GameUI.GameModes {
         }
 
         public void NextLevel() {
+            // TODO: probably something better than this hot bullshit but I am very much at the end of my tether
+            if (Game.Instance.loadedMainLevel != null) {
+                var nextLevel = Level.FromId(Game.Instance.loadedMainLevel.Id + 1);
+
+                var replaysForNextLevel = Replay.ReplaysForLevel(nextLevel.Data);
+                Game.Instance.ActiveGameReplays = new List<Replay>();
+                if (replaysForNextLevel.Count > 0) Game.Instance.ActiveGameReplays.Add(replaysForNextLevel.First());
+
+                FdNetworkManager.Instance.StartGameLoadSequence(SessionType.Singleplayer, nextLevel.Data);
+                Game.Instance.loadedMainLevel = nextLevel;
+            }
         }
     }
 }

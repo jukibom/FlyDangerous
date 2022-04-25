@@ -72,6 +72,8 @@ namespace Core {
         private Coroutine _loadingRoutine;
         private ShipParameters _shipParameters;
 
+        [CanBeNull] public Level loadedMainLevel;
+
         // The level data most recently used to load a map
         public LevelData LoadedLevelData => _levelLoader.LoadedLevelData;
 

@@ -205,9 +205,16 @@ namespace Core {
         public void StartGameLoadSequence(SessionType sessionType, LevelData levelData) {
             if (NetworkServer.active) {
                 // Transition any lobby players to loading state
-                if (Game.Instance.SessionStatus == SessionStatus.LobbyMenu) // iterate over a COPY of the lobby players (the List is mutated by transitioning!)
+                if (Game.Instance.SessionStatus == SessionStatus.LobbyMenu)
+                    // iterate over a COPY of the lobby players (the List is mutated by transitioning!)
                     foreach (var lobbyPlayer in LobbyPlayers.ToArray())
                         TransitionToLoadingPlayer(lobbyPlayer);
+
+                // Transition any in-game players to loading state
+                if (Game.Instance.SessionStatus == SessionStatus.InGame)
+                    // iterate over a COPY of the lobby players (the List is mutated by transitioning!)
+                    foreach (var shipPlayer in ShipPlayers.ToArray())
+                        TransitionToLoadingPlayer(shipPlayer);
 
                 // notify all clients about the new scene
                 NetworkServer.SendToAll(new StartGameMessage {
@@ -481,7 +488,6 @@ namespace Core {
         }
 
         private void OnSetShipPositionClientMsg(SetShipPositionMessage message) {
-
             // this may be received before the ship has finished loading - wait until it's available.
             IEnumerator SetShipPosition(SetShipPositionMessage positionMessage) {
                 var ship = FdPlayer.FindLocalShipPlayer;
