@@ -15,7 +15,6 @@ using GameUI.GameModes;
 using JetBrains.Annotations;
 using Misc;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Gameplay {
     [RequireComponent(typeof(ReplayRecorder))]
@@ -31,6 +30,8 @@ namespace Gameplay {
 
         private bool _complete;
         private IGameModeUI _gameModeUI;
+
+        private bool _isValid = true;
 
         private Score _previousBestScore;
 
@@ -77,13 +78,16 @@ namespace Gameplay {
         private void OnEnable() {
             _replayRecorder = GetComponent<ReplayRecorder>();
             Game.OnRestart += InitialiseTrack;
+            Game.OnGameSettingsApplied += CheckValidity;
         }
 
         private void OnDisable() {
             Game.OnRestart -= InitialiseTrack;
+            Game.OnGameSettingsApplied -= CheckValidity;
         }
 
         public void InitialiseTrack() {
+            _isValid = true;
             _previousBestScore = Score.ScoreForLevel(Game.Instance.LoadedLevelData);
 
             if (Game.Instance.LoadedLevelData.gameType == GameType.TimeTrial) GameModeUI.Timers.ShowTimers();
@@ -213,20 +217,12 @@ namespace Gameplay {
                     if (checkpoint.Type == CheckpointType.End) {
                         if (_splitDeltaFader != null) StopCoroutine(_splitDeltaFader);
 
-                        // TODO: Make this more generalised and implement a tinker tier for saving these times
-                        // TODO: Prevent saving a score from _any_ changes mid-game :| this will be a pain in the ass
-                        if (!FindObjectOfType<Game>().ShipParameters.ToJsonString()
-                                .Equals(ShipParameters.Defaults.ToJsonString())) {
-                            // you dirty debug cheater!
-                            GameModeUI.Timers.TotalTimeDisplay.GetComponent<Text>().color = new Color(1, 1, 0, 1);
-                        }
+                        var replayFileName = "";
+                        var replayFilePath = "";
+                        var score = Score.FromRaceTime(_timeSeconds, _splits);
 
-                        else {
-                            GameModeUI.Timers.TotalTimeDisplay.GetComponent<Text>().color = new Color(0, 1, 0, 1);
-
-                            var score = Score.NewPersonalBest(_timeSeconds, _splits);
-                            GameModeUI.ShowResultsScreen(score, _previousBestScore);
-
+                        CheckValidity();
+                        if (_isValid) {
                             // if new run OR better score, save!
                             // TODO: move this to the end screen too
                             if (_previousBestScore.PersonalBestTotalTime == 0 || _timeSeconds < _previousBestScore.PersonalBestTotalTime) {
@@ -238,28 +234,26 @@ namespace Gameplay {
                                     _replayRecorder.StopRecording();
                                     var levelHash = Game.Instance.LoadedLevelData.LevelHash();
                                     var replay = _replayRecorder.Replay;
-                                    var replayFileName = replay?.Save(scoreData);
-                                    var replayFilepath = Path.Combine(Replay.ReplayDirectory, levelHash, replayFileName ?? string.Empty);
-
-                                    // TODO: yeet this to the result screen
-                                    if (FdNetworkManager.Instance.HasLeaderboardServices) {
-                                        var flagId = Flag.FromFilename(Preferences.Instance.GetString("playerFlag")).FixedId;
-                                        var leaderboard = await FdNetworkManager.Instance.OnlineService!.Leaderboard!.FindOrCreateLeaderboard(levelHash);
-                                        var timeMilliseconds = _timeSeconds * 1000;
-                                        // TODO: This can ABSOLUTELY fail, handle it in the end screen!
-                                        await leaderboard.UploadScore((int)timeMilliseconds, flagId, replayFilepath, replayFileName);
-                                        Debug.Log("Leaderboard upload succeeded");
-                                    }
+                                    replayFileName = replay?.Save(scoreData);
+                                    replayFilePath = Path.Combine(Replay.ReplayDirectory, levelHash, replayFileName ?? string.Empty);
                                 }
                             }
 
                             UpdateTargetTimeElements();
                         }
 
+                        GameModeUI.ShowResultsScreen(score, _previousBestScore, _isValid, replayFileName, replayFilePath);
+
                         FinishTimer();
                     }
                 }
             }
+        }
+
+        // if the user ever changes parameters mid-level, the isValid flag is set to false and stays that way until restarting. It's also checked again
+        // at the end of the race.
+        private void CheckValidity() {
+            _isValid = _isValid && FindObjectOfType<Game>().ShipParameters.ToJsonString().Equals(ShipParameters.Defaults.ToJsonString());
         }
 
         private void ReplaceCheckpoints(List<Checkpoint> checkpoints) {

@@ -34,15 +34,15 @@ namespace GameUI {
         public GameModeUIHandler GameModeUIHandler => gameModeUIHandler;
 
         private void Awake() {
-            OnPause(false);
+            CursorIsActive(false);
         }
 
         private void OnEnable() {
-            Game.OnPauseToggle += OnPause;
+            Game.OnPauseToggle += CursorIsActive;
         }
 
         private void OnDisable() {
-            Game.OnPauseToggle -= OnPause;
+            Game.OnPauseToggle -= CursorIsActive;
         }
 
         public void OnPointerMove(PointerEventData eventData) {
@@ -56,8 +56,8 @@ namespace GameUI {
                 cursor.OnPointerMove(canvasPosition);
         }
 
-        private void OnPause(bool isPaused) {
-            cursor.gameObject.SetActive(isPaused);
+        public void CursorIsActive(bool isActive) {
+            cursor.gameObject.SetActive(isActive);
             cursor.OnPointerMove(Vector2.zero);
         }
 

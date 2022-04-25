@@ -14,7 +14,7 @@ namespace GameUI.GameModes {
         void HideMainUI();
 
         // Show and hide whatever game mode result screen there is
-        void ShowResultsScreen(Score score, Score previousBest);
+        void ShowResultsScreen(Score score, Score previousBest, bool isValid, string replayFilename, string replayFilepath);
         void HideResultsScreen();
     }
 
@@ -36,17 +36,17 @@ namespace GameUI.GameModes {
             timers.gameObject.SetActive(false);
         }
 
-        public void ShowResultsScreen(Score score, Score previousBest = null) {
+        public void ShowResultsScreen(Score score, Score previousBest, bool isValid, string replayFilename, string replayFilepath) {
             var player = FdPlayer.FindLocalShipPlayer;
             if (player) {
                 player.User.ShipCameraRig.SwitchToEndScreenCamera();
                 player.User.DisableGameInput();
-                player.User.EnableGameInput();
+                // TODO: enable flight assist or something? 
             }
 
             HideMainUI();
             raceResultsScreen.gameObject.SetActive(true);
-            raceResultsScreen.Show(score, previousBest);
+            raceResultsScreen.Show(score, previousBest, isValid, replayFilename, replayFilepath);
         }
 
         public void HideResultsScreen() {
