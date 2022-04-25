@@ -42,7 +42,13 @@ namespace Core.Player {
 
         private void OnEnable() {
             // Set active camera from preference (this also happens on VR disable as the component is re-enabled)
-            RecoverPreferredCameraFromPreferences();
+            // this may take a frame to do as other cameras may have come online at the same time
+            IEnumerator ResetCamera() {
+                yield return new WaitForEndOfFrame();
+                RecoverPreferredCameraFromPreferences();
+            }
+
+            StartCoroutine(ResetCamera());
         }
 
         private void ResetTransforms() {
