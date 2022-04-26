@@ -98,7 +98,7 @@ namespace GameUI.GameModes {
                 resultDeltaText.color = delta > 0 ? Color.red : Color.green;
             }
 
-            if (personalBest) scoreCheerAudio.Play();
+            if (personalBest && medalCount > 0) scoreCheerAudio.Play();
 
             if (!isValid)
                 resultNotValid.SetActive(true);
