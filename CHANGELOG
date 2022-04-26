@@ -36,6 +36,8 @@ New:
     * Added new test GPU foliage terrain - performance feedback welcome please!
     
 Changes:
+    * Pre-calculate terrain on time trial load (all terrain near checkpoints is pre-loaded)
+        * This should drastically reduce stuttering but with the trade-off that more is being rendered at any one time. Performance feedback welcome on this please!
     * Replaced basic light trails with GPU physics smoke particles based on thrust
     * Replaced space dust particle sprites with velocity-dependent line particles
     * Tweaked layout of lobby + time trial menus

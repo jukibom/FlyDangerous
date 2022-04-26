@@ -79,7 +79,7 @@ MonoBehaviour:
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
-    m_LineSpacing: 1
+    m_LineSpacing: 1.5
   m_Text: "New:\r\n    * Added VR toggle button in options (using param -vr still
     works but this is much simpler to toggle at runtime)\r\n    * Added experimental
     high resolution terrain toggle - this MUST be used in conjunction with terrain
@@ -196,7 +196,7 @@ MonoBehaviour:
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
-    m_LineSpacing: 1
+    m_LineSpacing: 1.5
   m_Text: "Fixes:\r\n    * Ship configuration default was not correct (boost time
     wrong by 1 second)\r\n        * This should not affect times, but the end timer
     will be green if not changed ship params\r\n    * Timer now correctly resets
@@ -296,7 +296,7 @@ MonoBehaviour:
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
-    m_LineSpacing: 1
+    m_LineSpacing: 1.5
   m_Text: The first release! Not much to say, there was a ship and a menu. If you
     actually read this far down then holy cow well done. Also, why?
 --- !u!114 &3959183345438993136
@@ -392,7 +392,7 @@ MonoBehaviour:
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
-    m_LineSpacing: 1
+    m_LineSpacing: 1.5
   m_Text: "New:\r\n    * Immediate restart: the game will endeavour to place the
     ship back at the starting location (either from custom level, race or regular
     free play) with as little loading time as possible. This I feel was especially
@@ -506,7 +506,7 @@ MonoBehaviour:
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
-    m_LineSpacing: 1
+    m_LineSpacing: 1.5
   m_Text: "New: \r\n    * VR Mode: Set the `-vr` flag parameter when launching the
     exe to use OpenXR. Do this either with steam or by making a shortcut to the exe.\r\n       
     * Added HMD recenter binding - this is F11 by default.\r\n        * NOTE: VR
@@ -956,7 +956,7 @@ MonoBehaviour:
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
-    m_LineSpacing: 1
+    m_LineSpacing: 1.5
   m_Text: "New:\r\n    * Added dev flag for additive thrusters (\"trichording\")
     which effectively re-enables old behaviour WRT thrust sharing.\r\n        * This
     allows each axis to operate with it's own max thrust amount and the flight params
@@ -1061,7 +1061,7 @@ MonoBehaviour:
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
-    m_LineSpacing: 1
+    m_LineSpacing: 1.5
   m_Text: "Fixed:\r\n    * Multiplayer failing to establish connection (null object
     check)\r\n    * Multiplayer join menu could have empty textboxes (the placeholder
     text is fake)\r\n    * Minor medal UI layout fix"
@@ -1158,7 +1158,7 @@ MonoBehaviour:
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
-    m_LineSpacing: 1
+    m_LineSpacing: 1.5
   m_Text: "Fixes:\r\n    * Apply rigidbody physics along with specialised ship param
     defaults on load. Sigh."
 --- !u!114 &7203000589233477305
@@ -1254,7 +1254,7 @@ MonoBehaviour:
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
-    m_LineSpacing: 1
+    m_LineSpacing: 1.5
   m_Text: "New:\r\n    * Added new ship, the Calidris!\r\n    * Some much-needed
     Time Trial TLC\r\n        * Added some new PLAYABLE MAPS and it only took six
     months\r\n        * Added new Time Trial map selection + Level data system\r\n       
@@ -1403,7 +1403,7 @@ MonoBehaviour:
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
-    m_LineSpacing: 1
+    m_LineSpacing: 1.5
   m_Text: "New:\r\n\t* Added multiple environment types and separated from map geometry
     (additive scene management).\r\n\t* Added ship spotlight + associated input binding
     for night maps (Default 'L' on keyboard).\r\n\t* Added experimental terrain (see
@@ -1518,7 +1518,7 @@ MonoBehaviour:
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
-    m_LineSpacing: 1
+    m_LineSpacing: 1.5
   m_Text: "0.5.0\r\nNew:\r\n    * Added in-game patch notes (oooo how meta, hello!)\r\n   
     * Added Steam integration (Steam version features only, obviously ...)\r\n       
     * No need to forward IPs on steam!\r\n        * New server browser shows games
@@ -1556,6 +1556,9 @@ MonoBehaviour:
     * Added UI Cancel navigation behaviour (navigate back one page) in main menu\r\n   
     * Ability to set max angular velocity in dev options\r\n    * Added new test
     GPU foliage terrain - performance feedback welcome please!\r\n    \r\nChanges:\r\n   
+    * Pre-calculate terrain on time trial load (all terrain near checkpoints is pre-loaded)\r\n       
+    * This should drastically reduce stuttering but with the trade-off that more
+    is being rendered at any one time. Performance feedback welcome on this please!\r\n   
     * Replaced basic light trails with GPU physics smoke particles based on thrust\r\n   
     * Replaced space dust particle sprites with velocity-dependent line particles\r\n   
     * Tweaked layout of lobby + time trial menus\r\n    * Converted ray check to
@@ -1676,7 +1679,7 @@ MonoBehaviour:
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
-    m_LineSpacing: 1
+    m_LineSpacing: 1.5
   m_Text: "New:\r\n    * Added new ship, the Calidris!\r\n    * Some much-needed
     Time Trial TLC\r\n        * Added some new PLAYABLE MAPS and it only took six
     months\r\n        * Added new Time Trial map selection + Level data system\r\n       
