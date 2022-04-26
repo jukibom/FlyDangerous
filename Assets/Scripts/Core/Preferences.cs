@@ -50,6 +50,7 @@ namespace Core {
             switch (key) {
                 case "showSpaceDust":
                 case "autoShipRotation":
+                case "invertArcadeYAxis":
                 case "graphics-terrain-details":
                     return true;
 

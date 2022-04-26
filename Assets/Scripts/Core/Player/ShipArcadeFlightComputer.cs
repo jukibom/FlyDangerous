@@ -40,6 +40,8 @@ namespace Core.Player {
          * bind any of these axes individually if they so choose.
          */
         public void UpdateShipFlightInput(ref float lateralH, ref float lateralV, ref float throttle, ref float pitch, ref float yaw, ref float roll) {
+            if (Preferences.Instance.GetBool("invertArcadeYAxis")) lateralV *= -1;
+
             // clamp
             lateralV = Math.Clamp(lateralV, -1f, 1f);
             lateralH = Math.Clamp(lateralH, -1f, 1f);
