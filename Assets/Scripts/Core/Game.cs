@@ -288,8 +288,6 @@ namespace Core {
                 loadText.text = "Waiting for all players to load ...";
                 yield return WaitForAllPlayersLoaded();
 
-                Debug.Log(FindObjectsOfType<LoadingPlayer>().Length + " players loaded!");
-
                 loadingPlayer.RequestTransitionToShipPlayer();
 
                 SessionStatus = SessionStatus.InGame;

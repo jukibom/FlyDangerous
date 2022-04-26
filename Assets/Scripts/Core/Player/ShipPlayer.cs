@@ -111,8 +111,8 @@ namespace Core.Player {
         }
 
         public override void OnStartLocalPlayer() {
-            // set tag for finding for e.g. terrain generation focus
-            gameObject.tag = "LocalPlayer";
+            // set tag for terrain generation focus
+            gameObject.tag = "Terrain Gen Marker";
 
             // enable input, camera, effects etc
             playerLogic.SetActive(true);
