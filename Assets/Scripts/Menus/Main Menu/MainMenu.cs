@@ -31,10 +31,6 @@ namespace Menus.Main_Menu {
 
         private void Start() {
             topMenu.Hide();
-            // if(SteamManager.Initialized) {
-            //     string name = SteamFriends.GetPersonaName();
-            //     Debug.Log($"Your Steam name is {name}.");
-            // }
 
             var lastPlayedVersion = Preferences.Instance.GetString("lastPlayedVersion");
             topMenu.SetPatchNotesUpdated(lastPlayedVersion != Application.version);

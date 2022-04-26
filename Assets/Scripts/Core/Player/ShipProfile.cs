@@ -43,7 +43,7 @@ namespace Core.Player {
 
         public static ShipProfile FromPreferences() {
             return new ShipProfile(
-                Preferences.Instance.GetString("playerName"),
+                Misc.Player.LocalPlayerName,
                 Preferences.Instance.GetString("playerFlag"),
                 Preferences.Instance.GetString("playerShipDesign"),
                 Preferences.Instance.GetString("playerShipPrimaryColor"),

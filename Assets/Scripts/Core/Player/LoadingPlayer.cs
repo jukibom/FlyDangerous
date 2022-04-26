@@ -21,7 +21,7 @@ namespace Core.Player {
 
         // On local client start
         public override void OnStartAuthority() {
-            CmdSetPlayerName(Preferences.Instance.GetString("playerName"));
+            CmdSetPlayerName(Misc.Player.LocalPlayerName);
         }
 
         public void RequestTransitionToShipPlayer() {

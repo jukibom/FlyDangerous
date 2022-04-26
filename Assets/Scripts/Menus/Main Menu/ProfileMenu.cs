@@ -163,9 +163,11 @@ namespace Menus.Main_Menu {
                 yield return new WaitForEndOfFrame();
                 yield return new WaitForEndOfFrame();
 
+                // if using online services, grab the name from there.
+                playerNameTextField.interactable = !Player.IsUsingOnlineName;
 
                 // load details from prefs
-                playerNameTextField.text = Preferences.Instance.GetString("playerName");
+                playerNameTextField.text = Player.LocalPlayerName;
                 countryDropdown.value = FdEnum.ToDropdownId(Flag.List(), Flag.FromFilename(Preferences.Instance.GetString("playerFlag")));
                 _playerShipPrimaryColor = Preferences.Instance.GetString("playerShipPrimaryColor");
                 _playerShipAccentColor = Preferences.Instance.GetString("playerShipAccentColor");

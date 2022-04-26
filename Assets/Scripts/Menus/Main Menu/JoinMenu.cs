@@ -1,4 +1,5 @@
 using Core;
+using Misc;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,7 +16,8 @@ namespace Menus.Main_Menu {
         [SerializeField] private InputField serverPassword;
 
         private void OnEnable() {
-            playerName.text = Preferences.Instance.GetString("playerName");
+            playerName.interactable = !Player.IsUsingOnlineName;
+            playerName.text = Player.LocalPlayerName;
             serverIPAddress.text = Preferences.Instance.GetString("lastUsedServerJoinAddress");
             serverPort.text = Preferences.Instance.GetString("lastUsedServerJoinPort");
             serverPassword.text = Preferences.Instance.GetString("lastUsedServerPassword");

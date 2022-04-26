@@ -53,6 +53,7 @@ namespace Core {
         }
 
         [CanBeNull] public IOnlineService OnlineService { get; private set; }
+        public bool HasOnlineServices => OnlineService != null;
         public bool HasMultiplayerServices => OnlineService?.Multiplayer != null;
         public bool HasLeaderboardServices => OnlineService?.Leaderboard != null;
 
