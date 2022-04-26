@@ -547,6 +547,19 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &4864000208089671692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7422173228353694911}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9435c99f06cb3bf4db750dccf34643a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  toolTipText: Set the primary binding (button or trigger).
 --- !u!114 &7422173228942635569 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 609786913693381189, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
@@ -736,6 +749,19 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &7586462655724787275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7422173228274351441}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9435c99f06cb3bf4db750dccf34643a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  toolTipText: Set the secondary binding (button or trigger).
 --- !u!224 &7422173228274351442 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
@@ -766,6 +792,10 @@ PrefabInstance:
     - target: {fileID: 609786913693381189, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
       propertyPath: m_FontData.m_FontSize
       value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786913693381191, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_Name
+      value: Icon
       objectReference: {fileID: 0}
     - target: {fileID: 609786914283039943, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
       propertyPath: m_Enabled
@@ -899,13 +929,31 @@ PrefabInstance:
       propertyPath: m_Name
       value: Reset Binding
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 1469095049701594667, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: label
+      value: 
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 609786913693381189, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
 --- !u!1 &7422173229169342101 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 609786914283039947, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
   m_PrefabInstance: {fileID: 8031816777376258654}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3558093774934137489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7422173229169342101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9435c99f06cb3bf4db750dccf34643a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  toolTipText: Reset bindings to default.
 --- !u!114 &8031816777204014739
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -931,3 +979,38 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
   m_PrefabInstance: {fileID: 8031816777376258654}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &7422173229804480537 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 609786913693381191, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+  m_PrefabInstance: {fileID: 8031816777376258654}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6448609280239537015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7422173229804480537}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: e28c60fa353baf9428344e184ebd5c36, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
