@@ -17,9 +17,9 @@ namespace Menus.Main_Menu.Components {
 
         [CanBeNull] private ILeaderboardEntry _entry;
 
-        private void OnEnable() {
-            var levelSelect = GetComponentInParent<LevelCompetitionPanel>();
-            if (levelSelect) downloadButton.onClick.AddListener(() => levelSelect.DownloadGhost(this));
+        private void Start() {
+            var levelCompetitionPanel = GetComponentInParent<LevelCompetitionPanel>(true);
+            if (levelCompetitionPanel) downloadButton.onClick.AddListener(() => levelCompetitionPanel.DownloadGhost(this));
         }
 
         public void GetData(ILeaderboardEntry entry) {

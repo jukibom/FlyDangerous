@@ -9,6 +9,7 @@ using Core.MapData;
 using Core.Player;
 using Core.Scores;
 using Core.ShipModel;
+using JetBrains.Annotations;
 using Misc;
 using UnityEngine;
 
@@ -45,9 +46,10 @@ namespace Core.Replays {
         private static readonly string tmpKeyFrameDataSaveLoc = Path.Combine(TMPSaveDirectory, keyFrameFileName);
         private static readonly string tmpArchiveDataSaveLoc = Path.Combine(ReplayDirectory, archiveFileName);
 
+        [CanBeNull] protected string replayFilePath;
+
         private Replay(ReplayMeta replayMeta, ShipParameters shipParameters, LevelData levelData, ShipProfile shipProfile, ScoreData scoreData,
-            Stream inputFrameStream,
-            Stream keyFrameStream) {
+            Stream inputFrameStream, Stream keyFrameStream, [CanBeNull] string filePath) {
             ReplayMeta = replayMeta;
             ShipParameters = shipParameters;
             LevelData = levelData;
@@ -55,6 +57,7 @@ namespace Core.Replays {
             ScoreData = scoreData;
             InputFrameStream = inputFrameStream;
             KeyFrameStream = keyFrameStream;
+            replayFilePath = filePath;
         }
 
         public ReplayMeta ReplayMeta { get; }
@@ -125,7 +128,13 @@ namespace Core.Replays {
 
             File.Move(tmpArchiveDataSaveLoc, filePath);
             Directory.Delete(TMPSaveDirectory, true);
+            replayFilePath = filePath;
+
             return fileName;
+        }
+
+        public void Delete() {
+            if (replayFilePath != null && File.Exists(replayFilePath)) File.Delete(replayFilePath);
         }
 
         /**
@@ -168,7 +177,7 @@ namespace Core.Replays {
             keyFrameMemoryStream.Position = 0;
 
             archive.Dispose();
-            return new Replay(replayMeta, shipParameters, levelData, shipProfile, scoreData, inputMemoryStream, keyFrameMemoryStream);
+            return new Replay(replayMeta, shipParameters, levelData, shipProfile, scoreData, inputMemoryStream, keyFrameMemoryStream, replayFilePath);
         }
 
         /**
@@ -187,7 +196,7 @@ namespace Core.Replays {
             if (File.Exists(tmpKeyFrameDataSaveLoc)) File.Delete(tmpKeyFrameDataSaveLoc);
             var keyFrameFileStream = new FileStream(tmpKeyFrameDataSaveLoc, FileMode.Append, FileAccess.Write, FileShare.Read);
 
-            return new Replay(replayMeta, shipParameters, levelData, shipProfile, new ScoreData(), inputFileStream, keyFrameFileStream);
+            return new Replay(replayMeta, shipParameters, levelData, shipProfile, new ScoreData(), inputFileStream, keyFrameFileStream, null);
         }
 
         /**

@@ -36,6 +36,11 @@ namespace Menus.Main_Menu.Components {
             }
         }
 
+        public void DeleteGhost(GhostEntry ghostEntry) {
+            ghostEntry.replay.Delete();
+            PopulateGhostsForLevel();
+        }
+
         private void PopulateGhostsForLevel() {
             ghostList.PopulateGhostsForLevel(_levelData);
             if (Game.Instance.ActiveGameReplays != null)
