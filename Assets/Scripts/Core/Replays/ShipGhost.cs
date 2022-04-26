@@ -1,18 +1,25 @@
 ﻿using Core.Player;
 using Core.ShipModel;
 using UnityEngine;
+using UnityEngine.Audio;
 
 namespace Core.Replays {
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(ReplayTimeline))]
     public class ShipGhost : MonoBehaviour, IReplayShip {
         [SerializeField] private ShipPhysics shipPhysics;
+        [SerializeField] private AudioMixerGroup ghostAudioMixer;
         public ReplayTimeline ReplayTimeline { get; private set; }
 
         private void Awake() {
             Transform = transform;
             Rigidbody = GetComponent<Rigidbody>();
             ReplayTimeline = GetComponent<ReplayTimeline>();
+        }
+
+        private void Start() {
+            // handle binding all sounds to the ghost mixer
+            foreach (var audioSource in GetComponentsInChildren<AudioSource>(true)) audioSource.outputAudioMixerGroup = ghostAudioMixer;
         }
 
         private void FixedUpdate() {

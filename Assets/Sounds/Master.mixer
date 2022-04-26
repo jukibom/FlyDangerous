@@ -28,6 +28,25 @@ AudioMixerEffectController:
   m_SendTarget: {fileID: 0}
   m_EnableWetMix: 0
   m_Bypass: 0
+--- !u!243 &-3618222713975468221
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: GhostSound
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: 8b27c9cd20dc797498babb14672e0647
+  m_Children: []
+  m_Volume: 14e166fec07b7914cbf47eb1715a068b
+  m_Pitch: 46b32e834e187334badb50ebee730f58
+  m_Send: 00000000000000000000000000000000
+  m_Effects:
+  - {fileID: -953194710543904554}
+  m_UserColorIndex: 0
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0
 --- !u!244 &-2540259559446995080
 AudioMixerEffectController:
   m_ObjectHideFlags: 3
@@ -41,6 +60,20 @@ AudioMixerEffectController:
   m_Parameters:
   - m_ParameterName: Cutoff freq
     m_GUID: 9cfa7ba53bbf43a41be478703b56da1c
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
+--- !u!244 &-953194710543904554
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: bb4a81a05bf3e96419941ec704d397dd
+  m_EffectName: Attenuation
+  m_MixLevel: c7eab60db952c4f46ab3866fc02722a9
+  m_Parameters: []
   m_SendTarget: {fileID: 0}
   m_EnableWetMix: 0
   m_Bypass: 0
@@ -60,6 +93,8 @@ AudioMixerController:
   m_EnableSuspend: 1
   m_UpdateMode: 0
   m_ExposedParameters:
+  - guid: 14e166fec07b7914cbf47eb1715a068b
+    name: ghostSoundVolume
   - guid: 2552d2919e1c4754a80553a9495ef586
     name: masterVolume
   - guid: c114c7e68bd1e1e44bdc01066feb9aa9
@@ -74,6 +109,7 @@ AudioMixerController:
     - a78ed87337efc904db8cb004ac9b6035
     - 0d31fd8e2d543dc4abcc2a54b2230369
     - 4b645101f0e066a47bcffe4c72f4d709
+    - 8b27c9cd20dc797498babb14672e0647
     name: View
   m_CurrentViewIndex: 0
   m_TargetSnapshot: {fileID: 24500006}
@@ -187,7 +223,8 @@ AudioMixerGroupController:
   m_Name: Sound
   m_AudioMixer: {fileID: 24100000}
   m_GroupID: 0d31fd8e2d543dc4abcc2a54b2230369
-  m_Children: []
+  m_Children:
+  - {fileID: -3618222713975468221}
   m_Volume: 7b40a52a246aae54daa9d4087b8928bd
   m_Pitch: c71c62b3fda45854c8939b775dd02dbc
   m_Send: 00000000000000000000000000000000

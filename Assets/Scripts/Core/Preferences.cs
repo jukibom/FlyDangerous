@@ -100,6 +100,8 @@ namespace Core {
                 case "volumeSound":
                 case "volumeUi":
                     return 100;
+                case "volumeGhostSound":
+                    return 25;
                 default:
                     Debug.LogWarning("Attempted to get preference " + key + " with no default specified");
                     return 0;
