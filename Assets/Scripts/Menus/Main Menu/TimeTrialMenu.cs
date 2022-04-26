@@ -45,6 +45,7 @@ namespace Menus.Main_Menu {
         }
 
         private void StartTimeTrial() {
+            Game.Instance.loadedMainLevel = levelSelectPanel.SelectedLevel;
             Game.Instance.ActiveGameReplays = levelSelectPanel.SelectedReplays;
             FdNetworkManager.Instance.StartGameLoadSequence(SessionType.Singleplayer, levelSelectPanel.SelectedLevel.Data);
         }
