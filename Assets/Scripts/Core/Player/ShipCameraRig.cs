@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Cinemachine;
 using Gameplay;
+using JetBrains.Annotations;
 using UnityEngine;
 using CameraType = Gameplay.CameraType;
 
@@ -25,14 +26,17 @@ namespace Core.Player {
         private Coroutine _endScreenCameraTransition;
         private Transform _transform;
 
-        public ShipCamera ActiveCamera { get; private set; }
+        [CanBeNull] public ShipCamera ActiveCamera { get; private set; }
 
         public void Reset() {
             RecoverPreferredCameraFromPreferences();
             if (_endScreenCameraTransition != null) StopCoroutine(_endScreenCameraTransition);
             endScreenCamera1.SetCameraActive(false);
             endScreenCamera2.SetCameraActive(false);
-            ResetTransforms();
+            SoftReset();
+            if (ActiveCamera != null)
+                ActiveCamera.Reset();
+            cameraTarget.localPosition = baseTargetPosition;
         }
 
         private void Start() {
@@ -49,13 +53,6 @@ namespace Core.Player {
             }
 
             StartCoroutine(ResetCamera());
-        }
-
-        private void ResetTransforms() {
-            SoftReset();
-            _cameraOffset = Vector3.zero;
-            cameraTarget.localPosition = baseTargetPosition;
-            cameraTarget.transform.rotation = transform.rotation;
         }
 
         public void SetPosition(Vector2 position, CameraPositionUpdate cameraType) {
@@ -78,51 +75,55 @@ namespace Core.Player {
         }
 
         private void UpdateAbsolute(Vector2 absolutePosition) {
-            if (ActiveCamera.cameraType == CameraType.FirstPerson) {
-                _currentRotation = new Vector2(
-                    Mathf.Lerp(_currentRotation.x, absolutePosition.x, 0.02f),
-                    Mathf.Lerp(_currentRotation.y, absolutePosition.y, 0.02f)
-                );
-                var angleY = _currentRotation.y * 90;
-                var angleX = _currentRotation.x * 90;
-
-                var pivot = _transform.TransformPoint(ActiveCamera.BaseLocalPosition);
-
-                cameraTarget.RotateAround(pivot, _transform.right, -angleY);
-                cameraTarget.RotateAround(pivot, _transform.up, angleX);
-            }
-
-            if (ActiveCamera.cameraType == CameraType.ThirdPerson) {
-                // input is used to rotate the view around the ship
-                // bias towards looking forward (only activate over a sensible deadzone)
-                if (Mathf.Abs(absolutePosition.x) > 0.2f || Mathf.Abs(absolutePosition.y) > 0.2f) {
+            if (ActiveCamera != null) {
+                if (ActiveCamera.cameraType == CameraType.FirstPerson) {
                     _currentRotation = new Vector2(
-                        Mathf.Lerp(_currentRotation.x, absolutePosition.x, 0.3f),
-                        Mathf.Lerp(_currentRotation.y, absolutePosition.y, 0.3f)
+                        Mathf.Lerp(_currentRotation.x, absolutePosition.x, 0.02f),
+                        Mathf.Lerp(_currentRotation.y, absolutePosition.y, 0.02f)
                     );
+                    var angleY = _currentRotation.y * 90;
+                    var angleX = _currentRotation.x * 90;
 
-                    var rotationRads = Mathf.Atan2(_currentRotation.x, _currentRotation.y);
-                    cameraTarget.RotateAround(_transform.position, _transform.up, rotationRads * Mathf.Rad2Deg);
+                    var pivot = _transform.TransformPoint(ActiveCamera.BaseLocalPosition);
+
+                    cameraTarget.RotateAround(pivot, _transform.right, -angleY);
+                    cameraTarget.RotateAround(pivot, _transform.up, angleX);
                 }
-                else {
-                    _currentRotation = Vector2.zero;
+
+                if (ActiveCamera.cameraType == CameraType.ThirdPerson) {
+                    // input is used to rotate the view around the ship
+                    // bias towards looking forward (only activate over a sensible deadzone)
+                    if (Mathf.Abs(absolutePosition.x) > 0.2f || Mathf.Abs(absolutePosition.y) > 0.2f) {
+                        _currentRotation = new Vector2(
+                            Mathf.Lerp(_currentRotation.x, absolutePosition.x, 0.3f),
+                            Mathf.Lerp(_currentRotation.y, absolutePosition.y, 0.3f)
+                        );
+
+                        var rotationRads = Mathf.Atan2(_currentRotation.x, _currentRotation.y);
+                        cameraTarget.RotateAround(_transform.position, _transform.up, rotationRads * Mathf.Rad2Deg);
+                    }
+                    else {
+                        _currentRotation = Vector2.zero;
+                    }
                 }
             }
         }
 
         private void UpdateRelative(Vector2 relativePosition) {
-            var pivot = _transform.TransformPoint(ActiveCamera.BaseLocalPosition);
-            if (ActiveCamera.cameraType == CameraType.ThirdPerson) pivot = _transform.position;
+            if (ActiveCamera != null) {
+                var pivot = _transform.TransformPoint(ActiveCamera.BaseLocalPosition);
+                if (ActiveCamera.cameraType == CameraType.ThirdPerson) pivot = _transform.position;
 
-            _currentRotation = new Vector2(
-                _currentRotation.x + relativePosition.x * 2 * Time.deltaTime,
-                _currentRotation.y + relativePosition.y * 2 * Time.deltaTime
-            );
-            var angleY = _currentRotation.y * 90;
-            var angleX = _currentRotation.x * 90;
+                _currentRotation = new Vector2(
+                    _currentRotation.x + relativePosition.x * 2 * Time.deltaTime,
+                    _currentRotation.y + relativePosition.y * 2 * Time.deltaTime
+                );
+                var angleY = _currentRotation.y * 90;
+                var angleX = _currentRotation.x * 90;
 
-            cameraTarget.RotateAround(pivot, _transform.right, -angleY);
-            cameraTarget.RotateAround(pivot, _transform.up, angleX);
+                cameraTarget.RotateAround(pivot, _transform.right, -angleY);
+                cameraTarget.RotateAround(pivot, _transform.up, angleX);
+            }
         }
 
         public void SoftReset() {
@@ -130,28 +131,31 @@ namespace Core.Player {
         }
 
         public void UpdateCameras(Vector3 velocity, float maxVelocity, Vector3 force, float maxForce) {
-            ActiveCamera.UpdateFov(velocity, maxVelocity);
-            _cameraOffset = ActiveCamera.GetCameraOffset(force, maxForce);
+            if (ActiveCamera != null) {
+                ActiveCamera.UpdateFov(velocity, maxVelocity);
+                _cameraOffset = ActiveCamera.GetCameraOffset(force, maxForce);
+            }
         }
 
         public void ToggleActiveCamera() {
             if (gameObject.activeSelf) {
                 var index = cameras.IndexOf(ActiveCamera);
                 SetActiveCamera(index == cameras.Count - 1 ? cameras[0] : cameras[index + 1]);
-                Preferences.Instance.SetString("preferredCamera", ActiveCamera.Name);
+                if (ActiveCamera != null)
+                    Preferences.Instance.SetString("preferredCamera", ActiveCamera.Name);
             }
         }
 
         private void SetActiveCamera(ShipCamera newCamera) {
             if (ActiveCamera != null) ActiveCamera.SetCameraActive(false);
 
-            ResetTransforms();
+            SoftReset();
             ActiveCamera = newCamera;
             user.InGameUI.ShipStats.SetStatsVisible(newCamera.showShipDataUI);
             var type = newCamera.cameraType;
             user.InGameUI.MouseWidgetScreen.gameObject.SetActive(type == CameraType.ThirdPerson);
             user.InGameUI.MouseWidgetWorld.gameObject.SetActive(type == CameraType.FirstPerson);
-            ActiveCamera.SetCameraActive(true);
+            newCamera.SetCameraActive(true);
         }
 
         private void RecoverPreferredCameraFromPreferences() {

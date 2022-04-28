@@ -500,6 +500,9 @@ namespace Core {
 
                 ship.AbsoluteWorldPosition = positionMessage.position;
                 ship.transform.rotation = positionMessage.rotation;
+
+                // instantly warp camera to start position rather than damping rotate
+                ship.User.ShipCameraRig.Reset();
             }
 
             StartCoroutine(SetShipPosition(message));

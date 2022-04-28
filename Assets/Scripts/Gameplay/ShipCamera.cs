@@ -1,3 +1,4 @@
+using System.Collections;
 using Cinemachine;
 using Core;
 using Misc;
@@ -48,6 +49,31 @@ namespace Gameplay {
 
         public void Awake() {
             BaseLocalPosition = transform.localPosition;
+        }
+
+        public void Reset() {
+            // Kinda gross but the fastest way to override the cinemachine brain is to just disable damping,
+            // snap the camera, wait a frame for the "animation" (of nothing) to happen and re-enable damping.
+            IEnumerator ResetPosition() {
+                // yield return new WaitForEndOfFrame();
+                var rotationComponent = Camera.GetCinemachineComponent<CinemachineSameAsFollowTarget>();
+                if (rotationComponent) {
+                    var damping = rotationComponent.m_Damping;
+
+                    Camera.PreviousStateIsValid = false;
+                    _offset = Vector3.zero;
+                    _targetOffset = Vector3.zero;
+                    var cameraTransform = Camera.transform;
+                    cameraTransform.localPosition = _targetOffset;
+                    cameraTransform.localRotation = Quaternion.identity;
+
+                    rotationComponent.m_Damping = 0;
+                    yield return new WaitForEndOfFrame();
+                    rotationComponent.m_Damping = damping;
+                }
+            }
+
+            StartCoroutine(ResetPosition());
         }
 
         public void OnEnable() {
