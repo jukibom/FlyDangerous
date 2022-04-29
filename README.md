@@ -60,4 +60,5 @@ The easiest way to get going is simply to load the Main Menu scene (`Assets/Scen
 
 All code is distributed under the GPLv3 license (see LICENSE).
 All models, textures and materials which are developed solely for this project (e.g. are not third party assets) are distributed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International license (see ASSET-LICENSE)
+Assets may include additional LICENSE files as appropriate.
 Permission to reuse the logo and name is not permitted.
