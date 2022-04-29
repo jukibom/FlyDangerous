@@ -9,6 +9,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.XR.Interaction.Toolkit;
 
 namespace Menus.Main_Menu {
+    [RequireComponent(typeof(MainMenuMusic))]
     public class MainMenu : MonoBehaviour {
         // Animating the ship
         [SerializeField] private GameObject shipMesh;
@@ -25,7 +26,7 @@ namespace Menus.Main_Menu {
         [SerializeField] private DisconnectionDialog disconnectionDialog;
 
         [SerializeField] private bool shouldMove;
-        [SerializeField] private float shipSpeed = 6f;
+        [SerializeField] private float shipSpeed = 12f;
 
         private static bool FirstRun => Game.Instance.MenuFirstRun;
 
@@ -43,7 +44,7 @@ namespace Menus.Main_Menu {
                 transform.Translate(0.1f, 0, shipSpeed);
 
                 // gently rock the ship mesh back and forth
-                var rotationAmount = (0.25f - Mathf.PingPong(Time.time / 20, 0.5f)) / 5;
+                var rotationAmount = (0.25f - Mathf.PingPong(Time.time / 10, 0.5f)) / 5;
                 shipMesh.transform.Rotate(Vector3.forward, rotationAmount);
             }
         }
@@ -64,6 +65,8 @@ namespace Menus.Main_Menu {
             disconnectionDialog.Open(topMenu);
             disconnectionDialog.Reason = reason;
         }
+
+        // TODO: show time trial with previous level selected
 
         public void ShowLobby() {
             var lobby = FindObjectOfType<LobbyMenu>(true);
@@ -139,6 +142,9 @@ namespace Menus.Main_Menu {
 
             yield return SceneManager.LoadSceneAsync(sceneEnvironment, LoadSceneMode.Additive);
             yield return new WaitForEndOfFrame();
+
+            GetComponent<MainMenuMusic>().PlayMenuMusic(FirstRun);
+
             Game.Instance.SetFlatScreenCameraControllerActive(false);
 
             FloatingOrigin.Instance.FocalTransform = transform;
