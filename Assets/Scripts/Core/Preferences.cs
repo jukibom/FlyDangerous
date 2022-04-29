@@ -97,10 +97,11 @@ namespace Core {
                 case "mousePowerCurve":
                     return 1.0f;
                 case "volumeMaster":
-                case "volumeMusic":
                 case "volumeSound":
                 case "volumeUi":
                     return 100;
+                case "volumeMusic":
+                    return 70;
                 case "volumeGhostSound":
                     return 25;
                 default:
