@@ -73,7 +73,7 @@ namespace Gameplay {
                 }
             }
 
-            StartCoroutine(ResetPosition());
+            if (gameObject.activeInHierarchy) StartCoroutine(ResetPosition());
         }
 
         public void OnEnable() {

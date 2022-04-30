@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Cinemachine;
@@ -152,7 +152,7 @@ namespace Core.Player {
 
             SoftReset();
             ActiveCamera = newCamera;
-            user.InGameUI.ShipStats.SetStatsVisible(newCamera.showShipDataUI);
+            user.InGameUI.ShipStats.SetStatsVisible(!Game.Instance.IsVREnabled && newCamera.showShipDataUI);
             var type = newCamera.cameraType;
             user.InGameUI.MouseWidgetScreen.gameObject.SetActive(type == CameraType.ThirdPerson);
             user.InGameUI.MouseWidgetWorld.gameObject.SetActive(type == CameraType.FirstPerson);
