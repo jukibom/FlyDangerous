@@ -24,7 +24,6 @@ namespace Core.Player {
         [SerializeField] public bool movementEnabled;
         [SerializeField] public bool pauseMenuEnabled = true;
         [SerializeField] public bool boostButtonEnabledOverride;
-
         private bool _alternateFlightControls;
         private bool _boost;
         private Vector2 _cameraMouse;
@@ -32,6 +31,8 @@ namespace Core.Player {
 
         private float _cameraX;
         private float _cameraY;
+
+        private bool _freeCamEnabled;
 
         private float _lateralH;
         private float _lateralV;
@@ -218,6 +219,18 @@ namespace Core.Player {
         public void DisableUIInput() {
             pauseUIInputModule.enabled = false;
             FdConsole.Instance.LogMessage("** UI INPUT DISABLED **");
+        }
+
+        public void EnableFreeCamInput() {
+            var playerInput = GetComponent<PlayerInput>();
+            playerInput.actions.FindActionMap("FreeCam").Enable();
+            FdConsole.Instance.LogMessage("** FREE CAM ENABLED **");
+        }
+
+        public void DisableFreeCamInput() {
+            var playerInput = GetComponent<PlayerInput>();
+            playerInput.actions.FindActionMap("FreeCam").Disable();
+            FdConsole.Instance.LogMessage("** FREE CAM DISABLED **");
         }
 
         public void SetVRStatus(bool isVREnabled) {
@@ -453,6 +466,69 @@ namespace Core.Player {
                 FdConsole.Instance.Hide();
             else
                 FdConsole.Instance.Show();
+        }
+
+        [UsedImplicitly]
+        public void OnToggleFreeCam(InputValue value) {
+            if (!Game.Instance.IsVREnabled) {
+                Debug.Log("HI FREECAM");
+                _freeCamEnabled = !_freeCamEnabled;
+                if (_freeCamEnabled) {
+                    DisableGameInput();
+                    EnableFreeCamInput();
+                    pauseMenuEnabled = false;
+                }
+                else {
+                    EnableGameInput();
+                    DisableFreeCamInput();
+                }
+
+                shipCameraRig.SetFreeCameraEnabled(_freeCamEnabled);
+            }
+        }
+
+        [UsedImplicitly]
+        public void OnFreeCamMove(InputValue value) {
+            ShipCameraRig.ShipFreeCamera.Move(value.Get<Vector2>());
+        }
+
+        [UsedImplicitly]
+        public void OnFreeCamLook(InputValue value) {
+            ShipCameraRig.ShipFreeCamera.LookAround(value.Get<Vector2>());
+        }
+
+        [UsedImplicitly]
+        public void OnFreeCamAscend(InputValue value) {
+            ShipCameraRig.ShipFreeCamera.Ascend(value.Get<float>());
+        }
+
+        [UsedImplicitly]
+        public void OnFreeCamToggleMovementLock(InputValue value) {
+            Debug.Log("Movement Lock not yet implemented");
+        }
+
+        [UsedImplicitly]
+        public void OnFreeCamToggleFocusLock(InputValue value) {
+            if (value.isPressed) ShipCameraRig.ShipFreeCamera.ToggleAimLock();
+        }
+
+        [UsedImplicitly]
+        public void OnFreeCamToggleFreeze(InputValue value) {
+            if (value.isPressed) Time.timeScale = Time.timeScale != 0 ? 0 : 1;
+        }
+
+        [UsedImplicitly]
+        public void OnFreeCamFieldOfView(InputValue value) {
+            ShipCameraRig.ShipFreeCamera.Zoom(value.Get<float>());
+        }
+
+        [UsedImplicitly]
+        public void OnFreeCamSetMotionMultiplier(InputValue value) {
+            var input = value.Get<float>();
+
+            if (input > 0) input = 1;
+            if (input < 0) input = -1;
+            if (input != 0) ShipCameraRig.ShipFreeCamera.IncrementMotionMultiplier(input);
         }
 
         private void CalculateMouseInput(out float pitchMouseInput, out float rollMouseInput, out float yawMouseInput) {

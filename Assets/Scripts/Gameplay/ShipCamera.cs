@@ -7,7 +7,8 @@ using UnityEngine;
 namespace Gameplay {
     public enum CameraType {
         FirstPerson,
-        ThirdPerson
+        ThirdPerson,
+        FreeCam
     }
 
     [RequireComponent(typeof(CinemachineVirtualCamera))]
@@ -91,7 +92,7 @@ namespace Gameplay {
             foreach (var audioLowPassFilter in FindObjectsOfType<AudioLowPassFilter>()) audioLowPassFilter.enabled = useLowPassAudio && active;
         }
 
-        public void UpdateFov(Vector3 velocity, float maxVelocity) {
+        public void UpdateVelocityFov(Vector3 velocity, float maxVelocity) {
             var fov = Mathf.Lerp(Camera.m_Lens.FieldOfView,
                 MathfExtensions.Remap(0, 1, _baseFov, _baseFov + 10, velocity.z / maxVelocity),
                 smoothSpeed
@@ -115,6 +116,7 @@ namespace Gameplay {
             _baseFov = cameraType == CameraType.FirstPerson
                 ? Preferences.Instance.GetFloat("graphics-field-of-view")
                 : Preferences.Instance.GetFloat("graphics-field-of-view-ext");
+            Camera.m_Lens.FieldOfView = _baseFov;
         }
     }
 }

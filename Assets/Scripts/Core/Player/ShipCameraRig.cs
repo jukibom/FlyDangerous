@@ -20,6 +20,7 @@ namespace Core.Player {
         [SerializeField] private List<ShipCamera> cameras;
         [SerializeField] private ShipCamera endScreenCamera1;
         [SerializeField] private ShipCamera endScreenCamera2;
+        [SerializeField] private ShipFreeCamera freeCamera;
         [SerializeField] private Transform cameraTarget;
         private Vector3 _cameraOffset;
         private Vector2 _currentRotation;
@@ -27,6 +28,7 @@ namespace Core.Player {
         private Transform _transform;
 
         [CanBeNull] public ShipCamera ActiveCamera { get; private set; }
+        public ShipFreeCamera ShipFreeCamera => freeCamera;
 
         public void Reset() {
             RecoverPreferredCameraFromPreferences();
@@ -57,22 +59,24 @@ namespace Core.Player {
         }
 
         public void SetPosition(Vector2 position, CameraPositionUpdate cameraType) {
-            // reset rotation before processing input
-            cameraTarget.localPosition = baseTargetPosition;
-            cameraTarget.transform.rotation = _transform.rotation;
+            if (ActiveCamera != null && ActiveCamera.cameraType != CameraType.FreeCam) {
+                // reset rotation before processing input
+                cameraTarget.localPosition = baseTargetPosition;
+                cameraTarget.transform.rotation = _transform.rotation;
 
-            switch (cameraType) {
-                case CameraPositionUpdate.Absolute:
-                    UpdateAbsolute(position);
-                    break;
-                case CameraPositionUpdate.Relative:
-                    UpdateRelative(position);
-                    break;
+                switch (cameraType) {
+                    case CameraPositionUpdate.Absolute:
+                        UpdateAbsolute(position);
+                        break;
+                    case CameraPositionUpdate.Relative:
+                        UpdateRelative(position);
+                        break;
+                }
+
+                // handle offset based on force
+                var cameraOffsetWorld = _transform.position - _transform.TransformPoint(_cameraOffset);
+                cameraTarget.position -= cameraOffsetWorld;
             }
-
-            // handle offset based on force
-            var cameraOffsetWorld = _transform.position - _transform.TransformPoint(_cameraOffset);
-            cameraTarget.position -= cameraOffsetWorld;
         }
 
         private void UpdateAbsolute(Vector2 absolutePosition) {
@@ -132,19 +136,32 @@ namespace Core.Player {
         }
 
         public void UpdateCameras(Vector3 velocity, float maxVelocity, Vector3 force, float maxForce) {
-            if (ActiveCamera != null) {
-                ActiveCamera.UpdateFov(velocity, maxVelocity);
+            if (ActiveCamera != null && ActiveCamera.cameraType != CameraType.FreeCam) {
+                ActiveCamera.UpdateVelocityFov(velocity, maxVelocity);
                 _cameraOffset = ActiveCamera.GetCameraOffset(force, maxForce);
             }
         }
 
         public void ToggleActiveCamera() {
-            if (gameObject.activeSelf) {
-                var index = cameras.IndexOf(ActiveCamera);
-                SetActiveCamera(index == cameras.Count - 1 ? cameras[0] : cameras[index + 1]);
-                if (ActiveCamera != null)
-                    Preferences.Instance.SetString("preferredCamera", ActiveCamera.Name);
-            }
+            if (gameObject.activeSelf)
+                if (ActiveCamera != null) {
+                    // on toggle camera from free cam state, revert to last known
+                    if (ActiveCamera.cameraType == CameraType.FreeCam) {
+                        RecoverPreferredCameraFromPreferences();
+                        return;
+                    }
+
+                    // otherwise cycle through and save the new preferred camera;
+                    var index = cameras.IndexOf(ActiveCamera);
+                    SetActiveCamera(index == cameras.Count - 1 ? cameras[0] : cameras[index + 1]);
+                    Preferences.Instance.SetString("preferredCamera", ActiveCamera!.Name);
+                }
+        }
+
+        public void SetFreeCameraEnabled(bool freeCamEnabled) {
+            if (ActiveCamera != null)
+                if (freeCamEnabled) // freeCamera.InitPosition(transform.localPosition + new Vector3(10, 0, 0));
+                    SetActiveCamera(freeCamera.ShipCamera);
         }
 
         private void SetActiveCamera(ShipCamera newCamera) {
@@ -156,6 +173,10 @@ namespace Core.Player {
             var type = newCamera.cameraType;
             user.InGameUI.MouseWidgetScreen.gameObject.SetActive(type == CameraType.ThirdPerson);
             user.InGameUI.MouseWidgetWorld.gameObject.SetActive(type == CameraType.FirstPerson);
+
+            //TODO recording stuff code get rid of this aaaaaaaaaa
+            user.InGameUI.ShipStats.SetStatsVisible(false);
+
             newCamera.SetCameraActive(true);
         }
 

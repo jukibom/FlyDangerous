@@ -1,10 +1,13 @@
+using System.Collections;
 using Misc;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI {
     public class FdConsole : Singleton<FdConsole> {
-        // TODO: make this log entry an array and trim as we go
+        [SerializeField] private ScrollRect logEntryScrollRect;
+
+        // TODO: Make this a trimmed array or something, no idea how slow this is!
         [SerializeField] private Text logEntry;
 
         public bool Visible { get; private set; }
@@ -41,6 +44,14 @@ namespace UI {
 
         public void LogMessage(string message) {
             logEntry.text = logEntry.text + "\n" + message;
+
+            // need to wait one frame for the scroll rect to be ready to move
+            IEnumerator ScrollToBottom() {
+                yield return new WaitForEndOfFrame();
+                logEntryScrollRect.verticalNormalizedPosition = 0f;
+            }
+
+            StartCoroutine(ScrollToBottom());
             Debug.Log(message);
         }
 

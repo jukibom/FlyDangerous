@@ -53,6 +53,15 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Toggle Free Cam"",
+                    ""type"": ""Button"",
+                    ""id"": ""7eb34af9-81a8-4176-ad10-f2913506a2a3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -108,6 +117,17 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Everything"",
                     ""action"": ""Show Game Menu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d0d9558d-16a9-4787-80d0-fc905ef581bf"",
+                    ""path"": ""<Keyboard>/f5"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Toggle Free Cam"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -3227,6 +3247,515 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""FreeCam"",
+            ""id"": ""25a5910c-eeb7-40bc-ac29-d794a76a8039"",
+            ""actions"": [
+                {
+                    ""name"": ""FreeCamMove"",
+                    ""type"": ""Value"",
+                    ""id"": ""8f668166-981a-4480-a6cb-6d35c100371e"",
+                    ""expectedControlType"": ""Stick"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""FreeCamLook"",
+                    ""type"": ""Value"",
+                    ""id"": ""1f9c05fa-91de-4d6f-a8f6-af1adc74bbd0"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""FreeCamAscend"",
+                    ""type"": ""Value"",
+                    ""id"": ""521decb2-cf61-4709-9bba-f51f55aa6065"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""FreeCamToggleMovementLock"",
+                    ""type"": ""Button"",
+                    ""id"": ""4e324fcf-88bc-412a-a3e8-10acbe52a171"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FreeCamToggleFocusLock"",
+                    ""type"": ""Button"",
+                    ""id"": ""018f478f-0bee-47a0-9d65-487d77c6d30c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FreeCamToggleFreeze"",
+                    ""type"": ""Button"",
+                    ""id"": ""e6df418f-48c8-4965-9d11-e68901ac5eb0"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FreeCamFieldOfView"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""97fc58d1-ad40-4ab3-a5a4-76051f6c9982"",
+                    ""expectedControlType"": ""Analog"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FreeCamSetMotionMultiplier"",
+                    ""type"": ""Value"",
+                    ""id"": ""6410c5da-4397-4b97-8e1c-447ea333a074"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""00ea07f3-d3cb-4315-9dab-063c509fa63d"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": ""StickDeadzone"",
+                    ""groups"": ""Everything"",
+                    ""action"": ""FreeCamMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""bf893bd8-cd1e-451d-8124-1e309fb32094"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FreeCamMove"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""c4ea642a-ae5c-43ef-96d0-c57fa76a9073"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""FreeCamMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""e3dbc7cc-5e32-4c42-aa13-13e3211c2816"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""FreeCamMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""10daaf35-2d91-4ae3-8df4-1095a1b878f7"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""FreeCamMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""7c94bf08-c173-41a7-aa11-9bf9846487d5"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""FreeCamMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5b0be296-c28c-460c-b490-682b3019512a"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": ""StickDeadzone"",
+                    ""groups"": ""Everything"",
+                    ""action"": ""FreeCamLook"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""e465ae48-d855-4cf9-910e-1d8e9d7855ea"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FreeCamLook"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""e79fdcfa-2c9d-4380-8352-e7d80cb2191a"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""FreeCamLook"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""3079ff12-a382-4ce9-9fa2-1954998c7c97"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""FreeCamLook"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""98cb2fbb-8c97-486c-a5d8-6a9322979bf6"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""FreeCamLook"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""03492d48-c1d6-4123-9e40-488345612f3f"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""FreeCamLook"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""dc0c6754-0632-432f-9153-744a86b32dc7"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": ""ScaleVector2(x=0.02,y=0.02)"",
+                    ""groups"": ""Everything"",
+                    ""action"": ""FreeCamLook"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""d286c84e-e0a0-418e-83ae-c69f1861cc1a"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FreeCamAscend"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""4d380a2e-c06d-4828-a945-2777fc3ec0bf"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""FreeCamAscend"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""63fa8a15-e1e4-4f75-b871-51152fc06068"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""FreeCamAscend"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""5c980cf0-b3ac-448b-8524-b3aa2daf47fa"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FreeCamAscend"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""47bacf3e-7f49-4060-8fd7-872c541882a7"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""FreeCamAscend"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""fcbef9e2-bf3b-48bb-815c-46af760eb7e0"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""FreeCamAscend"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""89bee345-dabc-4b4f-b79e-8e37e6158807"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""FreeCamToggleMovementLock"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fce1725c-d198-4a8e-8f91-3f8500ccb7cd"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""FreeCamToggleFocusLock"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c6d30b17-6a16-4123-9f36-14997d7b7e98"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""FreeCamToggleFocusLock"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1a369174-da9e-45fe-841e-cdbba2db78fd"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""FreeCamToggleFreeze"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5b39b3c7-f650-42ed-9a91-c5b7c23acd61"",
+                    ""path"": ""<Keyboard>/pause"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""FreeCamToggleFreeze"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""7ddd78f5-dbd2-4c3c-9fe7-966164bd4d19"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FreeCamSetMotionMultiplier"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""3aacc191-6669-4d60-9eda-b9eb33f4e60e"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""FreeCamSetMotionMultiplier"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""91bd1909-642e-4e6e-af2a-da3ad7053bf6"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""FreeCamSetMotionMultiplier"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""266e2a34-d668-47b9-82b6-16c50c738770"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FreeCamSetMotionMultiplier"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""83229e9b-ca89-4301-bd44-97733e8b45ec"",
+                    ""path"": ""<Keyboard>/minus"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""FreeCamSetMotionMultiplier"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""d05f67da-b8dd-401b-b5df-34233f07cb7b"",
+                    ""path"": ""<Keyboard>/equals"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""FreeCamSetMotionMultiplier"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""68337601-881e-4f2f-9d6a-d04a3e1429a1"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FreeCamSetMotionMultiplier"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""c35912d4-1f8f-4fc2-b10a-942a5efce452"",
+                    ""path"": ""<Keyboard>/numpadMinus"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""FreeCamSetMotionMultiplier"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""993e1493-a780-4fa6-bf87-baef4c4d861c"",
+                    ""path"": ""<Keyboard>/numpadPlus"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""FreeCamSetMotionMultiplier"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""6716d50c-f92c-4db4-b23f-4da06fbdaed8"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FreeCamFieldOfView"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""b6311a51-7ed9-49da-ae1b-b31530b4c5a1"",
+                    ""path"": ""<Gamepad>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""FreeCamFieldOfView"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""351887b6-e030-43ce-b402-d83e945938f9"",
+                    ""path"": ""<Gamepad>/dpad/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""FreeCamFieldOfView"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""172a6dd2-efc6-4e4a-9258-f9cae8b412c3"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FreeCamFieldOfView"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""b2e1c279-39c7-4f80-ba76-0c62182c7a34"",
+                    ""path"": ""<Keyboard>/leftBracket"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""FreeCamFieldOfView"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""0f94bc30-5e8a-42db-9d72-a49660e93212"",
+                    ""path"": ""<Keyboard>/rightBracket"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""FreeCamFieldOfView"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -3323,6 +3852,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         m_Global_ResetHMDView = m_Global.FindAction("Reset HMD View", throwIfNotFound: true);
         m_Global_ToggleConsole = m_Global.FindAction("Toggle Console", throwIfNotFound: true);
         m_Global_ShowGameMenu = m_Global.FindAction("Show Game Menu", throwIfNotFound: true);
+        m_Global_ToggleFreeCam = m_Global.FindAction("Toggle Free Cam", throwIfNotFound: true);
         // Ship
         m_Ship = asset.FindActionMap("Ship", throwIfNotFound: true);
         m_Ship_RestartTrack = m_Ship.FindAction("Restart Track", throwIfNotFound: true);
@@ -3384,6 +3914,16 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         m_UI_RightClick = m_UI.FindAction("RightClick", throwIfNotFound: true);
         m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
+        // FreeCam
+        m_FreeCam = asset.FindActionMap("FreeCam", throwIfNotFound: true);
+        m_FreeCam_FreeCamMove = m_FreeCam.FindAction("FreeCamMove", throwIfNotFound: true);
+        m_FreeCam_FreeCamLook = m_FreeCam.FindAction("FreeCamLook", throwIfNotFound: true);
+        m_FreeCam_FreeCamAscend = m_FreeCam.FindAction("FreeCamAscend", throwIfNotFound: true);
+        m_FreeCam_FreeCamToggleMovementLock = m_FreeCam.FindAction("FreeCamToggleMovementLock", throwIfNotFound: true);
+        m_FreeCam_FreeCamToggleFocusLock = m_FreeCam.FindAction("FreeCamToggleFocusLock", throwIfNotFound: true);
+        m_FreeCam_FreeCamToggleFreeze = m_FreeCam.FindAction("FreeCamToggleFreeze", throwIfNotFound: true);
+        m_FreeCam_FreeCamFieldOfView = m_FreeCam.FindAction("FreeCamFieldOfView", throwIfNotFound: true);
+        m_FreeCam_FreeCamSetMotionMultiplier = m_FreeCam.FindAction("FreeCamSetMotionMultiplier", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -3446,6 +3986,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Global_ResetHMDView;
     private readonly InputAction m_Global_ToggleConsole;
     private readonly InputAction m_Global_ShowGameMenu;
+    private readonly InputAction m_Global_ToggleFreeCam;
     public struct GlobalActions
     {
         private @FlyDangerousActions m_Wrapper;
@@ -3453,6 +3994,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         public InputAction @ResetHMDView => m_Wrapper.m_Global_ResetHMDView;
         public InputAction @ToggleConsole => m_Wrapper.m_Global_ToggleConsole;
         public InputAction @ShowGameMenu => m_Wrapper.m_Global_ShowGameMenu;
+        public InputAction @ToggleFreeCam => m_Wrapper.m_Global_ToggleFreeCam;
         public InputActionMap Get() { return m_Wrapper.m_Global; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -3471,6 +4013,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @ShowGameMenu.started -= m_Wrapper.m_GlobalActionsCallbackInterface.OnShowGameMenu;
                 @ShowGameMenu.performed -= m_Wrapper.m_GlobalActionsCallbackInterface.OnShowGameMenu;
                 @ShowGameMenu.canceled -= m_Wrapper.m_GlobalActionsCallbackInterface.OnShowGameMenu;
+                @ToggleFreeCam.started -= m_Wrapper.m_GlobalActionsCallbackInterface.OnToggleFreeCam;
+                @ToggleFreeCam.performed -= m_Wrapper.m_GlobalActionsCallbackInterface.OnToggleFreeCam;
+                @ToggleFreeCam.canceled -= m_Wrapper.m_GlobalActionsCallbackInterface.OnToggleFreeCam;
             }
             m_Wrapper.m_GlobalActionsCallbackInterface = instance;
             if (instance != null)
@@ -3484,6 +4029,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @ShowGameMenu.started += instance.OnShowGameMenu;
                 @ShowGameMenu.performed += instance.OnShowGameMenu;
                 @ShowGameMenu.canceled += instance.OnShowGameMenu;
+                @ToggleFreeCam.started += instance.OnToggleFreeCam;
+                @ToggleFreeCam.performed += instance.OnToggleFreeCam;
+                @ToggleFreeCam.canceled += instance.OnToggleFreeCam;
             }
         }
     }
@@ -4003,6 +4551,95 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         }
     }
     public UIActions @UI => new UIActions(this);
+
+    // FreeCam
+    private readonly InputActionMap m_FreeCam;
+    private IFreeCamActions m_FreeCamActionsCallbackInterface;
+    private readonly InputAction m_FreeCam_FreeCamMove;
+    private readonly InputAction m_FreeCam_FreeCamLook;
+    private readonly InputAction m_FreeCam_FreeCamAscend;
+    private readonly InputAction m_FreeCam_FreeCamToggleMovementLock;
+    private readonly InputAction m_FreeCam_FreeCamToggleFocusLock;
+    private readonly InputAction m_FreeCam_FreeCamToggleFreeze;
+    private readonly InputAction m_FreeCam_FreeCamFieldOfView;
+    private readonly InputAction m_FreeCam_FreeCamSetMotionMultiplier;
+    public struct FreeCamActions
+    {
+        private @FlyDangerousActions m_Wrapper;
+        public FreeCamActions(@FlyDangerousActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @FreeCamMove => m_Wrapper.m_FreeCam_FreeCamMove;
+        public InputAction @FreeCamLook => m_Wrapper.m_FreeCam_FreeCamLook;
+        public InputAction @FreeCamAscend => m_Wrapper.m_FreeCam_FreeCamAscend;
+        public InputAction @FreeCamToggleMovementLock => m_Wrapper.m_FreeCam_FreeCamToggleMovementLock;
+        public InputAction @FreeCamToggleFocusLock => m_Wrapper.m_FreeCam_FreeCamToggleFocusLock;
+        public InputAction @FreeCamToggleFreeze => m_Wrapper.m_FreeCam_FreeCamToggleFreeze;
+        public InputAction @FreeCamFieldOfView => m_Wrapper.m_FreeCam_FreeCamFieldOfView;
+        public InputAction @FreeCamSetMotionMultiplier => m_Wrapper.m_FreeCam_FreeCamSetMotionMultiplier;
+        public InputActionMap Get() { return m_Wrapper.m_FreeCam; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(FreeCamActions set) { return set.Get(); }
+        public void SetCallbacks(IFreeCamActions instance)
+        {
+            if (m_Wrapper.m_FreeCamActionsCallbackInterface != null)
+            {
+                @FreeCamMove.started -= m_Wrapper.m_FreeCamActionsCallbackInterface.OnFreeCamMove;
+                @FreeCamMove.performed -= m_Wrapper.m_FreeCamActionsCallbackInterface.OnFreeCamMove;
+                @FreeCamMove.canceled -= m_Wrapper.m_FreeCamActionsCallbackInterface.OnFreeCamMove;
+                @FreeCamLook.started -= m_Wrapper.m_FreeCamActionsCallbackInterface.OnFreeCamLook;
+                @FreeCamLook.performed -= m_Wrapper.m_FreeCamActionsCallbackInterface.OnFreeCamLook;
+                @FreeCamLook.canceled -= m_Wrapper.m_FreeCamActionsCallbackInterface.OnFreeCamLook;
+                @FreeCamAscend.started -= m_Wrapper.m_FreeCamActionsCallbackInterface.OnFreeCamAscend;
+                @FreeCamAscend.performed -= m_Wrapper.m_FreeCamActionsCallbackInterface.OnFreeCamAscend;
+                @FreeCamAscend.canceled -= m_Wrapper.m_FreeCamActionsCallbackInterface.OnFreeCamAscend;
+                @FreeCamToggleMovementLock.started -= m_Wrapper.m_FreeCamActionsCallbackInterface.OnFreeCamToggleMovementLock;
+                @FreeCamToggleMovementLock.performed -= m_Wrapper.m_FreeCamActionsCallbackInterface.OnFreeCamToggleMovementLock;
+                @FreeCamToggleMovementLock.canceled -= m_Wrapper.m_FreeCamActionsCallbackInterface.OnFreeCamToggleMovementLock;
+                @FreeCamToggleFocusLock.started -= m_Wrapper.m_FreeCamActionsCallbackInterface.OnFreeCamToggleFocusLock;
+                @FreeCamToggleFocusLock.performed -= m_Wrapper.m_FreeCamActionsCallbackInterface.OnFreeCamToggleFocusLock;
+                @FreeCamToggleFocusLock.canceled -= m_Wrapper.m_FreeCamActionsCallbackInterface.OnFreeCamToggleFocusLock;
+                @FreeCamToggleFreeze.started -= m_Wrapper.m_FreeCamActionsCallbackInterface.OnFreeCamToggleFreeze;
+                @FreeCamToggleFreeze.performed -= m_Wrapper.m_FreeCamActionsCallbackInterface.OnFreeCamToggleFreeze;
+                @FreeCamToggleFreeze.canceled -= m_Wrapper.m_FreeCamActionsCallbackInterface.OnFreeCamToggleFreeze;
+                @FreeCamFieldOfView.started -= m_Wrapper.m_FreeCamActionsCallbackInterface.OnFreeCamFieldOfView;
+                @FreeCamFieldOfView.performed -= m_Wrapper.m_FreeCamActionsCallbackInterface.OnFreeCamFieldOfView;
+                @FreeCamFieldOfView.canceled -= m_Wrapper.m_FreeCamActionsCallbackInterface.OnFreeCamFieldOfView;
+                @FreeCamSetMotionMultiplier.started -= m_Wrapper.m_FreeCamActionsCallbackInterface.OnFreeCamSetMotionMultiplier;
+                @FreeCamSetMotionMultiplier.performed -= m_Wrapper.m_FreeCamActionsCallbackInterface.OnFreeCamSetMotionMultiplier;
+                @FreeCamSetMotionMultiplier.canceled -= m_Wrapper.m_FreeCamActionsCallbackInterface.OnFreeCamSetMotionMultiplier;
+            }
+            m_Wrapper.m_FreeCamActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @FreeCamMove.started += instance.OnFreeCamMove;
+                @FreeCamMove.performed += instance.OnFreeCamMove;
+                @FreeCamMove.canceled += instance.OnFreeCamMove;
+                @FreeCamLook.started += instance.OnFreeCamLook;
+                @FreeCamLook.performed += instance.OnFreeCamLook;
+                @FreeCamLook.canceled += instance.OnFreeCamLook;
+                @FreeCamAscend.started += instance.OnFreeCamAscend;
+                @FreeCamAscend.performed += instance.OnFreeCamAscend;
+                @FreeCamAscend.canceled += instance.OnFreeCamAscend;
+                @FreeCamToggleMovementLock.started += instance.OnFreeCamToggleMovementLock;
+                @FreeCamToggleMovementLock.performed += instance.OnFreeCamToggleMovementLock;
+                @FreeCamToggleMovementLock.canceled += instance.OnFreeCamToggleMovementLock;
+                @FreeCamToggleFocusLock.started += instance.OnFreeCamToggleFocusLock;
+                @FreeCamToggleFocusLock.performed += instance.OnFreeCamToggleFocusLock;
+                @FreeCamToggleFocusLock.canceled += instance.OnFreeCamToggleFocusLock;
+                @FreeCamToggleFreeze.started += instance.OnFreeCamToggleFreeze;
+                @FreeCamToggleFreeze.performed += instance.OnFreeCamToggleFreeze;
+                @FreeCamToggleFreeze.canceled += instance.OnFreeCamToggleFreeze;
+                @FreeCamFieldOfView.started += instance.OnFreeCamFieldOfView;
+                @FreeCamFieldOfView.performed += instance.OnFreeCamFieldOfView;
+                @FreeCamFieldOfView.canceled += instance.OnFreeCamFieldOfView;
+                @FreeCamSetMotionMultiplier.started += instance.OnFreeCamSetMotionMultiplier;
+                @FreeCamSetMotionMultiplier.performed += instance.OnFreeCamSetMotionMultiplier;
+                @FreeCamSetMotionMultiplier.canceled += instance.OnFreeCamSetMotionMultiplier;
+            }
+        }
+    }
+    public FreeCamActions @FreeCam => new FreeCamActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     public InputControlScheme KeyboardMouseScheme
     {
@@ -4062,6 +4699,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         void OnResetHMDView(InputAction.CallbackContext context);
         void OnToggleConsole(InputAction.CallbackContext context);
         void OnShowGameMenu(InputAction.CallbackContext context);
+        void OnToggleFreeCam(InputAction.CallbackContext context);
     }
     public interface IShipActions
     {
@@ -4126,5 +4764,16 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         void OnRightClick(InputAction.CallbackContext context);
         void OnTrackedDevicePosition(InputAction.CallbackContext context);
         void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
+    }
+    public interface IFreeCamActions
+    {
+        void OnFreeCamMove(InputAction.CallbackContext context);
+        void OnFreeCamLook(InputAction.CallbackContext context);
+        void OnFreeCamAscend(InputAction.CallbackContext context);
+        void OnFreeCamToggleMovementLock(InputAction.CallbackContext context);
+        void OnFreeCamToggleFocusLock(InputAction.CallbackContext context);
+        void OnFreeCamToggleFreeze(InputAction.CallbackContext context);
+        void OnFreeCamFieldOfView(InputAction.CallbackContext context);
+        void OnFreeCamSetMotionMultiplier(InputAction.CallbackContext context);
     }
 }
