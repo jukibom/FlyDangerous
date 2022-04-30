@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Cinemachine;
@@ -37,6 +37,7 @@ namespace Core.Player {
             if (ActiveCamera != null)
                 ActiveCamera.Reset();
             cameraTarget.localPosition = baseTargetPosition;
+            cameraTarget.transform.rotation = _transform.rotation;
         }
 
         private void Start() {
