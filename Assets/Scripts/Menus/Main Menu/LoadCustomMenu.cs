@@ -20,7 +20,7 @@ namespace Menus.Main_Menu {
         }
 
         protected override void OnOpen() {
-            startButton.interactable = true;
+            OnSaveInputFieldChanged(saveInput.text);
         }
 
         public void ClosePanel() {
@@ -30,23 +30,19 @@ namespace Menus.Main_Menu {
         public void OnSaveInputFieldChanged(string levelString) {
             _levelData = null;
             saveWarning.enabled = false;
-            defaultActiveButton.enabled = false;
 
             // simple fast checks to prevent it parsing for every character in a large paste operation
+            SetInvalidState();
+
             var text = saveInput.text;
-            if (text.Length > 0) {
+            if (text.Length > 0)
                 if (text.FirstOrDefault() == '{' && text.Last() == '}') {
                     _levelData = LevelData.FromJsonString(text);
 
-                    if (_levelData == null || _levelData.version == 0)
-                        SetInvalidState();
-                    else
-                        SetValidState();
+                    if (_levelData != null && _levelData.version != 0) SetValidState();
                 }
-                else {
-                    SetInvalidState();
-                }
-            }
+
+            saveWarning.enabled = text.Length != 0 && saveWarning.enabled;
         }
 
         public void StartMap() {
@@ -65,13 +61,13 @@ namespace Menus.Main_Menu {
             }
 
             saveWarning.enabled = false;
-            defaultActiveButton.enabled = true;
+            startButton.interactable = true;
         }
 
         private void SetInvalidState() {
             mapInfo.text = "";
             saveWarning.enabled = true;
-            defaultActiveButton.enabled = false;
+            startButton.interactable = false;
         }
     }
 }
