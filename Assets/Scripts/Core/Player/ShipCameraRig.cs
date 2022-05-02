@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Cinemachine;
@@ -173,9 +173,6 @@ namespace Core.Player {
             var type = newCamera.cameraType;
             user.InGameUI.MouseWidgetScreen.gameObject.SetActive(type == CameraType.ThirdPerson);
             user.InGameUI.MouseWidgetWorld.gameObject.SetActive(type == CameraType.FirstPerson);
-
-            //TODO recording stuff code get rid of this aaaaaaaaaa
-            user.InGameUI.ShipStats.SetStatsVisible(false);
 
             newCamera.SetCameraActive(true);
         }
