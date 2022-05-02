@@ -471,7 +471,6 @@ namespace Core.Player {
         [UsedImplicitly]
         public void OnToggleFreeCam(InputValue value) {
             if (!Game.Instance.IsVREnabled) {
-                Debug.Log("HI FREECAM");
                 _freeCamEnabled = !_freeCamEnabled;
                 if (_freeCamEnabled) {
                     DisableGameInput();
