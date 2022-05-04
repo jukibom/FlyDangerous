@@ -60,6 +60,8 @@ namespace Core.MapData {
         [JsonConverter(typeof(FdEnumJsonConverter))]
         public Location location = Location.Space;
 
+        public string musicTrack = "";
+
         public string name = "";
         public LevelDataVector3 startPosition = new();
         public LevelDataVector3 startRotation = new();

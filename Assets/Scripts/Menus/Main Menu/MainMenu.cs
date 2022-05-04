@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Linq;
+using Audio;
 using Core;
 using Core.MapData;
 using JetBrains.Annotations;
@@ -10,7 +11,6 @@ using UnityEngine.SceneManagement;
 using UnityEngine.XR.Interaction.Toolkit;
 
 namespace Menus.Main_Menu {
-    [RequireComponent(typeof(MainMenuMusic))]
     public class MainMenu : MonoBehaviour {
         // Animating the ship
         [SerializeField] private GameObject shipMesh;
@@ -135,8 +135,7 @@ namespace Menus.Main_Menu {
             yield return SceneManager.LoadSceneAsync(sceneEnvironment.SceneToLoad, LoadSceneMode.Additive);
             yield return new WaitForEndOfFrame();
 
-            GetComponent<MainMenuMusic>().PlayMenuMusic(FirstRun);
-
+            MusicManager.Instance.PlayMusic(MusicTrack.MainMenu, FirstRun, false, false);
             Game.Instance.SetFlatScreenCameraControllerActive(false);
 
             FloatingOrigin.Instance.FocalTransform = transform;

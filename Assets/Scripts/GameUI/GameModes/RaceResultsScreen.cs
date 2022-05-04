@@ -19,6 +19,7 @@ namespace GameUI.GameModes {
         [SerializeField] private LevelCompetitionPanel competitionPanel;
         [SerializeField] private GameObject uiButtons;
         [SerializeField] private Button defaultSelectedButton;
+        [SerializeField] private AudioListener temporaryAudioListener;
 
         public void Hide() {
             resultsScreenBackground.enabled = false;
@@ -114,7 +115,7 @@ namespace GameUI.GameModes {
         }
 
         public void NextLevel() {
-            // TODO: probably something better than this hot bullshit but I am very much at the end of my tether
+            // TODO: probably something better than this hot bullshit but I am very much at the end of my tether (esp. the audio listener)
             if (Game.Instance.loadedMainLevel != null) {
                 var nextLevel = Level.FromId(Game.Instance.loadedMainLevel.Id + 1);
 
@@ -124,6 +125,13 @@ namespace GameUI.GameModes {
 
                 FdNetworkManager.Instance.StartGameLoadSequence(SessionType.Singleplayer, nextLevel.Data);
                 Game.Instance.loadedMainLevel = nextLevel;
+
+                // continue to play music while killing the ship and destroying the world (yeet ourselves off the ship!)
+                var lastBastionOfHope = FindObjectOfType<World>();
+                if (lastBastionOfHope) {
+                    transform.parent = lastBastionOfHope.transform;
+                    temporaryAudioListener.enabled = true;
+                }
             }
         }
     }

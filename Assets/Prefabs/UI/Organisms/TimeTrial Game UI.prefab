@@ -2583,6 +2583,7 @@ GameObject:
   - component: {fileID: 9151321556283229834}
   - component: {fileID: 7085694941485524692}
   - component: {fileID: 5514126506682515394}
+  - component: {fileID: 7549209246470627028}
   m_Layer: 5
   m_Name: ResultsScreen
   m_TagString: Untagged
@@ -2632,6 +2633,7 @@ MonoBehaviour:
   competitionPanel: {fileID: 396753171370332170}
   uiButtons: {fileID: 2604280456705650004}
   defaultSelectedButton: {fileID: 5147356405477130223}
+  temporaryAudioListener: {fileID: 7549209246470627028}
 --- !u!222 &9151321556283229834
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2766,6 +2768,14 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!81 &7549209246470627028
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9035904222347780726}
+  m_Enabled: 0
 --- !u!1001 &212818441501174946
 PrefabInstance:
   m_ObjectHideFlags: 0

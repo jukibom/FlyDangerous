@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Audio;
 using Cinemachine;
 using Core.Player;
 using Den.Tools;
@@ -31,11 +32,17 @@ namespace Core.MapData {
 
             var locationSceneToLoad = levelData.location.SceneToLoad;
             var environmentSceneToLoad = levelData.environment.SceneToLoad;
+            var musicTrack = levelData.musicTrack;
 
             // now we can finally start the level load
             _scenesLoading.Add(SceneManager.LoadSceneAsync(environmentSceneToLoad, LoadSceneMode.Additive));
             _scenesLoading.Add(SceneManager.LoadSceneAsync(locationSceneToLoad, LoadSceneMode.Additive));
             _scenesLoading.ForEach(scene => scene.allowSceneActivation = false);
+
+            if (musicTrack != "")
+                MusicManager.Instance.PlayMusic(MusicTrack.FromString(musicTrack), true, true, false);
+            else
+                MusicManager.Instance.StopMusic(true);
 
             yield return StartCoroutine(LoadGameScenes());
         }

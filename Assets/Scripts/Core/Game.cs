@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Audio;
 using Cinemachine;
 using Core.MapData;
 using Core.Player;
@@ -430,6 +431,7 @@ namespace Core {
                 Time.timeScale = 1;
 
                 FadeToBlack();
+                MusicManager.Instance.StopMusic(true);
                 yield return new WaitForSeconds(0.5f);
                 yield return SceneManager.LoadSceneAsync("Main Menu");
                 SetFlatScreenCameraControllerActive(false);

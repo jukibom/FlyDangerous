@@ -213,7 +213,7 @@ namespace Core {
 
                 // Transition any in-game players to loading state
                 if (Game.Instance.SessionStatus == SessionStatus.InGame)
-                    // iterate over a COPY of the lobby players (the List is mutated by transitioning!)
+                    // iterate over a COPY of the ship players (the List is mutated by transitioning!)
                     foreach (var shipPlayer in ShipPlayers.ToArray())
                         TransitionToLoadingPlayer(shipPlayer);
 
