@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Core.Player {
     public class Flag : IFdEnum {
         private static int _id;
-        public static readonly Flag None = new(0, "None", "none");
+        public static readonly Flag None = new(0, "None", "!none");
         public static readonly Flag Andorra = new(1, "Andorra", "ad");
         public static readonly Flag UnitedArabEmirates = new(2, "United Arab Emirates", "ae");
         public static readonly Flag Afghanistan = new(3, "Afghanistan", "af");
@@ -270,12 +270,12 @@ namespace Core.Player {
         }
 
         private static int GenerateId => _id++;
+        public int FixedId { get; }
+        public string Filename { get; }
 
         public int Id { get; }
-        public int FixedId { get; }
         public string Name { get; }
-        public string Filename { get; }
-        
+
         public static Flag FromString(string nameString) {
             return FdEnum.FromString(List(), nameString);
         }
@@ -288,7 +288,7 @@ namespace Core.Player {
         public static Flag FromFixedId(int fixedId) {
             var fdEnums = List();
             var flags = fdEnums as Flag[] ?? fdEnums.ToArray();
-            
+
             try {
                 return flags.Single(l => l.FixedId == fixedId);
             }
@@ -303,7 +303,7 @@ namespace Core.Player {
         public static Flag FromFilename(string filename) {
             var fdEnums = List();
             var flags = fdEnums as Flag[] ?? fdEnums.ToArray();
-            
+
             try {
                 return flags.Single(l => l.Filename == filename);
             }
@@ -570,7 +570,7 @@ namespace Core.Player {
                 WesternSahara,
                 Yemen,
                 Zambia,
-                Zimbabwe,
+                Zimbabwe
             };
         }
     }
