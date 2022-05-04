@@ -38,7 +38,9 @@ public class OptionHighlight : MonoBehaviour, ISelectHandler, IDeselectHandler, 
     }
 
     public void OnPointerClick(PointerEventData eventData) {
-        ActivateElement();
+        // Only activate if the click originated outside the element to activate but within this boundary
+        if (eventData.pointerPress != interactionObject.gameObject)
+            ActivateElement();
     }
 
     public void OnPointerEnter(PointerEventData eventData) {
