@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Linq;
 using Core;
+using Core.MapData;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -36,7 +37,7 @@ namespace Menus.Main_Menu {
 
         private void FixedUpdate() {
             // gently rock the ship mesh back and forth
-            var rotationAmount = (0.25f - Mathf.PingPong(Time.time / 2, 0.5f)) / 5;
+            var rotationAmount = (0.25f - Mathf.PingPong(Time.time / 5, 0.5f)) / 5;
             shipMesh.transform.Rotate(Vector3.forward, rotationAmount);
         }
 
@@ -107,31 +108,31 @@ namespace Menus.Main_Menu {
             // load engine if not already 
             if (!FindObjectOfType<Engine>()) yield return SceneManager.LoadSceneAsync("Engine", LoadSceneMode.Additive);
 
-            var sceneEnvironment = "Planet_Orbit_Bottom";
+            var sceneEnvironment = Environment.PlanetOrbitBottom;
 
             if (!FirstRun) {
                 // If it's not the first run, switch up the title screen :D
-                var environmentIndex = Random.Range(0, 5);
+                var environmentIndex = Random.Range(0, 6);
                 switch (environmentIndex) {
                     case 0:
-                        sceneEnvironment = "Planet_Orbit_Bottom";
+                        sceneEnvironment = Environment.PlanetOrbitBottom;
                         break;
                     case 1:
-                        sceneEnvironment = "Sunrise_Clear";
+                        sceneEnvironment = Environment.PlanetOrbitTop;
                         break;
                     case 2:
-                        sceneEnvironment = "Noon_Clear";
+                        sceneEnvironment = Environment.SunriseClear;
                         break;
                     case 3:
-                        sceneEnvironment = "Noon_Cloudy";
+                        sceneEnvironment = Environment.NoonClear;
                         break;
                     case 4:
-                        sceneEnvironment = "Sunset_Clear";
+                        sceneEnvironment = Environment.SunsetClear;
                         break;
                 }
             }
 
-            yield return SceneManager.LoadSceneAsync(sceneEnvironment, LoadSceneMode.Additive);
+            yield return SceneManager.LoadSceneAsync(sceneEnvironment.SceneToLoad, LoadSceneMode.Additive);
             yield return new WaitForEndOfFrame();
 
             GetComponent<MainMenuMusic>().PlayMenuMusic(FirstRun);
