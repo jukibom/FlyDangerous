@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Core.MapData;
 using Core.Replays;
+using JetBrains.Annotations;
 using Misc;
 using UnityEngine;
 
@@ -36,6 +37,23 @@ namespace Menus.Main_Menu.Components {
                 // enable the best score by default
                 ghostEntry.checkbox.isChecked = _replays.First() == replay;
             }
+        }
+
+        /**
+         * Return the element below, if it exists, or the element above, if it exists.
+         */
+        [CanBeNull]
+        public GhostEntry GetNearest(GhostEntry nextToGhostEntry) {
+            GhostEntry ge = null;
+            var entries = ghostEntryContainer.GetComponentsInChildren<GhostEntry>();
+            for (var i = 0; i < entries.Length; i++)
+                if (entries[i] == nextToGhostEntry) {
+                    if (entries.Length > i + 1)
+                        ge = entries[i + 1];
+                    else if (i > 0) ge = entries[i - 1];
+                }
+
+            return ge;
         }
     }
 }

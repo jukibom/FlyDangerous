@@ -1,15 +1,21 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Core;
 using Core.MapData;
 using Core.Replays;
+using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Menus.Main_Menu.Components {
     public class LevelCompetitionPanel : MonoBehaviour {
         [SerializeField] private GhostList ghostList;
         [SerializeField] private Leaderboard leaderboard;
+
+        [Label("Used if deleting a ghost entry and there's none others to select")] [SerializeField]
+        private Button defaultSelectedElement;
 
         private LevelData _levelData;
 
@@ -37,8 +43,21 @@ namespace Menus.Main_Menu.Components {
         }
 
         public void DeleteGhost(GhostEntry ghostEntry) {
+            // why does this event system hate me
+            IEnumerator SelectElement(Button element) {
+                yield return new WaitForEndOfFrame();
+                element.Select();
+            }
+
+            var nearestElement = ghostList.GetNearest(ghostEntry);
+
+            if (nearestElement != null)
+                StartCoroutine(SelectElement(nearestElement.deleteButton));
+            else
+                StartCoroutine(SelectElement(defaultSelectedElement));
+
             ghostEntry.replay.Delete();
-            PopulateGhostsForLevel();
+            Destroy(ghostEntry.gameObject);
         }
 
         private void PopulateGhostsForLevel() {
