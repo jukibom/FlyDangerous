@@ -5,6 +5,7 @@ using Core;
 using Core.MapData;
 using Core.Player;
 using Core.Replays;
+using Core.Scores;
 using Gameplay;
 using MapMagic.Core;
 using Mirror;
@@ -104,6 +105,14 @@ namespace Misc {
             }
 
             StartCoroutine(StartGame());
+        }
+
+        private void OnApplicationQuit() {
+            if (shouldRecordSession) {
+                var recorder = GetComponent<ReplayRecorder>();
+                recorder.StopRecording();
+                recorder.Replay?.Save(new ScoreData());
+            }
         }
 
         private void CreateTestSecondShip() {
