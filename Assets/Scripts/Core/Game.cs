@@ -105,7 +105,7 @@ namespace Core {
 
         public Camera InGameUICamera => inGameUiCamera;
 
-        public List<Replay> ActiveGameReplays { get; set; }
+        public List<Replay> ActiveGameReplays { get; set; } = new();
 
         public bool IsTerrainMap => _levelLoader.LoadedLevelData.location.IsTerrain;
 

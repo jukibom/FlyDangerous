@@ -189,7 +189,7 @@ namespace Gameplay {
         }
 
         public void CheckpointHit(Checkpoint checkpoint, AudioSource checkpointHitAudio) {
-            if (isActive && GameModeUI.Timers) {
+            if (isActive && GameModeUI?.Timers) {
                 var hitCheckpoint = hitCheckpoints.Find(c => c == checkpoint);
                 if (!hitCheckpoint) {
                     // new checkpoint, record it and split timer

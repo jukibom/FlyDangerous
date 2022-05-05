@@ -170,6 +170,7 @@ namespace Core.MapData {
                 name = LoadedLevelData.name,
                 gameType = LoadedLevelData.gameType,
                 location = LoadedLevelData.location,
+                musicTrack = LoadedLevelData.musicTrack,
                 environment = LoadedLevelData.environment,
                 terrainSeed = LoadedLevelData.terrainSeed,
                 checkpoints = LoadedLevelData.checkpoints
