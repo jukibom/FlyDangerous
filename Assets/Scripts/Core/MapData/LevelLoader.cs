@@ -63,8 +63,11 @@ namespace Core.MapData {
 
                 // the terrain will not be loaded if we teleport there, we need to fade to black, wait for terrain to load, then fade back. This should still be faster than full reload.
                 IEnumerator LoadTerrainAndReset(Vector3 position, Quaternion rotation) {
-                    DoReset(position, rotation);
-                    yield return new WaitForSeconds(0.5f);
+                    ship.AbsoluteWorldPosition = position;
+                    ship.transform.rotation = rotation;
+                    ship.Reset();
+
+                    yield return new WaitForSeconds(0.1f);
 
                     // wait for fully loaded local terrain
                     while (mapMagic.IsGenerating()) {
@@ -79,6 +82,7 @@ namespace Core.MapData {
                     var unload = SceneManager.UnloadSceneAsync("Loading");
                     while (!unload.isDone) yield return null;
 
+                    DoReset(position, rotation);
                     Game.Instance.FadeFromBlack();
                     yield return new WaitForSeconds(0.7f);
                 }
