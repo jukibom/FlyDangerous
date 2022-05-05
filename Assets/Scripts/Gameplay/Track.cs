@@ -129,6 +129,11 @@ namespace Gameplay {
             _complete = false;
         }
 
+        public void ClearGhosts() {
+            foreach (var shipGhost in ActiveGhosts) Game.Instance.RemoveGhost(shipGhost);
+            ActiveGhosts = new List<ShipGhost>();
+        }
+
         public IEnumerator StartTrackWithCountdown() {
             if (Checkpoints.Count > 0) {
                 _timeSeconds = -2.5f;
@@ -146,8 +151,7 @@ namespace Gameplay {
                     // Trigger recording and ghost replays
                     _replayRecorder.CancelRecording();
                     _replayRecorder.StartNewRecording(player.ShipPhysics);
-                    foreach (var shipGhost in ActiveGhosts) Game.Instance.RemoveGhost(shipGhost);
-                    ActiveGhosts = new List<ShipGhost>();
+                    ClearGhosts();
                     foreach (var activeReplay in Game.Instance.ActiveGameReplays)
                         ActiveGhosts.Add(Game.Instance.LoadGhost(activeReplay));
 

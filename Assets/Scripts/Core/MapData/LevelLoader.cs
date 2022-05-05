@@ -121,6 +121,11 @@ namespace Core.MapData {
                 // TODO: Make this distance dynamic based on tiles?
                 if (mapMagic && ship && distanceToStart > 20000) {
                     yield return StartCoroutine(ShowLoadingScreen(true));
+
+                    // if there's a track in the game world, clear ghosts
+                    var track = FindObjectOfType<Track>();
+                    if (track) track.ClearGhosts();
+
                     yield return StartCoroutine(LoadTerrainAndReset(positionToWarpTo, rotationToWarpTo));
                     yield return ResetTrackIfNeeded();
                 }
