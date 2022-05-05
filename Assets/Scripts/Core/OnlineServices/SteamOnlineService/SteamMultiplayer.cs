@@ -6,18 +6,18 @@ using Steamworks;
 
 namespace Core.OnlineServices.SteamOnlineService {
     public class SteamMultiplayer : IMultiplayerService {
-
-        private readonly SteamLobby _steamLobby = new SteamLobby();
         private readonly SteamHooks _steamHooks;
+
+        private readonly SteamLobby _steamLobby = new();
 
         public SteamMultiplayer() {
             _steamHooks = new SteamHooks(OnJoinGameRequest);
         }
-        
+
         public Task CreateLobby() {
             return _steamLobby.CreateLobby();
         }
-        
+
         public Task JoinLobby(string lobbyAddress) {
             // convert our string into a CSteamID
             var steamId = ulong.Parse(lobbyAddress);
@@ -35,6 +35,7 @@ namespace Core.OnlineServices.SteamOnlineService {
 
         private void OnJoinGameRequest(string address) {
             // TODO: Handle join request from any context (oh god state stuff why)
+            // Oh fuck you, past me
         }
     }
 }
