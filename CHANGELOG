@@ -1,4 +1,10 @@
-﻿0.5.0
+﻿0.5.1
+Fixes:
+    * Slowdown on multiple retries caused by uncleared debug log text buffer (backtick key shows in-game console)
+    * Fixed multiplayer failing to connect due to unregistered prefab (no idea how this happened, honestly!)
+    * Fixed possible soft-lock on results screen by clicking download and immediately selecting a ghost - the refresh replaced the element in a non-selected state
+
+0.5.0
 New:
     * Added in-game patch notes (oooo how meta, hello!)
     * Added Steam integration (Steam version features only, obviously ...)
