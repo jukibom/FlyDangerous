@@ -331,8 +331,8 @@ namespace Menus.Options {
             ongoingRebind = action.PerformInteractiveRebinding(bindingIndex)
                 .WithoutGeneralizingPathOfSelectedControl()
                 .OnPotentialMatch(operation => {
-                    // special case for delete key - unbind the binding!
-                    if (operation.selectedControl.path == "/Keyboard/delete") {
+                    // special case for delete key(s) - unbind the binding!
+                    if (operation.selectedControl.path is "/Keyboard/delete" or "/Keyboard/backspace") {
                         var binding = operation.action.bindings[bindingIndex];
                         binding.overridePath = "";
                         operation.action.ChangeBinding(bindingIndex).To(binding);
@@ -379,15 +379,16 @@ namespace Menus.Options {
             // If it's a part binding, show the name of the part in the UI.
             var partName = $"{action.name}";
             if (action.bindings[bindingIndex].isPartOfComposite)
-                partName = $"Binding '{action.name} : {action.bindings[bindingIndex].name}'. ";
+                partName = $"Binding '{action.name} : {action.bindings[bindingIndex].name}' ";
 
             // Bring up rebind overlay, if we have one.
             m_RebindOverlay?.SetActive(true);
             if (m_RebindText != null) {
                 var bindingTypeName = bindingType == BindingType.Primary ? "Primary" : "Secondary";
-                var text = !string.IsNullOrEmpty(ongoingRebind.expectedControlType)
-                    ? $"{partName.ToUpper()}:  {bindingTypeName.ToUpper()} BINDING\n\nWaiting for {ongoingRebind.expectedControlType} input...\n\n-------------------------------------------\n\nESC to cancel\nDEL to unbind"
-                    : $"{partName}\nWaiting for input...\n\n-------------------------------------------\n\nESC to cancel\nDEL to unbind";
+                var text = (!string.IsNullOrEmpty(ongoingRebind.expectedControlType)
+                               ? $"{partName.ToUpper()} {bindingTypeName.ToUpper()} BINDING\n\nWaiting for {ongoingRebind.expectedControlType} input..."
+                               : $"{partName}\nWaiting for input...")
+                           + "\n\n-------------------------------------------\n\nESC to cancel\nDEL / BACKSPACE to clear binding\n\n(Please toggle numlock ON for keyboard)";
                 m_RebindText.text = text;
             }
 
