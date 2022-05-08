@@ -7,6 +7,7 @@ using Core.MapData;
 using Core.Replays;
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Menus.Main_Menu.Components {
@@ -30,6 +31,9 @@ namespace Menus.Main_Menu.Components {
         }
 
         public async void DownloadGhost(LeaderboardEntry leaderboardEntry) {
+            // store the current selected UI element to return to later, if nothing is selected
+            var currentSelectedElement = EventSystem.current.currentSelectedGameObject;
+
             var currentSelectedReplays = GetSelectedReplays();
             var directory = Path.Combine(Replay.ReplayDirectory, _levelData.LevelHash());
             var filePath = await leaderboardEntry.DownloadReplay(directory);
@@ -40,6 +44,15 @@ namespace Menus.Main_Menu.Components {
                 SelectReplaysInList(currentSelectedReplays);
                 SelectReplayInList(newReplay);
             }
+
+            // restore selection if the user has moved over to a ghost element which has subsequently been replaced with refreshed state
+            // OF COURSE we need to wait a frame for the event system to do it's whatever-the-hell
+            IEnumerator RestoreSelectedIfNeeded() {
+                yield return new WaitForEndOfFrame();
+                if (EventSystem.current.currentSelectedGameObject == null) EventSystem.current.SetSelectedGameObject(currentSelectedElement);
+            }
+
+            StartCoroutine(RestoreSelectedIfNeeded());
         }
 
         public void DeleteGhost(GhostEntry ghostEntry) {
