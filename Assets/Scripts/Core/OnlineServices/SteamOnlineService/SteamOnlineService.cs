@@ -1,6 +1,6 @@
-﻿using Steamworks;
+﻿#if !DISABLESTEAMWORKS
+using Steamworks;
 
-#if !DISABLESTEAMWORKS
 namespace Core.OnlineServices.SteamOnlineService {
     public class SteamOnlineService : IOnlineService {
         private readonly SteamLeaderboardService _leaderboardService = new();
