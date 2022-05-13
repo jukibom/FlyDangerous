@@ -17,6 +17,7 @@ namespace Gameplay {
         [SerializeField] private string cameraName;
         [SerializeField] public CameraType cameraType;
         [SerializeField] public Vector3 maxOffset = Vector3.one;
+        [SerializeField] public Vector3 maxBoostOffset = Vector3.one;
         [SerializeField] public bool useLowPassAudio;
         [SerializeField] public bool showShipDataUI = true;
 
@@ -25,6 +26,8 @@ namespace Gameplay {
         private float _baseFov;
 
         private CinemachineVirtualCamera _camera;
+        private Vector3 _currentMaxOffset = Vector3.one;
+        private CinemachineBasicMultiChannelPerlin _noise;
         private Vector3 _offset = Vector3.zero;
         private Vector3 _targetOffset = Vector3.zero;
 
@@ -79,7 +82,9 @@ namespace Gameplay {
 
         public void OnEnable() {
             Game.OnGameSettingsApplied += SetBaseFov;
+            _noise = Camera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
             SetBaseFov();
+            _currentMaxOffset = maxOffset;
         }
 
         public void OnDisable() {
@@ -103,13 +108,21 @@ namespace Gameplay {
 
         public Vector3 GetCameraOffset(Vector3 force, float maxForce) {
             _targetOffset = Vector3.Lerp(_targetOffset, new Vector3(
-                MathfExtensions.Remap(-1, 1, maxOffset.x, -maxOffset.x, force.x / maxForce),
-                MathfExtensions.Remap(-1, 1, maxOffset.y, -maxOffset.y, force.y / maxForce),
-                MathfExtensions.Remap(-1, 1, maxOffset.z, -maxOffset.z, force.z / maxForce)
+                MathfExtensions.Remap(-1, 1, _currentMaxOffset.x, -_currentMaxOffset.x, force.x / maxForce),
+                MathfExtensions.Remap(-1, 1, _currentMaxOffset.y, -_currentMaxOffset.y, force.y / maxForce),
+                MathfExtensions.Remap(-1, 1, _currentMaxOffset.z, -_currentMaxOffset.z, force.z / maxForce)
             ), 0.1f);
 
             _offset = Vector3.Lerp(_offset, _targetOffset, 0.04f);
             return _offset;
+        }
+
+        public void SetBoostEffect(float amount) {
+            if (_noise) _noise.m_FrequencyGain = amount;
+
+            _currentMaxOffset.x = MathfExtensions.Remap(0, 1, maxOffset.x, maxBoostOffset.x, amount);
+            _currentMaxOffset.y = MathfExtensions.Remap(0, 1, maxOffset.y, maxBoostOffset.y, amount);
+            _currentMaxOffset.z = MathfExtensions.Remap(0, 1, maxOffset.z, maxBoostOffset.z, amount);
         }
 
         private void SetBaseFov() {

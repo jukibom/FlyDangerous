@@ -226,8 +226,7 @@ namespace Core.Player {
 
                 user.InGameUI.ShipStats.UpdateIndicators(ShipPhysics.ShipIndicatorData);
                 User.ShipCameraRig.UpdateCameras(transform.InverseTransformDirection(ShipPhysics.Velocity), ShipPhysics.CurrentParameters.maxSpeed,
-                    ShipPhysics.CurrentFrameThrust,
-                    ShipPhysics.CurrentParameters.maxThrust);
+                    ShipPhysics.CurrentFrameThrust, ShipPhysics.CurrentParameters.maxThrust);
 
                 // Send the current floating origin along with the new position and rotation to the server
                 CmdUpdate(FloatingOrigin.Instance.Origin, _transform.localPosition, _transform.rotation, ShipPhysics.Velocity, ShipPhysics.AngularVelocity,

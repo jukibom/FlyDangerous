@@ -67,7 +67,7 @@ namespace Core.ShipModel {
         public virtual void OnEnable() {
             Game.OnPauseToggle += PauseAudio;
             Game.OnRestart += Restart;
-            _shipShake = new ShipShake(transform);
+            _shipShake = new ShipShake(transform, transform.root.GetComponentInChildren<ShipCameraRig>());
         }
 
         public virtual void OnDisable() {
@@ -106,9 +106,10 @@ namespace Core.ShipModel {
 
         public void Boost(float boostTime) {
             IEnumerator AnimateBoost() {
+                _shipShake.Shake(1, 0.005f, false, new AnimationCurve(new Keyframe(0, 1), new Keyframe(1, 1)));
                 yield return new WaitForSeconds(1);
                 externalBoostThrusterAudioSource.Play();
-                _shipShake.Shake(boostTime - 1, 0.005f);
+                _shipShake.Shake(boostTime - 1, 0.01f, true);
                 thrusterController.AnimateBoostThrusters();
             }
 
@@ -130,10 +131,6 @@ namespace Core.ShipModel {
             smokeEmitter.UpdateThrustTrail(velocity, maxVelocity, force);
             foliageCollider.radius = MathfExtensions.Remap(0, maxVelocity / 2, 4, 15, velocity.magnitude);
         }
-
-        #endregion
-
-        #region Mesh Quirks
 
         #endregion
 

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3489566811455584531}
   - component: {fileID: 1058364048687953242}
   - component: {fileID: 1805212121777456337}
+  - component: {fileID: 221800719154703038}
   m_Layer: 0
   m_Name: cm
   m_TagString: Untagged
@@ -102,6 +103,23 @@ MonoBehaviour:
   m_MaximumFOV: 60
   m_MinimumOrthoSize: 1
   m_MaximumOrthoSize: 5000
+--- !u!114 &221800719154703038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 421825475331150145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_NoiseProfile: {fileID: 11400000, guid: e9ce97b7a206dc64d90931ea044e0c72, type: 2}
+  m_PivotOffset: {x: 0, y: 0, z: 0}
+  m_AmplitudeGain: 1
+  m_FrequencyGain: 0
+  mNoiseOffsets: {x: 0, y: 0, z: 0}
 --- !u!1 &724233965875489154
 GameObject:
   m_ObjectHideFlags: 0
@@ -114,6 +132,7 @@ GameObject:
   - component: {fileID: 3202899819310353311}
   - component: {fileID: 1956143437575883295}
   - component: {fileID: 6860295915006976489}
+  - component: {fileID: 8914721701452999872}
   m_Layer: 0
   m_Name: cm
   m_TagString: Untagged
@@ -204,6 +223,23 @@ MonoBehaviour:
   m_MaximumFOV: 60
   m_MinimumOrthoSize: 1
   m_MaximumOrthoSize: 5000
+--- !u!114 &8914721701452999872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 724233965875489154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_NoiseProfile: {fileID: 11400000, guid: e9ce97b7a206dc64d90931ea044e0c72, type: 2}
+  m_PivotOffset: {x: 0, y: 0, z: 0}
+  m_AmplitudeGain: 1
+  m_FrequencyGain: 0
+  mNoiseOffsets: {x: 0, y: 0, z: 0}
 --- !u!1 &870079099228119950
 GameObject:
   m_ObjectHideFlags: 0
@@ -455,6 +491,7 @@ MonoBehaviour:
   cameraName: nose
   cameraType: 0
   maxOffset: {x: 0.1, y: 0.1, z: 0.1}
+  maxBoostOffset: {x: 0.15, y: 0.15, z: 0.2}
   useLowPassAudio: 0
   showShipDataUI: 1
   smoothSpeed: 0.5
@@ -554,6 +591,7 @@ MonoBehaviour:
   cameraName: external end 1
   cameraType: 1
   maxOffset: {x: 5, y: 5, z: 5}
+  maxBoostOffset: {x: 5, y: 5, z: 5}
   useLowPassAudio: 0
   showShipDataUI: 0
   smoothSpeed: 0.5
@@ -998,6 +1036,7 @@ MonoBehaviour:
   cameraName: bonnet
   cameraType: 0
   maxOffset: {x: 0.2, y: 0.1, z: 0.2}
+  maxBoostOffset: {x: 0.25, y: 0.15, z: 0.4}
   useLowPassAudio: 0
   showShipDataUI: 1
   smoothSpeed: 0.5
@@ -1301,6 +1340,7 @@ MonoBehaviour:
   cameraName: cockpit
   cameraType: 0
   maxOffset: {x: 0.2, y: 0.2, z: 0.2}
+  maxBoostOffset: {x: 0.22, y: 0.22, z: 0.3}
   useLowPassAudio: 1
   showShipDataUI: 0
   smoothSpeed: 0.5
@@ -1401,6 +1441,7 @@ MonoBehaviour:
   cameraName: free cam
   cameraType: 2
   maxOffset: {x: 0, y: 0, z: 0}
+  maxBoostOffset: {x: 1, y: 1, z: 1}
   useLowPassAudio: 0
   showShipDataUI: 0
   smoothSpeed: 0
@@ -1543,6 +1584,7 @@ MonoBehaviour:
   cameraName: external far
   cameraType: 1
   maxOffset: {x: 5, y: 5, z: 5}
+  maxBoostOffset: {x: 7, y: 7, z: 20}
   useLowPassAudio: 0
   showShipDataUI: 1
   smoothSpeed: 0.5
@@ -1673,6 +1715,7 @@ MonoBehaviour:
   cameraName: external near
   cameraType: 1
   maxOffset: {x: 3, y: 3, z: 3}
+  maxBoostOffset: {x: 5, y: 5, z: 15}
   useLowPassAudio: 0
   showShipDataUI: 1
   smoothSpeed: 0.5
@@ -1869,6 +1912,7 @@ MonoBehaviour:
   cameraName: external end 1
   cameraType: 1
   maxOffset: {x: 5, y: 5, z: 5}
+  maxBoostOffset: {x: 5, y: 5, z: 5}
   useLowPassAudio: 0
   showShipDataUI: 0
   smoothSpeed: 0.5

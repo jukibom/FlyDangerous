@@ -40,6 +40,7 @@ namespace Core.Player {
                 ActiveCamera.Reset();
             cameraTarget.localPosition = baseTargetPosition;
             cameraTarget.transform.rotation = _transform.rotation;
+            SetBoostEffect(0);
         }
 
         private void Start() {
@@ -162,6 +163,10 @@ namespace Core.Player {
             if (ActiveCamera != null)
                 if (freeCamEnabled) // freeCamera.InitPosition(transform.localPosition + new Vector3(10, 0, 0));
                     SetActiveCamera(freeCamera.ShipCamera);
+        }
+
+        public void SetBoostEffect(float amount) {
+            if (ActiveCamera != null) ActiveCamera.SetBoostEffect(amount);
         }
 
         private void SetActiveCamera(ShipCamera newCamera) {
