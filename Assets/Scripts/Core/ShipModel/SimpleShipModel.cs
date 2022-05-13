@@ -94,7 +94,7 @@ namespace Core.ShipModel {
             if (player && player.isLocalPlayer) shipLights.renderMode = LightRenderMode.ForcePixel;
         }
 
-        public virtual void SetAssist(bool active) {
+        public virtual void SetAssist(AssistToggleType assistToggleType, bool active) {
             if (active) assistActivateAudioSource.Play();
             else assistDeactivateAudioSource.Play();
         }

@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using Audio;
 using Core.ShipModel;
 using Mirror;
 using Misc;
@@ -300,32 +299,18 @@ namespace Core.Player {
             _flightAssistVectorControl = isEnabled;
             _flightAssistRotationalControl = isEnabled;
 
-            Debug.Log("All Flight Assists " + (isEnabled ? "ON" : "OFF"));
-
-            UIAudioManager.Instance.Play(isEnabled ? "ship-alternate-flight-on" : "ship-alternate-flight-off");
-
+            ShipPhysics.ShipModel?.SetAssist(AssistToggleType.Both, isEnabled);
             if (Preferences.Instance.GetBool("forceRelativeMouseWithFAOff")) User.ResetMouseToCentre();
         }
 
         public void FlightAssistVectorControlToggle() {
             _flightAssistVectorControl = !_flightAssistVectorControl;
-            Debug.Log("Vector Control Flight Assist " + (_flightAssistVectorControl ? "ON" : "OFF"));
-
-            if (_flightAssistVectorControl)
-                UIAudioManager.Instance.Play("ship-alternate-flight-on");
-            else
-                UIAudioManager.Instance.Play("ship-alternate-flight-off");
+            ShipPhysics.ShipModel?.SetAssist(AssistToggleType.Vector, _flightAssistVectorControl);
         }
 
         public void FlightAssistRotationalDampeningToggle() {
             _flightAssistRotationalControl = !_flightAssistRotationalControl;
-            Debug.Log("Rotational Dampening Flight Assist " + (_flightAssistRotationalControl ? "ON" : "OFF"));
-
-            if (_flightAssistRotationalControl)
-                UIAudioManager.Instance.Play("ship-alternate-flight-on");
-            else
-                UIAudioManager.Instance.Play("ship-alternate-flight-off");
-
+            ShipPhysics.ShipModel?.SetAssist(AssistToggleType.Rotational, _flightAssistRotationalControl);
             if (Preferences.Instance.GetBool("forceRelativeMouseWithFAOff")) User.ResetMouseToCentre();
         }
 
@@ -336,10 +321,8 @@ namespace Core.Player {
         public void VelocityLimiterIsPressed(bool isPressed) {
             if (_velocityLimiterActive != isPressed) {
                 _velocityLimiterActive = isPressed;
-                if (_velocityLimiterActive)
-                    UIAudioManager.Instance.Play("ship-velocity-limit-on");
-                else
-                    UIAudioManager.Instance.Play("ship-velocity-limit-off");
+
+                ShipPhysics.ShipModel?.SetVelocityLimiter(_velocityLimiterActive);
             }
         }
 

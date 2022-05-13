@@ -21,6 +21,12 @@ namespace Core.ShipModel {
         External
     }
 
+    public enum AssistToggleType {
+        Vector,
+        Rotational,
+        Both
+    }
+
     /**
      * Interface for various kinds of ships. This is updated from the Ship Player - some of which occurs via network
      * commands (those marked as network aware) and some of which on the local client only.
@@ -39,7 +45,7 @@ namespace Core.ShipModel {
         /**
          * Do something when enabling or disabling some form of assist
          */
-        public void SetAssist(bool active);
+        public void SetAssist(AssistToggleType assistToggleType, bool active);
 
         /**
          * Enable the limiter
