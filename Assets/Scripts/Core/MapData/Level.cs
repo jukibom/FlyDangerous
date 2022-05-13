@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Core.Scores;
 using Misc;
 using UnityEngine;
@@ -8,10 +8,11 @@ namespace Core.MapData {
         private static int _id;
 
         public static readonly Level GentleStart = new("A Gentle Start", "a-gentle-start", GameType.TimeTrial);
-        public static readonly Level Snake = new("Snake", "snake", GameType.TimeTrial);
+        public static readonly Level UpsAndDowns = new("Ups and Downs", "ups-and-downs", GameType.TimeTrial);
         public static readonly Level AroundTheBlock = new("Around The Block", "around-the-block", GameType.TimeTrial);
         public static readonly Level HoldOnToYourStomach = new("Hold on to your stomach", "hold-on-to-your-stomach", GameType.TimeTrial);
         public static readonly Level AroundTheStation = new("Around the station", "around-the-station", GameType.TimeTrial);
+        public static readonly Level Snake = new("Snake", "snake", GameType.TimeTrial);
         public static readonly Level SpeedIsHalfTheBattle = new("Speed is Only Half the Battle", "speed-is-only-half-the-battle", GameType.TimeTrial);
         public static readonly Level YouMightWannaHoldBack = new("You Might Wanna Hold Back a Bit", "you-might-wanna-hold-back-a-bit", GameType.TimeTrial);
         public static readonly Level DeathValley = new("Death Valley", "death-valley", GameType.TimeTrial);
@@ -39,7 +40,8 @@ namespace Core.MapData {
 
         public static IEnumerable<Level> List() {
             return new[] {
-                GentleStart, Snake, AroundTheBlock, HoldOnToYourStomach, AroundTheStation, SpeedIsHalfTheBattle, YouMightWannaHoldBack, DeathValley, CrestLoop,
+                GentleStart, UpsAndDowns, AroundTheBlock, HoldOnToYourStomach, AroundTheStation, Snake, SpeedIsHalfTheBattle, YouMightWannaHoldBack,
+                DeathValley, CrestLoop,
                 YouHaveHeadlightsRight, LimiterMastery, ThreadTheNeedle
             };
         }
