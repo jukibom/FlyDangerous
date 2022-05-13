@@ -126,6 +126,8 @@ namespace Core {
                     return "arcade";
                 case "flightAssistDefault":
                     return "all on";
+                case "audioMode":
+                    return "stereo";
                 case "inputBindings":
                     return "";
                 case "mouseXAxis":
