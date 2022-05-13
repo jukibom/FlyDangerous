@@ -83,7 +83,7 @@ namespace Core.ShipModel {
             target.Opacity = MathfExtensions.Remap(5, minDistance, 0, 1, distanceToShip);
         }
 
-        private void ResetTargets() {
+        public void ResetTargets() {
             foreach (var keyValuePair in _players) Destroy(keyValuePair.Value.gameObject);
             foreach (var keyValuePair in _ghosts) Destroy(keyValuePair.Value.gameObject);
             _players.Clear();

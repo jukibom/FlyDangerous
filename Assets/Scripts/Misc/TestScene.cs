@@ -6,6 +6,7 @@ using Core.MapData;
 using Core.Player;
 using Core.Replays;
 using Core.Scores;
+using Core.ShipModel;
 using Gameplay;
 using MapMagic.Core;
 using Mirror;
@@ -25,7 +26,7 @@ namespace Misc {
         public bool shouldRecordSession;
         public bool shouldReplaySession;
         public Transform spawnLocation;
-        public ShipPlayer shipPlayerPrefab;
+        public ShipGhost shipGhostPrefab;
 
         private void Awake() {
             // load engine if not already 
@@ -118,7 +119,9 @@ namespace Misc {
         private void CreateTestSecondShip() {
             var player = FdPlayer.FindLocalShipPlayer;
             if (player) {
-                var testPlayer = Instantiate(shipPlayerPrefab, player.transform.position + new Vector3(0, 0, 10), Quaternion.identity);
+                Instantiate(shipGhostPrefab, player.transform.position + new Vector3(0, 0, 10), Quaternion.identity);
+                var targettingSystem = FindObjectOfType<TargettingSystem>();
+                if (targettingSystem) targettingSystem.ResetTargets();
             }
         }
     }
