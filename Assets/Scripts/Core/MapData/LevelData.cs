@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using JetBrains.Annotations;
 using Mirror;
 using Misc;
@@ -30,7 +31,11 @@ namespace Core.MapData {
         }
 
         public override string ToString() {
-            return "[ " + x + ", " + y + ", " + z + " ]";
+            return "[ " +
+                   x.ToString(CultureInfo.InvariantCulture) + ", " +
+                   y.ToString(CultureInfo.InvariantCulture) + ", " +
+                   z.ToString(CultureInfo.InvariantCulture) +
+                   " ]";
         }
 
         public static LevelDataVector3 FromVector3(Vector3 value) {
