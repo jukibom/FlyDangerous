@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Core.Scores;
 using Misc;
 using UnityEngine;
@@ -20,6 +20,7 @@ namespace Core.MapData {
         public static readonly Level YouHaveHeadlightsRight = new("You Have Headlights, Right?", "you-have-headlights-right", GameType.TimeTrial);
         public static readonly Level LimiterMastery = new("Limiter Mastery", "limiter-mastery", GameType.TimeTrial);
         public static readonly Level ThreadTheNeedle = new("Thread The Needle", "thread-the-needle", GameType.TimeTrial);
+        public static readonly Level HideAndSeek = new("Hide and Seek", "hide-and-seek", GameType.TimeTrial);
         private readonly string _jsonPath;
 
         private Level(string name, string jsonPath, GameType gameType) {
@@ -42,7 +43,7 @@ namespace Core.MapData {
             return new[] {
                 GentleStart, UpsAndDowns, AroundTheBlock, HoldOnToYourStomach, AroundTheStation, Snake, SpeedIsHalfTheBattle, YouMightWannaHoldBack,
                 DeathValley, CrestLoop,
-                YouHaveHeadlightsRight, LimiterMastery, ThreadTheNeedle
+                YouHaveHeadlightsRight, LimiterMastery, ThreadTheNeedle, HideAndSeek
             };
         }
 
