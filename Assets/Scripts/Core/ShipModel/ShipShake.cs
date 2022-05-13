@@ -1,15 +1,22 @@
-﻿using UnityEngine;
+using Core.Player;
+using JetBrains.Annotations;
+using UnityEngine;
 
 namespace Core.ShipModel {
     public class ShipShake {
+        private readonly AnimationCurve _linearCurve = new(new Keyframe(0, 0), new Keyframe(1, 1));
         private readonly Vector3 _originalPos;
+
+        private readonly Transform _shipTransform;
+
+        private bool _cameraShake;
+
         private float _shakeAmount;
+        private AnimationCurve _shakeAmountCurve;
 
         // How long the object should shake for.
         private float _shakeDuration;
         private float _shakeTimer;
-
-        private readonly Transform _shipTransform;
 
         // Amplitude of the shake. A larger value shakes the camera harder.
         private float _targetShakeAmount;
@@ -19,10 +26,15 @@ namespace Core.ShipModel {
             _originalPos = _shipTransform.localPosition;
         }
 
-        public void Shake(float duration, float amount) {
+        public void Shake(float duration, float amount, bool includeExternalCameraShake = false, AnimationCurve shakeAmountCurve = null) {
+            if (shakeAmountCurve == null)
+                shakeAmountCurve = _linearCurve;
+
+            _shakeAmountCurve = shakeAmountCurve;
             _shakeDuration = duration;
             _shakeTimer = duration;
             _targetShakeAmount = amount;
+            _cameraShake = includeExternalCameraShake;
         }
 
         public void Reset() {
@@ -33,7 +45,8 @@ namespace Core.ShipModel {
 
         public void Update() {
             if (_shakeTimer > 0) {
-                _shakeAmount = Mathf.Lerp(0, _targetShakeAmount, _shakeTimer / _shakeDuration);
+                var shake = _shakeAmountCurve.Evaluate(_shakeTimer / _shakeDuration);
+                _shakeAmount = shake * _targetShakeAmount;
                 _shipTransform.localPosition = _originalPos + Random.insideUnitSphere * _shakeAmount;
                 _shakeTimer -= Time.deltaTime;
             }
