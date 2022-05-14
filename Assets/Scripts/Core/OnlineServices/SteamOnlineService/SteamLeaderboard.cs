@@ -1,4 +1,4 @@
-﻿#if !DISABLESTEAMWORKS
+#if !DISABLESTEAMWORKS
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -88,9 +88,15 @@ namespace Core.OnlineServices.SteamOnlineService {
         // On upload we need to successively upload and then attach the ghost files before resolving the task.
         private void OnLeaderboardUpload(LeaderboardScoreUploaded_t ctx, bool ioFailure) {
             if (ctx.m_bSuccess == 1 && !ioFailure && _pendingReplayUploadFilePath != null && _pendingReplayUploadFileName != null) {
-                var replay = File.ReadAllBytes(_pendingReplayUploadFilePath);
-                var handle = SteamRemoteStorage.FileWriteAsync(_pendingReplayUploadFileName, replay, Convert.ToUInt32(replay.Length));
-                _uploadGhostCallback.Set(handle);
+                // if new high score on the leaderboard, update the ghost
+                if (Convert.ToBoolean(ctx.m_bScoreChanged)) {
+                    var replay = File.ReadAllBytes(_pendingReplayUploadFilePath);
+                    var handle = SteamRemoteStorage.FileWriteAsync(_pendingReplayUploadFileName, replay, Convert.ToUInt32(replay.Length));
+                    _uploadGhostCallback.Set(handle);
+                }
+                else {
+                    _uploadScoreTask.SetResult(true);
+                }
             }
             else {
                 _uploadScoreTask.SetException(new Exception("Failed to upload score"));
