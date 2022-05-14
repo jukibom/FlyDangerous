@@ -1,9 +1,10 @@
 using System;
+using Core;
 using Misc;
 using UnityEngine;
 using UnityEngine.VFX;
 
-namespace Core.Ship {
+namespace VFX {
     [RequireComponent(typeof(VisualEffect))]
     [RequireComponent(typeof(VfxFloatingOriginHandler))]
     public class SmokeEmitter : MonoBehaviour {
@@ -22,6 +23,14 @@ namespace Core.Ship {
             _trailEffect = GetComponent<VisualEffect>();
             _transform = transform;
             _ready = true;
+        }
+
+        private void OnEnable() {
+            Game.OnRestart += OnReset;
+        }
+
+        private void OnDisable() {
+            Game.OnRestart -= OnReset;
         }
 
         public void UpdateColor(Color color) {
@@ -52,6 +61,10 @@ namespace Core.Ship {
                 // set jitter to a factor of the forward local velocity 
                 _trailEffect.SetVector3("_startingPositionJitter", new Vector3(0, 0, MathfExtensions.Remap(0, 1, 0, -5, vesselSpeedLocal.z / maxSpeed)));
             }
+        }
+
+        private void OnReset() {
+            _trailEffect.Reinit();
         }
     }
 }

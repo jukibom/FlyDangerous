@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using Core.Player;
-using Core.Ship;
 using Misc;
 using UnityEngine;
+using VFX;
 #if !NO_PAID_ASSETS
 using GPUInstancer;
 #endif
