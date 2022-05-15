@@ -1,6 +1,7 @@
 ﻿0.5.3
 New:
     * Added roll to shoulders / arrow keys when in Arcade mode (not specified in controls diagram, probably not needed!)
+    * Switched to a system of including the distance to the checkpoint in the split timer calculation - this means all time trial timers are now far more accurate than 0.02 second splits
     
 Changes:
     * Smoke trails now clear on map restart
@@ -11,6 +12,8 @@ Changes:
     * Ship shake effect now occurs while charging a boost (thanks, sanderling!) and is slightly more pronounced during the boost
 
 Fixes:
+    * Collision checks on checkpoints use a new system which hopefully dramatically reduces the chances of missing a checkpoint
+        * New system should be marginally (very marginally) faster to set new times so a leaderboard reset isn't needed
     * Stretched flag on profile screen on ultra wide resolutions
 
 0.5.2

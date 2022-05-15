@@ -1163,13 +1163,21 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1.5
-  m_Text: "0.5.3\r\nChanges:\r\n    * Smoke trails now clear on map restart\r\n   
+  m_Text: "0.5.3\r\nNew:\r\n    * Added roll to shoulders / arrow keys when in Arcade
+    mode (not specified in controls diagram, probably not needed!)\r\n    * Switched
+    to a system of including the distance to the checkpoint in the split timer calculation
+    - this means all time trial timers are now far more accurate than 0.02 second
+    splits\r\n    \r\nChanges:\r\n    * Smoke trails now clear on map restart\r\n   
     * Drastically increased visibility of trails at speed - stationary ships now
     produce LESS smoke\r\n    * Added non-vr camera tweaks:\r\n        * Camera now
     has greater flexibility to pull away during a boost effect - this is more prominent
     with external cameras\r\n        * External cameras shake during boost\r\n   
     * Ship shake effect now occurs while charging a boost (thanks, sanderling!) and
-    is slightly more pronounced during the boost"
+    is slightly more pronounced during the boost\r\n\r\nFixes:\r\n    * Collision
+    checks on checkpoints use a new system which hopefully dramatically reduces the
+    chances of missing a checkpoint\r\n        * New system should be marginally
+    (very marginally) faster to set new times so a leaderboard reset isn't needed\r\n   
+    * Stretched flag on profile screen on ultra wide resolutions\r\n"
 --- !u!114 &4182444098687229629
 MonoBehaviour:
   m_ObjectHideFlags: 0
