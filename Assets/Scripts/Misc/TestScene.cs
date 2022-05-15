@@ -51,19 +51,19 @@ namespace Misc {
                 NetworkServer.dontListen = true;
                 FdNetworkManager.Instance.StartHost();
 
+                var pos = spawnLocation.position;
+                var rot = spawnLocation.rotation;
+                Game.Instance.LoadedLevelData.startPosition = new LevelDataVector3(pos.x, pos.y, pos.z);
+                Game.Instance.LoadedLevelData.startRotation = new LevelDataVector3(rot.eulerAngles.x, rot.eulerAngles.y, rot.eulerAngles.z);
+
                 yield return new WaitForEndOfFrame();
 
                 // enable input and position it where this entity is
                 var player = FdPlayer.FindLocalShipPlayer;
                 if (player) {
                     player.User.EnableGameInput();
-
-                    var pos = spawnLocation.position;
-                    var rot = spawnLocation.rotation;
                     player.AbsoluteWorldPosition = pos;
                     player.transform.rotation = rot;
-                    Game.Instance.LoadedLevelData.startPosition = new LevelDataVector3(pos.x, pos.y, pos.z);
-                    Game.Instance.LoadedLevelData.startRotation = new LevelDataVector3(rot.eulerAngles.x, rot.eulerAngles.y, rot.eulerAngles.z);
                 }
 
                 // if there's a map magic object going on here, enable it
