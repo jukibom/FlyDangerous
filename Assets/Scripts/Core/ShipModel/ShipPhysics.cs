@@ -22,7 +22,7 @@ namespace Core.ShipModel {
         public Optional<float> indicatorThrottleLocation;
 
         // ray-casting without per-frame allocation
-        private readonly RaycastHit[] _raycastHits = new RaycastHit[50];
+        private readonly RaycastHit[] _raycastHits = new RaycastHit[2];
         private float _boostCapacitorPercent = 100f;
         private bool _boostCharging;
 
@@ -185,13 +185,23 @@ namespace Core.ShipModel {
 
             ExtDebug.DrawBoxCastBox(start, halfExtents, orientation, direction, maxDistance, Color.red);
 
+            var checkpointHitCount = 0;
+            var checkpointDistance = 0f;
+            Checkpoint checkpointFound = null;
             for (var i = 0; i < raycastHitCount; i++) {
                 var raycastHit = _raycastHits[i];
                 var checkpoint = raycastHit.collider.GetComponentInParent<Checkpoint>();
-                var distance = raycastHit.distance;
-                var excessTimeToHit = distance / frameVelocity.magnitude * Time.fixedDeltaTime;
+                if (checkpoint) {
+                    checkpointHitCount++;
+                    checkpointDistance = Mathf.Max(checkpointDistance, raycastHit.distance);
+                    if (checkpointHitCount > 1) checkpointFound = checkpoint;
+                }
+            }
+
+            if (checkpointFound) {
+                var excessTimeToHit = checkpointDistance / frameVelocity.magnitude * Time.fixedDeltaTime;
                 // Debug.Log("DISTANCE " + distance + $"   Time to hit: {excessTimeToHit}");
-                if (checkpoint) checkpoint.Hit(excessTimeToHit);
+                checkpointFound.Hit(excessTimeToHit);
             }
         }
 
