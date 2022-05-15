@@ -2043,6 +2043,15 @@
                     "initialStateCheck": true
                 },
                 {
+                    "name": "Roll",
+                    "type": "Value",
+                    "id": "414aaa9d-074a-498e-8118-b3d28cf8eb45",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
                     "name": "Boost",
                     "type": "Value",
                     "id": "67d4115b-a831-46cf-a078-8fad1e50f91c",
@@ -2685,6 +2694,72 @@
                     "action": "ShipLights Toggle",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "Shoulders",
+                    "id": "98eeedbc-1afa-444d-834d-6e8d1f04e551",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Roll",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "11c9b467-a8aa-4abf-99e2-054b9db040f0",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Everything",
+                    "action": "Roll",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "8d22491f-fb35-40c0-a0e2-abfac625bb03",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Everything",
+                    "action": "Roll",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Keyboard",
+                    "id": "cb255f9a-2638-417d-9ff0-7b6e85bc3ea7",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Roll",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "df9140d2-dd27-44fc-aea4-69a474e3a0e5",
+                    "path": "<Keyboard>/leftArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Everything",
+                    "action": "Roll",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "1ff88920-cf78-4fa5-b81a-c80162dec969",
+                    "path": "<Keyboard>/rightArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Everything",
+                    "action": "Roll",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 }
             ]
         },

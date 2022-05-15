@@ -2065,6 +2065,15 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
+                    ""name"": ""Roll"",
+                    ""type"": ""Value"",
+                    ""id"": ""414aaa9d-074a-498e-8118-b3d28cf8eb45"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
                     ""name"": ""Boost"",
                     ""type"": ""Value"",
                     ""id"": ""67d4115b-a831-46cf-a078-8fad1e50f91c"",
@@ -2707,6 +2716,72 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""action"": ""ShipLights Toggle"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Shoulders"",
+                    ""id"": ""98eeedbc-1afa-444d-834d-6e8d1f04e551"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Roll"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""11c9b467-a8aa-4abf-99e2-054b9db040f0"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Roll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""8d22491f-fb35-40c0-a0e2-abfac625bb03"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Roll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Keyboard"",
+                    ""id"": ""cb255f9a-2638-417d-9ff0-7b6e85bc3ea7"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Roll"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""df9140d2-dd27-44fc-aea4-69a474e3a0e5"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Roll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""1ff88920-cf78-4fa5-b81a-c80162dec969"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Roll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -3893,6 +3968,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         m_ShipArcade_LateralV = m_ShipArcade.FindAction("LateralV", throwIfNotFound: true);
         m_ShipArcade_LateralH = m_ShipArcade.FindAction("LateralH", throwIfNotFound: true);
         m_ShipArcade_Throttle = m_ShipArcade.FindAction("Throttle", throwIfNotFound: true);
+        m_ShipArcade_Roll = m_ShipArcade.FindAction("Roll", throwIfNotFound: true);
         m_ShipArcade_Boost = m_ShipArcade.FindAction("Boost", throwIfNotFound: true);
         m_ShipArcade_VelocityLimiter = m_ShipArcade.FindAction("Velocity Limiter", throwIfNotFound: true);
         m_ShipArcade_ShipLightsToggle = m_ShipArcade.FindAction("ShipLights Toggle", throwIfNotFound: true);
@@ -4318,6 +4394,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_ShipArcade_LateralV;
     private readonly InputAction m_ShipArcade_LateralH;
     private readonly InputAction m_ShipArcade_Throttle;
+    private readonly InputAction m_ShipArcade_Roll;
     private readonly InputAction m_ShipArcade_Boost;
     private readonly InputAction m_ShipArcade_VelocityLimiter;
     private readonly InputAction m_ShipArcade_ShipLightsToggle;
@@ -4336,6 +4413,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         public InputAction @LateralV => m_Wrapper.m_ShipArcade_LateralV;
         public InputAction @LateralH => m_Wrapper.m_ShipArcade_LateralH;
         public InputAction @Throttle => m_Wrapper.m_ShipArcade_Throttle;
+        public InputAction @Roll => m_Wrapper.m_ShipArcade_Roll;
         public InputAction @Boost => m_Wrapper.m_ShipArcade_Boost;
         public InputAction @VelocityLimiter => m_Wrapper.m_ShipArcade_VelocityLimiter;
         public InputAction @ShipLightsToggle => m_Wrapper.m_ShipArcade_ShipLightsToggle;
@@ -4369,6 +4447,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @Throttle.started -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnThrottle;
                 @Throttle.performed -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnThrottle;
                 @Throttle.canceled -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnThrottle;
+                @Roll.started -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnRoll;
+                @Roll.performed -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnRoll;
+                @Roll.canceled -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnRoll;
                 @Boost.started -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnBoost;
                 @Boost.performed -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnBoost;
                 @Boost.canceled -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnBoost;
@@ -4415,6 +4496,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @Throttle.started += instance.OnThrottle;
                 @Throttle.performed += instance.OnThrottle;
                 @Throttle.canceled += instance.OnThrottle;
+                @Roll.started += instance.OnRoll;
+                @Roll.performed += instance.OnRoll;
+                @Roll.canceled += instance.OnRoll;
                 @Boost.started += instance.OnBoost;
                 @Boost.performed += instance.OnBoost;
                 @Boost.canceled += instance.OnBoost;
@@ -4742,6 +4826,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         void OnLateralV(InputAction.CallbackContext context);
         void OnLateralH(InputAction.CallbackContext context);
         void OnThrottle(InputAction.CallbackContext context);
+        void OnRoll(InputAction.CallbackContext context);
         void OnBoost(InputAction.CallbackContext context);
         void OnVelocityLimiter(InputAction.CallbackContext context);
         void OnShipLightsToggle(InputAction.CallbackContext context);
