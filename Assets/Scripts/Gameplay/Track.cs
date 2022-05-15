@@ -260,7 +260,8 @@ namespace Gameplay {
         // if the user ever changes parameters mid-level, the isValid flag is set to false and stays that way until restarting. It's also checked again
         // at the end of the race.
         private void CheckValidity() {
-            _isValid = _isValid && FindObjectOfType<Game>().ShipParameters.ToJsonString().Equals(ShipParameters.Defaults.ToJsonString());
+            var version = Application.version;
+            _isValid = _isValid && !version.Contains("-dev") && Game.Instance.ShipParameters.ToJsonString().Equals(ShipParameters.Defaults.ToJsonString());
         }
 
         private void ReplaceCheckpoints(List<Checkpoint> checkpoints) {
