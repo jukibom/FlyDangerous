@@ -188,7 +188,7 @@ namespace Gameplay {
             }
         }
 
-        public void CheckpointHit(Checkpoint checkpoint, AudioSource checkpointHitAudio) {
+        public void CheckpointHit(Checkpoint checkpoint, AudioSource checkpointHitAudio, float excessTimeToHitSeconds) {
             if (isActive && GameModeUI?.Timers) {
                 var hitCheckpoint = hitCheckpoints.Find(c => c == checkpoint);
                 if (!hitCheckpoint) {
@@ -196,14 +196,16 @@ namespace Gameplay {
                     hitCheckpoints.Add(checkpoint);
                     checkpointHitAudio.Play();
 
+                    var exactTime = _timeSeconds + excessTimeToHitSeconds;
+
                     // store split time
                     if (checkpoint.Type != CheckpointType.Start) {
-                        _splits.Add(_timeSeconds);
+                        _splits.Add(exactTime);
                         if (_splitDeltaFader != null) StopCoroutine(_splitDeltaFader);
                         if (_previousBestScore.HasPlayedPreviously && _previousBestScore.PersonalBestTimeSplits.Count >= _splits.Count) {
                             var index = _splits.Count - 1;
                             var previousBestSplit = _previousBestScore.PersonalBestTimeSplits[index];
-                            var deltaSplit = _timeSeconds - previousBestSplit;
+                            var deltaSplit = exactTime - previousBestSplit;
                             GameModeUI.Timers.SplitTimeDeltaDisplay.SetTimeSeconds(deltaSplit, true);
                             var color = deltaSplit > 0 ? Color.red : Color.green;
                             GameModeUI.Timers.SplitTimeDeltaDisplay.TextBox.color = color;
@@ -213,7 +215,7 @@ namespace Gameplay {
 
                     // update split display and fade out
                     if (checkpoint.Type == CheckpointType.Check) {
-                        GameModeUI.Timers.SplitTimeDisplay.SetTimeSeconds(_timeSeconds);
+                        GameModeUI.Timers.SplitTimeDisplay.SetTimeSeconds(exactTime);
                         if (_splitFader != null) StopCoroutine(_splitFader);
                         _splitFader = StartCoroutine(FadeTimer(GameModeUI.Timers.SplitTimeDisplay, Color.white));
                     }
@@ -223,14 +225,14 @@ namespace Gameplay {
 
                         var replayFileName = "";
                         var replayFilePath = "";
-                        var score = Score.FromRaceTime(_timeSeconds, _splits);
+                        var score = Score.FromRaceTime(exactTime, _splits);
                         var previous = _previousBestScore;
 
                         CheckValidity();
                         if (_isValid) {
                             // if new run OR better score, save!
                             // TODO: move this to the end screen too
-                            if (_previousBestScore.PersonalBestTotalTime == 0 || _timeSeconds < _previousBestScore.PersonalBestTotalTime) {
+                            if (_previousBestScore.PersonalBestTotalTime == 0 || exactTime < _previousBestScore.PersonalBestTotalTime) {
                                 _previousBestScore = score;
                                 var scoreData = score.Save(Game.Instance.LoadedLevelData);
                                 Score.SaveToDisk(scoreData, Game.Instance.LoadedLevelData);

@@ -28,6 +28,7 @@ namespace Core.ShipModel {
 
         [CanBeNull] private Coroutine _boostCoroutine;
         private float _boostedMaxSpeedDelta;
+        private int _checkpointLayerMask;
         private float _currentBoostTime;
         private float _gforce;
         private bool _isBoosting;
@@ -139,6 +140,9 @@ namespace Core.ShipModel {
 
             // init physics
             CurrentParameters = ShipParameters.Defaults;
+
+            // init checkpoint mask id
+            _checkpointLayerMask = LayerMask.NameToLayer("Checkpoint");
         }
 
         public event BoostFiredAction OnBoost;
@@ -167,23 +171,27 @@ namespace Core.ShipModel {
 
         // standard OnTriggerEnter doesn't cut the mustard at these speeds so we need to do something a bit more precise
         public void CheckpointCollisionCheck() {
-            var shipTransform = transform;
-
             var frameVelocity = targetRigidbody.velocity * Time.fixedDeltaTime;
-            var start = shipTransform.position + frameVelocity * 2; // + 1 to include the current frame
+            if (frameVelocity == Vector3.zero) return;
 
-            // Check for checkpoint collisions (layer mask 9) using an inverse velocity ray rather than the inbuilt box check
-            // use the velocity * 4 to make damn sure we capture everything.
-            // use a box cast to eliminate the problem of missing at the extreme edges.
-            var raycastHitCount = Physics.BoxCastNonAlloc(start, new Vector3(5, frameVelocity.magnitude * 4, 3), frameVelocity.normalized,
-                _raycastHits, Quaternion.identity, frameVelocity.magnitude, 1 << 7); // 7th layer is checkpoint collider
+            var start = targetRigidbody.transform.position;
+            var direction = frameVelocity.normalized;
+            var maxDistance = frameVelocity.magnitude * 2;
+            var orientation = Quaternion.LookRotation(frameVelocity);
 
-            // Debug.DrawRay(start, frameVelocity * 2 * -1, Color.red);
+            // Check for checkpoint collisions using a velocity ray box rather than the inbuilt box check
+            var halfExtents = new Vector3(5, 3, frameVelocity.magnitude / 2);
+            var raycastHitCount = Physics.BoxCastNonAlloc(start, halfExtents, direction, _raycastHits, orientation, maxDistance, 1 << _checkpointLayerMask);
+
+            ExtDebug.DrawBoxCastBox(start, halfExtents, orientation, direction, maxDistance, Color.red);
 
             for (var i = 0; i < raycastHitCount; i++) {
                 var raycastHit = _raycastHits[i];
                 var checkpoint = raycastHit.collider.GetComponentInParent<Checkpoint>();
-                if (checkpoint) checkpoint.Hit();
+                var distance = raycastHit.distance;
+                var excessTimeToHit = distance / frameVelocity.magnitude * Time.fixedDeltaTime;
+                // Debug.Log("DISTANCE " + distance + $"   Time to hit: {excessTimeToHit}");
+                if (checkpoint) checkpoint.Hit(excessTimeToHit);
             }
         }
 

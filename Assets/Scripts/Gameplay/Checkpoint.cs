@@ -44,17 +44,17 @@ public class Checkpoint : MonoBehaviour {
     }
 
     public void ShowOverlay() {
-        overlay.enabled = true;
+        overlay.gameObject.SetActive(true);
     }
 
     public void HideOverlay() {
-        overlay.enabled = false;
+        overlay.gameObject.SetActive(false);
     }
 
-    public void Hit() {
+    public void Hit(float excessTimeToHitMs) {
         if (Type == CheckpointType.Start) return;
         if (Type == CheckpointType.End && !_track.IsEndCheckpointValid) return;
-        _track.CheckpointHit(this, checkpointAudioSource);
+        _track.CheckpointHit(this, checkpointAudioSource, excessTimeToHitMs);
         HideOverlay();
     }
 }
