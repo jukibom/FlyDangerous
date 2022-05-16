@@ -78,7 +78,7 @@ namespace Core {
                 case "graphics-terrain-geometry-lod":
                     return 70.0f;
                 case "graphics-terrain-texture-distance":
-                    return 5000.0f;
+                    return 15000.0f;
                 case "graphics-terrain-chunks":
                     return 1.0f;
                 case "graphics-field-of-view":
