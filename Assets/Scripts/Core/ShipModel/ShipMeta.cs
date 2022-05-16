@@ -20,7 +20,7 @@ namespace Core.ShipModel {
             "Some say it's a prototype for the FD1. Others say it's a retrofitted brick with ridiculous indicators. Either way, it flies!");
 
         public static readonly ShipMeta Calidris = new("Calidris", "FD1-Calidris", "Calidris",
-            "A sleek, long-nosed racer, the Calidris has enormous rear thrusters with enough oomph to catapult you at obnoxious speed for it's size. Some say it was the first to include ancient \"scoop-based velocity limiting\" as standard. Whatever that means.");
+            "A sleek, long-nosed racer, the Calidris has enormous rear thrusters with enough oomph to catapult you at obnoxious speed for its size. Some say it was the first to include ancient \"scoop-based velocity limiting\" as standard. Whatever that means.");
 
         public string FullName { get; }
 
