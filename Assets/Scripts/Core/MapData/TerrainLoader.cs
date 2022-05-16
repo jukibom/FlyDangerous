@@ -22,13 +22,13 @@ namespace Core.MapData {
 
         private void OnGameOptionsApplied() {
             var terrainLOD = Preferences.Instance.GetFloat("graphics-terrain-geometry-lod");
-            var pixelError = MathfExtensions.Remap(10, 100, 50, 0, terrainLOD);
-            var textureHQDistance = Preferences.Instance.GetFloat("graphics-terrain-texture-distance");
+            var pixelError = MathfExtensions.Remap(10, 100, 50, 5, terrainLOD);
+            var textureHqDistance = Preferences.Instance.GetFloat("graphics-terrain-texture-distance");
             var terrainChunks = Preferences.Instance.GetFloat("graphics-terrain-chunks");
 
             // set map magic preferences
             _mapMagicTerrain.terrainSettings.pixelError = (int)pixelError;
-            _mapMagicTerrain.terrainSettings.baseMapDist = (int)textureHQDistance;
+            _mapMagicTerrain.terrainSettings.baseMapDist = (int)textureHqDistance;
 
             // main terrain chunks
             _mapMagicTerrain.mainRange = (int)terrainChunks;
