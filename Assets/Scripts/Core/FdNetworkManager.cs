@@ -14,6 +14,7 @@ using UnityEngine;
 #if !DISABLESTEAMWORKS
 using Core.OnlineServices.SteamOnlineService;
 using Mirror.FizzySteam;
+using Steamworks;
 #endif
 
 namespace Core {
@@ -309,6 +310,14 @@ namespace Core {
                 StopHost();
                 StopClient();
             }
+        }
+
+        public override void OnApplicationQuit() {
+            base.OnApplicationQuit();
+#if !DISABLESTEAMWORKS
+            Debug.Log("SHUTDOWN STEAM");
+            SteamAPI.Shutdown();
+#endif
         }
 
         #endregion
