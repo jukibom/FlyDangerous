@@ -10,7 +10,7 @@ namespace Core.ShipModel {
     public class TargettingSystem : MonoBehaviour {
         [SerializeField] private Target targetPrefab;
         [SerializeField] private SpriteAtlas flags;
-        private readonly Dictionary<ShipGhost, Target> _ghosts = new();
+        private readonly Dictionary<IReplayShip, Target> _ghosts = new();
         private readonly Dictionary<ShipPlayer, Target> _players = new();
         private Camera _mainCamera;
 

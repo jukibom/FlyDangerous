@@ -8,6 +8,8 @@ using UnityEngine;
 
 namespace Core.Replays {
     public interface IReplayShip {
+        // ReSharper disable once InconsistentNaming (MonoBehaviour compatibility)
+        Transform transform { get; }
         string PlayerName { get; set; }
         Flag PlayerFlag { get; set; }
         Transform Transform { get; }
@@ -96,8 +98,8 @@ namespace Core.Replays {
         private void UpdateInputFrame() {
             // TODO: This is slow as all hell! We should abstract this and use SeekOrigin.Current in typical ghost run
 
-            // Check for end of file
             if (Replay != null) {
+                // Check for end of file
                 var maxRead = _inputTicks * Replay.ReplayMeta.InputFrameBufferSizeBytes + Replay.ReplayMeta.InputFrameBufferSizeBytes;
                 if (maxRead < _inputFrameReader?.BaseStream.Length) {
                     _inputFrameReader.BaseStream.Seek(_inputTicks * Replay.ReplayMeta.InputFrameBufferSizeBytes, SeekOrigin.Begin);
@@ -105,7 +107,10 @@ namespace Core.Replays {
 
                     var inputFrame = MessagePackSerializer.Deserialize<InputFrame>(_inputFrameByteBuffer);
                     ShipReplayObject?.ShipPhysics.UpdateShip(inputFrame.pitch, inputFrame.roll, inputFrame.yaw, inputFrame.throttle, inputFrame.lateralH,
-                        inputFrame.lateralV, inputFrame.boostHeld, false, false, false);
+                        inputFrame.lateralV, inputFrame.boostHeld, inputFrame.limiterHeld, false, false);
+
+                    if (ShipReplayObject?.ShipPhysics.IsShipLightsActive != inputFrame.shipLightsEnabled)
+                        ShipReplayObject?.ShipPhysics.ShipLightsToggle(_ => { });
 
                     _inputTicks++;
                 }
