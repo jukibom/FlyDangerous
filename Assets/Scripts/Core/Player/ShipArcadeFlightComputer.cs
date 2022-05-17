@@ -38,8 +38,10 @@ namespace Core.Player {
          * lateralH, lateralV and throttle will be overwritten.
          * pitch, yaw and roll with be added to based on first three vector inputs. This allows a user to also
          * bind any of these axes individually if they so choose.
+         * Setting drift to true disables lateral / vector changes.
          */
-        public void UpdateShipFlightInput(ref float lateralH, ref float lateralV, ref float throttle, ref float pitch, ref float yaw, ref float roll) {
+        public void UpdateShipFlightInput(ref float lateralH, ref float lateralV, ref float throttle, ref float pitch, ref float yaw, ref float roll,
+            bool drift) {
             if (Preferences.Instance.GetBool("invertArcadeYAxis")) lateralV *= -1;
 
             // clamp
@@ -66,6 +68,10 @@ namespace Core.Player {
                 var planeRotation = Quaternion.Euler(shipRotEuler.x, shipRotEuler.y, 0);
                 var freeRotation = shipRotation;
                 var rotationResolutionBlendFactor = MathfExtensions.Remap(fixedToPlaneAngle, freeMoveAngle, planeTransformDamping, 1, shipAngleFromPlane);
+
+                // drift override - disable auto rotate to plane
+                if (drift) rotationResolutionBlendFactor = 1;
+
                 targetTransform.rotation = Quaternion.Lerp(planeRotation, freeRotation, rotationResolutionBlendFactor);
 
                 var pitchRotate = MathfExtensions.Remap(-1, 1, -maxTargetRotationDegrees, maxTargetRotationDegrees, lateralV);
@@ -123,12 +129,17 @@ namespace Core.Player {
             if (translateShip) inputTranslation = localPosition / drawCubePositionDistance;
             if (rotateShip) inputRotation = deltaRotation / maxTargetRotationDegrees;
 
+            if (drift) {
+                inputTranslation.x = 0;
+                inputTranslation.y = 0;
+            }
+
             lateralH = inputTranslation.x;
             lateralV = inputTranslation.y;
             throttle = inputTranslation.z;
             pitch += inputRotation.x * -1;
             yaw += inputRotation.y;
-            roll += inputRotation.z * -1;
+            if (!drift) roll += inputRotation.z * -1;
 
             #endregion
         }

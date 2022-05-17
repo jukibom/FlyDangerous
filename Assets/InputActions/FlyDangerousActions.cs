@@ -300,6 +300,15 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
+                    ""name"": ""Drift"",
+                    ""type"": ""Value"",
+                    ""id"": ""ed106b0c-50e8-43ca-9c22-d52771cefcc3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
                     ""name"": ""Velocity Limiter"",
                     ""type"": ""Value"",
                     ""id"": ""fd333179-1e8d-4ef5-878b-b20c724c87b6"",
@@ -971,7 +980,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""cc747143-d180-4195-aa6c-e34a265716fc"",
-                    ""path"": ""<Keyboard>/f"",
+                    ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
@@ -2012,6 +2021,28 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""action"": ""Toggle Camera Rotate Controls"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""df874380-af66-413b-a67b-ee87fb4820cb"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Drift"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8053a7e1-cf69-4403-91a6-cbeae725fa5b"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Drift"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -2077,6 +2108,15 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""name"": ""Boost"",
                     ""type"": ""Value"",
                     ""id"": ""67d4115b-a831-46cf-a078-8fad1e50f91c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Drift"",
+                    ""type"": ""Value"",
+                    ""id"": ""da424d01-fb41-4cdc-b603-46f7e8612964"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -2782,6 +2822,28 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""action"": ""Roll"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e1b12148-e449-48f9-a166-4dcd4fdaa50d"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Drift"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6b42b674-2c84-42f2-a5c5-ce2dcd1fe61c"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Drift"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -3948,6 +4010,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         m_Ship_ThrottleDecrease = m_Ship.FindAction("Throttle Decrease", throwIfNotFound: true);
         m_Ship_ThrottleIncrease = m_Ship.FindAction("Throttle Increase", throwIfNotFound: true);
         m_Ship_Boost = m_Ship.FindAction("Boost", throwIfNotFound: true);
+        m_Ship_Drift = m_Ship.FindAction("Drift", throwIfNotFound: true);
         m_Ship_VelocityLimiter = m_Ship.FindAction("Velocity Limiter", throwIfNotFound: true);
         m_Ship_AllFlightAssistToggle = m_Ship.FindAction("All Flight Assist Toggle", throwIfNotFound: true);
         m_Ship_VectorFlightAssistToggle = m_Ship.FindAction("Vector Flight Assist Toggle", throwIfNotFound: true);
@@ -3970,6 +4033,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         m_ShipArcade_Throttle = m_ShipArcade.FindAction("Throttle", throwIfNotFound: true);
         m_ShipArcade_Roll = m_ShipArcade.FindAction("Roll", throwIfNotFound: true);
         m_ShipArcade_Boost = m_ShipArcade.FindAction("Boost", throwIfNotFound: true);
+        m_ShipArcade_Drift = m_ShipArcade.FindAction("Drift", throwIfNotFound: true);
         m_ShipArcade_VelocityLimiter = m_ShipArcade.FindAction("Velocity Limiter", throwIfNotFound: true);
         m_ShipArcade_ShipLightsToggle = m_ShipArcade.FindAction("ShipLights Toggle", throwIfNotFound: true);
         m_ShipArcade_MouseRawDelta = m_ShipArcade.FindAction("Mouse Raw Delta", throwIfNotFound: true);
@@ -4134,6 +4198,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Ship_ThrottleDecrease;
     private readonly InputAction m_Ship_ThrottleIncrease;
     private readonly InputAction m_Ship_Boost;
+    private readonly InputAction m_Ship_Drift;
     private readonly InputAction m_Ship_VelocityLimiter;
     private readonly InputAction m_Ship_AllFlightAssistToggle;
     private readonly InputAction m_Ship_VectorFlightAssistToggle;
@@ -4169,6 +4234,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         public InputAction @ThrottleDecrease => m_Wrapper.m_Ship_ThrottleDecrease;
         public InputAction @ThrottleIncrease => m_Wrapper.m_Ship_ThrottleIncrease;
         public InputAction @Boost => m_Wrapper.m_Ship_Boost;
+        public InputAction @Drift => m_Wrapper.m_Ship_Drift;
         public InputAction @VelocityLimiter => m_Wrapper.m_Ship_VelocityLimiter;
         public InputAction @AllFlightAssistToggle => m_Wrapper.m_Ship_AllFlightAssistToggle;
         public InputAction @VectorFlightAssistToggle => m_Wrapper.m_Ship_VectorFlightAssistToggle;
@@ -4245,6 +4311,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @Boost.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnBoost;
                 @Boost.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnBoost;
                 @Boost.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnBoost;
+                @Drift.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnDrift;
+                @Drift.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnDrift;
+                @Drift.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnDrift;
                 @VelocityLimiter.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnVelocityLimiter;
                 @VelocityLimiter.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnVelocityLimiter;
                 @VelocityLimiter.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnVelocityLimiter;
@@ -4342,6 +4411,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @Boost.started += instance.OnBoost;
                 @Boost.performed += instance.OnBoost;
                 @Boost.canceled += instance.OnBoost;
+                @Drift.started += instance.OnDrift;
+                @Drift.performed += instance.OnDrift;
+                @Drift.canceled += instance.OnDrift;
                 @VelocityLimiter.started += instance.OnVelocityLimiter;
                 @VelocityLimiter.performed += instance.OnVelocityLimiter;
                 @VelocityLimiter.canceled += instance.OnVelocityLimiter;
@@ -4396,6 +4468,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_ShipArcade_Throttle;
     private readonly InputAction m_ShipArcade_Roll;
     private readonly InputAction m_ShipArcade_Boost;
+    private readonly InputAction m_ShipArcade_Drift;
     private readonly InputAction m_ShipArcade_VelocityLimiter;
     private readonly InputAction m_ShipArcade_ShipLightsToggle;
     private readonly InputAction m_ShipArcade_MouseRawDelta;
@@ -4415,6 +4488,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         public InputAction @Throttle => m_Wrapper.m_ShipArcade_Throttle;
         public InputAction @Roll => m_Wrapper.m_ShipArcade_Roll;
         public InputAction @Boost => m_Wrapper.m_ShipArcade_Boost;
+        public InputAction @Drift => m_Wrapper.m_ShipArcade_Drift;
         public InputAction @VelocityLimiter => m_Wrapper.m_ShipArcade_VelocityLimiter;
         public InputAction @ShipLightsToggle => m_Wrapper.m_ShipArcade_ShipLightsToggle;
         public InputAction @MouseRawDelta => m_Wrapper.m_ShipArcade_MouseRawDelta;
@@ -4453,6 +4527,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @Boost.started -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnBoost;
                 @Boost.performed -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnBoost;
                 @Boost.canceled -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnBoost;
+                @Drift.started -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnDrift;
+                @Drift.performed -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnDrift;
+                @Drift.canceled -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnDrift;
                 @VelocityLimiter.started -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnVelocityLimiter;
                 @VelocityLimiter.performed -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnVelocityLimiter;
                 @VelocityLimiter.canceled -= m_Wrapper.m_ShipArcadeActionsCallbackInterface.OnVelocityLimiter;
@@ -4502,6 +4579,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @Boost.started += instance.OnBoost;
                 @Boost.performed += instance.OnBoost;
                 @Boost.canceled += instance.OnBoost;
+                @Drift.started += instance.OnDrift;
+                @Drift.performed += instance.OnDrift;
+                @Drift.canceled += instance.OnDrift;
                 @VelocityLimiter.started += instance.OnVelocityLimiter;
                 @VelocityLimiter.performed += instance.OnVelocityLimiter;
                 @VelocityLimiter.canceled += instance.OnVelocityLimiter;
@@ -4805,6 +4885,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         void OnThrottleDecrease(InputAction.CallbackContext context);
         void OnThrottleIncrease(InputAction.CallbackContext context);
         void OnBoost(InputAction.CallbackContext context);
+        void OnDrift(InputAction.CallbackContext context);
         void OnVelocityLimiter(InputAction.CallbackContext context);
         void OnAllFlightAssistToggle(InputAction.CallbackContext context);
         void OnVectorFlightAssistToggle(InputAction.CallbackContext context);
@@ -4828,6 +4909,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         void OnThrottle(InputAction.CallbackContext context);
         void OnRoll(InputAction.CallbackContext context);
         void OnBoost(InputAction.CallbackContext context);
+        void OnDrift(InputAction.CallbackContext context);
         void OnVelocityLimiter(InputAction.CallbackContext context);
         void OnShipLightsToggle(InputAction.CallbackContext context);
         void OnMouseRawDelta(InputAction.CallbackContext context);

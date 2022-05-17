@@ -25,6 +25,7 @@ namespace Core.Player {
         [SerializeField] public bool pauseMenuEnabled = true;
         [SerializeField] public bool boostButtonEnabledOverride;
         private bool _alternateFlightControls;
+        private bool _autoRotateDrift;
         private bool _boost;
         private Vector2 _cameraMouse;
         private bool _cameraRotateAxisControlsEnabled = true;
@@ -98,7 +99,7 @@ namespace Core.Player {
 
                 // update the player
                 if (Preferences.Instance.GetBool("autoShipRotation") || Preferences.Instance.GetString("controlSchemeType") == "arcade")
-                    shipArcadeFlightComputer.UpdateShipFlightInput(ref lateralH, ref lateralV, ref throttle, ref pitch, ref yaw, ref roll);
+                    shipArcadeFlightComputer.UpdateShipFlightInput(ref lateralH, ref lateralV, ref throttle, ref pitch, ref yaw, ref roll, _autoRotateDrift);
 
                 shipPlayer.SetLateralH(lateralH);
                 shipPlayer.SetLateralV(lateralV);
@@ -365,6 +366,12 @@ namespace Core.Player {
         [UsedImplicitly]
         public void OnBoost(InputValue value) {
             _boost = value.isPressed;
+        }
+
+        [UsedImplicitly]
+        public void OnDrift(InputValue value) {
+            _autoRotateDrift = value.isPressed;
+            shipPlayer.IsAutoRotateDriftEnabled = _autoRotateDrift;
         }
 
         [UsedImplicitly]

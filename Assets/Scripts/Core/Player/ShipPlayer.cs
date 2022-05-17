@@ -42,11 +42,25 @@ namespace Core.Player {
         private Transform _transform;
         private Rigidbody _rigidbody;
 
-        public bool IsVectorFlightAssistActive => _flightAssistVectorControl || Preferences.Instance.GetBool("autoShipRotation") ||
-                                                  Preferences.Instance.GetString("controlSchemeType") == "arcade";
+        private bool _isDriftEnabled;
 
-        public bool IsRotationalFlightAssistActive => _flightAssistRotationalControl || Preferences.Instance.GetBool("autoShipRotation") ||
-                                                      Preferences.Instance.GetString("controlSchemeType") == "arcade";
+        public bool IsAutoRotateDriftEnabled {
+            get => _isDriftEnabled;
+            set {
+                _isDriftEnabled = value;
+                // update indicators and play sound effect if either flight assists are active
+                if (IsVectorFlightAssistActive || IsRotationalFlightAssistActive)
+                    ShipPhysics.ShipModel?.SetAssist(AssistToggleType.Both, !_isDriftEnabled);
+            }
+        }
+
+        public bool IsVectorFlightAssistActive => !IsAutoRotateDriftEnabled &&
+                                                  (_flightAssistVectorControl || Preferences.Instance.GetBool("autoShipRotation") ||
+                                                   Preferences.Instance.GetString("controlSchemeType") == "arcade");
+
+        public bool IsRotationalFlightAssistActive => !IsAutoRotateDriftEnabled &&
+                                                      (_flightAssistRotationalControl || Preferences.Instance.GetBool("autoShipRotation") ||
+                                                       Preferences.Instance.GetString("controlSchemeType") == "arcade");
 
         [SyncVar] private bool _serverReady;
         [SyncVar] public string playerName;
