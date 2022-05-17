@@ -117,6 +117,7 @@ namespace GameUI.GameModes {
         public void Retry() {
             Game.Instance.ActiveGameReplays = competitionPanel.GetSelectedReplays();
             Game.Instance.RestartSession();
+            FindObjectOfType<InGameUI>()?.CursorIsActive(true);
         }
 
         public void NextLevel() {
