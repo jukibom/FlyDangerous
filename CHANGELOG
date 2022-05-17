@@ -1,4 +1,22 @@
-﻿0.5.3
+﻿0.5.4
+New:
+    * Drift hold key binding which does a few things for pilots using various forms of Flight Assist. (FA-OFF this binding does nothing!)
+        * Disengages both vector and rotational flight assists
+        * With auto-roll enabled, disables vector thrust
+        * With auto-roll enabled, disables auto-roll (both in terms of input and correction-to-plane)
+    * Added mouse to Time Trial results screen
+    
+Changes:
+    * On map end, player and replay ships now come to a stop via flight assist rather than either bounce around erratically or just stop at the checkpoint
+    
+Fixes:
+    * Swap default roll bindings from arrows to Q and E - arrows are camera!
+    * Fixed displaying lights in replays
+    * Properly shut down Steam API on application close
+    * Incorrect start position on some Time Trial maps due to attempts to correct for proximity to terrain floor
+    * ERRANT APOSTROPHE
+
+0.5.3
 New:
     * Added roll to shoulders / arrow keys when in Arcade mode (not specified in controls diagram, probably not needed!)
     * Switched to a system of including the distance to the checkpoint in the split timer calculation - this means all time trial timers are now far more accurate than 0.02 second splits
