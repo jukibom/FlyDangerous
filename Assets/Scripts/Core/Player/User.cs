@@ -381,17 +381,25 @@ namespace Core.Player {
 
         [UsedImplicitly]
         public void OnAllFlightAssistToggle(InputValue value) {
-            shipPlayer.AllFlightAssistToggle();
+            // if any flight assist is enabled, deactivate (any on = all off)
+            var isEnabled = !(shipPlayer.IsVectorFlightAssistActive | shipPlayer.IsRotationalFlightAssistActive);
+
+            // if user has all flight assists on by default, flip that logic on its head (any off = all on)
+            if (Preferences.Instance.GetString("flightAssistDefault") == "all on")
+                isEnabled = !(shipPlayer.IsVectorFlightAssistActive & shipPlayer.IsRotationalFlightAssistActive);
+
+
+            shipPlayer.SetAllFlightAssistEnabled(isEnabled);
         }
 
         [UsedImplicitly]
         public void OnVectorFlightAssistToggle(InputValue value) {
-            shipPlayer.FlightAssistVectorControlToggle();
+            shipPlayer.SetFlightAssistVectorControlEnabled(!shipPlayer.IsVectorFlightAssistActive);
         }
 
         [UsedImplicitly]
         public void OnRotationalFlightAssistToggle(InputValue value) {
-            shipPlayer.FlightAssistRotationalDampeningToggle();
+            shipPlayer.SetFlightAssistRotationalDampeningEnabled(!shipPlayer.IsRotationalFlightAssistActive);
         }
 
         [UsedImplicitly]

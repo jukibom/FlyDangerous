@@ -1,8 +1,6 @@
-using System;
 using System.Collections;
 using Core.ShipModel;
 using Mirror;
-using Misc;
 using UnityEngine;
 
 namespace Core.Player {
@@ -31,13 +29,6 @@ namespace Core.Player {
         private float _yawInput;
         private float _rollInput;
 
-        // flight assist targets
-        private float _throttleTargetFactor;
-        private float _latHTargetFactor;
-        private float _latVTargetFactor;
-        private float _pitchTargetFactor;
-        private float _rollTargetFactor;
-        private float _yawTargetFactor;
 
         private Transform _transform;
         private Rigidbody _rigidbody;
@@ -49,7 +40,7 @@ namespace Core.Player {
             set {
                 _isDriftEnabled = value;
                 // update indicators and play sound effect if either flight assists are active
-                if (IsVectorFlightAssistActive || IsRotationalFlightAssistActive)
+                if (_flightAssistVectorControl || _flightAssistRotationalControl)
                     ShipPhysics.ShipModel?.SetAssist(AssistToggleType.Both, !_isDriftEnabled);
             }
         }
@@ -187,12 +178,6 @@ namespace Core.Player {
             _throttleInput = 0;
             _latHInput = 0;
             _latVInput = 0;
-            _throttleTargetFactor = 0;
-            _latHTargetFactor = 0;
-            _latVTargetFactor = 0;
-            _pitchTargetFactor = 0;
-            _rollTargetFactor = 0;
-            _yawTargetFactor = 0;
             _boostButtonHeld = false;
             _velocityLimiterActive = false;
 
@@ -223,18 +208,6 @@ namespace Core.Player {
         // Apply all physics updates in fixed intervals (WRITE)
         private void FixedUpdate() {
             if (isLocalPlayer && IsReady) {
-                var maxSpeedWithBoost = ShipPhysics.CurrentParameters.maxSpeed + ShipPhysics.BoostedMaxSpeedDelta;
-
-                /* FLIGHT ASSISTS */
-                if (IsVectorFlightAssistActive) CalculateVectorControlFlightAssist(maxSpeedWithBoost);
-                if (IsRotationalFlightAssistActive) CalculateRotationalDampeningFlightAssist();
-
-                ShipPhysics.indicatorThrottleLocation = new Optional<float>(
-                    _flightAssistVectorControl
-                        ? _throttleTargetFactor
-                        : _throttleInput
-                );
-
                 ShipPhysics.UpdateShip(_pitchInput, _rollInput, _yawInput, _throttleInput, _latHInput, _latVInput, _boostButtonHeld, _velocityLimiterActive,
                     IsVectorFlightAssistActive, IsRotationalFlightAssistActive);
 
@@ -256,74 +229,49 @@ namespace Core.Player {
         #region Input
 
         public void SetPitch(float value) {
-            if (IsRotationalFlightAssistActive)
-                _pitchTargetFactor = ClampInput(value);
-            else
-                _pitchInput = ClampInput(value);
+            _pitchInput = ClampInput(value);
         }
 
         public void SetRoll(float value) {
-            if (IsRotationalFlightAssistActive)
-                _rollTargetFactor = ClampInput(value);
-            else
-                _rollInput = ClampInput(value);
+            _rollInput = ClampInput(value);
         }
 
         public void SetYaw(float value) {
-            if (IsRotationalFlightAssistActive)
-                _yawTargetFactor = ClampInput(value);
-            else
-                _yawInput = ClampInput(value);
+            _yawInput = ClampInput(value);
         }
 
         public void SetThrottle(float value) {
-            if (IsVectorFlightAssistActive)
-                _throttleTargetFactor = ClampInput(value);
-            else
-                _throttleInput = ClampInput(value);
+            _throttleInput = ClampInput(value);
         }
 
         public void SetLateralH(float value) {
-            if (IsVectorFlightAssistActive)
-                _latHTargetFactor = ClampInput(value);
-            else
-                _latHInput = ClampInput(value);
+            _latHInput = ClampInput(value);
         }
 
         public void SetLateralV(float value) {
-            if (IsVectorFlightAssistActive)
-                _latVTargetFactor = ClampInput(value);
-            else
-                _latVInput = ClampInput(value);
+            _latVInput = ClampInput(value);
         }
 
         public void Boost(bool isPressed) {
             _boostButtonHeld = isPressed;
         }
 
-        public void AllFlightAssistToggle() {
-            // if any flight assist is enabled, deactivate (any on = all off)
-            var isEnabled = !(IsVectorFlightAssistActive | IsRotationalFlightAssistActive);
-
-            // if user has all flight assists on by default, flip that logic on its head (any off = all on)
-            if (Preferences.Instance.GetString("flightAssistDefault") == "all on")
-                isEnabled = !(IsVectorFlightAssistActive & IsRotationalFlightAssistActive);
-
+        public void SetAllFlightAssistEnabled(bool isEnabled, bool updateShipModel = true) {
             _flightAssistVectorControl = isEnabled;
             _flightAssistRotationalControl = isEnabled;
 
-            ShipPhysics.ShipModel?.SetAssist(AssistToggleType.Both, isEnabled);
+            if (updateShipModel) ShipPhysics.ShipModel?.SetAssist(AssistToggleType.Both, isEnabled);
             if (Preferences.Instance.GetBool("forceRelativeMouseWithFAOff")) User.ResetMouseToCentre();
         }
 
-        public void FlightAssistVectorControlToggle() {
-            _flightAssistVectorControl = !_flightAssistVectorControl;
-            ShipPhysics.ShipModel?.SetAssist(AssistToggleType.Vector, _flightAssistVectorControl);
+        public void SetFlightAssistVectorControlEnabled(bool isEnabled, bool updateShipModel = true) {
+            _flightAssistVectorControl = isEnabled;
+            if (updateShipModel) ShipPhysics.ShipModel?.SetAssist(AssistToggleType.Vector, _flightAssistVectorControl);
         }
 
-        public void FlightAssistRotationalDampeningToggle() {
-            _flightAssistRotationalControl = !_flightAssistRotationalControl;
-            ShipPhysics.ShipModel?.SetAssist(AssistToggleType.Rotational, _flightAssistRotationalControl);
+        public void SetFlightAssistRotationalDampeningEnabled(bool isEnabled, bool updateShipModel = true) {
+            _flightAssistRotationalControl = isEnabled;
+            if (updateShipModel) ShipPhysics.ShipModel?.SetAssist(AssistToggleType.Rotational, _flightAssistRotationalControl);
             if (Preferences.Instance.GetBool("forceRelativeMouseWithFAOff")) User.ResetMouseToCentre();
         }
 
@@ -347,77 +295,6 @@ namespace Core.Player {
         }
 
         #endregion
-
-
-        #region Flight Assist Calculations
-
-        private void CalculateVectorControlFlightAssist(float maxSpeedWithBoost) {
-            // TODO: Correctly calculate gravity for FA (need the actual velocity from acceleration caused in the previous frame)
-            var localVelocity = transform.InverseTransformDirection(_rigidbody.velocity);
-
-            CalculateAssistedAxis(_latHTargetFactor, localVelocity.x, 0.1f, maxSpeedWithBoost, out _latHInput);
-            CalculateAssistedAxis(_latVTargetFactor, localVelocity.y, 0.1f, maxSpeedWithBoost, out _latVInput);
-            CalculateAssistedAxis(_throttleTargetFactor, localVelocity.z, 0.1f, maxSpeedWithBoost, out _throttleInput);
-        }
-
-        private void CalculateRotationalDampeningFlightAssist() {
-            // convert global rigid body velocity into local space
-            var localAngularVelocity = transform.InverseTransformDirection(_rigidbody.angularVelocity);
-
-            CalculateAssistedAxis(_pitchTargetFactor, localAngularVelocity.x * -1, 1f, 3.0f, out _pitchInput);
-            CalculateAssistedAxis(_yawTargetFactor, localAngularVelocity.y, 1f, 3.0f, out _yawInput);
-            CalculateAssistedAxis(_rollTargetFactor, localAngularVelocity.z * -1, 1f, 3.0f, out _rollInput);
-        }
-
-        /**
-         * Given a target factor between 0 and 1 for a given axis, the current gross value and the maximum, calculate a
-         * new axis value to apply as input.
-         * @param targetFactor value between 0 and 1 (effectively the users' input)
-         * @param currentAxisVelocity the non-normalised raw value of the current motion of the axis
-         * @param interpolateAtPercent the point at which to begin linearly interpolating the acceleration
-         * (e.g. 0.1 = at 10% of the MAXIMUM velocity of the axis away from the target, interpolate the axis -
-         * if the current speed is 0, the target is 0.5 and this value is 0.1, this means that at 40% of the maximum
-         * speed -- when the axis is at 0.4 -- decrease the output linearly such that it moves from 1 to 0 and slowly
-         * decelerates.
-         * @param max the maximum non-normalised value for this axis e.g. the maximum speed or maximum rotation in radians etc
-         * @param out axis the value to apply the calculated new axis of input to
-         */
-        private void CalculateAssistedAxis(
-            float targetFactor,
-            float currentAxisVelocity,
-            float interpolateAtPercent,
-            float max,
-            out float axis
-        ) {
-            var targetRate = max * targetFactor;
-
-            // prevent tiny noticeable movement on start and jitter
-            if (Math.Abs(currentAxisVelocity - targetRate) < 0.000001f) {
-                axis = 0;
-                return;
-            }
-
-            // basic max or min
-            axis = currentAxisVelocity - targetRate < 0 ? 1 : -1;
-
-            // interpolation over final range (interpolateAtPercent)
-            var velocityInterpolateRange = max * interpolateAtPercent;
-
-            // positive motion
-            if (currentAxisVelocity < targetRate && currentAxisVelocity > targetRate - velocityInterpolateRange) {
-                var startInterpolate = targetRate - velocityInterpolateRange;
-                axis *= Mathf.InverseLerp(targetRate, startInterpolate, currentAxisVelocity);
-            }
-
-            // negative motion
-            if (currentAxisVelocity > targetRate && currentAxisVelocity < targetRate + velocityInterpolateRange) {
-                var startInterpolate = targetRate + velocityInterpolateRange;
-                axis *= Mathf.InverseLerp(targetRate, startInterpolate, currentAxisVelocity);
-            }
-        }
-
-        #endregion
-
 
         #region Network Position Sync etc
 

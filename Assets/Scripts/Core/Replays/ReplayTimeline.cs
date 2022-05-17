@@ -77,7 +77,7 @@ namespace Core.Replays {
         public void Stop() {
             _inputTicks = 0;
             _isPlaying = false;
-            if (ShipReplayObject != null) ShipReplayObject.ShipPhysics.Stop();
+            if (ShipReplayObject != null) ShipReplayObject.ShipPhysics.BringToStop();
         }
 
         private void UpdateKeyFrame() {
