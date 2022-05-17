@@ -53,12 +53,12 @@ namespace GameUI {
                     eventData.enterEventCamera,
                     out var canvasPosition)
             )
-                cursor.OnPointerMove(canvasPosition);
+                cursor.SetLocalPosition(canvasPosition);
         }
 
         public void CursorIsActive(bool isActive) {
             cursor.gameObject.SetActive(isActive);
-            cursor.OnPointerMove(Vector2.zero);
+            cursor.SetLocalPosition(Vector2.zero);
         }
 
         public void OnGameMenuToggle() {

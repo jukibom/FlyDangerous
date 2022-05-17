@@ -40,14 +40,19 @@ namespace GameUI.GameModes {
             yield return new WaitForSeconds(1f);
             yield return ShowMedalScreen(score, previousBest, isValid);
             yield return new WaitForSecondsRealtime(1);
-            var player = FdPlayer.FindLocalShipPlayer;
-            if (player) player.User.EnableUIInput();
-
             medalsScreen.gameObject.SetActive(false);
 
             var uploadTask = UploadLeaderboardResultIfValid(score.PersonalBestTotalTime, levelData.LevelHash(), replayFileName,
                 replayFilePath);
             yield return new WaitUntil(() => uploadTask.IsCompleted);
+
+            var player = FdPlayer.FindLocalShipPlayer;
+            if (player) {
+                FindObjectOfType<InGameUI>()?.CursorIsActive(true);
+                Game.Instance.FreeCursor();
+                player.User.EnableUIInput();
+                player.User.ResetMouseToCentre();
+            }
 
             // TODO: animation
             competitionPanel.gameObject.SetActive(true);

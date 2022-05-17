@@ -89,7 +89,7 @@ namespace GameUI.GameModes {
                     break;
             }
 
-            yield return new WaitForSeconds(animationInterval);
+            yield return new WaitForSeconds(animationInterval * 2);
             newPersonalBest.SetActive(personalBest);
 
             if (previousResult > 0) {
@@ -100,8 +100,10 @@ namespace GameUI.GameModes {
 
             if (personalBest && medalCount > 0) scoreCheerAudio.Play();
 
-            if (!isValid)
+            if (!isValid) {
                 resultNotValid.SetActive(true);
+                yield return new WaitForSeconds(1.5f);
+            }
         }
 
         private void PlayMedalDing(float pitch) {

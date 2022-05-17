@@ -42,8 +42,6 @@ namespace GameUI.GameModes {
                 player.User.ShipCameraRig.SwitchToEndScreenCamera();
                 player.User.DisableGameInput();
                 player.User.pauseMenuEnabled = false;
-                // TODO: enable flight assist or something? 
-
                 player.ShipPhysics.BringToStop();
             }
 

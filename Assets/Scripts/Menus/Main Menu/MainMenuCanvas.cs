@@ -18,7 +18,7 @@ namespace Menus.Main_Menu {
                     eventData.enterEventCamera,
                     out var canvasPosition)
             )
-                cursor.OnPointerMove(canvasPosition);
+                cursor.SetLocalPosition(canvasPosition);
         }
     }
 }
