@@ -117,7 +117,8 @@ namespace GameUI.GameModes {
         public void Retry() {
             Game.Instance.ActiveGameReplays = competitionPanel.GetSelectedReplays();
             Game.Instance.RestartSession();
-            FindObjectOfType<InGameUI>()?.OnPauseToggle(true);
+            // hide the mouse and do all the things that normally happens when unpausing
+            FindObjectOfType<InGameUI>()?.OnPauseToggle(false);
         }
 
         public void NextLevel() {
