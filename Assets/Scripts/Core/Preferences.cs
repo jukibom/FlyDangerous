@@ -164,6 +164,12 @@ namespace Core {
                     return "external far";
                 case "cameraMode":
                     return "absolute";
+                case "flightAssistAllBindType":
+                    return "toggle";
+                case "flightAssistVectorBindType":
+                    return "toggle";
+                case "flightAssistRotationalBindType":
+                    return "toggle";
                 case "mouseLookBindType":
                     return "toggle";
                 default:

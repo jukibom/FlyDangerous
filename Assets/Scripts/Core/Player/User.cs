@@ -381,6 +381,8 @@ namespace Core.Player {
 
         [UsedImplicitly]
         public void OnAllFlightAssistToggle(InputValue value) {
+            if (Preferences.Instance.GetString("flightAssistAllBindType") == "toggle" && !value.isPressed) return;
+
             // if any flight assist is enabled, deactivate (any on = all off)
             var isEnabled = !(shipPlayer.IsVectorFlightAssistActive | shipPlayer.IsRotationalFlightAssistActive);
 
@@ -394,11 +396,13 @@ namespace Core.Player {
 
         [UsedImplicitly]
         public void OnVectorFlightAssistToggle(InputValue value) {
+            if (Preferences.Instance.GetString("flightAssistVectorBindType") == "toggle" && !value.isPressed) return;
             shipPlayer.SetFlightAssistVectorControlEnabled(!shipPlayer.IsVectorFlightAssistActive);
         }
 
         [UsedImplicitly]
         public void OnRotationalFlightAssistToggle(InputValue value) {
+            if (Preferences.Instance.GetString("flightAssistRotationalBindType") == "toggle" && !value.isPressed) return;
             shipPlayer.SetFlightAssistRotationalDampeningEnabled(!shipPlayer.IsRotationalFlightAssistActive);
         }
 

@@ -319,30 +319,30 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""All Flight Assist Toggle"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""ce9c21e5-76be-402d-beed-36b5b132f0ad"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""Vector Flight Assist Toggle"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""ea0a242d-bdb0-4cc3-805e-49dc36350852"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""Rotational Flight Assist Toggle"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""30390ee4-f8b5-4a90-802f-54467c0c1ffc"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""ShipLights Toggle"",
