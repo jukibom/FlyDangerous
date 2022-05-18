@@ -48,7 +48,7 @@ namespace GameUI.GameModes {
 
             var player = FdPlayer.FindLocalShipPlayer;
             if (player) {
-                FindObjectOfType<InGameUI>()?.CursorIsActive(true);
+                FindObjectOfType<InGameUI>()?.OnPauseToggle(true);
                 Game.Instance.FreeCursor();
                 player.User.EnableUIInput();
                 player.User.ResetMouseToCentre();
@@ -117,7 +117,7 @@ namespace GameUI.GameModes {
         public void Retry() {
             Game.Instance.ActiveGameReplays = competitionPanel.GetSelectedReplays();
             Game.Instance.RestartSession();
-            FindObjectOfType<InGameUI>()?.CursorIsActive(true);
+            FindObjectOfType<InGameUI>()?.OnPauseToggle(true);
         }
 
         public void NextLevel() {
