@@ -10,6 +10,7 @@ namespace Core.MapData {
         public static readonly GameType Sprint = new("Sprint", false, false, true);
         public static readonly GameType Laps = new("Laps", false, false, true);
         public static readonly GameType HoonAttack = new("Hoon Attack", false, false, false);
+        public static readonly GameType Training = new("Training", false, false, true);
 
         private GameType(string name, bool isHotJoinable, bool canWarpToHost, bool hasFixedStartLocation) {
             Id = GenerateId;
@@ -28,7 +29,7 @@ namespace Core.MapData {
         public string Name { get; }
 
         public static IEnumerable<GameType> List() {
-            return new[] { FreeRoam, TimeTrial, Sprint, Laps, HoonAttack };
+            return new[] { FreeRoam, TimeTrial, Sprint, Laps, HoonAttack,Training };
         }
 
         public static GameType FromString(string locationString) {

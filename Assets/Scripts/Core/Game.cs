@@ -341,7 +341,8 @@ namespace Core {
                 ship.ShipPhysics.CurrentParameters = ShipParameters;
 
                 // resume the game
-                Time.timeScale = 1;
+                if (LoadedLevelData.gameType == GameType.Training) Time.timeScale = 0.5f;
+                else Time.timeScale = 1;
                 SetFlatScreenCameraControllerActive(!IsVREnabled);
 
                 // notify VR status (e.g. setting canvas world space, cameras, radial fog etc)
@@ -483,7 +484,8 @@ namespace Core {
                 FreeCursor();
             }
             else {
-                Time.timeScale = 1;
+                if (LoadedLevelData.gameType == GameType.Training) Time.timeScale = 0.5f;
+                else Time.timeScale = 1;
                 LockCursor();
             }
         }
