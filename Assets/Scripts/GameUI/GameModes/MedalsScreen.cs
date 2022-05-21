@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using JetBrains.Annotations;
 using Misc;
 using NaughtyAttributes;
 using UnityEngine;
@@ -47,6 +48,7 @@ namespace GameUI.GameModes {
         }
 
         [Button("Test Animation")]
+        [UsedImplicitly]
         private void TestAnimation() {
             StartCoroutine(ShowAnimation(4, true, 32.23f, 30, true));
         }
