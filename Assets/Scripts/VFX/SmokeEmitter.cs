@@ -43,7 +43,7 @@ namespace VFX {
             if (_ready) {
                 var vesselSpeedLocal = _transform.InverseTransformDirection(vesselSpeed);
 
-                _trailEffect.SetVector3("_startingVelocityMin", vesselSpeedLocal + minEjectionSpeed * Math.Max(0.2f, force.z));
+                _trailEffect.SetVector3("_startingVelocityMin", vesselSpeedLocal + minEjectionSpeed * Math.Max(0.15f, force.z));
                 _trailEffect.SetVector3("_startingVelocityMax", vesselSpeedLocal + maxEjectionSpeed * Math.Max(0.2f, force.z));
 
                 // only show with forward thrust and set the spawn rate to the ratio of thrust over max 
