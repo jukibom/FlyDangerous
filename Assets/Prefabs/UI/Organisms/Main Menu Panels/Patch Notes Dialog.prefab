@@ -500,13 +500,20 @@ MonoBehaviour:
     enabled, disables vector thrust\r\n        * With auto-roll enabled, disables
     auto-roll (both in terms of input and correction-to-plane)\r\n    * Added mouse
     to Time Trial results screen\r\n    * Added toggle vs hold setting for each flight
-    assist binding (default toggle)\r\n    \r\nChanges:\r\n    * On map end, player
-    and replay ships now come to a stop via flight assist rather than either bounce
-    around erratically or just stop at the checkpoint\r\n    \r\nFixes:\r\n    *
-    Swap default roll bindings from arrows to Q and E - arrows are camera!\r\n   
-    * Fixed displaying lights in replays\r\n    * Properly shut down Steam API on
-    application close\r\n    * Incorrect start position on some Time Trial maps due
-    to attempts to correct for proximity to terrain floor\r\n    * ERRANT APOSTROPHE"
+    assist binding (default toggle)\r\n    * Added current graphics API to version
+    number to aid in debugging\r\n    * Preliminary support for half-speed training
+    mode (Thank you, Lueces!), currently hidden\r\n    \r\nChanges:\r\n    * On map
+    end, player and replay ships now come to a stop via flight assist rather than
+    either bounce around erratically or just stop at the checkpoint\r\n    * Smoke
+    trails generating multiple particles at the exact same position (per-frame random
+    vs per-particle random), this makes smoke look a lot more natural\r\n    * Added
+    notice on multiplayer selection making it clear it's a technical preview \r\n   
+    \r\nFixes:\r\n    * Swap default roll bindings from arrows to Q and E - arrows
+    are camera!\r\n    * Fixed displaying lights in replays\r\n    * Properly shut
+    down Steam API on application close\r\n    * Incorrect start position on some
+    Time Trial maps due to attempts to correct for proximity to terrain floor\r\n   
+    * ERRANT APOSTROPHE\r\n    * Options / Profile Menu tooltips could get into an
+    invisible state"
 --- !u!114 &7839377399851254142
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2600,6 +2607,10 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6291702348123345415, guid: 7f6395d7f158695469e04e970e119e8d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6291702348231333095, guid: 7f6395d7f158695469e04e970e119e8d, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
@@ -3249,7 +3260,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8031816776609342325, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_Text
-      value: 0.5.4 - STEAM EARLY ACCESS  < CURRENT >
+      value: 0.5.4 - STEAM EARLY ACCESS RELEASE  < CURRENT >
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: affc708ba8599514c80709ef6909f882, type: 3}
@@ -4502,7 +4513,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8031816776609342325, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_Text
-      value: 0.5.3 - BUGFIX
+      value: 0.5.3 - TIME TRIAL IMPROVEMENTS
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: affc708ba8599514c80709ef6909f882, type: 3}
@@ -4776,7 +4787,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8031816776609342325, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_Text
-      value: 0.5.1 - BUGFIX
+      value: 0.5.1 - BUGFIXES
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: affc708ba8599514c80709ef6909f882, type: 3}
@@ -5872,7 +5883,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8031816776609342325, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_Text
-      value: 0.5.2 - BUGFIX
+      value: 0.5.2 - LEVEL TWEAKS + BUGFIX
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: affc708ba8599514c80709ef6909f882, type: 3}

@@ -6,9 +6,13 @@ New:
         * With auto-roll enabled, disables auto-roll (both in terms of input and correction-to-plane)
     * Added mouse to Time Trial results screen
     * Added toggle vs hold setting for each flight assist binding (default toggle)
+    * Added current graphics API to version number to aid in debugging
+    * Preliminary support for half-speed training mode (Thank you, Lueces!), currently hidden
     
 Changes:
     * On map end, player and replay ships now come to a stop via flight assist rather than either bounce around erratically or just stop at the checkpoint
+    * Smoke trails generating multiple particles at the exact same position (per-frame random vs per-particle random), this makes smoke look a lot more natural
+    * Added notice on multiplayer selection making it clear it's a technical preview 
     
 Fixes:
     * Swap default roll bindings from arrows to Q and E - arrows are camera!
@@ -16,6 +20,7 @@ Fixes:
     * Properly shut down Steam API on application close
     * Incorrect start position on some Time Trial maps due to attempts to correct for proximity to terrain floor
     * ERRANT APOSTROPHE
+    * Options / Profile Menu tooltips could get into an invisible state
 
 0.5.3
 New:
