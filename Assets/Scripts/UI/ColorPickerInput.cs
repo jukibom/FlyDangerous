@@ -1,24 +1,33 @@
-using System.Collections;
-using System.Collections.Generic;
+using Misc;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class ColorPickerInput : Selectable, ISubmitHandler, ICancelHandler {
-    
-    enum ColourElementType {
-        Main,
-        Hue
-    }
-    
-    private bool _hasFocus;
     [SerializeField] private ColourElementType colourElementType;
     [SerializeField] private FlexibleColorPicker colorPicker;
     [SerializeField] private float increment = 0.1f;
-    
+    [SerializeField] private RectTransform selectionCursor;
+
+    private bool _hasFocus;
+
+    public void Update() {
+        var scale = MathfExtensions.Remap(0, 1, 1, 2f, Mathf.PingPong(Time.time * 3, 1));
+        selectionCursor.localScale = _hasFocus ? Vector3.one * scale : Vector3.one;
+    }
+
+    public void OnCancel(BaseEventData eventData) {
+        _hasFocus = false;
+    }
+
+    public void OnSubmit(BaseEventData eventData) {
+        _hasFocus = !_hasFocus;
+    }
+
     public override void OnMove(AxisEventData eventData) {
-        if (!_hasFocus) 
+        if (!_hasFocus) {
             base.OnMove(eventData);
+        }
         else if (colourElementType == ColourElementType.Hue && (eventData.moveDir == MoveDirection.Left || eventData.moveDir == MoveDirection.Right)) {
             base.OnMove(eventData);
         }
@@ -43,16 +52,13 @@ public class ColorPickerInput : Selectable, ISubmitHandler, ICancelHandler {
         }
     }
 
-    public void OnSubmit(BaseEventData eventData) {
-        _hasFocus = !_hasFocus;
-    }
-
-    public void OnCancel(BaseEventData eventData) {
-        _hasFocus = false;
-    }
-
     public override void OnDeselect(BaseEventData eventData) {
         base.OnDeselect(eventData);
         _hasFocus = false;
+    }
+
+    private enum ColourElementType {
+        Main,
+        Hue
     }
 }

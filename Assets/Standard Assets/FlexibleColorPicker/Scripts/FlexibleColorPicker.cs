@@ -210,24 +210,15 @@ public class FlexibleColorPicker : MonoBehaviour {
 
     // move the marker by an amount
     public void FocusedPickerMove(Vector2 direction) {
-        var marker = GetMarker(focusedPicker.image, null);
-        // var position = focusedPicker.image.localPosition + new Vector3(direction.x, direction.y, 0);
-
         var v = Vector2.zero;
-
         for (var i = 0; i < pickers.Length; i++)
             if (IsPickerAvailable(i) && pickers[i].image == focusedPicker.image) {
                 var type = (PickerType)i;
                 v = GetValue(type);
             }
-        
-        v += direction;
-        
-        // var screenPoint = new Vector2(position.x, position.y);
-        // var v = GetNormalizedPointerPosition(canvas, focusedPicker.image.rectTransform, screenPoint);
-        bufferedColor = PickColor(bufferedColor, focusedPickerType, v);
 
-        Debug.Log(v);
+        v += direction;
+        bufferedColor = PickColor(bufferedColor, focusedPickerType, v);
 
         UpdateMarkers();
         UpdateTextures();
