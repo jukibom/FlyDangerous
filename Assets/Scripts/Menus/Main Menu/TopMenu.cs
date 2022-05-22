@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 namespace Menus.Main_Menu {
     public class TopMenu : MenuBase {
         [SerializeField] private SinglePlayerMenu singlePlayerMenu;
+        [SerializeField] private MultiplayerNoticeMenu multiplayerNoticeMenu;
         [SerializeField] private MultiPlayerMenu multiPlayerMenu;
         [SerializeField] private ServerBrowserMenu serverBrowserMenu;
         [SerializeField] private ProfileMenu profileMenu;
@@ -33,10 +34,7 @@ namespace Menus.Main_Menu {
         }
 
         public void OpenMultiPlayerMenu() {
-            if (FdNetworkManager.Instance.HasMultiplayerServices) // we have some online services hooked up, load the game browser
-                Progress(serverBrowserMenu);
-            else // revert to old-school
-                Progress(multiPlayerMenu);
+            Progress(multiplayerNoticeMenu);
         }
 
         public void OpenProfileMenu() {

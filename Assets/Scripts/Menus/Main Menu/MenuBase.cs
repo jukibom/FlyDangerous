@@ -32,12 +32,14 @@ namespace Menus.Main_Menu {
         }
 
         // Progress to a new dialog and set the call as this instance and trigger events
-        public void Progress(MenuBase nextMenu, bool setCallChain = true, bool playDialogOpenSound = true) {
+        public void Progress(MenuBase nextMenu, bool setCallChain = true, bool playDialogOpenSound = true, MenuBase withCaller = null) {
             if (playDialogOpenSound)
                 PlayOpenSound();
             else
                 PlayApplySound();
-            nextMenu.Open(setCallChain ? this : null);
+            nextMenu.Open(setCallChain
+                ? withCaller ? withCaller : this
+                : null);
             Hide();
             OnProgress();
         }
