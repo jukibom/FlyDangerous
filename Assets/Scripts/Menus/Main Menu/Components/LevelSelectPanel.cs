@@ -48,6 +48,7 @@ namespace Menus.Main_Menu.Components {
         public void LoadLevels(List<Level> levels) {
             foreach (var levelUI in levelPrefabContainer.gameObject.GetComponentsInChildren<LevelUIElement>()) Destroy(levelUI.gameObject);
             foreach (var level in levels) {
+                Debug.Log($"Loaded level {level.Name}: {level.Data.LevelHash()}");
                 var levelButton = Instantiate(levelUIElementPrefab, levelPrefabContainer);
                 levelButton.Level = level;
                 levelButton.gameObject.GetComponent<UIButton>().OnButtonSubmitEvent += OnLevelSelected;
