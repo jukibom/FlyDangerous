@@ -160,14 +160,16 @@ namespace Gameplay {
                     yield return YieldExtensions.WaitForFixedFrames(YieldExtensions.SecondsToFixedFrames(0.5f));
 
                     // start countdown sounds
-                    UIAudioManager.Instance.Play("tt-countdown");
+                    UIAudioManager.Instance.Play("tt-countdown-1");
 
                     // second beep (boost available here)
                     yield return YieldExtensions.WaitForFixedFrames(YieldExtensions.SecondsToFixedFrames(1));
+                    UIAudioManager.Instance.Play("tt-countdown-1");
                     user.boostButtonForceDisabled = false;
 
                     // GO! Unfreeze position and double-extra-special-make-sure the player is at the start
                     yield return YieldExtensions.WaitForFixedFrames(YieldExtensions.SecondsToFixedFrames(1));
+                    UIAudioManager.Instance.Play("tt-countdown-2");
                     player.Freeze = false;
                     var start = Checkpoints.Find(c => c.Type == CheckpointType.Start);
                     if (start) player.transform.position = start.transform.position;
