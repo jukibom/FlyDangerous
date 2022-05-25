@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.Events;
@@ -278,8 +279,8 @@ namespace Menus.Options {
 
         private string MakeAxisProcessorString(bool invert, float deadzone) {
             return invert
-                ? $"Invert,AxisDeadzone(min={deadzone},max=1.00)"
-                : $"AxisDeadzone(min={deadzone},max=1.00)";
+                ? $"Invert,AxisDeadzone(min={deadzone.ToString(CultureInfo.InvariantCulture)},max=1.00)"
+                : $"AxisDeadzone(min={deadzone.ToString(CultureInfo.InvariantCulture)},max=1.00)";
         }
 
         public void StartInteractivePrimaryRebind() {
