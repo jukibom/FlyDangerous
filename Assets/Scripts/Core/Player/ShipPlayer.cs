@@ -69,6 +69,15 @@ namespace Core.Player {
 
         private bool IsReady => _transform && _serverReady;
 
+        public bool Freeze {
+            get => _rigidbody.constraints == RigidbodyConstraints.FreezeAll;
+            set {
+                _rigidbody.constraints = value ? RigidbodyConstraints.FreezeAll : RigidbodyConstraints.None;
+                // reinitialise rigidbody by resetting the params
+                ShipPhysics.CurrentParameters = ShipPhysics.CurrentParameters;
+            }
+        }
+
         // The position and rotation of the ship within the world, taking into account floating origin fix
         public Vector3 AbsoluteWorldPosition {
             get {
@@ -212,8 +221,11 @@ namespace Core.Player {
                     IsVectorFlightAssistActive, IsRotationalFlightAssistActive);
 
                 user.InGameUI.ShipStats.UpdateIndicators(ShipPhysics.ShipIndicatorData);
-                User.ShipCameraRig.UpdateCameras(transform.InverseTransformDirection(ShipPhysics.Velocity), ShipPhysics.CurrentParameters.maxSpeed,
-                    ShipPhysics.CurrentFrameThrust, ShipPhysics.CurrentParameters.maxThrust);
+
+                // update camera offset if not frozen
+                var velocity = Freeze ? Vector3.zero : transform.InverseTransformDirection(ShipPhysics.Velocity);
+                var frameThrust = Freeze ? Vector3.zero : ShipPhysics.CurrentFrameThrust;
+                User.ShipCameraRig.UpdateCameras(velocity, ShipPhysics.CurrentParameters.maxSpeed, frameThrust, ShipPhysics.CurrentParameters.maxThrust);
 
                 // Send the current floating origin along with the new position and rotation to the server
                 CmdUpdate(FloatingOrigin.Instance.Origin, _transform.localPosition, _transform.rotation, ShipPhysics.Velocity, ShipPhysics.AngularVelocity,

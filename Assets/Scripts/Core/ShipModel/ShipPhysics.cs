@@ -19,8 +19,6 @@ namespace Core.ShipModel {
 
         [SerializeField] private Rigidbody targetRigidbody;
 
-        public Optional<float> indicatorThrottleLocation;
-
         // ray-casting without per-frame allocation
         private readonly RaycastHit[] _raycastHits = new RaycastHit[2];
         private float _boostCapacitorPercent = 100f;
@@ -206,7 +204,7 @@ namespace Core.ShipModel {
                 }
             }
 
-            if (checkpointFound) {
+            if (checkpointFound != null) {
                 var excessTimeToHit = checkpointDistance / frameVelocity.magnitude * Time.fixedDeltaTime;
                 // Debug.Log("DISTANCE " + distance + $"   Time to hit: {excessTimeToHit}");
                 checkpointFound.Hit(excessTimeToHit);

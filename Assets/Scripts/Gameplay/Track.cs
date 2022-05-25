@@ -144,9 +144,10 @@ namespace Gameplay {
                 var player = FdPlayer.FindLocalShipPlayer;
                 if (player != null) {
                     var user = player.User;
+                    user.boostButtonForceDisabled = true;
                     user.EnableGameInput();
-                    user.movementEnabled = false;
-                    user.pauseMenuEnabled = false;
+                    player.Freeze = true;
+
 
                     // Trigger recording and ghost replays
                     _replayRecorder.CancelRecording();
@@ -163,12 +164,13 @@ namespace Gameplay {
 
                     // second beep (boost available here)
                     yield return YieldExtensions.WaitForFixedFrames(YieldExtensions.SecondsToFixedFrames(1));
-                    user.boostButtonEnabledOverride = true;
+                    user.boostButtonForceDisabled = false;
 
-                    // GO!
+                    // GO! Unfreeze position and double-extra-special-make-sure the player is at the start
                     yield return YieldExtensions.WaitForFixedFrames(YieldExtensions.SecondsToFixedFrames(1));
-                    user.movementEnabled = true;
-                    user.pauseMenuEnabled = true;
+                    player.Freeze = false;
+                    var start = Checkpoints.Find(c => c.Type == CheckpointType.Start);
+                    if (start) player.transform.position = start.transform.position;
                 }
             }
 

@@ -23,7 +23,7 @@ namespace Core.Player {
 
         [SerializeField] public bool movementEnabled;
         [SerializeField] public bool pauseMenuEnabled = true;
-        [SerializeField] public bool boostButtonEnabledOverride;
+        [SerializeField] public bool boostButtonForceDisabled;
         private bool _alternateFlightControls;
         private bool _autoRotateDrift;
         private bool _boost;
@@ -107,8 +107,8 @@ namespace Core.Player {
                 shipPlayer.SetPitch(pitch);
                 shipPlayer.SetYaw(yaw);
                 shipPlayer.SetRoll(roll);
-                shipPlayer.Boost(_boost);
                 shipPlayer.VelocityLimiterIsPressed(_limiter);
+                if (!boostButtonForceDisabled) shipPlayer.Boost(_boost);
 
                 // handle camera rig
                 if (_cameraRotateAxisControlsEnabled) {
@@ -133,8 +133,6 @@ namespace Core.Player {
                         CameraPositionUpdate.Relative
                     );
             }
-
-            if (boostButtonEnabledOverride) shipPlayer.Boost(_boost);
         }
 
         public void OnEnable() {
@@ -172,7 +170,6 @@ namespace Core.Player {
 
             movementEnabled = true;
             pauseMenuEnabled = true;
-            boostButtonEnabledOverride = false;
 
             FdConsole.Instance.LogMessage("** USER INPUT ENABLED **");
             foreach (var inputDevice in InputSystem.devices) {
@@ -198,7 +195,6 @@ namespace Core.Player {
             playerInput.actions.FindActionMap("ShipArcade").Disable();
 
             movementEnabled = false;
-            boostButtonEnabledOverride = false;
 
             // clear inputs
             shipPlayer.SetPitch(0);
