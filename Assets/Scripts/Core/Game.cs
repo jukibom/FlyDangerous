@@ -71,6 +71,7 @@ namespace Core {
         private Quaternion _hmdRotation;
         private LevelLoader _levelLoader;
         private Coroutine _loadingRoutine;
+        private Coroutine _sessionRestartCoroutine;
         private ShipParameters _shipParameters;
 
         [CanBeNull] public Level loadedMainLevel;
@@ -372,7 +373,8 @@ namespace Core {
         }
 
         public void RestartSession() {
-            StartCoroutine(_levelLoader.RestartLevel(() => { OnRestart?.Invoke(); }));
+            if (_sessionRestartCoroutine != null) StopCoroutine(_sessionRestartCoroutine);
+            _sessionRestartCoroutine = StartCoroutine(_levelLoader.RestartLevel(() => { OnRestart?.Invoke(); }));
         }
 
         // Graceful leave game and decide if to transition back to lobby
