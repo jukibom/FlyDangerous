@@ -101,7 +101,7 @@ namespace Core {
                 case "volumeUi":
                     return 100;
                 case "volumeMusic":
-                    return 70;
+                    return 30;
                 case "volumeGhostSound":
                     return 25;
                 default:
@@ -121,7 +121,7 @@ namespace Core {
                 case "playerName":
                     return "PLAYER NAME";
                 case "playerFlag":
-                    return "none";
+                    return "None";
                 case "controlSchemeType":
                     return "arcade";
                 case "flightAssistDefault":
