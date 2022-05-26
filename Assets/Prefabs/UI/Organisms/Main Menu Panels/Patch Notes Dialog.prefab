@@ -2118,8 +2118,18 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1.5
-  m_Text: "0.5.5\r\nFixes:\r\n    * Fixed binding issue related to culture-specific
-    string encoding of floating point values"
+  m_Text: "0.5.5\r\n\nChanges:\r\n    * Pause menu and reset button now works during
+    time trial countdown\r\n    * Boost sound no longer requires round-trip to server
+    in multiplayer\r\n    * Music volume default lowered to 30%\r\n    * Default
+    leaderboard mode to show player rather than top 20\r\n    * Leaderboard now shows
+    50 entries - 25 above and below the player entry (or just 50 below if Sanderling)\r\n   
+    * UI repeat navigation speed increased by 3x\r\n\r\nFixes:\r\n    * Fixed serious
+    binding crash related to culture-specific string encoding of floating point values\r\n   
+    * Fixed mouse invert Y not applying\r\n    * Fixed possible exploit relating
+    to restart coroutines\r\n        * Added layer of redundancy here to snap the
+    player back to start position on TT start to be 100% sure!\r\n    * Fixed possible
+    exploit relating to CPU throttling\r\n    * Fixed broken scrollbars on leaderboard
+    / ghost panels"
 --- !u!114 &383002644996223599
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3357,7 +3367,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8031816776609342325, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_Text
-      value: 0.5.5 - BUGFIXES
+      value: 0.5.5 - BUGFIXES AND TWEAKS <CURRENT>
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: affc708ba8599514c80709ef6909f882, type: 3}

@@ -1,6 +1,21 @@
 ﻿0.5.5
+New:
+    * Leaderboard now shows 50 entries - 25 above and below the player entry (or just 50 below if Sanderling)
+
+Changes:
+    * Pause menu and reset button now works during time trial countdown
+    * Boost sound no longer requires round-trip to server in multiplayer
+    * Music volume default lowered to 30%
+    * Default leaderboard mode to show player rather than top 20
+    * UI repeat navigation speed increased by 3x
+
 Fixes:
-    * Fixed binding issue related to culture-specific string encoding of floating point values
+    * Fixed serious binding crash related to culture-specific string encoding of floating point values
+    * Fixed mouse invert Y not applying
+    * Fixed possible exploit relating to restart coroutines
+        * Added layer of redundancy here to snap the player back to start position on TT start to be 100% sure!
+    * Fixed possible exploit relating to CPU throttling
+    * Fixed broken scrollbars on leaderboard / ghost panels
 
 0.5.4
 New:
