@@ -14,7 +14,7 @@ namespace Menus.Main_Menu.Components {
         public void LoadLeaderboard(ILeaderboard leaderboard) {
             _leaderboard = leaderboard;
             ClearEntries();
-            ShowTop20();
+            ShowMe();
         }
 
         private void ClearEntries() {
