@@ -1,8 +1,10 @@
 using Core;
 using MapMagic.Core;
-using SCPE;
 using UnityEngine;
 using UnityEngine.Rendering;
+#if !NO_PAID_ASSETS
+using SCPE;
+#endif
 
 namespace VFX {
     [RequireComponent(typeof(Volume))]
@@ -25,7 +27,7 @@ namespace VFX {
         }
 
         private void OnGameSettingsApplied() {
-#if (NO_PAID_ASSETS == false)
+#if !NO_PAID_ASSETS
             var mapMagic = FindObjectOfType<MapMagicObject>();
             if (mapMagic && _volume.profile.TryGet<Fog>(out var fog)) {
                 var tileChunkCount = Preferences.Instance.GetFloat("graphics-terrain-chunks") + 1; // include drafts
@@ -45,7 +47,7 @@ namespace VFX {
         }
 
         private void UseRadialFog(bool useRadialFog) {
-#if (NO_PAID_ASSETS == false)
+#if !NO_PAID_ASSETS
             if (_volume && _volume.profile.TryGet<Fog>(out var fog)) fog.useRadialDistance.Override(useRadialFog);
 #endif
         }
