@@ -60,8 +60,8 @@ namespace Core {
                 case "showMouseWidget":
                 case "relativeMouseXAxis":
                 case "relativeMouseYAxis":
-                case "mouseXInvert:":
-                case "mouseYInvert:":
+                case "mouseXInvert":
+                case "mouseYInvert":
                 case "mouseLook":
                 case "forceRelativeMouseWithFAOff":
                 case "enableExperimentalTerrain":

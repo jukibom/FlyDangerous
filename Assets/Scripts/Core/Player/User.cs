@@ -557,7 +557,7 @@ namespace Core.Player {
             var sensitivityY = Preferences.Instance.GetFloat("mouseYSensitivity");
 
             var mouseXInvert = Preferences.Instance.GetBool("mouseXInvert");
-            var mouseYInvert = Preferences.Instance.GetBool("mouseXInvert");
+            var mouseYInvert = Preferences.Instance.GetBool("mouseYInvert");
 
             var mouseXIsRelative = Preferences.Instance.GetBool("relativeMouseXAxis") ||
                                    Preferences.Instance.GetBool("forceRelativeMouseWithFAOff") && !shipPlayer.IsRotationalFlightAssistActive;
