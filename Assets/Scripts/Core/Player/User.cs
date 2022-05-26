@@ -23,7 +23,7 @@ namespace Core.Player {
 
         [SerializeField] public bool movementEnabled;
         [SerializeField] public bool pauseMenuEnabled = true;
-        [SerializeField] public bool boostButtonForceDisabled;
+        [SerializeField] public bool boostButtonForceEnabled;
         private bool _alternateFlightControls;
         private bool _autoRotateDrift;
         private bool _boost;
@@ -67,7 +67,7 @@ namespace Core.Player {
         }
 
         public void Update() {
-            if (movementEnabled) {
+            if (movementEnabled && !shipPlayer.Freeze) {
                 var pitch = _pitch;
                 var roll = _roll;
                 var yaw = _yaw;
@@ -108,7 +108,7 @@ namespace Core.Player {
                 shipPlayer.SetYaw(yaw);
                 shipPlayer.SetRoll(roll);
                 shipPlayer.VelocityLimiterIsPressed(_limiter);
-                if (!boostButtonForceDisabled) shipPlayer.Boost(_boost);
+                shipPlayer.Boost(_boost);
 
                 // handle camera rig
                 if (_cameraRotateAxisControlsEnabled) {
@@ -133,6 +133,8 @@ namespace Core.Player {
                         CameraPositionUpdate.Relative
                     );
             }
+
+            if (boostButtonForceEnabled) shipPlayer.Boost(_boost);
         }
 
         public void OnEnable() {

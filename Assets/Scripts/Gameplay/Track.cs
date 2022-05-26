@@ -144,7 +144,7 @@ namespace Gameplay {
                 var player = FdPlayer.FindLocalShipPlayer;
                 if (player != null) {
                     var user = player.User;
-                    user.boostButtonForceDisabled = true;
+                    user.boostButtonForceEnabled = false;
                     user.EnableGameInput();
                     player.Freeze = true;
 
@@ -165,7 +165,7 @@ namespace Gameplay {
                     // second beep (boost available here)
                     yield return YieldExtensions.WaitForFixedFrames(YieldExtensions.SecondsToFixedFrames(1));
                     UIAudioManager.Instance.Play("tt-countdown-1");
-                    user.boostButtonForceDisabled = false;
+                    user.boostButtonForceEnabled = true;
 
                     // GO! Unfreeze position and double-extra-special-make-sure the player is at the start
                     yield return YieldExtensions.WaitForFixedFrames(YieldExtensions.SecondsToFixedFrames(1));
