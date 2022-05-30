@@ -72,9 +72,11 @@ namespace Core.Player {
         public bool Freeze {
             get => _rigidbody.constraints == RigidbodyConstraints.FreezeAll;
             set {
-                _rigidbody.constraints = value ? RigidbodyConstraints.FreezeAll : RigidbodyConstraints.None;
-                // reinitialise rigidbody by resetting the params
-                ShipPhysics.CurrentParameters = ShipPhysics.CurrentParameters;
+                if (_rigidbody) {
+                    _rigidbody.constraints = value ? RigidbodyConstraints.FreezeAll : RigidbodyConstraints.None;
+                    // reinitialise rigidbody by resetting the params
+                    ShipPhysics.CurrentParameters = ShipPhysics.CurrentParameters;
+                }
             }
         }
 
