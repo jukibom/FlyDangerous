@@ -58,8 +58,6 @@ namespace Core {
                 case "graphics-soft-shadows":
                 case "enableMouseFlightControls":
                 case "showMouseWidget":
-                case "relativeMouseXAxis":
-                case "relativeMouseYAxis":
                 case "mouseXInvert":
                 case "mouseYInvert":
                 case "mouseLook":
@@ -131,9 +129,11 @@ namespace Core {
                 case "inputBindings":
                     return "";
                 case "mouseXAxis":
-                    return "roll";
+                    return "yaw";
                 case "mouseYAxis":
                     return "pitch";
+                case "mouseInputMode":
+                    return "relative";
                 case "throttleType":
                     return "full range";
                 case "screen-mode":

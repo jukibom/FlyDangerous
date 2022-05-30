@@ -560,10 +560,8 @@ namespace Core.Player {
             var mouseXInvert = Preferences.Instance.GetBool("mouseXInvert");
             var mouseYInvert = Preferences.Instance.GetBool("mouseYInvert");
 
-            var mouseXIsRelative = Preferences.Instance.GetBool("relativeMouseXAxis") ||
-                                   Preferences.Instance.GetBool("forceRelativeMouseWithFAOff") && !shipPlayer.IsRotationalFlightAssistActive;
-            var mouseYIsRelative = Preferences.Instance.GetBool("relativeMouseYAxis") ||
-                                   Preferences.Instance.GetBool("forceRelativeMouseWithFAOff") && !shipPlayer.IsRotationalFlightAssistActive;
+            var mouseIsRelative = Preferences.Instance.GetString("mouseInputMode") == "relative" ||
+                                  Preferences.Instance.GetBool("forceRelativeMouseWithFAOff") && !shipPlayer.IsRotationalFlightAssistActive;
 
             var mouseRelativeRate = Mathf.Clamp(Preferences.Instance.GetFloat("mouseRelativeRate"), 1, 50f);
 
@@ -619,13 +617,13 @@ namespace Core.Player {
             }
 
             // send input depending on mouse mode
-            SetInput(mouseXAxisBind, mouseXIsRelative ? relativeMouse.x : continuousMouseX, mouseXInvert);
-            SetInput(mouseYAxisBind, mouseYIsRelative ? relativeMouse.y : continuousMouseY, mouseYInvert);
+            SetInput(mouseXAxisBind, mouseIsRelative ? relativeMouse.x : continuousMouseX, mouseXInvert);
+            SetInput(mouseYAxisBind, mouseIsRelative ? relativeMouse.y : continuousMouseY, mouseYInvert);
 
             // update widget graphics
             var widgetPosition = new Vector2(
-                mouseXIsRelative ? relativeMouse.x : continuousMouseX,
-                mouseYIsRelative ? relativeMouse.y : continuousMouseY
+                mouseIsRelative ? relativeMouse.x : continuousMouseX,
+                mouseIsRelative ? relativeMouse.y : continuousMouseY
             );
             inGameUI.MouseWidgetWorld.UpdateWidgetSprites(widgetPosition);
             inGameUI.MouseWidgetScreen.UpdateWidgetSprites(widgetPosition);
