@@ -378,6 +378,8 @@ namespace Core {
         }
 
         public void RestartSession() {
+            // this seems a little hairy but the loading routine includes the countdown and restart can only happen once the game has loaded :|
+            if (_loadingRoutine != null) StopCoroutine(_loadingRoutine);
             if (_sessionRestartCoroutine != null) StopCoroutine(_sessionRestartCoroutine);
             _sessionRestartCoroutine = StartCoroutine(_levelLoader.RestartLevel(() => { OnRestart?.Invoke(); }));
         }
