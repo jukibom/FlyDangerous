@@ -52,6 +52,7 @@ namespace GameUI.GameModes {
                 Game.Instance.FreeCursor();
                 player.User.EnableUIInput();
                 player.User.ResetMouseToCentre();
+                player.User.restartEnabled = true;
             }
 
             // TODO: animation

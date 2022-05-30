@@ -62,6 +62,15 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Restart Track"",
+                    ""type"": ""Button"",
+                    ""id"": ""7b7c5126-6685-4704-9219-dd6ddab798f2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -130,6 +139,28 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""action"": ""Toggle Free Cam"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""93cc2cbc-aa5f-4882-8c19-a68c6b2f66b4"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Restart Track"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""80cfc569-feb9-4e09-872d-61f839d95488"",
+                    ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Restart Track"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -137,15 +168,6 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
             ""name"": ""Ship"",
             ""id"": ""319c08b3-97e0-4636-a79a-bb6bde0a90f7"",
             ""actions"": [
-                {
-                    ""name"": ""Restart Track"",
-                    ""type"": ""Button"",
-                    ""id"": ""7b7c5126-6685-4704-9219-dd6ddab798f2"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
                 {
                     ""name"": ""Restart From Last Checkpoint"",
                     ""type"": ""Button"",
@@ -996,28 +1018,6 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Everything"",
                     ""action"": ""All Flight Assist Toggle"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""93cc2cbc-aa5f-4882-8c19-a68c6b2f66b4"",
-                    ""path"": ""<Keyboard>/r"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Everything"",
-                    ""action"": ""Restart Track"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""80cfc569-feb9-4e09-872d-61f839d95488"",
-                    ""path"": ""<Gamepad>/select"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Everything"",
-                    ""action"": ""Restart Track"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -3990,9 +3990,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         m_Global_ToggleConsole = m_Global.FindAction("Toggle Console", throwIfNotFound: true);
         m_Global_ShowGameMenu = m_Global.FindAction("Show Game Menu", throwIfNotFound: true);
         m_Global_ToggleFreeCam = m_Global.FindAction("Toggle Free Cam", throwIfNotFound: true);
+        m_Global_RestartTrack = m_Global.FindAction("Restart Track", throwIfNotFound: true);
         // Ship
         m_Ship = asset.FindActionMap("Ship", throwIfNotFound: true);
-        m_Ship_RestartTrack = m_Ship.FindAction("Restart Track", throwIfNotFound: true);
         m_Ship_RestartFromLastCheckpoint = m_Ship.FindAction("Restart From Last Checkpoint", throwIfNotFound: true);
         m_Ship_Pitch = m_Ship.FindAction("Pitch", throwIfNotFound: true);
         m_Ship_PitchAlt = m_Ship.FindAction("Pitch Alt", throwIfNotFound: true);
@@ -4127,6 +4127,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Global_ToggleConsole;
     private readonly InputAction m_Global_ShowGameMenu;
     private readonly InputAction m_Global_ToggleFreeCam;
+    private readonly InputAction m_Global_RestartTrack;
     public struct GlobalActions
     {
         private @FlyDangerousActions m_Wrapper;
@@ -4135,6 +4136,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         public InputAction @ToggleConsole => m_Wrapper.m_Global_ToggleConsole;
         public InputAction @ShowGameMenu => m_Wrapper.m_Global_ShowGameMenu;
         public InputAction @ToggleFreeCam => m_Wrapper.m_Global_ToggleFreeCam;
+        public InputAction @RestartTrack => m_Wrapper.m_Global_RestartTrack;
         public InputActionMap Get() { return m_Wrapper.m_Global; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -4156,6 +4158,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @ToggleFreeCam.started -= m_Wrapper.m_GlobalActionsCallbackInterface.OnToggleFreeCam;
                 @ToggleFreeCam.performed -= m_Wrapper.m_GlobalActionsCallbackInterface.OnToggleFreeCam;
                 @ToggleFreeCam.canceled -= m_Wrapper.m_GlobalActionsCallbackInterface.OnToggleFreeCam;
+                @RestartTrack.started -= m_Wrapper.m_GlobalActionsCallbackInterface.OnRestartTrack;
+                @RestartTrack.performed -= m_Wrapper.m_GlobalActionsCallbackInterface.OnRestartTrack;
+                @RestartTrack.canceled -= m_Wrapper.m_GlobalActionsCallbackInterface.OnRestartTrack;
             }
             m_Wrapper.m_GlobalActionsCallbackInterface = instance;
             if (instance != null)
@@ -4172,6 +4177,9 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 @ToggleFreeCam.started += instance.OnToggleFreeCam;
                 @ToggleFreeCam.performed += instance.OnToggleFreeCam;
                 @ToggleFreeCam.canceled += instance.OnToggleFreeCam;
+                @RestartTrack.started += instance.OnRestartTrack;
+                @RestartTrack.performed += instance.OnRestartTrack;
+                @RestartTrack.canceled += instance.OnRestartTrack;
             }
         }
     }
@@ -4180,7 +4188,6 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
     // Ship
     private readonly InputActionMap m_Ship;
     private IShipActions m_ShipActionsCallbackInterface;
-    private readonly InputAction m_Ship_RestartTrack;
     private readonly InputAction m_Ship_RestartFromLastCheckpoint;
     private readonly InputAction m_Ship_Pitch;
     private readonly InputAction m_Ship_PitchAlt;
@@ -4216,7 +4223,6 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
     {
         private @FlyDangerousActions m_Wrapper;
         public ShipActions(@FlyDangerousActions wrapper) { m_Wrapper = wrapper; }
-        public InputAction @RestartTrack => m_Wrapper.m_Ship_RestartTrack;
         public InputAction @RestartFromLastCheckpoint => m_Wrapper.m_Ship_RestartFromLastCheckpoint;
         public InputAction @Pitch => m_Wrapper.m_Ship_Pitch;
         public InputAction @PitchAlt => m_Wrapper.m_Ship_PitchAlt;
@@ -4257,9 +4263,6 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         {
             if (m_Wrapper.m_ShipActionsCallbackInterface != null)
             {
-                @RestartTrack.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnRestartTrack;
-                @RestartTrack.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnRestartTrack;
-                @RestartTrack.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnRestartTrack;
                 @RestartFromLastCheckpoint.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnRestartFromLastCheckpoint;
                 @RestartFromLastCheckpoint.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnRestartFromLastCheckpoint;
                 @RestartFromLastCheckpoint.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnRestartFromLastCheckpoint;
@@ -4357,9 +4360,6 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
             m_Wrapper.m_ShipActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @RestartTrack.started += instance.OnRestartTrack;
-                @RestartTrack.performed += instance.OnRestartTrack;
-                @RestartTrack.canceled += instance.OnRestartTrack;
                 @RestartFromLastCheckpoint.started += instance.OnRestartFromLastCheckpoint;
                 @RestartFromLastCheckpoint.performed += instance.OnRestartFromLastCheckpoint;
                 @RestartFromLastCheckpoint.canceled += instance.OnRestartFromLastCheckpoint;
@@ -4864,10 +4864,10 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         void OnToggleConsole(InputAction.CallbackContext context);
         void OnShowGameMenu(InputAction.CallbackContext context);
         void OnToggleFreeCam(InputAction.CallbackContext context);
+        void OnRestartTrack(InputAction.CallbackContext context);
     }
     public interface IShipActions
     {
-        void OnRestartTrack(InputAction.CallbackContext context);
         void OnRestartFromLastCheckpoint(InputAction.CallbackContext context);
         void OnPitch(InputAction.CallbackContext context);
         void OnPitchAlt(InputAction.CallbackContext context);

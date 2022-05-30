@@ -22,6 +22,7 @@ namespace Core.Player {
         [SerializeField] public InGameUI inGameUI;
 
         [SerializeField] public bool movementEnabled;
+        [SerializeField] public bool restartEnabled = true;
         [SerializeField] public bool pauseMenuEnabled = true;
         [SerializeField] public bool boostButtonForceEnabled;
         private bool _alternateFlightControls;
@@ -173,6 +174,7 @@ namespace Core.Player {
 
             movementEnabled = true;
             pauseMenuEnabled = true;
+            restartEnabled = true;
 
             FdConsole.Instance.LogMessage("** USER INPUT ENABLED **");
             foreach (var inputDevice in InputSystem.devices) {
@@ -198,6 +200,7 @@ namespace Core.Player {
             playerInput.actions.FindActionMap("ShipArcade").Disable();
 
             movementEnabled = false;
+            restartEnabled = false;
 
             // clear inputs
             shipPlayer.SetPitch(0);
@@ -268,7 +271,7 @@ namespace Core.Player {
 
         [UsedImplicitly]
         public void OnRestartTrack() {
-            if (movementEnabled) Game.Instance.RestartSession();
+            if (restartEnabled) Game.Instance.RestartSession();
         }
 
         [UsedImplicitly]
