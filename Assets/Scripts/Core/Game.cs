@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -218,6 +219,10 @@ namespace Core {
                         break;
                 }
             }
+
+            // fps cap
+            var fpsCap = Preferences.Instance.GetFloat("graphics-fps-cap");
+            Application.targetFrameRate = Convert.ToInt32(fpsCap);
         }
 
         public void EnableVR() {

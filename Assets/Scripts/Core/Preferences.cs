@@ -85,6 +85,8 @@ namespace Core {
                     return 80.0f;
                 case "graphics-render-scale":
                     return 1.0f;
+                case "graphics-fps-cap":
+                    return 1000;
                 case "mouseXSensitivity":
                 case "mouseYSensitivity":
                     return 0.5f;
