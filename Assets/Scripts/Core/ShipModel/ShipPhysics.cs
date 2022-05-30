@@ -121,18 +121,6 @@ namespace Core.ShipModel {
             }
         }
 
-        public void Reset() {
-            targetRigidbody.velocity = Vector3.zero;
-            targetRigidbody.angularVelocity = Vector3.zero;
-            _boostCharging = false;
-            _isBoosting = false;
-            _boostCapacitorPercent = 100f;
-            _prevVelocity = Vector3.zero;
-            _stopShip = false;
-
-            if (_boostCoroutine != null) StopCoroutine(_boostCoroutine);
-        }
-
         public void Start() {
             DontDestroyOnLoad(this);
 
@@ -149,6 +137,19 @@ namespace Core.ShipModel {
 
         private void FixedUpdate() {
             if (_stopShip) UpdateShip(0, 0, 0, 0, 0, 0, false, false, true, true);
+        }
+
+        public void ResetPhysics(bool includeBoost = true) {
+            targetRigidbody.velocity = Vector3.zero;
+            targetRigidbody.angularVelocity = Vector3.zero;
+            _prevVelocity = Vector3.zero;
+            _stopShip = false;
+            if (includeBoost) {
+                _boostCharging = false;
+                _isBoosting = false;
+                _boostCapacitorPercent = 100f;
+                if (_boostCoroutine != null) StopCoroutine(_boostCoroutine);
+            }
         }
 
         public event BoostFiredAction OnBoost;

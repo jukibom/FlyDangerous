@@ -172,7 +172,10 @@ namespace Gameplay {
                     UIAudioManager.Instance.Play("tt-countdown-2");
                     player.Freeze = false;
                     var start = Checkpoints.Find(c => c.Type == CheckpointType.Start);
-                    if (start) player.transform.position = start.transform.position;
+                    if (start) {
+                        player.transform.position = start.transform.position;
+                        player.ShipPhysics.ResetPhysics(false);
+                    }
                 }
             }
 

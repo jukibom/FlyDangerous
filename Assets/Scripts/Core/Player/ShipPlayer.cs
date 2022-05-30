@@ -190,7 +190,7 @@ namespace Core.Player {
             _boostButtonHeld = false;
             _velocityLimiterActive = false;
 
-            ShipPhysics.Reset();
+            ShipPhysics.ResetPhysics();
 
             User.ShipCameraRig.Reset();
         }
