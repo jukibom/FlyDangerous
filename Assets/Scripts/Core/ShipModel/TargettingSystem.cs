@@ -45,7 +45,7 @@ namespace Core.ShipModel {
 
         private void OnEnable() {
             Game.OnVRStatus += OnVRStatusChanged;
-            Game.OnPlayerLoaded += ResetTargets;
+            Game.OnPlayerJoin += ResetTargets;
             Game.OnPlayerLeave += ResetTargets;
             Game.OnGhostAdded += ResetTargets;
             Game.OnGhostRemoved += ResetTargets;
@@ -54,7 +54,7 @@ namespace Core.ShipModel {
 
         private void OnDisable() {
             Game.OnVRStatus -= OnVRStatusChanged;
-            Game.OnPlayerLoaded -= ResetTargets;
+            Game.OnPlayerJoin -= ResetTargets;
             Game.OnPlayerLeave -= ResetTargets;
             Game.OnGhostAdded -= ResetTargets;
             Game.OnGhostRemoved -= ResetTargets;

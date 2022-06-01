@@ -272,6 +272,13 @@ namespace Core {
                 levelData.startRotation.z
             );
 
+            // if a ship player which is the host already exists and the game mode permits it, warp there instead
+            var hostShip = ShipPlayers.Find(s => s.isHost);
+            if (hostShip != null && Game.Instance.LoadedLevelData.gameType.CanWarpToHost) {
+                position = hostShip.AbsoluteWorldPosition;
+                rotation = hostShip.transform.rotation;
+            }
+
             var ship = TransitionToShipPlayer(loadingPlayer);
             ship.ShipPhysics.gameObject.SetActive(false);
 
@@ -300,8 +307,8 @@ namespace Core {
                     // Update physics engine so subsequent collision checks are up-to-date
                     Physics.SyncTransforms();
 
-                    // all ships created and placed, notify ready (allows them to start syncing their own positions)
-                    foreach (var shipPlayer in ShipPlayers) shipPlayer.ServerReady();
+                    // ship created and placed, notify ready (allows them to start syncing their own positions)
+                    ship.ServerReady();
                 }
                 catch {
                     Game.Instance.QuitToMenu("The server failed to initialise properly");

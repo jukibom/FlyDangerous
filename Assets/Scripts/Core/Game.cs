@@ -151,7 +151,7 @@ namespace Core {
             DisableVRIfNeeded();
         }
 
-        public static event PlayerJoinAction OnPlayerLoaded;
+        public static event PlayerJoinAction OnPlayerJoin;
         public static event PlayerLeaveAction OnPlayerLeave;
         public static event GhostAddedAction OnGhostAdded;
         public static event GhostRemovedAction OnGhostRemoved;
@@ -555,7 +555,7 @@ namespace Core {
         }
 
         public void NotifyPlayerLoaded() {
-            OnPlayerLoaded?.Invoke();
+            OnPlayerJoin?.Invoke();
         }
     }
 }

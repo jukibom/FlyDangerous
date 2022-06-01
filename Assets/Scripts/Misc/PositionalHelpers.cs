@@ -1,3 +1,4 @@
+using Core;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -64,9 +65,17 @@ namespace Misc {
                 if (n != -1) testPosition = originalPosition + FibSpherePosition(n, max, positionSphereRadius);
 
                 testPosition = ClampPositionToTerrain(testPosition, objectRadius * 4);
+
+                // check to see if any other ships have been assigned this exact start position (and are therefore currently loading also)
+                var existingShipStartPosition = false;
+                FdNetworkManager.Instance.ShipPlayers.ForEach(s => Debug.Log("ship at " + s.AbsoluteWorldPosition));
+                FdNetworkManager.Instance.ShipPlayers.ForEach(s =>
+                    existingShipStartPosition = existingShipStartPosition || s.AbsoluteWorldPosition.Equals(testPosition));
+
+                // check to see if any existing ships or geometry are in this location
                 Physics.OverlapSphereNonAlloc(testPosition, objectRadius, hitColliders, collisionLayerMask);
 
-                return hitColliders[0] != null;
+                return existingShipStartPosition || hitColliders[0] != null;
             }
 
             while (NextPositionIsObstructed()) {
