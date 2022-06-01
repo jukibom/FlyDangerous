@@ -49,7 +49,6 @@ namespace Core {
         private bool GetDefaultBool(string key) {
             switch (key) {
                 case "showSpaceDust":
-                case "autoShipRotation":
                 case "invertArcadeYAxis":
                 case "graphics-terrain-details":
                     return true;
@@ -62,7 +61,7 @@ namespace Core {
                 case "mouseYInvert":
                 case "mouseLook":
                 case "forceRelativeMouseWithFAOff":
-                case "enableExperimentalTerrain":
+                case "autoShipRotation":
                     return false;
 
                 default:
