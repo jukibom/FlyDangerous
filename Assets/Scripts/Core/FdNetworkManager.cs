@@ -72,34 +72,8 @@ namespace Core {
 
         public static event Action<JoinGameSuccessMessage> OnClientConnected;
         public static event Action OnClientDisconnected;
+        public static event Action<string> OnPlayerLeave;
         public static event Action<string> OnClientConnectionRejected;
-
-        #region Helpers
-
-        /**
-         * This handler is a bit of a beast so let's break it down.
-         * Mirror requires an active connection tied to an entity to send messages to them. In order to "reject" a
-         * connection we must first, therefore, accept it. This means that our Mirror maxConnections is always at least
-         * 1 more than the actual maximum to accomodate this. This function creates a loading player prefab, adds the
-         * client as an active connection and starts a Coroutine to wait for ready status before sending a message that
-         * the client subscribes to and then forcibly disconnects the client so that a reason can be displayed.
-         */
-        private void RejectPlayerConnection(NetworkConnection conn, string reason) {
-            var loadingPlayer = Instantiate(loadingPlayerPrefab);
-            NetworkServer.AddPlayerForConnection(conn, loadingPlayer.gameObject);
-
-            IEnumerator Reject() {
-                while (!conn.isReady) yield return new WaitForEndOfFrame();
-                conn.identity.connectionToClient.Send(new JoinGameRejectionMessage { reason = reason });
-                yield return new WaitForEndOfFrame();
-
-                conn.Disconnect();
-            }
-
-            StartCoroutine(Reject());
-        }
-
-        #endregion
 
         #region Server Message Handlers
 
@@ -189,6 +163,10 @@ namespace Core {
             public string reason;
         }
 
+        public struct PlayerLeaveGameMessage : NetworkMessage {
+            public string playerName;
+        }
+
         private struct StartGameMessage : NetworkMessage {
             public SessionType sessionType;
             public LevelData levelData;
@@ -201,6 +179,41 @@ namespace Core {
             public Vector3 position;
             public Quaternion rotation;
         }
+
+        #region Helpers
+
+        /**
+         * This handler is a bit of a beast so let's break it down.
+         * Mirror requires an active connection tied to an entity to send messages to them. In order to "reject" a
+         * connection we must first, therefore, accept it. This means that our Mirror maxConnections is always at least
+         * 1 more than the actual maximum to accomodate this. This function creates a loading player prefab, adds the
+         * client as an active connection and starts a Coroutine to wait for ready status before sending a message that
+         * the client subscribes to and then forcibly disconnects the client so that a reason can be displayed.
+         */
+        private void RejectPlayerConnection(NetworkConnection conn, string reason) {
+            var loadingPlayer = Instantiate(loadingPlayerPrefab);
+            NetworkServer.AddPlayerForConnection(conn, loadingPlayer.gameObject);
+
+            IEnumerator Reject() {
+                while (!conn.isReady) yield return new WaitForEndOfFrame();
+                conn.identity.connectionToClient.Send(new JoinGameRejectionMessage { reason = reason });
+                yield return new WaitForEndOfFrame();
+
+                conn.Disconnect();
+            }
+
+            StartCoroutine(Reject());
+        }
+
+        // Find the player name for a given connection - this is ONLY valid on the server!
+        private string PlayerNameForConnection(NetworkConnection conn) {
+            var lobbyPlayer = LobbyPlayers.Find(p => p.connectionToClient.connectionId == conn.connectionId);
+            var loadingPlayer = LoadingPlayers.Find(p => p.connectionToClient.connectionId == conn.connectionId);
+            var shipPlayer = ShipPlayers.Find(p => p.connectionToClient.connectionId == conn.connectionId);
+            return lobbyPlayer ? lobbyPlayer.playerName : loadingPlayer ? loadingPlayer.playerName : shipPlayer ? shipPlayer.playerName : "unknown";
+        }
+
+        #endregion
 
         #region Start / Quit Game
 
@@ -332,6 +345,7 @@ namespace Core {
             base.OnClientConnect(conn);
             NetworkClient.RegisterHandler<JoinGameSuccessMessage>(OnJoinGameClientMsg);
             NetworkClient.RegisterHandler<JoinGameRejectionMessage>(OnRejectConnectionClientMsg);
+            NetworkClient.RegisterHandler<PlayerLeaveGameMessage>(OnPlayerLeaveClientMsg);
             NetworkClient.RegisterHandler<StartGameMessage>(OnStartLoadGameClientMsg);
             NetworkClient.RegisterHandler<ReturnToLobbyMessage>(OnShowLobbyClientMsg);
             NetworkClient.RegisterHandler<SetShipPositionMessage>(OnSetShipPositionClientMsg);
@@ -356,7 +370,7 @@ namespace Core {
             switch (sessionStatus) {
                 case SessionStatus.LobbyMenu:
                     var localPlayer = FdPlayer.FindLocalLobbyPlayer;
-                    if (localPlayer) localPlayer.HostCloseLobby();
+                    if (localPlayer != null) localPlayer.HostCloseLobby();
                     break;
 
                 case SessionStatus.Loading:
@@ -395,9 +409,10 @@ namespace Core {
         // player leaves
         public override void OnServerDisconnect(NetworkConnection conn) {
             Debug.Log("[SERVER] PLAYER DISCONNECT");
+            NetworkServer.SendToAll(new PlayerLeaveGameMessage { playerName = PlayerNameForConnection(conn) });
             base.OnServerDisconnect(conn);
-            UpdatePlayerLists();
             OnClientDisconnected?.Invoke();
+            UpdatePlayerLists();
         }
 
         public override void OnStopServer() {
@@ -489,6 +504,11 @@ namespace Core {
         private void OnRejectConnectionClientMsg(JoinGameRejectionMessage message) {
             Debug.Log(message.reason);
             OnClientConnectionRejected?.Invoke(message.reason);
+        }
+
+        private void OnPlayerLeaveClientMsg(PlayerLeaveGameMessage message) {
+            Debug.Log($"[CLIENT] Player {message.playerName} left the game");
+            OnPlayerLeave?.Invoke(message.playerName);
         }
 
         private void OnStartLoadGameClientMsg(StartGameMessage message) {

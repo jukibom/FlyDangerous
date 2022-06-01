@@ -136,7 +136,7 @@ namespace Core {
             if (args.ToList().Contains("-vr") || args.ToList().Contains("-VR")) EnableVR();
 
             // Subscribe to network events
-            FdNetworkManager.OnClientDisconnected += () => OnPlayerLeave?.Invoke();
+            FdNetworkManager.OnPlayerLeave += _ => OnPlayerLeave?.Invoke();
 
             // load hmd position from preferences
             _hmdPosition = Preferences.Instance.GetVector3("hmdPosition");

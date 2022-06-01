@@ -107,14 +107,14 @@ namespace Core.OnlineServices.SteamOnlineService {
         private void OnGetLobbyInfo(LobbyDataUpdate_t ctx) {
             var hasCallback = _getLobbyInfoTaskList.TryGetValue(ctx.m_ulSteamIDLobby, out var task);
             if (hasCallback) {
-                var steamId = new CSteamID(ctx.m_ulSteamIDLobby);
+                var lobbyId = new CSteamID(ctx.m_ulSteamIDLobby);
                 var lobbyInfo = new LobbyInfo {
                     lobbyId = ctx.m_ulSteamIDLobby.ToString(),
-                    connectionAddress = SteamMatchmaking.GetLobbyData(steamId, HostAddressVar),
-                    players = SteamMatchmaking.GetNumLobbyMembers(steamId),
-                    playersMax = SteamMatchmaking.GetLobbyMemberLimit(steamId),
-                    name = SteamMatchmaking.GetLobbyData(steamId, "name"),
-                    gameMode = SteamMatchmaking.GetLobbyData(steamId, "gameType")
+                    connectionAddress = SteamMatchmaking.GetLobbyData(lobbyId, HostAddressVar),
+                    players = SteamMatchmaking.GetNumLobbyMembers(lobbyId),
+                    playersMax = SteamMatchmaking.GetLobbyMemberLimit(lobbyId),
+                    name = SteamMatchmaking.GetLobbyData(lobbyId, "name"),
+                    gameMode = SteamMatchmaking.GetLobbyData(lobbyId, "gameType")
                 };
                 _getLobbyInfoTaskList.Remove(ctx.m_ulSteamIDLobby);
                 task.SetResult(lobbyInfo);
