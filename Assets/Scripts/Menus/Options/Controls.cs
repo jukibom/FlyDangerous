@@ -71,7 +71,6 @@ namespace Menus.Options {
         }
 
         private void SetAutoRotateVisibility(bool shouldShow) {
-            Debug.Log("Set auto rotate " + shouldShow);
             autoRotateOption.SetActive(shouldShow);
             autoRotateOptionDisabledFacade.SetActive(!shouldShow);
         }
