@@ -62,6 +62,7 @@ namespace Core {
                 case "mouseLook":
                 case "forceRelativeMouseWithFAOff":
                 case "autoShipRotation":
+                case "autoShipRoll":
                     return false;
 
                 default:

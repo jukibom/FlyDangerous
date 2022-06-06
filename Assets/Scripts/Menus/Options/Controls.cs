@@ -21,7 +21,10 @@ namespace Menus.Options {
         [SerializeField] private GameObject autoRotateOptionDisabledFacade;
         [SerializeField] private GameObject flightAssistModeDropdownDisabledFacade;
 
+        [SerializeField] private Checkbox autoShipRoll;
         [SerializeField] private Checkbox autoShipRotation;
+
+        private bool _isAdvancedEnabled;
 
         public void OnEnable() {
             // wait a frame to allow everything to load 
@@ -39,14 +42,21 @@ namespace Menus.Options {
             SetControlSchemeOptions(controlSchemeType == "advanced");
         }
 
+        public void OnAutoRollToggle(bool toggle) {
+            SetAutoRotateVisibility(_isAdvancedEnabled && toggle == false);
+            SetFlightAssistVisibility(_isAdvancedEnabled && !autoShipRotation.isChecked && toggle == false);
+        }
+
         public void OnAutoRotationToggle(bool toggle) {
             SetFlightAssistVisibility(!toggle);
         }
 
         private void SetControlSchemeOptions(bool isAdvancedActive) {
+            _isAdvancedEnabled = isAdvancedActive;
             SetAdvancedOptionsVisibility(isAdvancedActive);
             SetArcadeOptionsVisibility(!isAdvancedActive);
-            SetFlightAssistVisibility(isAdvancedActive && !autoShipRotation.isChecked);
+            SetAutoRotateVisibility(isAdvancedActive && !autoShipRoll.isChecked);
+            SetFlightAssistVisibility(isAdvancedActive && !autoShipRotation.isChecked && !autoShipRoll.isChecked);
         }
 
         private void SetAdvancedOptionsVisibility(bool show) {
@@ -58,6 +68,12 @@ namespace Menus.Options {
         private void SetArcadeOptionsVisibility(bool show) {
             controlsLayoutTab.SetActive(show);
             autoRotateOptionDisabledFacade.SetActive(show);
+        }
+
+        private void SetAutoRotateVisibility(bool shouldShow) {
+            Debug.Log("Set auto rotate " + shouldShow);
+            autoRotateOption.SetActive(shouldShow);
+            autoRotateOptionDisabledFacade.SetActive(!shouldShow);
         }
 
         private void SetFlightAssistVisibility(bool shouldShow) {

@@ -76,9 +76,10 @@ namespace Core.Player {
 
                 var pitchRotate = MathfExtensions.Remap(-1, 1, -maxTargetRotationDegrees, maxTargetRotationDegrees, lateralV);
                 var yawRotate = MathfExtensions.Remap(-1, 1, -maxTargetRotationDegrees, maxTargetRotationDegrees, lateralH);
+                var rollRotate = Preferences.Instance.GetBool("autoShipRoll") ? yawRotate * -1 : 0;
 
                 // apply an auto roll to the transform when pitch / yaw-ing
-                targetTransform.Rotate(pitchRotate * -1, yawRotate, yawRotate * -1);
+                targetTransform.Rotate(pitchRotate * -1, yawRotate, rollRotate);
 
                 if (drawDebugCubes) {
                     planeRotationDebugCube.rotation = planeRotation;

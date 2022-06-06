@@ -99,10 +99,13 @@ namespace Core.Player {
                     yaw += mouseYaw;
                 }
 
-                // update the player
-                if (Preferences.Instance.GetBool("autoShipRotation") || Preferences.Instance.GetString("controlSchemeType") == "arcade")
+                // if user has any auto-roll handling set, invoke the arcade flight computer to override the inputs
+                if (Preferences.Instance.GetBool("autoShipRoll") ||
+                    Preferences.Instance.GetBool("autoShipRotation") ||
+                    Preferences.Instance.GetString("controlSchemeType") == "arcade")
                     shipArcadeFlightComputer.UpdateShipFlightInput(ref lateralH, ref lateralV, ref throttle, ref pitch, ref yaw, ref roll, _autoRotateDrift);
 
+                // update the player
                 shipPlayer.SetLateralH(lateralH);
                 shipPlayer.SetLateralV(lateralV);
                 shipPlayer.SetThrottle(throttle);
