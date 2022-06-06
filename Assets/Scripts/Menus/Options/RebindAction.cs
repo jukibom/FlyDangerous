@@ -256,7 +256,7 @@ namespace Menus.Options {
                 var match = Regex.Match(binding.overrideProcessors, @"AxisDeadzone\(min\s*=\s*(\d*\.?\d*)");
                 if (match.Success)
                     try {
-                        return float.Parse(match.Result("$1"));
+                        return float.Parse(match.Result("$1"), CultureInfo.InvariantCulture);
                     }
                     catch {
                         // ignored

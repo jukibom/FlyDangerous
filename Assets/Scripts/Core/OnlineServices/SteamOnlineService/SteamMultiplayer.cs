@@ -1,5 +1,6 @@
 ﻿#if !DISABLESTEAMWORKS
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Steamworks;
@@ -20,7 +21,7 @@ namespace Core.OnlineServices.SteamOnlineService {
 
         public Task JoinLobby(string lobbyAddress) {
             // convert our string into a CSteamID
-            var steamId = ulong.Parse(lobbyAddress);
+            var steamId = ulong.Parse(lobbyAddress, CultureInfo.InvariantCulture);
             return _steamLobby.JoinLobby(new CSteamID(steamId));
         }
 
@@ -30,7 +31,7 @@ namespace Core.OnlineServices.SteamOnlineService {
         }
 
         public Task<LobbyInfo> GetLobbyInfo(string lobbyId) {
-            return _steamLobby.GetLobbyInfo(new CSteamID(ulong.Parse(lobbyId)));
+            return _steamLobby.GetLobbyInfo(new CSteamID(ulong.Parse(lobbyId, CultureInfo.InvariantCulture)));
         }
 
         private void OnJoinGameRequest(string address) {

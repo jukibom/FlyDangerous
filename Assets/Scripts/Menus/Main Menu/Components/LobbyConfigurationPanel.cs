@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using Core;
 using Core.MapData;
 using Core.Player;
@@ -90,7 +91,7 @@ namespace Menus.Main_Menu.Components {
             FdNetworkManager.serverPassword = passwordInputField.text;
 
             // parse out max players text box (between 2 and maxPlayerLimit)
-            maxPlayers = short.Parse(maxPlayersInputField.text);
+            maxPlayers = short.Parse(maxPlayersInputField.text, CultureInfo.InvariantCulture);
             maxPlayersInputField.text = maxPlayers.ToString();
             FdNetworkManager.Instance.maxPlayers = maxPlayers;
 
@@ -103,7 +104,7 @@ namespace Menus.Main_Menu.Components {
 
         public void ClampMaxPlayersInput() {
             try {
-                var value = Math.Min(Math.Max(float.Parse(maxPlayersInputField.text), 1), FdNetworkManager.maxPlayerLimit);
+                var value = Math.Min(Math.Max(float.Parse(maxPlayersInputField.text, CultureInfo.InvariantCulture), 1), FdNetworkManager.maxPlayerLimit);
                 maxPlayersInputField.text = value.ToString("0");
             }
             catch {

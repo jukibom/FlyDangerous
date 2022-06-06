@@ -27,26 +27,26 @@ namespace Core.Replays {
      * get around physics determinism to some extent.
      */
     public class Replay {
+        private const string ReplayMetaFileName = "replayMeta.json";
+        private const string ShipParameterFileName = "shipParameters.json";
+        private const string LevelDataFileName = "levelData.json";
+        private const string ShipProfileFileName = "shipProfile.json";
+        private const string ScoreDataFileName = "scoreData.json";
+        private const string InputFrameFileName = "input.bin";
+        private const string KeyFrameFileName = "keyFrames.bin";
+        private const string ArchiveFileName = "archive.zip";
         public static readonly string ReplayDirectory = Path.Combine(Application.persistentDataPath, "Save", "Records", "Replays");
-        public static readonly string TMPSaveDirectory = Path.Combine(ReplayDirectory, "tmp");
-        private static readonly string replayMetaFileName = "replayMeta.json";
-        private static readonly string shipParameterFileName = "shipParameters.json";
-        private static readonly string levelDataFileName = "levelData.json";
-        private static readonly string shipProfileFileName = "shipProfile.json";
-        private static readonly string scoreDataFileName = "scoreData.json";
-        private static readonly string inputFrameFileName = "input.bin";
-        private static readonly string keyFrameFileName = "keyFrames.bin";
-        private static readonly string archiveFileName = "archive.zip";
-        private static readonly string tmpReplayMetaSaveLoc = Path.Combine(TMPSaveDirectory, replayMetaFileName);
-        private static readonly string tmpShipParameterSaveLoc = Path.Combine(TMPSaveDirectory, shipParameterFileName);
-        private static readonly string tmpLevelDataSaveLoc = Path.Combine(TMPSaveDirectory, levelDataFileName);
-        private static readonly string tmpShipProfileSaveLoc = Path.Combine(TMPSaveDirectory, shipProfileFileName);
-        private static readonly string tmpScoreDataSaveLoc = Path.Combine(TMPSaveDirectory, scoreDataFileName);
-        private static readonly string tmpInputDataSaveLoc = Path.Combine(TMPSaveDirectory, inputFrameFileName);
-        private static readonly string tmpKeyFrameDataSaveLoc = Path.Combine(TMPSaveDirectory, keyFrameFileName);
-        private static readonly string tmpArchiveDataSaveLoc = Path.Combine(ReplayDirectory, archiveFileName);
+        private static readonly string tmpSaveDirectory = Path.Combine(ReplayDirectory, "tmp");
+        private static readonly string tmpReplayMetaSaveLoc = Path.Combine(tmpSaveDirectory, ReplayMetaFileName);
+        private static readonly string tmpShipParameterSaveLoc = Path.Combine(tmpSaveDirectory, ShipParameterFileName);
+        private static readonly string tmpLevelDataSaveLoc = Path.Combine(tmpSaveDirectory, LevelDataFileName);
+        private static readonly string tmpShipProfileSaveLoc = Path.Combine(tmpSaveDirectory, ShipProfileFileName);
+        private static readonly string tmpScoreDataSaveLoc = Path.Combine(tmpSaveDirectory, ScoreDataFileName);
+        private static readonly string tmpInputDataSaveLoc = Path.Combine(tmpSaveDirectory, InputFrameFileName);
+        private static readonly string tmpKeyFrameDataSaveLoc = Path.Combine(tmpSaveDirectory, KeyFrameFileName);
+        private static readonly string tmpArchiveDataSaveLoc = Path.Combine(ReplayDirectory, ArchiveFileName);
 
-        [CanBeNull] protected string replayFilePath;
+        [CanBeNull] private string _replayFilePath;
 
         private Replay(ReplayMeta replayMeta, ShipParameters shipParameters, LevelData levelData, ShipProfile shipProfile, ScoreData scoreData,
             Stream inputFrameStream, Stream keyFrameStream, [CanBeNull] string filePath) {
@@ -57,7 +57,7 @@ namespace Core.Replays {
             ScoreData = scoreData;
             InputFrameStream = inputFrameStream;
             KeyFrameStream = keyFrameStream;
-            replayFilePath = filePath;
+            _replayFilePath = filePath;
         }
 
         public ReplayMeta ReplayMeta { get; }
@@ -110,7 +110,7 @@ namespace Core.Replays {
             // move the file into a folder named the same as the level hash
 
             if (File.Exists(tmpArchiveDataSaveLoc)) File.Delete(tmpArchiveDataSaveLoc);
-            ZipFile.CreateFromDirectory(TMPSaveDirectory, tmpArchiveDataSaveLoc);
+            ZipFile.CreateFromDirectory(tmpSaveDirectory, tmpArchiveDataSaveLoc);
 
             using var sha256 = SHA256.Create();
             using var fileStream = File.OpenRead(tmpArchiveDataSaveLoc);
@@ -127,14 +127,14 @@ namespace Core.Replays {
             Directory.CreateDirectory(Path.Combine(ReplayDirectory, folder));
 
             File.Move(tmpArchiveDataSaveLoc, filePath);
-            Directory.Delete(TMPSaveDirectory, true);
-            replayFilePath = filePath;
+            Directory.Delete(tmpSaveDirectory, true);
+            _replayFilePath = filePath;
 
             return fileName;
         }
 
         public void Delete() {
-            if (replayFilePath != null && File.Exists(replayFilePath)) File.Delete(replayFilePath);
+            if (_replayFilePath != null && File.Exists(_replayFilePath)) File.Delete(_replayFilePath);
         }
 
         /**
@@ -157,14 +157,14 @@ namespace Core.Replays {
                 throw new DataException("Replay archive is not valid.");
             });
 
-            var replayMeta = ReplayMeta.FromJsonString(readArchiveEntry(archive, replayMetaFileName));
-            var shipParameters = ShipParameters.FromJsonString(readArchiveEntry(archive, shipParameterFileName));
-            var levelData = LevelData.FromJsonString(readArchiveEntry(archive, levelDataFileName));
-            var shipProfile = ShipProfile.FromJsonString(readArchiveEntry(archive, shipProfileFileName));
-            var scoreData = ScoreData.FromJsonString(readArchiveEntry(archive, scoreDataFileName));
+            var replayMeta = ReplayMeta.FromJsonString(readArchiveEntry(archive, ReplayMetaFileName));
+            var shipParameters = ShipParameters.FromJsonString(readArchiveEntry(archive, ShipParameterFileName));
+            var levelData = LevelData.FromJsonString(readArchiveEntry(archive, LevelDataFileName));
+            var shipProfile = ShipProfile.FromJsonString(readArchiveEntry(archive, ShipProfileFileName));
+            var scoreData = ScoreData.FromJsonString(readArchiveEntry(archive, ScoreDataFileName));
 
-            var inputFrameEntry = archive.GetEntry(inputFrameFileName);
-            var keyFrameEntry = archive.GetEntry(keyFrameFileName);
+            var inputFrameEntry = archive.GetEntry(InputFrameFileName);
+            var keyFrameEntry = archive.GetEntry(KeyFrameFileName);
 
             if (inputFrameEntry == null || keyFrameEntry == null) throw new DataException("Replay archive is not valid");
 
@@ -184,8 +184,8 @@ namespace Core.Replays {
          * Create a writeable stream in a temporary directory
          */
         public static Replay CreateNewWritable(ShipParameters shipParameters, LevelData levelData, ShipProfile shipProfile) {
-            if (Directory.Exists(TMPSaveDirectory)) Directory.Delete(TMPSaveDirectory, true);
-            Directory.CreateDirectory(TMPSaveDirectory);
+            if (Directory.Exists(tmpSaveDirectory)) Directory.Delete(tmpSaveDirectory, true);
+            Directory.CreateDirectory(tmpSaveDirectory);
 
             // V1 replay data
             var replayMeta = ReplayMeta.Version100(levelData);

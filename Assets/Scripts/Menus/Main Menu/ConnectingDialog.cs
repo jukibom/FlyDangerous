@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using Core;
 using Core.Player;
 using UnityEngine;
@@ -30,7 +31,7 @@ namespace Menus.Main_Menu {
                 FdNetworkManager.Instance.NetworkAddress = address;
             }
             else {
-                var port = Convert.ToUInt16(short.Parse(portText));
+                var port = Convert.ToUInt16(short.Parse(portText, CultureInfo.InvariantCulture));
                 FdNetworkManager.Instance.NetworkAddress = address;
                 FdNetworkManager.Instance.NetworkPort = port;
             }

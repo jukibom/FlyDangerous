@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -37,7 +38,7 @@ namespace UI {
 
         public void OnTextEntryChanged() {
             try {
-                var value = Math.Min(Math.Max(float.Parse(numberTextBox.text), minValue), maxValue);
+                var value = Math.Min(Math.Max(float.Parse(numberTextBox.text, CultureInfo.InvariantCulture), minValue), maxValue);
                 slider.value = slider.wholeNumbers ? (int)value : value;
                 numberTextBox.text = slider.wholeNumbers
                     ? value.ToString("0")
