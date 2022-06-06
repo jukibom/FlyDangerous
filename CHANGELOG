@@ -7,12 +7,15 @@ Changes:
     * Combined X and Y mouse modes into single mouse mode dropdown (default relative)
     * Set default mouse X axis to yaw for fps people (and Q/E are default roll anyway)
     * Free roam multiplayer join will warp to the host on spawn
+    * Auto Roll for Arcade input has been separated out from Auto Rotation (#175)
 
 Fixes:
     * Mouse power curve did not work at all with relative return rate (#159)
     * Incorrect scrollbars on Time Trial end screen (#169)
     * Player indicator still visible after player left multiplayer session (#140)
     * Free roam multiplayer join should never spawn underground or inside another ship (#157)
+    * Fixed axis deadzone possible to be > 1 in certain regions (#160)
+    * Fixed dev panel applying insane torque on apply in certain regions (#163)
 
 0.5.5
 New:
