@@ -21,6 +21,14 @@ namespace GameUI.GameModes {
         [SerializeField] private Button defaultSelectedButton;
         [SerializeField] private AudioListener temporaryAudioListener;
 
+        private void OnEnable() {
+            Game.OnRestart += SetReplaysAndHideCursor;
+        }
+
+        private void OnDisable() {
+            Game.OnRestart -= SetReplaysAndHideCursor;
+        }
+
         public void Hide() {
             resultsScreenBackground.enabled = false;
             medalsScreen.gameObject.SetActive(false);
@@ -116,9 +124,13 @@ namespace GameUI.GameModes {
         }
 
         public void Retry() {
-            Game.Instance.ActiveGameReplays = competitionPanel.GetSelectedReplays();
+            SetReplaysAndHideCursor();
             Game.Instance.RestartSession();
+        }
+
+        private void SetReplaysAndHideCursor() {
             // hide the mouse and do all the things that normally happens when unpausing
+            Game.Instance.ActiveGameReplays = competitionPanel.GetSelectedReplays();
             FindObjectOfType<InGameUI>()?.OnPauseToggle(false);
         }
 
