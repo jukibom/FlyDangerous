@@ -21,6 +21,7 @@ namespace Menus.Main_Menu {
         [SerializeField] private Camera uiCamera;
         [SerializeField] private XRRig xrRig;
 
+        [SerializeField] private VRCalibrationDialog vrCalibrationDialog;
         [SerializeField] private NewPlayerWelcomeDialog newPlayerWelcomeDialog;
         [SerializeField] private TopMenu topMenu;
         [SerializeField] private ProfileMenu profileMenu;
@@ -162,11 +163,24 @@ namespace Menus.Main_Menu {
         private void ShowStartingPanel() {
             topMenu.Hide();
 
-            // TODO: go back to last known panel? (e.g. time trial etc)
-            // (handling the offline server stuff will probably be pain!)
             var lastPlayedVersion = Preferences.Instance.GetString("lastPlayedVersion");
-            if (lastPlayedVersion == "none") newPlayerWelcomeDialog.Open(profileMenu);
-            else topMenu.gameObject.SetActive(true);
+            var showVrCalibrationDialog = Preferences.Instance.GetVector3("hmdPosition").Equals(Vector3.zero);
+            var showWelcomeDialog = lastPlayedVersion == "none";
+
+            // TODO: go back to last known panel on game mode quit? (e.g. time trial etc)
+            // (handling the offline server stuff will probably be pain!)
+
+            // startup stuff
+            if (Game.Instance.IsVREnabled && showVrCalibrationDialog) {
+                vrCalibrationDialog.Open(null);
+                vrCalibrationDialog.showWelcomeDialogNext = showWelcomeDialog;
+            }
+            else if (showWelcomeDialog) {
+                newPlayerWelcomeDialog.Open(profileMenu);
+            }
+            else {
+                topMenu.gameObject.SetActive(true);
+            }
 
             Preferences.Instance.SetString("lastPlayedVersion", Application.version);
             Preferences.Instance.Save();
