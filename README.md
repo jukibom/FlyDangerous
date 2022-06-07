@@ -16,6 +16,10 @@ This project aims to provide a ground-up reimplementation of a similar-enough fl
 
 ## Planned Features
 
+[Roadmap](https://github.com/users/jukibom/projects/1/views/5)
+
+Major features: 
+
 * Flight sticks of all shapes and sizes (done!)
 * Basic time trial map types
   * Sprint: 1 start, checkpoints, 1 end (done!)
