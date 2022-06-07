@@ -44,12 +44,14 @@ namespace Menus.Main_Menu {
         private void OnEnable() {
             SceneManager.sceneLoaded += OnEnvironmentLoadComplete;
             Game.OnVRStatus += OnVRStatus;
+            Game.OnGameSettingsApplied += OnGameSettingsApplied;
             StartCoroutine(MenuLoad());
         }
 
         private void OnDisable() {
             SceneManager.sceneLoaded -= OnEnvironmentLoadComplete;
             Game.OnVRStatus -= OnVRStatus;
+            Game.OnGameSettingsApplied -= OnGameSettingsApplied;
         }
 
         public void ShowDisconnectedDialog(string reason) {
@@ -76,7 +78,7 @@ namespace Menus.Main_Menu {
             if (xrRig) Game.Instance.ResetHmdView(xrRig, xrRig.transform.parent);
         }
 
-        public void OnVRStatus(bool isVREnabled) {
+        private void OnVRStatus(bool isVREnabled) {
             // if VR is enabled, we need to swap our active cameras and make UI panels operate in world space
             if (isVREnabled) {
                 canvas.renderMode = RenderMode.WorldSpace;
@@ -97,6 +99,12 @@ namespace Menus.Main_Menu {
                 uiCamera.enabled = true;
                 xrRig.gameObject.SetActive(false);
             }
+        }
+
+        private void OnGameSettingsApplied() {
+            var playerInput = GetComponent<PlayerInput>();
+            playerInput.currentActionMap = playerInput.actions
+                .FindActionMap(Preferences.Instance.GetString("controlSchemeType") == "arcade" ? "GlobalArcade" : "Global");
         }
 
         private IEnumerator MenuLoad() {

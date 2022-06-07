@@ -165,6 +165,147 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
             ]
         },
         {
+            ""name"": ""GlobalArcade"",
+            ""id"": ""e3b45f6b-d13f-4131-a96f-a169cd54ecac"",
+            ""actions"": [
+                {
+                    ""name"": ""Reset HMD View"",
+                    ""type"": ""Button"",
+                    ""id"": ""40ada5c8-ec47-4851-a112-a0536341bb6e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Toggle Console"",
+                    ""type"": ""Button"",
+                    ""id"": ""f3206437-fdb8-460e-ae4e-bddd14f79d8b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Show Game Menu"",
+                    ""type"": ""Button"",
+                    ""id"": ""0e24ddee-e7ee-4190-aa0c-f05339e0cf8f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Toggle Free Cam"",
+                    ""type"": ""Button"",
+                    ""id"": ""75a36a4d-f764-47e4-a1ec-09c455d6d914"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Restart Track"",
+                    ""type"": ""Button"",
+                    ""id"": ""42df12e0-4e49-4e25-b43f-4f21262d4686"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""4202cc87-53d3-4e44-be91-f745f9197e67"",
+                    ""path"": ""<Keyboard>/f11"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Reset HMD View"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6e784d43-c724-460a-abbf-e22a1ccc7d7f"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Reset HMD View"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8e1e515e-b089-4fbb-a946-17b4bd4f16c1"",
+                    ""path"": ""<Keyboard>/backquote"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Toggle Console"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""11098029-6ef0-46d1-a65c-894aa53c2a5d"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Show Game Menu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ab2fc261-9e0a-473a-9a1c-7bc67daedad9"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Show Game Menu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""10d691be-a0ff-4bcf-b8e0-8702e1e10199"",
+                    ""path"": ""<Keyboard>/f5"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Toggle Free Cam"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""729a90ac-81b8-4c4d-af92-11792c4fff50"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Restart Track"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""698fe503-ee69-47ee-bf17-d554a5401862"",
+                    ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Restart Track"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
             ""name"": ""Ship"",
             ""id"": ""319c08b3-97e0-4636-a79a-bb6bde0a90f7"",
             ""actions"": [
@@ -2221,7 +2362,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": ""positive"",
                     ""id"": ""bea09b6d-6e38-4721-a53f-384f684282be"",
-                    ""path"": ""<Keyboard>/space"",
+                    ""path"": ""<Keyboard>/ctrl"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
@@ -2232,7 +2373,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": ""negative"",
                     ""id"": ""9acad715-a053-4146-b7ec-b89272637b4a"",
-                    ""path"": ""<Keyboard>/ctrl"",
+                    ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
@@ -3991,6 +4132,13 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         m_Global_ShowGameMenu = m_Global.FindAction("Show Game Menu", throwIfNotFound: true);
         m_Global_ToggleFreeCam = m_Global.FindAction("Toggle Free Cam", throwIfNotFound: true);
         m_Global_RestartTrack = m_Global.FindAction("Restart Track", throwIfNotFound: true);
+        // GlobalArcade
+        m_GlobalArcade = asset.FindActionMap("GlobalArcade", throwIfNotFound: true);
+        m_GlobalArcade_ResetHMDView = m_GlobalArcade.FindAction("Reset HMD View", throwIfNotFound: true);
+        m_GlobalArcade_ToggleConsole = m_GlobalArcade.FindAction("Toggle Console", throwIfNotFound: true);
+        m_GlobalArcade_ShowGameMenu = m_GlobalArcade.FindAction("Show Game Menu", throwIfNotFound: true);
+        m_GlobalArcade_ToggleFreeCam = m_GlobalArcade.FindAction("Toggle Free Cam", throwIfNotFound: true);
+        m_GlobalArcade_RestartTrack = m_GlobalArcade.FindAction("Restart Track", throwIfNotFound: true);
         // Ship
         m_Ship = asset.FindActionMap("Ship", throwIfNotFound: true);
         m_Ship_RestartFromLastCheckpoint = m_Ship.FindAction("Restart From Last Checkpoint", throwIfNotFound: true);
@@ -4184,6 +4332,71 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         }
     }
     public GlobalActions @Global => new GlobalActions(this);
+
+    // GlobalArcade
+    private readonly InputActionMap m_GlobalArcade;
+    private IGlobalArcadeActions m_GlobalArcadeActionsCallbackInterface;
+    private readonly InputAction m_GlobalArcade_ResetHMDView;
+    private readonly InputAction m_GlobalArcade_ToggleConsole;
+    private readonly InputAction m_GlobalArcade_ShowGameMenu;
+    private readonly InputAction m_GlobalArcade_ToggleFreeCam;
+    private readonly InputAction m_GlobalArcade_RestartTrack;
+    public struct GlobalArcadeActions
+    {
+        private @FlyDangerousActions m_Wrapper;
+        public GlobalArcadeActions(@FlyDangerousActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @ResetHMDView => m_Wrapper.m_GlobalArcade_ResetHMDView;
+        public InputAction @ToggleConsole => m_Wrapper.m_GlobalArcade_ToggleConsole;
+        public InputAction @ShowGameMenu => m_Wrapper.m_GlobalArcade_ShowGameMenu;
+        public InputAction @ToggleFreeCam => m_Wrapper.m_GlobalArcade_ToggleFreeCam;
+        public InputAction @RestartTrack => m_Wrapper.m_GlobalArcade_RestartTrack;
+        public InputActionMap Get() { return m_Wrapper.m_GlobalArcade; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(GlobalArcadeActions set) { return set.Get(); }
+        public void SetCallbacks(IGlobalArcadeActions instance)
+        {
+            if (m_Wrapper.m_GlobalArcadeActionsCallbackInterface != null)
+            {
+                @ResetHMDView.started -= m_Wrapper.m_GlobalArcadeActionsCallbackInterface.OnResetHMDView;
+                @ResetHMDView.performed -= m_Wrapper.m_GlobalArcadeActionsCallbackInterface.OnResetHMDView;
+                @ResetHMDView.canceled -= m_Wrapper.m_GlobalArcadeActionsCallbackInterface.OnResetHMDView;
+                @ToggleConsole.started -= m_Wrapper.m_GlobalArcadeActionsCallbackInterface.OnToggleConsole;
+                @ToggleConsole.performed -= m_Wrapper.m_GlobalArcadeActionsCallbackInterface.OnToggleConsole;
+                @ToggleConsole.canceled -= m_Wrapper.m_GlobalArcadeActionsCallbackInterface.OnToggleConsole;
+                @ShowGameMenu.started -= m_Wrapper.m_GlobalArcadeActionsCallbackInterface.OnShowGameMenu;
+                @ShowGameMenu.performed -= m_Wrapper.m_GlobalArcadeActionsCallbackInterface.OnShowGameMenu;
+                @ShowGameMenu.canceled -= m_Wrapper.m_GlobalArcadeActionsCallbackInterface.OnShowGameMenu;
+                @ToggleFreeCam.started -= m_Wrapper.m_GlobalArcadeActionsCallbackInterface.OnToggleFreeCam;
+                @ToggleFreeCam.performed -= m_Wrapper.m_GlobalArcadeActionsCallbackInterface.OnToggleFreeCam;
+                @ToggleFreeCam.canceled -= m_Wrapper.m_GlobalArcadeActionsCallbackInterface.OnToggleFreeCam;
+                @RestartTrack.started -= m_Wrapper.m_GlobalArcadeActionsCallbackInterface.OnRestartTrack;
+                @RestartTrack.performed -= m_Wrapper.m_GlobalArcadeActionsCallbackInterface.OnRestartTrack;
+                @RestartTrack.canceled -= m_Wrapper.m_GlobalArcadeActionsCallbackInterface.OnRestartTrack;
+            }
+            m_Wrapper.m_GlobalArcadeActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @ResetHMDView.started += instance.OnResetHMDView;
+                @ResetHMDView.performed += instance.OnResetHMDView;
+                @ResetHMDView.canceled += instance.OnResetHMDView;
+                @ToggleConsole.started += instance.OnToggleConsole;
+                @ToggleConsole.performed += instance.OnToggleConsole;
+                @ToggleConsole.canceled += instance.OnToggleConsole;
+                @ShowGameMenu.started += instance.OnShowGameMenu;
+                @ShowGameMenu.performed += instance.OnShowGameMenu;
+                @ShowGameMenu.canceled += instance.OnShowGameMenu;
+                @ToggleFreeCam.started += instance.OnToggleFreeCam;
+                @ToggleFreeCam.performed += instance.OnToggleFreeCam;
+                @ToggleFreeCam.canceled += instance.OnToggleFreeCam;
+                @RestartTrack.started += instance.OnRestartTrack;
+                @RestartTrack.performed += instance.OnRestartTrack;
+                @RestartTrack.canceled += instance.OnRestartTrack;
+            }
+        }
+    }
+    public GlobalArcadeActions @GlobalArcade => new GlobalArcadeActions(this);
 
     // Ship
     private readonly InputActionMap m_Ship;
@@ -4859,6 +5072,14 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
         }
     }
     public interface IGlobalActions
+    {
+        void OnResetHMDView(InputAction.CallbackContext context);
+        void OnToggleConsole(InputAction.CallbackContext context);
+        void OnShowGameMenu(InputAction.CallbackContext context);
+        void OnToggleFreeCam(InputAction.CallbackContext context);
+        void OnRestartTrack(InputAction.CallbackContext context);
+    }
+    public interface IGlobalArcadeActions
     {
         void OnResetHMDView(InputAction.CallbackContext context);
         void OnToggleConsole(InputAction.CallbackContext context);

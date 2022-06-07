@@ -171,8 +171,10 @@ namespace Core.Player {
                 playerInput.currentActionMap = arcadeActionMap ?? playerInput.currentActionMap;
             }
 
-            // enable multiple input action sets
-            playerInput.actions.FindActionMap("Global").Enable();
+            // ensure that the global action set of the control scheme type is enabled
+            playerInput.actions.FindActionMap(Preferences.Instance.GetString("controlSchemeType") == "arcade" ? "GlobalArcade" : "Global").Enable();
+            playerInput.actions.FindActionMap(Preferences.Instance.GetString("controlSchemeType") == "advanced" ? "GlobalArcade" : "Global").Disable();
+
             playerInput.currentActionMap.Enable();
 
             movementEnabled = true;
