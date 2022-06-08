@@ -417,7 +417,8 @@ namespace Menus.Options {
             if (action != null) {
                 var bindingIndex = action.bindings.IndexOf(x => x.id.ToString() == m_PrimaryBindingId);
                 if (bindingIndex != -1)
-                    displayString = action.GetBindingDisplayString(bindingIndex, out deviceLayoutName, out controlPath, displayStringOptions);
+                    displayString = FormatDisplayText(action.GetBindingDisplayString(bindingIndex, out deviceLayoutName, out controlPath,
+                        displayStringOptions));
             }
 
             // Special protected status
@@ -426,7 +427,7 @@ namespace Menus.Options {
                 displayString = "(locked) " + displayString;
             }
 
-            if (displayString.Length == 0) displayString = "(unbound primary)";
+            if (displayString.Length == 0) displayString = "unbound primary";
 
             // Set on label (if any).
             if (m_PrimaryBindingText != null)
@@ -446,10 +447,11 @@ namespace Menus.Options {
             if (action != null) {
                 var bindingIndex = action.bindings.IndexOf(x => x.id.ToString() == m_SecondaryBindingId);
                 if (bindingIndex != -1)
-                    displayString = action.GetBindingDisplayString(bindingIndex, out deviceLayoutName, out controlPath, displayStringOptions);
+                    displayString = FormatDisplayText(action.GetBindingDisplayString(bindingIndex, out deviceLayoutName, out controlPath,
+                        displayStringOptions));
             }
 
-            if (displayString.Length == 0) displayString = "(unbound secondary)";
+            if (displayString.Length == 0) displayString = "unbound secondary";
 
             // Set on label (if any).
             if (m_SecondaryBindingText != null)
@@ -457,6 +459,14 @@ namespace Menus.Options {
 
             // Give listeners a chance to configure UI in response.
             m_UpdateBindingUIEvent?.Invoke(this, displayString, deviceLayoutName, controlPath);
+        }
+
+        // replace the "[DEVICE]" portion of the binding display string with " |  DEVICE"
+        private string FormatDisplayText(string displayString) {
+            // get portion of string INSIDE [ and ]`, excluding text which includes `[` (in case we want to bind to the '[' key!)
+            var device = Regex.Match(displayString, @"(?<=\[)[^\[]+?(?=\])");
+            // replace the entire chunk matching [text], excluding `[` as above, with preferred format
+            return Regex.Replace(displayString, @"\[[^\[]*?\]", $" |  {device}");
         }
 
         private void UpdateAxisOptions() {
