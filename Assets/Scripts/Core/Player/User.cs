@@ -264,8 +264,7 @@ namespace Core.Player {
             _mousePositionScreen = warpedPosition;
             _mousePositionNormalized = new Vector2(0, 0);
             _mousePositionDelta = new Vector2(0, 0);
-            inGameUI.MouseWidgetScreen.ResetToCentre();
-            inGameUI.MouseWidgetWorld.ResetToCentre();
+            inGameUI.MouseWidget.ResetToCentre();
         }
 
         // Event responders for PlayerInput, only valid in-game.
@@ -633,8 +632,7 @@ namespace Core.Player {
                 mouseIsRelative ? relativeMouse.x : continuousMouseX,
                 mouseIsRelative ? relativeMouse.y : continuousMouseY
             );
-            inGameUI.MouseWidgetWorld.UpdateWidgetSprites(widgetPosition);
-            inGameUI.MouseWidgetScreen.UpdateWidgetSprites(widgetPosition);
+            inGameUI.MouseWidget.UpdateWidgetSprites(widgetPosition);
 
             // clamp to virtual screen 
             var extentsX = Screen.width * Mathf.Pow(sensitivityX, -1);

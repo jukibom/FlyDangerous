@@ -18,8 +18,7 @@ namespace GameUI {
         [SerializeField] private DebugUI debugUI;
         [SerializeField] private PauseSystem pauseSystem;
         [SerializeField] private ShipStats shipStats;
-        [SerializeField] private MouseWidget mouseWidgetWorldSpace;
-        [SerializeField] private MouseWidget mouseWidgetScreenSpace;
+        [SerializeField] private MouseWidget mouseWidget;
         [SerializeField] private TargettingSystem targettingSystem;
         [SerializeField] private GameModeUIHandler gameModeUIHandler;
         [SerializeField] private CursorIcon cursor;
@@ -28,8 +27,7 @@ namespace GameUI {
         public DebugUI DebugUI => debugUI;
         public PauseSystem PauseSystem => pauseSystem;
         public ShipStats ShipStats => shipStats;
-        public MouseWidget MouseWidgetWorld => mouseWidgetWorldSpace;
-        public MouseWidget MouseWidgetScreen => mouseWidgetScreenSpace;
+        public MouseWidget MouseWidget => mouseWidget;
         public TargettingSystem TargettingSystem => targettingSystem;
         public GameModeUIHandler GameModeUIHandler => gameModeUIHandler;
 
@@ -76,7 +74,7 @@ namespace GameUI {
                     screenSpaceRect.localScale = new Vector3(0.001f, 0.001f, 0.001f);
                     screenSpaceRect.localRotation = Quaternion.identity;
                     screenSpaceRect.localPosition = new Vector3(0, 0.3f, 0.5f);
-                    screenSpaceRect.sizeDelta = new Vector2(1280, 1000);
+                    screenSpaceRect.sizeDelta = new Vector2(1536, 1228.8f); // 4:3
                     // we rely on the cockpit UI in VR mode!
                     ShipStats.SetStatsVisible(false);
                     break;
