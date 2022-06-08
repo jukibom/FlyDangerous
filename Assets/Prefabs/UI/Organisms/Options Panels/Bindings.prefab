@@ -112,7 +112,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6727430215522152156}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -181,6 +181,71 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!1 &4465218790331283261
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1260875942538040958}
+  - component: {fileID: 4936230227201303823}
+  m_Layer: 0
+  m_Name: Bindings Functions
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1260875942538040958
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4465218790331283261}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 8429132163106194978}
+  - {fileID: 3471978294607820954}
+  m_Father: {fileID: 6727430215522152156}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &4936230227201303823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4465218790331283261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 20
+    m_Right: 20
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 0
+  m_Spacing: 20
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 1
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1 &7148927350595273670
 GameObject:
   m_ObjectHideFlags: 0
@@ -316,7 +381,7 @@ RectTransform:
   - {fileID: 4116275564088562167}
   - {fileID: 8777120279214634187}
   m_Father: {fileID: 6727430215522152156}
-  m_RootOrder: 11
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -409,7 +474,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6727430215522152156}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -510,7 +575,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6727430215522152156}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -628,11 +693,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228754363359, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: Right Button [Mouse]
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228942635569, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: M [Keyboard]
+      value: M  |  Keyboard
       objectReference: {fileID: 0}
     - target: {fileID: 7422173229169342102, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1053,7 +1118,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8031816776331519998, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8031816776331519998, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_AnchorMax.x
@@ -1258,11 +1323,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228754363359, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: Button 3 [Saitek X52 Pro Flight Control System]
+      value: Left Stick Press  |  Xbox Controller
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228942635569, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: L [Keyboard]
+      value: L  |  Keyboard
       objectReference: {fileID: 0}
     - target: {fileID: 7422173229169342102, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1508,91 +1573,91 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 7422173228274351442, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228274351442, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228274351442, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 250
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228274351442, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 620.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228274351442, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228353694908, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228353694908, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228353694908, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 250
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228353694908, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 350.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228353694908, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228754363359, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: '` [Keyboard]'
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228942635569, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: (unbound primary)
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 7422173229169342102, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7422173229169342102, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7422173229169342102, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 42
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7422173229169342102, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 786.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7422173229169342102, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8031816775690939289, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8031816775690939289, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8031816775690939289, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 807.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8031816775690939289, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 1249.25
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8031816775690939289, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -40
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8031816776331519985, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Action
@@ -1640,7 +1705,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8031816776331519998, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_RootOrder
-      value: 12
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 8031816776331519998, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchorMax.x
@@ -1720,23 +1785,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8031816776609342322, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8031816776609342322, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8031816776609342322, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 825.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8031816776609342322, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 432.75
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8031816776609342322, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -40
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8031816776609342325, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
@@ -2058,6 +2123,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 0
   m_VerticalFit: 2
+--- !u!1 &6727430216257516665 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6291702347496066626, guid: 7f6395d7f158695469e04e970e119e8d, type: 3}
+  m_PrefabInstance: {fileID: 724023804258204219}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3932975116105974021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6727430216257516665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceecdc5202588944f8202b969cfe5d1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputActions: {fileID: -944628639613478452, guid: cdb424aa45592664faeac2ce28028bc8, type: 3}
 --- !u!1001 &1307548625717619664
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2107,11 +2190,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228754363359, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: Button 19 [Saitek X52 Pro Flight Control System]
+      value: Y  |  Xbox Controller
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228942635569, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: C [Keyboard]
+      value: C  |  Keyboard
       objectReference: {fileID: 0}
     - target: {fileID: 7422173229169342102, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchorMax.y
@@ -2693,11 +2776,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3391645744638297810, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: (unbound primary)
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 3391645744971306812, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 3391645745101936735, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -2861,7 +2944,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4454683661699738113, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 4454683661781429143, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -2885,7 +2968,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4454683661900174082, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: (unbound primary)
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 4454683662248489023, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -3287,11 +3370,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228754363359, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228942635569, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: 1 [Keyboard]
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 7422173229169342102, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchorMax.y
@@ -3578,11 +3661,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228754363359, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: HatSwitch Left [Saitek X52 Pro Flight Control System]
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228942635569, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: (locked) Left [Keyboard]
+      value: (locked) Left  |  Keyboard
       objectReference: {fileID: 0}
     - target: {fileID: 7422173229169342102, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchorMax.y
@@ -3867,11 +3950,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228754363359, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228942635569, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: (unbound primary)
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 7422173229169342102, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchorMax.y
@@ -4145,11 +4228,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228754363359, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: Button 8 [Saitek X52 Pro Flight Control System]
+      value: Select  |  Xbox Controller
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228942635569, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: R [Keyboard]
+      value: R  |  Keyboard
       objectReference: {fileID: 0}
     - target: {fileID: 7422173229169342102, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchorMax.y
@@ -4587,7 +4670,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8031816776331519998, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8031816776331519998, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_AnchorMax.x
@@ -5355,11 +5438,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3391645744638297810, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: (unbound primary)
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 3391645744971306812, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 3391645745101936735, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -5523,7 +5606,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4454683661699738113, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 4454683661781429143, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -5547,7 +5630,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4454683661900174082, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: (unbound primary)
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 4454683662248489023, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -5949,7 +6032,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228754363359, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: Button 3 [Saitek X52 Pro Flight Control System]
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228942635569, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
@@ -6370,11 +6453,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2128197007925891589, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 2128197007979021291, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: (unbound primary)
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 2128197008339814220, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -6542,11 +6625,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3391645744638297810, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: (unbound primary)
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 3391645744971306812, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 3391645745101936735, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -6710,7 +6793,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4454683661699738113, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 4454683661781429143, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -6734,7 +6817,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4454683661900174082, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: (unbound primary)
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 4454683662248489023, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -7268,11 +7351,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2128197007925891589, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: Button 24 [Saitek X52 Pro Flight Control System]
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 2128197007979021291, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: Space [Keyboard]
+      value: Space  |  Keyboard
       objectReference: {fileID: 0}
     - target: {fileID: 2128197008339814220, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -7440,11 +7523,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3391645744638297810, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: Control [Keyboard]
+      value: Control  |  Keyboard
       objectReference: {fileID: 0}
     - target: {fileID: 3391645744971306812, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: Button 26 [Saitek X52 Pro Flight Control System]
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 3391645745101936735, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -7608,7 +7691,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4454683661699738113, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 4454683661781429143, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -7632,7 +7715,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4454683661900174082, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: Left Stick Y [Xbox Controller]
+      value: Left Stick Y  |  Xbox Controller
       objectReference: {fileID: 0}
     - target: {fileID: 4454683662248489023, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -8166,11 +8249,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2128197007925891589, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 2128197007979021291, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: (unbound primary)
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 2128197008339814220, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -8338,11 +8421,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3391645744638297810, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: (unbound primary)
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 3391645744971306812, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 3391645745101936735, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -8506,7 +8589,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4454683661699738113, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 4454683661781429143, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -8530,7 +8613,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4454683661900174082, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: (unbound primary)
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 4454683662248489023, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -8932,11 +9015,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228754363359, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228942635569, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: (unbound primary)
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 7422173229169342102, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchorMax.y
@@ -9312,11 +9395,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228754363359, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228942635569, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: (unbound primary)
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 7422173229169342102, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchorMax.y
@@ -9731,11 +9814,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2128197007925891589, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 2128197007979021291, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: (unbound primary)
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 2128197008339814220, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -9903,11 +9986,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3391645744638297810, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: (unbound primary)
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 3391645744971306812, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 3391645745101936735, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -10071,7 +10154,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4454683661699738113, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 4454683661781429143, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -10095,7 +10178,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4454683661900174082, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: (unbound primary)
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 4454683662248489023, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -10497,11 +10580,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228754363359, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: Left Trigger [Xbox Controller]
+      value: Left Trigger  |  Xbox Controller
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228942635569, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: S [Keyboard]
+      value: S  |  Keyboard
       objectReference: {fileID: 0}
     - target: {fileID: 7422173229169342102, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchorMax.y
@@ -10911,7 +10994,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2128197007979021291, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: Right [Keyboard]
+      value: Right  |  Keyboard
       objectReference: {fileID: 0}
     - target: {fileID: 2128197008339814220, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -11079,11 +11162,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3391645744638297810, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: Left [Keyboard]
+      value: Left  |  Keyboard
       objectReference: {fileID: 0}
     - target: {fileID: 3391645744971306812, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 3391645745101936735, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -11267,7 +11350,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4454683661699738113, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: Rz [Saitek X52 Pro Flight Control System]
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 4454683661781429143, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -11291,7 +11374,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4454683661900174082, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: Right Stick X [Xbox Controller]
+      value: Right Stick X  |  Xbox Controller
       objectReference: {fileID: 0}
     - target: {fileID: 4454683662248489023, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -12175,11 +12258,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2128197007925891589, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: Button 25 [Saitek X52 Pro Flight Control System]
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 2128197007979021291, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: D [Keyboard]
+      value: D  |  Keyboard
       objectReference: {fileID: 0}
     - target: {fileID: 2128197008339814220, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -12347,11 +12430,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3391645744638297810, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: A [Keyboard]
+      value: A  |  Keyboard
       objectReference: {fileID: 0}
     - target: {fileID: 3391645744971306812, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: Button 27 [Saitek X52 Pro Flight Control System]
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 3391645745101936735, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -12515,7 +12598,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4454683661699738113, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 4454683661781429143, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -12539,7 +12622,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4454683661900174082, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: Left Stick X [Xbox Controller]
+      value: Left Stick X  |  Xbox Controller
       objectReference: {fileID: 0}
     - target: {fileID: 4454683662248489023, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -13089,7 +13172,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8031816776331519998, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8031816776331519998, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_AnchorMax.x
@@ -13498,6 +13581,196 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d6e9d733ff0cdb747800419cedebd348, type: 3}
+--- !u!1001 &4060157975060452434
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1260875942538040958}
+    m_Modifications:
+    - target: {fileID: 609786913693381189, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_Text
+      value: CLEAR ALL BINDINGS
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039943, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039943, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039943, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 3932975116105974021}
+    - target: {fileID: 609786914283039943, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039943, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ClearAllBindings
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039943, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Menus.Options.BindingsPanel, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039943, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039947, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_Name
+      value: Load From Clipboard
+      objectReference: {fileID: 0}
+    - target: {fileID: 2339301480516088037, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_Delegates.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2339301480516088037, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_Delegates.Array.data[0].eventID
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 2339301480516088037, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2339301480516088037, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2339301480516088037, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2339301480516088037, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2339301480516088037, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SendMessage
+      objectReference: {fileID: 0}
+    - target: {fileID: 2339301480516088037, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UnityEngine.Component, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 2339301480516088037, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+--- !u!1 &3471978294607820953 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 609786914283039947, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+  m_PrefabInstance: {fileID: 4060157975060452434}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7401988126949551230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3471978294607820953}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9435c99f06cb3bf4db750dccf34643a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  toolTipText: Load a ship configuration from JSON. If you prefer to edit these values
+    in a text editor, copy to the clipboard and do it there, then paste them back
+    in.
+--- !u!224 &3471978294607820954 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+  m_PrefabInstance: {fileID: 4060157975060452434}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4140731911909522005
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13679,11 +13952,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2128197007925891589, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: Right Bumper [Xbox Controller]
+      value: Right Bumper  |  Xbox Controller
       objectReference: {fileID: 0}
     - target: {fileID: 2128197007979021291, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: E [Keyboard]
+      value: E  |  Keyboard
       objectReference: {fileID: 0}
     - target: {fileID: 2128197008339814220, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -13851,11 +14124,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3391645744638297810, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: Q [Keyboard]
+      value: Q  |  Keyboard
       objectReference: {fileID: 0}
     - target: {fileID: 3391645744971306812, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: Left Bumper [Xbox Controller]
+      value: Left Bumper  |  Xbox Controller
       objectReference: {fileID: 0}
     - target: {fileID: 3391645745101936735, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -14039,7 +14312,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4454683661699738113, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: Stick X [Saitek X52 Pro Flight Control System]
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 4454683661781429143, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -14063,7 +14336,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4454683661900174082, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: (unbound primary)
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 4454683662248489023, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -14855,7 +15128,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8031816776331519998, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8031816776331519998, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_AnchorMax.x
@@ -15224,11 +15497,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2128197007925891589, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: HatSwitch Up [Saitek X52 Pro Flight Control System]
+      value: D-Pad Up  |  Xbox Controller
       objectReference: {fileID: 0}
     - target: {fileID: 2128197007979021291, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: Num 8 [Keyboard]
+      value: Num 8  |  Keyboard
       objectReference: {fileID: 0}
     - target: {fileID: 2128197008339814220, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -15404,11 +15677,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3391645744638297810, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: Num 2 [Keyboard]
+      value: Num 2  |  Keyboard
       objectReference: {fileID: 0}
     - target: {fileID: 3391645744971306812, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: HatSwitch Down [Saitek X52 Pro Flight Control System]
+      value: D-Pad Down  |  Xbox Controller
       objectReference: {fileID: 0}
     - target: {fileID: 3391645745101936735, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -15600,7 +15873,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4454683661699738113, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 4454683661781429143, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -15624,7 +15897,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4454683661900174082, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: (unbound primary)
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 4454683662248489023, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -16197,7 +16470,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8031816776331519998, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_RootOrder
-      value: 14
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 8031816776331519998, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_AnchorMax.x
@@ -16398,11 +16671,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228754363359, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228942635569, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: 2 [Keyboard]
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 7422173229169342102, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchorMax.y
@@ -16922,7 +17195,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8031816776331519998, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8031816776331519998, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_AnchorMax.x
@@ -17259,7 +17532,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2128197007979021291, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: Up [Keyboard]
+      value: Up  |  Keyboard
       objectReference: {fileID: 0}
     - target: {fileID: 2128197008339814220, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -17427,11 +17700,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3391645744638297810, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: Down [Keyboard]
+      value: Down  |  Keyboard
       objectReference: {fileID: 0}
     - target: {fileID: 3391645744971306812, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 3391645745101936735, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -17615,7 +17888,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4454683661699738113, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: Stick Y [Saitek X52 Pro Flight Control System]
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 4454683661781429141, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Spacing
@@ -17643,7 +17916,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4454683661900174082, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: Right Stick Y [Xbox Controller]
+      value: Right Stick Y  |  Xbox Controller
       objectReference: {fileID: 0}
     - target: {fileID: 4454683662248489023, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -18045,11 +18318,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228754363359, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: X [Xbox Controller]
+      value: X  |  Xbox Controller
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228942635569, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: (unbound primary)
+      value: F  |  Keyboard
       objectReference: {fileID: 0}
     - target: {fileID: 7422173229169342102, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchorMax.y
@@ -18496,11 +18769,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2128197007925891589, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: Right Trigger [Xbox Controller]
+      value: Right Trigger  |  Xbox Controller
       objectReference: {fileID: 0}
     - target: {fileID: 2128197007979021291, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: W [Keyboard]
+      value: W  |  Keyboard
       objectReference: {fileID: 0}
     - target: {fileID: 2128197008339814220, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -18672,11 +18945,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3391645744638297810, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: S [Keyboard]
+      value: S  |  Keyboard
       objectReference: {fileID: 0}
     - target: {fileID: 3391645744971306812, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: Left Trigger [Xbox Controller]
+      value: Left Trigger  |  Xbox Controller
       objectReference: {fileID: 0}
     - target: {fileID: 3391645745101936735, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -18860,7 +19133,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4454683661699738113, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: Z [Saitek X52 Pro Flight Control System]
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 4454683661781429143, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -18884,7 +19157,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4454683661900174082, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: (unbound primary)
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 4454683662248489023, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -19315,11 +19588,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228754363359, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: Right Trigger [Xbox Controller]
+      value: Right Trigger  |  Xbox Controller
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228942635569, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: W [Keyboard]
+      value: W  |  Keyboard
       objectReference: {fileID: 0}
     - target: {fileID: 7422173229169342102, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchorMax.y
@@ -19733,7 +20006,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8031816776331519998, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8031816776331519998, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_AnchorMax.x
@@ -19938,11 +20211,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228754363359, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: Button 4 [Saitek X52 Pro Flight Control System]
+      value: B  |  Xbox Controller
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228942635569, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: V [Keyboard]
+      value: V  |  Keyboard
       objectReference: {fileID: 0}
     - target: {fileID: 7422173229169342102, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchorMax.y
@@ -20373,7 +20646,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8031816776331519998, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8031816776331519998, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_AnchorMax.x
@@ -20570,11 +20843,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228754363359, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228942635569, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: Tab [Keyboard]
+      value: Tab  |  Keyboard
       objectReference: {fileID: 0}
     - target: {fileID: 7422173229169342102, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchorMax.y
@@ -20977,11 +21250,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2128197007925891589, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 2128197007979021291, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: (unbound primary)
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 2128197008339814220, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -21153,11 +21426,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3391645744638297810, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: (unbound primary)
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 3391645744971306812, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 3391645745101936735, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -21321,7 +21594,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4454683661699738113, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 4454683661781429143, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -21345,7 +21618,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4454683661900174082, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: (unbound primary)
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 4454683662248489023, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -21747,11 +22020,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228754363359, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: Button 7 [Saitek X52 Pro Flight Control System]
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228942635569, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: F [Keyboard]
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 7422173229169342102, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchorMax.y
@@ -22428,7 +22701,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8031816776331519998, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_RootOrder
-      value: 10
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 8031816776331519998, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_AnchorMax.x
@@ -22641,11 +22914,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228754363359, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: Start [Xbox Controller]
+      value: Start  |  Xbox Controller
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228942635569, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: (locked) Esc [Keyboard]
+      value: (locked) Esc  |  Keyboard
       objectReference: {fileID: 0}
     - target: {fileID: 7422173229169342102, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchorMax.y
@@ -22934,11 +23207,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228754363359, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: HatSwitch Down [Saitek X52 Pro Flight Control System]
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228942635569, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: (locked) Down [Keyboard]
+      value: (locked) Down  |  Keyboard
       objectReference: {fileID: 0}
     - target: {fileID: 7422173229169342102, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchorMax.y
@@ -23223,11 +23496,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228754363359, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: Button 31 [Saitek X52 Pro Flight Control System]
+      value: A  |  Xbox Controller
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228942635569, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: Shift [Keyboard]
+      value: Shift  |  Keyboard
       objectReference: {fileID: 0}
     - target: {fileID: 7422173229169342102, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchorMax.y
@@ -23513,11 +23786,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228754363359, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: HatSwitch Up [Saitek X52 Pro Flight Control System]
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228942635569, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: (locked) Up [Keyboard]
+      value: (locked) Up  |  Keyboard
       objectReference: {fileID: 0}
     - target: {fileID: 7422173229169342102, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchorMax.y
@@ -24221,11 +24494,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2128197007925891589, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: HatSwitch Right [Saitek X52 Pro Flight Control System]
+      value: D-Pad Right  |  Xbox Controller
       objectReference: {fileID: 0}
     - target: {fileID: 2128197007979021291, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: Num 6 [Keyboard]
+      value: Num 6  |  Keyboard
       objectReference: {fileID: 0}
     - target: {fileID: 2128197008339814220, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -24401,11 +24674,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3391645744638297810, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: Num 4 [Keyboard]
+      value: Num 4  |  Keyboard
       objectReference: {fileID: 0}
     - target: {fileID: 3391645744971306812, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: HatSwitch Left [Saitek X52 Pro Flight Control System]
+      value: D-Pad Left  |  Xbox Controller
       objectReference: {fileID: 0}
     - target: {fileID: 3391645745101936735, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -24597,7 +24870,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4454683661699738113, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 4454683661781429143, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -24621,7 +24894,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4454683661900174082, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_Text
-      value: (unbound primary)
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 4454683662248489023, guid: 73c44bd6624ddbb44a12341dbc9dfac5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -25051,11 +25324,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228754363359, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: HatSwitch Right [Saitek X52 Pro Flight Control System]
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228942635569, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: (locked) Right [Keyboard]
+      value: (locked) Right  |  Keyboard
       objectReference: {fileID: 0}
     - target: {fileID: 7422173229169342102, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchorMax.y
@@ -25340,11 +25613,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228754363359, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228942635569, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: (unbound primary)
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 7422173229169342102, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchorMax.y
@@ -25618,7 +25891,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228754363359, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: Button 4 [Saitek X52 Pro Flight Control System]
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228942635569, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
@@ -26055,7 +26328,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8031816776331519998, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_RootOrder
-      value: 13
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 8031816776331519998, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_AnchorMax.x
@@ -26404,7 +26677,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8031816776331519998, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_RootOrder
-      value: 15
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 8031816776331519998, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_AnchorMax.x
@@ -26556,6 +26829,195 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1267458087484041997, guid: affc708ba8599514c80709ef6909f882, type: 3}
   m_PrefabInstance: {fileID: 8866945687687355620}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &8974599822749625066
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1260875942538040958}
+    m_Modifications:
+    - target: {fileID: 609786913693381189, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_Text
+      value: RESET TO DEFAULT
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039943, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039943, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039943, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 3932975116105974021}
+    - target: {fileID: 609786914283039943, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039943, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ResetBindingsToDefault
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039943, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Menus.Options.BindingsPanel, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039943, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 609786914283039947, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_Name
+      value: Reset To Default
+      objectReference: {fileID: 0}
+    - target: {fileID: 2339301480516088037, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_Delegates.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2339301480516088037, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_Delegates.Array.data[0].eventID
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 2339301480516088037, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2339301480516088037, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2339301480516088037, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2339301480516088037, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2339301480516088037, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SendMessage
+      objectReference: {fileID: 0}
+    - target: {fileID: 2339301480516088037, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UnityEngine.Component, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 2339301480516088037, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+--- !u!1 &8429132163106194977 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 609786914283039947, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+  m_PrefabInstance: {fileID: 8974599822749625066}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7515393015744909936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8429132163106194977}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9435c99f06cb3bf4db750dccf34643a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  toolTipText: Revert all flight mechanics to their default values - this is necessary
+    for scores to be considered valid!
+--- !u!224 &8429132163106194978 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 609786914283039944, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+  m_PrefabInstance: {fileID: 8974599822749625066}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &9059552429877914637
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -26605,11 +27067,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228754363359, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: (unbound secondary)
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 7422173228942635569, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_Text
-      value: F11 [Keyboard]
+      value: F11  |  Keyboard
       objectReference: {fileID: 0}
     - target: {fileID: 7422173229169342102, guid: 0e472219708b37240878622d7d805087, type: 3}
       propertyPath: m_AnchorMax.y

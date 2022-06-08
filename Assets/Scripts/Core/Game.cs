@@ -162,7 +162,7 @@ namespace Core {
 
         public void LoadBindings() {
             var bindings = Preferences.Instance.GetString("inputBindings");
-            if (!string.IsNullOrEmpty(bindings)) playerBindings.LoadBindingOverridesFromJson(bindings);
+            if (bindings != null) playerBindings.LoadBindingOverridesFromJson(bindings);
         }
 
         public void ApplyGameOptions() {
