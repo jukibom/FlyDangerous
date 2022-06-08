@@ -24,6 +24,11 @@ namespace Menus.Main_Menu.Components {
 
         public void GetData(ILeaderboardEntry entry) {
             _entry = entry;
+
+            // show highlight if it's the players' entry
+            if (Player.LocalPlayerName.Equals(entry.Player))
+                GetComponent<Image>().enabled = true;
+
             Refresh();
         }
 
