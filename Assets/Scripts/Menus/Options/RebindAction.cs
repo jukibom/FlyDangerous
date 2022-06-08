@@ -341,6 +341,11 @@ namespace Menus.Options {
                         return;
                     }
 
+                    if (operation.selectedControl.path is "/Keyboard/escape") {
+                        operation.Cancel();
+                        return;
+                    }
+
                     // special case for Axis binds - we want to ignore button presses on axis binds (but not
                     // necessarily axis binds on other button bindings). 
                     // NOTE: This is not a direct comparison because "Button" bindings receive input "Key" from
@@ -368,7 +373,9 @@ namespace Menus.Options {
                                 PerformInteractiveRebind(bindingText, action, nextBindingIndex, bindingType, true);
                         }
                     })
-                .WithCancelingThrough("<Keyboard>/escape")
+                // this prevents binding to the `e` key, yes really
+                // .WithCancelingThrough("<Keyboard>/escape")
+                .WithCancelingThrough("an enormous string of absolute gibberish which overrides the default which is escape and causes the above bug")
                 .OnCancel(
                     operation => {
                         m_RebindStopEvent?.Invoke(this, operation);
