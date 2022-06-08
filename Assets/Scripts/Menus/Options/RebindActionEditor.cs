@@ -13,30 +13,30 @@ namespace Menus.Options {
     /// </summary>
     [CustomEditor(typeof(RebindAction))]
     public class RebindActionEditor : Editor {
+        private readonly GUIContent m_DisplayOptionsLabel = new("Display Options");
+        private readonly GUIContent m_EventsLabel = new("Events");
+
+        private readonly GUIContent m_PrimaryBindingLabel = new("Primary Binding");
+        private readonly GUIContent m_SecondaryBindingLabel = new("Secondary Binding");
+        private readonly GUIContent m_UILabel = new("UI");
         private SerializedProperty m_ActionLabelProperty;
 
         private SerializedProperty m_ActionProperty;
         private SerializedProperty m_ActionProtectedProperty;
         private GUIContent[] m_BindingOptions;
         private string[] m_BindingOptionValues;
-        private readonly GUIContent m_DisplayOptionsLabel = new("Display Options");
         private SerializedProperty m_DisplayStringOptionsProperty;
-        private readonly GUIContent m_EventsLabel = new("Events");
         private SerializedProperty m_PrimaryBindingButton;
         private SerializedProperty m_PrimaryBindingIdProperty;
-
-        private readonly GUIContent m_PrimaryBindingLabel = new("Primary Binding");
         private SerializedProperty m_PrimaryBindingTextProperty;
         private SerializedProperty m_RebindOverlayProperty;
         private SerializedProperty m_RebindStartEventProperty;
         private SerializedProperty m_RebindStopEventProperty;
         private SerializedProperty m_RebindTextProperty;
         private SerializedProperty m_SecondaryBindingIdProperty;
-        private readonly GUIContent m_SecondaryBindingLabel = new("Secondary Binding");
         private SerializedProperty m_SecondaryBindingTextProperty;
         private int m_SelectedPrimaryBindingOption;
         private int m_SelectedSecondaryBindingOption;
-        private readonly GUIContent m_UILabel = new("UI");
         private SerializedProperty m_UpdateBindingUIEventProperty;
 
         protected void OnEnable() {
@@ -175,7 +175,7 @@ namespace Menus.Options {
                                 binding.groups.Split(InputBinding.Separator)
                                     .Select(x => asset.controlSchemes.FirstOrDefault(c => c.bindingGroup == x).name));
 
-                            displayString = $"{displayString} ({controlSchemes})";
+                            displayString = $"{displayString} | {controlSchemes}";
                         }
                     }
 

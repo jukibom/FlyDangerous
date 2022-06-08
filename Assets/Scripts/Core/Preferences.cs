@@ -239,7 +239,7 @@ namespace Core {
             // try to find file at save location
             try {
                 var saveLoc = Path.Combine(Application.persistentDataPath, "Save", "Preferences.json");
-                Debug.Log("Loading from" + saveLoc);
+                Debug.Log("Loading from " + saveLoc);
                 using (var file = new FileStream(saveLoc, FileMode.Open, FileAccess.Read, FileShare.Read)) {
                     using (var reader = new StreamReader(file)) {
                         var json = reader.ReadToEnd();
