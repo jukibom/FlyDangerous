@@ -93,10 +93,14 @@ namespace Core.Player {
                     Preferences.Instance.GetBool("enableMouseFlightControls") &&
                     Preferences.Instance.GetString("controlSchemeType") == "advanced"
                 ) {
-                    CalculateMouseInput(out var mousePitch, out var mouseRoll, out var mouseYaw);
+                    CalculateMouseInput(
+                        out var mousePitch, out var mouseRoll, out var mouseYaw, out var mouseLateralH, out var mouseLateralV, out var mouseThrottle);
                     pitch += mousePitch;
                     roll += mouseRoll;
                     yaw += mouseYaw;
+                    lateralH += mouseLateralH;
+                    lateralV += mouseLateralV;
+                    throttle += mouseThrottle;
                 }
 
                 // if user has any auto-roll handling set, invoke the arcade flight computer to override the inputs
@@ -106,12 +110,12 @@ namespace Core.Player {
                     shipArcadeFlightComputer.UpdateShipFlightInput(ref lateralH, ref lateralV, ref throttle, ref pitch, ref yaw, ref roll, _autoRotateDrift);
 
                 // update the player
-                shipPlayer.SetLateralH(lateralH);
-                shipPlayer.SetLateralV(lateralV);
-                shipPlayer.SetThrottle(throttle);
                 shipPlayer.SetPitch(pitch);
                 shipPlayer.SetYaw(yaw);
                 shipPlayer.SetRoll(roll);
+                shipPlayer.SetLateralH(lateralH);
+                shipPlayer.SetLateralV(lateralV);
+                shipPlayer.SetThrottle(throttle);
                 shipPlayer.VelocityLimiterIsPressed(_limiter);
                 shipPlayer.Boost(_boost);
 
@@ -555,8 +559,9 @@ namespace Core.Player {
             if (input != 0) ShipCameraRig.ShipFreeCamera.IncrementMotionMultiplier(input);
         }
 
-        private void CalculateMouseInput(out float pitchMouseInput, out float rollMouseInput, out float yawMouseInput) {
-            float pitch = 0, roll = 0, yaw = 0;
+        private void CalculateMouseInput(out float pitchMouseInput, out float rollMouseInput, out float yawMouseInput,
+            out float lateralHMouseInput, out float lateralVMouseInput, out float throttleMouseInput) {
+            float pitch = 0, roll = 0, yaw = 0, throttle = 0, lateralH = 0, lateralV = 0;
 
             var mouseXAxisBind = Preferences.Instance.GetString("mouseXAxis");
             var mouseYAxisBind = Preferences.Instance.GetString("mouseYAxis");
@@ -620,6 +625,15 @@ namespace Core.Player {
                     case "yaw":
                         yaw += amount * invert;
                         break;
+                    case "lateral h":
+                        lateralH += amount * invert;
+                        break;
+                    case "lateral v":
+                        lateralV += amount * invert;
+                        break;
+                    case "throttle":
+                        throttle += amount * invert;
+                        break;
                 }
             }
 
@@ -644,6 +658,9 @@ namespace Core.Player {
             pitchMouseInput = pitch;
             rollMouseInput = roll;
             yawMouseInput = yaw;
+            lateralHMouseInput = lateralH;
+            lateralVMouseInput = lateralV;
+            throttleMouseInput = throttle;
         }
     }
 }
