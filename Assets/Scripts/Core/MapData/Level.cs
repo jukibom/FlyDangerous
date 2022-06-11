@@ -20,6 +20,7 @@ namespace Core.MapData {
         public static readonly Level YouHaveHeadlightsRight = new("You Have Headlights, Right?", "you-have-headlights-right", GameType.TimeTrial);
         public static readonly Level LimiterMastery = new("Limiter Mastery", "limiter-mastery", GameType.TimeTrial);
         public static readonly Level ThreadTheNeedle = new("Thread The Needle", "thread-the-needle", GameType.TimeTrial);
+        public static readonly Level MountainSpiral = new("Mountain Spiral", "mountain-spiral", GameType.TimeTrial);
         public static readonly Level LongRoad = new("Long Road", "long-road", GameType.TimeTrial);
         public static readonly Level HideAndSeek = new("Hide and Seek", "hide-and-seek", GameType.TimeTrial);
         private readonly string _jsonPath;
@@ -44,7 +45,7 @@ namespace Core.MapData {
             return new[] {
                 GentleStart, UpsAndDowns, AroundTheBlock, HoldOnToYourStomach, AroundTheStation, Snake, SpeedIsHalfTheBattle, YouMightWannaHoldBack,
                 DeathValley, CrestLoop,
-                YouHaveHeadlightsRight, LimiterMastery, ThreadTheNeedle, LongRoad, HideAndSeek
+                YouHaveHeadlightsRight, LimiterMastery, ThreadTheNeedle, MountainSpiral, LongRoad, HideAndSeek
             };
         }
 
