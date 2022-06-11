@@ -47,7 +47,7 @@ namespace Gameplay {
             get {
                 if (_gameModeUI == null) {
                     var ship = FdPlayer.FindLocalShipPlayer;
-                    if (ship) {
+                    if (ship != null) {
                         _gameModeUI = ship.User.InGameUI.GameModeUIHandler.ActiveGameModeUI;
                         UpdateTargetTimeElements();
                     }
@@ -95,7 +95,7 @@ namespace Gameplay {
             var start = Checkpoints.Find(c => c.Type == CheckpointType.Start);
             if (start) {
                 var ship = FdPlayer.FindLocalShipPlayer;
-                if (ship) ship.transform.position = start.transform.position;
+                if (ship != null) ship.transform.position = start.transform.position;
             }
             else if (Checkpoints.Count > 0) {
                 Debug.LogWarning("Checkpoints loaded with no start block! Is this intentional?");
@@ -198,7 +198,7 @@ namespace Gameplay {
         public void CheckpointHit(Checkpoint checkpoint, AudioSource checkpointHitAudio, float excessTimeToHitSeconds) {
             if (isActive && GameModeUI?.Timers) {
                 var hitCheckpoint = hitCheckpoints.Find(c => c == checkpoint);
-                if (!hitCheckpoint) {
+                if (!hitCheckpoint && GameModeUI != null) {
                     // new checkpoint, record it and split timer
                     hitCheckpoints.Add(checkpoint);
                     checkpointHitAudio.Play();
