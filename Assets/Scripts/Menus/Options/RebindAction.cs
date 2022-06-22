@@ -32,6 +32,8 @@ namespace Menus.Options {
         [SerializeField] private InteractiveRebindEvent m_RebindStartEvent;
         [SerializeField] private InteractiveRebindEvent m_RebindStopEvent;
 
+        public bool IsProtected => m_Protected;
+
         public InputActionReference actionReference {
             get => m_Action;
             set {
