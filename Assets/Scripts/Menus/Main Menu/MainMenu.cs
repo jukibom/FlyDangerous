@@ -46,6 +46,7 @@ namespace Menus.Main_Menu {
             SceneManager.sceneLoaded += OnEnvironmentLoadComplete;
             Game.OnVRStatus += OnVRStatus;
             Game.OnGameSettingsApplied += OnGameSettingsApplied;
+            InputSystem.onDeviceChange += OnDeviceChange;
             StartCoroutine(MenuLoad());
         }
 
@@ -53,6 +54,7 @@ namespace Menus.Main_Menu {
             SceneManager.sceneLoaded -= OnEnvironmentLoadComplete;
             Game.OnVRStatus -= OnVRStatus;
             Game.OnGameSettingsApplied -= OnGameSettingsApplied;
+            InputSystem.onDeviceChange -= OnDeviceChange;
         }
 
         public void ShowDisconnectedDialog(string reason) {
@@ -188,6 +190,12 @@ namespace Menus.Main_Menu {
 
         private void OnEnvironmentLoadComplete(Scene scene, LoadSceneMode mode) {
             SceneManager.SetActiveScene(scene);
+        }
+
+        private void OnDeviceChange(InputDevice device, InputDeviceChange change) {
+            var playerInput = GetComponent<PlayerInput>();
+            if (change == InputDeviceChange.Added) InputUser.PerformPairingWithDevice(device, playerInput.user);
+            if (change == InputDeviceChange.Removed) playerInput.user.UnpairDevice(device);
         }
     }
 }

@@ -149,12 +149,14 @@ namespace Core.Player {
         public void OnEnable() {
             _mouseLookActive = Preferences.Instance.GetString("controlSchemeType") == "advanced" && Preferences.Instance.GetBool("mouseLook");
             Game.OnVRStatus += SetVRStatus;
+            InputSystem.onDeviceChange += OnDeviceChange;
             ResetMouseToCentre();
             FdConsole.Instance.Clear();
         }
 
         public void OnDisable() {
             Game.OnVRStatus -= SetVRStatus;
+            InputSystem.onDeviceChange -= OnDeviceChange;
         }
 
         /**
@@ -661,6 +663,12 @@ namespace Core.Player {
             lateralHMouseInput = lateralH;
             lateralVMouseInput = lateralV;
             throttleMouseInput = throttle;
+        }
+
+        private void OnDeviceChange(InputDevice device, InputDeviceChange change) {
+            var playerInput = GetComponent<PlayerInput>();
+            if (change == InputDeviceChange.Added) InputUser.PerformPairingWithDevice(device, playerInput.user);
+            if (change == InputDeviceChange.Removed) playerInput.user.UnpairDevice(device);
         }
     }
 }
