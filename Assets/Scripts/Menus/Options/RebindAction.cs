@@ -333,6 +333,19 @@ namespace Menus.Options {
             // Configure the rebind.
             ongoingRebind = action.PerformInteractiveRebinding(bindingIndex)
                 .WithoutGeneralizingPathOfSelectedControl()
+                .OnComputeScore((control, _) => {
+                    // Very specific edge-case fix for VKB flight sticks (and possibly other devices?) reporting multiple devices with garbage data, this reduces the potential match score of those garbage inputs
+                    var score = 0f;
+                    if (control.IsPressed()) score += 1f;
+
+                    if (!control.synthetic)
+                        score += 1f;
+
+                    if (control.parent != null && control.parent is not Joystick) score /= 2f;
+
+                    return score;
+                })
+                .OnMatchWaitForAnother(0.5f)
                 .OnPotentialMatch(operation => {
                     // special case for delete key(s) - unbind the binding!
                     if (operation.selectedControl.path is "/Keyboard/delete" or "/Keyboard/backspace") {
@@ -354,8 +367,6 @@ namespace Menus.Options {
                     // the keyboard. No, I am not making this shit up I swear
                     if (ongoingRebind.expectedControlType == "Axis" && operation.selectedControl.layout != "Axis")
                         operation.Cancel();
-                    else
-                        operation.Complete();
                 })
                 .OnComplete(
                     operation => {
@@ -412,7 +423,6 @@ namespace Menus.Options {
 
             ongoingRebind.Start();
         }
-
 
         private void UpdatePrimaryBindingDisplay() {
             m_PrimaryBindingButton.interactable = true;
