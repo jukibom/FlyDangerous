@@ -9,6 +9,7 @@ using UnityEngine.UI;
 namespace Menus.Options {
     public class OptionsMenu : MenuBase {
         public InputActionAsset actions;
+        private bool _flightAssistDefaultsChanged;
         private SaveData _previousPrefs;
 
         protected override void OnOpen() {
@@ -26,6 +27,11 @@ namespace Menus.Options {
             SavePreferences();
             SetDebugFlightParameters();
             Game.Instance.ApplyGameOptions();
+            if (_flightAssistDefaultsChanged) {
+                var player = FdPlayer.FindLocalShipPlayer;
+                if (player) player.SetFlightAssistFromDefaults();
+            }
+
             Progress(caller, false, false);
         }
 
@@ -41,27 +47,7 @@ namespace Menus.Options {
         }
 
         public void OnFlightAssistDefaultsChange(Dropdown dropdown) {
-            // if the game is running, apply the chosen defaults to the local player ship
-            var player = FdPlayer.FindLocalShipPlayer;
-            if (player) {
-                var preference = "";
-                switch (dropdown.value) {
-                    case 0:
-                        preference = "all on";
-                        break;
-                    case 1:
-                        preference = "rotational assist only";
-                        break;
-                    case 2:
-                        preference = "vector assist only";
-                        break;
-                    case 3:
-                        preference = "all off";
-                        break;
-                }
-
-                player.SetFlightAssistDefaults(preference);
-            }
+            _flightAssistDefaultsChanged = Preferences.Instance.GetString("flightAssistDefault") != GetFlightAssistDefaultPreference(dropdown.value);
         }
 
         private void LoadPreferences() {
@@ -112,6 +98,26 @@ namespace Menus.Options {
         private void SetDebugFlightParameters() {
             var debugFlightOptions = GetComponentInChildren<DevPanel>(true);
             if (debugFlightOptions) Game.Instance.ShipParameters = debugFlightOptions.GetFlightParams();
+        }
+
+        private string GetFlightAssistDefaultPreference(int dropdownValue) {
+            var preference = "";
+            switch (dropdownValue) {
+                case 0:
+                    preference = "all on";
+                    break;
+                case 1:
+                    preference = "rotational assist only";
+                    break;
+                case 2:
+                    preference = "vector assist only";
+                    break;
+                case 3:
+                    preference = "all off";
+                    break;
+            }
+
+            return preference;
         }
     }
 }

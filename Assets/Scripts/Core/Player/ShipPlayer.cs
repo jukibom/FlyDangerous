@@ -138,7 +138,7 @@ namespace Core.Player {
             else
                 FloatingOrigin.Instance.FocalTransform = transform;
 
-            SetFlightAssistDefaults(Preferences.Instance.GetString("flightAssistDefault"));
+            SetFlightAssistFromDefaults();
 
             var profile = ShipProfile.FromPreferences();
             CmdSetPlayerProfile(profile.playerName, profile.playerFlagFilename);
@@ -197,12 +197,15 @@ namespace Core.Player {
             User.ShipCameraRig.Reset();
         }
 
-        public void SetFlightAssistDefaults(string preference) {
-            switch (preference) {
+        public void SetFlightAssistFromDefaults() {
+            var flightAssistPreference = Preferences.Instance.GetString("flightAssistDefault");
+            switch (flightAssistPreference) {
                 case "vector assist only":
                     _flightAssistVectorControl = true;
+                    _flightAssistRotationalControl = false;
                     break;
                 case "rotational assist only":
+                    _flightAssistVectorControl = false;
                     _flightAssistRotationalControl = true;
                     break;
                 case "all off":
