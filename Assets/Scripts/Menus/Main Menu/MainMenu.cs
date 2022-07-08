@@ -1,9 +1,12 @@
 using System.Collections;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 using Audio;
 using Core;
 using Core.MapData;
 using JetBrains.Annotations;
+using Misc;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Users;
@@ -23,23 +26,46 @@ namespace Menus.Main_Menu {
 
         [SerializeField] private VRCalibrationDialog vrCalibrationDialog;
         [SerializeField] private NewPlayerWelcomeDialog newPlayerWelcomeDialog;
+        [SerializeField] private TitleMenu titleMenu;
         [SerializeField] private TopMenu topMenu;
         [SerializeField] private ProfileMenu profileMenu;
         [SerializeField] private DisconnectionDialog disconnectionDialog;
+
+        private bool _shouldAnimate;
 
         private static bool FirstRun => Game.Instance.MenuFirstRun;
 
         private void Start() {
             topMenu.Hide();
+            titleMenu.Hide();
+
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("fr-FR");
 
             var lastPlayedVersion = Preferences.Instance.GetString("lastPlayedVersion");
             topMenu.SetPatchNotesUpdated(lastPlayedVersion != Application.version);
+
+            if (FirstRun) shipMesh.transform.position += new Vector3(1.58f, 1.32f, -6.8f);
         }
 
         private void FixedUpdate() {
-            // gently rock the ship mesh back and forth
-            var rotationAmount = (0.25f - Mathf.PingPong(Time.time / 5, 0.5f)) / 5;
-            shipMesh.transform.Rotate(Vector3.forward, rotationAmount);
+            if (_shouldAnimate) {
+                // move the ship around a fixed space
+                var positionX = MathfExtensions.Oscillate(-0.01f, 0.01f, 8);
+                var positionY = MathfExtensions.Oscillate(-0.01f, 0.01f, 12);
+                var positionZ = MathfExtensions.Oscillate(0.01f, -0.01f, 5);
+                shipMesh.transform.position += new Vector3(positionX, positionY, positionZ);
+
+                // gently rock the ship mesh back and forth
+                var rotationAmount = MathfExtensions.Oscillate(-0.12f, 0.12f, 8, 4);
+                shipMesh.transform.Rotate(Vector3.forward, rotationAmount);
+
+                // On first run wait for intro song to play then rotate the camera and move the ship into position slowly
+                // otherwise just rotate immediately 
+                if (Time.time > 9f || !FirstRun)
+                    flatScreenCamera.transform.RotateAround(new Vector3(0, 0, -6.5f), Vector3.up, -0.1f);
+                else
+                    shipMesh.transform.position += new Vector3(-0.00351f, -0.00293f, 0.0151f); // starting values / number of frames
+            }
         }
 
         private void OnEnable() {
@@ -119,7 +145,7 @@ namespace Menus.Main_Menu {
             // load engine if not already 
             if (!FindObjectOfType<Engine>()) yield return SceneManager.LoadSceneAsync("Engine", LoadSceneMode.Additive);
 
-            var sceneEnvironment = Environment.PlanetOrbitBottom;
+            var sceneEnvironment = Environment.PlanetOrbitTop;
 
             if (!FirstRun) {
                 // If it's not the first run, switch up the title screen :D
@@ -145,6 +171,7 @@ namespace Menus.Main_Menu {
 
             yield return SceneManager.LoadSceneAsync(sceneEnvironment.SceneToLoad, LoadSceneMode.Additive);
             yield return new WaitForEndOfFrame();
+            yield return new WaitForEndOfFrame();
 
             MusicManager.Instance.PlayMusic(MusicTrack.MainMenu, FirstRun, false, false);
             Game.Instance.SetFlatScreenCameraControllerActive(false);
@@ -159,6 +186,7 @@ namespace Menus.Main_Menu {
 
             yield return new WaitForSecondsRealtime(0.1f);
             Game.Instance.FadeFromBlack();
+            _shouldAnimate = true;
             ShowStartingPanel();
         }
 
@@ -172,13 +200,21 @@ namespace Menus.Main_Menu {
             // TODO: go back to last known panel on game mode quit? (e.g. time trial etc)
             // (handling the offline server stuff will probably be pain!)
 
-            // startup stuff
-            if (Game.Instance.IsVREnabled && showVrCalibrationDialog) {
-                vrCalibrationDialog.Open(null);
-                vrCalibrationDialog.showWelcomeDialogNext = showWelcomeDialog;
-            }
-            else if (showWelcomeDialog) {
-                newPlayerWelcomeDialog.Open(profileMenu);
+            if (FirstRun) {
+                // show main title screen logo and set up various show-once dialogs... 
+                MenuBase startingPanel = topMenu;
+
+                if (Game.Instance.IsVREnabled && showVrCalibrationDialog) {
+                    startingPanel = vrCalibrationDialog;
+                    vrCalibrationDialog.showWelcomeDialogNext = showWelcomeDialog;
+                }
+                else if (showWelcomeDialog) {
+                    startingPanel = newPlayerWelcomeDialog;
+                    newPlayerWelcomeDialog.SetCaller(profileMenu);
+                }
+
+                titleMenu.nextMenu = startingPanel;
+                titleMenu.gameObject.SetActive(true);
             }
             else {
                 topMenu.gameObject.SetActive(true);

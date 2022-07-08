@@ -44,6 +44,10 @@ namespace Menus.Main_Menu {
             SetFlightAssistVisibility(!toggle);
         }
 
+        public void SetCaller(MenuBase newCaller) {
+            caller = newCaller;
+        }
+
         private void SetControlSchemeOptions(bool isAdvancedActive) {
             SetAdvancedOptionsVisibility(isAdvancedActive);
             SetArcadeOptionsVisibility(!isAdvancedActive);

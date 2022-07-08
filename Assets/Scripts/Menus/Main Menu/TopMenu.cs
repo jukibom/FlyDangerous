@@ -6,20 +6,19 @@ using UnityEngine.EventSystems;
 
 namespace Menus.Main_Menu {
     public class TopMenu : MenuBase {
+        [SerializeField] private TitleMenu titleMenu;
         [SerializeField] private SinglePlayerMenu singlePlayerMenu;
         [SerializeField] private MultiplayerNoticeMenu multiplayerNoticeMenu;
-        [SerializeField] private MultiPlayerMenu multiPlayerMenu;
-        [SerializeField] private ServerBrowserMenu serverBrowserMenu;
         [SerializeField] private ProfileMenu profileMenu;
         [SerializeField] private OptionsMenu optionsMenu;
         [SerializeField] private PatchNotesMenu patchNotesMenu;
-
         [SerializeField] private GameObject patchNotesUpdatedText;
 
         public void Start() {
             // needed on game start
             if (defaultActiveButton != null) defaultActiveButton.Select();
         }
+
 
         public void SetPatchNotesUpdated(bool isUpdated) {
             patchNotesUpdatedText.SetActive(isUpdated);
@@ -61,13 +60,8 @@ namespace Menus.Main_Menu {
             Application.OpenURL("https://discord.gg/4daSEUKZ6A");
         }
 
-        public void Quit() {
-            PlayCancelSound();
-            Game.Instance.QuitGame();
-        }
-
         public override void OnCancel(BaseEventData eventData) {
-            Quit();
+            Progress(titleMenu, false);
         }
     }
 }
