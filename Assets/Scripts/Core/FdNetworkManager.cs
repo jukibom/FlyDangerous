@@ -192,7 +192,7 @@ namespace Core {
          */
         private void RejectPlayerConnection(NetworkConnection conn, string reason) {
             var loadingPlayer = Instantiate(loadingPlayerPrefab);
-            NetworkServer.AddPlayerForConnection(conn, loadingPlayer.gameObject);
+            NetworkServer.AddPlayerForConnection((NetworkConnectionToClient)conn, loadingPlayer.gameObject);
 
             IEnumerator Reject() {
                 while (!conn.isReady) yield return new WaitForEndOfFrame();
@@ -272,6 +272,8 @@ namespace Core {
                 levelData.startRotation.z
             );
 
+            Debug.Log("[TEST] Starting position " + position);
+
             // if a ship player which is the host already exists and the game mode permits it, warp there instead
             var hostShip = ShipPlayers.Find(s => s.isHost);
             if (hostShip != null && Game.Instance.LoadedLevelData.gameType.CanWarpToHost) {
@@ -281,6 +283,7 @@ namespace Core {
 
             var ship = TransitionToShipPlayer(loadingPlayer);
             ship.ShipPhysics.gameObject.SetActive(false);
+            Physics.SyncTransforms();
 
             IEnumerator SetPlayerPosition() {
                 // wait once to sync positions and again to init physics, I guess? Who knows
@@ -295,8 +298,7 @@ namespace Core {
 
                     // update locally immediately for subsequent collision checks
                     ship.ShipPhysics.gameObject.SetActive(true);
-                    ship.AbsoluteWorldPosition = position;
-                    ship.transform.rotation = rotation;
+                    ship.SetTransformWorld(position, rotation);
 
                     // ensure each client receives their assigned position
                     ship.connectionToClient.Send(new SetShipPositionMessage {
@@ -400,7 +402,7 @@ namespace Core {
         }
 
         // player joins
-        public override void OnServerConnect(NetworkConnection conn) {
+        public override void OnServerConnect(NetworkConnectionToClient conn) {
             Debug.Log("[SERVER] PLAYER CONNECT" + " (" + (numPlayers + 1) + " / " + maxPlayers + " players)");
 
             if (numPlayers >= maxPlayers) {
@@ -414,7 +416,7 @@ namespace Core {
         }
 
         // player leaves
-        public override void OnServerDisconnect(NetworkConnection conn) {
+        public override void OnServerDisconnect(NetworkConnectionToClient conn) {
             Debug.Log("[SERVER] PLAYER DISCONNECT");
             NetworkServer.SendToAll(new PlayerLeaveGameMessage { playerName = PlayerNameForConnection(conn) });
             base.OnServerDisconnect(conn);
@@ -474,7 +476,7 @@ namespace Core {
 
         private T AddPlayerFromPrefab<T>(NetworkConnection conn, T prefab) where T : NetworkBehaviour {
             var playerConnectionPrefab = Instantiate(prefab);
-            NetworkServer.AddPlayerForConnection(conn, playerConnectionPrefab.gameObject);
+            NetworkServer.AddPlayerForConnection((NetworkConnectionToClient)conn, playerConnectionPrefab.gameObject);
             if (conn.identity != null) {
                 var player = conn.identity.GetComponent<T>();
                 UpdatePlayerLists();
@@ -536,8 +538,7 @@ namespace Core {
                     return ship != null;
                 });
 
-                ship.AbsoluteWorldPosition = positionMessage.position;
-                ship.transform.rotation = positionMessage.rotation;
+                ship.SetTransformWorld(message.position, message.rotation);
 
                 // instantly warp camera to start position rather than damping rotate
                 ship.User.ShipCameraRig.Reset();

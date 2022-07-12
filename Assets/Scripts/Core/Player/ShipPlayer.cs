@@ -80,20 +80,19 @@ namespace Core.Player {
             }
         }
 
+        public Vector3 Position => _transform.position;
+
         // The position and rotation of the ship within the world, taking into account floating origin fix
-        public Vector3 AbsoluteWorldPosition {
-            get {
-                var position = transform.position;
-                // if floating origin fix is active, overwrite position with corrected world space
-                if (FloatingOrigin.Instance.FocalTransform == transform) position = FloatingOrigin.Instance.FocalObjectPosition;
-                return position;
-            }
-            set {
-                var position = value;
-                // if floating origin fix is active, overwrite position with corrected world space
-                if (FloatingOrigin.Instance.FocalTransform == transform) position -= FloatingOrigin.Instance.Origin;
-                transform.position = position;
-            }
+        public Vector3 AbsoluteWorldPosition => FloatingOrigin.Instance.FocalTransform == _transform ? FloatingOrigin.Instance.FocalObjectPosition : Position;
+
+        // Set the position and rotation of the ship to a relative / local position with respect to itself 
+        public void SetTransformLocal(Vector3 position, Quaternion rotation) {
+            GetComponent<Rigidbody>().Move(position, rotation);
+        }
+
+        // Set the position and rotation of the ship to a world location, taking into account floating origin
+        public void SetTransformWorld(Vector3 position, Quaternion rotation) {
+            SetTransformLocal(FloatingOrigin.Instance.FocalTransform == transform ? position - FloatingOrigin.Instance.Origin : position, rotation);
         }
 
         #endregion
@@ -172,6 +171,9 @@ namespace Core.Player {
                 while (string.IsNullOrEmpty(_shipModelName)) yield return new WaitForFixedUpdate();
                 ShipPhysics.RefreshShipModel(new ShipProfile(playerName, playerFlag, _shipModelName, _primaryColor, _accentColor, _thrusterColor, _trailColor,
                     _headLightsColor));
+
+                // handle any ship model specific stuff
+                shipPhysics.ShipModel?.SetIsLocalPlayer(isLocalPlayer);
             }
 
             StartCoroutine(RefreshShipAsync());
@@ -372,7 +374,7 @@ namespace Core.Player {
         }
 
         private void NonLocalPlayerPositionCorrection(Vector3 offset) {
-            if (!isLocalPlayer) transform.position -= offset;
+            if (!isLocalPlayer) _transform.position -= offset;
         }
 
         [Command]

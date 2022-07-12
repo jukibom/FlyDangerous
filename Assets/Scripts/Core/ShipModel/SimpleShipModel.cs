@@ -83,6 +83,17 @@ namespace Core.ShipModel {
             drawableContainer.SetActive(visible);
         }
 
+        public void SetIsLocalPlayer(bool isLocalPlayer) {
+            engineBoostAudioSource.priority = isLocalPlayer ? 0 : 128;
+            externalBoostAudioSource.priority = isLocalPlayer ? 0 : 128;
+            externalBoostThrusterAudioSource.priority = isLocalPlayer ? 0 : 128;
+            simpleToggleAudioSource.priority = isLocalPlayer ? 1 : 128;
+            assistActivateAudioSource.priority = isLocalPlayer ? 1 : 128;
+            assistDeactivateAudioSource.priority = isLocalPlayer ? 1 : 128;
+            velocityLimitActivateAudioSource.priority = isLocalPlayer ? 1 : 128;
+            velocityLimitDeactivateAudioSource.priority = isLocalPlayer ? 1 : 128;
+        }
+
         #region IShip Basic Functions
 
         public virtual void SetLights(bool active) {

@@ -54,17 +54,14 @@ namespace Core.MapData {
                 var mapMagic = FindObjectOfType<MapMagicObject>();
 
                 void DoReset(Vector3 position, Quaternion rotation) {
-                    ship.AbsoluteWorldPosition = position;
-                    ship.transform.rotation = rotation;
+                    ship.SetTransformWorld(position, rotation);
                     ship.Reset();
-
                     onRestart();
                 }
 
                 // the terrain will not be loaded if we teleport there, we need to fade to black, wait for terrain to load, then fade back. This should still be faster than full reload.
                 IEnumerator LoadTerrainAndReset(Vector3 position, Quaternion rotation) {
-                    ship.AbsoluteWorldPosition = position;
-                    ship.transform.rotation = rotation;
+                    ship.SetTransformWorld(position, rotation);
                     ship.Reset();
 
                     yield return new WaitForSeconds(0.1f);

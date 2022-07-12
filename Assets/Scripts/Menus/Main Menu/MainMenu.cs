@@ -1,7 +1,5 @@
 using System.Collections;
-using System.Globalization;
 using System.Linq;
-using System.Threading;
 using Audio;
 using Core;
 using Core.MapData;
@@ -39,7 +37,8 @@ namespace Menus.Main_Menu {
             topMenu.Hide();
             titleMenu.Hide();
 
-            Thread.CurrentThread.CurrentCulture = new CultureInfo("fr-FR");
+            // use this for testing bonkers string conversion issues
+            // Thread.CurrentThread.CurrentCulture = new CultureInfo("fr-FR");
 
             var lastPlayedVersion = Preferences.Instance.GetString("lastPlayedVersion");
             topMenu.SetPatchNotesUpdated(lastPlayedVersion != Application.version);
@@ -60,11 +59,10 @@ namespace Menus.Main_Menu {
                 shipMesh.transform.Rotate(Vector3.forward, rotationAmount);
 
                 // On first run wait for intro song to play then rotate the camera and move the ship into position slowly
-                // otherwise just rotate immediately 
-                if (Time.time > 9f || !FirstRun)
+                if (Time.time > 8f || !FirstRun)
                     flatScreenCamera.transform.RotateAround(new Vector3(0, 0, -6.5f), Vector3.up, -0.1f);
-                else
-                    shipMesh.transform.position += new Vector3(-0.00351f, -0.00293f, 0.0151f); // starting values / number of frames
+                if (Time.time < 9f)
+                    shipMesh.transform.position += new Vector3(-0.00351f, -0.00293f, 0.0151f); // starting values / number of frames 
             }
         }
 

@@ -62,8 +62,7 @@ namespace Misc {
                 var player = FdPlayer.FindLocalShipPlayer;
                 if (player) {
                     player.User.EnableGameInput();
-                    player.AbsoluteWorldPosition = pos;
-                    player.transform.rotation = rot;
+                    player.SetTransformWorld(pos, rot);
                 }
 
                 // if there's a map magic object going on here, enable it

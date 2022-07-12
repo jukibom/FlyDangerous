@@ -95,7 +95,10 @@ namespace Gameplay {
             var start = Checkpoints.Find(c => c.Type == CheckpointType.Start);
             if (start) {
                 var ship = FdPlayer.FindLocalShipPlayer;
-                if (ship != null) ship.transform.position = start.transform.position;
+                if (ship != null) {
+                    var startCheckpointTransform = start.transform;
+                    ship.SetTransformLocal(startCheckpointTransform.position, startCheckpointTransform.rotation);
+                }
             }
             else if (Checkpoints.Count > 0) {
                 Debug.LogWarning("Checkpoints loaded with no start block! Is this intentional?");
@@ -141,17 +144,16 @@ namespace Gameplay {
                 _complete = false;
 
                 // enable user input but disable actual movement
-                var player = FdPlayer.FindLocalShipPlayer;
-                if (player != null) {
-                    var user = player.User;
+                var ship = FdPlayer.FindLocalShipPlayer;
+                if (ship != null) {
+                    var user = ship.User;
                     user.boostButtonForceEnabled = false;
                     user.EnableGameInput();
-                    player.Freeze = true;
-
+                    ship.Freeze = true;
 
                     // Trigger recording and ghost replays
                     _replayRecorder.CancelRecording();
-                    _replayRecorder.StartNewRecording(player.ShipPhysics);
+                    _replayRecorder.StartNewRecording(ship.ShipPhysics);
                     ClearGhosts();
                     foreach (var activeReplay in Game.Instance.ActiveGameReplays)
                         ActiveGhosts.Add(Game.Instance.LoadGhost(activeReplay));
@@ -170,11 +172,12 @@ namespace Gameplay {
                     // GO! Unfreeze position and double-extra-special-make-sure the player is at the start
                     yield return YieldExtensions.WaitForFixedFrames(YieldExtensions.SecondsToFixedFrames(1));
                     UIAudioManager.Instance.Play("tt-countdown-2");
-                    player.Freeze = false;
+                    ship.Freeze = false;
                     var start = Checkpoints.Find(c => c.Type == CheckpointType.Start);
                     if (start) {
-                        player.transform.position = start.transform.position;
-                        player.ShipPhysics.ResetPhysics(false);
+                        var startCheckpointTransform = start.transform;
+                        ship.SetTransformLocal(startCheckpointTransform.position, startCheckpointTransform.rotation);
+                        ship.ShipPhysics.ResetPhysics(false);
                     }
                 }
             }

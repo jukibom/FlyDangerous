@@ -767,7 +767,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5348441963532606526}
   - component: {fileID: 7926466904788661996}
-  - component: {fileID: 4175871150849242769}
+  - component: {fileID: 6172610040420158231}
   - component: {fileID: 8522863665227369495}
   m_Layer: 0
   m_Name: '@NetworkManager'
@@ -804,7 +804,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dontDestroyOnLoad: 0
-  PersistNetworkManagerToOfflineScene: 0
   runInBackground: 1
   autoStartServerBuild: 1
   serverTickRate: 30
@@ -813,8 +812,6 @@ MonoBehaviour:
   transport: {fileID: 8522863665227369495}
   networkAddress: localhost
   maxConnections: 129
-  disconnectInactiveConnections: 0
-  disconnectInactiveTimeout: 60
   authenticator: {fileID: 0}
   playerPrefab: {fileID: 0}
   autoCreatePlayer: 0
@@ -827,7 +824,7 @@ MonoBehaviour:
   loadingPlayerPrefab: {fileID: 4628784113580051962, guid: 3423a20ad16ca904daaf17b815a5d9b8, type: 3}
   shipPlayerPrefab: {fileID: 1767139775458680005, guid: 28f3c96dd6aab644ab0a02156a3f779a, type: 3}
   maxPlayers: 128
---- !u!114 &4175871150849242769
+--- !u!114 &6172610040420158231
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -836,7 +833,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7966117636676226303}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef4bffeda13d7a748973ff9204401c07, type: 3}
+  m_Script: {fileID: 11500000, guid: 7f559e23ab8b477fb248ea2a81e71bc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &8522863665227369495
@@ -860,7 +857,11 @@ MonoBehaviour:
   CongestionWindow: 0
   SendWindowSize: 4096
   ReceiveWindowSize: 4096
+  MaxRetransmit: 40
   NonAlloc: 1
+  MaximizeSendReceiveBuffersToOSLimit: 1
+  ReliableMaxMessageSize: 298449
+  UnreliableMaxMessageSize: 1199
   debugLog: 0
   statisticsGUI: 0
   statisticsLog: 0
@@ -1054,6 +1055,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 2
     m_TransformParent: {fileID: 1147554568742394716}
     m_Modifications:
     - target: {fileID: 5767733330303709240, guid: 4a7b393b0022fdf468d688f10143f7fa, type: 3}
@@ -1145,6 +1147,7 @@ PrefabInstance:
       value: '@Crossfade'
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 4a7b393b0022fdf468d688f10143f7fa, type: 3}
 --- !u!114 &2326767390520936643 stripped
 MonoBehaviour:

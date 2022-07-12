@@ -19,6 +19,7 @@ namespace Menus.Main_Menu {
         private bool _quitting;
 
         public void Update() {
+            // super complex advanced flashing sprite code
             pressAnyButton.enabled = Time.time % 0.8f > 0.4f;
         }
 

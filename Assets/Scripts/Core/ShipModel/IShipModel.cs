@@ -16,11 +16,6 @@ namespace Core.ShipModel {
         public bool rotationalFlightAssistActive;
     }
 
-    public enum CockpitMode {
-        Internal,
-        External
-    }
-
     public enum AssistToggleType {
         Vector,
         Rotational,
@@ -35,6 +30,8 @@ namespace Core.ShipModel {
         public MonoBehaviour Entity();
 
         public void SetVisible(bool visible);
+
+        public void SetIsLocalPlayer(bool isLocalPlayer);
 
         /**
          * Enable the lights on the ship
