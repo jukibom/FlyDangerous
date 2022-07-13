@@ -111,11 +111,12 @@ namespace Menus.Main_Menu {
                 canvas.renderMode = RenderMode.WorldSpace;
                 var canvasRect = canvas.GetComponent<RectTransform>();
                 if (canvasRect) {
-                    canvasRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 1920);
-                    canvasRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 1080);
+                    // this numbers are pretty wild, used to be 1920 x 1080 but the great UI refactor was much easier to change reference pixels to rescale
+                    canvasRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 2608);
+                    canvasRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 1467);
                 }
 
-                canvas.transform.localScale = new Vector3(0.005f, 0.005f, 0.005f);
+                canvas.transform.localScale = new Vector3(0.004f, 0.004f, 0.004f);
                 flatScreenCamera.enabled = false;
                 uiCamera.enabled = false;
                 xrRig.gameObject.SetActive(true);

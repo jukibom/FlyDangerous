@@ -75,7 +75,7 @@ namespace GameUI {
                     screenSpaceRect.localScale = new Vector3(0.001f, 0.001f, 0.001f);
                     screenSpaceRect.localRotation = Quaternion.identity;
                     screenSpaceRect.localPosition = new Vector3(0, 0.3f, 0.5f);
-                    screenSpaceRect.sizeDelta = new Vector2(1536, 1228.8f); // 4:3
+                    screenSpaceRect.sizeDelta = new Vector2(1920, 1440f); // 4:3
                     // we rely on the cockpit UI in VR mode!
                     ShipStats.SetStatsVisible(false);
                     break;

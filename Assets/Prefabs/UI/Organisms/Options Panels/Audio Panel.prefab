@@ -5,6 +5,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 2
     m_TransformParent: {fileID: 9040166604317561087}
     m_Modifications:
     - target: {fileID: 959697013099676001, guid: 867e83b6d6754d944aac22727e76575d, type: 3}
@@ -252,12 +253,19 @@ PrefabInstance:
       value: AUDIO SPEAKER MODE
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 867e83b6d6754d944aac22727e76575d, type: 3}
+--- !u!224 &7794250013594307075 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8031816776331519998, guid: 867e83b6d6754d944aac22727e76575d, type: 3}
+  m_PrefabInstance: {fileID: 242072718174596605}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1806279900830306471
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 2
     m_TransformParent: {fileID: 9040166604317561087}
     m_Modifications:
     - target: {fileID: 1235410031485389764, guid: aeba2b200c1ff98498f84fc218976835, type: 3}
@@ -449,7 +457,13 @@ PrefabInstance:
       value: -40
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: aeba2b200c1ff98498f84fc218976835, type: 3}
+--- !u!224 &2873765143888834076 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4535296158600249019, guid: aeba2b200c1ff98498f84fc218976835, type: 3}
+  m_PrefabInstance: {fileID: 1806279900830306471}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2873765143888834077 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4535296158600249018, guid: aeba2b200c1ff98498f84fc218976835, type: 3}
@@ -473,6 +487,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 2
     m_TransformParent: {fileID: 9040166604317561087}
     m_Modifications:
     - target: {fileID: 1235410031485389764, guid: aeba2b200c1ff98498f84fc218976835, type: 3}
@@ -664,6 +679,7 @@ PrefabInstance:
       value: -40
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: aeba2b200c1ff98498f84fc218976835, type: 3}
 --- !u!1 &1831160946051115728 stripped
 GameObject:
@@ -684,11 +700,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   toolTipText: Set the volume of just UI / menu interactions. This is a percentage
     of the master volume.
+--- !u!224 &1831160946051115729 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4535296158600249019, guid: aeba2b200c1ff98498f84fc218976835, type: 3}
+  m_PrefabInstance: {fileID: 2853326125981914218}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3036976813812433944
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 6291702346574653274, guid: 7f6395d7f158695469e04e970e119e8d, type: 3}
@@ -856,6 +878,25 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 6291702348231333095, guid: 7f6395d7f158695469e04e970e119e8d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7794250013594307075}
+    - targetCorrespondingSourceObject: {fileID: 6291702348231333095, guid: 7f6395d7f158695469e04e970e119e8d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2873765143888834076}
+    - targetCorrespondingSourceObject: {fileID: 6291702348231333095, guid: 7f6395d7f158695469e04e970e119e8d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 580542237088939594}
+    - targetCorrespondingSourceObject: {fileID: 6291702348231333095, guid: 7f6395d7f158695469e04e970e119e8d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 901888644337878557}
+    - targetCorrespondingSourceObject: {fileID: 6291702348231333095, guid: 7f6395d7f158695469e04e970e119e8d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8959535741749449995}
+    - targetCorrespondingSourceObject: {fileID: 6291702348231333095, guid: 7f6395d7f158695469e04e970e119e8d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1831160946051115729}
   m_SourcePrefab: {fileID: 100100000, guid: 7f6395d7f158695469e04e970e119e8d, type: 3}
 --- !u!1 &9040166604317561084 stripped
 GameObject:
@@ -889,8 +930,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 120
-    m_Right: 120
+    m_Left: 20
+    m_Right: 20
     m_Top: 20
     m_Bottom: 20
   m_ChildAlignment: 0
@@ -912,6 +953,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 2
     m_TransformParent: {fileID: 9040166604317561087}
     m_Modifications:
     - target: {fileID: 1235410031485389764, guid: aeba2b200c1ff98498f84fc218976835, type: 3}
@@ -1103,6 +1145,7 @@ PrefabInstance:
       value: -40
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: aeba2b200c1ff98498f84fc218976835, type: 3}
 --- !u!1 &901888644337878556 stripped
 GameObject:
@@ -1123,11 +1166,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   toolTipText: Set the volume of just sound effects. This is a percentage of the
     master volume.
+--- !u!224 &901888644337878557 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4535296158600249019, guid: aeba2b200c1ff98498f84fc218976835, type: 3}
+  m_PrefabInstance: {fileID: 3635738754334357670}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3962635257173524721
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 2
     m_TransformParent: {fileID: 9040166604317561087}
     m_Modifications:
     - target: {fileID: 1235410031485389764, guid: aeba2b200c1ff98498f84fc218976835, type: 3}
@@ -1319,7 +1368,13 @@ PrefabInstance:
       value: -40
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: aeba2b200c1ff98498f84fc218976835, type: 3}
+--- !u!224 &580542237088939594 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4535296158600249019, guid: aeba2b200c1ff98498f84fc218976835, type: 3}
+  m_PrefabInstance: {fileID: 3962635257173524721}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &580542237088939595 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4535296158600249018, guid: aeba2b200c1ff98498f84fc218976835, type: 3}
@@ -1343,6 +1398,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 2
     m_TransformParent: {fileID: 9040166604317561087}
     m_Modifications:
     - target: {fileID: 1235410031485389764, guid: aeba2b200c1ff98498f84fc218976835, type: 3}
@@ -1534,6 +1590,7 @@ PrefabInstance:
       value: -40
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: aeba2b200c1ff98498f84fc218976835, type: 3}
 --- !u!1 &8959535741749449994 stripped
 GameObject:
@@ -1554,3 +1611,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   toolTipText: Set the volume of ghost ship sound effects. This is a percentage of
     the sound effect volume above.
+--- !u!224 &8959535741749449995 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4535296158600249019, guid: aeba2b200c1ff98498f84fc218976835, type: 3}
+  m_PrefabInstance: {fileID: 4802580591539907504}
+  m_PrefabAsset: {fileID: 0}
