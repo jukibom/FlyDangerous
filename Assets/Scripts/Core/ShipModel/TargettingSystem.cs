@@ -33,10 +33,10 @@ namespace Core.ShipModel {
 
                 foreach (var keyValuePair in _ghosts) {
                     var ghost = keyValuePair.Key;
-                    if (ghost == null) continue;
+                    if (ghost.Transform == null) continue;
                     var target = keyValuePair.Value;
                     var targetName = ghost.PlayerName;
-                    var targetPosition = ghost.transform.position;
+                    var targetPosition = ghost.Transform.position;
                     var icon = ghost.PlayerFlag != null ? flags.GetSprite(ghost.PlayerFlag.Filename) : null;
                     UpdateTarget(target, targetPosition, targetName, icon);
                 }

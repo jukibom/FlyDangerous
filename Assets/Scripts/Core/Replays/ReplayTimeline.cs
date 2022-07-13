@@ -8,8 +8,6 @@ using UnityEngine;
 
 namespace Core.Replays {
     public interface IReplayShip {
-        // ReSharper disable once InconsistentNaming (MonoBehaviour compatibility)
-        Transform transform { get; }
         string PlayerName { get; set; }
         Flag PlayerFlag { get; set; }
         Transform Transform { get; }
