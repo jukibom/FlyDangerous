@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace UI {
+namespace FdUI {
     /**
      * When attached to a UI element in the Options panel, fires an event to a subscribed element to forward on a string explaining what the options does.
      */

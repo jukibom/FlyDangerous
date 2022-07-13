@@ -4,12 +4,11 @@ using Misc;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI {
+namespace FdUI {
     public class FdConsole : Singleton<FdConsole> {
         [SerializeField] private float maxLineHistory = 150;
         [SerializeField] private ScrollRect logEntryScrollRect;
 
-        // TODO: Make this a trimmed array or something, no idea how slow this is!
         [SerializeField] private Text logEntry;
 
         private readonly Queue<string> _logQueue = new();

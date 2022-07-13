@@ -1,7 +1,7 @@
 ﻿using Core;
 using Core.Player;
+using FdUI;
 using Menus.Main_Menu;
-using UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;

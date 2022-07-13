@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using Core;
 using Core.Player;
+using FdUI;
 using GameUI;
 using Menus.Main_Menu;
 using Menus.Options;
-using UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace UI {
+namespace FdUI {
     public class SliderOption : MonoBehaviour {
         public string preference = "default-preference";
         [SerializeField] private FdSlider slider;

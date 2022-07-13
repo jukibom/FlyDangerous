@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI {
+namespace FdUI {
     public class FlexibleGridLayout : LayoutGroup {
         public enum FitType {
             Uniform,

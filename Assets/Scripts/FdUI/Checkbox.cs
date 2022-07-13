@@ -4,7 +4,7 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace UI {
+namespace FdUI {
     public class Checkbox : MonoBehaviour, ISubmitHandler, IPointerClickHandler {
         [SerializeField] public UnityEvent<bool> onToggle;
         public string preference;

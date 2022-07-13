@@ -1,5 +1,5 @@
 using Core.Replays;
-using UI;
+using FdUI;
 using UnityEngine;
 using UnityEngine.UI;
 

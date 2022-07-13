@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI {
+namespace FdUI {
     public class ContentFitterRefresh : MonoBehaviour {
         private void Awake() {
             RefreshContentFitters();

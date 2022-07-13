@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-namespace UI {
+namespace FdUI {
     public class FdSlider : MonoBehaviour {
         [SerializeField] private InputField numberTextBox;
         [SerializeField] private Slider slider;

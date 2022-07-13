@@ -1,5 +1,5 @@
 ﻿using Cinemachine;
-using UI;
+using FdUI;
 using UnityEngine;
 
 namespace Gameplay {

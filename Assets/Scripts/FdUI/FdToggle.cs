@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-namespace UI {
+namespace FdUI {
     [RequireComponent(typeof(Toggle))]
     public class FdToggle : MonoBehaviour {
         [SerializeField] private string value;

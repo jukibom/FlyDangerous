@@ -1,5 +1,5 @@
 using Core;
-using UI;
+using FdUI;
 using UnityEngine;
 
 namespace Menus.Main_Menu {

@@ -1,6 +1,6 @@
 using System.Collections;
 using Core;
-using UI;
+using FdUI;
 using UnityEngine;
 
 namespace Menus.Options {

@@ -7,11 +7,10 @@ using Core.MapData;
 using Core.Replays;
 using Core.Scores;
 using Den.Tools;
+using FdUI;
 using Misc;
-using UI;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.UI.Extensions;
 
 namespace Menus.Main_Menu.Components {
     public class LevelSelectPanel : MonoBehaviour {

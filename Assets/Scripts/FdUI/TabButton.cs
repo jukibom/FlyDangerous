@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace UI {
+namespace FdUI {
     [RequireComponent(typeof(Image))]
     public class TabButton : MonoBehaviour, ISubmitHandler, IPointerClickHandler {
         [SerializeField] private GameObject tabPanel;

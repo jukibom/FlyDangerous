@@ -349,9 +349,9 @@ namespace Core {
         #region Client Handlers
 
         // player joins
-        public override void OnClientConnect(NetworkConnection conn) {
+        public override void OnClientConnect() {
             Debug.Log("[CLIENT] LOCAL CLIENT HAS CONNECTED");
-            base.OnClientConnect(conn);
+            base.OnClientConnect();
             NetworkClient.RegisterHandler<JoinGameSuccessMessage>(OnJoinGameClientMsg);
             NetworkClient.RegisterHandler<JoinGameRejectionMessage>(OnRejectConnectionClientMsg);
             NetworkClient.RegisterHandler<PlayerLeaveGameMessage>(OnPlayerLeaveClientMsg);
@@ -360,13 +360,13 @@ namespace Core {
             NetworkClient.RegisterHandler<SetShipPositionMessage>(OnSetShipPositionClientMsg);
 
             // Initiate handshake
-            conn.Send(joinGameRequestMessage);
+            NetworkClient.connection.Send(joinGameRequestMessage);
         }
 
         // player leaves
-        public override void OnClientDisconnect(NetworkConnection conn) {
+        public override void OnClientDisconnect() {
             Debug.Log("[CLIENT] LOCAL CLIENT HAS DISCONNECTED");
-            base.OnClientDisconnect(conn);
+            base.OnClientDisconnect();
         }
 
         // Server shutdown, notify all players

@@ -2,7 +2,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI {
+namespace FdUI {
     [RequireComponent(typeof(ToggleGroup))]
     public class FdToggleGroup : MonoBehaviour {
         [SerializeField] private string preference;

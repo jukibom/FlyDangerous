@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace UI {
+namespace FdUI {
     public class ScrollablePanel : MonoBehaviour, ISelectHandler, IPointerDownHandler {
         [SerializeField] private float lerpTime;
         private Coroutine _animation;

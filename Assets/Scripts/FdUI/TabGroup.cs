@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace UI {
+namespace FdUI {
     public class TabGroup : MonoBehaviour {
         public List<TabButton> tabButtons = new();
         public TabButton defaultTab;
@@ -19,5 +19,5 @@ namespace UI {
         private void ResetTabs() {
             tabButtons.ForEach(tab => { tab.SetSelectedState(false); });
         }
-    }
+    } 
 }
