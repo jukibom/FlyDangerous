@@ -9,15 +9,18 @@ namespace FdUI {
         [SerializeField] private FlexibleColorPicker colorPicker;
         [SerializeField] private float increment = 0.1f;
         [SerializeField] private RectTransform selectionCursor;
+        [SerializeField] private float baseScale = 2;
 
         private bool _hasFocus;
 
         public void Update() {
             var scale = MathfExtensions.Remap(0, 1, 1, 2f, Mathf.PingPong(Time.time * 3, 1));
-            selectionCursor.localScale = _hasFocus ? Vector3.one * scale : Vector3.one;
+            selectionCursor.localScale = baseScale * (_hasFocus ? Vector3.one * scale : Vector3.one);
         }
 
         public void OnCancel(BaseEventData eventData) {
+            // if not active, propagate to cancel out of memu
+            if (!_hasFocus) ExecuteEvents.ExecuteHierarchy(transform.parent.gameObject, eventData, ExecuteEvents.cancelHandler);
             _hasFocus = false;
         }
 
