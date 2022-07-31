@@ -67,10 +67,15 @@ namespace Core.MapData {
                     yield return new WaitForSeconds(0.1f);
 
                     // wait for fully loaded local terrain
+                    var loadText = GameObject.FindGameObjectWithTag("DynamicLoadingText").GetComponent<Text>();
                     while (mapMagic.IsGenerating()) {
-                        var progressPercent = Mathf.Min(100, Mathf.Round(mapMagic.GetProgress() * 100));
-                        var loadText = GameObject.FindGameObjectWithTag("DynamicLoadingText").GetComponent<Text>();
-                        loadText.text = $"Generating terrain ({progressPercent}%)";
+                        try {
+                            var progressPercent = Mathf.Min(100, Mathf.Round(mapMagic.GetProgress() * 100));
+                            loadText.text = $"Generating terrain ({progressPercent}%)";
+                        }
+                        catch {
+                            // ignored because it only updates loading text and weird race condition errors here in map magic and out of my control
+                        }
 
                         yield return null;
                     }
@@ -286,10 +291,15 @@ namespace Core.MapData {
 
                 // wait for fully loaded local terrain
                 while (mapMagic.IsGenerating()) {
-                    var progressPercent = Mathf.Min(100, Mathf.Round(mapMagic.GetProgress() * 100));
+                    try {
+                        var progressPercent = Mathf.Min(100, Mathf.Round(mapMagic.GetProgress() * 100));
 
-                    // this entity may be destroyed by server shutdown...
-                    if (loadText != null) loadText.text = $"Generating terrain ({progressPercent}%)\n\n\nSeed: \"{LoadedLevelData.terrainSeed}\"";
+                        // this entity may be destroyed by server shutdown...
+                        if (loadText != null) loadText.text = $"Generating terrain ({progressPercent}%)\n\n\nSeed: \"{LoadedLevelData.terrainSeed}\"";
+                    }
+                    catch {
+                        // ignored because it only updates loading text and weird race condition errors here in map magic and out of my control
+                    }
 
                     yield return new WaitForEndOfFrame();
                 }

@@ -3,9 +3,9 @@ using UnityEngine.EventSystems;
 
 namespace FdUI {
     /**
- * Propagates UI events up the stack such that parent containers can hook into them
- * (these events are raised on selectable elements, not their parents)
- */
+     * Propagates UI events up the stack such that parent containers can hook into them
+     * (these events are raised on selectable elements, not their parents)
+     */
     public class SelectableElement : EventTrigger {
         public bool playSound = true;
         private bool _elementInteracting;
