@@ -46,15 +46,6 @@ namespace Menus.Main_Menu.Components {
 
         public void LoadLevels(List<Level> levels) {
             foreach (var levelUI in levelPrefabContainer.gameObject.GetComponentsInChildren<LevelUIElement>()) Destroy(levelUI.gameObject);
-            foreach (var level in levels) {
-                Debug.Log($"Loaded level {level.Name}: {level.Data.LevelHash()}");
-                var levelButton = Instantiate(levelUIElementPrefab, levelPrefabContainer);
-                levelButton.Level = level;
-                levelButton.gameObject.GetComponent<UIButton>().OnButtonSubmitEvent += OnLevelSelected;
-                levelButton.gameObject.GetComponent<UIButton>().OnButtonSelectEvent += OnLevelHighLighted;
-                levelButton.gameObject.GetComponent<UIButton>().OnButtonHighlightedEvent += OnLevelHighLighted;
-                levelButton.gameObject.GetComponent<UIButton>().OnButtonUnHighlightedEvent += OnLevelUnHighLighted;
-            }
 
             levelFlowLayoutGroup.enabled = true;
             levelGridLayoutElement.preferredWidth = 2000;
@@ -63,16 +54,25 @@ namespace Menus.Main_Menu.Components {
             levelGridLayoutElement.gameObject.SetActive(true);
             summaryScreenGridLayoutElement.gameObject.SetActive(false);
 
-            // Select the first level on load
-            // Yes, this is what giving up looks like.
-            // Don't you judge me.
-            IEnumerator SelectFirst() {
-                yield return new WaitForEndOfFrame();
+            // Load level panels one at a time then select the first one
+            IEnumerator AddLevelPanels() {
+                foreach (var level in levels) {
+                    Debug.Log($"Loaded level {level.Name}: {level.Data.LevelHash()}");
+                    var levelButton = Instantiate(levelUIElementPrefab, levelPrefabContainer);
+                    levelButton.Level = level;
+                    levelButton.gameObject.GetComponent<UIButton>().OnButtonSubmitEvent += OnLevelSelected;
+                    levelButton.gameObject.GetComponent<UIButton>().OnButtonSelectEvent += OnLevelHighLighted;
+                    levelButton.gameObject.GetComponent<UIButton>().OnButtonHighlightedEvent += OnLevelHighLighted;
+                    levelButton.gameObject.GetComponent<UIButton>().OnButtonUnHighlightedEvent += OnLevelUnHighLighted;
+
+                    yield return new WaitForEndOfFrame();
+                }
+
                 var firstLevel = levelPrefabContainer.GetComponentsInChildren<LevelUIElement>().First();
                 if (firstLevel != null) firstLevel.GetComponent<Button>().Select();
             }
 
-            StartCoroutine(SelectFirst());
+            StartCoroutine(AddLevelPanels());
         }
 
         private void OnLevelHighLighted(UIButton uiButton) {

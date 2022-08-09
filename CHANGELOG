@@ -13,6 +13,7 @@ Fixes:
     * Possible fix for VKBs always reporting "Hat Up" on rebind (thanks to the painful manual debugging efforts of Giskard for this fix!)
     * Was previously possible to unset protected bindings (which cannot then be rebound!)
     * Fixed (hopefully!) occasional rare crash on terrain load (#190)
+    * Level panels load data in once per frame (Level UI element, ghosts, leaderboard entries) to eliminate stutter during menu transitions
 
 0.5.7
 New:
