@@ -3,6 +3,7 @@ using System.Linq;
 using Audio;
 using Core;
 using Core.MapData;
+using Core.ShipModel;
 using JetBrains.Annotations;
 using Misc;
 using UnityEngine;
@@ -14,7 +15,9 @@ using UnityEngine.XR.Interaction.Toolkit;
 namespace Menus.Main_Menu {
     public class MainMenu : MonoBehaviour {
         // Animating the ship
-        [SerializeField] private GameObject shipMesh;
+        [SerializeField] private GameObject ship;
+        [SerializeField] private PuffinShipModel puffinShipModel;
+        [SerializeField] private CalidrisShipModel calidrisShipModel;
 
         // VR handling
         [SerializeField] private Canvas canvas;
@@ -27,6 +30,7 @@ namespace Menus.Main_Menu {
         [SerializeField] private TitleMenu titleMenu;
         [SerializeField] private TopMenu topMenu;
         [SerializeField] private ProfileMenu profileMenu;
+
         [SerializeField] private DisconnectionDialog disconnectionDialog;
 
         private bool _shouldAnimate;
@@ -42,8 +46,9 @@ namespace Menus.Main_Menu {
 
             var lastPlayedVersion = Preferences.Instance.GetString("lastPlayedVersion");
             topMenu.SetPatchNotesUpdated(lastPlayedVersion != Application.version);
+            SetShipFromPreferences();
 
-            if (FirstRun) shipMesh.transform.position += new Vector3(1.58f, 1.32f, -6.8f);
+            if (FirstRun) ship.transform.position += new Vector3(1.58f, 1.32f, -6.8f);
         }
 
         private void FixedUpdate() {
@@ -52,17 +57,17 @@ namespace Menus.Main_Menu {
                 var positionX = MathfExtensions.Oscillate(-0.01f, 0.01f, 8);
                 var positionY = MathfExtensions.Oscillate(-0.01f, 0.01f, 12);
                 var positionZ = MathfExtensions.Oscillate(0.01f, -0.01f, 5);
-                shipMesh.transform.position += new Vector3(positionX, positionY, positionZ);
+                ship.transform.position += new Vector3(positionX, positionY, positionZ);
 
                 // gently rock the ship mesh back and forth
                 var rotationAmount = MathfExtensions.Oscillate(-0.12f, 0.12f, 8, 4);
-                shipMesh.transform.Rotate(Vector3.forward, rotationAmount);
+                ship.transform.Rotate(Vector3.forward, rotationAmount);
 
                 // On first run wait for intro song to play then rotate the camera and move the ship into position slowly
                 if (Time.time > 8f || !FirstRun)
                     flatScreenCamera.transform.RotateAround(new Vector3(0, 0, -6.5f), Vector3.up, -0.1f);
                 if (Time.time < 9f)
-                    shipMesh.transform.position += new Vector3(-0.00351f, -0.00293f, 0.0151f); // starting values / number of frames 
+                    ship.transform.position += new Vector3(-0.00351f, -0.00293f, 0.0151f); // starting values / number of frames 
             }
         }
 
@@ -79,6 +84,27 @@ namespace Menus.Main_Menu {
             Game.OnVRStatus -= OnVRStatus;
             Game.OnGameSettingsApplied -= OnGameSettingsApplied;
             InputSystem.onDeviceChange -= OnDeviceChange;
+        }
+
+        public void SetShipFromPreferences() {
+            puffinShipModel.gameObject.SetActive(false);
+            calidrisShipModel.gameObject.SetActive(false);
+            IShipModel shipModel;
+            switch (Preferences.Instance.GetString("playerShipDesign")) {
+                case "Puffin":
+                    shipModel = puffinShipModel;
+                    break;
+                case "Calidris":
+                default:
+                    shipModel = calidrisShipModel;
+                    break;
+            }
+
+            shipModel.Entity().gameObject.SetActive(true);
+            shipModel.SetPrimaryColor(Preferences.Instance.GetString("playerShipPrimaryColor"));
+            shipModel.SetAccentColor(Preferences.Instance.GetString("playerShipAccentColor"));
+            shipModel.SetThrusterColor(Preferences.Instance.GetString("playerShipThrusterColor"));
+            shipModel.SetTrailColor(Preferences.Instance.GetString("playerShipTrailColor"));
         }
 
         public void ShowDisconnectedDialog(string reason) {

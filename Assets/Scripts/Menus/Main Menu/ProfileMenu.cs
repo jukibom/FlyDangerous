@@ -113,6 +113,11 @@ namespace Menus.Main_Menu {
             Preferences.Instance.SetString("playerShipTrailColor", _playerShipTrailColor);
             Preferences.Instance.SetString("playerShipHeadLightsColor", _playerShipHeadLightsColor);
             Preferences.Instance.Save();
+
+            // grab the main menu and update the ship if available
+            var mainMenu = FindObjectOfType<MainMenu>();
+            mainMenu.SetShipFromPreferences();
+
             // we're going backward but with a positive apply sound so don't set the call chain in the previous menu
             Progress(caller, false, false);
         }
