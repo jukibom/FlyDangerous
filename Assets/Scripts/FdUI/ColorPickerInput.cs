@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace FdUI {
-    public class ColorPickerInput : Selectable, ISubmitHandler, ICancelHandler {
+    public class ColorPickerInput : Selectable, ISelectHandler, ISubmitHandler, ICancelHandler {
         [SerializeField] private ColourElementType colourElementType;
         [SerializeField] private FlexibleColorPicker colorPicker;
         [SerializeField] private float increment = 0.1f;
@@ -22,6 +22,11 @@ namespace FdUI {
             // if not active, propagate to cancel out of memu
             if (!_hasFocus) ExecuteEvents.ExecuteHierarchy(transform.parent.gameObject, eventData, ExecuteEvents.cancelHandler);
             _hasFocus = false;
+        }
+
+        public override void OnSelect(BaseEventData eventData) {
+            base.OnSelect(eventData);
+            ExecuteEvents.ExecuteHierarchy(transform.parent.gameObject, eventData, ExecuteEvents.selectHandler);
         }
 
         public void OnSubmit(BaseEventData eventData) {
