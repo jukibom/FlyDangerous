@@ -114,6 +114,8 @@ namespace Core {
             switch (key) {
                 case "lastPlayedVersion":
                     return "none";
+                case "lastPlayedVersionInVR":
+                    return "none";
                 case "lastPlayedFreeRoamLocation":
                     return "Biome World";
                 case "lastPlayedFreeRoamEnvironment":

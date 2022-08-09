@@ -253,6 +253,7 @@ namespace Core {
             _hmdPosition = xrOriginTransform.localPosition;
             _hmdRotation = xrOriginTransform.localRotation;
 
+            Preferences.Instance.SetString("lastPlayedVersionInVR", Application.version);
             Preferences.Instance.SetVector3("hmdPosition", _hmdPosition);
             Preferences.Instance.SetVector3("hmdRotation", _hmdRotation.eulerAngles);
             Preferences.Instance.Save();
@@ -512,7 +513,14 @@ namespace Core {
                     // allow xr rigs to be initialised before resetting hmd position
                     yield return new WaitForEndOfFrame();
                     var xrOrigin = FindObjectOfType<XROrigin>(true);
+
                     if (xrOrigin) {
+                        // Whenever VR is enabled on a new version in any capacity (e.g. through option menu). perform auto-calibration.
+                        if (Preferences.Instance.GetString("lastPlayedVersionInVR") != Application.version) {
+                            Debug.Log("New version detected in VR session, performing auto-calibration");
+                            ResetHmdView(xrOrigin, xrOrigin.transform.parent);
+                        }
+
                         var xrTransform = xrOrigin.transform;
 
                         _hmdPosition = Preferences.Instance.GetVector3("hmdPosition");
