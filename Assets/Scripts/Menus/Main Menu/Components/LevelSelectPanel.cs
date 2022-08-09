@@ -143,6 +143,8 @@ namespace Menus.Main_Menu.Components {
         }
 
         private void SwitchToLevelSelectScreen(Action onComplete = null) {
+            competitionPanel.ClearLeaderboard();
+            competitionPanel.ClearGhosts();
             if (_panelAnimationHideCoroutine != null) StopCoroutine(_panelAnimationHideCoroutine);
             if (_panelAnimationShowCoroutine != null) StopCoroutine(_panelAnimationShowCoroutine);
             _panelAnimationHideCoroutine = StartCoroutine(HidePanel(summaryScreenGridLayoutElement));

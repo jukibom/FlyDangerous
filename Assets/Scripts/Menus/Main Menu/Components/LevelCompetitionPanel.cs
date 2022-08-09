@@ -30,6 +30,10 @@ namespace Menus.Main_Menu.Components {
             return ghostList.GetComponentsInChildren<GhostEntry>().ToList().FindAll(entry => entry.checkbox.isChecked).ConvertAll(entry => entry.replay);
         }
 
+        public void ClearGhosts() {
+            ghostList.ClearGhosts();
+        }
+
         public async void DownloadGhost(LeaderboardEntry leaderboardEntry) {
             // store the current selected UI element to return to later, if nothing is selected
             var currentSelectedElement = EventSystem.current.currentSelectedGameObject;
@@ -85,6 +89,10 @@ namespace Menus.Main_Menu.Components {
                 var leaderboardData = await FdNetworkManager.Instance.OnlineService!.Leaderboard!.FindOrCreateLeaderboard(_levelData.LevelHash());
                 leaderboard.LoadLeaderboard(leaderboardData);
             }
+        }
+
+        public void ClearLeaderboard() {
+            leaderboard.ClearEntries();
         }
 
         private void SelectReplaysInList(List<Replay> replays) {

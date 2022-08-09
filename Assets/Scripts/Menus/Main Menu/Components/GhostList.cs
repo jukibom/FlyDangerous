@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Core.MapData;
@@ -12,31 +13,26 @@ namespace Menus.Main_Menu.Components {
         [SerializeField] private GhostEntry ghostEntryPrefab;
         [SerializeField] private GameObject noGhostText;
 
-        private List<Replay> _replays;
+        private Coroutine _addGhostsCoroutine;
 
         private void OnEnable() {
             noGhostText.SetActive(true);
         }
 
         public void PopulateGhostsForLevel(LevelData levelData) {
+            if (_addGhostsCoroutine != null) StopCoroutine(_addGhostsCoroutine);
+
+            ClearGhosts();
+
+            var ghosts = Replay.ReplaysForLevel(levelData);
+            if (ghosts.Count > 0) noGhostText.SetActive(false);
+            ghosts = ghosts.OrderBy(r => r.ScoreData.raceTime).ToList();
+
+            _addGhostsCoroutine = StartCoroutine(AddGhosts(ghosts));
+        }
+
+        public void ClearGhosts() {
             foreach (var ghostEntry in ghostEntryContainer.GetComponentsInChildren<GhostEntry>()) Destroy(ghostEntry.gameObject);
-
-            _replays = Replay.ReplaysForLevel(levelData);
-            if (_replays.Count > 0) noGhostText.SetActive(false);
-
-            _replays = _replays.OrderBy(r => r.ScoreData.raceTime).ToList();
-
-            foreach (var replay in _replays) {
-                var ghostEntry = Instantiate(ghostEntryPrefab);
-                ghostEntry.GetComponent<RectTransform>().SetParent(ghostEntryContainer, false);
-                ghostEntry.playerName.text = replay.ShipProfile.playerName;
-                ghostEntry.score.text = TimeExtensions.TimeSecondsToString(replay.ScoreData.raceTime);
-                ghostEntry.entryDate.text = replay.ReplayMeta.CreationDate.ToShortDateString();
-                ghostEntry.replay = replay;
-
-                // enable the best score by default
-                ghostEntry.checkbox.isChecked = _replays.First() == replay;
-            }
         }
 
         /**
@@ -54,6 +50,21 @@ namespace Menus.Main_Menu.Components {
                 }
 
             return ge;
+        }
+
+        private IEnumerator AddGhosts(List<Replay> ghosts) {
+            foreach (var replay in ghosts) {
+                var ghostEntry = Instantiate(ghostEntryPrefab);
+                ghostEntry.GetComponent<RectTransform>().SetParent(ghostEntryContainer, false);
+                ghostEntry.playerName.text = replay.ShipProfile.playerName;
+                ghostEntry.score.text = TimeExtensions.TimeSecondsToString(replay.ScoreData.raceTime);
+                ghostEntry.entryDate.text = replay.ReplayMeta.CreationDate.ToShortDateString();
+                ghostEntry.replay = replay;
+
+                // enable the best score by default
+                ghostEntry.checkbox.isChecked = ghosts.First() == replay;
+                yield return new WaitForEndOfFrame();
+            }
         }
     }
 }
