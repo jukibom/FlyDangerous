@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.unity3d.player"
+    android:versionCode="1"
+    android:versionName="1.0" >
+    <!--
+    Important Notes
+      1.  If your project contains a custom AndroidManifest.xml file, add permissions
+          <uses-permission android:name="android.permission.BLUETOOTH" />
+          <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+      
+    2.  Otherwise, copy this file to this location in your project:
+        Assets/Plugins/Android/AndroidManifest.xml.
+    -->
+    <application
+      android:allowBackup="true"
+      android:label="@string/app_name"
+      android:supportsRtl="true" >
+      <activity android:name="com.unity3d.player.UnityPlayerActivity" android:label="@string/app_name" android:screenOrientation="sensorPortrait" android:launchMode="singleTask" android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|uiMode|screenSize|smallestScreenSize|fontScale|layoutDirection|density" android:hardwareAccelerated="false">
+        <intent-filter>
+          <action android:name="android.intent.action.MAIN" />
+          <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        <meta-data android:name="unityplayer.UnityActivity" android:value="true" />
+      </activity>
+      <meta-data android:name="unityplayer.SkipPermissionsDialog" android:value="true" />
+    </application>
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+</manifest>
