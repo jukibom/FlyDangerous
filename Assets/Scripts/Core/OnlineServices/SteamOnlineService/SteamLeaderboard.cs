@@ -45,7 +45,7 @@ namespace Core.OnlineServices.SteamOnlineService {
                     break;
             }
 
-            var handle = SteamUserStats.DownloadLeaderboardEntries(_leaderboard, entriesRequest, -6, 43);
+            var handle = SteamUserStats.DownloadLeaderboardEntries(_leaderboard, entriesRequest, -19, 30);
             _entriesFetchResultsCallback.Set(handle);
 
             return _leaderboardEntryListTask.Task;
