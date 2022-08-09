@@ -243,7 +243,7 @@ MonoBehaviour:
   canvas: {fileID: 1630960266}
   flatScreenCamera: {fileID: 1275474031}
   uiCamera: {fileID: 1841434655}
-  xrRig: {fileID: 956907116}
+  xrOrigin: {fileID: 956907116}
   vrCalibrationDialog: {fileID: 8332279060808995805}
   newPlayerWelcomeDialog: {fileID: 9044597288724942541}
   titleMenu: {fileID: 780486024051009843}
@@ -1083,9 +1083,9 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1006576277}
+  - {fileID: 1275474032}
   - {fileID: 1841434658}
   - {fileID: 1991284505}
-  - {fileID: 1275474032}
   m_Father: {fileID: 339787321}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1194,15 +1194,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 956907114}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7448815bd5148434682b3d931066cd10, type: 3}
+  m_Script: {fileID: 11500000, guid: e0cb9aa70a22847b5925ee5f067c10a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Camera: {fileID: 0}
+  m_Camera: {fileID: 1252704817}
   m_OriginBaseGameObject: {fileID: 956907114}
-  m_CameraFloorOffsetObject: {fileID: 1755688314}
-  m_RequestedTrackingOriginMode: 2
+  m_CameraFloorOffsetObject: {fileID: 0}
+  m_RequestedTrackingOriginMode: 1
   m_CameraYOffset: 0
-  m_CameraGameObject: {fileID: 1252704814}
 --- !u!1 &1006576276
 GameObject:
   m_ObjectHideFlags: 0

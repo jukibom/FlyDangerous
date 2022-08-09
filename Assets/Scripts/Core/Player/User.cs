@@ -5,19 +5,19 @@ using FdUI;
 using GameUI;
 using JetBrains.Annotations;
 using Misc;
+using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.InputSystem.Users;
-using UnityEngine.XR.Interaction.Toolkit;
 
 namespace Core.Player {
     public class User : MonoBehaviour {
         [SerializeField] private ShipPlayer shipPlayer;
         [SerializeField] private ShipArcadeFlightComputer shipArcadeFlightComputer;
         [SerializeField] private ShipCameraRig shipCameraRig;
-        [SerializeField] private XRRig xrRig;
+        [SerializeField] private XROrigin xrOrigin;
         [SerializeField] private InputSystemUIInputModule pauseUIInputModule;
         [SerializeField] public InGameUI inGameUI;
 
@@ -57,8 +57,10 @@ namespace Core.Player {
 
         public Vector3 UserCameraPosition =>
             Game.Instance.IsVREnabled
-                ? xrRig.cameraGameObject.transform.position
-                : shipCameraRig.ActiveCamera.transform.position;
+                ? xrOrigin.Camera.transform.position
+                : shipCameraRig.ActiveCamera != null
+                    ? shipCameraRig.ActiveCamera.transform.position
+                    : Vector3.zero;
 
         public ShipCameraRig ShipCameraRig => shipCameraRig;
 
@@ -251,12 +253,12 @@ namespace Core.Player {
             if (isVREnabled) {
                 Game.Instance.SetFlatScreenCameraControllerActive(false);
                 shipCameraRig.gameObject.SetActive(false);
-                xrRig.gameObject.SetActive(true);
+                xrOrigin.gameObject.SetActive(true);
             }
             else {
                 Game.Instance.SetFlatScreenCameraControllerActive(true);
                 shipCameraRig.gameObject.SetActive(true);
-                xrRig.gameObject.SetActive(false);
+                xrOrigin.gameObject.SetActive(false);
             }
 
             // if VR is enabled, we need to swap our active cameras and make UI panels operate in world space
@@ -488,7 +490,7 @@ namespace Core.Player {
 
         [UsedImplicitly]
         public void OnResetHMDView(InputValue value) {
-            if (xrRig) Game.Instance.ResetHmdView(xrRig, transform);
+            if (xrOrigin) Game.Instance.ResetHmdView(xrOrigin, transform);
         }
 
         [UsedImplicitly]

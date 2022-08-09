@@ -6,11 +6,11 @@ using Core.MapData;
 using Core.ShipModel;
 using JetBrains.Annotations;
 using Misc;
+using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Users;
 using UnityEngine.SceneManagement;
-using UnityEngine.XR.Interaction.Toolkit;
 
 namespace Menus.Main_Menu {
     public class MainMenu : MonoBehaviour {
@@ -23,7 +23,7 @@ namespace Menus.Main_Menu {
         [SerializeField] private Canvas canvas;
         [SerializeField] private Camera flatScreenCamera;
         [SerializeField] private Camera uiCamera;
-        [SerializeField] private XRRig xrRig;
+        [SerializeField] private XROrigin xrOrigin;
 
         [SerializeField] private VRCalibrationDialog vrCalibrationDialog;
         [SerializeField] private NewPlayerWelcomeDialog newPlayerWelcomeDialog;
@@ -128,7 +128,7 @@ namespace Menus.Main_Menu {
 
         [UsedImplicitly]
         public void OnResetHMDView(InputValue inputValue) {
-            if (xrRig) Game.Instance.ResetHmdView(xrRig, xrRig.transform.parent);
+            if (xrOrigin) Game.Instance.ResetHmdView(xrOrigin, xrOrigin.transform.parent);
         }
 
         private void OnVRStatus(bool isVREnabled) {
@@ -145,13 +145,13 @@ namespace Menus.Main_Menu {
                 canvas.transform.localScale = new Vector3(0.004f, 0.004f, 0.004f);
                 flatScreenCamera.enabled = false;
                 uiCamera.enabled = false;
-                xrRig.gameObject.SetActive(true);
+                xrOrigin.gameObject.SetActive(true);
             }
             else {
                 canvas.renderMode = RenderMode.ScreenSpaceCamera;
                 flatScreenCamera.enabled = true;
                 uiCamera.enabled = true;
-                xrRig.gameObject.SetActive(false);
+                xrOrigin.gameObject.SetActive(false);
             }
         }
 

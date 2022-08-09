@@ -1,7 +1,7 @@
 using System.Collections;
 using Core;
+using Unity.XR.CoreUtils;
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit;
 
 namespace Menus.Main_Menu {
     public class VRCalibrationDialog : MenuBase {
@@ -20,8 +20,8 @@ namespace Menus.Main_Menu {
         }
 
         public void OnCalibrate() {
-            var xrRig = FindObjectOfType<XRRig>();
-            if (xrRig) Game.Instance.ResetHmdView(xrRig, xrRig.transform.parent);
+            var xrOrigin = FindObjectOfType<XROrigin>();
+            if (xrOrigin) Game.Instance.ResetHmdView(xrOrigin, xrOrigin.transform.parent);
         }
 
         public void OnAccept() {

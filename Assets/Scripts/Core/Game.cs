@@ -16,13 +16,13 @@ using MapMagic.Core;
 using Menus.Main_Menu;
 using Mirror;
 using Misc;
+using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Management;
 using Environment = System.Environment;
 #if !NO_PAID_ASSETS
@@ -245,13 +245,13 @@ namespace Core {
             }
         }
 
-        public void ResetHmdView(XRRig xrRig, Transform targetTransform) {
-            xrRig.MoveCameraToWorldLocation(targetTransform.position);
-            xrRig.MatchRigUpCameraForward(targetTransform.up, targetTransform.forward);
+        public void ResetHmdView(XROrigin xrOrigin, Transform targetTransform) {
+            xrOrigin.MoveCameraToWorldLocation(targetTransform.position);
+            xrOrigin.MatchOriginUpCameraForward(targetTransform.up, targetTransform.forward);
 
-            var xrRigTransform = xrRig.transform;
-            _hmdPosition = xrRigTransform.localPosition;
-            _hmdRotation = xrRigTransform.localRotation;
+            var xrOriginTransform = xrOrigin.transform;
+            _hmdPosition = xrOriginTransform.localPosition;
+            _hmdRotation = xrOriginTransform.localRotation;
 
             Preferences.Instance.SetVector3("hmdPosition", _hmdPosition);
             Preferences.Instance.SetVector3("hmdRotation", _hmdRotation.eulerAngles);
@@ -316,7 +316,7 @@ namespace Core {
 #if !NO_PAID_ASSETS
                 // gpu instancer VR initialisation (paid asset!)
                 if (IsVREnabled) {
-                    var cam = FindObjectOfType<XRRig>(true).cameraGameObject.GetComponent<Camera>();
+                    var cam = FindObjectOfType<XROrigin>(true).Camera;
 
                     var gpuInstancer = FindObjectOfType<GPUInstancerMapMagic2Integration>();
                     var mapMagic = FindObjectOfType<MapMagicObject>();
@@ -511,9 +511,9 @@ namespace Core {
                 IEnumerator ResetHmdPosition() {
                     // allow xr rigs to be initialised before resetting hmd position
                     yield return new WaitForEndOfFrame();
-                    var xrRig = FindObjectOfType<XRRig>(true);
-                    if (xrRig) {
-                        var xrTransform = xrRig.transform;
+                    var xrOrigin = FindObjectOfType<XROrigin>(true);
+                    if (xrOrigin) {
+                        var xrTransform = xrOrigin.transform;
 
                         _hmdPosition = Preferences.Instance.GetVector3("hmdPosition");
                         _hmdRotation = Quaternion.Euler(Preferences.Instance.GetVector3("hmdRotation"));
