@@ -1,5 +1,5 @@
 using System.Globalization;
-using Core.ShipModel;
+using Core.ShipModel.ShipIndicator;
 using Misc;
 using UnityEngine;
 using UnityEngine.UI;
@@ -43,15 +43,15 @@ namespace GameUI {
             _targetUIAlpha = visible ? 1 : -1;
         }
 
-        public void UpdateIndicators(ShipIndicatorData shipIndicatorData) {
+        public void UpdateIndicators(IShipIndicatorData shipIndicatorData) {
             #region Velocity
 
-            velocityIndicatorText.text = shipIndicatorData.velocity.ToString(CultureInfo.InvariantCulture);
+            velocityIndicatorText.text = shipIndicatorData.Velocity.ToString(CultureInfo.InvariantCulture);
 
             // special use-case for acceleration bar depending on flight assist (switch to throttle input)
-            var accelerationBarAmount = shipIndicatorData.vectorFlightAssistActive
-                ? shipIndicatorData.throttlePosition
-                : shipIndicatorData.acceleration;
+            var accelerationBarAmount = shipIndicatorData.VectorFlightAssistActive
+                ? shipIndicatorData.ThrottlePosition
+                : shipIndicatorData.Acceleration;
 
             accelerationBarAmount = Mathf.Lerp(_previousAccelerationBarAmount, accelerationBarAmount, 0.1f);
 
@@ -61,7 +61,7 @@ namespace GameUI {
             accelerationBar.transform.localRotation = Quaternion.Euler(0, 0, 45);
             accelerationBar.fillClockwise = true;
             var accelerationBarBaseActiveColor = _activeColor;
-            if (shipIndicatorData.vectorFlightAssistActive && accelerationBarAmount < 0) {
+            if (shipIndicatorData.VectorFlightAssistActive && accelerationBarAmount < 0) {
                 accelerationBar.color = _notificationColor;
                 accelerationBarBaseActiveColor = _notificationColor;
                 accelerationBar.transform.localRotation = Quaternion.Euler(0, 0, 135);
@@ -83,32 +83,32 @@ namespace GameUI {
 
             #region Boost
 
-            boostIndicatorText.text = ((int)shipIndicatorData.boostCapacitorPercent).ToString(CultureInfo.InvariantCulture) + "%";
+            boostIndicatorText.text = ((int)shipIndicatorData.BoostCapacitorPercent).ToString(CultureInfo.InvariantCulture) + "%";
             boostCapacitorBar.fillAmount = Mathf.Lerp(
                 boostCapacitorBar.fillAmount,
-                MathfExtensions.Remap(0, 100, 0, 0.755f, shipIndicatorData.boostCapacitorPercent),
+                MathfExtensions.Remap(0, 100, 0, 0.755f, shipIndicatorData.BoostCapacitorPercent),
                 0.1f
             );
 
-            if (shipIndicatorData.boostCapacitorPercent > 80)
+            if (shipIndicatorData.BoostCapacitorPercent > 80)
                 boostCapacitorBar.color = Color.Lerp(_activeColor, _positiveColor,
                     MathfExtensions.Remap(
                         80,
                         90,
-                        0, 1, shipIndicatorData.boostCapacitorPercent
+                        0, 1, shipIndicatorData.BoostCapacitorPercent
                     )
                 );
-            else if (shipIndicatorData.boostCapacitorPercent < 30f)
+            else if (shipIndicatorData.BoostCapacitorPercent < 30f)
                 boostCapacitorBar.color = Color.Lerp(_activeColor, _warningColor,
-                    MathfExtensions.Remap(30, 15, 0, 1, shipIndicatorData.boostCapacitorPercent));
+                    MathfExtensions.Remap(30, 15, 0, 1, shipIndicatorData.BoostCapacitorPercent));
             else
                 boostCapacitorBar.color = _activeColor;
 
-            var boostWarningColor = shipIndicatorData.boostTimerReady ? _notificationColor : _warningColor;
-            boostReadyIcon.color = shipIndicatorData.boostTimerReady && shipIndicatorData.boostChargeReady ? _positiveColor : boostWarningColor;
-            boostChargeText.text = shipIndicatorData.boostTimerReady && shipIndicatorData.boostChargeReady
+            var boostWarningColor = shipIndicatorData.BoostTimerReady ? _notificationColor : _warningColor;
+            boostReadyIcon.color = shipIndicatorData.BoostTimerReady && shipIndicatorData.BoostChargeReady ? _positiveColor : boostWarningColor;
+            boostChargeText.text = shipIndicatorData.BoostTimerReady && shipIndicatorData.BoostChargeReady
                 ? "BOOST READY"
-                : !shipIndicatorData.boostTimerReady
+                : !shipIndicatorData.BoostTimerReady
                     ? "BOOSTING"
                     : "BOOST CHARGING";
 

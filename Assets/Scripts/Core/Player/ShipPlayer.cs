@@ -97,7 +97,6 @@ namespace Core.Player {
 
         #endregion
 
-
         #region Lifecycle + Misc
 
         public void Awake() {
@@ -243,8 +242,7 @@ namespace Core.Player {
         }
 
         #endregion
-
-
+        
         #region Input
 
         public void SetPitch(float value) {

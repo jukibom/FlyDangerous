@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using Core.Player;
+using Core.ShipModel.ShipIndicator;
 using JetBrains.Annotations;
 using Misc;
 using UnityEngine;
@@ -21,6 +22,7 @@ namespace Core.ShipModel {
 
         // ray-casting without per-frame allocation
         private readonly RaycastHit[] _raycastHits = new RaycastHit[2];
+        private readonly ShipIndicatorData _shipIndicatorData = new();
         private float _boostCapacitorPercent = 100f;
         private bool _boostCharging;
 
@@ -32,7 +34,6 @@ namespace Core.ShipModel {
         private bool _isBoosting;
 
         private Vector3 _prevVelocity;
-        private ShipIndicatorData _shipIndicatorData;
 
         [CanBeNull] private IShipModel _shipModel;
 
@@ -67,7 +68,7 @@ namespace Core.ShipModel {
         public float VelocityMagnitude => Mathf.Round(targetRigidbody.velocity.magnitude);
         public float VelocityNormalised => targetRigidbody.velocity.sqrMagnitude / (CurrentParameters.maxBoostSpeed * CurrentParameters.maxBoostSpeed);
         private bool BoostReady => !_boostCharging && _boostCapacitorPercent > CurrentParameters.boostCapacitorPercentCost;
-        public ShipIndicatorData ShipIndicatorData => _shipIndicatorData;
+        public IShipIndicatorData ShipIndicatorData => _shipIndicatorData;
 
         public Vector3 CurrentFrameThrust { get; private set; }
         public Vector3 CurrentFrameTorque { get; private set; }
@@ -340,19 +341,19 @@ namespace Core.ShipModel {
 
 
         private void UpdateIndicators() {
-            _shipIndicatorData.throttlePosition = VectorFlightAssistActive ? ThrottleRaw : Throttle;
-            _shipIndicatorData.acceleration = (Math.Abs(CurrentFrameThrust.x) + Math.Abs(CurrentFrameThrust.y) + Math.Abs(CurrentFrameThrust.z)) /
+            _shipIndicatorData.ThrottlePosition = VectorFlightAssistActive ? ThrottleRaw : Throttle;
+            _shipIndicatorData.Acceleration = (Math.Abs(CurrentFrameThrust.x) + Math.Abs(CurrentFrameThrust.y) + Math.Abs(CurrentFrameThrust.z)) /
                                               CurrentParameters.maxThrust;
-            _shipIndicatorData.velocity = VelocityMagnitude;
-            _shipIndicatorData.throttle = Throttle;
-            _shipIndicatorData.boostCapacitorPercent = _boostCapacitorPercent;
-            _shipIndicatorData.boostTimerReady = !_boostCharging;
-            _shipIndicatorData.boostChargeReady = _boostCapacitorPercent > CurrentParameters.boostCapacitorPercentCost;
-            _shipIndicatorData.lightsActive = IsShipLightsActive;
-            _shipIndicatorData.velocityLimiterActive = VelocityLimitActive;
-            _shipIndicatorData.vectorFlightAssistActive = VectorFlightAssistActive;
-            _shipIndicatorData.rotationalFlightAssistActive = RotationalFlightAssistActive;
-            _shipIndicatorData.gForce = _gforce;
+            _shipIndicatorData.Velocity = VelocityMagnitude;
+            _shipIndicatorData.Throttle = Throttle;
+            _shipIndicatorData.BoostCapacitorPercent = _boostCapacitorPercent;
+            _shipIndicatorData.BoostTimerReady = !_boostCharging;
+            _shipIndicatorData.BoostChargeReady = _boostCapacitorPercent > CurrentParameters.boostCapacitorPercentCost;
+            _shipIndicatorData.LightsActive = IsShipLightsActive;
+            _shipIndicatorData.VelocityLimiterActive = VelocityLimitActive;
+            _shipIndicatorData.VectorFlightAssistActive = VectorFlightAssistActive;
+            _shipIndicatorData.RotationalFlightAssistActive = RotationalFlightAssistActive;
+            _shipIndicatorData.GForce = _gforce;
 
             ShipModel?.UpdateIndicators(_shipIndicatorData);
         }

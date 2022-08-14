@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Core.Player;
+using Core.ShipModel.ShipIndicator;
 using Misc;
 using UnityEngine;
 using VFX;
@@ -133,7 +134,7 @@ namespace Core.ShipModel {
 
         #region Rolling Updates
 
-        public virtual void UpdateIndicators(ShipIndicatorData shipIndicatorData) {
+        public virtual void UpdateIndicators(IShipIndicatorData shipIndicatorData) {
             /* Indicators are entirely model-specific and should be implemented. */
         }
 

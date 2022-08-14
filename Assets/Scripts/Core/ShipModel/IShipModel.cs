@@ -1,20 +1,7 @@
-﻿using UnityEngine;
+﻿using Core.ShipModel.ShipIndicator;
+using UnityEngine;
 
 namespace Core.ShipModel {
-    public struct ShipIndicatorData {
-        public float throttlePosition; // -1 - 1
-        public float velocity; // m/s
-        public float acceleration; // 0 - 1
-        public float throttle; // 0 - 1
-        public float gForce;
-        public float boostCapacitorPercent; // 0 - 100
-        public bool boostTimerReady;
-        public bool boostChargeReady;
-        public bool lightsActive;
-        public bool velocityLimiterActive;
-        public bool vectorFlightAssistActive;
-        public bool rotationalFlightAssistActive;
-    }
 
     public enum AssistToggleType {
         Vector,
@@ -56,7 +43,7 @@ namespace Core.ShipModel {
         public void Boost(float boostTime);
 
         /** Update the cockpit indicators (local player only, others not needed).*/
-        public void UpdateIndicators(ShipIndicatorData shipIndicatorData);
+        public void UpdateIndicators(IShipIndicatorData shipIndicatorData);
 
         /**
          * Anything related to motion - thrusters, sounds etc - based on the velocity, force and torque of the player.
