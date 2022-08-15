@@ -149,8 +149,6 @@ namespace Core.ShipModel {
                 MathfExtensions.Remap(-0.3f, 0.3f, -1, 1, shipMotionData.CurrentAngularTorqueNormalised.z)
             );
 
-            SimpleDebug.Log(shipMotionData.CurrentLateralVelocity, shipMotionData.MaxLateralVelocity, shipMotionData.CurrentLateralForce);
-
             thrusterController.UpdateThrusters(shipMotionData.CurrentLateralForce, torqueVec);
             smokeEmitter.UpdateThrustTrail(shipMotionData.CurrentLateralVelocity, shipMotionData.MaxLateralVelocity,
                 shipMotionData.CurrentLateralForceNormalised);
