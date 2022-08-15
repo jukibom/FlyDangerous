@@ -241,6 +241,14 @@ namespace Core.Player {
             }
         }
 
+        private void OnCollisionEnter(Collision collisionInfo) {
+            ShipPhysics.OnCollision(collisionInfo);
+        }
+
+        private void OnCollisionStay(Collision collisionInfo) {
+            ShipPhysics.OnCollision(collisionInfo);
+        }
+
         #endregion
 
         #region Input

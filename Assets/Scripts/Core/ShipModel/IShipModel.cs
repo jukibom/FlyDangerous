@@ -12,7 +12,7 @@ namespace Core.ShipModel {
      * Interface for various kinds of ships. This is updated from the Ship Player - some of which occurs via network
      * commands (those marked as network aware) and some of which on the local client only.
      */
-    public interface IShipModel : IShipIndicators, IShipMotion {
+    public interface IShipModel : IShipIndicators, IShipMotion, IShipFeedback {
         public ShipShake ShipShake { get; }
         public MonoBehaviour Entity();
 

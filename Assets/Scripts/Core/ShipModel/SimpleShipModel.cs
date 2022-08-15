@@ -155,6 +155,11 @@ namespace Core.ShipModel {
             foliageCollider.radius = MathfExtensions.Remap(0, shipMotionData.MaxLateralVelocity / 2, 4, 15, shipMotionData.CurrentLateralVelocity.magnitude);
         }
 
+        public virtual void OnShipFeedbackUpdate(IShipFeedbackData shipFeedbackData) {
+            if (shipFeedbackData.CollisionThisFrame)
+                ShipShake.AddShake(0.2f, shipFeedbackData.CollisionForceNormalised / 100);
+        }
+
         #endregion
 
         #region User Preferences

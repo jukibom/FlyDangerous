@@ -41,6 +41,14 @@ namespace Core.Replays {
             ShipPhysics.OnBoost -= ShowBoost;
         }
 
+        private void OnCollisionEnter(Collision collisionInfo) {
+            ShipPhysics.OnCollision(collisionInfo);
+        }
+
+        private void OnCollisionStay(Collision collisionInfo) {
+            ShipPhysics.OnCollision(collisionInfo);
+        }
+
         public string PlayerName { get; set; }
         public Flag PlayerFlag { get; set; }
 

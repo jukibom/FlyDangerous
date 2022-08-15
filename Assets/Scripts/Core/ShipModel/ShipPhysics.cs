@@ -187,6 +187,10 @@ namespace Core.ShipModel {
             ShipModel = shipObject;
         }
 
+        public void OnCollision(Collision collision) {
+            _currentFrameCollision = collision;
+        }
+
         // standard OnTriggerEnter doesn't cut the mustard at these speeds so we need to do something a bit more precise
         public void CheckpointCollisionCheck() {
             var frameVelocity = targetRigidbody.velocity * Time.fixedDeltaTime;
@@ -375,14 +379,21 @@ namespace Core.ShipModel {
         }
 
         private void UpdateFeedbackData() {
-            // TODO: Collision force / direction
             _shipFeedbackData.CollisionThisFrame = false;
             _shipFeedbackData.CollisionForceNormalised = 0;
             _shipFeedbackData.CollisionDirection = Vector3.zero;
 
+            if (_currentFrameCollision != null) {
+                _shipFeedbackData.CollisionThisFrame = true;
+                _shipFeedbackData.CollisionForceNormalised = _currentFrameCollision.relativeVelocity.magnitude / FlightParameters.maxBoostSpeed;
+                _shipFeedbackData.CollisionDirection = _currentFrameCollision.relativeVelocity.normalized;
+            }
+
+            _currentFrameCollision = null;
+
+
             // TODO: rest of boost progress
             _shipFeedbackData.BoostProgressNormalised = _isBoosting ? _currentBoostTime / FlightParameters.totalBoostTime : 0;
-
             _shipFeedbackData.ShipShake = ShipModel?.ShipShake.CurrentShakeAmount ?? 0;
         }
 
