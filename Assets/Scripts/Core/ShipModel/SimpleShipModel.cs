@@ -120,10 +120,10 @@ namespace Core.ShipModel {
 
         public void Boost(float boostTime) {
             IEnumerator AnimateBoost() {
-                ShipShake.Shake(1, 0.005f, false, new AnimationCurve(new Keyframe(0, 1), new Keyframe(1, 1)));
+                ShipShake.AddShake(1, 0.005f, false, new AnimationCurve(new Keyframe(0, 1), new Keyframe(1, 1)));
                 yield return new WaitForSeconds(1);
                 externalBoostThrusterAudioSource.Play();
-                ShipShake.Shake(boostTime - 1, 0.01f, true);
+                ShipShake.AddShake(boostTime - 1, 0.01f, true);
                 thrusterController.AnimateBoostThrusters();
             }
 
