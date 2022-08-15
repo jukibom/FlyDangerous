@@ -1,9 +1,8 @@
 ﻿namespace Core.ShipModel.ShipIndicator {
     public class ShipIndicatorData : IShipIndicatorData {
-        public float ThrottlePosition { get; set; }
-        public float Velocity { get; set; }
-        public float Acceleration { get; set; }
-        public float Throttle { get; set; }
+        public float ThrottlePositionNormalised { get; set; }
+        public float VelocityMagnitude { get; set; }
+        public float AccelerationMagnitudeNormalised { get; set; }
         public float GForce { get; set; }
         public float BoostCapacitorPercent { get; set; }
         public bool BoostTimerReady { get; set; }

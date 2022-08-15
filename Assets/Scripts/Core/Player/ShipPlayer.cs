@@ -75,7 +75,7 @@ namespace Core.Player {
                 if (_rigidbody) {
                     _rigidbody.constraints = value ? RigidbodyConstraints.FreezeAll : RigidbodyConstraints.None;
                     // reinitialise rigidbody by resetting the params
-                    ShipPhysics.CurrentParameters = ShipPhysics.CurrentParameters;
+                    ShipPhysics.FlightParameters = ShipPhysics.FlightParameters;
                 }
             }
         }
@@ -231,7 +231,7 @@ namespace Core.Player {
                 // update camera offset if not frozen
                 var velocity = Freeze ? Vector3.zero : transform.InverseTransformDirection(ShipPhysics.Velocity);
                 var frameThrust = Freeze ? Vector3.zero : ShipPhysics.CurrentFrameThrust;
-                User.ShipCameraRig.UpdateCameras(velocity, ShipPhysics.CurrentParameters.maxSpeed, frameThrust, ShipPhysics.CurrentParameters.maxThrust);
+                User.ShipCameraRig.UpdateCameras(velocity, ShipPhysics.FlightParameters.maxSpeed, frameThrust, ShipPhysics.FlightParameters.maxThrust);
 
                 // Send the current floating origin along with the new position and rotation to the server
                 CmdUpdate(FloatingOrigin.Instance.Origin, _transform.localPosition, _transform.rotation, ShipPhysics.Velocity, ShipPhysics.AngularVelocity,
@@ -242,7 +242,7 @@ namespace Core.Player {
         }
 
         #endregion
-        
+
         #region Input
 
         public void SetPitch(float value) {
@@ -342,7 +342,7 @@ namespace Core.Player {
                 // add velocity to position as position would have moved on server at that velocity
                 transform.localPosition += velocity * Time.fixedDeltaTime;
 
-                ShipPhysics.UpdateMotionInformation(velocity, thrust, torque);
+                ShipPhysics.UpdateMotionData(velocity, thrust, torque);
             }
         }
 

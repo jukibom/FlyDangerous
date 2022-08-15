@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Core.Player;
+using Core.ShipModel.Feedback.interfaces;
 using Core.ShipModel.ShipIndicator;
 using Misc;
 using UnityEngine;
@@ -33,7 +34,6 @@ namespace Core.ShipModel {
         [SerializeField] private AudioSource velocityLimitDeactivateAudioSource;
 
         private Coroutine _boostCoroutine;
-        private ShipShake _shipShake;
 
         public virtual void Start() {
             // Init GPU Instance removal colliders 
@@ -62,19 +62,21 @@ namespace Core.ShipModel {
         }
 
         public virtual void FixedUpdate() {
-            _shipShake.Update();
+            ShipShake.Update();
         }
 
         public virtual void OnEnable() {
             Game.OnPauseToggle += PauseAudio;
             Game.OnRestart += Restart;
-            _shipShake = new ShipShake(transform, transform.root.GetComponentInChildren<ShipCameraRig>());
+            ShipShake = new ShipShake(transform, transform.root.GetComponentInChildren<ShipCameraRig>());
         }
 
         public virtual void OnDisable() {
             Game.OnPauseToggle -= PauseAudio;
             Game.OnRestart -= Restart;
         }
+
+        public ShipShake ShipShake { get; private set; }
 
         public MonoBehaviour Entity() {
             return this;
@@ -118,10 +120,10 @@ namespace Core.ShipModel {
 
         public void Boost(float boostTime) {
             IEnumerator AnimateBoost() {
-                _shipShake.Shake(1, 0.005f, false, new AnimationCurve(new Keyframe(0, 1), new Keyframe(1, 1)));
+                ShipShake.Shake(1, 0.005f, false, new AnimationCurve(new Keyframe(0, 1), new Keyframe(1, 1)));
                 yield return new WaitForSeconds(1);
                 externalBoostThrusterAudioSource.Play();
-                _shipShake.Shake(boostTime - 1, 0.01f, true);
+                ShipShake.Shake(boostTime - 1, 0.01f, true);
                 thrusterController.AnimateBoostThrusters();
             }
 
@@ -134,14 +136,25 @@ namespace Core.ShipModel {
 
         #region Rolling Updates
 
-        public virtual void UpdateIndicators(IShipIndicatorData shipIndicatorData) {
+        public virtual void OnShipIndicatorUpdate(IShipIndicatorData shipIndicatorData) {
             /* Indicators are entirely model-specific and should be implemented. */
         }
 
-        public virtual void UpdateMotionInformation(Vector3 velocity, float maxVelocity, Vector3 force, Vector3 torque) {
-            thrusterController.UpdateThrusters(force, torque);
-            smokeEmitter.UpdateThrustTrail(velocity, maxVelocity, force);
-            foliageCollider.radius = MathfExtensions.Remap(0, maxVelocity / 2, 4, 15, velocity.magnitude);
+        public virtual void OnShipMotionUpdate(IShipMotionData shipMotionData) {
+            // TODO: I literally have no idea where this came from or why, maybe do some digging here?
+            // At least it's localised now ...
+            var torqueVec = new Vector3(
+                shipMotionData.CurrentAngularTorqueNormalised.x,
+                MathfExtensions.Remap(-0.8f, 0.8f, -1, 1, shipMotionData.CurrentAngularTorqueNormalised.y),
+                MathfExtensions.Remap(-0.3f, 0.3f, -1, 1, shipMotionData.CurrentAngularTorqueNormalised.z)
+            );
+
+            SimpleDebug.Log(shipMotionData.CurrentLateralVelocity, shipMotionData.MaxLateralVelocity, shipMotionData.CurrentLateralForce);
+
+            thrusterController.UpdateThrusters(shipMotionData.CurrentLateralForce, torqueVec);
+            smokeEmitter.UpdateThrustTrail(shipMotionData.CurrentLateralVelocity, shipMotionData.MaxLateralVelocity,
+                shipMotionData.CurrentLateralForceNormalised);
+            foliageCollider.radius = MathfExtensions.Remap(0, shipMotionData.MaxLateralVelocity / 2, 4, 15, shipMotionData.CurrentLateralVelocity.magnitude);
         }
 
         #endregion
@@ -207,7 +220,7 @@ namespace Core.ShipModel {
         }
 
         private void Restart() {
-            _shipShake.Reset();
+            ShipShake.Reset();
             engineBoostAudioSource.Stop();
             externalBoostAudioSource.Stop();
             externalBoostThrusterAudioSource.Stop();

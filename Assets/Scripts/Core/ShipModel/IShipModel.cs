@@ -1,8 +1,7 @@
-﻿using Core.ShipModel.ShipIndicator;
+﻿using Core.ShipModel.Feedback.interfaces;
 using UnityEngine;
 
 namespace Core.ShipModel {
-
     public enum AssistToggleType {
         Vector,
         Rotational,
@@ -13,7 +12,8 @@ namespace Core.ShipModel {
      * Interface for various kinds of ships. This is updated from the Ship Player - some of which occurs via network
      * commands (those marked as network aware) and some of which on the local client only.
      */
-    public interface IShipModel {
+    public interface IShipModel : IShipIndicators, IShipMotion {
+        public ShipShake ShipShake { get; }
         public MonoBehaviour Entity();
 
         public void SetVisible(bool visible);
@@ -41,15 +41,6 @@ namespace Core.ShipModel {
          * This function is network-aware.
          */
         public void Boost(float boostTime);
-
-        /** Update the cockpit indicators (local player only, others not needed).*/
-        public void UpdateIndicators(IShipIndicatorData shipIndicatorData);
-
-        /**
-         * Anything related to motion - thrusters, sounds etc - based on the velocity, force and torque of the player.
-         * This function is network-aware.
-         */
-        public void UpdateMotionInformation(Vector3 velocity, float maxVelocity, Vector3 force, Vector3 torque);
 
         /**
          * Set the main color of the ship as a html color

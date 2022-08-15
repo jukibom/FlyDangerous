@@ -12,7 +12,6 @@ namespace Core.ShipModel {
 
         private bool _cameraShake;
 
-        private float _shakeAmount;
         private AnimationCurve _shakeAmountCurve;
 
         // How long the object should shake for.
@@ -29,6 +28,8 @@ namespace Core.ShipModel {
             _shipCameraRig = shipCameraRig;
         }
 
+        public float CurrentShakeAmount { get; private set; }
+
         public void Shake(float duration, float amount, bool includeExternalCameraShake = false, AnimationCurve shakeAmountCurve = null) {
             if (shakeAmountCurve == null)
                 shakeAmountCurve = _linearCurve;
@@ -43,14 +44,14 @@ namespace Core.ShipModel {
         public void Reset() {
             _shakeTimer = 0;
             _shakeDuration = 0;
-            _shakeAmount = 0;
+            CurrentShakeAmount = 0;
         }
 
         public void Update() {
             if (_shakeTimer > 0) {
                 var shake = _shakeAmountCurve.Evaluate(_shakeTimer / _shakeDuration);
-                _shakeAmount = shake * _targetShakeAmount;
-                _shipTransform.localPosition = _originalPos + Random.insideUnitSphere * _shakeAmount;
+                CurrentShakeAmount = shake * _targetShakeAmount;
+                _shipTransform.localPosition = _originalPos + Random.insideUnitSphere * CurrentShakeAmount;
                 _shakeTimer -= Time.deltaTime;
 
                 if (_cameraShake && _shipCameraRig != null)

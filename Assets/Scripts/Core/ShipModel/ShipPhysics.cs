@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using Core.Player;
+using Core.ShipModel.Feedback;
+using Core.ShipModel.Feedback.interfaces;
 using Core.ShipModel.ShipIndicator;
 using JetBrains.Annotations;
 using Misc;
@@ -15,14 +17,17 @@ namespace Core.ShipModel {
         // This magic number is the original inertiaTensor of the puffin ship which, unbeknownst to me at the time,
         // is actually calculated from the rigid body bounding boxes and impacts the torque rotation physics.
         // Therefore, to maintains consistency with the flight parameters model this will likely never change.
-        // Good fun!
+        // Good fun! Yay one-way doors!
         private static readonly Vector3 initialInertiaTensor = new(5189.9f, 5825.6f, 1471.6f);
 
         [SerializeField] private Rigidbody targetRigidbody;
+        [SerializeField] private FeedbackEngine feedbackEngine;
 
         // ray-casting without per-frame allocation
         private readonly RaycastHit[] _raycastHits = new RaycastHit[2];
+        private readonly ShipFeedbackData _shipFeedbackData = new();
         private readonly ShipIndicatorData _shipIndicatorData = new();
+        private readonly ShipMotionData _shipMotionData = new();
         private float _boostCapacitorPercent = 100f;
         private bool _boostCharging;
 
@@ -30,7 +35,8 @@ namespace Core.ShipModel {
         private float _boostedMaxSpeedDelta;
         private int _checkpointLayerMask;
         private float _currentBoostTime;
-        private float _gforce;
+        private float _gForce;
+        private bool _isBoostDrop;
         private bool _isBoosting;
 
         private Vector3 _prevVelocity;
@@ -41,8 +47,9 @@ namespace Core.ShipModel {
         private bool _stopShip;
         private float _velocityLimitCap;
 
+        public FeedbackEngine FeedbackEngine => feedbackEngine;
 
-        public ShipParameters CurrentParameters {
+        public ShipParameters FlightParameters {
             get {
                 if (!targetRigidbody || _shipParameters == null) return ShipParameters.Defaults;
                 return _shipParameters;
@@ -66,10 +73,11 @@ namespace Core.ShipModel {
         public Vector3 Velocity => targetRigidbody.velocity;
         public Vector3 AngularVelocity => targetRigidbody.angularVelocity;
         public float VelocityMagnitude => Mathf.Round(targetRigidbody.velocity.magnitude);
-        public float VelocityNormalised => targetRigidbody.velocity.sqrMagnitude / (CurrentParameters.maxBoostSpeed * CurrentParameters.maxBoostSpeed);
-        private bool BoostReady => !_boostCharging && _boostCapacitorPercent > CurrentParameters.boostCapacitorPercentCost;
+        public float VelocityNormalised => targetRigidbody.velocity.sqrMagnitude / (FlightParameters.maxBoostSpeed * FlightParameters.maxBoostSpeed);
+        private bool BoostReady => !_boostCharging && _boostCapacitorPercent > FlightParameters.boostCapacitorPercentCost;
+        public IShipFeedbackData ShipFeedbackData => _shipFeedbackData;
+        public IShipMotionData ShipMotionData => _shipMotionData;
         public IShipIndicatorData ShipIndicatorData => _shipIndicatorData;
-
         public Vector3 CurrentFrameThrust { get; private set; }
         public Vector3 CurrentFrameTorque { get; private set; }
         public float MaxThrustWithBoost { get; private set; }
@@ -112,8 +120,10 @@ namespace Core.ShipModel {
                     _shipModel = value;
                     var entity = _shipModel.Entity();
                     entity.transform.SetParent(transform, false);
+                    FeedbackEngine.SubscribeFeedbackObject(_shipModel);
 
-                    // clean up existing ship
+                    // clean up
+                    if (prev != null) FeedbackEngine.RemoveFeedbackObject(prev);
                     if (prev != value && prev != null) {
                         Debug.Log("Cleaning up existing ... " + prev);
                         Destroy(prev.Entity().gameObject);
@@ -130,7 +140,7 @@ namespace Core.ShipModel {
             targetRigidbody.inertiaTensorRotation = Quaternion.identity;
 
             // init physics
-            CurrentParameters = ShipParameters.Defaults;
+            FlightParameters = ShipParameters.Defaults;
 
             // init checkpoint mask id
             _checkpointLayerMask = LayerMask.NameToLayer("Checkpoint");
@@ -228,16 +238,16 @@ namespace Core.ShipModel {
 
         private void AttemptBoost() {
             if (BoostReady) {
-                _boostCapacitorPercent -= CurrentParameters.boostCapacitorPercentCost;
+                _boostCapacitorPercent -= FlightParameters.boostCapacitorPercentCost;
                 _boostCharging = true;
 
                 IEnumerator DoBoost() {
-                    OnBoost?.Invoke(CurrentParameters.totalBoostTime);
+                    OnBoost?.Invoke(FlightParameters.totalBoostTime);
                     yield return YieldExtensions.WaitForFixedFrames(YieldExtensions.SecondsToFixedFrames(1));
                     _currentBoostTime = 0f;
-                    _boostedMaxSpeedDelta = CurrentParameters.maxBoostSpeed - CurrentParameters.maxSpeed;
+                    _boostedMaxSpeedDelta = FlightParameters.maxBoostSpeed - FlightParameters.maxSpeed;
                     _isBoosting = true;
-                    yield return YieldExtensions.WaitForFixedFrames(YieldExtensions.SecondsToFixedFrames(CurrentParameters.boostRechargeTime));
+                    yield return YieldExtensions.WaitForFixedFrames(YieldExtensions.SecondsToFixedFrames(FlightParameters.boostRechargeTime));
                     _boostCharging = false;
                 }
 
@@ -245,31 +255,31 @@ namespace Core.ShipModel {
             }
         }
 
-        // TODO: clamping should be based on input rather than modifying the rigid body - if gravity pulls you down
+        // TODO: clamping should be based on input rather than modifying the rigid body - if gravity pulls you down (or boost pads increase speed!)
         //   then that's fine, similar to if a collision yeets you into a spinning mess.
         private void ClampMaxSpeed(bool velocityLimiterActive) {
             // clamp max speed if user is holding the velocity limiter button down
             if (velocityLimiterActive) {
-                _velocityLimitCap = Math.Max(_prevVelocity.magnitude, CurrentParameters.minUserLimitedVelocity);
+                _velocityLimitCap = Math.Max(_prevVelocity.magnitude, FlightParameters.minUserLimitedVelocity);
                 targetRigidbody.velocity = Vector3.ClampMagnitude(targetRigidbody.velocity, _velocityLimitCap);
             }
 
             // clamp max speed in general including boost variance (max boost speed minus max speed)
-            targetRigidbody.velocity = Vector3.ClampMagnitude(targetRigidbody.velocity, CurrentParameters.maxSpeed + BoostedMaxSpeedDelta);
+            targetRigidbody.velocity = Vector3.ClampMagnitude(targetRigidbody.velocity, FlightParameters.maxSpeed + BoostedMaxSpeedDelta);
 
             // calculate g-force 
             var currentVelocity = targetRigidbody.velocity;
-            _gforce = Math.Abs((currentVelocity - _prevVelocity).magnitude / (Time.fixedDeltaTime * 9.8f));
+            _gForce = Math.Abs((currentVelocity - _prevVelocity).magnitude / (Time.fixedDeltaTime * 9.8f));
             _prevVelocity = currentVelocity;
         }
 
         private void UpdateBoostStatus() {
             _boostCapacitorPercent = Mathf.Min(100,
-                _boostCapacitorPercent + CurrentParameters.boostCapacityPercentChargeRate * Time.fixedDeltaTime);
+                _boostCapacitorPercent + FlightParameters.boostCapacityPercentChargeRate * Time.fixedDeltaTime);
 
             // copy defaults before modifying
-            MaxThrustWithBoost = CurrentParameters.maxThrust;
-            MaxTorqueWithBoost = CurrentParameters.maxThrust * CurrentParameters.torqueThrustMultiplier;
+            MaxThrustWithBoost = FlightParameters.maxThrust;
+            MaxTorqueWithBoost = FlightParameters.maxThrust * FlightParameters.torqueThrustMultiplier;
             BoostedMaxSpeedDelta = _boostedMaxSpeedDelta;
 
             _currentBoostTime += Time.fixedDeltaTime;
@@ -277,17 +287,17 @@ namespace Core.ShipModel {
             // reduce boost potency over time period
             if (_isBoosting) {
                 // Ease-in (boost drop-off is more dramatic)
-                var t = _currentBoostTime / CurrentParameters.totalBoostTime;
+                var t = _currentBoostTime / FlightParameters.totalBoostTime;
                 var tBoost = 1f - Mathf.Cos(t * Mathf.PI * 0.5f);
                 var tTorque = 1f - Mathf.Cos(t * Mathf.PI * 0.5f);
 
-                MaxThrustWithBoost *= Mathf.Lerp(CurrentParameters.thrustBoostMultiplier, 1, tBoost);
-                MaxTorqueWithBoost *= Mathf.Lerp(CurrentParameters.torqueBoostMultiplier, 1, tTorque);
+                MaxThrustWithBoost *= Mathf.Lerp(FlightParameters.thrustBoostMultiplier, 1, tBoost);
+                MaxTorqueWithBoost *= Mathf.Lerp(FlightParameters.torqueBoostMultiplier, 1, tTorque);
             }
 
             // reduce max speed over time until we're back at 0
             if (_boostedMaxSpeedDelta > 0) {
-                var t = _currentBoostTime / CurrentParameters.boostMaxSpeedDropOffTime;
+                var t = _currentBoostTime / FlightParameters.boostMaxSpeedDropOffTime;
                 // TODO: an actual curve rather than this ... idk what this is
                 // clamp at 1 as it's being used as a multiplier and the first ~2 seconds are at max speed 
                 var tBoostVelocityMax = Math.Min(1, 0.15f - Mathf.Cos(t * Mathf.PI * 0.6f) * -1);
@@ -296,7 +306,7 @@ namespace Core.ShipModel {
                 if (tBoostVelocityMax < 0) _boostedMaxSpeedDelta = 0;
             }
 
-            if (_currentBoostTime > CurrentParameters.totalBoostRotationalTime) _isBoosting = false;
+            if (_currentBoostTime > FlightParameters.totalBoostRotationalTime) _isBoosting = false;
         }
 
         public void UpdateShip(
@@ -316,7 +326,7 @@ namespace Core.ShipModel {
             RotationalFlightAssistActive = rotationalFlightAssistActive;
 
             /* FLIGHT ASSISTS */
-            var maxSpeedWithBoost = CurrentParameters.maxSpeed + BoostedMaxSpeedDelta;
+            var maxSpeedWithBoost = FlightParameters.maxSpeed + BoostedMaxSpeedDelta;
             if (vectorFlightAssistActive) CalculateVectorControlFlightAssist(maxSpeedWithBoost);
             if (rotationalFlightAssistActive) CalculateRotationalDampeningFlightAssist();
 
@@ -325,37 +335,55 @@ namespace Core.ShipModel {
             if (boostButtonHeld) AttemptBoost();
             UpdateBoostStatus();
             ApplyFlightForces();
-            UpdateIndicators();
-            UpdateMotionInformation(Velocity, CurrentFrameThrust, CurrentFrameTorque);
+            UpdateIndicatorData();
+            UpdateMotionData();
+            UpdateFeedbackData();
         }
 
-        public void UpdateMotionInformation(Vector3 velocity, Vector3 thrust, Vector3 torque) {
-            var torqueNormalised = torque / (CurrentParameters.maxThrust * CurrentParameters.torqueThrustMultiplier);
-            var torqueVec = new Vector3(
-                torqueNormalised.x,
-                MathfExtensions.Remap(-0.8f, 0.8f, -1, 1, torqueNormalised.y),
-                MathfExtensions.Remap(-0.3f, 0.3f, -1, 1, torqueNormalised.z)
-            );
-            ShipModel?.UpdateMotionInformation(velocity, CurrentParameters.maxBoostSpeed, thrust / CurrentParameters.maxThrust, torqueVec);
+        // public overrides for motion data, used for multiplayer non-local client RPC calls
+        public void UpdateMotionData(Vector3 velocity, Vector3 thrust, Vector3 torque) {
+            _shipMotionData.CurrentLateralForce = thrust;
+            _shipMotionData.CurrentLateralVelocity = velocity;
+            _shipMotionData.CurrentAngularTorque = torque;
+
+            _shipMotionData.CurrentAngularVelocity = AngularVelocity;
+            _shipMotionData.CurrentLateralForceNormalised = thrust / MaxThrustWithBoost;
+            _shipMotionData.CurrentLateralVelocityNormalised = velocity / FlightParameters.maxBoostSpeed;
+            _shipMotionData.CurrentAngularVelocityNormalised = AngularVelocity / FlightParameters.maxAngularVelocity;
+            _shipMotionData.CurrentAngularTorqueNormalised = torque / (FlightParameters.maxThrust * FlightParameters.torqueThrustMultiplier);
+            _shipMotionData.MaxLateralVelocity = FlightParameters.maxBoostSpeed;
         }
 
+        private void UpdateMotionData() {
+            UpdateMotionData(Velocity, CurrentFrameThrust, CurrentFrameTorque);
+        }
 
-        private void UpdateIndicators() {
-            _shipIndicatorData.ThrottlePosition = VectorFlightAssistActive ? ThrottleRaw : Throttle;
-            _shipIndicatorData.Acceleration = (Math.Abs(CurrentFrameThrust.x) + Math.Abs(CurrentFrameThrust.y) + Math.Abs(CurrentFrameThrust.z)) /
-                                              CurrentParameters.maxThrust;
-            _shipIndicatorData.Velocity = VelocityMagnitude;
-            _shipIndicatorData.Throttle = Throttle;
+        private void UpdateIndicatorData() {
+            _shipIndicatorData.ThrottlePositionNormalised = VectorFlightAssistActive ? ThrottleRaw : Throttle;
+            _shipIndicatorData.AccelerationMagnitudeNormalised =
+                (Math.Abs(CurrentFrameThrust.x) + Math.Abs(CurrentFrameThrust.y) + Math.Abs(CurrentFrameThrust.z)) /
+                FlightParameters.maxThrust;
+            _shipIndicatorData.VelocityMagnitude = VelocityMagnitude;
             _shipIndicatorData.BoostCapacitorPercent = _boostCapacitorPercent;
             _shipIndicatorData.BoostTimerReady = !_boostCharging;
-            _shipIndicatorData.BoostChargeReady = _boostCapacitorPercent > CurrentParameters.boostCapacitorPercentCost;
+            _shipIndicatorData.BoostChargeReady = _boostCapacitorPercent > FlightParameters.boostCapacitorPercentCost;
             _shipIndicatorData.LightsActive = IsShipLightsActive;
             _shipIndicatorData.VelocityLimiterActive = VelocityLimitActive;
             _shipIndicatorData.VectorFlightAssistActive = VectorFlightAssistActive;
             _shipIndicatorData.RotationalFlightAssistActive = RotationalFlightAssistActive;
-            _shipIndicatorData.GForce = _gforce;
+            _shipIndicatorData.GForce = _gForce;
+        }
 
-            ShipModel?.UpdateIndicators(_shipIndicatorData);
+        private void UpdateFeedbackData() {
+            // TODO: Collision force / direction
+            _shipFeedbackData.CollisionThisFrame = false;
+            _shipFeedbackData.CollisionForceNormalised = 0;
+            _shipFeedbackData.CollisionDirection = Vector3.zero;
+
+            // TODO: rest of boost progress
+            _shipFeedbackData.BoostProgressNormalised = _isBoosting ? _currentBoostTime / FlightParameters.totalBoostTime : 0;
+
+            _shipFeedbackData.ShipShake = ShipModel?.ShipShake.CurrentShakeAmount ?? 0;
         }
 
         private void ApplyFlightForces() {
@@ -376,7 +404,7 @@ namespace Core.ShipModel {
             // special case for throttle - no reverse while boosting but, while always going forward, the ship will change
             // vector less harshly while holding back (up to 40%). The whole reverse axis is remapped to 40% for this calculation.
             // any additional throttle thrust not used in boost to be distributed across laterals
-            if (_isBoosting && _currentBoostTime < CurrentParameters.totalBoostTime) {
+            if (_isBoosting && _currentBoostTime < FlightParameters.totalBoostTime) {
                 throttle = Mathf.Min(1f, MathfExtensions.Remap(-1, 0, 0.6f, 1, Throttle));
 
                 var delta = 1f - throttle;
@@ -394,9 +422,9 @@ namespace Core.ShipModel {
             // Get the raw inputs multiplied by the ship params multipliers as a vector3.
             // All components are between -1 and 1.
             var thrustInput = new Vector3(
-                latH * CurrentParameters.latHMultiplier,
-                latV * CurrentParameters.latVMultiplier,
-                throttle * CurrentParameters.throttleMultiplier
+                latH * FlightParameters.latHMultiplier,
+                latV * FlightParameters.latVMultiplier,
+                throttle * FlightParameters.throttleMultiplier
             );
 
             /* THRUST */
@@ -407,10 +435,10 @@ namespace Core.ShipModel {
             /* TORQUE */
             // torque is applied entirely independently, this may be looked at later.
             var torque = new Vector3(
-                Pitch * CurrentParameters.pitchMultiplier * MaxTorqueWithBoost * -1,
-                Yaw * CurrentParameters.yawMultiplier * MaxTorqueWithBoost,
-                Roll * CurrentParameters.rollMultiplier * MaxTorqueWithBoost * -1
-            ) * CurrentParameters
+                Pitch * FlightParameters.pitchMultiplier * MaxTorqueWithBoost * -1,
+                Yaw * FlightParameters.yawMultiplier * MaxTorqueWithBoost,
+                Roll * FlightParameters.rollMultiplier * MaxTorqueWithBoost * -1
+            ) * FlightParameters
                 .inertiaTensorMultiplier; // if we don't counteract the inertial tensor of the rigidbody, the rotation spin would increase in lockstep
 
             targetRigidbody.AddTorque(transform.TransformDirection(torque));
@@ -418,8 +446,8 @@ namespace Core.ShipModel {
             ClampMaxSpeed(VelocityLimitActive);
 
             // output var for indicators etc
-            CurrentFrameThrust = thrustInput * CurrentParameters.maxThrust;
-            CurrentFrameTorque = torque / CurrentParameters.inertiaTensorMultiplier;
+            CurrentFrameThrust = thrustInput * FlightParameters.maxThrust;
+            CurrentFrameTorque = torque / FlightParameters.inertiaTensorMultiplier;
         }
 
         #region Flight Assist Calculations

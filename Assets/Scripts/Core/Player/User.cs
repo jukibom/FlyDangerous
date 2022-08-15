@@ -19,7 +19,7 @@ namespace Core.Player {
         [SerializeField] private ShipCameraRig shipCameraRig;
         [SerializeField] private XROrigin xrOrigin;
         [SerializeField] private InputSystemUIInputModule pauseUIInputModule;
-        [SerializeField] public InGameUI inGameUI;
+        [SerializeField] private InGameUI inGameUI;
 
         [SerializeField] public bool movementEnabled;
         [SerializeField] public bool restartEnabled = true;

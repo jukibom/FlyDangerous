@@ -11,12 +11,12 @@ namespace Core.ShipModel {
         [SerializeField] private Text boostIndicator;
         [SerializeField] private Image boostCapacitorBar;
 
-        public override void UpdateIndicators(IShipIndicatorData shipIndicatorData) {
-            if (velocityIndicator != null) velocityIndicator.text = shipIndicatorData.Velocity.ToString(CultureInfo.InvariantCulture);
+        public override void OnShipIndicatorUpdate(IShipIndicatorData shipIndicatorData) {
+            if (velocityIndicator != null) velocityIndicator.text = shipIndicatorData.VelocityMagnitude.ToString(CultureInfo.InvariantCulture);
 
             if (accelerationBar != null) {
-                accelerationBar.fillAmount = MathfExtensions.Remap(0, 1, 0, 0.755f, shipIndicatorData.Acceleration);
-                accelerationBar.color = Color.Lerp(Color.green, Color.red, shipIndicatorData.Acceleration);
+                accelerationBar.fillAmount = MathfExtensions.Remap(0, 1, 0, 0.755f, shipIndicatorData.AccelerationMagnitudeNormalised);
+                accelerationBar.color = Color.Lerp(Color.green, Color.red, shipIndicatorData.AccelerationMagnitudeNormalised);
             }
 
             if (boostIndicator != null) boostIndicator.text = ((int)shipIndicatorData.BoostCapacitorPercent).ToString(CultureInfo.InvariantCulture) + "%";

@@ -47,7 +47,7 @@ namespace Core.ShipModel {
             base.OnDisable();
         }
 
-        public override void UpdateIndicators(IShipIndicatorData shipIndicatorData) {
+        public override void OnShipIndicatorUpdate(IShipIndicatorData shipIndicatorData) {
             #region Simple Indicators
 
             vectorAssistIcon.color = shipIndicatorData.VectorFlightAssistActive ? _positiveColor : _warningColor;
@@ -65,12 +65,12 @@ namespace Core.ShipModel {
 
             #region Velocity
 
-            velocityIndicatorText.text = shipIndicatorData.Velocity.ToString(CultureInfo.InvariantCulture);
+            velocityIndicatorText.text = shipIndicatorData.VelocityMagnitude.ToString(CultureInfo.InvariantCulture);
 
             // special use-case for acceleration bar depending on flight assist (switch to throttle input)
             var accelerationBarAmount = shipIndicatorData.VectorFlightAssistActive
-                ? shipIndicatorData.ThrottlePosition
-                : shipIndicatorData.Acceleration;
+                ? shipIndicatorData.ThrottlePositionNormalised
+                : shipIndicatorData.AccelerationMagnitudeNormalised;
 
             accelerationBarAmount = Mathf.Lerp(_previousAccelerationBarAmount, accelerationBarAmount, 0.1f);
 

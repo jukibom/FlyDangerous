@@ -95,13 +95,13 @@ namespace Core {
                 if (_shipParameters != null) return _shipParameters;
                 _shipParameters = ShipParameters.Defaults;
                 var player = FdPlayer.FindLocalShipPlayer;
-                if (player != null) _shipParameters = player.ShipPhysics.CurrentParameters;
+                if (player != null) _shipParameters = player.ShipPhysics.FlightParameters;
                 return _shipParameters;
             }
             set {
                 _shipParameters = value;
                 var ship = FdPlayer.FindLocalShipPlayer;
-                if (ship) ship.ShipPhysics.CurrentParameters = _shipParameters;
+                if (ship) ship.ShipPhysics.FlightParameters = _shipParameters;
             }
         }
 
@@ -339,13 +339,13 @@ namespace Core {
                 yield return _levelLoader.HideLoadingScreen();
 
                 // set the game mode
-                ship.User.inGameUI.GameModeUIHandler.SetGameMode(LoadedLevelData.gameType);
+                ship.User.InGameUI.GameModeUIHandler.SetGameMode(LoadedLevelData.gameType);
 
                 // if there's a track, initialise it
                 var track = FindObjectOfType<Track>();
                 if (track) track.InitialiseTrack();
 
-                ship.ShipPhysics.CurrentParameters = ShipParameters;
+                ship.ShipPhysics.FlightParameters = ShipParameters;
 
                 // resume the game
                 if (LoadedLevelData.gameType == GameType.Training) Time.timeScale = 0.5f;
