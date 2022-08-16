@@ -156,8 +156,8 @@ namespace Core.ShipModel {
         }
 
         public virtual void OnShipFeedbackUpdate(IShipFeedbackData shipFeedbackData) {
-            if (shipFeedbackData.CollisionThisFrame)
-                ShipShake.AddShake(0.2f, shipFeedbackData.CollisionForceNormalised / 100);
+            if (shipFeedbackData.CollisionThisFrame && shipFeedbackData.CollisionStartedThisFrame)
+                ShipShake.AddShake(0.1f, shipFeedbackData.CollisionImpactNormalised / 50);
         }
 
         #endregion

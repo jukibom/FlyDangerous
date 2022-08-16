@@ -14,6 +14,8 @@ namespace Core.ShipModel {
 
     public class ShipShake {
         private readonly AnimationCurve _linearCurve = new(new Keyframe(0, 0), new Keyframe(1, 1));
+        private readonly float _maxCameraShake = 0.05f;
+        private readonly float _maxShake = 0.1f;
         private readonly Vector3 _originalPos;
         private readonly List<Shake> _shakes = new();
         [CanBeNull] private readonly ShipCameraRig _shipCameraRig;
@@ -53,22 +55,17 @@ namespace Core.ShipModel {
             CurrentBoostShakeAmount = 0;
 
             // accumulate shakes
-            foreach (var shake in _shakes) {
-                Debug.Log(shake + " " + shake.duration + " " + shake.timer);
+            foreach (var shake in _shakes)
                 if (shake.timer > 0) {
                     var shakeFactor = shake.animationCurve.Evaluate(shake.timer / shake.duration);
                     CurrentShakeAmount += shakeFactor * shake.amount;
                     if (shake.shakeCamera) CurrentBoostShakeAmount += shakeFactor * shake.amount;
                     shake.timer -= Time.deltaTime;
                 }
-            }
 
             // apply shakes
-            _shipTransform.localPosition = _originalPos + Random.insideUnitSphere * CurrentShakeAmount;
-            if (_shipCameraRig != null) {
-                Debug.Log(CurrentBoostShakeAmount);
-                _shipCameraRig.SetBoostEffect(CurrentBoostShakeAmount);
-            }
+            _shipTransform.localPosition = _originalPos + Random.insideUnitSphere * Mathf.Min(_maxShake, CurrentShakeAmount);
+            if (_shipCameraRig != null) _shipCameraRig.SetBoostEffect(Mathf.Min(_maxCameraShake, CurrentBoostShakeAmount));
 
             // clear defunct shakes
             _shakes.RemoveAll(shake => shake.timer <= 0);
