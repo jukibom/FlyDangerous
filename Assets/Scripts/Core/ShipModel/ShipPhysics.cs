@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Linq;
 using Core.Player;
 using Core.ShipModel.Feedback;
 using Core.ShipModel.Feedback.interfaces;
@@ -34,7 +35,9 @@ namespace Core.ShipModel {
         [CanBeNull] private Coroutine _boostCoroutine;
         private float _boostedMaxSpeedDelta;
         private int _checkpointLayerMask;
+        private bool _collisionStartedThisFrame;
         private float _currentBoostTime;
+        [CanBeNull] private Collision _currentFrameCollision;
         private float _gForce;
         private bool _isBoostDrop;
         private bool _isBoosting;
@@ -187,8 +190,9 @@ namespace Core.ShipModel {
             ShipModel = shipObject;
         }
 
-        public void OnCollision(Collision collision) {
+        public void OnCollision(Collision collision, bool startedThisFrame) {
             _currentFrameCollision = collision;
+            _collisionStartedThisFrame = startedThisFrame;
         }
 
         // standard OnTriggerEnter doesn't cut the mustard at these speeds so we need to do something a bit more precise
@@ -379,19 +383,28 @@ namespace Core.ShipModel {
         }
 
         private void UpdateFeedbackData() {
+            // Collision Handling
             _shipFeedbackData.CollisionThisFrame = false;
-            _shipFeedbackData.CollisionForceNormalised = 0;
+            _shipFeedbackData.CollisionImpactNormalised = 0;
             _shipFeedbackData.CollisionDirection = Vector3.zero;
 
             if (_currentFrameCollision != null) {
+                var normalBuffer = _currentFrameCollision.contacts.Aggregate(Vector3.zero, (current, contact) => current + contact.normal);
+                var impact = Mathf.Abs(Vector3.Dot(normalBuffer.normalized, Velocity.normalized));
+
                 _shipFeedbackData.CollisionThisFrame = true;
-                _shipFeedbackData.CollisionForceNormalised = _currentFrameCollision.relativeVelocity.magnitude / FlightParameters.maxBoostSpeed;
+                _shipFeedbackData.CollisionStartedThisFrame = _collisionStartedThisFrame;
+                _shipFeedbackData.CollisionImpactNormalised = impact;
                 _shipFeedbackData.CollisionDirection = _currentFrameCollision.relativeVelocity.normalized;
+
+                // handle boost cap impact (this should go elsewhere!)
+                if (_collisionStartedThisFrame) _boostCapacitorPercent *= 1 - ShipFeedbackData.CollisionImpactNormalised;
             }
 
             _currentFrameCollision = null;
+            _collisionStartedThisFrame = false;
 
-
+            // Boost forces
             // TODO: rest of boost progress
             _shipFeedbackData.BoostProgressNormalised = _isBoosting ? _currentBoostTime / FlightParameters.totalBoostTime : 0;
             _shipFeedbackData.ShipShake = ShipModel?.ShipShake.CurrentShakeAmount ?? 0;

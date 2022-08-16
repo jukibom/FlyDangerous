@@ -42,11 +42,11 @@ namespace Core.Replays {
         }
 
         private void OnCollisionEnter(Collision collisionInfo) {
-            ShipPhysics.OnCollision(collisionInfo);
+            ShipPhysics.OnCollision(collisionInfo, true);
         }
 
         private void OnCollisionStay(Collision collisionInfo) {
-            ShipPhysics.OnCollision(collisionInfo);
+            ShipPhysics.OnCollision(collisionInfo, false);
         }
 
         public string PlayerName { get; set; }
