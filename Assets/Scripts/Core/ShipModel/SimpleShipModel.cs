@@ -23,6 +23,7 @@ namespace Core.ShipModel {
 
         [SerializeField] private List<MeshRenderer> primaryColorMeshes = new();
         [SerializeField] private List<MeshRenderer> accentColorMeshes = new();
+        [SerializeField] private Shield shield;
 
         [SerializeField] private AudioSource engineBoostAudioSource;
         [SerializeField] private AudioSource externalBoostAudioSource;
@@ -156,8 +157,15 @@ namespace Core.ShipModel {
         }
 
         public virtual void OnShipFeedbackUpdate(IShipFeedbackData shipFeedbackData) {
-            if (shipFeedbackData.CollisionThisFrame && shipFeedbackData.CollisionStartedThisFrame)
-                ShipShake.AddShake(0.1f, shipFeedbackData.CollisionImpactNormalised / 50);
+            if (shipFeedbackData.CollisionThisFrame) {
+                if (shipFeedbackData.CollisionStartedThisFrame) {
+                    ShipShake.AddShake(0.1f, shipFeedbackData.CollisionImpactNormalised / 50);
+                    shield.OnImpact(shipFeedbackData.CollisionImpactNormalised, shipFeedbackData.CollisionDirection);
+                }
+                else {
+                    shield.OnContinuousCollision(shipFeedbackData.CollisionDirection);
+                }
+            }
         }
 
         #endregion

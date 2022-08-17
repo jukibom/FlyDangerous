@@ -395,7 +395,8 @@ namespace Core.ShipModel {
                 _shipFeedbackData.CollisionThisFrame = true;
                 _shipFeedbackData.CollisionStartedThisFrame = _collisionStartedThisFrame;
                 _shipFeedbackData.CollisionImpactNormalised = impact;
-                _shipFeedbackData.CollisionDirection = _currentFrameCollision.relativeVelocity.normalized;
+                _shipFeedbackData.CollisionDirection =
+                    targetRigidbody.transform.InverseTransformDirection(normalBuffer.normalized) * -1;
 
                 // handle boost cap impact (this should go elsewhere!)
                 if (_collisionStartedThisFrame) _boostCapacitorPercent *= 1 - ShipFeedbackData.CollisionImpactNormalised;

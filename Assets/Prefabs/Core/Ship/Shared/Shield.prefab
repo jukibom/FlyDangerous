@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2808843471157701060}
   - component: {fileID: 4326133964139788110}
   - component: {fileID: 2947802139602103296}
+  - component: {fileID: 4825925495673997478}
   m_Layer: 6
   m_Name: Shield
   m_TagString: Untagged
@@ -57,6 +58,20 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &4825925495673997478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8025906372094937880}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9712e11745274a18a3f3433c712f3d8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shieldMesh: {fileID: 3733737809236489995}
+  shieldImpactMesh: {fileID: 7415999813184575844}
 --- !u!1001 &2598985318428240783
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -141,6 +156,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 4364ef8a4f8202b48817ba66943bd8da, type: 3}
   m_PrefabInstance: {fileID: 2598985318428240783}
   m_PrefabAsset: {fileID: 0}
+--- !u!23 &3733737809236489995 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 4364ef8a4f8202b48817ba66943bd8da, type: 3}
+  m_PrefabInstance: {fileID: 2598985318428240783}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8154744763083933152
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -220,6 +240,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 4364ef8a4f8202b48817ba66943bd8da, type: 3}
+--- !u!23 &7415999813184575844 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 4364ef8a4f8202b48817ba66943bd8da, type: 3}
+  m_PrefabInstance: {fileID: 8154744763083933152}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8548325041096696331 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 4364ef8a4f8202b48817ba66943bd8da, type: 3}
