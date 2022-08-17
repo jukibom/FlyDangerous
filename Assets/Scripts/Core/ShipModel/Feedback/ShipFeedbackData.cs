@@ -4,7 +4,8 @@ using UnityEngine;
 namespace Core.ShipModel.Feedback {
     public class ShipFeedbackData : IShipFeedbackData {
         public bool CollisionThisFrame { get; set; }
-        public float CollisionForceNormalised { get; set; }
+        public bool CollisionStartedThisFrame { get; set; }
+        public float CollisionImpactNormalised { get; set; }
         public Vector3 CollisionDirection { get; set; }
         public bool BoostDropStart { get; set; }
         public float BoostDropProgressNormalised { get; set; }

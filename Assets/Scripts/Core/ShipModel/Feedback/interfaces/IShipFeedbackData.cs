@@ -3,7 +3,8 @@
 namespace Core.ShipModel.Feedback.interfaces {
     public interface IShipFeedbackData {
         bool CollisionThisFrame { get; }
-        float CollisionForceNormalised { get; }
+        bool CollisionStartedThisFrame { get; }
+        float CollisionImpactNormalised { get; }
         Vector3 CollisionDirection { get; }
         bool BoostDropStart { get; }
         float BoostDropProgressNormalised { get; }
