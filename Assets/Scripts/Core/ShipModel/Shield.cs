@@ -1,4 +1,4 @@
-﻿using Misc;
+using Misc;
 using UnityEngine;
 
 namespace Core.ShipModel {
@@ -31,6 +31,7 @@ namespace Core.ShipModel {
         private void Awake() {
             _shieldMaterial = shieldMesh.material;
             _shieldImpactMaterial = shieldImpactMesh.material;
+            ResetShield();
         }
 
         private void FixedUpdate() {
@@ -50,6 +51,22 @@ namespace Core.ShipModel {
             _shieldImpactMaterial.SetFloat(shieldOffset, _targetTurbulenceOffset);
             _shieldMaterial.SetFloat(shieldFresnel, _targetFresnel);
             _shieldImpactMaterial.SetVector(impactCenter, new Vector4(_targetDirection.x, _targetDirection.y, _targetDirection.z, 0));
+        }
+
+        private void OnEnable() {
+            Game.OnRestart += ResetShield;
+        }
+
+        private void OnDisable() {
+            Game.OnRestart -= ResetShield;
+        }
+
+        private void ResetShield() {
+            _targetShieldImpactAlpha = 0;
+            _targetShieldAlpha = minShieldAlpha;
+            _targetTurbulenceOffset = minTurbulenceOffset;
+            _targetFresnel = maxShieldFresnel;
+            _targetDirection = Vector3.zero;
         }
 
         public void OnImpact(float impactForce, Vector3 impactDirection) {
