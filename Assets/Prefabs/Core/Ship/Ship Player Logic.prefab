@@ -1441,7 +1441,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -363.78223, y: 0}
+  m_SizeDelta: {x: -23.01587, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6796845335227128212
 MonoBehaviour:
@@ -2795,7 +2795,7 @@ MonoBehaviour:
   shipPlayer: {fileID: 0}
   shipArcadeFlightComputer: {fileID: 5730277539670157778}
   shipCameraRig: {fileID: 5431932561140638915}
-  xrRig: {fileID: 8165869082400564573}
+  xrOrigin: {fileID: 1770569352624991730}
   pauseUIInputModule: {fileID: 8165869081867346850}
   inGameUI: {fileID: 4109853613154166522}
   movementEnabled: 1
@@ -4674,9 +4674,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8165869082400564574}
-  - component: {fileID: 8165869082400564573}
+  - component: {fileID: 1770569352624991730}
   m_Layer: 0
-  m_Name: XR Rig
+  m_Name: XR Orgin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4698,7 +4698,7 @@ Transform:
   m_Father: {fileID: 8165869081144972043}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8165869082400564573
+--- !u!114 &1770569352624991730
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4707,15 +4707,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 8165869082400564575}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7448815bd5148434682b3d931066cd10, type: 3}
+  m_Script: {fileID: 11500000, guid: e0cb9aa70a22847b5925ee5f067c10a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Camera: {fileID: 0}
+  m_Camera: {fileID: 8165869081206140119}
   m_OriginBaseGameObject: {fileID: 8165869082400564575}
-  m_CameraFloorOffsetObject: {fileID: 8165869081692100081}
-  m_RequestedTrackingOriginMode: 2
+  m_CameraFloorOffsetObject: {fileID: 0}
+  m_RequestedTrackingOriginMode: 1
   m_CameraYOffset: 0
-  m_CameraGameObject: {fileID: 8165869081206140114}
 --- !u!1 &8194574460070692837
 GameObject:
   m_ObjectHideFlags: 0
@@ -8676,7 +8675,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 358198641968465147, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: Left Trigger  |  Xbox Controller
+      value: Left Trigger  |  Gamepad
       objectReference: {fileID: 0}
     - target: {fileID: 369650819061855176, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Layer
@@ -12168,7 +12167,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1407801522074297125, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: Right Stick Y  |  Xbox Controller
+      value: Right Stick/Y  |  Gamepad
       objectReference: {fileID: 0}
     - target: {fileID: 1407801524019304998, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
@@ -13276,7 +13275,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3485364340392819825, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: Left Trigger  |  Xbox Controller
+      value: Left Trigger  |  Gamepad
       objectReference: {fileID: 0}
     - target: {fileID: 3506199835882203129, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Layer
@@ -13512,7 +13511,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3918633012984332738, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: Right Trigger  |  Xbox Controller
+      value: Right Trigger  |  Gamepad
       objectReference: {fileID: 0}
     - target: {fileID: 3960560803154157151, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_AnchorMax.y
@@ -14456,7 +14455,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4725926569202342945, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: Right Bumper  |  Xbox Controller
+      value: Right Shoulder  |  Gamepad
       objectReference: {fileID: 0}
     - target: {fileID: 4741919553260739474, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_AnchorMax.y
@@ -15026,6 +15025,10 @@ PrefabInstance:
       propertyPath: m_Text
       value: unbound primary
       objectReference: {fileID: 0}
+    - target: {fileID: 5697657815472166664, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
+      propertyPath: m_Text
+      value: Button West  |  Gamepad
+      objectReference: {fileID: 0}
     - target: {fileID: 5707985898903540254, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -15188,7 +15191,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5927291518028737438, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: Right Trigger  |  Xbox Controller
+      value: Right Trigger  |  Gamepad
       objectReference: {fileID: 0}
     - target: {fileID: 5938660241642797667, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_AnchorMax.y
@@ -19540,7 +19543,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7776207559346766080, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: Right Stick X  |  Xbox Controller
+      value: Right Stick/X  |  Gamepad
       objectReference: {fileID: 0}
     - target: {fileID: 7776207559546959875, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
@@ -19616,7 +19619,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7881742123241550881, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: Left Stick X  |  Xbox Controller
+      value: Left Stick/X  |  Gamepad
       objectReference: {fileID: 0}
     - target: {fileID: 7885272104485802658, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_AnchorMax.y
@@ -19628,7 +19631,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7921875074880326349, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: Start  |  Xbox Controller
+      value: Start  |  Gamepad
       objectReference: {fileID: 0}
     - target: {fileID: 7921875075338869539, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
@@ -20596,7 +20599,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8290151776064166168, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: Left Bumper  |  Xbox Controller
+      value: Left Shoulder  |  Gamepad
       objectReference: {fileID: 0}
     - target: {fileID: 8290151776556648694, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
@@ -21352,7 +21355,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9047179913964891302, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_Text
-      value: Left Stick Y  |  Xbox Controller
+      value: Left Stick/Y  |  Gamepad
       objectReference: {fileID: 0}
     - target: {fileID: 9047179914919684931, guid: 599038888aa0c8546847d93bf32fad59, type: 3}
       propertyPath: m_EffectColor.a
@@ -22748,7 +22751,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6291702348123345465, guid: 7f6395d7f158695469e04e970e119e8d, type: 3}
       propertyPath: m_Value
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6291702348231333095, guid: 7f6395d7f158695469e04e970e119e8d, type: 3}
       propertyPath: m_SizeDelta.y
@@ -22756,7 +22759,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6291702348231333095, guid: 7f6395d7f158695469e04e970e119e8d, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -7488
+      value: -8415
       objectReference: {fileID: 0}
     - target: {fileID: 6291702348586179442, guid: 7f6395d7f158695469e04e970e119e8d, type: 3}
       propertyPath: m_AnchorMax.x

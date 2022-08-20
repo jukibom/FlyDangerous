@@ -13,6 +13,7 @@ namespace Core.ShipModel {
         [SerializeField] private float minTurbulenceOffset = 0.2f;
         [SerializeField] private float maxTurbulenceOffset = 1.5f;
         [SerializeField] private float maxShieldAlpha = 50f;
+        [SerializeField] private float minShieldFresnel = 5f;
         [SerializeField] private float maxShieldFresnel = 40f;
         private Material _shieldImpactMaterial;
 
@@ -37,7 +38,7 @@ namespace Core.ShipModel {
             _targetShieldAlpha = Mathf.Clamp(_targetShieldAlpha, 0.2f, maxShieldAlpha);
             _targetShieldImpactAlpha = Mathf.Clamp(_targetShieldImpactAlpha, 0, 1);
             _targetTurbulenceOffset = Mathf.Clamp(_targetTurbulenceOffset, minTurbulenceOffset, maxTurbulenceOffset);
-            _targetFresnel = Mathf.Clamp(_targetFresnel, 10, maxShieldFresnel);
+            _targetFresnel = Mathf.Clamp(_targetFresnel, minShieldFresnel, maxShieldFresnel);
 
             _shieldMaterial.SetFloat(alpha, _targetShieldAlpha);
             _shieldImpactMaterial.SetFloat(alpha, _targetShieldImpactAlpha);
@@ -50,7 +51,7 @@ namespace Core.ShipModel {
         public void OnImpact(float impactForce, Vector3 impactDirection) {
             _targetShieldImpactAlpha += impactForce;
             _targetShieldAlpha += impactForce * maxShieldAlpha;
-            _targetTurbulenceOffset = MathfExtensions.Remap(0, 1, minTurbulenceOffset, maxTurbulenceOffset, impactForce);
+            _targetTurbulenceOffset += MathfExtensions.Remap(0, 1, minTurbulenceOffset, maxTurbulenceOffset, impactForce);
             _targetDirection = impactDirection;
             _targetFresnel -= impactForce * maxShieldFresnel;
         }
