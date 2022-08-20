@@ -12,7 +12,11 @@ namespace Core.ShipModel {
         [SerializeField] private MeshRenderer shieldImpactMesh;
         [SerializeField] private float minTurbulenceOffset = 0.2f;
         [SerializeField] private float maxTurbulenceOffset = 1.5f;
-        [SerializeField] private float maxShieldAlpha = 50f;
+        [SerializeField] private float minShieldAlpha = 0.1f;
+        [SerializeField] private float maxShieldAlpha = 3f;
+        [SerializeField] private float minImpactShieldAlpha;
+        [SerializeField] private float maxImpactShieldAlpha = 3f;
+        [SerializeField] private float shieldImpactForceAlphaMultiplier = 3f;
         [SerializeField] private float minShieldFresnel = 5f;
         [SerializeField] private float maxShieldFresnel = 40f;
         private Material _shieldImpactMaterial;
@@ -31,12 +35,12 @@ namespace Core.ShipModel {
 
         private void FixedUpdate() {
             _targetShieldImpactAlpha = Mathf.Lerp(_targetShieldImpactAlpha, 0, 0.05f);
-            _targetShieldAlpha = Mathf.Lerp(_targetShieldAlpha, 0, 0.01f);
-            _targetTurbulenceOffset = Mathf.Lerp(_targetTurbulenceOffset, 0, 0.01f);
+            _targetShieldAlpha = Mathf.Lerp(_targetShieldAlpha, minShieldAlpha, 0.01f);
+            _targetTurbulenceOffset = Mathf.Lerp(_targetTurbulenceOffset, minTurbulenceOffset, 0.01f);
             _targetFresnel = Mathf.Lerp(_targetFresnel, maxShieldFresnel, 0.01f);
 
-            _targetShieldAlpha = Mathf.Clamp(_targetShieldAlpha, 0.2f, maxShieldAlpha);
-            _targetShieldImpactAlpha = Mathf.Clamp(_targetShieldImpactAlpha, 0, 1);
+            _targetShieldAlpha = Mathf.Clamp(_targetShieldAlpha, minShieldAlpha, maxShieldAlpha);
+            _targetShieldImpactAlpha = Mathf.Clamp(_targetShieldImpactAlpha, minImpactShieldAlpha, maxImpactShieldAlpha);
             _targetTurbulenceOffset = Mathf.Clamp(_targetTurbulenceOffset, minTurbulenceOffset, maxTurbulenceOffset);
             _targetFresnel = Mathf.Clamp(_targetFresnel, minShieldFresnel, maxShieldFresnel);
 
@@ -49,7 +53,7 @@ namespace Core.ShipModel {
         }
 
         public void OnImpact(float impactForce, Vector3 impactDirection) {
-            _targetShieldImpactAlpha += impactForce;
+            _targetShieldImpactAlpha += impactForce * shieldImpactForceAlphaMultiplier;
             _targetShieldAlpha += impactForce * maxShieldAlpha;
             _targetTurbulenceOffset += MathfExtensions.Remap(0, 1, minTurbulenceOffset, maxTurbulenceOffset, impactForce);
             _targetDirection = impactDirection;
