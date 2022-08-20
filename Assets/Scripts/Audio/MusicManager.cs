@@ -17,6 +17,7 @@ namespace Audio {
 
         private void OnEnable() {
             _audioSource = GetComponent<AudioSource>();
+            _audioSource.priority = 0;
             _volume = _audioSource.volume;
             AudioSettings.OnAudioConfigurationChanged += OnAudioConfigurationChanged;
         }
