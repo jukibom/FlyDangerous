@@ -276,9 +276,7 @@ namespace Core.ShipModel {
             targetRigidbody.velocity = Vector3.ClampMagnitude(targetRigidbody.velocity, FlightParameters.maxSpeed + BoostedMaxSpeedDelta);
 
             // calculate g-force 
-            var currentVelocity = targetRigidbody.velocity;
-            _gForce = Math.Abs((currentVelocity - _prevVelocity).magnitude / (Time.fixedDeltaTime * 9.8f));
-            _prevVelocity = currentVelocity;
+            _gForce = Math.Abs((Velocity - _prevVelocity).magnitude / (Time.fixedDeltaTime * 9.8f));
         }
 
         private void UpdateBoostStatus() {
@@ -346,6 +344,8 @@ namespace Core.ShipModel {
             UpdateIndicatorData();
             UpdateMotionData();
             UpdateFeedbackData();
+
+            _prevVelocity = Velocity;
         }
 
         // public overrides for motion data, used for multiplayer non-local client RPC calls
@@ -390,7 +390,7 @@ namespace Core.ShipModel {
 
             if (_currentFrameCollision != null) {
                 var normalBuffer = _currentFrameCollision.contacts.Aggregate(Vector3.zero, (current, contact) => current + contact.normal);
-                var impact = Mathf.Abs(Vector3.Dot(normalBuffer.normalized, Velocity.normalized));
+                var impact = Mathf.Abs(Vector3.Dot(normalBuffer.normalized, _prevVelocity.normalized));
 
                 _shipFeedbackData.CollisionThisFrame = true;
                 _shipFeedbackData.CollisionStartedThisFrame = _collisionStartedThisFrame;
