@@ -37,7 +37,7 @@ namespace Core.ShipModel {
         private void FixedUpdate() {
             _targetShieldImpactAlpha = Mathf.Lerp(_targetShieldImpactAlpha, 0, 0.05f);
             _targetShieldAlpha = Mathf.Lerp(_targetShieldAlpha, minShieldAlpha, 0.01f);
-            _targetTurbulenceOffset = Mathf.Lerp(_targetTurbulenceOffset, minTurbulenceOffset, 0.01f);
+            _targetTurbulenceOffset = Mathf.Lerp(_targetTurbulenceOffset, minTurbulenceOffset, 0.03f);
             _targetFresnel = Mathf.Lerp(_targetFresnel, maxShieldFresnel, 0.01f);
 
             _targetShieldAlpha = Mathf.Clamp(_targetShieldAlpha, minShieldAlpha, maxShieldAlpha);
