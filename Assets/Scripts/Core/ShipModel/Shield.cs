@@ -62,7 +62,7 @@ namespace Core.ShipModel {
 
         public void OnContinuousCollision(Vector3 collisionDirection) {
             _targetDirection = Vector3.Lerp(_targetDirection, collisionDirection, 0.01f);
-            _targetShieldImpactAlpha += 0.01f;
+            _targetShieldImpactAlpha += 0.01f * shieldImpactForceAlphaMultiplier;
             _targetShieldAlpha += 0.01f * maxShieldAlpha;
             _targetTurbulenceOffset += 0.01f;
             _targetFresnel -= 0.01f * maxShieldFresnel;
