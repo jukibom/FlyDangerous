@@ -16,6 +16,7 @@ Fixes:
     * Was previously possible to unset protected bindings (which cannot then be rebound!)
     * Fixed (hopefully!) occasional rare crash on terrain load (#190)
     * Level panels load data in once per frame (Level UI element, ghosts, leaderboard entries) to eliminate stutter during menu transitions
+    * Collision detection should be more accurate at high speeds (speculative detection mode increased collision size with velocity!)
 
 0.5.7
 New:
