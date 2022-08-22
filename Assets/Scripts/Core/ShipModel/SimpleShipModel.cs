@@ -63,7 +63,7 @@ namespace Core.ShipModel {
         }
 
         public virtual void FixedUpdate() {
-            ShipShake.Update();
+            ShipShake.FixedUpdate();
         }
 
         public virtual void OnEnable() {
@@ -150,7 +150,7 @@ namespace Core.ShipModel {
                 MathfExtensions.Remap(-0.3f, 0.3f, -1, 1, shipMotionData.CurrentAngularTorqueNormalised.z)
             );
 
-            thrusterController.UpdateThrusters(shipMotionData.CurrentLateralForce, torqueVec);
+            thrusterController.UpdateThrusters(shipMotionData.CurrentLateralForceNormalised, torqueVec);
             smokeEmitter.UpdateThrustTrail(shipMotionData.CurrentLateralVelocity, shipMotionData.MaxLateralVelocity,
                 shipMotionData.CurrentLateralForceNormalised);
             foliageCollider.radius = MathfExtensions.Remap(0, shipMotionData.MaxLateralVelocity / 2, 4, 15, shipMotionData.CurrentLateralVelocity.magnitude);
