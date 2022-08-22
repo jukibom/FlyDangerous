@@ -30,6 +30,7 @@ namespace Core.ShipModel {
         }
 
         public float CurrentShakeAmount { get; private set; }
+        public float CurrentShakeAmountNormalised => CurrentShakeAmount / _maxCameraShake;
         public float CurrentBoostShakeAmount { get; private set; }
 
         public void AddShake(float duration, float amount, bool includeExternalCameraShake = false, AnimationCurve shakeAmountCurve = null) {
@@ -50,7 +51,7 @@ namespace Core.ShipModel {
             CurrentShakeAmount = 0;
         }
 
-        public void Update() {
+        public void FixedUpdate() {
             CurrentShakeAmount = 0;
             CurrentBoostShakeAmount = 0;
 
