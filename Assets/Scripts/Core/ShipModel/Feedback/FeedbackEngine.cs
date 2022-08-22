@@ -7,13 +7,13 @@ namespace Core.ShipModel.Feedback {
     public class FeedbackEngine : MonoBehaviour {
         [SerializeField] private ShipPhysics shipPhysics;
         private readonly List<IShipFeedback> _shipFeedbackSubscribers = new();
-        private readonly List<IShipIndicators> _shipIndicatorSubscribers = new();
+        private readonly List<IShipInstruments> _shipIndicatorSubscribers = new();
         private readonly List<IShipMotion> _shipMotionSubscribers = new();
 
-        private void Update() {
+        private void FixedUpdate() {
             UpdateShipFeedback(shipPhysics.ShipFeedbackData);
             UpdateShipMotion(shipPhysics.ShipMotionData);
-            UpdateShipIndicators(shipPhysics.ShipIndicatorData);
+            UpdateShipIndicators(shipPhysics.ShipInstrumentData);
         }
 
         /**
@@ -25,7 +25,7 @@ namespace Core.ShipModel.Feedback {
                 _shipFeedbackSubscribers.Add(shipFeedback);
             if (feedbackObject is IShipMotion shipMotion)
                 _shipMotionSubscribers.Add(shipMotion);
-            if (feedbackObject is IShipIndicators shipIndicators)
+            if (feedbackObject is IShipInstruments shipIndicators)
                 _shipIndicatorSubscribers.Add(shipIndicators);
         }
 
@@ -38,7 +38,7 @@ namespace Core.ShipModel.Feedback {
                 _shipFeedbackSubscribers.Remove(shipFeedback);
             if (feedbackObject is IShipMotion shipMotion)
                 _shipMotionSubscribers.Remove(shipMotion);
-            if (feedbackObject is IShipIndicators shipIndicators)
+            if (feedbackObject is IShipInstruments shipIndicators)
                 _shipIndicatorSubscribers.Remove(shipIndicators);
         }
 
@@ -61,9 +61,9 @@ namespace Core.ShipModel.Feedback {
         /**
          * Update every subscriber with ship indicator data.
          */
-        private void UpdateShipIndicators(IShipIndicatorData shipIndicatorData) {
+        private void UpdateShipIndicators(IShipInstrumentData shipInstrumentData) {
             foreach (var shipIndicatorSubscriber in _shipIndicatorSubscribers)
-                shipIndicatorSubscriber.OnShipIndicatorUpdate(shipIndicatorData);
+                shipIndicatorSubscriber.OnShipIndicatorUpdate(shipInstrumentData);
         }
     }
 }

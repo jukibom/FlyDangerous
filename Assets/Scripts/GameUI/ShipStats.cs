@@ -1,4 +1,5 @@
 using System.Globalization;
+using Core.ShipModel.Feedback.interfaces;
 using Core.ShipModel.ShipIndicator;
 using Misc;
 using UnityEngine;
@@ -6,7 +7,7 @@ using UnityEngine.UI;
 
 namespace GameUI {
     [RequireComponent(typeof(CanvasGroup))]
-    public class ShipStats : MonoBehaviour {
+    public class ShipStats : MonoBehaviour, IShipInstruments {
         // indicator UI
         // TODO: move this somewhere 
         [SerializeField] private Text velocityIndicatorText;
@@ -39,19 +40,15 @@ namespace GameUI {
             _canvasGroup = GetComponent<CanvasGroup>();
         }
 
-        public void SetStatsVisible(bool visible) {
-            _targetUIAlpha = visible ? 1 : -1;
-        }
-
-        public void UpdateIndicators(IShipIndicatorData shipIndicatorData) {
+        public void OnShipIndicatorUpdate(IShipInstrumentData shipInstrumentData) {
             #region Velocity
 
-            velocityIndicatorText.text = shipIndicatorData.VelocityMagnitude.ToString(CultureInfo.InvariantCulture);
+            velocityIndicatorText.text = shipInstrumentData.VelocityMagnitude.ToString(CultureInfo.InvariantCulture);
 
             // special use-case for acceleration bar depending on flight assist (switch to throttle input)
-            var accelerationBarAmount = shipIndicatorData.VectorFlightAssistActive
-                ? shipIndicatorData.ThrottlePositionNormalised
-                : shipIndicatorData.AccelerationMagnitudeNormalised;
+            var accelerationBarAmount = shipInstrumentData.VectorFlightAssistActive
+                ? shipInstrumentData.ThrottlePositionNormalised
+                : shipInstrumentData.AccelerationMagnitudeNormalised;
 
             accelerationBarAmount = Mathf.Lerp(_previousAccelerationBarAmount, accelerationBarAmount, 0.1f);
 
@@ -61,7 +58,7 @@ namespace GameUI {
             accelerationBar.transform.localRotation = Quaternion.Euler(0, 0, 45);
             accelerationBar.fillClockwise = true;
             var accelerationBarBaseActiveColor = _activeColor;
-            if (shipIndicatorData.VectorFlightAssistActive && accelerationBarAmount < 0) {
+            if (shipInstrumentData.VectorFlightAssistActive && accelerationBarAmount < 0) {
                 accelerationBar.color = _notificationColor;
                 accelerationBarBaseActiveColor = _notificationColor;
                 accelerationBar.transform.localRotation = Quaternion.Euler(0, 0, 135);
@@ -83,36 +80,40 @@ namespace GameUI {
 
             #region Boost
 
-            boostIndicatorText.text = ((int)shipIndicatorData.BoostCapacitorPercent).ToString(CultureInfo.InvariantCulture) + "%";
+            boostIndicatorText.text = ((int)shipInstrumentData.BoostCapacitorPercent).ToString(CultureInfo.InvariantCulture) + "%";
             boostCapacitorBar.fillAmount = Mathf.Lerp(
                 boostCapacitorBar.fillAmount,
-                MathfExtensions.Remap(0, 100, 0, 0.755f, shipIndicatorData.BoostCapacitorPercent),
+                MathfExtensions.Remap(0, 100, 0, 0.755f, shipInstrumentData.BoostCapacitorPercent),
                 0.1f
             );
 
-            if (shipIndicatorData.BoostCapacitorPercent > 80)
+            if (shipInstrumentData.BoostCapacitorPercent > 80)
                 boostCapacitorBar.color = Color.Lerp(_activeColor, _positiveColor,
                     MathfExtensions.Remap(
                         80,
                         90,
-                        0, 1, shipIndicatorData.BoostCapacitorPercent
+                        0, 1, shipInstrumentData.BoostCapacitorPercent
                     )
                 );
-            else if (shipIndicatorData.BoostCapacitorPercent < 30f)
+            else if (shipInstrumentData.BoostCapacitorPercent < 30f)
                 boostCapacitorBar.color = Color.Lerp(_activeColor, _warningColor,
-                    MathfExtensions.Remap(30, 15, 0, 1, shipIndicatorData.BoostCapacitorPercent));
+                    MathfExtensions.Remap(30, 15, 0, 1, shipInstrumentData.BoostCapacitorPercent));
             else
                 boostCapacitorBar.color = _activeColor;
 
-            var boostWarningColor = shipIndicatorData.BoostTimerReady ? _notificationColor : _warningColor;
-            boostReadyIcon.color = shipIndicatorData.BoostTimerReady && shipIndicatorData.BoostChargeReady ? _positiveColor : boostWarningColor;
-            boostChargeText.text = shipIndicatorData.BoostTimerReady && shipIndicatorData.BoostChargeReady
+            var boostWarningColor = shipInstrumentData.BoostTimerReady ? _notificationColor : _warningColor;
+            boostReadyIcon.color = shipInstrumentData.BoostTimerReady && shipInstrumentData.BoostChargeReady ? _positiveColor : boostWarningColor;
+            boostChargeText.text = shipInstrumentData.BoostTimerReady && shipInstrumentData.BoostChargeReady
                 ? "BOOST READY"
-                : !shipIndicatorData.BoostTimerReady
+                : !shipInstrumentData.BoostTimerReady
                     ? "BOOSTING"
                     : "BOOST CHARGING";
 
-            #endregion
+            #endregion }
+        }
+
+        public void SetStatsVisible(bool visible) {
+            _targetUIAlpha = visible ? 1 : -1;
         }
     }
 }

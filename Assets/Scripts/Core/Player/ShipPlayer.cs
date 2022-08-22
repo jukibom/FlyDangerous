@@ -136,6 +136,9 @@ namespace Core.Player {
             else
                 FloatingOrigin.Instance.FocalTransform = transform;
 
+            // register local player UI 
+            ShipPhysics.FeedbackEngine.SubscribeFeedbackObject(user.InGameUI.ShipStats);
+
             SetFlightAssistFromDefaults();
 
             var profile = ShipProfile.FromPreferences();
@@ -225,8 +228,6 @@ namespace Core.Player {
             if (isLocalPlayer && IsReady) {
                 ShipPhysics.UpdateShip(_pitchInput, _rollInput, _yawInput, _throttleInput, _latHInput, _latVInput, _boostButtonHeld, _velocityLimiterActive,
                     IsVectorFlightAssistActive, IsRotationalFlightAssistActive);
-
-                user.InGameUI.ShipStats.UpdateIndicators(ShipPhysics.ShipIndicatorData);
 
                 // update camera offset if not frozen
                 var velocity = Freeze ? Vector3.zero : transform.InverseTransformDirection(ShipPhysics.Velocity);

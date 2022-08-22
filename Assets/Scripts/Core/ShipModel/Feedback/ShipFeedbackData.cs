@@ -7,10 +7,12 @@ namespace Core.ShipModel.Feedback {
         public bool CollisionStartedThisFrame { get; set; }
         public float CollisionImpactNormalised { get; set; }
         public Vector3 CollisionDirection { get; set; }
-        public bool BoostDropStart { get; set; }
+        public bool IsBoostDropActive { get; set; }
+        public bool IsBoostThrustActive { get; set; }
+        public bool BoostDropStartThisFrame { get; set; }
         public float BoostDropProgressNormalised { get; set; }
-        public bool BoostStart { get; set; }
-        public float BoostProgressNormalised { get; set; }
+        public bool BoostThrustStartThisFrame { get; set; }
+        public float BoostThrustProgressNormalised { get; set; }
         public float ShipShake { get; set; }
     }
 }

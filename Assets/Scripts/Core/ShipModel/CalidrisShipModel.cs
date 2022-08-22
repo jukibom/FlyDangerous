@@ -47,30 +47,30 @@ namespace Core.ShipModel {
             base.OnDisable();
         }
 
-        public override void OnShipIndicatorUpdate(IShipIndicatorData shipIndicatorData) {
+        public override void OnShipIndicatorUpdate(IShipInstrumentData shipInstrumentData) {
             #region Simple Indicators
 
-            vectorAssistIcon.color = shipIndicatorData.VectorFlightAssistActive ? _positiveColor : _warningColor;
-            vectorAssistText.text = shipIndicatorData.VectorFlightAssistActive ? "VFA\nON" : "VFA\nOFF";
+            vectorAssistIcon.color = shipInstrumentData.VectorFlightAssistActive ? _positiveColor : _warningColor;
+            vectorAssistText.text = shipInstrumentData.VectorFlightAssistActive ? "VFA\nON" : "VFA\nOFF";
 
-            rotationalAssistIcon.color = shipIndicatorData.RotationalFlightAssistActive ? _positiveColor : _warningColor;
-            rotationAssistText.text = shipIndicatorData.RotationalFlightAssistActive ? "RFA\nON" : "RFA\nOFF";
+            rotationalAssistIcon.color = shipInstrumentData.RotationalFlightAssistActive ? _positiveColor : _warningColor;
+            rotationAssistText.text = shipInstrumentData.RotationalFlightAssistActive ? "RFA\nON" : "RFA\nOFF";
 
-            velocityLimiterIcon.color = shipIndicatorData.VelocityLimiterActive ? _activeColor : _disabledColor;
-            velocityLimiterText.text = shipIndicatorData.VelocityLimiterActive ? "V-LIM\nON" : "V-LIM\nOFF";
+            velocityLimiterIcon.color = shipInstrumentData.VelocityLimiterActive ? _activeColor : _disabledColor;
+            velocityLimiterText.text = shipInstrumentData.VelocityLimiterActive ? "V-LIM\nON" : "V-LIM\nOFF";
 
-            shipLightIcon.color = shipIndicatorData.LightsActive ? _activeColor : _disabledColor;
+            shipLightIcon.color = shipInstrumentData.LightsActive ? _activeColor : _disabledColor;
 
             #endregion
 
             #region Velocity
 
-            velocityIndicatorText.text = shipIndicatorData.VelocityMagnitude.ToString(CultureInfo.InvariantCulture);
+            velocityIndicatorText.text = shipInstrumentData.VelocityMagnitude.ToString(CultureInfo.InvariantCulture);
 
             // special use-case for acceleration bar depending on flight assist (switch to throttle input)
-            var accelerationBarAmount = shipIndicatorData.VectorFlightAssistActive
-                ? shipIndicatorData.ThrottlePositionNormalised
-                : shipIndicatorData.AccelerationMagnitudeNormalised;
+            var accelerationBarAmount = shipInstrumentData.VectorFlightAssistActive
+                ? shipInstrumentData.ThrottlePositionNormalised
+                : shipInstrumentData.AccelerationMagnitudeNormalised;
 
             accelerationBarAmount = Mathf.Lerp(_previousAccelerationBarAmount, accelerationBarAmount, 0.1f);
 
@@ -80,7 +80,7 @@ namespace Core.ShipModel {
             accelerationBar.transform.localRotation = Quaternion.Euler(0, 0, 45);
             accelerationBar.fillClockwise = true;
             var accelerationBarBaseActiveColor = _activeColor;
-            if (shipIndicatorData.VectorFlightAssistActive && accelerationBarAmount < 0) {
+            if (shipInstrumentData.VectorFlightAssistActive && accelerationBarAmount < 0) {
                 accelerationBar.color = _notificationColor;
                 accelerationBarBaseActiveColor = _notificationColor;
                 accelerationBar.transform.localRotation = Quaternion.Euler(0, 0, 135);
@@ -102,32 +102,32 @@ namespace Core.ShipModel {
 
             #region Boost
 
-            boostIndicatorText.text = ((int)shipIndicatorData.BoostCapacitorPercent).ToString(CultureInfo.InvariantCulture) + "%";
+            boostIndicatorText.text = ((int)shipInstrumentData.BoostCapacitorPercent).ToString(CultureInfo.InvariantCulture) + "%";
             boostCapacitorBar.fillAmount = Mathf.Lerp(
                 boostCapacitorBar.fillAmount,
-                MathfExtensions.Remap(0, 100, 0, 0.755f, shipIndicatorData.BoostCapacitorPercent),
+                MathfExtensions.Remap(0, 100, 0, 0.755f, shipInstrumentData.BoostCapacitorPercent),
                 0.1f
             );
 
-            if (shipIndicatorData.BoostCapacitorPercent > 80)
+            if (shipInstrumentData.BoostCapacitorPercent > 80)
                 boostCapacitorBar.color = Color.Lerp(_activeColor, _positiveColor,
                     MathfExtensions.Remap(
                         80,
                         90,
-                        0, 1, shipIndicatorData.BoostCapacitorPercent
+                        0, 1, shipInstrumentData.BoostCapacitorPercent
                     )
                 );
-            else if (shipIndicatorData.BoostCapacitorPercent < 30f)
+            else if (shipInstrumentData.BoostCapacitorPercent < 30f)
                 boostCapacitorBar.color = Color.Lerp(_activeColor, _warningColor,
-                    MathfExtensions.Remap(30, 15, 0, 1, shipIndicatorData.BoostCapacitorPercent));
+                    MathfExtensions.Remap(30, 15, 0, 1, shipInstrumentData.BoostCapacitorPercent));
             else
                 boostCapacitorBar.color = _activeColor;
 
-            var boostWarningColor = shipIndicatorData.BoostTimerReady ? _notificationColor : _warningColor;
-            boostReadyIcon.color = shipIndicatorData.BoostTimerReady && shipIndicatorData.BoostChargeReady ? _positiveColor : boostWarningColor;
-            boostChargeText.text = shipIndicatorData.BoostTimerReady && shipIndicatorData.BoostChargeReady
+            var boostWarningColor = shipInstrumentData.BoostTimerReady ? _notificationColor : _warningColor;
+            boostReadyIcon.color = shipInstrumentData.BoostTimerReady && shipInstrumentData.BoostChargeReady ? _positiveColor : boostWarningColor;
+            boostChargeText.text = shipInstrumentData.BoostTimerReady && shipInstrumentData.BoostChargeReady
                 ? "BOOST READY"
-                : !shipIndicatorData.BoostTimerReady
+                : !shipInstrumentData.BoostTimerReady
                     ? "BOOSTING"
                     : "BOOST CHARGING";
 
@@ -135,7 +135,7 @@ namespace Core.ShipModel {
 
             #region GForce
 
-            var gForce = Mathf.Lerp(_previousGForce, shipIndicatorData.GForce, 0.05f);
+            var gForce = Mathf.Lerp(_previousGForce, shipInstrumentData.GForce, 0.05f);
             _previousGForce = gForce;
             gForceNumberText.text = $"{gForce:0.0}";
 

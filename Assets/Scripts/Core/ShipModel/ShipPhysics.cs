@@ -27,13 +27,14 @@ namespace Core.ShipModel {
         // ray-casting without per-frame allocation
         private readonly RaycastHit[] _raycastHits = new RaycastHit[2];
         private readonly ShipFeedbackData _shipFeedbackData = new();
-        private readonly ShipIndicatorData _shipIndicatorData = new();
+        private readonly ShipInstrumentData _shipInstrumentData = new();
         private readonly ShipMotionData _shipMotionData = new();
         private float _boostCapacitorPercent = 100f;
-        private bool _boostCharging;
 
         [CanBeNull] private Coroutine _boostCoroutine;
         private float _boostedMaxSpeedDelta;
+        private int _boostProgressTicks;
+        private bool _boostRecharging;
         private int _checkpointLayerMask;
         private bool _collisionStartedThisFrame;
         private float _currentBoostTime;
@@ -77,10 +78,10 @@ namespace Core.ShipModel {
         public Vector3 AngularVelocity => targetRigidbody.angularVelocity;
         public float VelocityMagnitude => Mathf.Round(targetRigidbody.velocity.magnitude);
         public float VelocityNormalised => targetRigidbody.velocity.sqrMagnitude / (FlightParameters.maxBoostSpeed * FlightParameters.maxBoostSpeed);
-        private bool BoostReady => !_boostCharging && _boostCapacitorPercent > FlightParameters.boostCapacitorPercentCost;
+        private bool BoostReady => !_boostRecharging && _boostCapacitorPercent > FlightParameters.boostCapacitorPercentCost;
         public IShipFeedbackData ShipFeedbackData => _shipFeedbackData;
         public IShipMotionData ShipMotionData => _shipMotionData;
-        public IShipIndicatorData ShipIndicatorData => _shipIndicatorData;
+        public IShipInstrumentData ShipInstrumentData => _shipInstrumentData;
         public Vector3 CurrentFrameThrust { get; private set; }
         public Vector3 CurrentFrameTorque { get; private set; }
         public float MaxThrustWithBoost { get; private set; }
@@ -159,7 +160,7 @@ namespace Core.ShipModel {
             _prevVelocity = Vector3.zero;
             _stopShip = false;
             if (includeBoost) {
-                _boostCharging = false;
+                _boostRecharging = false;
                 _isBoosting = false;
                 _boostCapacitorPercent = 100f;
                 if (_boostCoroutine != null) StopCoroutine(_boostCoroutine);
@@ -247,7 +248,9 @@ namespace Core.ShipModel {
         private void AttemptBoost() {
             if (BoostReady) {
                 _boostCapacitorPercent -= FlightParameters.boostCapacitorPercentCost;
-                _boostCharging = true;
+                _boostRecharging = true;
+                _boostProgressTicks = 0;
+                _currentBoostTime = 0f;
 
                 IEnumerator DoBoost() {
                     OnBoost?.Invoke(FlightParameters.totalBoostTime);
@@ -256,7 +259,7 @@ namespace Core.ShipModel {
                     _boostedMaxSpeedDelta = FlightParameters.maxBoostSpeed - FlightParameters.maxSpeed;
                     _isBoosting = true;
                     yield return YieldExtensions.WaitForFixedFrames(YieldExtensions.SecondsToFixedFrames(FlightParameters.boostRechargeTime));
-                    _boostCharging = false;
+                    _boostRecharging = false;
                 }
 
                 _boostCoroutine = StartCoroutine(DoBoost());
@@ -312,7 +315,11 @@ namespace Core.ShipModel {
                 if (tBoostVelocityMax < 0) _boostedMaxSpeedDelta = 0;
             }
 
-            if (_currentBoostTime > FlightParameters.totalBoostRotationalTime) _isBoosting = false;
+            _boostProgressTicks++;
+            if (_currentBoostTime > FlightParameters.totalBoostRotationalTime) {
+                _isBoosting = false;
+                _boostProgressTicks = 0;
+            }
         }
 
         public void UpdateShip(
@@ -341,7 +348,7 @@ namespace Core.ShipModel {
             if (boostButtonHeld) AttemptBoost();
             UpdateBoostStatus();
             ApplyFlightForces();
-            UpdateIndicatorData();
+            UpdateInstrumentData();
             UpdateMotionData();
             UpdateFeedbackData();
 
@@ -350,6 +357,13 @@ namespace Core.ShipModel {
 
         // public overrides for motion data, used for multiplayer non-local client RPC calls
         public void UpdateMotionData(Vector3 velocity, Vector3 thrust, Vector3 torque) {
+            _shipMotionData.AccelerationMagnitudeNormalised =
+                (Math.Abs(CurrentFrameThrust.x) + Math.Abs(CurrentFrameThrust.y) + Math.Abs(CurrentFrameThrust.z)) /
+                FlightParameters.maxThrust;
+            _shipMotionData.VelocityMagnitude = VelocityMagnitude;
+
+            _shipMotionData.GForce = _gForce;
+
             _shipMotionData.CurrentLateralForce = thrust;
             _shipMotionData.CurrentLateralVelocity = velocity;
             _shipMotionData.CurrentAngularTorque = torque;
@@ -366,20 +380,23 @@ namespace Core.ShipModel {
             UpdateMotionData(Velocity, CurrentFrameThrust, CurrentFrameTorque);
         }
 
-        private void UpdateIndicatorData() {
-            _shipIndicatorData.ThrottlePositionNormalised = VectorFlightAssistActive ? ThrottleRaw : Throttle;
-            _shipIndicatorData.AccelerationMagnitudeNormalised =
+        private void UpdateInstrumentData() {
+            _shipInstrumentData.AccelerationMagnitudeNormalised =
                 (Math.Abs(CurrentFrameThrust.x) + Math.Abs(CurrentFrameThrust.y) + Math.Abs(CurrentFrameThrust.z)) /
                 FlightParameters.maxThrust;
-            _shipIndicatorData.VelocityMagnitude = VelocityMagnitude;
-            _shipIndicatorData.BoostCapacitorPercent = _boostCapacitorPercent;
-            _shipIndicatorData.BoostTimerReady = !_boostCharging;
-            _shipIndicatorData.BoostChargeReady = _boostCapacitorPercent > FlightParameters.boostCapacitorPercentCost;
-            _shipIndicatorData.LightsActive = IsShipLightsActive;
-            _shipIndicatorData.VelocityLimiterActive = VelocityLimitActive;
-            _shipIndicatorData.VectorFlightAssistActive = VectorFlightAssistActive;
-            _shipIndicatorData.RotationalFlightAssistActive = RotationalFlightAssistActive;
-            _shipIndicatorData.GForce = _gForce;
+            _shipInstrumentData.VelocityMagnitude = VelocityMagnitude;
+            _shipInstrumentData.GForce = _gForce;
+            _shipInstrumentData.PitchPositionNormalised = Pitch;
+            _shipInstrumentData.RollPositionNormalised = Roll;
+            _shipInstrumentData.YawPositionNormalised = Yaw;
+            _shipInstrumentData.ThrottlePositionNormalised = VectorFlightAssistActive ? ThrottleRaw : Throttle;
+            _shipInstrumentData.BoostCapacitorPercent = _boostCapacitorPercent;
+            _shipInstrumentData.BoostTimerReady = !_boostRecharging;
+            _shipInstrumentData.BoostChargeReady = _boostCapacitorPercent > FlightParameters.boostCapacitorPercentCost;
+            _shipInstrumentData.LightsActive = IsShipLightsActive;
+            _shipInstrumentData.VelocityLimiterActive = VelocityLimitActive;
+            _shipInstrumentData.VectorFlightAssistActive = VectorFlightAssistActive;
+            _shipInstrumentData.RotationalFlightAssistActive = RotationalFlightAssistActive;
         }
 
         private void UpdateFeedbackData() {
@@ -406,8 +423,16 @@ namespace Core.ShipModel {
             _collisionStartedThisFrame = false;
 
             // Boost forces
-            // TODO: rest of boost progress
-            _shipFeedbackData.BoostProgressNormalised = _isBoosting ? _currentBoostTime / FlightParameters.totalBoostTime : 0;
+            var secondInFrames = (int)(1 / Time.fixedDeltaTime);
+            _shipFeedbackData.IsBoostDropActive = _boostRecharging && !_isBoosting;
+            _shipFeedbackData.IsBoostThrustActive = _isBoosting;
+            _shipFeedbackData.BoostDropStartThisFrame = (_isBoosting || _boostRecharging) && _boostProgressTicks == 1;
+            _shipFeedbackData.BoostThrustStartThisFrame = (_isBoosting || _boostRecharging) && _boostProgressTicks == secondInFrames; // one second after start
+            _shipFeedbackData.BoostDropProgressNormalised =
+                _shipFeedbackData.IsBoostDropActive ? MathfExtensions.Remap(0, secondInFrames, 0, 1, _boostProgressTicks) : 0;
+            _shipFeedbackData.BoostThrustProgressNormalised = _isBoosting ? _currentBoostTime / (FlightParameters.totalBoostTime + 1) : 0;
+
+            // Misc
             _shipFeedbackData.ShipShake = ShipModel?.ShipShake.CurrentShakeAmount ?? 0;
         }
 

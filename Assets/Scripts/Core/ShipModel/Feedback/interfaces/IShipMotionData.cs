@@ -2,6 +2,9 @@
 
 namespace Core.ShipModel.Feedback.interfaces {
     public interface IShipMotionData {
+        float VelocityMagnitude { get; }
+        float AccelerationMagnitudeNormalised { get; }
+        float GForce { get; }
         Vector3 CurrentLateralVelocity { get; }
         Vector3 CurrentLateralForce { get; }
         Vector3 CurrentAngularVelocity { get; }

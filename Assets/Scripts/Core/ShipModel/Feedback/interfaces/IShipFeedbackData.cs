@@ -6,10 +6,12 @@ namespace Core.ShipModel.Feedback.interfaces {
         bool CollisionStartedThisFrame { get; }
         float CollisionImpactNormalised { get; }
         Vector3 CollisionDirection { get; }
-        bool BoostDropStart { get; }
+        bool IsBoostDropActive { get; }
+        bool IsBoostThrustActive { get; }
+        bool BoostDropStartThisFrame { get; }
         float BoostDropProgressNormalised { get; }
-        bool BoostStart { get; }
-        float BoostProgressNormalised { get; }
+        bool BoostThrustStartThisFrame { get; }
+        float BoostThrustProgressNormalised { get; }
         float ShipShake { get; }
     }
 }
