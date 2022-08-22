@@ -1,14 +1,21 @@
 ﻿using Bhaptics.Tact.Unity;
 using Core.ShipModel.Feedback.interfaces;
 using Core.ShipModel.ShipIndicator;
-using Misc;
 using UnityEngine;
 
 namespace Core.ShipModel.Feedback.bHaptics {
-    public class BHapticsShipFeedback : MonoBehaviour, IShipFeedback, IShipIndicators {
-
+    public class BHapticsShipFeedback : MonoBehaviour, IShipFeedback, IShipInstruments {
+        [SerializeField] private FeedbackEngine feedbackEngine;
         [SerializeField] private HapticClip boostDropVestHapticSource;
         [SerializeField] private HapticClip boostFireVestHapticSource;
+
+        private void OnEnable() {
+            feedbackEngine.SubscribeFeedbackObject(this);
+        }
+
+        private void OnDisable() {
+            feedbackEngine.RemoveFeedbackObject(this);
+        }
 
         // public void Collision(float forceNormalised, Vector3 direction) {
         //     Debug.Log("Collision! " + forceNormalised + " " + direction);
@@ -39,11 +46,16 @@ namespace Core.ShipModel.Feedback.bHaptics {
         // }
 
         public void OnShipFeedbackUpdate(IShipFeedbackData shipFeedbackData) {
-            Debug.Log("Feedback update");
+            // if (shipFeedbackData.BoostDropStartThisFrame) Debug.Log("BOOST DROP START " + Time.frameCount);
+            // if (shipFeedbackData.BoostThrustStartThisFrame) Debug.Log("BOOST THRUST START " + Time.frameCount);
+            // if (shipFeedbackData.IsBoostDropActive) Debug.Log("Drop " + shipFeedbackData.BoostDropProgressNormalised);
+            // if (shipFeedbackData.IsBoostThrustActive) Debug.Log("Thrust " + shipFeedbackData.BoostThrustProgressNormalised);
+            //
+            // if (shipFeedbackData.IsBoostDropActive)
+            //     boostDropVestHapticSource.Play(0.5f, 1, 0, shipFeedbackData.BoostDropProgressNormalised);
         }
 
-        public void OnShipIndicatorUpdate(IShipIndicatorData shipIndicatorData) {
-            Debug.Log("Indicator Update");
+        public void OnShipIndicatorUpdate(IShipInstrumentData shipInstrumentData) {
         }
     }
 }
