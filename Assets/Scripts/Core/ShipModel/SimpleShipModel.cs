@@ -159,10 +159,11 @@ namespace Core.ShipModel {
         public virtual void OnShipFeedbackUpdate(IShipFeedbackData shipFeedbackData) {
             if (shipFeedbackData.CollisionThisFrame) {
                 if (shipFeedbackData.CollisionStartedThisFrame) {
-                    ShipShake.AddShake(0.1f, shipFeedbackData.CollisionImpactNormalised / 50);
+                    ShipShake.AddShake(0.2f, shipFeedbackData.CollisionImpactNormalised * Time.fixedDeltaTime);
                     shield.OnImpact(shipFeedbackData.CollisionImpactNormalised, shipFeedbackData.CollisionDirection);
                 }
                 else {
+                    ShipShake.AddShake(Time.fixedDeltaTime * 3, shipFeedbackData.CollisionImpactNormalised * 3 * Time.fixedDeltaTime);
                     shield.OnContinuousCollision(shipFeedbackData.CollisionDirection);
                 }
             }
