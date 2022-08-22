@@ -407,7 +407,8 @@ namespace Core.ShipModel {
 
             if (_currentFrameCollision != null) {
                 var normalBuffer = _currentFrameCollision.contacts.Aggregate(Vector3.zero, (current, contact) => current + contact.normal);
-                var impact = Mathf.Abs(Vector3.Dot(normalBuffer.normalized, _prevVelocity.normalized));
+                var impact = _currentFrameCollision.relativeVelocity.magnitude / _shipParameters.maxBoostSpeed *
+                             Mathf.Abs(Vector3.Dot(normalBuffer.normalized, _prevVelocity.normalized));
 
                 _shipFeedbackData.CollisionThisFrame = true;
                 _shipFeedbackData.CollisionStartedThisFrame = _collisionStartedThisFrame;
@@ -426,6 +427,8 @@ namespace Core.ShipModel {
             var secondInFrames = (int)(1 / Time.fixedDeltaTime);
             _shipFeedbackData.IsBoostDropActive = _boostRecharging && !_isBoosting;
             _shipFeedbackData.IsBoostThrustActive = _isBoosting;
+            _shipFeedbackData.BoostDropTotalDuration = 1;
+            _shipFeedbackData.BoostThrustTotalDuration = FlightParameters.totalBoostTime - 1;
             _shipFeedbackData.BoostDropStartThisFrame = (_isBoosting || _boostRecharging) && _boostProgressTicks == 1;
             _shipFeedbackData.BoostThrustStartThisFrame = (_isBoosting || _boostRecharging) && _boostProgressTicks == secondInFrames; // one second after start
             _shipFeedbackData.BoostDropProgressNormalised =
@@ -433,7 +436,7 @@ namespace Core.ShipModel {
             _shipFeedbackData.BoostThrustProgressNormalised = _isBoosting ? _currentBoostTime / (FlightParameters.totalBoostTime + 1) : 0;
 
             // Misc
-            _shipFeedbackData.ShipShake = ShipModel?.ShipShake.CurrentShakeAmount ?? 0;
+            _shipFeedbackData.ShipShake = ShipModel?.ShipShake.CurrentShakeAmountNormalised ?? 0;
         }
 
         private void ApplyFlightForces() {
