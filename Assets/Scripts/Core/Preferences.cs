@@ -51,6 +51,7 @@ namespace Core {
                 case "showSpaceDust":
                 case "invertArcadeYAxis":
                 case "graphics-terrain-details":
+                case "graphics-vsync":
                     return true;
 
                 case "graphics-ssao":
