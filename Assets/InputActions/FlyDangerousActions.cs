@@ -518,12 +518,12 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Alt Flight Controls Toggle"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""3f4865cf-7469-487c-b73f-6b2f669985cd"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""Mouse Raw Delta"",

@@ -447,7 +447,15 @@ namespace Core.Player {
 
         [UsedImplicitly]
         public void OnAltFlightControlsToggle(InputValue value) {
-            _alternateFlightControls = !_alternateFlightControls;
+            var altFlightBindType = Preferences.Instance.GetString("altFlightBindType");
+            if (altFlightBindType == "toggle" && value.isPressed) {
+                _alternateFlightControls = !_alternateFlightControls;
+                UIAudioManager.Instance.Play(_alternateFlightControls ? "ship-alternate-flight-on" : "ship-alternate-flight-off");
+            }
+            else if (altFlightBindType == "hold") {
+                _alternateFlightControls = value.isPressed;
+                UIAudioManager.Instance.Play(_alternateFlightControls ? "ship-alternate-flight-on" : "ship-alternate-flight-off");
+            }
 
             // restore values based on current input 
             // (if we do nothing then last held, unbound input will continue forever and if we reset to 0 then any held, identical input will also be reset!)
@@ -458,8 +466,6 @@ namespace Core.Player {
             _throttle = _alternateFlightControls ? playerInput.actions["Throttle Alt"].ReadValue<float>() : playerInput.actions["Throttle"].ReadValue<float>();
             _lateralH = _alternateFlightControls ? playerInput.actions["LateralH Alt"].ReadValue<float>() : playerInput.actions["LateralH"].ReadValue<float>();
             _lateralV = _alternateFlightControls ? playerInput.actions["LateralV Alt"].ReadValue<float>() : playerInput.actions["LateralV"].ReadValue<float>();
-
-            UIAudioManager.Instance.Play(_alternateFlightControls ? "ship-alternate-flight-on" : "ship-alternate-flight-off");
         }
 
         [UsedImplicitly]

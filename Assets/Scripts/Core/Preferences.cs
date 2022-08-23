@@ -177,6 +177,8 @@ namespace Core {
                     return "toggle";
                 case "mouseLookBindType":
                     return "toggle";
+                case "altFlightBindType":
+                    return "toggle";
                 default:
                     Debug.LogWarning("Attempted to get preference " + key + " with no default specified");
                     return "";
