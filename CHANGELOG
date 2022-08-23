@@ -3,9 +3,9 @@ New:
     * Device hot-plugging now supported (#153)
     * Added a bit of spit and polish to the title screen
     * Player profile ship is now shown on title screen
-    * Added visual shield effect for collisions
-    * Added engine capacity penalty on collision proportional to impact
-    * Added Ability to disable VSync
+    * Added visual shield effect for collisions (#183)
+    * Added engine capacity penalty on collision proportional to impact (#183)
+    * Added Ability to disable VSync (#185 )
     
 Changed:
     * Interior Calidris cockpit glass reflectivity not quite so glaring anymore 
@@ -19,7 +19,8 @@ Fixes:
     * Fixed (hopefully!) occasional rare crash on terrain load (#190)
     * Level panels load data in once per frame (Level UI element, ghosts, leaderboard entries) to eliminate stutter during menu transitions
     * Collision detection should be more accurate at high speeds (speculative detection mode increased collision size with velocity!)
-    * Incorrect dimensions on some flags in dropdown
+    * Incorrect dimensions on some flags in dropdown (#196)
+    * Fixed toggling alternate flight controls resetting axes (#178)
 
 0.5.7
 New:

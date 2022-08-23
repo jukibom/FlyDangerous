@@ -447,17 +447,19 @@ namespace Core.Player {
 
         [UsedImplicitly]
         public void OnAltFlightControlsToggle(InputValue value) {
-            _pitch = 0;
-            _roll = 0;
-            _yaw = 0;
-            _throttle = 0;
-            _lateralH = 0;
-            _lateralV = 0;
             _alternateFlightControls = !_alternateFlightControls;
-            if (_alternateFlightControls)
-                UIAudioManager.Instance.Play("ship-alternate-flight-on");
-            else
-                UIAudioManager.Instance.Play("ship-alternate-flight-off");
+
+            // restore values based on current input 
+            // (if we do nothing then last held, unbound input will continue forever and if we reset to 0 then any held, identical input will also be reset!)
+            var playerInput = GetComponent<PlayerInput>();
+            _pitch = _alternateFlightControls ? playerInput.actions["Pitch Alt"].ReadValue<float>() : playerInput.actions["Pitch"].ReadValue<float>();
+            _roll = _alternateFlightControls ? playerInput.actions["Roll Alt"].ReadValue<float>() : playerInput.actions["Roll"].ReadValue<float>();
+            _yaw = _alternateFlightControls ? playerInput.actions["Yaw Alt"].ReadValue<float>() : playerInput.actions["Yaw"].ReadValue<float>();
+            _throttle = _alternateFlightControls ? playerInput.actions["Throttle Alt"].ReadValue<float>() : playerInput.actions["Throttle"].ReadValue<float>();
+            _lateralH = _alternateFlightControls ? playerInput.actions["LateralH Alt"].ReadValue<float>() : playerInput.actions["LateralH"].ReadValue<float>();
+            _lateralV = _alternateFlightControls ? playerInput.actions["LateralV Alt"].ReadValue<float>() : playerInput.actions["LateralV"].ReadValue<float>();
+
+            UIAudioManager.Instance.Play(_alternateFlightControls ? "ship-alternate-flight-on" : "ship-alternate-flight-off");
         }
 
         [UsedImplicitly]
