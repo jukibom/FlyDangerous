@@ -10,6 +10,7 @@ using Misc;
 using UnityEngine;
 
 namespace Core.ShipModel {
+    [RequireComponent(typeof(FeedbackEngine))]
     public class ShipPhysics : MonoBehaviour {
         public delegate void BoostFiredAction(float boostTime);
 
@@ -22,7 +23,6 @@ namespace Core.ShipModel {
         private static readonly Vector3 initialInertiaTensor = new(5189.9f, 5825.6f, 1471.6f);
 
         [SerializeField] private Rigidbody targetRigidbody;
-        [SerializeField] private FeedbackEngine feedbackEngine;
 
         // ray-casting without per-frame allocation
         private readonly RaycastHit[] _raycastHits = new RaycastHit[2];
@@ -39,6 +39,7 @@ namespace Core.ShipModel {
         private bool _collisionStartedThisFrame;
         private float _currentBoostTime;
         [CanBeNull] private Collision _currentFrameCollision;
+        private FeedbackEngine _feedbackEngine;
         private float _gForce;
         private bool _isBoostDrop;
         private bool _isBoosting;
@@ -51,7 +52,7 @@ namespace Core.ShipModel {
         private bool _stopShip;
         private float _velocityLimitCap;
 
-        public FeedbackEngine FeedbackEngine => feedbackEngine;
+        public FeedbackEngine FeedbackEngine => _feedbackEngine ? _feedbackEngine : _feedbackEngine = GetComponent<FeedbackEngine>();
 
         public ShipParameters FlightParameters {
             get {

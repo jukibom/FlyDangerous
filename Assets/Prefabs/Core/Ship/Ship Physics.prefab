@@ -1,51 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &284987931111645817
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4736119545150680307}
-  - component: {fileID: 7187783959109936209}
-  m_Layer: 0
-  m_Name: Feedback Engine
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4736119545150680307
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 284987931111645817}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 4027010446527293585}
-  m_Father: {fileID: 4969557051023498551}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7187783959109936209
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 284987931111645817}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 66a44737eef548a88db4948d2cec1355, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  shipPhysics: {fileID: 1072241050817558044}
 --- !u!1 &3633334740965823626
 GameObject:
   m_ObjectHideFlags: 0
@@ -56,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4969557051023498551}
   - component: {fileID: 1072241050817558044}
+  - component: {fileID: 8904958166780064749}
   m_Layer: 0
   m_Name: Ship Physics
   m_TagString: Untagged
@@ -75,7 +30,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4736119545150680307}
   - {fileID: 2261586734824294475}
   - {fileID: 4136914657196690307}
   m_Father: {fileID: 0}
@@ -94,64 +48,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetRigidbody: {fileID: 0}
-  feedbackEngine: {fileID: 7187783959109936209}
---- !u!1 &4535652988279382225
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4027010446527293585}
-  - component: {fileID: 8487336191842756428}
-  m_Layer: 0
-  m_Name: bHaptics
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4027010446527293585
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4535652988279382225}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4736119545150680307}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8487336191842756428
+--- !u!114 &8904958166780064749
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4535652988279382225}
+  m_GameObject: {fileID: 3633334740965823626}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e15a99e7159c426196fbffd4b0f3973b, type: 3}
+  m_Script: {fileID: 11500000, guid: 66a44737eef548a88db4948d2cec1355, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  feedbackEngine: {fileID: 7187783959109936209}
-  collisionImpactVestHapticClip: {fileID: 11400000, guid: ce3bf3dbd4609ea48bb6343e997a3608, type: 2}
-  boostDropVestHapticClip: {fileID: 11400000, guid: d251384bf2a8a9b49814b756532cd1d9, type: 2}
-  boostFireVestHapticClip: {fileID: 11400000, guid: ce3bf3dbd4609ea48bb6343e997a3608, type: 2}
-  shipShakeVestHapticClip: {fileID: 11400000, guid: 4ea1056da053e7148a51538869924d9a, type: 2}
-  collisionImpactLeftArmHapticClip: {fileID: 11400000, guid: 1aa2b18506ddd764a818692c5827694c, type: 2}
-  boostDropLeftArmHapticClip: {fileID: 11400000, guid: 906c86030979f8e479006bfa9c3032b5, type: 2}
-  boostFireLeftArmHapticClip: {fileID: 11400000, guid: d763e9aba001ff349b2177961cdc1453, type: 2}
-  shipShakeLeftArmHapticClip: {fileID: 11400000, guid: 759eca17b1650f54fb53a6c39ab10f8f, type: 2}
-  collisionImpactRightArmHapticClip: {fileID: 11400000, guid: 0a09576bf69efb84ca97b8a79679795c, type: 2}
-  boostDropRightArmHapticClip: {fileID: 11400000, guid: ba66f6aabb6f8b549abb35175aa7fdb7, type: 2}
-  boostFireRightArmHapticClip: {fileID: 11400000, guid: 7fff5c02bb05004409251195175410b7, type: 2}
-  shipShakeRightArmHapticClip: {fileID: 11400000, guid: e1955ade81d35ad45aaa9ed73a2e3029, type: 2}
+  shipPhysics: {fileID: 0}
 --- !u!1001 &2096375933786169274
 PrefabInstance:
   m_ObjectHideFlags: 0

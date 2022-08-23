@@ -4,16 +4,18 @@ using Core.ShipModel.ShipIndicator;
 using UnityEngine;
 
 namespace Core.ShipModel.Feedback {
+    [RequireComponent(typeof(ShipPhysics))]
     public class FeedbackEngine : MonoBehaviour {
-        [SerializeField] private ShipPhysics shipPhysics;
         private readonly List<IShipFeedback> _shipFeedbackSubscribers = new();
         private readonly List<IShipInstruments> _shipIndicatorSubscribers = new();
         private readonly List<IShipMotion> _shipMotionSubscribers = new();
+        private ShipPhysics _shipPhysics;
+        private ShipPhysics ShipPhysics => _shipPhysics != null ? _shipPhysics : _shipPhysics = GetComponent<ShipPhysics>();
 
         private void FixedUpdate() {
-            UpdateShipFeedback(shipPhysics.ShipFeedbackData);
-            UpdateShipMotion(shipPhysics.ShipMotionData);
-            UpdateShipIndicators(shipPhysics.ShipInstrumentData);
+            UpdateShipFeedback(ShipPhysics.ShipFeedbackData);
+            UpdateShipMotion(ShipPhysics.ShipMotionData);
+            UpdateShipIndicators(ShipPhysics.ShipInstrumentData);
         }
 
         /**

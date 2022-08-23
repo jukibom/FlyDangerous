@@ -1,5 +1,6 @@
 using System.Collections;
 using Core.ShipModel;
+using Core.ShipModel.Feedback.bHaptics;
 using Mirror;
 using UnityEngine;
 
@@ -138,6 +139,9 @@ namespace Core.Player {
 
             // register local player UI 
             ShipPhysics.FeedbackEngine.SubscribeFeedbackObject(user.InGameUI.ShipStats);
+
+            // register bHaptics
+            ShipPhysics.FeedbackEngine.SubscribeFeedbackObject(BHapticsShipFeedback.Instance);
 
             SetFlightAssistFromDefaults();
 

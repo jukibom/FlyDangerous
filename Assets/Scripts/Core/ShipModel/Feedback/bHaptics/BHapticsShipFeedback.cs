@@ -1,12 +1,11 @@
 ﻿using Bhaptics.Tact.Unity;
 using Core.ShipModel.Feedback.interfaces;
 using Core.ShipModel.ShipIndicator;
+using Misc;
 using UnityEngine;
 
 namespace Core.ShipModel.Feedback.bHaptics {
-    public class BHapticsShipFeedback : MonoBehaviour, IShipFeedback, IShipInstruments {
-        [SerializeField] private FeedbackEngine feedbackEngine;
-
+    public class BHapticsShipFeedback : Singleton<BHapticsShipFeedback>, IShipFeedback, IShipInstruments {
         [SerializeField] private VestHapticClip collisionImpactVestHapticClip;
         [SerializeField] private VestHapticClip boostDropVestHapticClip;
         [SerializeField] private VestHapticClip boostFireVestHapticClip;
@@ -22,14 +21,6 @@ namespace Core.ShipModel.Feedback.bHaptics {
 
         // No idea why but `IsPlaying()` always returns false :/
         private float _shakeHapticPlayTime;
-
-        private void OnEnable() {
-            feedbackEngine.SubscribeFeedbackObject(this);
-        }
-
-        private void OnDisable() {
-            feedbackEngine.RemoveFeedbackObject(this);
-        }
 
         public void OnShipFeedbackUpdate(IShipFeedbackData shipFeedbackData) {
             if (shipFeedbackData.BoostDropStartThisFrame) {
