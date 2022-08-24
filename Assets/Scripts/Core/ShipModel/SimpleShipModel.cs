@@ -138,7 +138,6 @@ namespace Core.ShipModel {
             if (_boostCoroutine != null) {
                 StopCoroutine(_boostCoroutine);
                 externalBoostInterruptedAudioSource.Play();
-                // engineBoostAudioSource.Stop();
                 externalBoostAudioSource.Stop();
                 externalBoostThrusterAudioSource.Stop();
             }

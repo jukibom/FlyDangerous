@@ -6,6 +6,10 @@ using UnityEngine.UI;
 
 namespace Core.ShipModel {
     public class CalidrisShipModel : SimpleShipModel {
+        [SerializeField] private AudioSource proximityWarningAudioSource;
+        [SerializeField] private Light proximityWarningLight;
+        [SerializeField] private GameObject proximityWarning;
+
         [SerializeField] private Text velocityIndicatorText;
         [SerializeField] private Image accelerationBar;
 
@@ -36,6 +40,9 @@ namespace Core.ShipModel {
         // Lerping fun
         private float _previousAccelerationBarAmount;
         private float _previousGForce;
+        private float _proximityWarningFlashTimer;
+
+        private float _targetProximityWarning;
 
         public override void OnEnable() {
             Game.OnRestart += Restart;
@@ -138,6 +145,26 @@ namespace Core.ShipModel {
             var gForce = Mathf.Lerp(_previousGForce, shipInstrumentData.GForce, 0.05f);
             _previousGForce = gForce;
             gForceNumberText.text = $"{gForce:0.0}";
+
+            #endregion
+
+            #region Proximity Alert
+
+            float proximity = 0;
+            var showProximityWarning = false;
+            _proximityWarningFlashTimer += Time.fixedDeltaTime;
+            if (shipInstrumentData.ProximityWarning) {
+                proximity = 1 - shipInstrumentData.ProximityWarningSeconds / 5;
+                showProximityWarning = Mathf.Cos(_proximityWarningFlashTimer * 20 / Mathf.PI) > 0;
+            }
+
+            proximityWarning.SetActive(showProximityWarning);
+
+            var lerpAmount = proximity > _targetProximityWarning ? 0.02f : 0.08f;
+            _targetProximityWarning = Mathf.Lerp(_targetProximityWarning, proximity, lerpAmount);
+
+            proximityWarningAudioSource.volume = _targetProximityWarning * 0.05f;
+            proximityWarningLight.intensity = _targetProximityWarning * 0.2f;
 
             #endregion
         }

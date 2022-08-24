@@ -14,5 +14,7 @@
         public bool VelocityLimiterActive { get; set; }
         public bool VectorFlightAssistActive { get; set; }
         public bool RotationalFlightAssistActive { get; set; }
+        public bool ProximityWarning { get; set; }
+        public float ProximityWarningSeconds { get; set; }
     }
 }

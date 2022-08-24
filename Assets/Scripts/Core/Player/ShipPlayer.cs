@@ -249,6 +249,7 @@ namespace Core.Player {
                     ShipPhysics.CurrentFrameThrust, ShipPhysics.CurrentFrameTorque);
 
                 ShipPhysics.CheckpointCollisionCheck();
+                ShipPhysics.GeometryCollisionCheck();
             }
         }
 

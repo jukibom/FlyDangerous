@@ -203,6 +203,7 @@ namespace Core.ShipModel {
         }
 
         // standard OnTriggerEnter doesn't cut the mustard at these speeds so we need to do something a bit more precise
+        // called by ShipPlayer to ensure it's only called on the client!
         public void CheckpointCollisionCheck() {
             var frameVelocity = targetRigidbody.velocity * Time.fixedDeltaTime;
             if (frameVelocity == Vector3.zero) return;
@@ -236,6 +237,19 @@ namespace Core.ShipModel {
                 // Debug.Log("DISTANCE " + distance + $"   Time to hit: {excessTimeToHit}");
                 checkpointFound.Hit(excessTimeToHit);
             }
+        }
+
+        public void GeometryCollisionCheck() {
+            // we want to know up to 5 seconds before a collision happens
+            var velocity = targetRigidbody.velocity;
+            var origin = targetRigidbody.transform.position;
+            var length = velocity.magnitude * 5;
+            var direction = velocity.normalized;
+
+            var isValidHit = Physics.Raycast(origin, direction, out var hitInfo, length, 1);
+
+            _shipInstrumentData.ProximityWarning = isValidHit && _shipMotionData.CurrentLateralVelocityNormalised.magnitude > 0.25f;
+            if (isValidHit) _shipInstrumentData.ProximityWarningSeconds = hitInfo.distance / velocity.magnitude;
         }
 
         public void ShipLightsToggle(Action<bool> shipLightStatus) {
