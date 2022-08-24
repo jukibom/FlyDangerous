@@ -16,11 +16,12 @@ namespace Core.ShipModel {
         [SerializeField] [ColorUsage(true, true)]
         public Color thrustColor;
 
-        [SerializeField] private float thrustHdrMultiplier = 1;
+        [SerializeField] private float thrustColorIntensity = 1;
         [SerializeField] private Color thrustColorBuffer = new(0.1f, 0.1f, 0.1f);
         [SerializeField] public Color thrustRingColor;
 
-        public bool isLarge;
+        [SerializeField] private bool isLarge;
+        [SerializeField] private bool isPreview;
         [Range(0, 1)] [SerializeField] private float targetThrust;
 
         private float _thrust;
@@ -66,7 +67,8 @@ namespace Core.ShipModel {
 
         private void UpdateMaterials() {
             lightSource.color = ThrustColor;
-            var color = (ThrustColor + thrustColorBuffer) * thrustHdrMultiplier;
+            // use base level (no black thrusters) and intensity if it's not a preview (on the profile menu)
+            var color = (ThrustColor + thrustColorBuffer) * (isPreview ? 1 : Mathf.Pow(2, thrustColorIntensity));
             if (_thrusterMaterial != null) {
                 _thrusterMaterial.SetColor(thrustColorProperty, color);
                 _thrusterMaterial.SetColor(thrustRingColorProperty, thrustRingColor);
