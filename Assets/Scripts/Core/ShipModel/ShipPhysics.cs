@@ -285,7 +285,6 @@ namespace Core.ShipModel {
             if (_isBoosting || _isBoostSpooling) {
                 if (_boostCoroutine != null) StopCoroutine(_boostCoroutine);
                 _currentBoostTime = 0f;
-                _boostProgressTicks = 0;
                 _isBoosting = false;
                 _isBoostSpooling = false;
                 OnBoostCancel?.Invoke();
