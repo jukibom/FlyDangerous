@@ -7,15 +7,17 @@ using UnityEngine;
 namespace Core.ShipModel.Feedback.bHaptics {
     public class BHapticsShipFeedback : Singleton<BHapticsShipFeedback>, IShipFeedback, IShipInstruments {
         [SerializeField] private VestHapticClip collisionImpactVestHapticClip;
-        [SerializeField] private VestHapticClip boostDropVestHapticClip;
+        [SerializeField] private VestHapticClip boostSpoolVestHapticClip;
         [SerializeField] private VestHapticClip boostFireVestHapticClip;
         [SerializeField] private VestHapticClip shipShakeVestHapticClip;
+
         [SerializeField] private ArmsHapticClip collisionImpactLeftArmHapticClip;
-        [SerializeField] private ArmsHapticClip boostDropLeftArmHapticClip;
+        [SerializeField] private ArmsHapticClip boostSpoolLeftArmHapticClip;
         [SerializeField] private ArmsHapticClip boostFireLeftArmHapticClip;
         [SerializeField] private ArmsHapticClip shipShakeLeftArmHapticClip;
+
         [SerializeField] private ArmsHapticClip collisionImpactRightArmHapticClip;
-        [SerializeField] private ArmsHapticClip boostDropRightArmHapticClip;
+        [SerializeField] private ArmsHapticClip boostSpoolRightArmHapticClip;
         [SerializeField] private ArmsHapticClip boostFireRightArmHapticClip;
         [SerializeField] private ArmsHapticClip shipShakeRightArmHapticClip;
 
@@ -23,10 +25,10 @@ namespace Core.ShipModel.Feedback.bHaptics {
         private float _shakeHapticPlayTime;
 
         public void OnShipFeedbackUpdate(IShipFeedbackData shipFeedbackData) {
-            if (shipFeedbackData.BoostDropStartThisFrame) {
-                boostDropVestHapticClip.Play(0.3f);
-                boostDropLeftArmHapticClip.Play(0.3f, 2);
-                boostDropRightArmHapticClip.Play(0.3f, 2);
+            if (shipFeedbackData.BoostSpoolStartThisFrame) {
+                boostSpoolVestHapticClip.Play(0.3f);
+                boostSpoolLeftArmHapticClip.Play(0.3f, 2);
+                boostSpoolRightArmHapticClip.Play(0.3f, 2);
             }
 
             if (shipFeedbackData.BoostThrustStartThisFrame) {
@@ -52,7 +54,7 @@ namespace Core.ShipModel.Feedback.bHaptics {
             }
         }
 
-        public void OnShipIndicatorUpdate(IShipInstrumentData shipInstrumentData) {
+        public void OnShipInstrumentUpdate(IShipInstrumentData shipInstrumentData) {
         }
     }
 }

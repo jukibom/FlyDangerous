@@ -47,7 +47,7 @@ namespace Core.ShipModel {
             base.OnDisable();
         }
 
-        public override void OnShipIndicatorUpdate(IShipInstrumentData shipInstrumentData) {
+        public override void OnShipInstrumentUpdate(IShipInstrumentData shipInstrumentData) {
             #region Simple Indicators
 
             vectorAssistIcon.color = shipInstrumentData.VectorFlightAssistActive ? _positiveColor : _warningColor;

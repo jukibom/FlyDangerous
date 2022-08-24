@@ -41,8 +41,8 @@ namespace Core.ShipModel {
         [CanBeNull] private Collision _currentFrameCollision;
         private FeedbackEngine _feedbackEngine;
         private float _gForce;
-        private bool _isBoostDrop;
         private bool _isBoosting;
+        private bool _isBoostSpooling;
 
         private Vector3 _prevVelocity;
 
@@ -426,14 +426,14 @@ namespace Core.ShipModel {
 
             // Boost forces
             var secondInFrames = (int)(1 / Time.fixedDeltaTime);
-            _shipFeedbackData.IsBoostDropActive = _boostRecharging && !_isBoosting;
+            _shipFeedbackData.IsBoostSpooling = _boostRecharging && !_isBoosting;
             _shipFeedbackData.IsBoostThrustActive = _isBoosting;
-            _shipFeedbackData.BoostDropTotalDuration = 1;
+            _shipFeedbackData.BoostSpoolTotalDuration = 1;
             _shipFeedbackData.BoostThrustTotalDuration = FlightParameters.totalBoostTime - 1;
-            _shipFeedbackData.BoostDropStartThisFrame = (_isBoosting || _boostRecharging) && _boostProgressTicks == 1;
+            _shipFeedbackData.BoostSpoolStartThisFrame = (_isBoosting || _boostRecharging) && _boostProgressTicks == 1;
             _shipFeedbackData.BoostThrustStartThisFrame = (_isBoosting || _boostRecharging) && _boostProgressTicks == secondInFrames; // one second after start
-            _shipFeedbackData.BoostDropProgressNormalised =
-                _shipFeedbackData.IsBoostDropActive ? MathfExtensions.Remap(0, secondInFrames, 0, 1, _boostProgressTicks) : 0;
+            _shipFeedbackData.BoostSpoolProgressNormalised =
+                _shipFeedbackData.IsBoostSpooling ? MathfExtensions.Remap(0, secondInFrames, 0, 1, _boostProgressTicks) : 0;
             _shipFeedbackData.BoostThrustProgressNormalised = _isBoosting ? _currentBoostTime / (FlightParameters.totalBoostTime + 1) : 0;
 
             // Misc

@@ -65,7 +65,7 @@ namespace Core.ShipModel.Feedback {
          */
         private void UpdateShipIndicators(IShipInstrumentData shipInstrumentData) {
             foreach (var shipIndicatorSubscriber in _shipIndicatorSubscribers)
-                shipIndicatorSubscriber.OnShipIndicatorUpdate(shipInstrumentData);
+                shipIndicatorSubscriber.OnShipInstrumentUpdate(shipInstrumentData);
         }
     }
 }

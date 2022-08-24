@@ -40,7 +40,7 @@ namespace GameUI {
             _canvasGroup = GetComponent<CanvasGroup>();
         }
 
-        public void OnShipIndicatorUpdate(IShipInstrumentData shipInstrumentData) {
+        public void OnShipInstrumentUpdate(IShipInstrumentData shipInstrumentData) {
             #region Velocity
 
             velocityIndicatorText.text = shipInstrumentData.VelocityMagnitude.ToString(CultureInfo.InvariantCulture);

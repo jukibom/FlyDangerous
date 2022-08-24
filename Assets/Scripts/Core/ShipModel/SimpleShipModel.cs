@@ -137,7 +137,7 @@ namespace Core.ShipModel {
 
         #region Rolling Updates
 
-        public virtual void OnShipIndicatorUpdate(IShipInstrumentData shipInstrumentData) {
+        public virtual void OnShipInstrumentUpdate(IShipInstrumentData shipInstrumentData) {
             /* Indicators are entirely model-specific and should be implemented. */
         }
 
