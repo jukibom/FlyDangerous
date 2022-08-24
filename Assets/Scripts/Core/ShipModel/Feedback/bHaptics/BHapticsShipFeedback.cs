@@ -26,13 +26,13 @@ namespace Core.ShipModel.Feedback.bHaptics {
 
         public void OnShipFeedbackUpdate(IShipFeedbackData shipFeedbackData) {
             if (shipFeedbackData.BoostSpoolStartThisFrame) {
-                boostSpoolVestHapticClip.Play(0.3f);
+                boostSpoolVestHapticClip.Play();
                 boostSpoolLeftArmHapticClip.Play(0.3f, 2);
                 boostSpoolRightArmHapticClip.Play(0.3f, 2);
             }
 
             if (shipFeedbackData.BoostThrustStartThisFrame) {
-                boostFireVestHapticClip.Play();
+                boostFireVestHapticClip.Play(5, 1.5f);
                 boostFireLeftArmHapticClip.Play();
                 boostFireRightArmHapticClip.Play();
             }
