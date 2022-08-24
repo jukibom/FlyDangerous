@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using Misc;
 using UnityEngine;
+using Random = System.Random;
 
 namespace Core.ShipModel {
     public class Shield : MonoBehaviour {
@@ -10,6 +12,9 @@ namespace Core.ShipModel {
 
         [SerializeField] private MeshRenderer shieldMesh;
         [SerializeField] private MeshRenderer shieldImpactMesh;
+        [SerializeField] private AudioSource shieldActivateAudioSource;
+        [SerializeField] private AudioSource collisionAudioSource;
+        [SerializeField] private List<AudioClip> collisionAudioClips;
         [SerializeField] private float minTurbulenceOffset = 0.2f;
         [SerializeField] private float maxTurbulenceOffset = 1.5f;
         [SerializeField] private float minShieldAlpha = 0.1f;
@@ -19,6 +24,7 @@ namespace Core.ShipModel {
         [SerializeField] private float shieldImpactForceAlphaMultiplier = 3f;
         [SerializeField] private float minShieldFresnel = 5f;
         [SerializeField] private float maxShieldFresnel = 40f;
+
         private Material _shieldImpactMaterial;
 
         private Material _shieldMaterial;
@@ -69,16 +75,30 @@ namespace Core.ShipModel {
             _targetDirection = Vector3.zero;
         }
 
-        public void OnImpact(float impactForce, Vector3 impactDirection) {
-            _targetShieldImpactAlpha += impactForce * shieldImpactForceAlphaMultiplier;
-            _targetShieldAlpha += impactForce * maxShieldAlpha;
-            _targetTurbulenceOffset += MathfExtensions.Remap(0, 1, minTurbulenceOffset, maxTurbulenceOffset, impactForce);
+        public void OnImpact(float impactForceNormalised, Vector3 impactDirection) {
+            _targetShieldImpactAlpha += impactForceNormalised * shieldImpactForceAlphaMultiplier;
+            _targetShieldAlpha += impactForceNormalised * maxShieldAlpha;
+            _targetTurbulenceOffset += MathfExtensions.Remap(0, 1, minTurbulenceOffset, maxTurbulenceOffset, impactForceNormalised);
             _targetDirection = impactDirection;
-            _targetFresnel -= impactForce * maxShieldFresnel;
+            _targetFresnel -= impactForceNormalised * maxShieldFresnel;
+
+            var random = new Random();
+            var pitch = MathfExtensions.Remap(0, 1, 0.7f, 1.3f, (float)random.NextDouble());
+
+            shieldActivateAudioSource.transform.localPosition = _targetDirection;
+            shieldActivateAudioSource.pitch = pitch;
+            shieldActivateAudioSource.Play();
+
+            collisionAudioSource.transform.localPosition = _targetDirection;
+            collisionAudioSource.volume = impactForceNormalised * 2;
+            collisionAudioSource.clip = collisionAudioClips[random.Next(collisionAudioClips.Count)];
+            collisionAudioSource.pitch = pitch;
+            collisionAudioSource.Play();
         }
 
         public void OnContinuousCollision(Vector3 collisionDirection) {
             _targetDirection = Vector3.Lerp(_targetDirection, collisionDirection, 0.01f);
+            shieldActivateAudioSource.transform.localPosition = _targetDirection;
             _targetShieldImpactAlpha += 0.01f * shieldImpactForceAlphaMultiplier;
             _targetShieldAlpha += 0.01f * maxShieldAlpha;
             _targetTurbulenceOffset += 0.01f;

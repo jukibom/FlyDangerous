@@ -34,11 +34,13 @@ namespace Core.Replays {
         private void OnEnable() {
             FloatingOrigin.OnFloatingOriginCorrection += PerformCorrection;
             ShipPhysics.OnBoost += ShowBoost;
+            ShipPhysics.OnBoostCancel += CancelBoost;
         }
 
         private void OnDisable() {
             FloatingOrigin.OnFloatingOriginCorrection -= PerformCorrection;
             ShipPhysics.OnBoost -= ShowBoost;
+            ShipPhysics.OnBoostCancel -= CancelBoost;
         }
 
         private void OnCollisionEnter(Collision collisionInfo) {
@@ -73,6 +75,10 @@ namespace Core.Replays {
 
         private void ShowBoost(float boostTime) {
             ShipPhysics.ShipModel?.Boost(boostTime);
+        }
+
+        private void CancelBoost() {
+            ShipPhysics.ShipModel?.BoostCancel();
         }
     }
 }

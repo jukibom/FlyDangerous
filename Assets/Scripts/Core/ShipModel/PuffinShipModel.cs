@@ -11,7 +11,7 @@ namespace Core.ShipModel {
         [SerializeField] private Text boostIndicator;
         [SerializeField] private Image boostCapacitorBar;
 
-        public override void OnShipIndicatorUpdate(IShipInstrumentData shipInstrumentData) {
+        public override void OnShipInstrumentUpdate(IShipInstrumentData shipInstrumentData) {
             if (velocityIndicator != null) velocityIndicator.text = shipInstrumentData.VelocityMagnitude.ToString(CultureInfo.InvariantCulture);
 
             if (accelerationBar != null) {

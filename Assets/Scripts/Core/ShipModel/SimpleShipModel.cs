@@ -28,6 +28,7 @@ namespace Core.ShipModel {
         [SerializeField] private AudioSource engineBoostAudioSource;
         [SerializeField] private AudioSource externalBoostAudioSource;
         [SerializeField] private AudioSource externalBoostThrusterAudioSource;
+        [SerializeField] private AudioSource externalBoostInterruptedAudioSource;
         [SerializeField] private AudioSource simpleToggleAudioSource;
         [SerializeField] private AudioSource assistActivateAudioSource;
         [SerializeField] private AudioSource assistDeactivateAudioSource;
@@ -131,6 +132,16 @@ namespace Core.ShipModel {
             engineBoostAudioSource.Play();
             externalBoostAudioSource.Play();
             _boostCoroutine = StartCoroutine(AnimateBoost());
+        }
+
+        public void BoostCancel() {
+            if (_boostCoroutine != null) {
+                StopCoroutine(_boostCoroutine);
+                externalBoostInterruptedAudioSource.Play();
+                // engineBoostAudioSource.Stop();
+                externalBoostAudioSource.Stop();
+                externalBoostThrusterAudioSource.Stop();
+            }
         }
 
         #endregion

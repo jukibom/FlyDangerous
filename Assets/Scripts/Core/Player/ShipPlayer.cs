@@ -1,6 +1,7 @@
 using System.Collections;
 using Core.ShipModel;
 using Core.ShipModel.Feedback.bHaptics;
+using Core.ShipModel.Feedback.socket;
 using Mirror;
 using UnityEngine;
 
@@ -117,11 +118,13 @@ namespace Core.Player {
             // perform positional correction on non-local client player objects like anything else in the world
             FloatingOrigin.OnFloatingOriginCorrection += NonLocalPlayerPositionCorrection;
             ShipPhysics.OnBoost += CmdBoost;
+            ShipPhysics.OnBoostCancel += CmdBoostCancel;
         }
 
         private void OnDisable() {
             FloatingOrigin.OnFloatingOriginCorrection -= NonLocalPlayerPositionCorrection;
             ShipPhysics.OnBoost -= CmdBoost;
+            ShipPhysics.OnBoostCancel -= CmdBoostCancel;
         }
 
         public override void OnStartLocalPlayer() {
@@ -142,6 +145,9 @@ namespace Core.Player {
 
             // register bHaptics
             ShipPhysics.FeedbackEngine.SubscribeFeedbackObject(BHapticsShipFeedback.Instance);
+
+            // register sockets
+            ShipPhysics.FeedbackEngine.SubscribeFeedbackObject(UDP.Instance);
 
             SetFlightAssistFromDefaults();
 
@@ -372,6 +378,19 @@ namespace Core.Player {
         private void RpcBoost(float boostTime) {
             if (!isLocalPlayer)
                 ShipPhysics.ShipModel?.Boost(boostTime);
+        }
+
+        [Command]
+        private void CmdBoostCancel() {
+            if (isLocalPlayer)
+                ShipPhysics.ShipModel?.BoostCancel();
+            RpcBoostCancel();
+        }
+
+        [ClientRpc]
+        private void RpcBoostCancel() {
+            if (!isLocalPlayer)
+                ShipPhysics.ShipModel?.BoostCancel();
         }
 
         [Command]

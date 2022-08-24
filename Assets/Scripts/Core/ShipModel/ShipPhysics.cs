@@ -12,6 +12,8 @@ using UnityEngine;
 namespace Core.ShipModel {
     [RequireComponent(typeof(FeedbackEngine))]
     public class ShipPhysics : MonoBehaviour {
+        public delegate void BoostCancelledAction();
+
         public delegate void BoostFiredAction(float boostTime);
 
         public delegate void ShipPhysicsUpdated();
@@ -30,10 +32,10 @@ namespace Core.ShipModel {
         private readonly ShipInstrumentData _shipInstrumentData = new();
         private readonly ShipMotionData _shipMotionData = new();
         private float _boostCapacitorPercent = 100f;
-
         [CanBeNull] private Coroutine _boostCoroutine;
         private float _boostedMaxSpeedDelta;
         private int _boostProgressTicks;
+        [CanBeNull] private Coroutine _boostRechargeCoroutine;
         private bool _boostRecharging;
         private int _checkpointLayerMask;
         private bool _collisionStartedThisFrame;
@@ -165,10 +167,12 @@ namespace Core.ShipModel {
                 _isBoosting = false;
                 _boostCapacitorPercent = 100f;
                 if (_boostCoroutine != null) StopCoroutine(_boostCoroutine);
+                if (_boostRechargeCoroutine != null) StopCoroutine(_boostRechargeCoroutine);
             }
         }
 
         public event BoostFiredAction OnBoost;
+        public event BoostCancelledAction OnBoostCancel;
         public event ShipPhysicsUpdated OnShipPhysicsUpdated;
 
         public void RefreshShipModel(ShipProfile shipProfile) {
@@ -193,6 +197,7 @@ namespace Core.ShipModel {
         }
 
         public void OnCollision(Collision collision, bool startedThisFrame) {
+            if (startedThisFrame) CancelBoost();
             _currentFrameCollision = collision;
             _collisionStartedThisFrame = startedThisFrame;
         }
@@ -248,22 +253,42 @@ namespace Core.ShipModel {
 
         private void AttemptBoost() {
             if (BoostReady) {
-                _boostCapacitorPercent -= FlightParameters.boostCapacitorPercentCost;
-                _boostRecharging = true;
-                _boostProgressTicks = 0;
-                _currentBoostTime = 0f;
+                OnBoost?.Invoke(FlightParameters.totalBoostTime);
 
                 IEnumerator DoBoost() {
-                    OnBoost?.Invoke(FlightParameters.totalBoostTime);
+                    _boostCapacitorPercent -= FlightParameters.boostCapacitorPercentCost;
+                    _boostProgressTicks = 0;
+                    _currentBoostTime = 0f;
+                    _isBoostSpooling = true;
+
                     yield return YieldExtensions.WaitForFixedFrames(YieldExtensions.SecondsToFixedFrames(1));
+
+                    _isBoostSpooling = false;
+                    _isBoosting = true;
                     _currentBoostTime = 0f;
                     _boostedMaxSpeedDelta = FlightParameters.maxBoostSpeed - FlightParameters.maxSpeed;
-                    _isBoosting = true;
-                    yield return YieldExtensions.WaitForFixedFrames(YieldExtensions.SecondsToFixedFrames(FlightParameters.boostRechargeTime));
+                }
+
+                // wait for spoolup + recharge time
+                IEnumerator BoostRecharge() {
+                    _boostRecharging = true;
+                    yield return YieldExtensions.WaitForFixedFrames(YieldExtensions.SecondsToFixedFrames(1 + FlightParameters.boostRechargeTime));
                     _boostRecharging = false;
                 }
 
                 _boostCoroutine = StartCoroutine(DoBoost());
+                _boostRechargeCoroutine = StartCoroutine(BoostRecharge());
+            }
+        }
+
+        private void CancelBoost() {
+            if (_isBoosting || _isBoostSpooling) {
+                if (_boostCoroutine != null) StopCoroutine(_boostCoroutine);
+                _currentBoostTime = 0f;
+                _boostProgressTicks = 0;
+                _isBoosting = false;
+                _isBoostSpooling = false;
+                OnBoostCancel?.Invoke();
             }
         }
 

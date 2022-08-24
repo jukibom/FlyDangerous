@@ -43,6 +43,11 @@ namespace Core.ShipModel {
         public void Boost(float boostTime);
 
         /**
+         * Cancel the boost operation due to a collision
+         */
+        public void BoostCancel();
+
+        /**
          * Set the main color of the ship as a html color
          */
         public void SetPrimaryColor(string htmlColor);
