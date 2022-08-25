@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Misc {
     public static class PositionalHelpers {
         [CanBeNull]
-        public static Terrain GetClosestCurrentTerrain(Vector3 position) {
+        public static Terrain GetClosestCurrentTerrain(Vector3 toWorldPosition) {
             //Get all terrain
             var terrains = Terrain.activeTerrains;
 
@@ -18,15 +18,18 @@ namespace Misc {
                 return terrains[0];
 
             //Get the closest one to the player
-            var lowDist = (terrains[0].GetPosition() - position).sqrMagnitude;
+            var lowDist = Mathf.Infinity;
             var terrainIndex = 0;
 
-            for (var i = 1; i < terrains.Length; i++) {
+            for (var i = 0; i < terrains.Length; i++) {
                 var terrain = terrains[i];
-                var terrainPos = terrain.GetPosition();
+                var terrainPosition = terrain.transform.position;
+                var terrainData = terrain.terrainData;
+                var terrainPos = new Vector3(terrainPosition.x + terrainData.size.x / 2, terrainPosition.y,
+                    terrainPosition.z + terrainData.size.z / 2);
 
                 //Find the distance and check if it is lower than the last one then store it
-                var dist = (terrainPos - position).sqrMagnitude;
+                var dist = (terrainPos - toWorldPosition).magnitude;
                 if (dist < lowDist) {
                     lowDist = dist;
                     terrainIndex = i;
