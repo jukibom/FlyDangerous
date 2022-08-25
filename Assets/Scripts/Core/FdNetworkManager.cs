@@ -272,8 +272,6 @@ namespace Core {
                 levelData.startRotation.z
             );
 
-            Debug.Log("[TEST] Starting position " + position);
-
             // if a ship player which is the host already exists and the game mode permits it, warp there instead
             var hostShip = ShipPlayers.Find(s => s.isHost);
             if (hostShip != null && Game.Instance.LoadedLevelData.gameType.CanWarpToHost) {

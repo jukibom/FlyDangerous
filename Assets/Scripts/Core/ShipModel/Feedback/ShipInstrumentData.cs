@@ -1,5 +1,9 @@
-﻿namespace Core.ShipModel.ShipIndicator {
+﻿using UnityEngine;
+
+namespace Core.ShipModel.ShipIndicator {
     public class ShipInstrumentData : IShipInstrumentData {
+        public Vector3 ShipWorldPosition { get; set; }
+        public float ShipAltitude { get; set; }
         public float VelocityMagnitude { get; set; }
         public float AccelerationMagnitudeNormalised { get; set; }
         public float GForce { get; set; }

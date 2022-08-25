@@ -420,6 +420,14 @@ namespace Core.ShipModel {
         }
 
         private void UpdateInstrumentData() {
+            var shipPosition = targetRigidbody.position;
+            var absoluteShipPosition = FloatingOrigin.Instance.GetAbsoluteWorldPosition(targetRigidbody.transform);
+            var nearestTerrain = PositionalHelpers.GetClosestCurrentTerrain(shipPosition);
+
+            _shipInstrumentData.ShipWorldPosition = absoluteShipPosition;
+            _shipInstrumentData.ShipAltitude = Game.Instance.IsTerrainMap && nearestTerrain != null
+                ? absoluteShipPosition.y - nearestTerrain.SampleHeight(shipPosition)
+                : Mathf.Infinity;
             _shipInstrumentData.AccelerationMagnitudeNormalised =
                 (Math.Abs(CurrentFrameThrust.x) + Math.Abs(CurrentFrameThrust.y) + Math.Abs(CurrentFrameThrust.z)) /
                 FlightParameters.maxThrust;
@@ -466,8 +474,8 @@ namespace Core.ShipModel {
             var secondInFrames = (int)(1 / Time.fixedDeltaTime);
             _shipFeedbackData.IsBoostSpooling = _boostRecharging && !_isBoosting;
             _shipFeedbackData.IsBoostThrustActive = _isBoosting;
-            _shipFeedbackData.BoostSpoolTotalDuration = 1;
-            _shipFeedbackData.BoostThrustTotalDuration = FlightParameters.totalBoostTime - 1;
+            _shipFeedbackData.BoostSpoolTotalDurationSeconds = 1;
+            _shipFeedbackData.BoostThrustTotalDurationSeconds = FlightParameters.totalBoostTime - 1;
             _shipFeedbackData.BoostSpoolStartThisFrame = (_isBoosting || _boostRecharging) && _boostProgressTicks == 1;
             _shipFeedbackData.BoostThrustStartThisFrame = (_isBoosting || _boostRecharging) && _boostProgressTicks == secondInFrames; // one second after start
             _shipFeedbackData.BoostSpoolProgressNormalised =
@@ -475,7 +483,7 @@ namespace Core.ShipModel {
             _shipFeedbackData.BoostThrustProgressNormalised = _isBoosting ? _currentBoostTime / (FlightParameters.totalBoostTime + 1) : 0;
 
             // Misc
-            _shipFeedbackData.ShipShake = ShipModel?.ShipShake.CurrentShakeAmountNormalised ?? 0;
+            _shipFeedbackData.ShipShakeNormalised = ShipModel?.ShipShake.CurrentShakeAmountNormalised ?? 0;
         }
 
         private void ApplyFlightForces() {

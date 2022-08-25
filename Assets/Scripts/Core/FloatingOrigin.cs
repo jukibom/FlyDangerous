@@ -43,6 +43,11 @@ namespace Core {
             Gizmos.DrawWireSphere(transform.position, correctionDistance);
         }
 
+        // Return the "real world" position of a given transform
+        public Vector3 GetAbsoluteWorldPosition(Transform objectTransform) {
+            return objectTransform.position + Origin;
+        }
+
         // Replace the focal transform without resetting the origin - the objects should always be at the same place when doing this!
         public void SwapFocalTransform(Transform newTransform) {
             focalTransform = newTransform;

@@ -37,11 +37,11 @@ namespace Core.ShipModel.Feedback.bHaptics {
                 boostFireRightArmHapticClip.Play();
             }
 
-            if (shipFeedbackData.ShipShake > 0 && _shakeHapticPlayTime > 0.1f) {
+            if (shipFeedbackData.ShipShakeNormalised > 0 && _shakeHapticPlayTime > 0.1f) {
                 _shakeHapticPlayTime = 0;
-                shipShakeVestHapticClip.Play(shipFeedbackData.ShipShake * 5, 0.1f);
-                shipShakeLeftArmHapticClip.Play(shipFeedbackData.ShipShake * 5, 0.2f);
-                shipShakeRightArmHapticClip.Play(shipFeedbackData.ShipShake * 5, 0.2f);
+                shipShakeVestHapticClip.Play(shipFeedbackData.ShipShakeNormalised * 5, 0.1f);
+                shipShakeLeftArmHapticClip.Play(shipFeedbackData.ShipShakeNormalised * 5, 0.2f);
+                shipShakeRightArmHapticClip.Play(shipFeedbackData.ShipShakeNormalised * 5, 0.2f);
             }
 
             _shakeHapticPlayTime += Time.fixedDeltaTime;
