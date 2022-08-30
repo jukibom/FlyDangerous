@@ -171,6 +171,7 @@ namespace Core.ShipModel {
             _stopShip = false;
             if (includeBoost) {
                 _boostStatus = BoostStatus.Inactive;
+                _boostRecharging = false;
                 _boostCapacitorPercent = 100f;
                 if (_boostCoroutine != null) StopCoroutine(_boostCoroutine);
                 if (_boostRechargeCoroutine != null) StopCoroutine(_boostRechargeCoroutine);
