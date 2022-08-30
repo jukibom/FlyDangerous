@@ -10,6 +10,12 @@ using Misc;
 using UnityEngine;
 
 namespace Core.ShipModel {
+    public enum BoostStatus {
+        Inactive,
+        Spooling,
+        Active
+    }
+
     [RequireComponent(typeof(FeedbackEngine))]
     public class ShipPhysics : MonoBehaviour {
         public delegate void BoostCancelledAction();
@@ -37,14 +43,15 @@ namespace Core.ShipModel {
         private int _boostProgressTicks;
         [CanBeNull] private Coroutine _boostRechargeCoroutine;
         private bool _boostRecharging;
+
+        private BoostStatus _boostStatus;
         private int _checkpointLayerMask;
         private bool _collisionStartedThisFrame;
         private float _currentBoostTime;
         [CanBeNull] private Collision _currentFrameCollision;
         private FeedbackEngine _feedbackEngine;
+
         private float _gForce;
-        private bool _isBoosting;
-        private bool _isBoostSpooling;
 
         private Vector3 _prevVelocity;
 
@@ -163,8 +170,7 @@ namespace Core.ShipModel {
             _prevVelocity = Vector3.zero;
             _stopShip = false;
             if (includeBoost) {
-                _boostRecharging = false;
-                _isBoosting = false;
+                _boostStatus = BoostStatus.Inactive;
                 _boostCapacitorPercent = 100f;
                 if (_boostCoroutine != null) StopCoroutine(_boostCoroutine);
                 if (_boostRechargeCoroutine != null) StopCoroutine(_boostRechargeCoroutine);
@@ -272,14 +278,11 @@ namespace Core.ShipModel {
                 IEnumerator DoBoost() {
                     _boostCapacitorPercent -= FlightParameters.boostCapacitorPercentCost;
                     _boostProgressTicks = 0;
-                    _currentBoostTime = 0f;
-                    _isBoostSpooling = true;
-                    _isBoosting = false;
+                    _boostStatus = BoostStatus.Spooling;
 
                     yield return YieldExtensions.WaitForFixedFrames(YieldExtensions.SecondsToFixedFrames(FlightParameters.boostSpoolUpTime));
 
-                    _isBoostSpooling = false;
-                    _isBoosting = true;
+                    _boostStatus = BoostStatus.Active;
                     _currentBoostTime = 0f;
                     _boostedMaxSpeedDelta = FlightParameters.maxBoostSpeed - FlightParameters.maxSpeed;
                 }
@@ -298,11 +301,11 @@ namespace Core.ShipModel {
         }
 
         private void CancelBoost() {
-            if (_isBoosting || _isBoostSpooling) {
+            if (_boostStatus != BoostStatus.Inactive) {
                 if (_boostCoroutine != null) StopCoroutine(_boostCoroutine);
                 _currentBoostTime = 0f;
-                _isBoosting = false;
-                _isBoostSpooling = false;
+                _boostedMaxSpeedDelta = 0;
+                _boostStatus = BoostStatus.Inactive;
                 OnBoostCancel?.Invoke();
             }
         }
@@ -335,7 +338,7 @@ namespace Core.ShipModel {
             _currentBoostTime += Time.fixedDeltaTime;
 
             // reduce boost potency over time period
-            if (_isBoosting) {
+            if (_boostStatus == BoostStatus.Active) {
                 // Ease-in (boost drop-off is more dramatic)
                 var t = _currentBoostTime / FlightParameters.totalBoostTime;
                 var tBoost = 1f - Mathf.Cos(t * Mathf.PI * 0.5f);
@@ -357,7 +360,7 @@ namespace Core.ShipModel {
 
             _boostProgressTicks++;
             if (_currentBoostTime > FlightParameters.totalBoostRotationalTime) {
-                _isBoosting = false;
+                _boostStatus = BoostStatus.Inactive;
                 _boostProgressTicks = 0;
             }
         }
@@ -479,15 +482,17 @@ namespace Core.ShipModel {
 
             // Boost forces
             var secondInFrames = (int)(1 / Time.fixedDeltaTime);
-            _shipFeedbackData.IsBoostSpooling = _boostRecharging && !_isBoosting;
-            _shipFeedbackData.IsBoostThrustActive = _isBoosting;
+            _shipFeedbackData.IsBoostSpooling = _boostStatus == BoostStatus.Spooling;
+            _shipFeedbackData.IsBoostThrustActive = _boostStatus == BoostStatus.Active;
             _shipFeedbackData.BoostSpoolTotalDurationSeconds = FlightParameters.boostSpoolUpTime;
             _shipFeedbackData.BoostThrustTotalDurationSeconds = FlightParameters.totalBoostTime;
-            _shipFeedbackData.BoostSpoolStartThisFrame = (_isBoosting || _boostRecharging) && _boostProgressTicks == 1;
-            _shipFeedbackData.BoostThrustStartThisFrame = (_isBoosting || _boostRecharging) && _boostProgressTicks == secondInFrames; // one second after start
+            _shipFeedbackData.BoostSpoolStartThisFrame = _shipFeedbackData.IsBoostSpooling && _boostProgressTicks == 1;
+            _shipFeedbackData.BoostThrustStartThisFrame =
+                _shipFeedbackData.IsBoostThrustActive && _boostProgressTicks == secondInFrames; // one second after start
             _shipFeedbackData.BoostSpoolProgressNormalised =
                 _shipFeedbackData.IsBoostSpooling ? MathfExtensions.Remap(0, secondInFrames, 0, 1, _boostProgressTicks) : 0;
-            _shipFeedbackData.BoostThrustProgressNormalised = _isBoosting ? Math.Min(1, _currentBoostTime / FlightParameters.totalBoostTime) : 0;
+            _shipFeedbackData.BoostThrustProgressNormalised =
+                _shipFeedbackData.IsBoostThrustActive ? Math.Min(1, _currentBoostTime / FlightParameters.totalBoostTime) : 0;
 
             // Misc
             _shipFeedbackData.ShipShakeNormalised = ShipModel?.ShipShake.CurrentShakeAmountNormalised ?? 0;
@@ -511,7 +516,7 @@ namespace Core.ShipModel {
             // special case for throttle - no reverse while boosting but, while always going forward, the ship will change
             // vector less harshly while holding back (up to 40%). The whole reverse axis is remapped to 40% for this calculation.
             // any additional throttle thrust not used in boost to be distributed across laterals
-            if (_isBoosting && _currentBoostTime < FlightParameters.totalBoostTime) {
+            if (_boostStatus == BoostStatus.Active && _currentBoostTime < FlightParameters.totalBoostTime) {
                 throttle = Mathf.Min(1f, MathfExtensions.Remap(-1, 0, 0.6f, 1, Throttle));
 
                 var delta = 1f - throttle;
