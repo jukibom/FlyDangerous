@@ -40,7 +40,7 @@ namespace Core.ShipModel {
          * Play boost sounds and any other needed visual effects
          * This function is network-aware.
          */
-        public void Boost(float boostTime);
+        public void Boost(float spoolTime, float boostTime);
 
         /**
          * Cancel the boost operation due to a collision

@@ -120,12 +120,12 @@ namespace Core.ShipModel {
             else velocityLimitDeactivateAudioSource.Play();
         }
 
-        public void Boost(float boostTime) {
+        public void Boost(float spoolTime, float boostTime) {
             IEnumerator AnimateBoost() {
-                ShipShake.AddShake(1, 0.005f, false, new AnimationCurve(new Keyframe(0, 1), new Keyframe(1, 1)));
-                yield return new WaitForSeconds(1);
+                ShipShake.AddShake(spoolTime, 0.005f, false, new AnimationCurve(new Keyframe(0, 1), new Keyframe(spoolTime, 1)));
+                yield return new WaitForSeconds(spoolTime);
                 externalBoostThrusterAudioSource.Play();
-                ShipShake.AddShake(boostTime - 1, 0.01f, true);
+                ShipShake.AddShake(boostTime, 0.01f, true);
                 thrusterController.AnimateBoostThrusters();
             }
 

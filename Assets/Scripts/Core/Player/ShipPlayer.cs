@@ -362,18 +362,18 @@ namespace Core.Player {
         }
 
         [Command]
-        private void CmdBoost(float boostTime) {
+        private void CmdBoost(float spoolTime, float boostTime) {
             // do local boost effects immediately
             if (isLocalPlayer)
-                ShipPhysics.ShipModel?.Boost(boostTime);
+                ShipPhysics.ShipModel?.Boost(spoolTime, boostTime);
             // signal other clients to reflect boost effect
-            RpcBoost(boostTime);
+            RpcBoost(spoolTime, boostTime);
         }
 
         [ClientRpc]
-        private void RpcBoost(float boostTime) {
+        private void RpcBoost(float spoolTime, float boostTime) {
             if (!isLocalPlayer)
-                ShipPhysics.ShipModel?.Boost(boostTime);
+                ShipPhysics.ShipModel?.Boost(spoolTime, boostTime);
         }
 
         [Command]

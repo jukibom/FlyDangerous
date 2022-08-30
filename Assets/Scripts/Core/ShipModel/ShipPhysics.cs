@@ -14,7 +14,7 @@ namespace Core.ShipModel {
     public class ShipPhysics : MonoBehaviour {
         public delegate void BoostCancelledAction();
 
-        public delegate void BoostFiredAction(float boostTime);
+        public delegate void BoostFiredAction(float spoolTime, float boostTime);
 
         public delegate void ShipPhysicsUpdated();
 
@@ -267,7 +267,7 @@ namespace Core.ShipModel {
 
         private void AttemptBoost() {
             if (BoostReady) {
-                OnBoost?.Invoke(FlightParameters.totalBoostTime);
+                OnBoost?.Invoke(FlightParameters.boostSpoolUpTime, FlightParameters.totalBoostTime);
 
                 IEnumerator DoBoost() {
                     _boostCapacitorPercent -= FlightParameters.boostCapacitorPercentCost;
@@ -276,7 +276,7 @@ namespace Core.ShipModel {
                     _isBoostSpooling = true;
                     _isBoosting = false;
 
-                    yield return YieldExtensions.WaitForFixedFrames(YieldExtensions.SecondsToFixedFrames(1));
+                    yield return YieldExtensions.WaitForFixedFrames(YieldExtensions.SecondsToFixedFrames(FlightParameters.boostSpoolUpTime));
 
                     _isBoostSpooling = false;
                     _isBoosting = true;
@@ -287,7 +287,8 @@ namespace Core.ShipModel {
                 // wait for spool-up + recharge time
                 IEnumerator BoostRecharge() {
                     _boostRecharging = true;
-                    yield return YieldExtensions.WaitForFixedFrames(YieldExtensions.SecondsToFixedFrames(1 + FlightParameters.boostRechargeTime));
+                    yield return YieldExtensions.WaitForFixedFrames(
+                        YieldExtensions.SecondsToFixedFrames(FlightParameters.boostSpoolUpTime + FlightParameters.boostRechargeTime));
                     _boostRecharging = false;
                 }
 
@@ -480,8 +481,8 @@ namespace Core.ShipModel {
             var secondInFrames = (int)(1 / Time.fixedDeltaTime);
             _shipFeedbackData.IsBoostSpooling = _boostRecharging && !_isBoosting;
             _shipFeedbackData.IsBoostThrustActive = _isBoosting;
-            _shipFeedbackData.BoostSpoolTotalDurationSeconds = 1;
-            _shipFeedbackData.BoostThrustTotalDurationSeconds = FlightParameters.totalBoostTime - 1;
+            _shipFeedbackData.BoostSpoolTotalDurationSeconds = FlightParameters.boostSpoolUpTime;
+            _shipFeedbackData.BoostThrustTotalDurationSeconds = FlightParameters.totalBoostTime;
             _shipFeedbackData.BoostSpoolStartThisFrame = (_isBoosting || _boostRecharging) && _boostProgressTicks == 1;
             _shipFeedbackData.BoostThrustStartThisFrame = (_isBoosting || _boostRecharging) && _boostProgressTicks == secondInFrames; // one second after start
             _shipFeedbackData.BoostSpoolProgressNormalised =

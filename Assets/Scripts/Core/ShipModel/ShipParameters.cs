@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -23,6 +23,7 @@ namespace Core.ShipModel {
             yawMultiplier = 0.8f,
             thrustBoostMultiplier = 3.25f,
             torqueBoostMultiplier = 2f,
+            boostSpoolUpTime = 1f,
             totalBoostTime = 5f,
             totalBoostRotationalTime = 6f,
             boostMaxSpeedDropOffTime = 12f,
@@ -37,6 +38,7 @@ namespace Core.ShipModel {
         public float boostCapacityPercentChargeRate;
         public float boostMaxSpeedDropOffTime;
         public float boostRechargeTime;
+        public float boostSpoolUpTime;
         public float drag;
         public float inertiaTensorMultiplier;
         public float latHMultiplier;
@@ -66,6 +68,7 @@ namespace Core.ShipModel {
             try {
                 var parameters = JsonConvert.DeserializeObject<ShipParameters>(json);
                 if (parameters?.maxAngularVelocity == 0) parameters.maxAngularVelocity = Defaults.maxAngularVelocity;
+                if (parameters?.boostSpoolUpTime == 0) parameters.boostSpoolUpTime = Defaults.boostSpoolUpTime;
 
                 return parameters;
             }

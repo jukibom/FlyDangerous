@@ -73,8 +73,8 @@ namespace Core.Replays {
             transform.position -= offset;
         }
 
-        private void ShowBoost(float boostTime) {
-            ShipPhysics.ShipModel?.Boost(boostTime);
+        private void ShowBoost(float spoolTime, float boostTime) {
+            ShipPhysics.ShipModel?.Boost(spoolTime, boostTime);
         }
 
         private void CancelBoost() {
