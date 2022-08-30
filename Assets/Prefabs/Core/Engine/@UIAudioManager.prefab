@@ -1,0 +1,108 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &501565932487905851
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7893906660898877846}
+  - component: {fileID: 1186049337142914971}
+  m_Layer: 0
+  m_Name: '@UIAudioManager'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7893906660898877846
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 501565932487905851}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1186049337142914971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 501565932487905851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3955aff9b3a5164bb7d36a12316b98b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+  - clip: {fileID: 8300000, guid: 79e1a13407e8ace4aa941202ff564585, type: 3}
+    name: ui-dialog-open
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: 912d284ad1c3f084ba2cc6168182545d, type: 3}
+    name: ui-nav
+    volume: 0.15
+    pitch: 1.5
+    loop: 0
+    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: d9fd03a3a1486ff4c85dfb12343c355b, type: 3}
+    name: ui-confirm
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: 7e6a23672dd781f4695c5713a2072b57, type: 3}
+    name: ui-cancel
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: 3cba295e29601074b8b2f025c7814709, type: 3}
+    name: ship-velocity-limit-on
+    volume: 0.1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: 3ff505d2bf9789045b2db4554f57c213, type: 3}
+    name: ship-velocity-limit-off
+    volume: 0.1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: b4ee736e43ff17649b4f043e65f9e685, type: 3}
+    name: ship-alternate-flight-on
+    volume: 0.2
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: 0aa60192f7b8a384396da4778247c923, type: 3}
+    name: ship-alternate-flight-off
+    volume: 0.3
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: a7cfdc30a97254f44806774ff01a2b28, type: 3}
+    name: tt-countdown-1
+    volume: 0.15
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: 38dd9107c2484b54d8267f2ee5ee355c, type: 3}
+    name: tt-countdown-2
+    volume: 0.15
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  audioMixer: {fileID: 2643463271570325378, guid: 4d35772c6feef854a95b4dbe1c73b3bc, type: 2}

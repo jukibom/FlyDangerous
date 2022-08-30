@@ -1,7 +1,5 @@
 using System.Collections;
 using Core.ShipModel;
-using Core.ShipModel.Feedback.bHaptics;
-using Core.ShipModel.Feedback.socket;
 using Mirror;
 using UnityEngine;
 
@@ -143,11 +141,8 @@ namespace Core.Player {
             // register local player UI 
             ShipPhysics.FeedbackEngine.SubscribeFeedbackObject(user.InGameUI.ShipStats);
 
-            // register bHaptics
-            ShipPhysics.FeedbackEngine.SubscribeFeedbackObject(BHapticsShipFeedback.Instance);
-
-            // register sockets
-            ShipPhysics.FeedbackEngine.SubscribeFeedbackObject(UDP.Instance);
+            // register integrations
+            foreach (var integration in Engine.Instance.Integrations) ShipPhysics.FeedbackEngine.SubscribeFeedbackObject(integration);
 
             SetFlightAssistFromDefaults();
 
