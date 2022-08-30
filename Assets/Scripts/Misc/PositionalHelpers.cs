@@ -9,7 +9,7 @@ namespace Misc {
 
         /**
          * Get the closest terrain tile to a given position in current (non-floating origin corrected!) world space.
-         * This function ASSUMES THAT ALL TERRAIN TILES ARE EQUALLY SPACED AND SIZED!
+         * This function ASSUMES THAT ALL TERRAIN TILES ARE EQUALLY SPACED AND SIZED and at the same Y value!
          */
         [CanBeNull]
         public static Terrain GetClosestCurrentTerrain(Vector3 toWorldPosition) {
