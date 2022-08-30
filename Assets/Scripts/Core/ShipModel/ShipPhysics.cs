@@ -89,7 +89,7 @@ namespace Core.ShipModel {
         public Vector3 CurrentFrameTorque { get; private set; }
         public float MaxThrustWithBoost { get; private set; }
         public float MaxTorqueWithBoost { get; private set; }
-        public float BoostedMaxSpeedDelta { get; private set; }
+        public float CurrentBoostedMaxSpeedDelta { get; private set; }
 
 
         public float Pitch { get; private set; }
@@ -283,7 +283,7 @@ namespace Core.ShipModel {
                     _boostedMaxSpeedDelta = FlightParameters.maxBoostSpeed - FlightParameters.maxSpeed;
                 }
 
-                // wait for spoolup + recharge time
+                // wait for spool-up + recharge time
                 IEnumerator BoostRecharge() {
                     _boostRecharging = true;
                     yield return YieldExtensions.WaitForFixedFrames(YieldExtensions.SecondsToFixedFrames(1 + FlightParameters.boostRechargeTime));
@@ -315,7 +315,7 @@ namespace Core.ShipModel {
             }
 
             // clamp max speed in general including boost variance (max boost speed minus max speed)
-            targetRigidbody.velocity = Vector3.ClampMagnitude(targetRigidbody.velocity, FlightParameters.maxSpeed + BoostedMaxSpeedDelta);
+            targetRigidbody.velocity = Vector3.ClampMagnitude(targetRigidbody.velocity, FlightParameters.maxSpeed + CurrentBoostedMaxSpeedDelta);
 
             // calculate g-force 
             _gForce = Math.Abs((Velocity - _prevVelocity).magnitude / (Time.fixedDeltaTime * 9.8f));
@@ -328,7 +328,7 @@ namespace Core.ShipModel {
             // copy defaults before modifying
             MaxThrustWithBoost = FlightParameters.maxThrust;
             MaxTorqueWithBoost = FlightParameters.maxThrust * FlightParameters.torqueThrustMultiplier;
-            BoostedMaxSpeedDelta = _boostedMaxSpeedDelta;
+            CurrentBoostedMaxSpeedDelta = _boostedMaxSpeedDelta;
 
             _currentBoostTime += Time.fixedDeltaTime;
 
@@ -346,10 +346,9 @@ namespace Core.ShipModel {
             // reduce max speed over time until we're back at 0
             if (_boostedMaxSpeedDelta > 0) {
                 var t = _currentBoostTime / FlightParameters.boostMaxSpeedDropOffTime;
-                // TODO: an actual curve rather than this ... idk what this is
                 // clamp at 1 as it's being used as a multiplier and the first ~2 seconds are at max speed 
                 var tBoostVelocityMax = Math.Min(1, 0.15f - Mathf.Cos(t * Mathf.PI * 0.6f) * -1);
-                BoostedMaxSpeedDelta *= tBoostVelocityMax;
+                CurrentBoostedMaxSpeedDelta *= tBoostVelocityMax;
 
                 if (tBoostVelocityMax < 0) _boostedMaxSpeedDelta = 0;
             }
@@ -378,7 +377,7 @@ namespace Core.ShipModel {
             RotationalFlightAssistActive = rotationalFlightAssistActive;
 
             /* FLIGHT ASSISTS */
-            var maxSpeedWithBoost = FlightParameters.maxSpeed + BoostedMaxSpeedDelta;
+            var maxSpeedWithBoost = FlightParameters.maxSpeed + CurrentBoostedMaxSpeedDelta;
             if (vectorFlightAssistActive) CalculateVectorControlFlightAssist(maxSpeedWithBoost);
             if (rotationalFlightAssistActive) CalculateRotationalDampeningFlightAssist();
 
@@ -486,7 +485,7 @@ namespace Core.ShipModel {
             _shipFeedbackData.BoostThrustStartThisFrame = (_isBoosting || _boostRecharging) && _boostProgressTicks == secondInFrames; // one second after start
             _shipFeedbackData.BoostSpoolProgressNormalised =
                 _shipFeedbackData.IsBoostSpooling ? MathfExtensions.Remap(0, secondInFrames, 0, 1, _boostProgressTicks) : 0;
-            _shipFeedbackData.BoostThrustProgressNormalised = _isBoosting ? _currentBoostTime / (FlightParameters.totalBoostTime + 1) : 0;
+            _shipFeedbackData.BoostThrustProgressNormalised = _isBoosting ? Math.Min(1, _currentBoostTime / FlightParameters.totalBoostTime) : 0;
 
             // Misc
             _shipFeedbackData.ShipShakeNormalised = ShipModel?.ShipShake.CurrentShakeAmountNormalised ?? 0;
