@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -64,7 +64,10 @@ namespace Core.ShipModel {
         [CanBeNull]
         public static ShipParameters FromJsonString(string json) {
             try {
-                return JsonConvert.DeserializeObject<ShipParameters>(json);
+                var parameters = JsonConvert.DeserializeObject<ShipParameters>(json);
+                if (parameters?.maxAngularVelocity == 0) parameters.maxAngularVelocity = Defaults.maxAngularVelocity;
+
+                return parameters;
             }
             catch (Exception e) {
                 Debug.LogWarning(e.Message);
