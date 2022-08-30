@@ -145,6 +145,8 @@ namespace Core.ShipModel {
         public void BoostCancel() {
             if (_boostCoroutine != null) {
                 StopCoroutine(_boostCoroutine);
+
+                externalBoostInterruptedAudioSource.pitch = MathfExtensions.Remap(0, 1, 0.7f, 1.3f, Random.value);
                 externalBoostInterruptedAudioSource.Play();
                 externalBoostAudioSource.Stop();
                 externalBoostThrusterAudioSource.Stop();
