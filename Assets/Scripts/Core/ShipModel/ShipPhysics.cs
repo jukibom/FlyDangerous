@@ -391,6 +391,12 @@ namespace Core.ShipModel {
             UpdateMotionData();
             UpdateFeedbackData();
 
+            // correct for being underground in any scenario
+            if (_shipInstrumentData.ShipAltitude < 0) {
+                var position = targetRigidbody.position;
+                targetRigidbody.position = new Vector3(position.x, position.y - _shipInstrumentData.ShipAltitude, position.z);
+            }
+
             _prevVelocity = Velocity;
         }
 
