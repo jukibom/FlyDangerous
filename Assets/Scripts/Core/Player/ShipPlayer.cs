@@ -169,7 +169,10 @@ namespace Core.Player {
 
                 // force new layer for non-local player
                 var mask = LayerMask.NameToLayer("Non-Local Player");
-                foreach (var transformObject in GetComponentsInChildren<Transform>(true)) transformObject.gameObject.layer = mask;
+                var protectedMask = LayerMask.NameToLayer("TransparentFX");
+                foreach (var transformObject in GetComponentsInChildren<Transform>(true))
+                    if (transformObject.gameObject.layer != protectedMask)
+                        transformObject.gameObject.layer = mask;
             }
         }
 

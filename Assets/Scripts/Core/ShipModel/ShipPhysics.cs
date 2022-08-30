@@ -185,9 +185,11 @@ namespace Core.ShipModel {
             var shipData = ShipMeta.FromString(shipProfile.shipModel);
             // TODO: make this async
             var shipModel = Instantiate(Resources.Load(shipData.PrefabToLoad, typeof(GameObject)) as GameObject);
+            var protectedMask = LayerMask.NameToLayer("TransparentFX");
 
             void SetLayerMaskRecursive(int layer, GameObject targetGameObject) {
-                targetGameObject.layer = layer;
+                if (targetGameObject.layer != protectedMask)
+                    targetGameObject.layer = layer;
                 foreach (Transform child in targetGameObject.transform) SetLayerMaskRecursive(layer, child.gameObject);
             }
 

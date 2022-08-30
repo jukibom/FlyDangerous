@@ -61,10 +61,6 @@ namespace Core.ShipModel {
 
         private void OnEnable() {
             Game.OnRestart += ResetShield;
-
-            // override shield mesh to always be transparent fx layer
-            shieldMesh.gameObject.layer = LayerMask.NameToLayer("TransparentFX");
-            shieldImpactMesh.gameObject.layer = LayerMask.NameToLayer("TransparentFX");
         }
 
         private void OnDisable() {
