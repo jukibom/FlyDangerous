@@ -274,6 +274,7 @@ namespace Core.ShipModel {
                     _boostProgressTicks = 0;
                     _currentBoostTime = 0f;
                     _isBoostSpooling = true;
+                    _isBoosting = false;
 
                     yield return YieldExtensions.WaitForFixedFrames(YieldExtensions.SecondsToFixedFrames(1));
 
