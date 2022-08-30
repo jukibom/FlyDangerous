@@ -34,6 +34,8 @@ namespace Core.ShipModel {
         [SerializeField] private AudioSource assistDeactivateAudioSource;
         [SerializeField] private AudioSource velocityLimitActivateAudioSource;
         [SerializeField] private AudioSource velocityLimitDeactivateAudioSource;
+        [SerializeField] private AudioSource nightVisionActivateAudioSource;
+        [SerializeField] private AudioSource nightVisionDeactivateAudioSource;
 
         private Coroutine _boostCoroutine;
 
@@ -101,8 +103,14 @@ namespace Core.ShipModel {
 
         #region IShip Basic Functions
 
-        public virtual void SetLights(bool active) {
-            simpleToggleAudioSource.Play();
+        public virtual void SetNightVision(bool active) {
+            if (active) nightVisionActivateAudioSource.Play();
+            else nightVisionDeactivateAudioSource.Play();
+
+            // Trigger night vision active
+            Engine.Instance.SetNightVisionActive(active);
+
+            // enable the associated light
             shipLights.enabled = !shipLights.enabled;
 
             // ensure that the local player ship lights take priority over all others
@@ -220,6 +228,8 @@ namespace Core.ShipModel {
             foreach (var shipLight in GetComponentsInChildren<Light>())
                 if (shipLight.type == LightType.Spot)
                     shipLight.color = color;
+
+            Engine.Instance.SetNightVisionColor(color);
         }
 
         #endregion

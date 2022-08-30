@@ -310,8 +310,8 @@ namespace Core.Player {
             if (Preferences.Instance.GetBool("forceRelativeMouseWithFAOff")) User.ResetMouseToCentre();
         }
 
-        public void ShipLightsToggle() {
-            ShipPhysics.ShipLightsToggle(CmdSetLights);
+        public void NightVisionToggle() {
+            ShipPhysics.NightVisionToggle(CmdSetNightVision);
         }
 
         public void VelocityLimiterIsPressed(bool isPressed) {
@@ -393,13 +393,13 @@ namespace Core.Player {
         }
 
         [Command]
-        private void CmdSetLights(bool active) {
-            RpcSetLights(active);
+        private void CmdSetNightVision(bool active) {
+            RpcSetNightVision(active);
         }
 
         [ClientRpc]
-        private void RpcSetLights(bool active) {
-            ShipPhysics.ShipModel?.SetLights(active);
+        private void RpcSetNightVision(bool active) {
+            ShipPhysics.ShipModel?.SetNightVision(active);
         }
 
         private void NonLocalPlayerPositionCorrection(Vector3 offset) {

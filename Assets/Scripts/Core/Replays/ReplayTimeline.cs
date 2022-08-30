@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Text;
 using Core.Player;
 using Core.ShipModel;
@@ -75,7 +75,7 @@ namespace Core.Replays {
         public void Stop() {
             _inputTicks = 0;
             _isPlaying = false;
-            if (ShipReplayObject != null) ShipReplayObject.ShipPhysics.BringToStop();
+            ShipReplayObject?.ShipPhysics.BringToStop();
         }
 
         private void UpdateKeyFrame() {
@@ -108,7 +108,7 @@ namespace Core.Replays {
                         inputFrame.lateralV, inputFrame.boostHeld, inputFrame.limiterHeld, false, false);
 
                     if (ShipReplayObject?.ShipPhysics.IsShipLightsActive != inputFrame.shipLightsEnabled)
-                        ShipReplayObject?.ShipPhysics.ShipLightsToggle(_ => { });
+                        ShipReplayObject?.ShipPhysics.NightVisionToggle(_ => { });
 
                     _inputTicks++;
                 }

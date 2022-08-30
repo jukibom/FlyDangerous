@@ -260,7 +260,7 @@ namespace Core.ShipModel {
             if (isValidHit) _shipInstrumentData.ProximityWarningSeconds = hitInfo.distance / velocity.magnitude;
         }
 
-        public void ShipLightsToggle(Action<bool> shipLightStatus) {
+        public void NightVisionToggle(Action<bool> shipLightStatus) {
             IsShipLightsActive = !IsShipLightsActive;
             shipLightStatus(IsShipLightsActive);
         }

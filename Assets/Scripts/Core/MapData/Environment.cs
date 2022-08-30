@@ -5,27 +5,29 @@ namespace Core.MapData {
     public class Environment : IFdEnum {
         private static int _id;
 
-        public static readonly Environment SunriseClear = new("Sunrise Clear", "Sunrise_Clear");
-        public static readonly Environment NoonClear = new("Noon Clear", "Noon_Clear");
-        public static readonly Environment NoonCloudy = new("Noon Cloudy", "Noon_Cloudy");
-        public static readonly Environment NoonStormy = new("Noon Stormy", "Noon_Stormy");
-        public static readonly Environment SunsetClear = new("Sunset Clear", "Sunset_Clear");
-        public static readonly Environment SunsetCloudy = new("Sunset Cloudy", "Sunset_Cloudy");
-        public static readonly Environment NightClear = new("Night Clear", "Night_Clear");
-        public static readonly Environment NightCloudy = new("Night Cloudy", "Night_Cloudy");
-        public static readonly Environment PlanetOrbitBottom = new("Red Planet", "Planet_Orbit_Bottom");
-        public static readonly Environment PlanetOrbitTop = new("Blue Planet", "Planet_Orbit_Top");
-        public static readonly Environment RedBlueNebula = new("Red / Blue Nebula", "Red_Blue_Nebula");
-        public static readonly Environment YellowGreenNebula = new("Yellow / Green Nebula", "Yellow_Green_Nebula");
+        public static readonly Environment SunriseClear = new("Sunrise Clear", "Sunrise_Clear", 4);
+        public static readonly Environment NoonClear = new("Noon Clear", "Noon_Clear", 4);
+        public static readonly Environment NoonCloudy = new("Noon Cloudy", "Noon_Cloudy", 4);
+        public static readonly Environment NoonStormy = new("Noon Stormy", "Noon_Stormy", 4);
+        public static readonly Environment SunsetClear = new("Sunset Clear", "Sunset_Clear", 4);
+        public static readonly Environment SunsetCloudy = new("Sunset Cloudy", "Sunset_Cloudy", 4);
+        public static readonly Environment NightClear = new("Night Clear", "Night_Clear", 4);
+        public static readonly Environment NightCloudy = new("Night Cloudy", "Night_Cloudy", 4);
+        public static readonly Environment PlanetOrbitBottom = new("Red Planet", "Planet_Orbit_Bottom", 4);
+        public static readonly Environment PlanetOrbitTop = new("Blue Planet", "Planet_Orbit_Top", 4);
+        public static readonly Environment RedBlueNebula = new("Red / Blue Nebula", "Red_Blue_Nebula", 4);
+        public static readonly Environment YellowGreenNebula = new("Yellow / Green Nebula", "Yellow_Green_Nebula", 4);
 
-        private Environment(string name, string sceneToLoad) {
+        private Environment(string name, string sceneToLoad, float nightVisionAmbientLight) {
             Id = GenerateId;
             Name = name;
             SceneToLoad = sceneToLoad;
+            NightVisionAmbientLight = nightVisionAmbientLight;
         }
 
         private static int GenerateId => _id++;
         public string SceneToLoad { get; }
+        public float NightVisionAmbientLight { get; }
 
         public int Id { get; }
         public string Name { get; }

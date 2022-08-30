@@ -422,7 +422,7 @@ namespace Core.Player {
 
         [UsedImplicitly]
         public void OnShipLightsToggle(InputValue value) {
-            shipPlayer.ShipLightsToggle();
+            shipPlayer.NightVisionToggle();
         }
 
         [UsedImplicitly]

@@ -21,10 +21,10 @@ namespace Core.ShipModel {
         public void SetIsLocalPlayer(bool isLocalPlayer);
 
         /**
-         * Enable the lights on the ship
+         * Enable the night vision mode.
          * This function is network aware.
          */
-        public void SetLights(bool active);
+        public void SetNightVision(bool active);
 
         /**
          * Do something when enabling or disabling some form of assist
