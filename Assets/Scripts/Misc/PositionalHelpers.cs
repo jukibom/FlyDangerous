@@ -4,12 +4,19 @@ using UnityEngine;
 
 namespace Misc {
     public static class PositionalHelpers {
+        // used to avoid reallocation during expensive call
+        private static Vector3 _terrainPosComparison;
+
+        /**
+         * Get the closest terrain tile to a given position in current (non-floating origin corrected!) world space.
+         * This function ASSUMES THAT ALL TERRAIN TILES ARE EQUALLY SPACED AND SIZED!
+         */
         [CanBeNull]
         public static Terrain GetClosestCurrentTerrain(Vector3 toWorldPosition) {
             //Get all terrain
             var terrains = Terrain.activeTerrains;
 
-            //Make sure that terrains length is ok
+            //If no terrains, we're done here!
             if (terrains.Length == 0)
                 return null;
 
@@ -18,20 +25,20 @@ namespace Misc {
                 return terrains[0];
 
             //Get the closest one to the player
-            var lowDist = Mathf.Infinity;
+            var closestTerrainDistance = Mathf.Infinity;
             var terrainIndex = 0;
 
             for (var i = 0; i < terrains.Length; i++) {
                 var terrain = terrains[i];
                 var terrainPosition = terrain.transform.position;
                 var terrainData = terrain.terrainData;
-                var terrainPos = new Vector3(terrainPosition.x + terrainData.size.x / 2, terrainPosition.y,
+                _terrainPosComparison.Set(terrainPosition.x + terrainData.size.x / 2, terrainPosition.y,
                     terrainPosition.z + terrainData.size.z / 2);
 
                 //Find the distance and check if it is lower than the last one then store it
-                var dist = (terrainPos - toWorldPosition).magnitude;
-                if (dist < lowDist) {
-                    lowDist = dist;
+                var dist = (_terrainPosComparison - toWorldPosition).sqrMagnitude;
+                if (dist < closestTerrainDistance) {
+                    closestTerrainDistance = dist;
                     terrainIndex = i;
                 }
             }
