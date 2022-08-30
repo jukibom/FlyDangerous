@@ -104,5 +104,13 @@ namespace Core.ShipModel {
             _targetTurbulenceOffset += 0.01f;
             _targetFresnel -= 0.01f * maxShieldFresnel;
         }
+
+        // Specifically for viewing ships in a UI, make the shield more visible at a standstill
+        public void SetPresentationMode() {
+            minShieldAlpha = 1;
+            minImpactShieldAlpha = 0.2f;
+            minTurbulenceOffset = 0.2f;
+            maxShieldFresnel = 50;
+        }
     }
 }
