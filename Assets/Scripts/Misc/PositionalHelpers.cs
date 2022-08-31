@@ -78,7 +78,6 @@ namespace Misc {
 
                 // check to see if any other ships have been assigned this exact start position (and are therefore currently loading also)
                 var existingShipStartPosition = false;
-                FdNetworkManager.Instance.ShipPlayers.ForEach(s => Debug.Log("ship at " + s.AbsoluteWorldPosition));
                 FdNetworkManager.Instance.ShipPlayers.ForEach(s =>
                     existingShipStartPosition = existingShipStartPosition || s.AbsoluteWorldPosition.Equals(testPosition));
 
