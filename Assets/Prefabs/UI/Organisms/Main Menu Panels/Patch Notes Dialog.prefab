@@ -727,25 +727,28 @@ MonoBehaviour:
     effect for collisions (#183)\r\n        * Added engine capacity penalty on collision
     proportional to impact (#183)\r\n        * Added boost cancel on collision (#197)\r\n       
     * Added collision, shield activate and boost cancel sfx (#197)\r\n    * Added
-    a bit of spit and polish to the title screen\r\n    * Player profile ship is
-    now shown on title screen\r\n    * Added Ability to disable VSync (#185 )\r\n   
-    * Device hot-plugging now supported (#153)\r\n    * Added hold binding for alternate
-    flight controls (#177)\r\n    \r\nChanged:\r\n    * Interior Calidris cockpit
-    glass reflectivity not quite so glaring anymore \r\n    * Advanced input mode
-    renamed \"Custom\" because some people assumed there was no way to rebind controls\r\n   
-    * Increased and standardised primary collider size across ships (shield)\r\n   
+    a bit of spit and polish to the title screen\r\n        * Player profile ship
+    is now shown on title screen\r\n    * Added lens flare shaders to ship rear exhausts\r\n   
+    * Added Ability to disable VSync (#185 )\r\n    * Device hot-plugging now supported
+    (#153)\r\n    * Added hold binding for alternate flight controls (#177)\r\n   
+    * Added Ultra reflection quality for refresh rate locked to frame rate (use at
+    your own risk :P)\r\n    \r\nChanged:\r\n    * Ship lights now operate as night
+    vision\r\n    * Interior Calidris cockpit glass reflectivity not quite so glaring
+    anymore \r\n    * Advanced input mode renamed \"Custom\" because some people
+    assumed there was no way to rebind controls\r\n    * Increased and standardised
+    primary collider size across ships (shield)\r\n    * Update target overlay font
+    and graphic\r\n    * Level panels load data in once per frame (Level UI element,
+    ghosts, leaderboard entries) to eliminate stutter during menu transitions\r\n   
     * Updated to Unity 2022.1.8f1\r\n    \r\nFixes:\r\n    * Possible fix for VKBs
     always reporting \"Hat Up\" on rebind (thanks to the painful manual debugging
     efforts of Giskard for this fix!)\r\n    * Was previously possible to unset protected
     bindings (which cannot then be rebound!)\r\n    * Fixed (hopefully!) occasional
-    rare crash on terrain load (#190)\r\n    * Level panels load data in once per
-    frame (Level UI element, ghosts, leaderboard entries) to eliminate stutter during
-    menu transitions\r\n    * Collision detection should be more accurate at high
-    speeds (speculative detection mode increased collision size with velocity!)\r\n   
-    * Incorrect dimensions on some flags in dropdown (#196)\r\n    * Fixed toggling
-    alternate flight controls resetting axes (#178)\r\n    * No longer possible to
-    ever be underneath the terrain (e.g. through a crack in the tile margins), ship
-    is always pushed up to compensate\r\n"
+    rare crash on terrain load (#190)\r\n    * Collision detection should be more
+    accurate at high speeds (speculative detection mode increased collision size
+    with velocity!)\r\n    * Incorrect dimensions on some flags in dropdown (#196)\r\n   
+    * Fixed toggling alternate flight controls resetting axes (#178)\r\n    * No
+    longer possible to ever be underneath the terrain (e.g. through a crack in the
+    tile margins), ship is always pushed up to compensate\r\n"
 --- !u!114 &8501361730435722574
 MonoBehaviour:
   m_ObjectHideFlags: 0

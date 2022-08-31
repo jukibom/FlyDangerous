@@ -104,10 +104,12 @@ namespace Core.MapData {
 
     // Level data network serialisation 
     public static class LevelDataReaderWriter {
+        [UsedImplicitly]
         public static void WriteLevelData(this NetworkWriter writer, LevelData levelData) {
             writer.WriteString(levelData.ToJsonString());
         }
 
+        [UsedImplicitly]
         public static LevelData ReadLevelData(this NetworkReader reader) {
             return LevelData.FromJsonString(reader.ReadString());
         }

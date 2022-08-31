@@ -67,7 +67,10 @@ namespace Misc {
 
                 // if there's a map magic object going on here, enable it
                 var mapMagic = FindObjectOfType<MapMagicObject>();
-                if (mapMagic) mapMagic.enabled = true;
+                if (mapMagic) {
+                    Game.Instance.LoadedLevelData.location = Location.TerrainV1;
+                    mapMagic.enabled = true;
+                }
 
                 // apply graphics options
                 Game.Instance.ApplyGameOptions();
@@ -91,6 +94,7 @@ namespace Misc {
                     var path = Path.Combine(Replay.ReplayDirectory, Game.Instance.LoadedLevelData.LevelHash());
                     if (Directory.Exists(path)) {
                         var ghostPaths = Directory.GetFiles(path);
+                        Debug.Log("Loading ghosts from " + path);
                         foreach (var ghostPath in ghostPaths) Game.Instance.LoadGhost(Replay.LoadFromFilepath(ghostPath));
                     }
                 }
