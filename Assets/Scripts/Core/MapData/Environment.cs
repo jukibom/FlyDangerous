@@ -9,7 +9,7 @@ namespace Core.MapData {
         public static readonly Environment NoonClear = new("Noon Clear", "Noon_Clear", 0.6f);
         public static readonly Environment NoonCloudy = new("Noon Cloudy", "Noon_Cloudy", 0.8f);
         public static readonly Environment NoonStormy = new("Noon Stormy", "Noon_Stormy", 0.8f);
-        public static readonly Environment SunsetClear = new("Sunset Clear", "Sunset_Clear", 2);
+        public static readonly Environment SunsetClear = new("Sunset Clear", "Sunset_Clear", 3);
         public static readonly Environment SunsetCloudy = new("Sunset Cloudy", "Sunset_Cloudy", 3);
         public static readonly Environment NightClear = new("Night Clear", "Night_Clear", 4);
         public static readonly Environment NightCloudy = new("Night Cloudy", "Night_Cloudy", 6);

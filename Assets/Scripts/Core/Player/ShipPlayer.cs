@@ -154,8 +154,8 @@ namespace Core.Player {
 
             // always disable the night vision post process shader until enabled by user action
             var nightVisionColor = ColorExtensions.ParseHtmlColor(profile.headLightsColor);
-            Engine.Instance.SetNightVisionColor(nightVisionColor);
-            Engine.Instance.SetNightVisionActive(false);
+            Engine.Instance.NightVision.SetNightVisionColor(nightVisionColor);
+            Engine.Instance.NightVision.SetNightVisionActive(false);
 
             RefreshShipModel();
         }
@@ -402,7 +402,7 @@ namespace Core.Player {
         private void CmdSetNightVision(bool active) {
             // Trigger night vision post process effects
             if (isLocalPlayer)
-                Engine.Instance.SetNightVisionActive(active);
+                Engine.Instance.NightVision.SetNightVisionActive(active);
 
             RpcSetNightVision(active);
         }

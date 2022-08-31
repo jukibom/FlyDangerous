@@ -41,7 +41,7 @@ namespace Menus.Main_Menu {
             topMenu.Hide();
             titleMenu.Hide();
 
-            Engine.Instance.SetNightVisionActive(false);
+            Engine.Instance.NightVision.SetNightVisionActive(false);
 
             // use this for testing bonkers string conversion issues
             // Thread.CurrentThread.CurrentCulture = new CultureInfo("fr-FR");
