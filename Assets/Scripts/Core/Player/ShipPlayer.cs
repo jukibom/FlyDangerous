@@ -1,6 +1,7 @@
 using System.Collections;
 using Core.ShipModel;
 using Mirror;
+using Misc;
 using UnityEngine;
 
 namespace Core.Player {
@@ -150,6 +151,11 @@ namespace Core.Player {
             CmdSetPlayerProfile(profile.playerName, profile.playerFlagFilename);
             CmdLoadShipModelPreferences(profile.shipModel, profile.primaryColor, profile.accentColor, profile.thrusterColor, profile.trailColor,
                 profile.headLightsColor);
+
+            // always disable the night vision post process shader until enabled by user action
+            var nightVisionColor = ColorExtensions.ParseHtmlColor(profile.headLightsColor);
+            Engine.Instance.SetNightVisionColor(nightVisionColor);
+            Engine.Instance.SetNightVisionActive(false);
 
             RefreshShipModel();
         }
@@ -394,6 +400,10 @@ namespace Core.Player {
 
         [Command]
         private void CmdSetNightVision(bool active) {
+            // Trigger night vision post process effects
+            if (isLocalPlayer)
+                Engine.Instance.SetNightVisionActive(active);
+
             RpcSetNightVision(active);
         }
 

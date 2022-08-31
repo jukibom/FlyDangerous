@@ -107,9 +107,6 @@ namespace Core.ShipModel {
             if (active) nightVisionActivateAudioSource.Play();
             else nightVisionDeactivateAudioSource.Play();
 
-            // Trigger night vision active
-            Engine.Instance.SetNightVisionActive(active);
-
             // enable the associated light
             shipLights.enabled = !shipLights.enabled;
 
@@ -194,7 +191,7 @@ namespace Core.ShipModel {
         #region User Preferences
 
         public virtual void SetPrimaryColor(string htmlColor) {
-            var color = ParseColor(htmlColor);
+            var color = ColorExtensions.ParseHtmlColor(htmlColor);
             primaryColorMeshes.ForEach(mesh => {
                 var mat = mesh.material;
                 mat.color = color;
@@ -202,7 +199,7 @@ namespace Core.ShipModel {
         }
 
         public virtual void SetAccentColor(string htmlColor) {
-            var color = ParseColor(htmlColor);
+            var color = ColorExtensions.ParseHtmlColor(htmlColor);
             accentColorMeshes.ForEach(mesh => {
                 var mat = mesh.material;
                 mat.color = color;
@@ -210,7 +207,7 @@ namespace Core.ShipModel {
         }
 
         public virtual void SetThrusterColor(string htmlColor) {
-            var color = ParseColor(htmlColor);
+            var color = ColorExtensions.ParseHtmlColor(htmlColor);
             foreach (var thruster in GetComponentsInChildren<Thruster>()) thruster.ThrustColor = color;
         }
 
@@ -218,7 +215,7 @@ namespace Core.ShipModel {
          * Set the color of the trails which occur under boost
          */
         public virtual void SetTrailColor(string htmlColor) {
-            var trailColor = ParseColor(htmlColor);
+            var trailColor = ColorExtensions.ParseHtmlColor(htmlColor);
             smokeEmitter.UpdateColor(trailColor);
         }
 
@@ -226,12 +223,10 @@ namespace Core.ShipModel {
          * Set the color of the ship head-lights
          */
         public virtual void SetHeadLightsColor(string htmlColor) {
-            var color = ParseColor(htmlColor);
+            var color = ColorExtensions.ParseHtmlColor(htmlColor);
             foreach (var shipLight in GetComponentsInChildren<Light>())
                 if (shipLight.type == LightType.Spot)
                     shipLight.color = color;
-
-            Engine.Instance.SetNightVisionColor(color);
         }
 
         #endregion
@@ -243,14 +238,6 @@ namespace Core.ShipModel {
             foreach (var audioSource in GetComponentsInChildren<AudioSource>())
                 if (paused) audioSource.Pause();
                 else audioSource.UnPause();
-        }
-
-        protected Color ParseColor(string htmlColor) {
-            if (ColorUtility.TryParseHtmlString(htmlColor, out var color)) return color;
-            color = Color.red;
-            Debug.LogWarning("Failed to parse html color " + htmlColor);
-
-            return color;
         }
 
         private void Restart() {
