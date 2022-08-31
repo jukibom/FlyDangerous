@@ -30,7 +30,7 @@ namespace Core.ShipModel {
 
         private void FixedUpdate() {
             forwardThrusters.ForEach(thruster => {
-                var thrusterTransform = thruster.transform;
+                var thrusterTransform = thruster.ThrusterMesh.transform;
                 var localScale = thrusterTransform.localScale;
                 localScale = new Vector3(
                     localScale.x,
@@ -43,7 +43,7 @@ namespace Core.ShipModel {
 
         public void AnimateBoostThrusters() {
             forwardThrusters.ForEach(thruster => {
-                var thrusterTransform = thruster.transform;
+                var thrusterTransform = thruster.ThrusterMesh.transform;
                 var localScale = thrusterTransform.localScale;
                 localScale = new Vector3(
                     localScale.x,

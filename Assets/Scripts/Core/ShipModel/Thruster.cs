@@ -28,6 +28,8 @@ namespace Core.ShipModel {
 
         private Material _thrusterMaterial;
 
+        public GameObject ThrusterMesh => thrusterRenderer.gameObject;
+
         public Color ThrustColor {
             get => thrustColor;
             set {
@@ -52,7 +54,7 @@ namespace Core.ShipModel {
 
             audioSource.volume = MathfExtensions.Remap(0, 1, 0, 0.2f, _thrust);
             audioSource.pitch = MathfExtensions.Remap(0, 1, 0.8f, 2f, _thrust);
-            lightSource.intensity = MathfExtensions.Remap(0, 1, 0, 2, _thrust);
+            lightSource.intensity = MathfExtensions.Remap(0, 1, 0, 3, _thrust * thrusterRenderer.transform.localScale.z);
             if (lensFlare != null) lensFlare.intensity = lightSource.intensity;
 
             if (isLarge) {
