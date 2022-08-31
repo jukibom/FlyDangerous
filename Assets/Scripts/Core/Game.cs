@@ -207,6 +207,10 @@ namespace Core {
                 var reflectionSetting = Preferences.Instance.GetString("graphics-reflections");
                 shipPlayer.ReflectionProbe.enabled = reflectionSetting != "off";
                 switch (reflectionSetting) {
+                    case "ultra":
+                        shipPlayer.ReflectionProbe.resolution = 512;
+                        shipPlayer.ReflectionProbe.timeSlicingMode = ReflectionProbeTimeSlicingMode.NoTimeSlicing;
+                        break;
                     case "high":
                         shipPlayer.ReflectionProbe.resolution = 512;
                         shipPlayer.ReflectionProbe.timeSlicingMode = ReflectionProbeTimeSlicingMode.AllFacesAtOnce;
