@@ -280,7 +280,7 @@ namespace Core.ShipModel {
 
                 IEnumerator DoBoost() {
                     _boostCapacitorPercent -= FlightParameters.boostCapacitorPercentCost;
-                    _boostProgressTicks = 0;
+                    _boostProgressTicks = -1;
                     _boostStatus = BoostStatus.Spooling;
 
                     yield return YieldExtensions.WaitForFixedFrames(YieldExtensions.SecondsToFixedFrames(FlightParameters.boostSpoolUpTime));
@@ -362,9 +362,9 @@ namespace Core.ShipModel {
             }
 
             _boostProgressTicks++;
-            if (_currentBoostTime > FlightParameters.totalBoostRotationalTime) {
+            if (_boostStatus == BoostStatus.Active && _currentBoostTime > FlightParameters.totalBoostRotationalTime) {
                 _boostStatus = BoostStatus.Inactive;
-                _boostProgressTicks = 0;
+                _boostProgressTicks = -1;
             }
         }
 
@@ -489,7 +489,7 @@ namespace Core.ShipModel {
             _shipFeedbackData.IsBoostThrustActive = _boostStatus == BoostStatus.Active;
             _shipFeedbackData.BoostSpoolTotalDurationSeconds = FlightParameters.boostSpoolUpTime;
             _shipFeedbackData.BoostThrustTotalDurationSeconds = FlightParameters.totalBoostTime;
-            _shipFeedbackData.BoostSpoolStartThisFrame = _shipFeedbackData.IsBoostSpooling && _boostProgressTicks == 1;
+            _shipFeedbackData.BoostSpoolStartThisFrame = _shipFeedbackData.IsBoostSpooling && _boostProgressTicks == 0;
             _shipFeedbackData.BoostThrustStartThisFrame =
                 _shipFeedbackData.IsBoostThrustActive && _boostProgressTicks == secondInFrames; // one second after start
             _shipFeedbackData.BoostSpoolProgressNormalised =
