@@ -53,7 +53,7 @@ namespace Core.ShipModel.Feedback.socket {
         [UsedImplicitly]
         private void StopListener() {
             Debug.Log("Shutting down UDP Listener");
-            _listener.Close();
+            _listener?.Close();
             _receiveTask = null;
             _isEnabled = false;
         }

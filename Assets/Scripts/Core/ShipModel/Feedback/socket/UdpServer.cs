@@ -71,7 +71,7 @@ namespace Core.ShipModel.Feedback.socket {
         [UsedImplicitly]
         private void StopListener() {
             Debug.Log("Shutting down UDP Server");
-            _socket?.Dispose();
+            _socket?.Close();
             _socket = null;
             _isEnabled = false;
         }
