@@ -5,18 +5,19 @@ using UnityEngine.Rendering.Universal;
 namespace Core {
     [RequireComponent(typeof(Volume))]
     public class NightVision : MonoBehaviour {
+        private bool _nightVisionEnabled;
 
         private Volume _volume;
-        private bool _nightVisionEnabled;
+
         private void FixedUpdate() {
-            _volume.weight += _nightVisionEnabled ? 0.005f : -1f;
+            _volume.weight += _nightVisionEnabled ? 0.008f : -1f;
             _volume.weight = Mathf.Clamp(_volume.weight, 0, 1);
 
             // gradually reduce ambient night vision light
             RenderSettings.ambientIntensity =
                 _nightVisionEnabled
                     ? RenderSettings.ambientIntensity >= Game.Instance.LoadedLevelData.environment.NightVisionAmbientLight
-                        ? RenderSettings.ambientIntensity * 0.99f
+                        ? RenderSettings.ambientIntensity * 0.985f
                         : Game.Instance.LoadedLevelData.environment.NightVisionAmbientLight
                     : 0;
         }
@@ -28,7 +29,7 @@ namespace Core {
         public void SetNightVisionActive(bool isActive) {
             _nightVisionEnabled = isActive;
             if (isActive) _volume.weight = 0.5f;
-            RenderSettings.ambientIntensity = isActive ? Game.Instance.LoadedLevelData.environment.NightVisionAmbientLight * 4 : 0;
+            RenderSettings.ambientIntensity = isActive ? Game.Instance.LoadedLevelData.environment.NightVisionAmbientLight * 3 : 0;
         }
 
         public void SetNightVisionColor(Color nightVisionColor) {
