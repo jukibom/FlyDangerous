@@ -166,8 +166,8 @@ namespace Core {
         }
 
         public void ApplyGameOptions() {
-            OnGameSettingsApplied?.Invoke();
             ApplyGraphicsOptions();
+            OnGameSettingsApplied?.Invoke();
         }
 
         private void ApplyGraphicsOptions() {

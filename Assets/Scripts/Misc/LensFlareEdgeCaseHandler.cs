@@ -1,4 +1,3 @@
-using System;
 using Core;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -39,13 +38,13 @@ namespace Misc {
 
         private void HandleVisibility(bool vrEnabled) {
             var shouldShow = true;
-            
+
             // TODO: remove this when #199 fixed (MSAA breaks lens flares!)
             var urp = (UniversalRenderPipelineAsset)GraphicsSettings.currentRenderPipeline;
-            shouldShow &= urp.msaaSampleCount == 0;
-            
+            if (urp.msaaSampleCount != 0) shouldShow = false;
+
             // TODO: remove this when #200 fixed (lens flare broken in VR!)
-            shouldShow &= !vrEnabled;
+            if (vrEnabled) shouldShow = false;
 
             _lensFlare.enabled = shouldShow;
         }
