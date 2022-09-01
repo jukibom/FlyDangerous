@@ -13,12 +13,19 @@ namespace Core {
             _volume.weight += _nightVisionEnabled ? 0.008f : -1f;
             _volume.weight = Mathf.Clamp(_volume.weight, 0, 1);
 
+            var targetAmbientIntensity = Game.Instance.LoadedLevelData.environment.NightVisionAmbientLight;
+
+#if !UNITY_EDITOR
+            // no idea why it's darker in release, I give up :(
+            targetAmbientIntensity *= 1.8f;
+#endif
+
             // gradually reduce ambient night vision light
             RenderSettings.ambientIntensity =
                 _nightVisionEnabled
-                    ? RenderSettings.ambientIntensity >= Game.Instance.LoadedLevelData.environment.NightVisionAmbientLight
+                    ? RenderSettings.ambientIntensity > targetAmbientIntensity
                         ? RenderSettings.ambientIntensity * 0.985f
-                        : Game.Instance.LoadedLevelData.environment.NightVisionAmbientLight
+                        : targetAmbientIntensity
                     : 0;
         }
 
@@ -29,7 +36,7 @@ namespace Core {
         public void SetNightVisionActive(bool isActive) {
             _nightVisionEnabled = isActive;
             if (isActive) _volume.weight = 0.5f;
-            RenderSettings.ambientIntensity = isActive ? Game.Instance.LoadedLevelData.environment.NightVisionAmbientLight * 3 : 0;
+            RenderSettings.ambientIntensity = isActive ? Game.Instance.LoadedLevelData.environment.NightVisionAmbientLight * 6 : 0;
         }
 
         public void SetNightVisionColor(Color nightVisionColor) {
