@@ -21,6 +21,9 @@ namespace Core.ShipModel.Feedback.bHaptics {
         [SerializeField] private ArmsHapticClip boostFireRightArmHapticClip;
         [SerializeField] private ArmsHapticClip shipShakeRightArmHapticClip;
 
+        [SerializeField] private HeadHapticClip collisionImpactHeadHapticClip;
+        [SerializeField] private HeadHapticClip boostFireHeadHapticClip;
+
         // No idea why but `IsPlaying()` always returns false :/
         private float _shakeHapticPlayTime;
 
@@ -35,6 +38,7 @@ namespace Core.ShipModel.Feedback.bHaptics {
                 boostFireVestHapticClip.Play(5, 1.5f);
                 boostFireLeftArmHapticClip.Play();
                 boostFireRightArmHapticClip.Play();
+                boostFireHeadHapticClip.Play();
             }
 
             if (shipFeedbackData.ShipShakeNormalised > 0 && _shakeHapticPlayTime > 0.1f) {
@@ -51,6 +55,7 @@ namespace Core.ShipModel.Feedback.bHaptics {
                     Vector3.forward, 1);
                 collisionImpactLeftArmHapticClip.Play(shipFeedbackData.CollisionImpactNormalised);
                 collisionImpactRightArmHapticClip.Play(shipFeedbackData.CollisionImpactNormalised);
+                collisionImpactHeadHapticClip.Play(shipFeedbackData.CollisionImpactNormalised);
             }
         }
 
