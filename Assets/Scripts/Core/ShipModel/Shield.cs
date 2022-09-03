@@ -73,6 +73,8 @@ namespace Core.ShipModel {
             _targetTurbulenceOffset = minTurbulenceOffset;
             _targetFresnel = maxShieldFresnel;
             _targetDirection = Vector3.zero;
+            collisionAudioSource.Stop();
+            shieldActivateAudioSource.Stop();
         }
 
         public void OnImpact(float impactForceNormalised, Vector3 impactDirection) {
