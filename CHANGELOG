@@ -1,6 +1,6 @@
 ﻿[unreleased]
 New:
-    * Ship Collisions
+    * Ship Collisions (Change in collision gameplay means maps reliant on checkpoint rebounds at high end must have leaderboards reset)
         * Added visual shield effect for collisions (#183)
         * Added engine capacity penalty on collision proportional to impact (#183)
         * Added boost cancel on collision (#197)
@@ -8,10 +8,14 @@ New:
     * Added a bit of spit and polish to the title screen
         * Player profile ship is now shown on title screen
     * Added lens flare shaders to ship rear exhausts
+        * Note this is disabled in VR (#200) and with MSAA (#199) active.
+    * Added support for ultra-wide displays by constraining the UI to a max width (#184)
     * Added Ability to disable VSync (#185 )
     * Device hot-plugging now supported (#153)
     * Added hold binding for alternate flight controls (#177)
     * Added Ultra reflection quality for refresh rate locked to frame rate (use at your own risk :P)
+    * Added bHaptics support for Vest, Arms and Head (WIP, #194)
+    * Added telemetry support for generic motion simulators (WIP, #115, more information to follow)
     
 Changed:
     * Ship lights now operate as night vision
