@@ -372,7 +372,7 @@ namespace Core {
                 // store the starting position after any correction (e.g. move above terrain height)
                 // TODO: What impact, if any, does this have on level hashes??
                 var shipPosition = ship.AbsoluteWorldPosition;
-                _levelLoader.LoadedLevelData.startPosition = LevelDataVector3.FromVector3(shipPosition);
+                _levelLoader.LoadedLevelData.startPosition = SerializableVector3.FromVector3(shipPosition);
 
                 // enable user input
                 ship.User.EnableGameInput();

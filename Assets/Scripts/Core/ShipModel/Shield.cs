@@ -5,10 +5,10 @@ using Random = System.Random;
 
 namespace Core.ShipModel {
     public class Shield : MonoBehaviour {
-        private static readonly int alpha = Shader.PropertyToID("_Alpha");
-        private static readonly int impactCenter = Shader.PropertyToID("_ImpactCenter");
-        private static readonly int shieldOffset = Shader.PropertyToID("_ShieldOffset");
-        private static readonly int shieldFresnel = Shader.PropertyToID("_FresnelPower");
+        private static readonly int Alpha = Shader.PropertyToID("_Alpha");
+        private static readonly int ImpactCenter = Shader.PropertyToID("_ImpactCenter");
+        private static readonly int ShieldOffset = Shader.PropertyToID("_ShieldOffset");
+        private static readonly int ShieldFresnel = Shader.PropertyToID("_FresnelPower");
 
         [SerializeField] private MeshRenderer shieldMesh;
         [SerializeField] private MeshRenderer shieldImpactMesh;
@@ -51,12 +51,12 @@ namespace Core.ShipModel {
             _targetTurbulenceOffset = Mathf.Clamp(_targetTurbulenceOffset, minTurbulenceOffset, maxTurbulenceOffset);
             _targetFresnel = Mathf.Clamp(_targetFresnel, minShieldFresnel, maxShieldFresnel);
 
-            _shieldMaterial.SetFloat(alpha, _targetShieldAlpha);
-            _shieldImpactMaterial.SetFloat(alpha, _targetShieldImpactAlpha);
-            _shieldMaterial.SetFloat(shieldOffset, _targetTurbulenceOffset);
-            _shieldImpactMaterial.SetFloat(shieldOffset, _targetTurbulenceOffset);
-            _shieldMaterial.SetFloat(shieldFresnel, _targetFresnel);
-            _shieldImpactMaterial.SetVector(impactCenter, new Vector4(_targetDirection.x, _targetDirection.y, _targetDirection.z, 0));
+            _shieldMaterial.SetFloat(Alpha, _targetShieldAlpha);
+            _shieldImpactMaterial.SetFloat(Alpha, _targetShieldImpactAlpha);
+            _shieldMaterial.SetFloat(ShieldOffset, _targetTurbulenceOffset);
+            _shieldImpactMaterial.SetFloat(ShieldOffset, _targetTurbulenceOffset);
+            _shieldMaterial.SetFloat(ShieldFresnel, _targetFresnel);
+            _shieldImpactMaterial.SetVector(ImpactCenter, new Vector4(_targetDirection.x, _targetDirection.y, _targetDirection.z, 0));
         }
 
         private void OnEnable() {

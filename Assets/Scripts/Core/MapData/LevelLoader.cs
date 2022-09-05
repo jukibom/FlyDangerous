@@ -197,14 +197,14 @@ namespace Core.MapData {
                 foreach (var checkpoint in checkpoints) {
                     var checkpointLocation = new CheckpointLocation();
                     checkpointLocation.type = checkpoint.Type;
-                    checkpointLocation.position = new LevelDataVector3();
-                    checkpointLocation.rotation = new LevelDataVector3();
+                    checkpointLocation.position = new SerializableVector3();
+                    checkpointLocation.rotation = new SerializableVector3();
 
                     var checkpointTransform = checkpoint.transform;
                     var position = checkpointTransform.localPosition;
                     var rotation = checkpointTransform.rotation.eulerAngles;
-                    checkpointLocation.position = LevelDataVector3.FromVector3(position);
-                    checkpointLocation.rotation = LevelDataVector3.FromVector3(rotation);
+                    checkpointLocation.position = SerializableVector3.FromVector3(position);
+                    checkpointLocation.rotation = SerializableVector3.FromVector3(rotation);
                     levelData.checkpoints.Add(checkpointLocation);
                 }
             }

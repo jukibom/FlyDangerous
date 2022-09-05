@@ -53,8 +53,8 @@ namespace Misc {
 
                 var pos = spawnLocation.position;
                 var rot = spawnLocation.rotation;
-                Game.Instance.LoadedLevelData.startPosition = new LevelDataVector3(pos.x, pos.y, pos.z);
-                Game.Instance.LoadedLevelData.startRotation = new LevelDataVector3(rot.eulerAngles.x, rot.eulerAngles.y, rot.eulerAngles.z);
+                Game.Instance.LoadedLevelData.startPosition = new SerializableVector3(pos.x, pos.y, pos.z);
+                Game.Instance.LoadedLevelData.startRotation = new SerializableVector3(rot.eulerAngles.x, rot.eulerAngles.y, rot.eulerAngles.z);
 
                 yield return new WaitForEndOfFrame();
 

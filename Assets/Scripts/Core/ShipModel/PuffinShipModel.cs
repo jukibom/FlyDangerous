@@ -12,7 +12,7 @@ namespace Core.ShipModel {
         [SerializeField] private Image boostCapacitorBar;
 
         public override void OnShipInstrumentUpdate(IShipInstrumentData shipInstrumentData) {
-            if (velocityIndicator != null) velocityIndicator.text = shipInstrumentData.VelocityMagnitude.ToString(CultureInfo.InvariantCulture);
+            if (velocityIndicator != null) velocityIndicator.text = shipInstrumentData.Speed.ToString(CultureInfo.InvariantCulture);
 
             if (accelerationBar != null) {
                 accelerationBar.fillAmount = MathfExtensions.Remap(0, 1, 0, 0.755f, shipInstrumentData.AccelerationMagnitudeNormalised);

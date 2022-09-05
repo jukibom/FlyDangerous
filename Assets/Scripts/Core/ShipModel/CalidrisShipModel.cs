@@ -72,7 +72,7 @@ namespace Core.ShipModel {
 
             #region Velocity
 
-            velocityIndicatorText.text = shipInstrumentData.VelocityMagnitude.ToString(CultureInfo.InvariantCulture);
+            velocityIndicatorText.text = shipInstrumentData.Speed.ToString(CultureInfo.InvariantCulture);
 
             // special use-case for acceleration bar depending on flight assist (switch to throttle input)
             var accelerationBarAmount = shipInstrumentData.VectorFlightAssistActive

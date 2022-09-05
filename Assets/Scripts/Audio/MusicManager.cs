@@ -13,7 +13,7 @@ namespace Audio {
         [CanBeNull] private AudioClip _introTrack;
         private AudioClip _loopingTrack;
         private float _volume;
-        public MusicTrack CurrentPlayingTrack { get; private set; }
+        [CanBeNull] public MusicTrack CurrentPlayingTrack { get; private set; }
 
         private void OnEnable() {
             _audioSource = GetComponent<AudioSource>();
@@ -38,23 +38,27 @@ namespace Audio {
             _loopingTrack = loopingTrack;
 
             if (fadeOut)
-                FadeOut(1f, () => Play(includeIntro));
-            else Play(includeIntro);
+                FadeOut(1f, () => Play(musicTrack, includeIntro));
+            else Play(musicTrack, includeIntro);
 
             if (fadeIn) FadeIn();
         }
 
         public void StopMusic(bool fade = false) {
+            CurrentPlayingTrack = null;
             if (fade)
                 FadeOut(1f, () => _audioSource.Stop());
             else
                 _audioSource.Stop();
         }
 
-        private void Play(bool includeIntro) {
+        private void Play([CanBeNull] MusicTrack musicTrack, bool includeIntro = true) {
+            if (musicTrack == null) return;
+
             if (_fadeCoroutine != null) StopCoroutine(_fadeCoroutine);
 
             StopMusic();
+            CurrentPlayingTrack = musicTrack;
 
             _audioSource.volume = _volume;
             _audioSource.clip = _loopingTrack;
@@ -91,7 +95,7 @@ namespace Audio {
 
         // Music has to be manually restarted whenever audio config changes
         private void OnAudioConfigurationChanged(bool deviceWasChanged) {
-            Play(true);
+            Play(CurrentPlayingTrack);
         }
     }
 }

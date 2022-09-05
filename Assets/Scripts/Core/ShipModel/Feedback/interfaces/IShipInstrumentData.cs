@@ -6,13 +6,13 @@ namespace Core.ShipModel.ShipIndicator {
     // Many values are exposed as normalised (-1:1 or 0:1) for ease of integration.
     public interface IShipInstrumentData {
         // The world position coordinates from the world origin
-        public Vector3 ShipWorldPosition { get; }
+        public Vector3 WorldPosition { get; }
 
         // The ship altitude in meters, if applicable (Infinity in space!)
-        public float ShipAltitude { get; }
+        public float Altitude { get; }
 
-        // The raw velocity in m/s
-        public float VelocityMagnitude { get; }
+        // The raw velocity magnitude in m/s
+        public float Speed { get; }
 
         // The amount of acceleration applied as a normalised value.
         public float AccelerationMagnitudeNormalised { get; }
@@ -31,6 +31,12 @@ namespace Core.ShipModel.ShipIndicator {
 
         // The position of the throttle as a normalised value (where -1 is reverse)
         public float ThrottlePositionNormalised { get; }
+
+        // The position of lateral (horizontal) thrusters
+        public float LateralHPositionNormalised { get; }
+
+        // The position of vertical thrusters
+        public float LateralVPositionNormalised { get; }
 
         // The value of the boost / engine capacitor as a percentage
         public float BoostCapacitorPercent { get; }

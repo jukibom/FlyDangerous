@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using JetBrains.Annotations;
 using Mirror;
 using Misc;
@@ -8,44 +7,9 @@ using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Core.MapData {
-    public class LevelDataVector3 {
-        public float x;
-        public float y;
-        public float z;
-
-        public LevelDataVector3() {
-        }
-
-        public LevelDataVector3(float x, float y, float z) {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-        }
-
-        public Vector3 ToVector3() {
-            return new Vector3(
-                x,
-                y,
-                z
-            );
-        }
-
-        public override string ToString() {
-            return "[ " +
-                   x.ToString(CultureInfo.InvariantCulture) + ", " +
-                   y.ToString(CultureInfo.InvariantCulture) + ", " +
-                   z.ToString(CultureInfo.InvariantCulture) +
-                   " ]";
-        }
-
-        public static LevelDataVector3 FromVector3(Vector3 value) {
-            return new LevelDataVector3(value.x, value.y, value.z);
-        }
-    }
-
     public class CheckpointLocation {
-        public LevelDataVector3 position;
-        public LevelDataVector3 rotation;
+        public SerializableVector3 position;
+        public SerializableVector3 rotation;
         public CheckpointType type;
     }
 
@@ -60,7 +24,7 @@ namespace Core.MapData {
         [JsonConverter(typeof(FdEnumJsonConverter))]
         public GameType gameType = GameType.FreeRoam;
 
-        public LevelDataVector3 gravity = new(0, 0, 0);
+        public SerializableVector3 gravity = new(0, 0, 0);
 
         [JsonConverter(typeof(FdEnumJsonConverter))]
         public Location location = Location.Space;
@@ -68,8 +32,8 @@ namespace Core.MapData {
         public string musicTrack = "";
 
         public string name = "";
-        public LevelDataVector3 startPosition = new();
-        public LevelDataVector3 startRotation = new();
+        public SerializableVector3 startPosition = new();
+        public SerializableVector3 startRotation = new();
 
         public string terrainSeed = "";
         public int version = 1;

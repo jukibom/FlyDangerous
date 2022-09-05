@@ -4,15 +4,6 @@ namespace Core.ShipModel.Feedback.interfaces {
     // Typically used to provide physics data to integrations like motion rigs.
     // Most values are provided normalised (-1:1 or 0:1) using the maximums for ease of integration.
     public interface IShipMotionData {
-        // The raw velocity in m/s
-        public float VelocityMagnitude { get; }
-
-        // The amount of acceleration applied as a normalised value.
-        public float AccelerationMagnitudeNormalised { get; }
-
-        // The raw GForce currently applied to the seat of the ship in Gs
-        public float GForce { get; }
-
         // The raw lateral velocity in ship local space m/s
         Vector3 CurrentLateralVelocity { get; }
 
@@ -38,6 +29,6 @@ namespace Core.ShipModel.Feedback.interfaces {
         Vector3 CurrentAngularTorqueNormalised { get; }
 
         // The raw maximum lateral velocity magnitude in m/s permitted by the ship configuration
-        float MaxLateralVelocity { get; }
+        float MaxSpeed { get; }
     }
 }

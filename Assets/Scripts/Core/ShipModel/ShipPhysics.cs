@@ -399,9 +399,9 @@ namespace Core.ShipModel {
             UpdateFeedbackData();
 
             // correct for being underground in any scenario
-            if (_shipInstrumentData.ShipAltitude < 0) {
+            if (_shipInstrumentData.Altitude < 0) {
                 var position = targetRigidbody.position;
-                targetRigidbody.position = new Vector3(position.x, position.y - _shipInstrumentData.ShipAltitude, position.z);
+                targetRigidbody.position = new Vector3(position.x, position.y - _shipInstrumentData.Altitude, position.z);
             }
 
             _prevVelocity = Velocity;
@@ -409,13 +409,6 @@ namespace Core.ShipModel {
 
         // public overrides for motion data, used for multiplayer non-local client RPC calls
         public void UpdateMotionData(Vector3 velocity, Vector3 thrust, Vector3 torque) {
-            _shipMotionData.AccelerationMagnitudeNormalised =
-                (Math.Abs(CurrentFrameThrust.x) + Math.Abs(CurrentFrameThrust.y) + Math.Abs(CurrentFrameThrust.z)) /
-                FlightParameters.maxThrust;
-            _shipMotionData.VelocityMagnitude = VelocityMagnitude;
-
-            _shipMotionData.GForce = _gForce;
-
             _shipMotionData.CurrentLateralForce = thrust;
             _shipMotionData.CurrentLateralVelocity = velocity;
             _shipMotionData.CurrentAngularTorque = torque;
@@ -425,7 +418,7 @@ namespace Core.ShipModel {
             _shipMotionData.CurrentLateralVelocityNormalised = velocity / FlightParameters.maxBoostSpeed;
             _shipMotionData.CurrentAngularVelocityNormalised = AngularVelocity / FlightParameters.maxAngularVelocity;
             _shipMotionData.CurrentAngularTorqueNormalised = torque / (FlightParameters.maxThrust * FlightParameters.torqueThrustMultiplier);
-            _shipMotionData.MaxLateralVelocity = FlightParameters.maxBoostSpeed;
+            _shipMotionData.MaxSpeed = FlightParameters.maxBoostSpeed;
         }
 
         private void UpdateMotionData() {
@@ -437,19 +430,21 @@ namespace Core.ShipModel {
             var absoluteShipPosition = FloatingOrigin.Instance.GetAbsoluteWorldPosition(targetRigidbody.transform);
             var nearestTerrain = PositionalHelpers.GetClosestCurrentTerrain(shipPosition);
 
-            _shipInstrumentData.ShipWorldPosition = absoluteShipPosition;
-            _shipInstrumentData.ShipAltitude = Game.Instance.IsTerrainMap && nearestTerrain != null
+            _shipInstrumentData.WorldPosition = absoluteShipPosition;
+            _shipInstrumentData.Altitude = Game.Instance.IsTerrainMap && nearestTerrain != null
                 ? absoluteShipPosition.y - nearestTerrain.SampleHeight(shipPosition)
                 : Mathf.Infinity;
             _shipInstrumentData.AccelerationMagnitudeNormalised =
                 (Math.Abs(CurrentFrameThrust.x) + Math.Abs(CurrentFrameThrust.y) + Math.Abs(CurrentFrameThrust.z)) /
                 FlightParameters.maxThrust;
-            _shipInstrumentData.VelocityMagnitude = VelocityMagnitude;
+            _shipInstrumentData.Speed = VelocityMagnitude;
             _shipInstrumentData.GForce = _gForce;
             _shipInstrumentData.PitchPositionNormalised = Pitch;
             _shipInstrumentData.RollPositionNormalised = Roll;
             _shipInstrumentData.YawPositionNormalised = Yaw;
             _shipInstrumentData.ThrottlePositionNormalised = VectorFlightAssistActive ? ThrottleRaw : Throttle;
+            _shipInstrumentData.LateralHPositionNormalised = LatH;
+            _shipInstrumentData.LateralVPositionNormalised = LatV;
             _shipInstrumentData.BoostCapacitorPercent = _boostCapacitorPercent;
             _shipInstrumentData.BoostTimerReady = !_boostRecharging;
             _shipInstrumentData.BoostChargeReady = _boostCapacitorPercent > FlightParameters.boostCapacitorPercentCost;

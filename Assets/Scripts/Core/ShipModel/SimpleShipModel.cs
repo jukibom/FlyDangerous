@@ -168,9 +168,9 @@ namespace Core.ShipModel {
             );
 
             thrusterController.UpdateThrusters(shipMotionData.CurrentLateralForceNormalised, torqueVec);
-            smokeEmitter.UpdateThrustTrail(shipMotionData.CurrentLateralVelocity, shipMotionData.MaxLateralVelocity,
+            smokeEmitter.UpdateThrustTrail(shipMotionData.CurrentLateralVelocity, shipMotionData.MaxSpeed,
                 shipMotionData.CurrentLateralForceNormalised);
-            foliageCollider.radius = MathfExtensions.Remap(0, shipMotionData.MaxLateralVelocity / 2, 4, 15, shipMotionData.CurrentLateralVelocity.magnitude);
+            foliageCollider.radius = MathfExtensions.Remap(0, shipMotionData.MaxSpeed / 2, 4, 15, shipMotionData.CurrentLateralVelocity.magnitude);
         }
 
         public virtual void OnShipFeedbackUpdate(IShipFeedbackData shipFeedbackData) {

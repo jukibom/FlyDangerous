@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Text;
+using Misc;
 using Newtonsoft.Json;
 
 namespace Core.ShipModel.Feedback.socket {
@@ -10,14 +11,67 @@ namespace Core.ShipModel.Feedback.socket {
     }
 
     public struct FlyDangerousTelemetry {
+        // Meta
+        public uint flyDangerousTelemetryId;
         public uint packetId;
-        public string version;
-        public string currentTrackName;
+
+        // Game State
+        public string gameVersion;
         public string currentGameMode;
-        public float velocity;
+        public string currentLevelName;
+        public string currentMusicTrackName;
+        public int currentPlayerCount;
+
+        // Instrument Data
+        public SerializableVector3 shipWorldPosition;
+        public float shipAltitude;
+        public float shipSpeed;
+        public float accelerationMagnitudeNormalised;
+        public float gForce;
+        public float pitchPosition;
+        public float rollPosition;
+        public float yawPosition;
+        public float throttlePosition;
+        public float lateralHPosition;
+        public float lateralVPosition;
+        public float boostCapacitorPercent;
+        public bool boostTimerReady;
+        public bool boostChargeReady;
+        public bool lightsActive;
+        public bool velocityLimiterActive;
+        public bool vectorFlightAssistActive;
+        public bool rotationalFlightAssistActive;
+        public bool proximityWarning;
+        public float proximityWarningSeconds;
+
+        // Feedback Data
+        public bool collisionThisFrame;
+        public bool collisionStartedThisFrame;
+        public float collisionImpactNormalised;
+        public SerializableVector3 collisionDirection;
+        public bool isBoostSpooling;
+        public bool boostSpoolStartedThisFrame;
+        public bool isBoostThrustActive;
+        public bool boostThrustStartedThisFrame;
+        public float boostSpoolTotalDurationSeconds;
+        public float boostThrustTotalDurationSeconds;
+        public float boostThrustProgressNormalised;
+        public float shipShakeNormalised;
+
+        // Motion Data
+        public SerializableVector3 currentLateralVelocity;
+        public SerializableVector3 currentLateralForce;
+        public SerializableVector3 currentAngularVelocity;
+        public SerializableVector3 currentAngularTorque;
+        public SerializableVector3 currentLateralVelocityNormalised;
+        public SerializableVector3 currentLateralForceNormalised;
+        public SerializableVector3 currentAngularVelocityNormalised;
+        public SerializableVector3 currentAngularTorqueNormalised;
+        public float maxSpeed;
 
         public override string ToString() {
-            return $"Fly Dangerous version {version}, packetId: {packetId}, ship velocity: {velocity}m/s";
+            return
+                $"Fly Dangerous version {gameVersion}, packetId: {packetId}, ship details: speed - {shipSpeed}m/s, altitude {shipAltitude} - world position {shipWorldPosition}";
         }
     }
 
@@ -68,7 +122,7 @@ namespace Core.ShipModel.Feedback.socket {
 
     public static class FlyDangerousTelemetryDecoder {
         private static FlyDangerousTelemetry _telemetry;
-        
+
         internal static FlyDangerousTelemetry DecodePacket(BroadcastFormat broadcastFormat, byte[] bytes) {
             switch (broadcastFormat) {
                 case BroadcastFormat.Bytes:
