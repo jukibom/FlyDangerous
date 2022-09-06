@@ -13,7 +13,8 @@ namespace Core.ShipModel.Feedback.socket {
         [SerializeField] private BroadcastFormat broadcastFormat = BroadcastFormat.Json;
         [SerializeField] private IPAddress broadcastIpAddress = IPAddress.Parse("127.0.0.1");
         [SerializeField] private int broadcastPort = 11000;
-        [SerializeField] private float emitInterval = 0.02f;
+        [SerializeField] private float emitIntervalSeconds = 0.02f;
+        private float _emitTimer;
         [CanBeNull] private IPEndPoint _ipEndPoint;
 
         private bool _isEnabled;
@@ -26,24 +27,28 @@ namespace Core.ShipModel.Feedback.socket {
         private void FixedUpdate() {
             if (!_isEnabled) return;
 
-            // TODO: emit interval implementation
+            if (_emitTimer >= emitIntervalSeconds) {
+                _emitTimer = 0;
 
-            // Add missing / global data to telemetry
-            // Meta
-            _telemetry.flyDangerousTelemetryId = 1;
-            _telemetry.packetId = _packetId;
+                // Add missing / global data to telemetry
+                // Meta
+                _telemetry.flyDangerousTelemetryId = 1;
+                _telemetry.packetId = _packetId;
 
-            // Game State
-            _telemetry.gameVersion = Application.version;
-            _telemetry.currentLevelName = Game.Instance.LoadedLevelData.name;
-            _telemetry.currentGameMode = Game.Instance.LoadedLevelData.gameType.Name;
-            _telemetry.currentMusicTrackName = MusicManager.Instance.CurrentPlayingTrack?.Name ?? "None";
-            _telemetry.currentPlayerCount = FdNetworkManager.Instance.numPlayers;
+                // Game State
+                _telemetry.gameVersion = Application.version;
+                _telemetry.currentLevelName = Game.Instance.LoadedLevelData.name;
+                _telemetry.currentGameMode = Game.Instance.LoadedLevelData.gameType.Name;
+                _telemetry.currentMusicTrackName = MusicManager.Instance.CurrentPlayingTrack?.Name ?? "None";
+                _telemetry.currentPlayerCount = FdNetworkManager.Instance.numPlayers;
 
-            // Serialise and send
-            var packet = FlyDangerousTelemetryEncoder.EncodePacket(broadcastFormat, _telemetry);
-            if (_socket != null && _ipEndPoint != null) _socket.SendTo(packet, _ipEndPoint);
-            _packetId++;
+                // Serialise and send
+                var packet = FlyDangerousTelemetryEncoder.EncodePacket(broadcastFormat, _telemetry);
+                if (_socket != null && _ipEndPoint != null) _socket.SendTo(packet, _ipEndPoint);
+                _packetId++;
+            }
+
+            _emitTimer += Time.fixedDeltaTime;
         }
 
         private void OnEnable() {
@@ -138,7 +143,22 @@ namespace Core.ShipModel.Feedback.socket {
         }
 
         private void OnGameSettingsApplied() {
-            Debug.Log("TODO: UDP CONFIG FUN TIMES");
+            _isEnabled = Preferences.Instance.GetBool("telemetryEnabled");
+            var mode = Preferences.Instance.GetString("telemetryOutputMode");
+            switch (mode) {
+                case "bytes":
+                    broadcastFormat = BroadcastFormat.Bytes;
+                    break;
+                case "json":
+                    broadcastFormat = BroadcastFormat.Json;
+                    break;
+                default:
+                    Debug.LogWarning("Telemetry enabled but 'telemetryOutputMode' setting is not recognised.");
+                    _isEnabled = false;
+                    return;
+            }
+
+            _emitTimer = Preferences.Instance.GetFloat("telemetryEmitIntervalSeconds");
 
             if (_isEnabled) StartListener();
             else StopListener();

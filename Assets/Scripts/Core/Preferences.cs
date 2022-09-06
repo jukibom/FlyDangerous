@@ -64,6 +64,7 @@ namespace Core {
                 case "forceRelativeMouseWithFAOff":
                 case "autoShipRotation":
                 case "autoShipRoll":
+                case "enableTelemetry":
                     return false;
 
                 default:
@@ -105,6 +106,8 @@ namespace Core {
                     return 30;
                 case "volumeGhostSound":
                     return 25;
+                case "telemetryEmitIntervalSeconds":
+                    return 0.02f;
                 default:
                     Debug.LogWarning("Attempted to get preference " + key + " with no default specified");
                     return 0;
@@ -179,6 +182,8 @@ namespace Core {
                     return "toggle";
                 case "altFlightBindType":
                     return "toggle";
+                case "telemetryOutputMode":
+                    return "json";
                 default:
                     Debug.LogWarning("Attempted to get preference " + key + " with no default specified");
                     return "";
