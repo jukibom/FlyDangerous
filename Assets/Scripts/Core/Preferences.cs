@@ -64,7 +64,7 @@ namespace Core {
                 case "forceRelativeMouseWithFAOff":
                 case "autoShipRotation":
                 case "autoShipRoll":
-                case "enableTelemetry":
+                case "telemetryEnabled":
                     return false;
 
                 default:
@@ -108,6 +108,8 @@ namespace Core {
                     return 25;
                 case "telemetryEmitIntervalSeconds":
                     return 0.02f;
+                case "telemetryOutputPort":
+                    return 11000;
                 default:
                     Debug.LogWarning("Attempted to get preference " + key + " with no default specified");
                     return 0;
@@ -184,6 +186,8 @@ namespace Core {
                     return "toggle";
                 case "telemetryOutputMode":
                     return "json";
+                case "telemetryOutputAddress":
+                    return "127.0.0.1";
                 default:
                     Debug.LogWarning("Attempted to get preference " + key + " with no default specified");
                     return "";

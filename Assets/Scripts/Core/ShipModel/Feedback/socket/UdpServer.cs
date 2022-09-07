@@ -145,6 +145,9 @@ namespace Core.ShipModel.Feedback.socket {
         private void OnGameSettingsApplied() {
             _isEnabled = Preferences.Instance.GetBool("telemetryEnabled");
             var mode = Preferences.Instance.GetString("telemetryOutputMode");
+            broadcastIpAddress = IPAddress.Parse(Preferences.Instance.GetString("telemetryOutputAddress"));
+            broadcastPort = (int)Preferences.Instance.GetFloat("telemetryOutputPort");
+
             switch (mode) {
                 case "bytes":
                     broadcastFormat = BroadcastFormat.Bytes;
