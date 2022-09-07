@@ -261,16 +261,8 @@ namespace Core {
         public void LoadPlayerShip(LoadingPlayer loadingPlayer) {
             // handle start position for each client
             var levelData = Game.Instance.LoadedLevelData;
-            var position = new Vector3(
-                levelData.startPosition.x,
-                levelData.startPosition.y,
-                levelData.startPosition.z
-            );
-            var rotation = Quaternion.Euler(
-                levelData.startRotation.x,
-                levelData.startRotation.y,
-                levelData.startRotation.z
-            );
+            var position = levelData.startPosition.ToVector3();
+            var rotation = Quaternion.Euler(levelData.startRotation.ToVector3());
 
             // if a ship player which is the host already exists and the game mode permits it, warp there instead
             var hostShip = ShipPlayers.Find(s => s.isHost);

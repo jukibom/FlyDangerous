@@ -98,14 +98,8 @@ namespace Core.MapData {
                     if (user) user.EnableGameInput();
                 }
 
-                var positionToWarpTo = new Vector3 {
-                    x = LoadedLevelData.startPosition.x,
-                    y = LoadedLevelData.startPosition.y,
-                    z = LoadedLevelData.startPosition.z
-                };
-
-                var rotationToWarpTo = Quaternion.Euler(LoadedLevelData.startRotation.x,
-                    LoadedLevelData.startRotation.y, LoadedLevelData.startRotation.z);
+                var positionToWarpTo = LoadedLevelData.startPosition.ToVector3();
+                var rotationToWarpTo = Quaternion.Euler(LoadedLevelData.startRotation.ToVector3());
 
                 // if multiplayer free-roam and not the host, warp to the host
                 if (Game.Instance.SessionType == SessionType.Multiplayer && LoadedLevelData.gameType.CanWarpToHost && !ship.isHost)
@@ -182,12 +176,8 @@ namespace Core.MapData {
             if (ship) {
                 var position = ship.AbsoluteWorldPosition;
                 var rotation = ship.transform.rotation;
-                levelData.startPosition.x = position.x;
-                levelData.startPosition.y = position.y;
-                levelData.startPosition.z = position.z;
-                levelData.startRotation.x = rotation.eulerAngles.x;
-                levelData.startRotation.y = rotation.eulerAngles.y;
-                levelData.startRotation.z = rotation.eulerAngles.z;
+                levelData.startPosition = SerializableVector3.AssignOrCreateFromVector3(levelData.startPosition, position);
+                levelData.startRotation = SerializableVector3.AssignOrCreateFromVector3(levelData.startPosition, rotation.eulerAngles);
             }
 
             var track = FindObjectOfType<Track>();
@@ -252,11 +242,7 @@ namespace Core.MapData {
                     checkpoint.Type = c.type;
                     var checkpointObjectTransform = checkpointObject.transform;
                     checkpointObjectTransform.position = c.position.ToVector3();
-                    checkpointObjectTransform.rotation = Quaternion.Euler(
-                        c.rotation.x,
-                        c.rotation.y,
-                        c.rotation.z
-                    );
+                    checkpointObjectTransform.rotation = Quaternion.Euler(c.rotation.ToVector3());
                     checkpoint.transform.parent = track.transform;
                 });
 

@@ -498,11 +498,7 @@ namespace Core.ShipModel {
 
         private void ApplyFlightForces() {
             /* GRAVITY */
-            var gravity = new Vector3(
-                Game.Instance.LoadedLevelData.gravity.x,
-                Game.Instance.LoadedLevelData.gravity.y,
-                Game.Instance.LoadedLevelData.gravity.z
-            );
+            var gravity = Game.Instance.LoadedLevelData.gravity.ToVector3();
             targetRigidbody.AddForce(targetRigidbody.mass * gravity);
 
             /* INPUTS */
