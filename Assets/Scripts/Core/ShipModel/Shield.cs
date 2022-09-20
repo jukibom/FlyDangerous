@@ -80,12 +80,12 @@ namespace Core.ShipModel {
         public void OnImpact(float impactForceNormalised, Vector3 impactDirection) {
             _targetShieldImpactAlpha += impactForceNormalised * shieldImpactForceAlphaMultiplier;
             _targetShieldAlpha += impactForceNormalised * maxShieldAlpha;
-            _targetTurbulenceOffset += MathfExtensions.Remap(0, 1, minTurbulenceOffset, maxTurbulenceOffset, impactForceNormalised);
+            _targetTurbulenceOffset += impactForceNormalised.Remap(0, 1, minTurbulenceOffset, maxTurbulenceOffset);
             _targetDirection = impactDirection;
             _targetFresnel -= impactForceNormalised * maxShieldFresnel;
 
             var random = new Random();
-            var pitch = MathfExtensions.Remap(0, 1, 0.7f, 1.3f, (float)random.NextDouble());
+            var pitch = ((float)random.NextDouble()).Remap(0, 1, 0.7f, 1.3f);
 
             shieldActivateAudioSource.transform.localPosition = _targetDirection;
             shieldActivateAudioSource.pitch = pitch;

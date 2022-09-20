@@ -81,7 +81,7 @@ namespace Core.Player {
 
                 // handle advanced throttle control
                 if (Preferences.Instance.GetString("throttleType") == "forward only") {
-                    throttle = MathfExtensions.Remap(-1, 1, 0, 1, throttle);
+                    throttle = throttle.Remap(-1, 1, 0, 1);
                     if (_reverse) throttle *= -1;
                 }
 
@@ -338,7 +338,7 @@ namespace Core.Player {
         [UsedImplicitly]
         public void OnThrottleIncrease(InputValue value) {
             if (value.isPressed)
-                _targetThrottleIncrement = MathfExtensions.Remap(0, 1, 0, 0.005f, value.Get<float>());
+                _targetThrottleIncrement = value.Get<float>().Remap(0, 1, 0, 0.005f);
             else
                 _targetThrottleIncrement = 0;
         }
@@ -346,7 +346,7 @@ namespace Core.Player {
         [UsedImplicitly]
         public void OnThrottleDecrease(InputValue value) {
             if (value.isPressed)
-                _targetThrottleIncrement = MathfExtensions.Remap(0, 1, 0, -0.005f, value.Get<float>());
+                _targetThrottleIncrement = value.Get<float>().Remap(0, 1, 0, -0.005f);
             else
                 _targetThrottleIncrement = 0;
         }

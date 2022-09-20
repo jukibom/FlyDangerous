@@ -128,10 +128,10 @@ namespace GameUI.GameModes {
 
             while (animationValue < animationDuration) {
                 animationValue += Time.deltaTime;
-                medalTransform.localScale = Vector3.one * MathfExtensions.Remap(0, animationDuration, 2.5f, 1f, animationValue);
+                medalTransform.localScale = Vector3.one * animationValue.Remap(0, animationDuration, 2.5f, 1f);
                 medalTransform.localPosition =
-                    Vector3.Lerp(startingPosition, targetPosition, MathfExtensions.Remap(0, animationDuration, 0, 1, animationValue));
-                medalGroup.alpha = MathfExtensions.Remap(0, animationDuration, 0, 1, animationValue);
+                    Vector3.Lerp(startingPosition, targetPosition, animationValue.Remap(0, animationDuration, 0, 1));
+                medalGroup.alpha = animationValue.Remap(0, animationDuration, 0, 1);
                 yield return new WaitForEndOfFrame();
             }
 

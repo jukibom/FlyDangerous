@@ -156,7 +156,7 @@ namespace Menus.Main_Menu.Components {
 
             var animationPosition = 0f;
             while (animationPosition <= 1) {
-                panel.preferredWidth = MathfExtensions.Remap(0, 1, openPanelPreferredWidthValue, 0, screenTransitionCurve.Evaluate(animationPosition));
+                panel.preferredWidth = screenTransitionCurve.Evaluate(animationPosition).Remap(0, 1, openPanelPreferredWidthValue, 0);
                 animationPosition += frameIncrement;
                 yield return new WaitForFixedUpdate();
             }
@@ -171,7 +171,7 @@ namespace Menus.Main_Menu.Components {
             panel.gameObject.SetActive(true);
             var animationPosition = 0f;
             while (animationPosition <= 1) {
-                panel.preferredWidth = MathfExtensions.Remap(0, 1, 0, openPanelPreferredWidthValue, screenTransitionCurve.Evaluate(animationPosition));
+                panel.preferredWidth = screenTransitionCurve.Evaluate(animationPosition).Remap(0, 1, 0, openPanelPreferredWidthValue);
                 animationPosition += frameIncrement;
                 yield return new WaitForFixedUpdate();
             }

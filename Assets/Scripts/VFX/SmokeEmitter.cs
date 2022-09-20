@@ -48,33 +48,23 @@ namespace VFX {
 
                 // only show with forward thrust and set the spawn rate to the ratio of thrust over max 
                 var spawnRate = forceNormalised.z > 0.001f
-                    ? MathfExtensions.Remap(
-                        0,
-                        1,
-                        minSpawnRate,
-                        maxSpawnRate,
-                        forceNormalised.z
-                    )
+                    ? forceNormalised.z.Remap(0, 1, minSpawnRate, maxSpawnRate)
                     // set minimum spawn rate as a factor of velocity 
-                    : MathfExtensions.Remap(0, maxSpeed, minSpawnRate, maxSpawnRate / 2f, vesselSpeedLocal.z);
+                    : vesselSpeedLocal.z.Remap(0, maxSpeed, minSpawnRate, maxSpawnRate / 2f);
 
                 _trailEffect.SetInt("_spawnRate", Mathf.FloorToInt(spawnRate));
 
                 // these get quite large quite quickly so lets cap their life dependent on speed
                 // we want them to be very visible at distance and at fast speeds and die quickly when stationary or slow
-                var lifetime = MathfExtensions.Remap(
-                    0,
-                    1,
-                    minLifetime,
-                    maxLifetime,
-                    forceNormalised.z
-                );
+                var lifetime = forceNormalised.z.Remap(0, 1, minLifetime, maxLifetime);
 
                 _trailEffect.SetInt("_lifetimeMin", Mathf.FloorToInt(lifetime));
                 _trailEffect.SetInt("_lifetimeMax", Mathf.FloorToInt(lifetime + 5 * forceNormalised.z));
 
+                var vesselSpeedNormalised = vesselSpeedLocal.z / maxSpeed;
+
                 // set jitter to a factor of the forward local velocity 
-                _trailEffect.SetVector3("_startingPositionJitter", new Vector3(0, 0, MathfExtensions.Remap(0, 1, 0, -5, vesselSpeedLocal.z / maxSpeed)));
+                _trailEffect.SetVector3("_startingPositionJitter", new Vector3(0, 0, vesselSpeedNormalised.Remap(0, 1, 0, -5)));
             }
         }
 

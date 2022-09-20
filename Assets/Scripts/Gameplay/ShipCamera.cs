@@ -98,8 +98,9 @@ namespace Gameplay {
         }
 
         public void UpdateVelocityFov(Vector3 velocity, float maxVelocity) {
+            var velocityNormalised = velocity.z / maxVelocity;
             var fov = Mathf.Lerp(Camera.m_Lens.FieldOfView,
-                MathfExtensions.Remap(0, 1, _baseFov, _baseFov + 10, velocity.z / maxVelocity),
+                velocityNormalised.Remap(0, 1, _baseFov, _baseFov + 10),
                 smoothSpeed
             );
             Camera.m_Lens.FieldOfView = fov;
@@ -107,10 +108,11 @@ namespace Gameplay {
         }
 
         public Vector3 GetCameraOffset(Vector3 force, float maxForce) {
+            var forceNormalised = force / maxForce;
             _targetOffset = Vector3.Lerp(_targetOffset, new Vector3(
-                MathfExtensions.Remap(-1, 1, _currentMaxOffset.x, -_currentMaxOffset.x, force.x / maxForce),
-                MathfExtensions.Remap(-1, 1, _currentMaxOffset.y, -_currentMaxOffset.y, force.y / maxForce),
-                MathfExtensions.Remap(-1, 1, _currentMaxOffset.z, -_currentMaxOffset.z, force.z / maxForce)
+                forceNormalised.x.Remap(-1, 1, _currentMaxOffset.x, -_currentMaxOffset.x),
+                forceNormalised.y.Remap(-1, 1, _currentMaxOffset.y, -_currentMaxOffset.y),
+                forceNormalised.z.Remap(-1, 1, _currentMaxOffset.z, -_currentMaxOffset.z)
             ), 0.1f);
 
             _offset = Vector3.Lerp(_offset, _targetOffset, 0.04f);
@@ -119,10 +121,10 @@ namespace Gameplay {
 
         public void SetShakeEffect(float amount) {
             if (_noise) _noise.m_FrequencyGain = amount;
-            
-            _currentMaxOffset.x = MathfExtensions.Remap(0, 1, maxOffset.x, maxBoostOffset.x, amount);
-            _currentMaxOffset.y = MathfExtensions.Remap(0, 1, maxOffset.y, maxBoostOffset.y, amount);
-            _currentMaxOffset.z = MathfExtensions.Remap(0, 1, maxOffset.z, maxBoostOffset.z, amount);
+
+            _currentMaxOffset.x = amount.Remap(0, 1, maxOffset.x, maxBoostOffset.x);
+            _currentMaxOffset.y = amount.Remap(0, 1, maxOffset.y, maxBoostOffset.y);
+            _currentMaxOffset.z = amount.Remap(0, 1, maxOffset.z, maxBoostOffset.z);
         }
 
         private void SetBaseFov() {

@@ -80,7 +80,7 @@ namespace Core.ShipModel {
             targetTransform.position = Vector3.MoveTowards(originPosition, targetPosition + direction * minDistance, maxDistance);
             targetTransform.rotation = _mainCamera.transform.rotation;
 
-            target.Opacity = MathfExtensions.Remap(5, minDistance, 0, 1, distanceToShip);
+            target.Opacity = distanceToShip.Remap(5, minDistance, 0, 1);
         }
 
         public void ResetTargets() {

@@ -21,7 +21,7 @@ namespace VFX {
                 _vfx.SetVector3("_playerVelocity",
                     _playerShipTransform.InverseTransformDirection(_playerShipRigidbody.velocity));
                 _vfx.SetVector3("_playerVelocity", _playerShipRigidbody.velocity);
-                _vfx.SetFloat("_alphaMultiplier", MathfExtensions.Remap(0.1f, 1, 0, 0.4f, player.ShipPhysics.VelocityNormalised));
+                _vfx.SetFloat("_alphaMultiplier", player.ShipPhysics.VelocityNormalised.Remap(0.1f, 1, 0, 0.4f));
             }
 
             if (forceOn && forceVelocity != Vector3.zero) {

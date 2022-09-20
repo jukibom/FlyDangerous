@@ -488,7 +488,7 @@ namespace Core.ShipModel {
             _shipFeedbackData.BoostThrustStartThisFrame =
                 _shipFeedbackData.IsBoostThrustActive && _boostProgressTicks == secondInFrames; // one second after start
             _shipFeedbackData.BoostSpoolProgressNormalised =
-                _shipFeedbackData.IsBoostSpooling ? MathfExtensions.Remap(0, secondInFrames, 0, 1, _boostProgressTicks) : 0;
+                _shipFeedbackData.IsBoostSpooling ? _boostProgressTicks.Remap(0, secondInFrames, 0, 1) : 0;
             _shipFeedbackData.BoostThrustProgressNormalised =
                 _shipFeedbackData.IsBoostThrustActive ? Math.Min(1, _currentBoostTime / FlightParameters.totalBoostTime) : 0;
 
@@ -511,7 +511,7 @@ namespace Core.ShipModel {
             // vector less harshly while holding back (up to 40%). The whole reverse axis is remapped to 40% for this calculation.
             // any additional throttle thrust not used in boost to be distributed across laterals
             if (_boostStatus == BoostStatus.Active && _currentBoostTime < FlightParameters.totalBoostTime) {
-                throttle = Mathf.Min(1f, MathfExtensions.Remap(-1, 0, 0.6f, 1, Throttle));
+                throttle = Mathf.Min(1f, Throttle.Remap(-1, 0, 0.6f, 1));
 
                 var delta = 1f - throttle;
                 if (delta > 0) {

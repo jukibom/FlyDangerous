@@ -52,9 +52,9 @@ namespace Core.ShipModel {
 
             _thrusterMaterial.SetFloat(thrustProperty, _thrust);
 
-            audioSource.volume = MathfExtensions.Remap(0, 1, 0, 0.2f, _thrust);
-            audioSource.pitch = MathfExtensions.Remap(0, 1, 0.8f, 2f, _thrust);
-            lightSource.intensity = MathfExtensions.Remap(0, 1, 0, 3, _thrust * thrusterRenderer.transform.localScale.z);
+            audioSource.volume = _thrust.Remap(0, 1, 0, 0.2f);
+            audioSource.pitch = _thrust.Remap(0, 1, 0.8f, 2f);
+            lightSource.intensity = _thrust * thrusterRenderer.transform.localScale.z.Remap(0, 1, 0, 3);
             if (lensFlare != null) lensFlare.intensity = lightSource.intensity;
 
             if (isLarge) {

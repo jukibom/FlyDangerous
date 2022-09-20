@@ -22,7 +22,7 @@ namespace Core.MapData {
 
         private void OnGameOptionsApplied() {
             var terrainLOD = Preferences.Instance.GetFloat("graphics-terrain-geometry-lod");
-            var pixelError = MathfExtensions.Remap(10, 100, 50, 5, terrainLOD);
+            var pixelError = terrainLOD.Remap(10, 100, 50, 5);
             var textureHqDistance = Preferences.Instance.GetFloat("graphics-terrain-texture-distance");
             var terrainChunks = Preferences.Instance.GetFloat("graphics-terrain-chunks");
 

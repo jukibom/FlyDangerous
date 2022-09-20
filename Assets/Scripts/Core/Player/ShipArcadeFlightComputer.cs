@@ -67,15 +67,15 @@ namespace Core.Player {
             if (rotateTarget) {
                 var planeRotation = Quaternion.Euler(shipRotEuler.x, shipRotEuler.y, 0);
                 var freeRotation = shipRotation;
-                var rotationResolutionBlendFactor = MathfExtensions.Remap(fixedToPlaneAngle, freeMoveAngle, planeTransformDamping, 1, shipAngleFromPlane);
+                var rotationResolutionBlendFactor = shipAngleFromPlane.Remap(fixedToPlaneAngle, freeMoveAngle, planeTransformDamping, 1);
 
                 // drift override - disable auto rotate to plane
                 if (drift) rotationResolutionBlendFactor = 1;
 
                 targetTransform.rotation = Quaternion.Lerp(planeRotation, freeRotation, rotationResolutionBlendFactor);
 
-                var pitchRotate = MathfExtensions.Remap(-1, 1, -maxTargetRotationDegrees, maxTargetRotationDegrees, lateralV);
-                var yawRotate = MathfExtensions.Remap(-1, 1, -maxTargetRotationDegrees, maxTargetRotationDegrees, lateralH);
+                var pitchRotate = lateralV.Remap(-1, 1, -maxTargetRotationDegrees, maxTargetRotationDegrees);
+                var yawRotate = lateralH.Remap(-1, 1, -maxTargetRotationDegrees, maxTargetRotationDegrees);
                 var rollRotate = Preferences.Instance.GetBool("autoShipRoll") ? yawRotate * -1 : 0;
 
                 // apply an auto roll to the transform when pitch / yaw-ing
@@ -107,7 +107,7 @@ namespace Core.Player {
                 var freeLocalPosition = new Vector3(lateralH, lateralV, throttle) * drawCubePositionDistance;
                 var planeLocalPosition = new Vector3(freeLocalPosition.x, freeLocalPosition.y - yOffset, freeLocalPosition.z);
 
-                var positionResolutionBlendFactor = MathfExtensions.Remap(fixedToPlaneAngle, freeMoveAngle / 2, planeTransformDamping, 1, shipAngleFromPlane);
+                var positionResolutionBlendFactor = shipAngleFromPlane.Remap(fixedToPlaneAngle, freeMoveAngle / 2, planeTransformDamping, 1);
                 targetTransform.localPosition = Vector3.Lerp(planeLocalPosition, freeLocalPosition, positionResolutionBlendFactor);
 
                 if (drawDebugCubes) {

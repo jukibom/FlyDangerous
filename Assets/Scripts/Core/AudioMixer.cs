@@ -45,11 +45,11 @@ namespace Core {
             if (audioConfiguration.speakerMode != currentSpeakerMode)
                 AudioSettings.Reset(audioConfiguration);
 
-            var master = MathfExtensions.Remap(0, 100, 0.0001f, 1, Preferences.Instance.GetFloat("volumeMaster"));
-            var music = MathfExtensions.Remap(0, 100, 0.0001f, 1, Preferences.Instance.GetFloat("volumeMusic"));
-            var sound = MathfExtensions.Remap(0, 100, 0.0001f, 1, Preferences.Instance.GetFloat("volumeSound"));
-            var ghostSound = MathfExtensions.Remap(0, 100, 0.0001f, 1, Preferences.Instance.GetFloat("volumeGhostSound"));
-            var ui = MathfExtensions.Remap(0, 100, 0.0001f, 1, Preferences.Instance.GetFloat("volumeUi"));
+            var master = Preferences.Instance.GetFloat("volumeMaster").Remap(0, 100, 0.0001f, 1);
+            var music = Preferences.Instance.GetFloat("volumeMusic").Remap(0, 100, 0.0001f, 1);
+            var sound = Preferences.Instance.GetFloat("volumeSound").Remap(0, 100, 0.0001f, 1);
+            var ghostSound = Preferences.Instance.GetFloat("volumeGhostSound").Remap(0, 100, 0.0001f, 1);
+            var ui = Preferences.Instance.GetFloat("volumeUi").Remap(0, 100, 0.0001f, 1);
 
             masterMixerGroup.audioMixer.SetFloat("masterVolume", Mathf.Log10(master) * 20);
             masterMixerGroup.audioMixer.SetFloat("musicVolume", Mathf.Log10(music) * 20);

@@ -14,7 +14,7 @@ namespace FdUI {
         private bool _hasFocus;
 
         public void Update() {
-            var scale = MathfExtensions.Remap(0, 1, 1, 2f, Mathf.PingPong(Time.time * 3, 1));
+            var scale = Mathf.PingPong(Time.time * 3, 1).Remap(0, 1, 1, 2f);
             selectionCursor.localScale = baseScale * (_hasFocus ? Vector3.one * scale : Vector3.one);
         }
 

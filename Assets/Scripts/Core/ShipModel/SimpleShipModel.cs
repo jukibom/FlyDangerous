@@ -148,7 +148,7 @@ namespace Core.ShipModel {
             if (_boostCoroutine != null) {
                 StopCoroutine(_boostCoroutine);
 
-                externalBoostInterruptedAudioSource.pitch = MathfExtensions.Remap(0, 1, 0.7f, 1.3f, Random.value);
+                externalBoostInterruptedAudioSource.pitch = Random.value.Remap(0, 1, 0.7f, 1.3f);
                 externalBoostInterruptedAudioSource.Play();
                 externalBoostAudioSource.Stop();
                 externalBoostThrusterAudioSource.Stop();
@@ -168,20 +168,20 @@ namespace Core.ShipModel {
             // At least it's localised now ...
             var torqueVec = new Vector3(
                 shipMotionData.CurrentAngularTorqueNormalised.x,
-                MathfExtensions.Remap(-0.8f, 0.8f, -1, 1, shipMotionData.CurrentAngularTorqueNormalised.y),
-                MathfExtensions.Remap(-0.3f, 0.3f, -1, 1, shipMotionData.CurrentAngularTorqueNormalised.z)
+                shipMotionData.CurrentAngularTorqueNormalised.y.Remap(-0.8f, 0.8f, -1, 1),
+                shipMotionData.CurrentAngularTorqueNormalised.z.Remap(-0.3f, 0.3f, -1, 1)
             );
 
             var accelerationNormalised = shipMotionData.CurrentLateralForceNormalised.magnitude;
             if (accelerationNormalised > 0.8f) {
                 var accelerationShakeAmountMax = _velocityLimiterActive ? 0.008f : 0.004f; 
-                ShipShake?.AddShake( Time.fixedDeltaTime, MathfExtensions.Remap(0.4f, 1, 0, accelerationShakeAmountMax, accelerationNormalised), true);
+                ShipShake?.AddShake( Time.fixedDeltaTime, accelerationNormalised.Remap(0.4f, 1, 0, accelerationShakeAmountMax), true);
             }
 
             thrusterController.UpdateThrusters(shipMotionData.CurrentLateralForceNormalised, torqueVec);
             smokeEmitter.UpdateThrustTrail(shipMotionData.CurrentLateralVelocity, shipMotionData.MaxSpeed,
                 shipMotionData.CurrentLateralForceNormalised);
-            foliageCollider.radius = MathfExtensions.Remap(0, shipMotionData.MaxSpeed / 2, 4, 15, shipMotionData.CurrentLateralVelocity.magnitude);
+            foliageCollider.radius = shipMotionData.CurrentLateralVelocity.magnitude.Remap(0, shipMotionData.MaxSpeed / 2, 4, 15);
         }
 
         public virtual void OnShipFeedbackUpdate(IShipFeedbackData shipFeedbackData) {

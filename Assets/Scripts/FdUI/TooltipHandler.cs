@@ -46,7 +46,7 @@ namespace FdUI {
             var time = 0f;
             while (time < timeToDisplaySeconds) {
                 // get the character offset via the animation curve as a factor of time elapsed
-                var charIndex = MathfExtensions.Remap(0, 1, 0, _tooltipText.Length, animationCurve.Evaluate(time / timeToDisplaySeconds));
+                var charIndex = animationCurve.Evaluate(time / timeToDisplaySeconds).Remap(0, 1, 0, _tooltipText.Length);
                 textField.text = _tooltipText.Substring(0, (int)Mathf.Floor(charIndex));
 
                 // increment time (using unscaled - the game may be paused!) and wait one animation frame
