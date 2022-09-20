@@ -16,10 +16,18 @@ namespace Core.ShipModel.Feedback.socket {
         public uint packetId;
 
         // Game State
-        public string gameVersion;
-        public string currentGameMode;
-        public string currentLevelName;
-        public string currentMusicTrackName;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
+        public char[] gameVersion;
+
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 50)]
+        public char[] currentGameMode;
+
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 50)]
+        public char[] currentLevelName;
+
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 50)]
+        public char[] currentMusicTrackName;
+
         public int currentPlayerCount;
 
         // Instrument Data
@@ -69,15 +77,25 @@ namespace Core.ShipModel.Feedback.socket {
         public SerializableVector3 currentAngularTorqueNormalised;
         public float maxSpeed;
 
+        // string helpers for char[] handling
+        public string GameVersion => new string(gameVersion).TrimEnd();
+        public string CurrentGameMode => new string(currentGameMode).TrimEnd();
+        public string CurrentLevelName => new string(currentLevelName).TrimEnd();
+        public string CurrentMusicTrackName => new string(currentMusicTrackName).TrimEnd();
+
         public override string ToString() {
             return
-                $"Fly Dangerous version {gameVersion}, packetId: {packetId}, ship details: speed - {shipSpeed}m/s, altitude {shipAltitude} - world position {shipWorldPosition}";
+                $"Fly Dangerous version {GameVersion}, packetId: {packetId}\nGame details: game mode - {CurrentGameMode}, level - {CurrentLevelName}, music - {CurrentMusicTrackName}\nShip details: speed - {shipSpeed}m/s, altitude {shipAltitude} - world position {shipWorldPosition}";
         }
     }
 
     #region Serialisers
 
     public static class FlyDangerousTelemetryEncoder {
+        // used for pre-allocating bytes for encoding (size of struct never changes)
+        private static int _sizeBytes;
+        private static byte[] _arrBytes;
+
         internal static byte[] EncodePacket(BroadcastFormat broadcastFormat, FlyDangerousTelemetry telemetry) {
             byte[] packet;
             switch (broadcastFormat) {
@@ -98,21 +116,23 @@ namespace Core.ShipModel.Feedback.socket {
             return Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(telemetryStruct, Formatting.Indented));
         }
 
-        // TODO: can we pre-alloc and update the same byte array?
         private static byte[] StructureToByteArray(FlyDangerousTelemetry telemetryStruct) {
-            var size = Marshal.SizeOf(telemetryStruct);
-            var arr = new byte[size];
+            if (_arrBytes == null) {
+                _sizeBytes = Marshal.SizeOf(telemetryStruct);
+                _arrBytes = new byte[_sizeBytes];
+            }
+
             var ptr = IntPtr.Zero;
             try {
-                ptr = Marshal.AllocHGlobal(size);
+                ptr = Marshal.AllocHGlobal(_sizeBytes);
                 Marshal.StructureToPtr(telemetryStruct, ptr, false);
-                Marshal.Copy(ptr, arr, 0, size);
+                Marshal.Copy(ptr, _arrBytes, 0, _sizeBytes);
             }
             finally {
                 Marshal.FreeHGlobal(ptr);
             }
 
-            return arr;
+            return _arrBytes;
         }
     }
 

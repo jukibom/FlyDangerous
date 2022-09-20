@@ -36,10 +36,11 @@ namespace Core.ShipModel.Feedback.socket {
                 _telemetry.packetId = _packetId;
 
                 // Game State
-                _telemetry.gameVersion = Application.version;
-                _telemetry.currentLevelName = Game.Instance.LoadedLevelData.name;
-                _telemetry.currentGameMode = Game.Instance.LoadedLevelData.gameType.Name;
-                _telemetry.currentMusicTrackName = MusicManager.Instance.CurrentPlayingTrack?.Name ?? "None";
+                _telemetry.gameVersion = Application.version.PadRight(20).ToCharArray();
+                _telemetry.currentLevelName =
+                    (Game.Instance.LoadedLevelData.name != "" ? Game.Instance.LoadedLevelData.name : "None").PadRight(50).ToCharArray();
+                _telemetry.currentGameMode = Game.Instance.LoadedLevelData.gameType.Name.PadRight(50).ToCharArray();
+                _telemetry.currentMusicTrackName = (MusicManager.Instance.CurrentPlayingTrack?.Name ?? "None").PadRight(50).ToCharArray();
                 _telemetry.currentPlayerCount = FdNetworkManager.Instance.numPlayers;
 
                 // Serialise and send
