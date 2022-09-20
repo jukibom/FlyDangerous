@@ -387,6 +387,7 @@ namespace Menus.Options {
                         }
                     })
                 // this prevents binding to the `e` key, yes really
+                // actually this was supposedly fixed but now it binds everything as "any key" which um. Isn't correct. So this cludge stays
                 // .WithCancelingThrough("<Keyboard>/escape")
                 .WithCancelingThrough("an enormous string of absolute gibberish which overrides the default which is escape and causes the above bug")
                 .OnCancel(

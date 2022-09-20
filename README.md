@@ -33,7 +33,7 @@ Major features:
 
 ## Building
 
-Unity build: 2022.1.8f1
+Unity build: 2022.1.16f1
 
 The release build is reliant on some paid assets (follow instructions underneath to build without for dev purposes!):
 
