@@ -117,9 +117,9 @@ namespace Gameplay {
             return _offset;
         }
 
-        public void SetBoostEffect(float amount) {
+        public void SetShakeEffect(float amount) {
             if (_noise) _noise.m_FrequencyGain = amount;
-
+            
             _currentMaxOffset.x = MathfExtensions.Remap(0, 1, maxOffset.x, maxBoostOffset.x, amount);
             _currentMaxOffset.y = MathfExtensions.Remap(0, 1, maxOffset.y, maxBoostOffset.y, amount);
             _currentMaxOffset.z = MathfExtensions.Remap(0, 1, maxOffset.z, maxBoostOffset.z, amount);

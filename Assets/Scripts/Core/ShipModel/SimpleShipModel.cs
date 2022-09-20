@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Core.Player;
 using Core.ShipModel.Feedback.interfaces;
 using Core.ShipModel.ShipIndicator;
+using JetBrains.Annotations;
 using Misc;
 using UnityEngine;
 using VFX;
@@ -36,9 +37,12 @@ namespace Core.ShipModel {
         [SerializeField] private AudioSource velocityLimitDeactivateAudioSource;
         [SerializeField] private AudioSource nightVisionActivateAudioSource;
         [SerializeField] private AudioSource nightVisionDeactivateAudioSource;
+        
+        public ShipCameraRig ShipCameraRig { get; set; }
 
         private Coroutine _boostCoroutine;
-
+        private bool _velocityLimiterActive;
+        
         public virtual void Start() {
             // Init GPU Instance removal colliders 
 #if !NO_PAID_ASSETS
@@ -66,13 +70,12 @@ namespace Core.ShipModel {
         }
 
         public virtual void FixedUpdate() {
-            ShipShake.FixedUpdate();
+            ShipShake?.FixedUpdate();
         }
 
         public virtual void OnEnable() {
             Game.OnPauseToggle += PauseAudio;
             Game.OnRestart += Restart;
-            ShipShake = new ShipShake(transform, transform.root.GetComponentInChildren<ShipCameraRig>());
         }
 
         public virtual void OnDisable() {
@@ -80,7 +83,7 @@ namespace Core.ShipModel {
             Game.OnRestart -= Restart;
         }
 
-        public ShipShake ShipShake { get; private set; }
+        [CanBeNull] public ShipShake ShipShake { get; private set; }
 
         public MonoBehaviour Entity() {
             return this;
@@ -99,6 +102,7 @@ namespace Core.ShipModel {
             assistDeactivateAudioSource.priority = isLocalPlayer ? 1 : 128;
             velocityLimitActivateAudioSource.priority = isLocalPlayer ? 1 : 128;
             velocityLimitDeactivateAudioSource.priority = isLocalPlayer ? 1 : 128;
+            if (isLocalPlayer) ShipShake = new ShipShake(transform, ShipCameraRig);
         }
 
         #region IShip Basic Functions
@@ -121,16 +125,17 @@ namespace Core.ShipModel {
         }
 
         public virtual void SetVelocityLimiter(bool active) {
+            _velocityLimiterActive = active;
             if (active) velocityLimitActivateAudioSource.Play();
             else velocityLimitDeactivateAudioSource.Play();
         }
 
         public void Boost(float spoolTime, float boostTime) {
             IEnumerator AnimateBoost() {
-                ShipShake.AddShake(spoolTime, 0.005f, false, new AnimationCurve(new Keyframe(0, 1), new Keyframe(spoolTime, 1)));
+                ShipShake?.AddShake(spoolTime, 0.005f, false, new AnimationCurve(new Keyframe(0, 1), new Keyframe(spoolTime, 1)));
                 yield return new WaitForSeconds(spoolTime);
                 externalBoostThrusterAudioSource.Play();
-                ShipShake.AddShake(boostTime, 0.01f, true);
+                ShipShake?.AddShake(boostTime, 0.01f, true);
                 thrusterController.AnimateBoostThrusters();
             }
 
@@ -167,6 +172,12 @@ namespace Core.ShipModel {
                 MathfExtensions.Remap(-0.3f, 0.3f, -1, 1, shipMotionData.CurrentAngularTorqueNormalised.z)
             );
 
+            var accelerationNormalised = shipMotionData.CurrentLateralForceNormalised.magnitude;
+            if (accelerationNormalised > 0.8f) {
+                var accelerationShakeAmountMax = _velocityLimiterActive ? 0.008f : 0.004f; 
+                ShipShake?.AddShake( Time.fixedDeltaTime, MathfExtensions.Remap(0.4f, 1, 0, accelerationShakeAmountMax, accelerationNormalised), true);
+            }
+
             thrusterController.UpdateThrusters(shipMotionData.CurrentLateralForceNormalised, torqueVec);
             smokeEmitter.UpdateThrustTrail(shipMotionData.CurrentLateralVelocity, shipMotionData.MaxSpeed,
                 shipMotionData.CurrentLateralForceNormalised);
@@ -176,11 +187,11 @@ namespace Core.ShipModel {
         public virtual void OnShipFeedbackUpdate(IShipFeedbackData shipFeedbackData) {
             if (shipFeedbackData.CollisionThisFrame) {
                 if (shipFeedbackData.CollisionStartedThisFrame) {
-                    ShipShake.AddShake(0.2f, shipFeedbackData.CollisionImpactNormalised * Time.fixedDeltaTime);
+                    ShipShake?.AddShake(0.2f, shipFeedbackData.CollisionImpactNormalised * Time.fixedDeltaTime);
                     shield.OnImpact(shipFeedbackData.CollisionImpactNormalised, shipFeedbackData.CollisionDirection);
                 }
                 else {
-                    ShipShake.AddShake(Time.fixedDeltaTime * 3, shipFeedbackData.CollisionImpactNormalised * 3 * Time.fixedDeltaTime);
+                    ShipShake?.AddShake(Time.fixedDeltaTime * 3, shipFeedbackData.CollisionImpactNormalised * 3 * Time.fixedDeltaTime);
                     shield.OnContinuousCollision(shipFeedbackData.CollisionDirection);
                 }
             }
@@ -241,7 +252,7 @@ namespace Core.ShipModel {
         }
 
         private void Restart() {
-            ShipShake.Reset();
+            ShipShake?.Reset();
             externalBoostInterruptedAudioSource.Stop();
             engineBoostAudioSource.Stop();
             externalBoostAudioSource.Stop();

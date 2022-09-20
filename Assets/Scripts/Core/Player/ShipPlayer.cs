@@ -188,6 +188,10 @@ namespace Core.Player {
                 ShipPhysics.RefreshShipModel(new ShipProfile(playerName, playerFlag, _shipModelName, _primaryColor, _accentColor, _thrusterColor, _trailColor,
                     _headLightsColor));
 
+                if (isLocalPlayer && shipPhysics.ShipModel != null) {
+                    shipPhysics.ShipModel.ShipCameraRig = user.ShipCameraRig;
+                }
+                
                 // handle any ship model specific stuff
                 shipPhysics.ShipModel?.SetIsLocalPlayer(isLocalPlayer);
             }

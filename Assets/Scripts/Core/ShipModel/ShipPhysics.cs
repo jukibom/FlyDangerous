@@ -493,7 +493,7 @@ namespace Core.ShipModel {
                 _shipFeedbackData.IsBoostThrustActive ? Math.Min(1, _currentBoostTime / FlightParameters.totalBoostTime) : 0;
 
             // Misc
-            _shipFeedbackData.ShipShakeNormalised = ShipModel?.ShipShake.CurrentShakeAmountNormalised ?? 0;
+            _shipFeedbackData.ShipShakeNormalised = ShipModel?.ShipShake?.CurrentShakeAmountNormalised ?? 0;
         }
 
         private void ApplyFlightForces() {

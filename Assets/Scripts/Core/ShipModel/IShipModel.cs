@@ -1,4 +1,5 @@
-﻿using Core.ShipModel.Feedback.interfaces;
+﻿using Core.Player;
+using Core.ShipModel.Feedback.interfaces;
 using UnityEngine;
 
 namespace Core.ShipModel {
@@ -14,6 +15,7 @@ namespace Core.ShipModel {
      */
     public interface IShipModel : IShipInstruments, IShipMotion, IShipFeedback {
         public ShipShake ShipShake { get; }
+        public ShipCameraRig ShipCameraRig { get; set; }
         public MonoBehaviour Entity();
 
         public void SetVisible(bool visible);

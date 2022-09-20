@@ -14,7 +14,7 @@ namespace Core.Player {
     }
 
     public class ShipCameraRig : MonoBehaviour {
-        private static readonly Vector3 baseTargetPosition = new(0, 0, 20);
+        private static readonly Vector3 BaseTargetPosition = new(0, 0, 20);
 
         [SerializeField] private User user;
         [SerializeField] private List<ShipCamera> cameras;
@@ -38,9 +38,9 @@ namespace Core.Player {
             SoftReset();
             if (ActiveCamera != null)
                 ActiveCamera.Reset();
-            cameraTarget.localPosition = baseTargetPosition;
+            cameraTarget.localPosition = BaseTargetPosition;
             cameraTarget.transform.rotation = _transform.rotation;
-            SetBoostEffect(0);
+            SetShakeEffect(0);
         }
 
         private void Start() {
@@ -62,7 +62,7 @@ namespace Core.Player {
         public void SetPosition(Vector2 position, CameraPositionUpdate cameraType) {
             if (ActiveCamera != null && ActiveCamera.cameraType != CameraType.FreeCam) {
                 // reset rotation before processing input
-                cameraTarget.localPosition = baseTargetPosition;
+                cameraTarget.localPosition = BaseTargetPosition;
                 cameraTarget.transform.rotation = _transform.rotation;
 
                 switch (cameraType) {
@@ -165,8 +165,8 @@ namespace Core.Player {
                     SetActiveCamera(freeCamera.ShipCamera);
         }
 
-        public void SetBoostEffect(float amount) {
-            if (ActiveCamera != null) ActiveCamera.SetBoostEffect(amount);
+        public void SetShakeEffect(float amount) {
+            if (ActiveCamera != null) ActiveCamera.SetShakeEffect(amount);
         }
 
         private void SetActiveCamera(ShipCamera newCamera) {
