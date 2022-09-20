@@ -16,27 +16,38 @@ namespace Core.ShipModel.Feedback.bHaptics {
         [SerializeField] private ArmsHapticClip boostFireLeftArmHapticClip;
         [SerializeField] private ArmsHapticClip shipShakeLeftArmHapticClip;
         [SerializeField] private ArmsHapticClip toggleFunctionLeftArmHapticClip;
-        
+
         [SerializeField] private ArmsHapticClip collisionImpactRightArmHapticClip;
         [SerializeField] private ArmsHapticClip boostSpoolRightArmHapticClip;
         [SerializeField] private ArmsHapticClip boostFireRightArmHapticClip;
         [SerializeField] private ArmsHapticClip shipShakeRightArmHapticClip;
         [SerializeField] private ArmsHapticClip toggleFunctionRightArmHapticClip;
-        
+
         [SerializeField] private HeadHapticClip collisionImpactHeadHapticClip;
         [SerializeField] private HeadHapticClip boostFireHeadHapticClip;
         [SerializeField] private HeadHapticClip toggleNightVisionHeadClip;
 
+        private bool _firstUpdate = true;
+        private bool _isEnabled;
+        private bool _nightVisionActive;
+        private bool _rotationalAssistActive;
+
         // No idea why but `IsPlaying()` always returns false :/
         private float _shakeHapticPlayTime;
-
-        private bool _firstUpdate = true;
-        private bool _velocityLimiterActive;
         private bool _vectorAssistActive;
-        private bool _rotationalAssistActive;
-        private bool _nightVisionActive;
+        private bool _velocityLimiterActive;
+
+        private void OnEnable() {
+            Game.OnGameSettingsApplied += OnGameSettingsApplied;
+        }
+
+        private void OnDisable() {
+            Game.OnGameSettingsApplied -= OnGameSettingsApplied;
+        }
 
         public void OnShipFeedbackUpdate(IShipFeedbackData shipFeedbackData) {
+            if (!_isEnabled) return;
+
             if (shipFeedbackData.BoostSpoolStartThisFrame) {
                 boostSpoolVestHapticClip.Play();
                 boostSpoolLeftArmHapticClip.Play(0.3f, 2);
@@ -69,6 +80,8 @@ namespace Core.ShipModel.Feedback.bHaptics {
         }
 
         public void OnShipInstrumentUpdate(IShipInstrumentData shipInstrumentData) {
+            if (!_isEnabled) return;
+
             if (_firstUpdate) {
                 _vectorAssistActive = shipInstrumentData.VelocityLimiterActive;
                 _rotationalAssistActive = shipInstrumentData.RotationalFlightAssistActive;
@@ -95,13 +108,17 @@ namespace Core.ShipModel.Feedback.bHaptics {
                 toggleFunctionLeftArmHapticClip.Play();
                 toggleFunctionRightArmHapticClip.Play();
             }
-            
+
             if (_nightVisionActive != shipInstrumentData.LightsActive) {
                 _nightVisionActive = shipInstrumentData.LightsActive;
                 toggleFunctionLeftArmHapticClip.Play();
                 toggleFunctionRightArmHapticClip.Play();
                 if (_nightVisionActive) toggleNightVisionHeadClip.Play();
             }
+        }
+
+        private void OnGameSettingsApplied() {
+            _isEnabled = Preferences.Instance.GetBool("bHapticsEnabled");
         }
     }
 }
