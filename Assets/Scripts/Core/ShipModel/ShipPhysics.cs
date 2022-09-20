@@ -147,8 +147,6 @@ namespace Core.ShipModel {
         }
 
         public void Start() {
-            DontDestroyOnLoad(this);
-
             // rigidbody non-configurable defaults
             targetRigidbody.centerOfMass = Vector3.zero;
             targetRigidbody.inertiaTensorRotation = Quaternion.identity;

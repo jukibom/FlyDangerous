@@ -23,8 +23,8 @@ namespace Misc {
                             _instance = singletonObject.AddComponent<T>();
                             singletonObject.name = typeof(T) + " (Singleton)";
 
-                            // Make instance persistent.
-                            DontDestroyOnLoad(singletonObject);
+                            // Make instance persistent (if root node).
+                            if (singletonObject.transform.root == singletonObject.transform) DontDestroyOnLoad(singletonObject);
                         }
                     }
 

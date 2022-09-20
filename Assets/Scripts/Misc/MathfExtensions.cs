@@ -12,8 +12,8 @@ namespace Misc {
             return Remap((float)v, iMin, iMax, oMin, oMax);
         }
 
-        public static float Oscillate(float iMin, float iMax, float periodSeconds, float offsetSeconds = 0) {
-            return Mathf.PingPong(offsetSeconds + Time.time / periodSeconds, 1).Remap(0, 1, iMin, iMax);
+        public static float Oscillate(float min, float max, float periodSeconds, float offsetSeconds = 0) {
+            return Mathf.PingPong(offsetSeconds + Time.time / periodSeconds, 1).Remap(0, 1, min, max);
         }
     }
 }
