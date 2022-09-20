@@ -15,17 +15,26 @@ namespace Core.ShipModel.Feedback.bHaptics {
         [SerializeField] private ArmsHapticClip boostSpoolLeftArmHapticClip;
         [SerializeField] private ArmsHapticClip boostFireLeftArmHapticClip;
         [SerializeField] private ArmsHapticClip shipShakeLeftArmHapticClip;
-
+        [SerializeField] private ArmsHapticClip toggleFunctionLeftArmHapticClip;
+        
         [SerializeField] private ArmsHapticClip collisionImpactRightArmHapticClip;
         [SerializeField] private ArmsHapticClip boostSpoolRightArmHapticClip;
         [SerializeField] private ArmsHapticClip boostFireRightArmHapticClip;
         [SerializeField] private ArmsHapticClip shipShakeRightArmHapticClip;
-
+        [SerializeField] private ArmsHapticClip toggleFunctionRightArmHapticClip;
+        
         [SerializeField] private HeadHapticClip collisionImpactHeadHapticClip;
         [SerializeField] private HeadHapticClip boostFireHeadHapticClip;
+        [SerializeField] private HeadHapticClip toggleNightVisionHeadClip;
 
         // No idea why but `IsPlaying()` always returns false :/
         private float _shakeHapticPlayTime;
+
+        private bool _firstUpdate = true;
+        private bool _velocityLimiterActive;
+        private bool _vectorAssistActive;
+        private bool _rotationalAssistActive;
+        private bool _nightVisionActive;
 
         public void OnShipFeedbackUpdate(IShipFeedbackData shipFeedbackData) {
             if (shipFeedbackData.BoostSpoolStartThisFrame) {
@@ -60,6 +69,39 @@ namespace Core.ShipModel.Feedback.bHaptics {
         }
 
         public void OnShipInstrumentUpdate(IShipInstrumentData shipInstrumentData) {
+            if (_firstUpdate) {
+                _vectorAssistActive = shipInstrumentData.VelocityLimiterActive;
+                _rotationalAssistActive = shipInstrumentData.RotationalFlightAssistActive;
+                _velocityLimiterActive = shipInstrumentData.VelocityLimiterActive;
+                _nightVisionActive = shipInstrumentData.LightsActive;
+                _firstUpdate = false;
+                return;
+            }
+
+            if (_vectorAssistActive != shipInstrumentData.VectorFlightAssistActive) {
+                _vectorAssistActive = shipInstrumentData.VectorFlightAssistActive;
+                toggleFunctionLeftArmHapticClip.Play();
+                toggleFunctionRightArmHapticClip.Play();
+            }
+
+            if (_rotationalAssistActive != shipInstrumentData.RotationalFlightAssistActive) {
+                _rotationalAssistActive = shipInstrumentData.RotationalFlightAssistActive;
+                toggleFunctionLeftArmHapticClip.Play();
+                toggleFunctionRightArmHapticClip.Play();
+            }
+
+            if (_velocityLimiterActive != shipInstrumentData.VelocityLimiterActive) {
+                _velocityLimiterActive = shipInstrumentData.VelocityLimiterActive;
+                toggleFunctionLeftArmHapticClip.Play();
+                toggleFunctionRightArmHapticClip.Play();
+            }
+            
+            if (_nightVisionActive != shipInstrumentData.LightsActive) {
+                _nightVisionActive = shipInstrumentData.LightsActive;
+                toggleFunctionLeftArmHapticClip.Play();
+                toggleFunctionRightArmHapticClip.Play();
+                if (_nightVisionActive) toggleNightVisionHeadClip.Play();
+            }
         }
     }
 }
