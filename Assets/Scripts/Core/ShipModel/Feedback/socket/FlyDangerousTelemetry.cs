@@ -10,6 +10,7 @@ namespace Core.ShipModel.Feedback.socket {
         Json
     }
 
+    [StructLayout(LayoutKind.Sequential)]
     public struct FlyDangerousTelemetry {
         // Meta
         public uint flyDangerousTelemetryId;

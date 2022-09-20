@@ -416,6 +416,8 @@ namespace Core.ShipModel {
             _shipMotionData.CurrentLateralVelocityNormalised = velocity / FlightParameters.maxBoostSpeed;
             _shipMotionData.CurrentAngularVelocityNormalised = AngularVelocity / FlightParameters.maxAngularVelocity;
             _shipMotionData.CurrentAngularTorqueNormalised = torque / (FlightParameters.maxThrust * FlightParameters.torqueThrustMultiplier);
+
+            _shipMotionData.WorldRotationEuler = targetRigidbody.transform.rotation.eulerAngles;
             _shipMotionData.MaxSpeed = FlightParameters.maxBoostSpeed;
         }
 

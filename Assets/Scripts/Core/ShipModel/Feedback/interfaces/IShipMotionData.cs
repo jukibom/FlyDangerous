@@ -28,6 +28,9 @@ namespace Core.ShipModel.Feedback.interfaces {
         // The raw angular torque in ship local space normalised values
         Vector3 CurrentAngularTorqueNormalised { get; }
 
+        // The raw orientation of the craft in world space
+        Vector3 WorldRotationEuler { get; }
+
         // The raw maximum lateral velocity magnitude in m/s permitted by the ship configuration
         float MaxSpeed { get; }
     }

@@ -44,14 +44,16 @@ namespace Core {
     }
 
     public class Preferences : Singleton<Preferences> {
-        private SaveData _saveData;
+        private SaveData _saveData; // used to cache
 
+        // ReSharper disable Unity.PerformanceAnalysis
         private bool GetDefaultBool(string key) {
             switch (key) {
                 case "showSpaceDust":
                 case "invertArcadeYAxis":
                 case "graphics-terrain-details":
                 case "graphics-vsync":
+                case "bHapticsEnabled":
                     return true;
 
                 case "graphics-ssao":
@@ -65,6 +67,7 @@ namespace Core {
                 case "autoShipRotation":
                 case "autoShipRoll":
                 case "telemetryEnabled":
+                case "simRacingStudioEnabled":
                     return false;
 
                 default:
@@ -73,6 +76,7 @@ namespace Core {
             }
         }
 
+        // ReSharper disable Unity.PerformanceAnalysis
         private float GetDefaultFloat(string key) {
             switch (key) {
                 case "graphics-terrain-geometry-lod":
@@ -110,12 +114,15 @@ namespace Core {
                     return 0.02f;
                 case "telemetryOutputPort":
                     return 11000;
+                case "simRacingStudioOutputPort":
+                    return 33001;
                 default:
                     Debug.LogWarning("Attempted to get preference " + key + " with no default specified");
                     return 0;
             }
         }
 
+        // ReSharper disable Unity.PerformanceAnalysis
         private string GetDefaultString(string key) {
             switch (key) {
                 case "lastPlayedVersion":
@@ -188,12 +195,15 @@ namespace Core {
                     return "json";
                 case "telemetryOutputAddress":
                     return "127.0.0.1";
+                case "simRacingStudioOutputAddress":
+                    return "127.0.0.1";
                 default:
                     Debug.LogWarning("Attempted to get preference " + key + " with no default specified");
                     return "";
             }
         }
 
+        // ReSharper disable Unity.PerformanceAnalysis
         private Vector3 GetDefaultVector3(string key) {
             switch (key) {
                 case "hmdPosition":
@@ -246,6 +256,7 @@ namespace Core {
             GetCurrent().vector3Prefs[key] = new SaveDataVector3<float> { x = val.x, y = val.y, z = val.z };
         }
 
+        // ReSharper disable Unity.PerformanceAnalysis
         public SaveData GetCurrent() {
             // if already loaded, just return
             if (_saveData != null) return _saveData;

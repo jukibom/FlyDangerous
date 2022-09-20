@@ -11,6 +11,7 @@ namespace Core.ShipModel.Feedback {
         public Vector3 CurrentLateralForceNormalised { get; set; }
         public Vector3 CurrentAngularVelocityNormalised { get; set; }
         public Vector3 CurrentAngularTorqueNormalised { get; set; }
+        public Vector3 WorldRotationEuler { get; set; }
         public float MaxSpeed { get; set; }
     }
 }

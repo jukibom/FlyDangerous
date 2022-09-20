@@ -11,9 +11,9 @@ using UnityEngine;
 namespace Core.ShipModel.Feedback.socket {
     public class UdpServer : Singleton<UdpServer>, IShipMotion, IShipInstruments, IShipFeedback {
         [SerializeField] private BroadcastFormat broadcastFormat = BroadcastFormat.Json;
-        [SerializeField] private IPAddress broadcastIpAddress = IPAddress.Parse("127.0.0.1");
-        [SerializeField] private int broadcastPort = 11000;
         [SerializeField] private float emitIntervalSeconds = 0.02f;
+        private IPAddress _broadcastIpAddress = IPAddress.Parse("127.0.0.1");
+        private int _broadcastPort = 11000;
         private float _emitTimer;
         [CanBeNull] private IPEndPoint _ipEndPoint;
 
@@ -126,16 +126,16 @@ namespace Core.ShipModel.Feedback.socket {
 
         [Button("Start Server")]
         [UsedImplicitly]
-        private void StartListener() {
-            Debug.Log($"Starting {broadcastFormat} UDP Server ({broadcastIpAddress}:{broadcastPort}) ... ");
+        private void StartServer() {
+            Debug.Log($"Starting {broadcastFormat} UDP Server ({_broadcastIpAddress}:{_broadcastPort}) ... ");
             _socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-            _ipEndPoint = new IPEndPoint(broadcastIpAddress, broadcastPort);
+            _ipEndPoint = new IPEndPoint(_broadcastIpAddress, _broadcastPort);
             _isEnabled = true;
         }
 
         [Button("Stop Server")]
         [UsedImplicitly]
-        private void StopListener() {
+        private void StopServer() {
             Debug.Log("Shutting down UDP Server");
             _packetId = 0;
             _socket?.Close();
@@ -146,8 +146,8 @@ namespace Core.ShipModel.Feedback.socket {
         private void OnGameSettingsApplied() {
             _isEnabled = Preferences.Instance.GetBool("telemetryEnabled");
             var mode = Preferences.Instance.GetString("telemetryOutputMode");
-            broadcastIpAddress = IPAddress.Parse(Preferences.Instance.GetString("telemetryOutputAddress"));
-            broadcastPort = (int)Preferences.Instance.GetFloat("telemetryOutputPort");
+            _broadcastIpAddress = IPAddress.Parse(Preferences.Instance.GetString("telemetryOutputAddress"));
+            _broadcastPort = (int)Preferences.Instance.GetFloat("telemetryOutputPort");
 
             switch (mode) {
                 case "bytes":
@@ -164,8 +164,8 @@ namespace Core.ShipModel.Feedback.socket {
 
             _emitTimer = Preferences.Instance.GetFloat("telemetryEmitIntervalSeconds");
 
-            if (_isEnabled) StartListener();
-            else StopListener();
+            if (_isEnabled) StartServer();
+            else StopServer();
         }
     }
 }
