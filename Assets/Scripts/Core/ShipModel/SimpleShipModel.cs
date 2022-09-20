@@ -37,12 +37,10 @@ namespace Core.ShipModel {
         [SerializeField] private AudioSource velocityLimitDeactivateAudioSource;
         [SerializeField] private AudioSource nightVisionActivateAudioSource;
         [SerializeField] private AudioSource nightVisionDeactivateAudioSource;
-        
-        public ShipCameraRig ShipCameraRig { get; set; }
 
         private Coroutine _boostCoroutine;
         private bool _velocityLimiterActive;
-        
+
         public virtual void Start() {
             // Init GPU Instance removal colliders 
 #if !NO_PAID_ASSETS
@@ -82,6 +80,8 @@ namespace Core.ShipModel {
             Game.OnPauseToggle -= PauseAudio;
             Game.OnRestart -= Restart;
         }
+
+        public ShipCameraRig ShipCameraRig { get; set; }
 
         [CanBeNull] public ShipShake ShipShake { get; private set; }
 
@@ -173,9 +173,9 @@ namespace Core.ShipModel {
             );
 
             var accelerationNormalised = shipMotionData.CurrentLateralForceNormalised.magnitude;
-            if (accelerationNormalised > 0.8f) {
-                var accelerationShakeAmountMax = _velocityLimiterActive ? 0.008f : 0.004f; 
-                ShipShake?.AddShake( Time.fixedDeltaTime, accelerationNormalised.Remap(0.4f, 1, 0, accelerationShakeAmountMax), true);
+            if (accelerationNormalised > 0.4f) {
+                var accelerationShakeAmountMax = _velocityLimiterActive ? 0.008f : 0.004f;
+                ShipShake?.AddShake(Time.fixedDeltaTime, accelerationNormalised.Remap(0.4f, 1, 0, accelerationShakeAmountMax), true);
             }
 
             thrusterController.UpdateThrusters(shipMotionData.CurrentLateralForceNormalised, torqueVec);
