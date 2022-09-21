@@ -23,11 +23,20 @@ namespace Core.ShipModel.Feedback.socket {
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 50)]
         public char[] currentGameMode;
 
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 50)]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 100)]
         public char[] currentLevelName;
 
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 50)]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 100)]
         public char[] currentMusicTrackName;
+
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 50)]
+        public char[] currentShipName;
+
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 50)]
+        public char[] playerName;
+
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
+        public char[] playerFlagIso;
 
         public int currentPlayerCount;
 

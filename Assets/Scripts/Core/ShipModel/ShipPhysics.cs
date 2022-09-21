@@ -58,6 +58,7 @@ namespace Core.ShipModel {
         [CanBeNull] private IShipModel _shipModel;
 
         private ShipParameters _shipParameters;
+        private ShipProfile _shipProfile;
         private bool _stopShip;
         private float _velocityLimitCap;
 
@@ -79,6 +80,15 @@ namespace Core.ShipModel {
 
                 // setup angular momentum for collisions (higher multiplier = less spin)
                 targetRigidbody.inertiaTensor = initialInertiaTensor * value.inertiaTensorMultiplier;
+            }
+        }
+
+        [CanBeNull]
+        public ShipProfile ShipProfile {
+            get => _shipProfile;
+            set {
+                _shipProfile = value;
+                RefreshShipModel(value);
             }
         }
 
@@ -180,7 +190,7 @@ namespace Core.ShipModel {
         public event BoostCancelledAction OnBoostCancel;
         public event ShipPhysicsUpdated OnShipPhysicsUpdated;
 
-        public void RefreshShipModel(ShipProfile shipProfile) {
+        private void RefreshShipModel(ShipProfile shipProfile) {
             var shipData = ShipMeta.FromString(shipProfile.shipModel);
             // TODO: make this async
             var shipModel = Instantiate(Resources.Load(shipData.PrefabToLoad, typeof(GameObject)) as GameObject);

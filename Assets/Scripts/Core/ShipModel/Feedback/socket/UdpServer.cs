@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 using Audio;
+using Core.Player;
 using Core.ShipModel.Feedback.interfaces;
 using Core.ShipModel.ShipIndicator;
 using JetBrains.Annotations;
@@ -37,11 +38,18 @@ namespace Core.ShipModel.Feedback.socket {
                 _telemetry.packetId = _packetId;
 
                 // Game State
+                var player = FdPlayer.FindLocalShipPlayer;
                 _telemetry.gameVersion = Application.version.PadRight(20).ToCharArray();
                 _telemetry.currentLevelName =
-                    (Game.Instance.LoadedLevelData.name != "" ? Game.Instance.LoadedLevelData.name : "None").PadRight(50).ToCharArray();
+                    (Game.Instance.LoadedLevelData.name != "" ? Game.Instance.LoadedLevelData.name : "None").PadRight(100).ToCharArray();
                 _telemetry.currentGameMode = Game.Instance.LoadedLevelData.gameType.Name.PadRight(50).ToCharArray();
-                _telemetry.currentMusicTrackName = (MusicManager.Instance.CurrentPlayingTrack?.Name ?? "None").PadRight(50).ToCharArray();
+                _telemetry.currentMusicTrackName = (MusicManager.Instance.CurrentPlayingTrack?.Name ?? "None").PadRight(100).ToCharArray();
+                if (player != null) {
+                    _telemetry.currentShipName = (player.ShipPhysics.ShipProfile?.shipModel ?? "None").PadRight(50).ToCharArray();
+                    _telemetry.playerName = (player.ShipPhysics.ShipProfile?.playerName ?? "None").PadRight(50).ToCharArray();
+                    _telemetry.playerFlagIso = (player.ShipPhysics.ShipProfile?.playerFlagFilename ?? "None").PadRight(50).ToCharArray();
+                }
+
                 _telemetry.currentPlayerCount = FdNetworkManager.Instance.numPlayers;
 
                 // Serialise and send

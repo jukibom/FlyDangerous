@@ -1,5 +1,6 @@
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
+using Core.Player;
 using Core.ShipModel.Feedback.interfaces;
 using Core.ShipModel.ShipIndicator;
 using JetBrains.Annotations;
@@ -29,9 +30,10 @@ namespace Core.ShipModel.Feedback.simRacingStudio {
             _simRacingStudioData.game = "Fly Dangerous".PadRight(50).ToCharArray();
 
             // Game State
+            var player = FdPlayer.FindLocalShipPlayer;
             _simRacingStudioData.location =
                 (Game.Instance.LoadedLevelData.name != "" ? Game.Instance.LoadedLevelData.name : "None").PadRight(50).ToCharArray();
-            _simRacingStudioData.vehicleName = "is this needed?".PadRight(50).ToCharArray();
+            if (player != null) _simRacingStudioData.vehicleName = (player.ShipPhysics.ShipProfile?.shipModel ?? "None").PadRight(50).ToCharArray();
 
             // Serialise and send
             var packet = SimRacingStudioDataEncoder.EncodePacket(_simRacingStudioData);
@@ -48,8 +50,8 @@ namespace Core.ShipModel.Feedback.simRacingStudio {
 
         public void OnShipInstrumentUpdate(IShipInstrumentData shipInstrumentData) {
             _simRacingStudioData.speed = shipInstrumentData.Speed / 3.6f;
-            _simRacingStudioData.maxRpm = 32000;
-            _simRacingStudioData.rpm = shipInstrumentData.AccelerationMagnitudeNormalised * 32000;
+            _simRacingStudioData.maxRpm = 30000;
+            _simRacingStudioData.rpm = shipInstrumentData.AccelerationMagnitudeNormalised * 10000;
             _simRacingStudioData.gear = shipInstrumentData.ThrottlePositionNormalised > 0 ? 1 : -1;
         }
 

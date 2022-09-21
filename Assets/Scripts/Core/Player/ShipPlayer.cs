@@ -185,13 +185,11 @@ namespace Core.Player {
         private void RefreshShipModel() {
             IEnumerator RefreshShipAsync() {
                 while (string.IsNullOrEmpty(_shipModelName)) yield return new WaitForFixedUpdate();
-                ShipPhysics.RefreshShipModel(new ShipProfile(playerName, playerFlag, _shipModelName, _primaryColor, _accentColor, _thrusterColor, _trailColor,
-                    _headLightsColor));
+                ShipPhysics.ShipProfile = new ShipProfile(playerName, playerFlag, _shipModelName, _primaryColor, _accentColor, _thrusterColor, _trailColor,
+                    _headLightsColor);
 
-                if (isLocalPlayer && shipPhysics.ShipModel != null) {
-                    shipPhysics.ShipModel.ShipCameraRig = user.ShipCameraRig;
-                }
-                
+                if (isLocalPlayer && shipPhysics.ShipModel != null) shipPhysics.ShipModel.ShipCameraRig = user.ShipCameraRig;
+
                 // handle any ship model specific stuff
                 shipPhysics.ShipModel?.SetIsLocalPlayer(isLocalPlayer);
             }

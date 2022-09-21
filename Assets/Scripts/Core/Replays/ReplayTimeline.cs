@@ -47,7 +47,7 @@ namespace Core.Replays {
         public void LoadReplay(IReplayShip ship, Replay replay) {
             Replay = replay;
             ShipReplayObject = ship;
-            ship.ShipPhysics.RefreshShipModel(replay.ShipProfile);
+            ship.ShipPhysics.ShipProfile = replay.ShipProfile;
 
             // hide all rendering assets until told to show (e.g. by distance in FixedUpdate)
             if (ship.ShipPhysics.ShipModel != null) ship.ShipPhysics.ShipModel.SetVisible(false);
