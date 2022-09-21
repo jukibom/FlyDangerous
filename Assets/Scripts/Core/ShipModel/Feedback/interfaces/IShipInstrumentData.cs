@@ -8,7 +8,10 @@ namespace Core.ShipModel.ShipIndicator {
         // The world position coordinates from the world origin
         public Vector3 WorldPosition { get; }
 
-        // The ship altitude in meters, if applicable (Infinity in space!)
+        // The ship height from the terrain, if applicable (Infinity in space!)
+        public float ShipHeightFromGround { get; }
+
+        // The ship altitude from mean sea level in meters, if applicable (Infinity in space!)
         public float Altitude { get; }
 
         // The raw velocity magnitude in m/s

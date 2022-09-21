@@ -91,6 +91,7 @@ namespace Core.ShipModel.Feedback.socket {
 
             _telemetry.shipWorldPosition = SerializableVector3.AssignOrCreateFromVector3(_telemetry.shipWorldPosition, shipInstrumentData.WorldPosition);
             _telemetry.shipAltitude = shipInstrumentData.Altitude;
+            _telemetry.shipHeightFromGround = shipInstrumentData.ShipHeightFromGround;
             _telemetry.shipSpeed = shipInstrumentData.Speed;
             _telemetry.accelerationMagnitudeNormalised = shipInstrumentData.AccelerationMagnitudeNormalised;
             _telemetry.gForce = shipInstrumentData.GForce;

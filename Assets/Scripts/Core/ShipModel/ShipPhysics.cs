@@ -441,8 +441,11 @@ namespace Core.ShipModel {
             var nearestTerrain = PositionalHelpers.GetClosestCurrentTerrain(shipPosition);
 
             _shipInstrumentData.WorldPosition = absoluteShipPosition;
-            _shipInstrumentData.Altitude = Game.Instance.IsTerrainMap && nearestTerrain != null
+            _shipInstrumentData.ShipHeightFromGround = Game.Instance.IsTerrainMap && nearestTerrain != null
                 ? absoluteShipPosition.y - nearestTerrain.SampleHeight(shipPosition)
+                : Mathf.Infinity;
+            _shipInstrumentData.Altitude = Game.Instance.IsTerrainMap && nearestTerrain != null
+                ? absoluteShipPosition.y
                 : Mathf.Infinity;
             _shipInstrumentData.AccelerationMagnitudeNormalised =
                 (Math.Abs(CurrentFrameThrust.x) + Math.Abs(CurrentFrameThrust.y) + Math.Abs(CurrentFrameThrust.z)) /

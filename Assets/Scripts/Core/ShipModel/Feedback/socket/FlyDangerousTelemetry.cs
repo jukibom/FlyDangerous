@@ -43,6 +43,7 @@ namespace Core.ShipModel.Feedback.socket {
         // Instrument Data
         public SerializableVector3 shipWorldPosition;
         public float shipAltitude;
+        public float shipHeightFromGround;
         public float shipSpeed;
         public float accelerationMagnitudeNormalised;
         public float gForce;
