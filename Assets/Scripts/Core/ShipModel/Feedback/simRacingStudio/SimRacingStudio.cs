@@ -53,9 +53,9 @@ namespace Core.ShipModel.Feedback.simRacingStudio {
         }
 
         public void OnShipMotionUpdate(IShipMotionData shipMotionData) {
-            _simRacingStudioData.lateralAcceleration = shipMotionData.CurrentLateralForceNormalised.x;
-            _simRacingStudioData.verticalAcceleration = shipMotionData.CurrentLateralForceNormalised.y;
-            _simRacingStudioData.longitudinalAcceleration = shipMotionData.CurrentLateralForceNormalised.z;
+            _simRacingStudioData.lateralAcceleration = shipMotionData.CurrentLateralForceNormalised.x * 10;
+            _simRacingStudioData.verticalAcceleration = shipMotionData.CurrentLateralForceNormalised.y * 10;
+            _simRacingStudioData.longitudinalAcceleration = shipMotionData.CurrentLateralForceNormalised.z * 10;
 
             _simRacingStudioData.pitch = SimRacingStudioDataEncoder.MapAngleToSrs(shipMotionData.WorldRotationEuler.x);
             _simRacingStudioData.yaw = SimRacingStudioDataEncoder.MapAngleToSrs(shipMotionData.WorldRotationEuler.y);
