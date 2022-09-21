@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using System.Net.Sockets;
 using Core.ShipModel.Feedback.interfaces;
 using Core.ShipModel.ShipIndicator;
@@ -20,6 +20,7 @@ namespace Core.ShipModel.Feedback.simRacingStudio {
 
         private void FixedUpdate() {
             if (!_isEnabled) return;
+            if (!Game.Instance.InGame) return;
 
             // Add missing / global data to telemetry
             // Meta

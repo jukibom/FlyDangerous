@@ -86,6 +86,8 @@ namespace Core {
         public SessionType SessionType { get; private set; } = SessionType.Singleplayer;
         public SessionStatus SessionStatus { get; set; } = SessionStatus.Offline;
 
+        public bool InGame => SessionStatus is SessionStatus.InGame or SessionStatus.Development;
+
         public bool IsVREnabled { get; private set; }
 
         public bool IsGameHotJoinable => LoadedLevelData.gameType.IsHotJoinable;
