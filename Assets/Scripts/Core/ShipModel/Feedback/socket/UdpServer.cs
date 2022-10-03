@@ -39,21 +39,21 @@ namespace Core.ShipModel.Feedback.socket {
 
                 // Game State
                 var player = FdPlayer.FindLocalShipPlayer;
-                _telemetry.gameVersion = Application.version.PadRight(20).ToCharArray();
+                _telemetry.gameVersion = Application.version;
                 _telemetry.currentLevelName =
-                    (Game.Instance.LoadedLevelData.name != "" ? Game.Instance.LoadedLevelData.name : "None").PadRight(100).ToCharArray();
-                _telemetry.currentGameMode = Game.Instance.LoadedLevelData.gameType.Name.PadRight(50).ToCharArray();
-                _telemetry.currentMusicTrackName = (MusicManager.Instance.CurrentPlayingTrack?.Name ?? "None").PadRight(100).ToCharArray();
+                    Game.Instance.LoadedLevelData.name != "" ? Game.Instance.LoadedLevelData.name : "None";
+                _telemetry.currentGameMode = Game.Instance.LoadedLevelData.gameType.Name;
+                _telemetry.currentMusicTrackName = MusicManager.Instance.CurrentPlayingTrack?.Name ?? "None";
                 if (player != null) {
-                    _telemetry.currentShipName = (player.ShipPhysics.ShipProfile?.shipModel ?? "None").PadRight(50).ToCharArray();
-                    _telemetry.playerName = (player.ShipPhysics.ShipProfile?.playerName ?? "None").PadRight(50).ToCharArray();
-                    _telemetry.playerFlagIso = (player.ShipPhysics.ShipProfile?.playerFlagFilename ?? "None").PadRight(50).ToCharArray();
+                    _telemetry.currentShipName = player.ShipPhysics.ShipProfile?.shipModel ?? "None";
+                    _telemetry.playerName = player.ShipPhysics.ShipProfile?.playerName ?? "None";
+                    _telemetry.playerFlagIso = player.ShipPhysics.ShipProfile?.playerFlagFilename ?? "None";
                 }
 
                 _telemetry.currentPlayerCount = FdNetworkManager.Instance.numPlayers;
 
                 // Serialise and send
-                var packet = FlyDangerousTelemetryEncoder.EncodePacket(broadcastFormat, _telemetry);
+                var packet = FlyDangerousTelemetryEncoder.EncodePacket(broadcastFormat, ref _telemetry);
                 if (_socket != null && _ipEndPoint != null) _socket.SendTo(packet, _ipEndPoint);
                 _packetId++;
             }
