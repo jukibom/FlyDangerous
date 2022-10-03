@@ -182,6 +182,10 @@ namespace Core.ShipModel {
             smokeEmitter.UpdateThrustTrail(shipMotionData.CurrentLateralVelocity, shipMotionData.MaxSpeed,
                 shipMotionData.CurrentLateralForceNormalised);
             foliageCollider.radius = shipMotionData.CurrentLateralVelocity.magnitude.Remap(0, shipMotionData.MaxSpeed / 2, 4, 15);
+
+            // if we're going faster than max (boost pad yay!) let's make that shield go woOOoooOoo
+            var velocityNormalised = shipMotionData.CurrentLateralVelocityNormalised.magnitude;
+            if (shipMotionData.CurrentLateralVelocityNormalised.magnitude > 1.1f) shield.Fizzle();
         }
 
         public virtual void OnShipFeedbackUpdate(IShipFeedbackData shipFeedbackData) {

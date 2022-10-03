@@ -254,7 +254,7 @@ namespace Core.Player {
                 CmdUpdate(FloatingOrigin.Instance.Origin, _transform.localPosition, _transform.rotation, ShipPhysics.Velocity, ShipPhysics.AngularVelocity,
                     ShipPhysics.CurrentFrameThrust, ShipPhysics.CurrentFrameTorque);
 
-                ShipPhysics.CheckpointCollisionCheck();
+                ShipPhysics.LocalPlayerTriggerCollisionChecks();
                 ShipPhysics.GeometryCollisionCheck();
             }
         }

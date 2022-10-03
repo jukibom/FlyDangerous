@@ -26,8 +26,8 @@ namespace Core.ShipModel {
         [SerializeField] private float maxShieldFresnel = 40f;
 
         private Material _shieldImpactMaterial;
-
         private Material _shieldMaterial;
+
         private Vector3 _targetDirection;
         private float _targetFresnel;
         private float _targetShieldAlpha;
@@ -105,6 +105,12 @@ namespace Core.ShipModel {
             _targetShieldAlpha += 0.01f * maxShieldAlpha;
             _targetTurbulenceOffset += 0.01f;
             _targetFresnel -= 0.01f * maxShieldFresnel;
+        }
+
+        public void Fizzle() {
+            _targetDirection = Vector3.zero;
+            _targetShieldImpactAlpha = 1;
+            _targetTurbulenceOffset = 0.18f;
         }
 
         // Specifically for viewing ships in a UI, make the shield more visible at a standstill

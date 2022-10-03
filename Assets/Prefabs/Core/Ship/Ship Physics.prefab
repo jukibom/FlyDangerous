@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4969557051023498551}
   - component: {fileID: 1072241050817558044}
   - component: {fileID: 8904958166780064749}
+  - component: {fileID: 2591242827892225168}
   m_Layer: 0
   m_Name: Ship Physics
   m_TagString: Untagged
@@ -60,7 +61,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66a44737eef548a88db4948d2cec1355, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shipPhysics: {fileID: 0}
+--- !u!114 &2591242827892225168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3633334740965823626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e891343e545a496fa908f02211c03644, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shipDeltaSpeedCapDamping: 0.99
+  shipDeltaThrustCapDamping: 0.998
+  shipForceDamping: 0.8
+  maxShipForce: 50000000
+  maxShipDeltaSpeed: 5000
+  maxShipDeltaThrust: 1000000
 --- !u!1001 &2096375933786169274
 PrefabInstance:
   m_ObjectHideFlags: 0
