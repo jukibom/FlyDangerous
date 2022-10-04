@@ -35,7 +35,7 @@ namespace Core.ShipModel {
         [SerializeField] private Rigidbody targetRigidbody;
 
         // ray-casting without per-frame allocation
-        private readonly RaycastHit[] _raycastHits = new RaycastHit[2];
+        private readonly RaycastHit[] _raycastHits = new RaycastHit[10];
         private readonly ShipFeedbackData _shipFeedbackData = new();
         private readonly ShipInstrumentData _shipInstrumentData = new();
         private readonly ShipMotionData _shipMotionData = new();

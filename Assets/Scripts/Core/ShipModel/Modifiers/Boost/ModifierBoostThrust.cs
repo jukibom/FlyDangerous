@@ -1,8 +1,8 @@
 using UnityEngine;
 
-namespace Core.ShipModel.Modifiers {
+namespace Core.ShipModel.Modifiers.Boost {
     [RequireComponent(typeof(AudioSource))]
-    public class ModifierBoost : MonoBehaviour, IModifier {
+    public class ModifierBoostThrust : MonoBehaviour, IModifier {
         [SerializeField] private float shipForceAdd = 50000000;
         [SerializeField] private float shipSpeedAdd = 150;
         [SerializeField] private float shipThrustAdd = 50000;
