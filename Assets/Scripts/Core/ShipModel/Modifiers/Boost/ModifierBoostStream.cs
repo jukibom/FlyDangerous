@@ -33,15 +33,21 @@ namespace Core.ShipModel.Modifiers.Boost {
 
         public void ApplyModifierEffect(Rigidbody shipRigidBody, ref AppliedEffects effects) {
             var streamTransform = transform;
-            var distance = streamTransform.position - shipRigidBody.transform.position;
-            var effectOverDisantceNormalised = 1 - distance.magnitude / (lengthMeters - streamCapsuleEndCapRadius);
 
-            effects.shipForce += Vector3.Lerp(Vector3.zero, streamTransform.forward * shipForceAdd, effectOverDisantceNormalised);
+            // apply force along the funnel with force linear equivalent to the distance from the source
+            var distance = streamTransform.position - shipRigidBody.transform.position;
+            var effectOverDistanceNormalised = 1 - distance.magnitude / (lengthMeters - streamCapsuleEndCapRadius);
+            effects.shipForce += Vector3.Lerp(Vector3.zero, streamTransform.forward * shipForceAdd, effectOverDistanceNormalised);
+
+            // apply force along the x / y pulling the ship into the centre
+            var directionToCenter = new Vector3(streamTransform.position.x, streamTransform.position.y, 0) -
+                                    new Vector3(shipRigidBody.transform.position.x, shipRigidBody.transform.position.y, 0);
+            effects.shipForce += Vector3.Lerp(Vector3.zero, directionToCenter.normalized * shipForceAdd, effectOverDistanceNormalised);
 
             // apply additional thrust and max speed if the ship vector is facing the correct direction
             if (Vector3.Dot(transform.forward, shipRigidBody.velocity) > 0) {
-                effects.shipDeltaSpeedCap += Mathf.Lerp(0, shipSpeedAdd, effectOverDisantceNormalised);
-                effects.shipDeltaThrust += Mathf.Lerp(0, shipThrustAdd, effectOverDisantceNormalised);
+                effects.shipDeltaSpeedCap += Mathf.Lerp(0, shipSpeedAdd, effectOverDistanceNormalised);
+                effects.shipDeltaThrust += Mathf.Lerp(0, shipThrustAdd, effectOverDistanceNormalised);
             }
         }
     }
