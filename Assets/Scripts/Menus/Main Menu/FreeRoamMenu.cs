@@ -14,6 +14,8 @@ namespace Menus.Main_Menu {
         [SerializeField] private Button startButton;
         [SerializeField] private Dropdown locationDropdown;
         [SerializeField] private Dropdown environmentDropdown;
+        [SerializeField] private Text locationDescriptionHeader;
+        [SerializeField] private Text locationDescription;
 
         [CanBeNull] private LevelData _levelData;
 
@@ -29,6 +31,8 @@ namespace Menus.Main_Menu {
 
             locationDropdown.value = location.Id;
             environmentDropdown.value = environment.Id;
+            locationDescriptionHeader.text = location.Name;
+            locationDescription.text = location.Description;
 
             UpdateSeedField();
             _levelData = null;
@@ -45,6 +49,9 @@ namespace Menus.Main_Menu {
 
         public void OnLocationChanged() {
             UpdateSeedField();
+            var location = Location.FromId(locationDropdown.value);
+            locationDescriptionHeader.text = location.Name;
+            locationDescription.text = location.Description;
         }
 
         public void StartFreeRoam() {
