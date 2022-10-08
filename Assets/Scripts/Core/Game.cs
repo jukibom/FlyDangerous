@@ -176,7 +176,7 @@ namespace Core {
             QualitySettings.vSyncCount = Preferences.Instance.GetBool("graphics-vsync") ? 1 : 0;
 
             var urp = (UniversalRenderPipelineAsset)GraphicsSettings.currentRenderPipeline;
-            urp.renderScale = Preferences.Instance.GetFloat("graphics-render-scale");
+            urp.renderScale = Mathf.Clamp(Preferences.Instance.GetFloat("graphics-render-scale"), 0.5f, 2);
 
             // For some maddening reason soft shadows is not exposed but flipping this bool does work so here's some awful reflection. yay!
             var type = urp.GetType();
