@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Core.OnlineServices;
@@ -10,6 +11,7 @@ namespace Menus.Main_Menu.Components {
         [SerializeField] private RectTransform container;
         [SerializeField] private LeaderboardEntry leaderboardEntryPrefab;
         [SerializeField] private Text leaderboardText;
+        [SerializeField] private GameObject loadingOverlay;
         [CanBeNull] private Coroutine _addLeaderboardEntryCoroutine;
 
         [CanBeNull] private ILeaderboard _leaderboard;
@@ -44,6 +46,7 @@ namespace Menus.Main_Menu.Components {
             if (_addLeaderboardEntryCoroutine != null) StopCoroutine(_addLeaderboardEntryCoroutine);
 
             if (_leaderboard != null) {
+                loadingOverlay.SetActive(true);
                 leaderboardText.text = "FETCHING ...";
                 var newEntries = await _leaderboard.GetEntries(fetchType);
                 ClearEntries();
@@ -52,16 +55,20 @@ namespace Menus.Main_Menu.Components {
 
                 // panel may have closed after entries have been fetched
                 if (newEntries.Count > 0 && gameObject.activeSelf)
-                    _addLeaderboardEntryCoroutine = StartCoroutine(AddEntries(newEntries));
+                    _addLeaderboardEntryCoroutine = StartCoroutine(AddEntries(newEntries, () => loadingOverlay.SetActive(false)));
+                else
+                    loadingOverlay.SetActive(false);
             }
         }
 
-        private IEnumerator AddEntries(List<ILeaderboardEntry> leaderboardEntries) {
+        private IEnumerator AddEntries(List<ILeaderboardEntry> leaderboardEntries, Action onComplete) {
             foreach (var leaderboardEntry in leaderboardEntries) {
                 var entry = Instantiate(leaderboardEntryPrefab, container);
                 entry.GetData(leaderboardEntry);
                 yield return new WaitForEndOfFrame();
             }
+
+            onComplete();
         }
     }
 }

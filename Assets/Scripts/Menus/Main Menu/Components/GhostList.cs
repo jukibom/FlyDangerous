@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,14 +13,17 @@ namespace Menus.Main_Menu.Components {
         [SerializeField] private RectTransform ghostEntryContainer;
         [SerializeField] private GhostEntry ghostEntryPrefab;
         [SerializeField] private GameObject noGhostText;
-
+        [SerializeField] private GameObject loadingOverlay;
         private Coroutine _addGhostsCoroutine;
+
+        public IEnumerable<GhostEntry> GhostEntries => ghostEntryContainer.GetComponentsInChildren<GhostEntry>();
 
         private void OnEnable() {
             noGhostText.SetActive(true);
         }
 
-        public void PopulateGhostsForLevel(LevelData levelData) {
+        public void PopulateGhostsForLevel(LevelData levelData, Action onComplete) {
+            loadingOverlay.SetActive(true);
             if (_addGhostsCoroutine != null) StopCoroutine(_addGhostsCoroutine);
 
             ClearGhosts();
@@ -28,11 +32,14 @@ namespace Menus.Main_Menu.Components {
             if (ghosts.Count > 0) noGhostText.SetActive(false);
             ghosts = ghosts.OrderBy(r => r.ScoreData.raceTime).ToList();
 
-            _addGhostsCoroutine = StartCoroutine(AddGhosts(ghosts));
+            _addGhostsCoroutine = StartCoroutine(AddGhosts(ghosts, () => {
+                loadingOverlay.SetActive(false);
+                onComplete();
+            }));
         }
 
         public void ClearGhosts() {
-            foreach (var ghostEntry in ghostEntryContainer.GetComponentsInChildren<GhostEntry>()) Destroy(ghostEntry.gameObject);
+            foreach (var ghostEntry in GhostEntries) Destroy(ghostEntry.gameObject);
         }
 
         /**
@@ -52,7 +59,7 @@ namespace Menus.Main_Menu.Components {
             return ge;
         }
 
-        private IEnumerator AddGhosts(List<Replay> ghosts) {
+        private IEnumerator AddGhosts(List<Replay> ghosts, Action onComplete) {
             foreach (var replay in ghosts) {
                 var ghostEntry = Instantiate(ghostEntryPrefab);
                 ghostEntry.GetComponent<RectTransform>().SetParent(ghostEntryContainer, false);
@@ -60,11 +67,11 @@ namespace Menus.Main_Menu.Components {
                 ghostEntry.score.text = TimeExtensions.TimeSecondsToString(replay.ScoreData.raceTime);
                 ghostEntry.entryDate.text = replay.ReplayMeta.CreationDate.ToShortDateString();
                 ghostEntry.replay = replay;
-
-                // enable the best score by default
-                ghostEntry.checkbox.isChecked = ghosts.First() == replay;
+                ghostEntry.checkbox.isChecked = false;
                 yield return new WaitForEndOfFrame();
             }
+
+            onComplete();
         }
     }
 }
