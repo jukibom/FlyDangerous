@@ -38,7 +38,6 @@ namespace Core.Player.HeadTracking {
                 // position is in cm in flipped in X and Z space, convert
                 // max magnitude 1m in any direction
                 _headTransform.position = Vector3.ClampMagnitude(new Vector3((float)-data.x / 100, (float)data.y / 100, (float)-data.z / 100), 1);
-                Debug.Log(data.z);
                 // orientation convert to vec 3 euler
                 _headTransform.orientationEuler = new Vector3((float)data.pitch, (float)data.yaw, -(float)data.roll);
             }, _listenPort, 1000);
