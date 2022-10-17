@@ -585,7 +585,7 @@ namespace Core.Player {
             var mouseYInvert = Preferences.Instance.GetBool("mouseYInvert");
 
             var mouseIsRelative = Preferences.Instance.GetString("mouseInputMode") == "relative" ||
-                                  Preferences.Instance.GetBool("forceRelativeMouseWithFAOff") && !shipPlayer.IsRotationalFlightAssistActive;
+                                  (Preferences.Instance.GetBool("forceRelativeMouseWithFAOff") && !shipPlayer.IsRotationalFlightAssistActive);
 
             var mouseRelativeRate = Mathf.Clamp(Preferences.Instance.GetFloat("mouseRelativeRate"), 1, 50f);
 
