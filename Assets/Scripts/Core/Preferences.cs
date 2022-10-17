@@ -68,6 +68,7 @@ namespace Core {
                 case "autoShipRoll":
                 case "telemetryEnabled":
                 case "simRacingStudioEnabled":
+                case "openTrackEnabled":
                     return false;
 
                 default:

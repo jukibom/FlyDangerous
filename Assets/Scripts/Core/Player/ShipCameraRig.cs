@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Cinemachine;
+using Core.Player.HeadTracking;
 using Gameplay;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -25,6 +26,7 @@ namespace Core.Player {
         private Vector3 _cameraOffset;
         private Vector2 _currentRotation;
         private Coroutine _endScreenCameraTransition;
+        private HeadTransform _headTransform;
         private Transform _transform;
 
         [CanBeNull] public ShipCamera ActiveCamera { get; private set; }
@@ -87,13 +89,15 @@ namespace Core.Player {
                         Mathf.Lerp(_currentRotation.x, absolutePosition.x, 0.02f),
                         Mathf.Lerp(_currentRotation.y, absolutePosition.y, 0.02f)
                     );
-                    var angleY = _currentRotation.y * 90;
-                    var angleX = _currentRotation.x * 90;
+                    var angleY = _headTransform.orientationEuler.x + _currentRotation.y * 90;
+                    var angleX = _headTransform.orientationEuler.y + _currentRotation.x * 90;
+                    var angleZ = _headTransform.orientationEuler.z;
 
                     var pivot = _transform.TransformPoint(ActiveCamera.BaseLocalPosition);
 
                     cameraTarget.RotateAround(pivot, _transform.right, -angleY);
                     cameraTarget.RotateAround(pivot, _transform.up, angleX);
+                    cameraTarget.RotateAround(pivot, _transform.forward, angleZ);
                 }
 
                 if (ActiveCamera.cameraType == CameraType.ThirdPerson) {
@@ -124,12 +128,22 @@ namespace Core.Player {
                     _currentRotation.x + relativePosition.x * 2 * Time.deltaTime,
                     _currentRotation.y + relativePosition.y * 2 * Time.deltaTime
                 );
-                var angleY = _currentRotation.y * 90;
-                var angleX = _currentRotation.x * 90;
+                var angleY = _headTransform.orientationEuler.x + _currentRotation.y * 90;
+                var angleX = _headTransform.orientationEuler.y + _currentRotation.x * 90;
+                var angleZ = _headTransform.orientationEuler.z;
+
+                // var angleY = _currentRotation.y * 90;
+                // var angleX = _currentRotation.x * 90;
 
                 cameraTarget.RotateAround(pivot, _transform.right, -angleY);
                 cameraTarget.RotateAround(pivot, _transform.up, angleX);
+                cameraTarget.RotateAround(pivot, _transform.forward, angleZ);
             }
+        }
+
+        public void SetHeadTransform(ref HeadTransform headTransform) {
+            _headTransform = headTransform;
+            transform.localPosition = headTransform.position;
         }
 
         public void SoftReset() {

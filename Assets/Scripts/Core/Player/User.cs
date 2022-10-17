@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Audio;
+using Core.Player.HeadTracking;
 using FdUI;
 using GameUI;
 using JetBrains.Annotations;
@@ -20,6 +21,7 @@ namespace Core.Player {
         [SerializeField] private XROrigin xrOrigin;
         [SerializeField] private InputSystemUIInputModule pauseUIInputModule;
         [SerializeField] private InGameUI inGameUI;
+        [SerializeField] private HeadTrackingManager headTracking;
 
         [SerializeField] public bool movementEnabled;
         [SerializeField] public bool restartEnabled = true;
@@ -146,6 +148,8 @@ namespace Core.Player {
             }
 
             if (boostButtonForceEnabled) shipPlayer.Boost(_boost);
+
+            shipCameraRig.SetHeadTransform(ref headTracking.HeadTransform);
         }
 
         public void OnEnable() {

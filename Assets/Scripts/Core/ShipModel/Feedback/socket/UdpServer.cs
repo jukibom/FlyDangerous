@@ -4,6 +4,7 @@ using Audio;
 using Core.Player;
 using Core.ShipModel.Feedback.interfaces;
 using Core.ShipModel.ShipIndicator;
+using FdUI;
 using JetBrains.Annotations;
 using Misc;
 using NaughtyAttributes;
@@ -135,18 +136,16 @@ namespace Core.ShipModel.Feedback.socket {
         }
 
         [Button("Start Server")]
-        [UsedImplicitly]
         private void StartServer() {
-            Debug.Log($"Starting {broadcastFormat} UDP Server ({_broadcastIpAddress}:{_broadcastPort}) ... ");
+            FdConsole.Instance.LogMessage($"Starting {broadcastFormat} Telemetry UDP Server ({_broadcastIpAddress}:{_broadcastPort}) ... ");
             _socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             _ipEndPoint = new IPEndPoint(_broadcastIpAddress, _broadcastPort);
             _isEnabled = true;
         }
 
         [Button("Stop Server")]
-        [UsedImplicitly]
         private void StopServer() {
-            Debug.Log("Shutting down UDP Server");
+            FdConsole.Instance.LogMessage($"Shutting down {broadcastFormat} Telemetry UDP Server");
             _packetId = 0;
             _socket?.Close();
             _socket = null;

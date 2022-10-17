@@ -49,6 +49,8 @@ namespace FdUI {
         }
 
         public void LogMessage(string message) {
+            if (logEntry == null) return;
+
             logEntry.text = "";
             _logQueue.Enqueue(message);
             if (_logQueue.Count > maxLineHistory) _logQueue.Dequeue();
