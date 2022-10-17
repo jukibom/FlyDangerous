@@ -739,23 +739,26 @@ MonoBehaviour:
     * Added Ultra reflection quality for refresh rate locked to frame rate (use at
     your own risk :P)\r\n    * Added bHaptics support for Vest, Arms and Head (WIP,
     #194)\r\n    * Added UDP telemetry support for generic motion simulators etc
-    (WIP, #115, more information to follow)\r\n    \r\nChanged:\r\n    * Ship lights
-    now operate as night vision\r\n    * Interior Calidris cockpit glass reflectivity
-    not quite so glaring anymore \r\n    * Advanced input mode renamed \"Custom\"
-    because some people assumed there was no way to rebind controls\r\n    * Increased
-    and standardised primary collider size across ships (shield)\r\n    * Update
-    target overlay font and graphic\r\n    * Level panels load data in once per frame
-    (Level UI element, ghosts, leaderboard entries) to eliminate stutter during menu
-    transitions\r\n    * Updated to Unity 2022.1.8f1\r\n    \r\nFixes:\r\n    * Possible
-    fix for VKBs always reporting \"Hat Up\" on rebind (thanks to the painful manual
-    debugging efforts of Giskard for this fix!)\r\n    * Was previously possible
-    to unset protected bindings (which cannot then be rebound!)\r\n    * Fixed (hopefully!)
-    occasional rare crash on terrain load (#190)\r\n    * Collision detection should
-    be more accurate at high speeds (speculative detection mode increased collision
-    size with velocity!)\r\n    * Incorrect dimensions on some flags in dropdown
-    (#196)\r\n    * Fixed toggling alternate flight controls resetting axes (#178)\r\n   
-    * No longer possible to ever be underneath the terrain (e.g. through a crack
-    in the tile margins), ship is always pushed up to compensate\r\n\n"
+    (WIP, #115, more information to follow)\r\n    * Added descriptions to locations
+    in Free Roam menu\r\n    * Added new boost pad modifiers to the Proving Grounds
+    (see changes below)\r\n    \r\nChanged:\r\n    * Ship lights now operate as night
+    vision\r\n    * Interior Calidris cockpit glass reflectivity not quite so glaring
+    anymore \r\n    * Advanced input mode renamed \"Custom\" because some people
+    assumed there was no way to rebind controls\r\n    * Increased and standardised
+    primary collider size across ships (shield)\r\n    * Update target overlay font
+    and graphic\r\n    * Level panels load data in once per frame (Level UI element,
+    ghosts, leaderboard entries) to eliminate stutter during menu transitions\r\n   
+    * Moved testing objects scene to new location (\"Proving Grounds\"), Space scene
+    is now actually empty for map creation\r\n    * Updated to Unity 2022.1.16f1\r\n   
+    \r\nFixes:\r\n    * Possible fix for VKBs always reporting \"Hat Up\" on rebind
+    (thanks to the painful manual debugging efforts of Giskard for this fix!)\r\n   
+    * Was previously possible to unset protected bindings (which cannot then be rebound!)\r\n   
+    * Fixed (hopefully!) occasional rare crash on terrain load (#190)\r\n    * Collision
+    detection should be more accurate at high speeds (speculative detection mode
+    increased collision size with velocity!)\r\n    * Incorrect dimensions on some
+    flags in dropdown (#196)\r\n    * Fixed toggling alternate flight controls resetting
+    axes (#178)\r\n    * No longer possible to ever be underneath the terrain (e.g.
+    through a crack in the tile margins), ship is always pushed up to compensate\r\n\n\n"
 --- !u!114 &8501361730435722574
 MonoBehaviour:
   m_ObjectHideFlags: 0
