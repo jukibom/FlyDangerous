@@ -529,9 +529,6 @@ namespace Core {
                 });
 
                 ship.SetTransformWorld(message.position, message.rotation);
-
-                // instantly warp camera to start position rather than damping rotate
-                ship.User.ShipCameraRig.Reset();
             }
 
             StartCoroutine(SetShipPosition(message));
