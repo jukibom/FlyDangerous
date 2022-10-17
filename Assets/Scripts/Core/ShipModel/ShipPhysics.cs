@@ -160,19 +160,21 @@ namespace Core.ShipModel {
             }
         }
 
+        public void Awake() {
+            // init physics
+            FlightParameters = ShipParameters.Defaults;
+
+            // get components
+            _modifierEngine = GetComponent<ModifierEngine>();
+
+            // init checkpoint mask id
+            _checkpointLayerMask = LayerMask.NameToLayer("Checkpoint");
+        }
+
         public void Start() {
             // rigidbody non-configurable defaults
             targetRigidbody.centerOfMass = Vector3.zero;
             targetRigidbody.inertiaTensorRotation = Quaternion.identity;
-
-            // init physics
-            FlightParameters = ShipParameters.Defaults;
-
-            // init checkpoint mask id
-            _checkpointLayerMask = LayerMask.NameToLayer("Checkpoint");
-
-            // modifier component
-            _modifierEngine = GetComponent<ModifierEngine>();
         }
 
         private void FixedUpdate() {
