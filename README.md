@@ -31,6 +31,39 @@ Major features:
   * Freeplay flight, seed generation (done!)
   * Record + share racetracks (format supports it)
 
+## Integrations
+
+The game supports various peripherals, accessible from the Integrations tab in the Options panel.
+
+### VR
+
+The game uses [OpenXR](https://www.khronos.org/openxr/) for headset VR integration. It can be toggled mid-game from the option panel or launched with the parameter `-vr` to start in VR mode.
+
+VR is currently headset-only, gamepad / joystick / mouse + kb input and menu navigation is required.
+
+**Unfortunately, Unity only supports OpenXR on Windows (I know, right?!) so for Linux it is advised to use Proton.**
+
+### OpenTrack
+
+[OpenTrack](https://github.com/opentrack/opentrack) is a head tracking application which interfaces with various hardware and webcams to provide head-tracking on flat screen displays.
+Enable it with the option toggle and set OpenTrack to UDP output on 127.0.0.1, port 4242. 
+
+For webcams, the neuralnet tracker input module is excellent. It is advised you bind a shortcut to recenter in the OpenTrack application.
+
+### bHaptics
+
+[bHaptics](https://www.bhaptics.com/) is a suite of haptic feedback hardware. Fly Dangerous supports the TactSuit (x16 / x40) body vest, Tactocity for Arms and Tactal head feedback modules. Enable with the checkbox and suit should power up in-game.
+
+### SimTools
+
+[SimTools](https://simtools.us/) is a universal motion simulation software suite with integration for various peripherals, motion rigs and related devices. Enable the checkbox here to integrate with SimTools.
+
+By default it uses 127.0.0.1 and port 33001 (SimTools defaults) but may be modified in the config file (`simRacingStudioOutputAddress` and `simRacingStudioOutputPort`).
+
+### UDP Telemetry
+
+The game supports raw telemetry output in the form of a binary byte or json firehose for arbitrary custom integrations. This is an advanced feature, see [this ticket for more information](https://github.com/jukibom/FlyDangerous/issues/115).
+
 ## Building
 
 Unity build: 2022.1.16f1
