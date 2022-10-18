@@ -89,9 +89,10 @@ namespace Core.Player {
                         Mathf.Lerp(_currentRotation.x, absolutePosition.x, 0.02f),
                         Mathf.Lerp(_currentRotation.y, absolutePosition.y, 0.02f)
                     );
-                    var angleY = _headTransform.orientationEuler.x + _currentRotation.y * 90;
-                    var angleX = _headTransform.orientationEuler.y + _currentRotation.x * 90;
-                    var angleZ = _headTransform.orientationEuler.z;
+                    var headOrientation = _headTransform.orientation.eulerAngles;
+                    var angleY = -headOrientation.x + _currentRotation.y * 90;
+                    var angleX = headOrientation.y + _currentRotation.x * 90;
+                    var angleZ = headOrientation.z;
 
                     var pivot = _transform.TransformPoint(ActiveCamera.BaseLocalPosition);
 
@@ -128,12 +129,10 @@ namespace Core.Player {
                     _currentRotation.x + relativePosition.x * 2 * Time.deltaTime,
                     _currentRotation.y + relativePosition.y * 2 * Time.deltaTime
                 );
-                var angleY = _headTransform.orientationEuler.x + _currentRotation.y * 90;
-                var angleX = _headTransform.orientationEuler.y + _currentRotation.x * 90;
-                var angleZ = _headTransform.orientationEuler.z;
-
-                // var angleY = _currentRotation.y * 90;
-                // var angleX = _currentRotation.x * 90;
+                var headOrientation = _headTransform.orientation.eulerAngles;
+                var angleY = -headOrientation.x + _currentRotation.y * 90;
+                var angleX = headOrientation.y + _currentRotation.x * 90;
+                var angleZ = headOrientation.z;
 
                 cameraTarget.RotateAround(pivot, _transform.right, -angleY);
                 cameraTarget.RotateAround(pivot, _transform.up, angleX);

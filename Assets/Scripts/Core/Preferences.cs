@@ -69,6 +69,7 @@ namespace Core {
                 case "telemetryEnabled":
                 case "simRacingStudioEnabled":
                 case "openTrackEnabled":
+                case "autoTrackEnabled":
                     return false;
 
                 default:

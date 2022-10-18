@@ -149,6 +149,7 @@ namespace Core.Player {
 
             if (boostButtonForceEnabled) shipPlayer.Boost(_boost);
 
+            headTracking.SetShipVelocityVector(shipPlayer.Rigidbody.velocity);
             shipCameraRig.SetHeadTransform(ref headTracking.HeadTransform);
         }
 
