@@ -17,6 +17,7 @@ New:
     * Added bHaptics support for Vest, Arms and Head (WIP, #194)
     * Added support for OpenTrack head tracking (#65)
     * Added "Drift Cam" option which attempts to look in the direction of travel (within a sensible arc)
+        * Added associated options for head snap, smoothing and max rotational extents
     * Added UDP telemetry support for generic motion simulators etc (WIP, #115, more information to follow)
     * Added descriptions to locations in Free Roam menu
     * Added new boost pad modifiers to the Proving Grounds (see changes below)
@@ -43,6 +44,7 @@ Fixes:
     * No longer possible to ever be underneath the terrain (e.g. through a crack in the tile margins), ship is always pushed up to compensate
     * Bug causing camera damping to be forgotten on restart when using Arcade control scheme
     * Fixed ship params not sticking between levels
+    * Fixed relative mouse mode applying return rate before sending input (leading to effectively no input at high return rates) 
 
 0.5.7
 New:
