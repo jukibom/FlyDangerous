@@ -50,6 +50,11 @@ Enable it with the option toggle and set OpenTrack to UDP output on 127.0.0.1, p
 
 For webcams, the neuralnet tracker input module is excellent. It is advised you bind a shortcut to recenter in the OpenTrack application.
 
+### TrackIR
+
+[TrackIR](https://www.trackir.com/) is a proprietary hardware head tracking solution. Fly Dangerous supports direct integration, simply enable the checkbox and go.
+Be sure to have TrackIR installed and running when launching before launching into a map as the SDK is initialised when the player is created.
+
 ### bHaptics
 
 [bHaptics](https://www.bhaptics.com/) is a suite of haptic feedback hardware. Fly Dangerous supports the TactSuit (x16 / x40) body vest, Tactocity for Arms and Tactal head feedback modules. Enable with the checkbox and suit should power up in-game.

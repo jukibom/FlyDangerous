@@ -13,6 +13,7 @@ namespace Core.Player.HeadTracking {
     }
 
     public class HeadTrackingManager : MonoBehaviour {
+        [SerializeField] private TrackIRComponent trackIr;
         private float _autoTrackDamping;
         private Quaternion _autoTrackHeadOrientation;
         private Vector3 _autoTrackMax;
@@ -24,8 +25,11 @@ namespace Core.Player.HeadTracking {
         private Quaternion _openTrackHeadOrientation;
         private Vector3 _openTrackHeadPosition;
         private Vector3 _shipVelocity;
+        private Quaternion _trackIrHeadOrientation;
+        private Vector3 _trackIrHeadPosition;
 
         public bool IsOpenTrackEnabled { get; private set; }
+        public bool IsTrackIrEnabled { get; private set; }
         public bool IsAutoTrackEnabled { get; private set; }
 
         public ref HeadTransform HeadTransform => ref _headTransform;
@@ -49,6 +53,17 @@ namespace Core.Player.HeadTracking {
                 _openTrackHeadOrientation = Quaternion.identity;
             }
 
+            // Track IR
+            if (IsTrackIrEnabled) {
+                var trackIrTransform = trackIr.transform;
+                _trackIrHeadPosition = trackIrTransform.localPosition;
+                _trackIrHeadOrientation = trackIrTransform.rotation;
+            }
+            else {
+                _trackIrHeadPosition = Vector3.zero;
+                _trackIrHeadOrientation = Quaternion.identity;
+            }
+
             // Auto vector rotation
             if (IsAutoTrackEnabled && _shipVelocity.magnitude > 1) {
                 var lookDirection = Quaternion.LookRotation(transform.InverseTransformDirection(_shipVelocity), Vector3.up);
@@ -69,9 +84,11 @@ namespace Core.Player.HeadTracking {
             // Accumulate the transform
             // positional
             _headTransform.position += _openTrackHeadPosition;
+            _headTransform.position += _trackIrHeadPosition;
 
             // rotational
             _headTransform.orientation *= _openTrackHeadOrientation;
+            _headTransform.orientation *= _trackIrHeadOrientation;
             _headTransform.orientation *= _autoTrackHeadOrientation;
         }
 
@@ -89,6 +106,7 @@ namespace Core.Player.HeadTracking {
 
         private void OnGameSettingsApplied() {
             IsOpenTrackEnabled = Preferences.Instance.GetBool("openTrackEnabled");
+            IsTrackIrEnabled = Preferences.Instance.GetBool("trackIrEnabled");
             IsAutoTrackEnabled = Preferences.Instance.GetBool("autoTrackEnabled");
             _autoTrackDamping = Preferences.Instance.GetFloat("autoTrackDamping").Remap(0, 1, 0.1f, 0.01f);
             _autoTrackMin = new Vector3(
@@ -102,7 +120,6 @@ namespace Core.Player.HeadTracking {
                 0
             );
             _autoTrackSnap = Preferences.Instance.GetBool("autoTrackSnapForward");
-            if (!IsOpenTrackEnabled) _openTrackData.Reset();
         }
     }
 }

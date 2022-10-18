@@ -70,6 +70,7 @@ namespace Core {
                 case "telemetryEnabled":
                 case "simRacingStudioEnabled":
                 case "openTrackEnabled":
+                case "trackIrEnabled":
                 case "autoTrackEnabled":
                     return false;
 
