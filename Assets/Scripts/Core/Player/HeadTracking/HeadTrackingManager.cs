@@ -39,7 +39,7 @@ namespace Core.Player.HeadTracking {
                 _openTrackData.ReceiveOpenTrackDataAsync(data => {
                     // position is in cm in flipped in X and Z space, convert
                     // max magnitude 1m in any direction
-                    _openTrackHeadPosition = Vector3.ClampMagnitude(new Vector3((float)data.x / 100, (float)data.y / 100, (float)-data.z / 100), 1);
+                    _openTrackHeadPosition = Vector3.ClampMagnitude(new Vector3(-(float)data.x / 100, (float)data.y / 100, (float)-data.z / 100), 1);
                     // orientation convert from vec 3 euler
                     _openTrackHeadOrientation = Quaternion.Euler(-(float)data.pitch, (float)data.yaw, -(float)data.roll);
                 }, 4242, 1000);
