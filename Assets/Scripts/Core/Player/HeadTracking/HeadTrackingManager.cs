@@ -46,10 +46,9 @@ namespace Core.Player.HeadTracking {
             }
 
             // Auto vector rotation
-            if (IsAutoTrackEnabled && _shipVelocity.magnitude > 0.1f) {
+            if (IsAutoTrackEnabled && _shipVelocity.magnitude > 1) {
                 var lookDirection = Quaternion.LookRotation(transform.InverseTransformDirection(_shipVelocity), Vector3.up);
                 var clampedDirection = MathfExtensions.ClampRotation(lookDirection, _autoTrackMin, _autoTrackMax);
-                Debug.Log(clampedDirection.eulerAngles);
                 _headTransform.orientation *= clampedDirection;
             }
 
