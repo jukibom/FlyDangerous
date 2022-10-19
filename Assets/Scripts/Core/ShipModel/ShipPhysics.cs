@@ -66,7 +66,7 @@ namespace Core.ShipModel {
         private float _velocityLimitCap;
 
         public FeedbackEngine FeedbackEngine => _feedbackEngine ? _feedbackEngine : _feedbackEngine = GetComponent<FeedbackEngine>();
-        public AppliedEffects AppliedEffects => _modifierEngine.AppliedEffects;
+        public ref AppliedEffects AppliedEffects => ref _modifierEngine.AppliedEffects;
 
         public ShipParameters FlightParameters {
             get {
@@ -394,6 +394,13 @@ namespace Core.ShipModel {
             }
 
             _prevVelocity = Velocity;
+        }
+
+        /**
+         * Write values directly to the modifier engine for replay purposes
+         */
+        public void OverwriteModifiers(Vector3 shipForce, float shipDeltaSpeedCap, float shipDeltaThrust) {
+            _modifierEngine.SetDirect(shipForce, shipDeltaSpeedCap, shipDeltaThrust);
         }
 
         // public overrides for motion data, used for multiplayer non-local client RPC calls

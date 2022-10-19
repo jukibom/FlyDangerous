@@ -60,7 +60,7 @@ namespace Core.Replays {
                         angularVelocity = _targetShip.AngularVelocity
                     });
 
-                RecordInputFrame(new InputFrame {
+                RecordInputFrame(new InputFrameV110 {
                     pitch = _targetShip.Pitch,
                     roll = _targetShip.Roll,
                     yaw = _targetShip.Yaw,
@@ -69,14 +69,17 @@ namespace Core.Replays {
                     lateralV = _targetShip.LatV,
                     boostHeld = _targetShip.BoostButtonHeld,
                     limiterHeld = _targetShip.VelocityLimitActive,
-                    shipLightsEnabled = _targetShip.IsShipLightsActive
+                    shipLightsEnabled = _targetShip.IsShipLightsActive,
+                    modifierShipForce = _targetShip.AppliedEffects.shipForce,
+                    modifierShipDeltaSpeedCap = _targetShip.AppliedEffects.shipDeltaThrust,
+                    modifierShipDeltaThrust = _targetShip.AppliedEffects.shipDeltaThrust
                 });
 
                 _ticks++;
             }
         }
 
-        private void RecordInputFrame(InputFrame inputFrame) {
+        private void RecordInputFrame(InputFrameV110 inputFrame) {
             if (Replay is { CanWrite: true }) {
                 var inputFrameBytes = MessagePackSerializer.Serialize(inputFrame);
                 using var bw = new BinaryWriter(Replay.InputFrameStream, Encoding.UTF8, true);

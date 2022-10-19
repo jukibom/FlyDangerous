@@ -37,5 +37,11 @@ namespace Core.ShipModel.Modifiers {
         public void ApplyModifier(Rigidbody shipRigidBody, IModifier modifier) {
             modifier.ApplyModifierEffect(shipRigidBody, ref _appliedEffects);
         }
+
+        public void SetDirect(Vector3 shipForce, float shipDeltaSpeedCap, float shipDeltaThrust) {
+            _appliedEffects.shipForce = shipForce;
+            _appliedEffects.shipDeltaSpeedCap = shipDeltaSpeedCap;
+            _appliedEffects.shipDeltaThrust = shipDeltaThrust;
+        }
     }
 }

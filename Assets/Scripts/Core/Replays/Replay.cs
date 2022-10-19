@@ -60,6 +60,7 @@ namespace Core.Replays {
             _replayFilePath = filePath;
         }
 
+        public string Version => ReplayMeta.Version;
         public ReplayMeta ReplayMeta { get; }
         public ShipParameters ShipParameters { get; }
         public LevelData LevelData { get; }
@@ -187,8 +188,8 @@ namespace Core.Replays {
             if (Directory.Exists(tmpSaveDirectory)) Directory.Delete(tmpSaveDirectory, true);
             Directory.CreateDirectory(tmpSaveDirectory);
 
-            // V1 replay data
-            var replayMeta = ReplayMeta.Version100(levelData);
+            // V2 replay data
+            var replayMeta = ReplayMeta.Version110(levelData);
 
             if (File.Exists(tmpInputDataSaveLoc)) File.Delete(tmpInputDataSaveLoc);
             var inputFileStream = new FileStream(tmpInputDataSaveLoc, FileMode.Append, FileAccess.Write, FileShare.Read);

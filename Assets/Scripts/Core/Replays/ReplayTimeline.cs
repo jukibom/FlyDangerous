@@ -89,13 +89,13 @@ namespace Core.Replays {
                 ShipReplayObject.Transform.rotation = keyFrame.rotation;
                 ShipReplayObject.Rigidbody.velocity = keyFrame.velocity;
                 ShipReplayObject.Rigidbody.angularVelocity = keyFrame.angularVelocity;
+
+
                 _keyFrameTicks++;
             }
         }
 
         private void UpdateInputFrame() {
-            // TODO: This is slow as all hell! We should abstract this and use SeekOrigin.Current in typical ghost run
-
             if (Replay != null) {
                 // Check for end of file
                 var maxRead = _inputTicks * Replay.ReplayMeta.InputFrameBufferSizeBytes + Replay.ReplayMeta.InputFrameBufferSizeBytes;
@@ -103,12 +103,16 @@ namespace Core.Replays {
                     _inputFrameReader.BaseStream.Seek(_inputTicks * Replay.ReplayMeta.InputFrameBufferSizeBytes, SeekOrigin.Begin);
                     _inputFrameReader.Read(_inputFrameByteBuffer, 0, Replay.ReplayMeta.InputFrameBufferSizeBytes);
 
-                    var inputFrame = MessagePackSerializer.Deserialize<InputFrame>(_inputFrameByteBuffer);
+                    var inputFrame = InputFrameV110.Deserialize(Replay.Version, ref _inputFrameByteBuffer);
+
                     ShipReplayObject?.ShipPhysics.UpdateShip(inputFrame.pitch, inputFrame.roll, inputFrame.yaw, inputFrame.throttle, inputFrame.lateralH,
                         inputFrame.lateralV, inputFrame.boostHeld, inputFrame.limiterHeld, false, false);
 
                     if (ShipReplayObject?.ShipPhysics.IsShipLightsActive != inputFrame.shipLightsEnabled)
                         ShipReplayObject?.ShipPhysics.NightVisionToggle(_ => { });
+
+                    ShipReplayObject?.ShipPhysics.OverwriteModifiers(inputFrame.modifierShipForce, inputFrame.modifierShipDeltaSpeedCap,
+                        inputFrame.modifierShipDeltaThrust);
 
                     _inputTicks++;
                 }
