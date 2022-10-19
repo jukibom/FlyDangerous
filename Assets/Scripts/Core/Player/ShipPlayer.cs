@@ -6,13 +6,13 @@ using UnityEngine;
 
 namespace Core.Player {
     [RequireComponent(typeof(Rigidbody))]
-    [RequireComponent(typeof(ReflectionProbe))]
     public class ShipPlayer : FdPlayer {
         #region Attributes + Getters
 
         [SerializeField] private GameObject playerLogic;
         [SerializeField] private User user;
         [SerializeField] private ShipPhysics shipPhysics;
+        [SerializeField] private ReflectionProbe reflectionProbe;
 
         public User User => user;
         public ShipPhysics ShipPhysics => shipPhysics;
@@ -67,7 +67,7 @@ namespace Core.Player {
         [SyncVar] private string _trailColor;
         [SyncVar] private string _headLightsColor;
         public Flag PlayerFlag { get; private set; }
-        public ReflectionProbe ReflectionProbe { get; private set; }
+        public ReflectionProbe ReflectionProbe => reflectionProbe;
 
         private bool IsReady => _transform && _serverReady;
 
@@ -105,9 +105,9 @@ namespace Core.Player {
             playerLogic.SetActive(false);
             _transform = transform;
             Rigidbody = GetComponent<Rigidbody>();
-            ReflectionProbe = GetComponent<ReflectionProbe>();
+
             // always disable reflections until explicitly enabled by settings on the local client
-            ReflectionProbe.enabled = false;
+            ReflectionProbe.gameObject.SetActive(false);
         }
 
         public void Start() {

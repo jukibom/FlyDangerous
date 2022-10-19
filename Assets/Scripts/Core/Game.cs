@@ -207,7 +207,7 @@ namespace Core {
             var shipPlayer = FdPlayer.FindLocalShipPlayer;
             if (shipPlayer) {
                 var reflectionSetting = Preferences.Instance.GetString("graphics-reflections");
-                shipPlayer.ReflectionProbe.enabled = reflectionSetting != "off";
+                shipPlayer.ReflectionProbe.gameObject.SetActive(reflectionSetting != "off");
                 switch (reflectionSetting) {
                     case "ultra":
                         shipPlayer.ReflectionProbe.resolution = 512;
