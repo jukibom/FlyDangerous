@@ -565,9 +565,9 @@ namespace Core.ShipModel {
             // convert global rigid body velocity into local space
             var localAngularVelocity = transform.InverseTransformDirection(targetRigidbody.angularVelocity);
 
-            Pitch = CalculateAssistedAxis(Pitch, localAngularVelocity.x * -1, 1f, 3.0f);
-            Yaw = CalculateAssistedAxis(Yaw, localAngularVelocity.y, 1f, 3.0f);
-            Roll = CalculateAssistedAxis(Roll, localAngularVelocity.z * -1, 1f, 3.0f);
+            Pitch = CalculateAssistedAxis(Pitch, localAngularVelocity.x * -1, 0.35f, 3.0f);
+            Yaw = CalculateAssistedAxis(Yaw, localAngularVelocity.y, 0.35f, 3.0f);
+            Roll = CalculateAssistedAxis(Roll, localAngularVelocity.z * -1, 0.35f, 3.0f);
         }
 
         /**
