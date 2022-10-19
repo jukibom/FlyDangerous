@@ -120,6 +120,8 @@ namespace Core.Player.HeadTracking {
                 0
             );
             _autoTrackSnap = Preferences.Instance.GetBool("autoTrackSnapForward");
+
+            trackIr.gameObject.SetActive(IsTrackIrEnabled);
         }
     }
 }
