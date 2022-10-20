@@ -56,8 +56,15 @@ namespace Core.Player.HeadTracking {
             // Track IR
             if (IsTrackIrEnabled) {
                 var trackIrTransform = trackIr.transform;
+                var trackIrLocalRotation = trackIrTransform.localRotation;
+
+                // for some reason the trackIR sdk outputs flipped z rotation? Not sure if that's an OpenTrack problem so make sure to 
+                // check with whoever actually owns one of these things
+                var rotationZFlip = trackIrLocalRotation.eulerAngles.z * -2;
+                var mirrorQuaternion = Quaternion.Euler(0, 0, rotationZFlip);
+
                 _trackIrHeadPosition = trackIrTransform.localPosition;
-                _trackIrHeadOrientation = trackIrTransform.rotation;
+                _trackIrHeadOrientation = trackIrLocalRotation * mirrorQuaternion;
             }
             else {
                 _trackIrHeadPosition = Vector3.zero;
