@@ -39,6 +39,7 @@ namespace Core.ShipModel {
         private readonly ShipFeedbackData _shipFeedbackData = new();
         private readonly ShipInstrumentData _shipInstrumentData = new();
         private readonly ShipMotionData _shipMotionData = new();
+        private int _billboardLayerMask;
         private float _boostCapacitorPercent = 100f;
         [CanBeNull] private Coroutine _boostCoroutine;
         private float _boostedMaxSpeedDelta;
@@ -55,6 +56,7 @@ namespace Core.ShipModel {
 
         private float _gForce;
         private ModifierEngine _modifierEngine;
+        private int _modifierLayerMask;
 
         private Vector3 _prevVelocity;
 
@@ -167,8 +169,10 @@ namespace Core.ShipModel {
             // get components
             _modifierEngine = GetComponent<ModifierEngine>();
 
-            // init checkpoint mask id
+            // init layer mask ids
             _checkpointLayerMask = LayerMask.NameToLayer("Checkpoint");
+            _modifierLayerMask = LayerMask.NameToLayer("Modifier");
+            _billboardLayerMask = LayerMask.NameToLayer("Billboard");
         }
 
         public void Start() {
@@ -234,6 +238,7 @@ namespace Core.ShipModel {
         public void LocalPlayerTriggerCollisionChecks() {
             CheckpointCollisionCheck();
             ModifierCollisionCheck();
+            BillboardCollisionCheck();
         }
 
         public void GeometryCollisionCheck() {
@@ -656,13 +661,18 @@ namespace Core.ShipModel {
 
         // Check for modifier and apply it if found
         private void ModifierCollisionCheck() {
-            var rayHits = VelocityBoxCast(out var raycastHitCount, 1 << _checkpointLayerMask);
+            var rayHits = VelocityBoxCast(out var raycastHitCount, 1 << _modifierLayerMask);
 
             for (var i = 0; i < raycastHitCount; i++) {
                 var raycastHit = rayHits[i];
                 var modifier = raycastHit.collider.GetComponentInParent(typeof(IModifier));
                 if (modifier) _modifierEngine.ApplyModifier(targetRigidbody, modifier as IModifier);
             }
+        }
+
+        private void BillboardCollisionCheck() {
+            VelocityBoxCast(out var raycastHitCount, 1 << _billboardLayerMask);
+            if (raycastHitCount > 0) _shipModel?.BillboardCollision();
         }
 
         // standard OnTriggerEnter doesn't cut the mustard at these speeds so we need to do something a bit more precise

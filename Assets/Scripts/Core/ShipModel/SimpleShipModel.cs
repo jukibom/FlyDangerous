@@ -244,6 +244,10 @@ namespace Core.ShipModel {
                     shipLight.color = color;
         }
 
+        public void BillboardCollision() {
+            shield.Fizzle(3);
+        }
+
         #endregion
 
         #region Internal Helper

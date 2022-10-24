@@ -107,9 +107,9 @@ namespace Core.ShipModel {
             _targetFresnel -= 0.01f * maxShieldFresnel;
         }
 
-        public void Fizzle() {
+        public void Fizzle(float amount = 1) {
             _targetDirection = Vector3.zero;
-            _targetShieldImpactAlpha = 1;
+            _targetShieldImpactAlpha = amount;
             _targetTurbulenceOffset = 0.18f;
         }
 
