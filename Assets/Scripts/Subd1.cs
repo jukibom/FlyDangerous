@@ -11,7 +11,6 @@ public class Subd1 : MonoBehaviour
         Mesh m = MF.mesh;
         MeshHelper.Subdivide(m);
         MeshHelper.Subdivide(m);
-        MeshHelper.Subdivide(m);
         MF.mesh = m;
         m = null;
     }

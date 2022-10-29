@@ -7,7 +7,7 @@ public class Endlessterrain : MonoBehaviour
 {
     const float scale = 15;
 
-    const float vieweroffsetthresholdforUpdate = 5f;
+    const float vieweroffsetthresholdforUpdate = 25f;
     const float sqrvieweroffsetthresholdforUpdate = vieweroffsetthresholdforUpdate * vieweroffsetthresholdforUpdate;
 
     public LODinfo[] detaillevels;
@@ -31,11 +31,25 @@ public class Endlessterrain : MonoBehaviour
 
     void Start()
     {
+        if (Trackingmode == trackingmode.Transform)
+        {
+            viewerPosition = new Vector2(viewer.position.x, viewer.position.z) / scale;
+        }
+        else
+        {
+            viewerPosition = new Vector2(GameObject.FindGameObjectWithTag("Terrain Gen Marker").transform.position.x,
+            GameObject.FindGameObjectWithTag("Terrain Gen Marker").transform.position.z);
+            viewerPosition -= new Vector2(gameObject.transform.position.x - gameObject.transform.localPosition.x, gameObject.transform.position.z - gameObject.transform.localPosition.z);
+            viewerPosition /= scale;
+        }
+
+
         maxViewDist = detaillevels[detaillevels.Length-1].visibleDistThreshold;
         chunkSize = MapGenerate.MapChunkSize - 1;
         chunksVisibleInViewDist = Mathf.RoundToInt((maxViewDist / chunkSize)+1f);
         MapGenerator = FindObjectOfType<MapGenerate>();
         UpdateVisibleChunks();
+        
     }
 
     void Update()
@@ -51,6 +65,7 @@ public class Endlessterrain : MonoBehaviour
             viewerPosition -= new Vector2(gameObject.transform.position.x - gameObject.transform.localPosition.x, gameObject.transform.position.z - gameObject.transform.localPosition.z);
             viewerPosition /= scale;
         }
+
         if ((viewerpositionold - viewerPosition).sqrMagnitude > sqrvieweroffsetthresholdforUpdate)
         {
             viewerpositionold = viewerPosition;
