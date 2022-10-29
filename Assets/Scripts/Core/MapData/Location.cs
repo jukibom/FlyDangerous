@@ -13,6 +13,7 @@ namespace Core.MapData {
         public static readonly Location TerrainV2 = new("Canyons", "TerrainV2", true);
         public static readonly Location TerrainV3 = new("Biome World", "TerrainV3", true);
         public static readonly Location TerrainGPUFoliageTest = new("GPU Foliage Test", "TerrainWorkspace", true);
+        public static readonly Location TeamwinFTW_Scene = new("TeamwinFTW scene", "TeamwinFTW_Scene", true);
 
         private Location(string name, string sceneToLoad, bool isTerrain) {
             Id = GenerateId;
@@ -31,7 +32,7 @@ namespace Core.MapData {
         public string Name { get; }
 
         public static IEnumerable<Location> List() {
-            return new[] { Space, TestSpaceStation, TerrainV1, TerrainV2, TerrainV3, TerrainGPUFoliageTest };
+            return new[] { Space, TestSpaceStation, TerrainV1, TerrainV2, TerrainV3, TerrainGPUFoliageTest, TeamwinFTW_Scene};
         }
 
         public static Location FromString(string locationString) {

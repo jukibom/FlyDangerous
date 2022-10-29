@@ -1,0 +1,664 @@
+﻿using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using System;
+
+namespace Plugins 
+{
+	public static class Erosion 
+	{
+			private struct Cross
+			{
+				public float c;
+				public float px; public float nx;
+				public float pz; public float nz;
+
+				public Cross (float c, float px, float nx, float pz, float nz)
+					{ this.c=c; this.px=px; this.nx=nx; this.pz=pz; this.nz=nz; }
+
+				public Cross (Cross src)
+					{ this.c=src.c; this.px=src.px; this.nx=src.nx; this.pz=src.pz; this.nz=src.nz; }
+			
+
+				public Cross (Cross c1, Cross c2) //analog of * static operator, but works in Unity5
+					{ this.c=c1.c*c2.c; this.px=c1.px*c2.px; this.nx=c1.nx*c2.nx; this.pz=c1.pz*c2.pz; this.nz=c1.nz*c2.nz; }
+
+				public Cross (float[] m, int sizeX, int sizeZ, int i)
+				{
+					px = m[i-1]; c = m[i]; nx = m[i+1];
+					pz = m[i-sizeX]; nz = m[i+sizeX];
+				}
+
+				public Cross (bool[] m, int sizeX, int sizeZ, int i)
+				{
+					px = m[i-1] ? 1f : 0f; c = m[i] ? 1f : 0f; nx = m[i+1] ? 1f : 0f;
+					pz = m[i-sizeX] ? 1f : 0f; nz = m[i+sizeX] ? 1f : 0f;
+				}
+
+				public Cross (FloatMatrix m, int i)
+				{
+					px = m.arr[i-1]; c = m.arr[i]; nx = m.arr[i+1];
+					pz = m.arr[i-m.rect.size.x]; nz = m.arr[i+m.rect.size.x];
+				}
+
+				public void ToMatrix (float[] m, int sizeX, int sizeZ, int i)
+				{
+					
+					m[i-1] = px; m[i] = c; m[i+1] = nx;
+					m[i-sizeX] = pz; m[i+sizeX] = nz;
+				}
+				
+				public void ToMatrix (FloatMatrix m, int i)
+				{
+					
+					m.arr[i-1] = px; m.arr[i] = c; m.arr[i+1] = nx;
+					m.arr[i-m.rect.size.x] = pz; m.arr[i+m.rect.size.x] = nz;
+				}
+
+
+				/*public Cross (JaggedMatrix m, int i)
+				{
+					int z = i / m.arrays.Length;
+					int x = i - z*m.arrays.Length;
+					
+					float[] array = m.arrays[x];
+					pz = array[z-1]; c = array[z]; nz = array[z+1];
+
+					px = m[x-1,z]; nx = m[x+1,z]; 
+				}
+
+				public void ToMatrix (JaggedMatrix m, int i)
+				{
+					int z = i / m.arrays.Length;
+					int x = i - z*m.arrays.Length;
+					
+					float[] array = m.arrays[x];
+					array[z-1] = pz; array[z] = c; array[z+1] = nz;
+
+					m[x-1,z] = px; m[x+1,z] = nx; 
+
+					//m[x,z] = c;
+					//m[x-1,z] = px; m[x+1,z] = nx; m[x,z-1] = pz; m[x,z+1] = nz;
+				}*/
+
+
+				public void Percent ()
+				{
+					float s = c + px + nx + pz + nz;
+					if (s>0.00001f) {c=c/s; px=px/s; nx=nx/s; pz=pz/s; nz=nz/s; }
+					else {c=0; px=0; nx=0; pz=0; nz=0; }
+				}
+
+				public void ClampPositive () { c = c<0 ? 0:c; px = px<0 ? 0:px; nx = nx<0 ? 0:nx; pz = pz<0 ? 0:pz; nz = nz<0 ? 0:nz; }
+
+				public float max { get{ return Mathf.Max( Mathf.Max( Mathf.Max(px,nx), Mathf.Max(pz,nz)), c);} }
+				public float min { get{ return Mathf.Min( Mathf.Min( Mathf.Min(px,nx), Mathf.Min(pz,nz)), c);} }
+				public float sum { get{ return c+px+nx+pz+nz; }}
+				public float avg { get{ return (c+px+nx+pz+nz)/5f; }}
+				public float avgAround { get{ return (px+nx+pz+nz)/4f; }}
+				public float maxAround { get{ return Mathf.Max( Mathf.Max(px,nx), Mathf.Max(pz,nz));} }
+				public float minAround { get{ return Mathf.Min( Mathf.Min(px,nx), Mathf.Min(pz,nz));} }
+
+				public void Multiply (Cross c2) { c*=c2.c; px*=c2.px; nx*=c2.nx; pz*=c2.pz; nz*=c2.nz; }
+				public void Multiply (float f) { c*=f; px*=f; nx*=f; pz*=f; nz*=f; }
+				public void Add (Cross c2) { c+=c2.c; px+=c2.px; nx+=c2.nx; pz+=c2.pz; nz+=c2.nz; }
+				public void Divide (Cross c2) { c/=c2.c; px/=c2.px; nx/=c2.nx; pz/=c2.pz; nz/=c2.nz; }
+				public void Divide (float f) { c/=f; px/=f; nx/=f; pz/=f; nz/=f; }
+				public void Subtract (float f) { c-=f; px-=f; nx-=f; pz-=f; nz-=f; }
+				public void SubtractInverse (float f) { c=f-c; px=f-px; nx=f-nx; pz=f-pz; nz=f-nz; }
+				public float GetMultipliedMax (Cross c2) { return Mathf.Max( Mathf.Max( Mathf.Max(px*c2.px,nx*c2.nx), Mathf.Max(pz*c2.pz,nz*c2.nz)), c*c2.c); }
+				public float GetMultipliedSum (Cross c2) { return c*c2.c + px*c2.px + nx*c2.nx + pz*c2.pz + nz*c2.nz; }
+			
+				public bool isNaN { get{ return float.IsNaN(c) || float.IsNaN(px) || float.IsNaN(pz) || float.IsNaN(nx) ||float.IsNaN(nz);} }
+
+				public float this[int n] {
+					get{ switch (n) {case 0: return c; case 1: return px; case 2:return nx; case 3:return pz; case 4:return nz; default: return c;}} 
+					set{ switch (n) {case 0: c=value; break; case 1: px=value; break; case 2:nx=value; break; case 3:pz=value; break; case 4:nz=value; break; default:c=value; break;}} }
+			
+				public void SortByHeight (int[] sorted)
+				{
+					for (int i=0; i<5; i++) sorted[i] = i;
+				
+					for (int i=0; i<5; i++) 
+						for (int j=0; j<4; j++)
+							if (this[sorted[j]] > this[sorted[j+1]])
+							{
+								int tmp = sorted[j];
+								sorted[j] = sorted[j+1];
+								sorted[j+1] = tmp;
+							}
+				}
+
+
+
+				public IEnumerable<int> Sorted ()
+				{
+					/*int cs=0; int pxs=0; int pzs=0; int nxs=0; int nzs=0;
+				
+					if (c>px) cs++; if (c>nx) cs++; if (c>pz) cs++; if (c>nz) cs++; 
+					if (px>c) pxs++; if (px>pz) pxs++; if (px>nx) pxs++; if (px>nz) pxs++; 
+					if (nx>c) nxs++; if (nx>px) nxs++; if (nx>pz) nxs++; if (nx>nz) nxs++; 
+					if (pz>c) pzs++; if (pz>px) pzs++; if (pz>nx) pzs++; if (pz>nz) pzs++; 
+					if (nz>c) nzs++; if (nz>px) nzs++; if (nz>nx) nzs++; if (nz>pz) nzs++;*/
+					
+					//if (>c && >px && >nx && >pz && >nz)
+				
+					float _c=c; float _px=px; float _nx=nx; float _pz=pz; float _nz=nz;
+
+					if (c>px && c>nx && c>pz && c>nz)
+					{
+						_c=0; yield return 0;
+						if (px>nx && px>pz && px>nz) {_px=0; yield return 1;}
+						else if (nx>px && nx>pz && nx>nz) { _nx=0; yield return 2;}
+						else if (pz>px && pz>nx && pz>nz) {_pz=0; yield return 3;}
+						else if (nz>px && nz>nx && nz>pz) {_nz=0; yield return 4;}
+					}
+
+					if (px>c  && px>nx && px>pz && px>nz)
+					{
+						_px=0; yield return 1;
+						if (c>nx && c>pz && c>nz) {_c=0; yield return 0;}
+						else if (nx>c && nx>pz && nx>nz) { _nx=0; yield return 2;}
+						else if (pz>c && pz>nx && pz>nz) {_pz=0; yield return 3;}
+						else if (nz>c && nz>nx && nz>pz) {_nz=0; yield return 4;}
+					}
+
+					if (nx>c && nx>px && nx>pz && nx>nz)
+					{
+						_nx=0; yield return 2;
+						if (c>px && c>pz && c>nz) {_c=0; yield return 0;}
+						else if (px>c && px>pz && px>nz) {_px=0; yield return 1;}
+						else if (pz>c && pz>px && pz>nz) {_pz=0; yield return 3;}
+						else if (nz>c && nz>px && nz>pz) {_nz=0; yield return 4;}
+					}
+
+					if (pz>c && pz>px && pz>nx && pz>nz)
+					{
+						_pz=0; yield return 3;
+						if (c>px && c>nx && c>nz) {_c=0; yield return 0;}
+						else if (px>c && px>nx && px>nz) {_px=0; yield return 1;}
+						else if (nx>c && nx>px && nx>nz) { _nx=0; yield return 2;}
+						else if (nz>c && nz>px && nz>nx) {_nz=0; yield return 4;}
+					}
+
+					if (nz>c && nz>px && nz>nx && nz>pz )
+					{
+						_nz=0; yield return 4;
+						if (c>px && c>nx && c>pz) {_c=0; yield return 0;}
+						else if (px>c && px>nx && px>pz) {_px=0; yield return 1;}
+						else if (nx>c && nx>px && nx>pz) { _nx=0; yield return 2;}
+						else if (pz>c && pz>px && pz>nx) {_pz=0; yield return 3;}
+					}
+
+					for (int i=0; i<3; i++)
+					{
+						if (_c>_px && _c>_nx && _c>_pz && _c>_nz) { _c=0; yield return 0; }
+						else if (_px>_c && _px>_nx && _px>_pz && _px>_nz) { _px=0; yield return 1; }
+						else if (_nx>_c && _nx>_px && _nx>_pz && _nx>_nz) { _nx=0; yield return 2; }
+						else if (_pz>_c && _pz>_px && _pz>_nx && _pz>_nz) { _pz=0; yield return 3; }
+						else if (_nz>_c && _nz>_px && _nz>_nx && _nz>_pz) { _nz=0; yield return 4; }
+						
+						//if (_c<_px && _c<_nx && _c<_pz && _c<_nz) { _c=20000000; val=0; }
+						//else if (_px<_c && _px<_nx && _px<_pz && _px<_nz) { _px=20000000; val = 1; }
+						//else if (_nx<_c && _nx<_px && _nx<_pz && _nx<_nz) { _nx=20000000; val = 2; }
+						//else if (_pz<_c && _pz<_px && _pz<_nx && _pz<_nz) { _pz=20000000; val = 3; }
+						//else if (_nz<_c && _nz<_px && _nz<_nx && _nz<_pz) { _nz=20000000; val = 4; }
+					}
+
+					//for (int i=4; i>=0; i--) yield return sorted[i];
+				}
+			
+				//operators cause crash in Unity5
+				public static Cross operator + (Cross c1, Cross c2)  { return new Cross(c1.c+c2.c, c1.px+c2.px, c1.nx+c2.nx, c1.pz+c2.pz, c1.nz+c2.nz); }
+				public static Cross operator + (Cross c1, float f)  { return new Cross(c1.c+f, c1.px+f, c1.nx+f, c1.pz+f, c1.nz+f); }
+				public static Cross operator - (Cross c1, Cross c2)  { return new Cross(c1.c-c2.c, c1.px-c2.px, c1.nx-c2.nx, c1.pz-c2.pz, c1.nz-c2.nz); }
+				public static Cross operator - (float f, Cross c2)  { return new Cross(f-c2.c, f-c2.px, f-c2.nx, f-c2.pz, f-c2.nz); }
+				public static Cross operator - (Cross c1, float f)  { return new Cross(c1.c-f, c1.px-f, c1.nx-f, c1.pz-f, c1.nz-f); }
+				public static Cross operator * (Cross c1, Cross c2)  { return new Cross(c1.c*c2.c, c1.px*c2.px, c1.nx*c2.nx, c1.pz*c2.pz, c1.nz*c2.nz); }
+				public static Cross operator * (float f, Cross c2)  { return new Cross(f*c2.c, f*c2.px, f*c2.nx, f*c2.pz, f*c2.nz); }
+				public static Cross operator * (Cross c1, float f)  { return new Cross(c1.c*f, c1.px*f, c1.nx*f, c1.pz*f, c1.nz*f); }
+				public static Cross operator / (Cross c1, float f)  { if (f>0.00001f) return new Cross(c1.c/f, c1.px/f, c1.nx/f, c1.pz/f, c1.nz/f); 
+					else return new Cross(0,0,0,0,0); } 
+
+				public Cross PercentObsolete ()
+				{
+					float s = c + px + nx + pz + nz;
+					if (s>0.00001f) return new Cross(c/s, px/s, nx/s, pz/s, nz/s);
+					else return new Cross(0, 0, 0, 0, 0);
+				}
+
+				public Cross ClampPositiveObsolete () { return new Cross(c<0 ? 0:c, px<0 ? 0:px, nx<0 ? 0:nx, pz<0 ? 0:pz, nz<0 ? 0:nz); } //obsolete, do not use
+			}
+
+			private struct MooreCross
+			{
+				public float c;
+				public float px; public float nx; public float pxpz; public float nxpz;
+				public float pz; public float nz; public float pxnz; public float nxnz;
+			
+				public MooreCross (float c, float px, float nx, float pz, float nz, float pxpz, float nxpz, float pxnz, float nxnz)
+					{ this.c=c; this.px=px; this.nx=nx; this.pz=pz; this.nz=nz;  this.pxpz=pxpz; this.nxpz=nxpz; this.pxnz=pxnz; this.nxnz=nxnz; }
+			
+				public MooreCross (MooreCross src)
+					{ this.c=src.c; this.px=src.px; this.nx=src.nx; this.pz=src.pz; this.nz=src.nz;  this.pxpz=src.pxpz; this.nxpz=src.nxpz; this.pxnz=src.pxnz; this.nxnz=src.nxnz; }
+			
+				public MooreCross (float[] m, int sizeX, int sizeZ, int i)
+				{
+					px = m[i-1]; c = m[i]; nx = m[i+1]; pz = m[i-sizeX]; nz = m[i+sizeX];
+					pxpz = m[i-1-sizeX]; nxpz = m[i+1-sizeX];
+					pxnz = m[i-1+sizeX]; nxnz = m[i+1+sizeX]; 
+				}
+
+				public MooreCross (FloatMatrix m, int i)
+				{
+					px = m.arr[i-1]; 
+					c = m.arr[i]; 
+					nx = m.arr[i+1]; 
+					pz = m.arr[i-m.rect.size.x]; 
+					nz = m.arr[i+m.rect.size.x];
+					pxpz = m.arr[i-1-m.rect.size.x]; nxpz = m.arr[i+1-m.rect.size.x];
+					pxnz = m.arr[i-1+m.rect.size.x]; nxnz = m.arr[i+1+m.rect.size.x]; 
+				}
+
+				public void ToMatrix (float[] m, int sizeX, int sizeZ, int i)
+				{
+					m[i-1] = px; m[i] = c; m[i+1] = nx; m[i-sizeX] = pz; m[i+sizeX] = nz;
+					m[i-1-sizeX] = pxpz; m[i+1-sizeX] = nxpz;
+					m[i-1+sizeX] = pxnz; m[i+1+sizeX] = nxnz; 
+				}
+
+				public void ToMatrix (FloatMatrix m, int i)
+				{
+					m.arr[i-1] = px; m.arr[i] = c; m.arr[i+1] = nx; m.arr[i-m.rect.size.x] = pz; m.arr[i+m.rect.size.x] = nz;
+					m.arr[i-1-m.rect.size.x] = pxpz; m.arr[i+1-m.rect.size.x] = nxpz;
+					m.arr[i-1+m.rect.size.x] = pxnz; m.arr[i+1+m.rect.size.x] = nxnz; 
+				}
+
+				public void Percent ()
+				{
+					float s = c + px + nx + pz + nz + pxpz + nxpz + pxnz + nxnz;
+					if (s>0.00001f) { c/=s; px/=s; nx/=s; pz/=s; nz/=s; pxpz/=s; nxpz/=s; pxnz/=s; nxnz/=s; }
+					else { c=0; px=0; nx=0; pz=0; nz=0; pxpz=0; nxpz=0; pxnz=0; nxnz=0; }
+				}
+
+				public bool isNaN { get{ return float.IsNaN(c) || float.IsNaN(px) || float.IsNaN(pz) || float.IsNaN(nx) ||float.IsNaN(nz) || float.IsNaN(pxpz) || float.IsNaN(pxnz) || float.IsNaN(nxpz) ||float.IsNaN(nxnz);} }
+				public override string ToString() { return "MooreCross: " + c + ", " + px + ", " + pz + ", " + nx + ", " + nz + ", " + pxpz + ", " + nxpz + ", " + pxnz + ", " + nxnz; }
+
+				public void ClampPositive () { c = c<0 ? 0:c; px = px<0 ? 0:px; nx = nx<0 ? 0:nx; pz = pz<0 ? 0:pz; nz = nz<0 ? 0:nz;
+					pxpz = pxpz<0 ? 0:pxpz; nxpz = nxpz<0 ? 0:nxpz; pxnz = pxnz<0 ? 0:pxnz; nxnz = nxnz<0 ? 0:nxnz; }
+
+				public float max { get{ return Mathf.Max( Mathf.Max( Mathf.Max(px,nx), Mathf.Max(pz,nz)), c);} }
+				public float min { get{ return Mathf.Min( Mathf.Min( Mathf.Min(px,nx), Mathf.Min(pz,nz)), c);} }
+				public float sum { get{ return c+px+nx+pz+nz; }}
+
+				public void Multiply (float f) { c*=f; px*=f; nx*=f; pz*=f; nz*=f; pxpz*=f; nxpz*=f; pxnz*=f; nxnz*=f; }
+				public void Add (float f) { c+=f; px+=f; nx+=f; pz+=f; nz+=f; pxpz+=f; nxpz+=f; pxnz+=f; nxnz+=f; }
+				public void Add (MooreCross c2) { c+=c2.c; px+=c2.px; nx+=c2.nx; pz+=c2.pz; nz+=c2.nz; pxpz+=c2.pxpz; nxpz+=c2.nxpz; pxnz+=c2.pxnz; nxnz+=c2.nxnz; }
+				public void Subtract (float f) { c-=f; px-=f; nx-=f; pz-=f; nz-=f; pxpz-=f; nxpz-=f; pxnz-=f; nxnz-=f; }
+				public void SubtractInverse (float f) { c=f-c; px=f-px; nx=f-nx; pz=f-pz; nz=f-nz; pxpz=f-pxpz; nxpz=f-nxpz; pxnz=f-pxnz; nxnz=f-nxnz; }
+
+				//Obsolete operators
+				public static MooreCross operator + (MooreCross c1, MooreCross c2)  { return new MooreCross(c1.c+c2.c, c1.px+c2.px, c1.nx+c2.nx, c1.pz+c2.pz, c1.nz+c2.nz, c1.pxpz+c2.pxpz, c1.nxpz+c2.nxpz, c1.pxnz+c2.pxnz, c1.nxnz+c2.nxnz); }
+				public static MooreCross operator + (MooreCross c1, float f)  { return new MooreCross(c1.c+f, c1.px+f, c1.nx+f, c1.pz+f, c1.nz+f, c1.pxpz+f, c1.nxpz+f, c1.pxnz+f, c1.nxnz+f); }
+				public static MooreCross operator - (MooreCross c1, MooreCross c2)  { return new MooreCross(c1.c-c2.c, c1.px-c2.px, c1.nx-c2.nx, c1.pz-c2.pz, c1.nz-c2.nz, c1.pxpz-c2.pxpz, c1.nxpz-c2.nxpz, c1.pxnz-c2.pxnz, c1.nxnz-c2.nxnz); }
+				public static MooreCross operator - (float f, MooreCross c2) { return new MooreCross(f-c2.c, f-c2.px, f-c2.nx, f-c2.pz, f-c2.nz, f-c2.pxpz, f-c2.nxpz, f-c2.pxnz, f-c2.nxnz); }
+				public static MooreCross operator - (MooreCross c1, float f)  { return new MooreCross(c1.c-f, c1.px-f, c1.nx-f, c1.pz-f, c1.nz-f, c1.pxpz-f, c1.nxpz-f, c1.pxnz-f, c1.nxnz-f); }
+				public static MooreCross operator * (MooreCross c1, MooreCross c2) { return new MooreCross(c1.c*c2.c, c1.px*c2.px, c1.nx*c2.nx, c1.pz*c2.pz, c1.nz*c2.nz, c1.pxpz*c2.pxpz, c1.nxpz*c2.nxpz, c1.pxnz*c2.pxnz, c1.nxnz*c2.nxnz); }
+				public static MooreCross operator * (float f, MooreCross c2)  { return new MooreCross(f*c2.c, f*c2.px, f*c2.nx, f*c2.pz, f*c2.nz, f*c2.pxpz, f*c2.nxpz, f*c2.pxnz, f*c2.nxnz); }
+				public static MooreCross operator * (MooreCross c1, float f)  { return new MooreCross(c1.c*f, c1.px*f, c1.nx*f, c1.pz*f, c1.nz*f, c1.pxpz*f, c1.nxpz*f, c1.pxnz*f, c1.nxnz*f); }
+				public static MooreCross operator / (MooreCross c1, float f)  { if (f>0.00001f) return new MooreCross(c1.c/f, c1.px/f, c1.nx/f, c1.pz/f, c1.nz/f, c1.pxpz/f, c1.nxpz/f, c1.pxnz/f, c1.nxnz/f);
+					else return new MooreCross(0, 0,0,0,0, 0,0,0,0); }
+
+				public MooreCross PercentObsolete ()
+				{
+					float s = c + px + nx + pz + nz + pxpz + nxpz + pxnz + nxnz;
+					if (s>0.00001f) return new MooreCross(c/s, px/s, nx/s, pz/s, nz/s, pxpz/s, nxpz/s, pxnz/s, nxnz/s);
+					else return new MooreCross(0, 0,0,0,0, 0,0,0,0);
+				}
+
+				public MooreCross ClampPositiveObsolete () { return new MooreCross(c<0 ? 0:c, px<0 ? 0:px, nx<0 ? 0:nx, pz<0 ? 0:pz, nz<0 ? 0:nz, 
+					pxpz<0 ? 0:pxpz, nxpz<0 ? 0:nxpz, pxnz<0 ? 0:pxnz, nxnz<0 ? 0:nxnz); }
+			}
+		
+
+			static public void ErosionIteration (FloatMatrix heights, FloatMatrix erosion, FloatMatrix sedimentSum, CoordRect area=new CoordRect(), 
+				float erosionDurability=0.9f, float erosionAmount=1f, float sedimentAmount=0.5f, int erosionFluidityIterations=3, float ruffle=0.1f,
+				FloatMatrix torrents=null, FloatMatrix sediments=null, int[] stepsArray=null, int[] heightsInt=null, int[] order=null)
+			{
+				if (area.size.x==0 || area.size.z==0) area = heights.rect;
+				int count = heights.count;
+
+				#region Creating order array
+
+					int steps = 1000000;
+
+					//creating int-type copy of heights
+					if (heightsInt==null) heightsInt = new int[count];
+					for (int i=0; i<heights.count; i++) 
+					{
+						float val = heights.arr[i];
+						//val = Mathf.Clamp01(val);
+						if (val<0) val=0; if (val>1) val=1;
+						heightsInt[i] = (int)(val*steps);
+					}
+
+					//order array
+					if (order==null) order = new int[count];
+					order = ArrayTools.Order(heightsInt, order:order, max:heights.count, stepsArray:stepsArray);
+					
+
+					/*if (order==null) order = new int[count];
+					for (int i=0; i<order.Length; i++) order[i] = i;
+					float[] refHeights = new float[heights.array.Length];
+					Array.Copy(heights.array, refHeights, heights.array.Length);
+					Array.Sort(refHeights, order);*/
+
+					//setting out-of-area order num to negative
+					for (int j=0; j<heights.count; j++)
+					{
+						int pos = order[j];
+
+						int z = pos / heights.rect.size.x;
+						int x = pos - z*heights.rect.size.x;
+						Coord coord = new Coord(x+heights.rect.offset.x, z+heights.rect.offset.z);
+
+						//if (!area.CheckInRangeAndBounds(coord)) order[j] = -1;
+						if (!(x > heights.rect.offset.x && x < heights.rect.offset.x + heights.rect.size.x-1 &&
+							z > heights.rect.offset.z && z < heights.rect.offset.z + heights.rect.size.z-1))
+								order[j] = -1;
+					}
+
+
+				#endregion
+
+				#region Creating torrents
+
+					if (torrents==null) torrents = new FloatMatrix(heights.rect);
+					torrents.ChangeRect(heights.rect);
+					torrents.Fill(1f); //casting initial rain
+					
+					for (int j=count-1; j>=0; j--)
+					{
+						//finding column ordered by height
+						int pos = order[j];
+						if (pos<0) continue;
+						/*
+						MooreCross height = new MooreCross(heights, pos); //moore
+						MooreCross torrent = new MooreCross(torrents, pos); //moore
+						if (torrent.c > 2000000000) torrent.c = 2000000000;
+
+						//creating torrents
+						MooreCross delta = new MooreCross(height); //moore
+						delta.SubtractInverse(height.c);
+						delta.ClampPositive();
+
+						delta.Percent(); //every side now determines a percent - how many water should go to it
+						delta.Multiply(torrent.c);
+						torrent.Add(delta);
+						*/
+
+						//getting height values
+						float[] m = heights.arr; int i=pos; int sizeX = heights.rect.size.x;
+						float h = m[i]; float hx = m[i-1]; float hX = m[i+1]; float hz = m[i-sizeX]; float hZ = m[i+sizeX];
+						float hxz = m[i-1-sizeX]; float hXz = m[i+1-sizeX]; float hxZ = m[i-1+sizeX]; float hXZ = m[i+1+sizeX]; 
+
+						//creating delta
+						float d=h-h; float dx=h-hx; float dX=h-hX; float dz=h-hz; float dZ=h-hZ; 
+						float dxz=h-hxz; float dXz=h-hXz; float dxZ=h-hxZ; float dXZ=h-hXZ;
+
+						//ignoring negative delta values
+						d=d>0? d : 0; dx=dx>0? dx : 0; dX=dX>0? dX : 0; dz=dz>0? dz : 0; dZ=dZ>0? dZ : 0;
+						dxz=dxz>0? dxz : 0; dXz=dXz>0? dXz : 0; dxZ=dxZ>0? dxZ : 0; dXZ=dXZ>0? dXZ : 0;
+
+						//finding percents
+						float p=0, px=0, pX=0, pz=0, pZ=0, pxz=0, pXz=0, pxZ=0, pXZ=0;
+						float s = d + dx + dX + dz + dZ + dxz + dXz + dxZ + dXZ;
+						if (s>0.00001f) { p=d/s; px=dx/s; pX=dX/s; pz=dz/s; pZ=dZ/s; pxz=dxz/s; pXz=dXz/s; pxZ=dxZ/s; pXZ=dXZ/s; }
+
+						//getting central torrent (and clamping it)
+						float t = torrents.arr[i];
+						if (t > 2000000000) t = 2000000000;
+
+						//spreading central torrent according percents delta. And adding to torrents array
+						m = torrents.arr;
+						m[i] += t*p; m[i-1] += t*px; m[i+1] += t*pX; m[i-sizeX] += t*pz; m[i+sizeX] += t*pZ;
+						m[i-1-sizeX] += t*pxz; m[i+1-sizeX] += t*pXz; m[i-1+sizeX] += t*pxZ; m[i+1+sizeX] += t*pXZ;
+
+ 
+					}
+				#endregion
+		
+				#region Erosion
+
+					if (sediments==null) sediments = new FloatMatrix(heights.rect);
+					else sediments.ChangeRect(heights.rect); 
+					sediments.Clear();
+
+					for (int j=count-1; j>=0; j--)
+					{
+						//finding column ordered by height
+						int pos = order[j];
+						if (pos<0) continue;
+
+						/*
+						Cross height = new Cross(heights, pos);
+						Cross torrent = new Cross(torrents, pos);
+						Cross sediment = new Cross(sediments, pos);	
+
+						//erosion
+						float erodeLine = (height.c + height.min)/2f; //halfway between current and maximum height
+
+						if (height.c > erodeLine) //raising soil if column is higher than eroded column
+						{
+							float raised = height.c - erodeLine;
+							raised = Mathf.Min(raised, raised*(torrent.c-1) * (1-erosionDurability));  //could not raise more soil than height-minHeight. //torrents always have 1 or more
+							raised *= erosionAmount;
+
+							heights.array[pos] -= raised; //raising soil
+							height.c -= raised;
+							sediments.array[pos] += raised * sedimentAmount; //and saving raised to sediment
+							sediment.c += raised * sedimentAmount;
+
+							if (paintErosion != null) paintErosion.array[pos] += raised * mapsFactor; //and writing to ref
+						}
+						*/
+
+						//getting height values
+						float[] m = heights.arr; int i=pos; int sizeX = heights.rect.size.x;
+						float h = m[i]; float hx = m[i-1]; float hX = m[i+1]; float hz = m[i-sizeX]; float hZ = m[i+sizeX];
+
+						//height minimum
+						float h_min = h;
+						if (hx<h_min) h_min=hx; if (hX<h_min) h_min=hX; if (hz<h_min) h_min=hz; if (hZ<h_min) h_min=hZ; 
+
+						//erosion line
+						float erodeLine = (h + h_min)/2f; //halfway between current and maximum height
+						if (h < erodeLine) continue;
+
+						//raising soil
+						float raised = h - erodeLine;
+						float maxRaised = raised*(torrents.arr[pos]-1) * (1-erosionDurability);
+						if (raised > maxRaised) raised = maxRaised;
+						raised *= erosionAmount;
+
+						//saving arrays
+						heights.arr[pos] -= raised;
+						sediments.arr[pos] += raised * sedimentAmount;
+						//sedimentSum.array[pos] += sediments.array[pos] * 10;
+						if (erosion != null) erosion.arr[pos] += raised; //and writing to ref
+					} 
+				#endregion
+
+				
+
+				#region Settling sediment
+
+					for (int l=0; l<erosionFluidityIterations; l++)
+					for (int j=count-1; j>=0; j--)
+					{				
+						//finding column ordered by height
+						int pos = order[j];
+						if (pos<0) continue;
+
+						//getting height values
+						float[] m = heights.arr; int sizeX = heights.rect.size.x;
+						float h = m[pos]; float hx = m[pos-1]; float hX = m[pos+1]; float hz = m[pos-sizeX]; float hZ = m[pos+sizeX];
+
+						//getting sediment values
+						m = sediments.arr;
+						float s = m[pos]; float sx = m[pos-1]; float sX = m[pos+1]; float sz = m[pos-sizeX]; float sZ = m[pos+sizeX];
+
+						//sediment sum
+						float sum = s + sx + sX + sz + sZ;
+						if (sum < 0.00001f) continue;
+
+						//pouring sum to all cells
+						float sedimentFifth = sum/5;
+						s=sedimentFifth; sx=sedimentFifth; sX=sedimentFifth; sz=sedimentFifth; sZ=sedimentFifth;
+
+						//levelling
+						//for (int i=0; i<2; i++)
+						//{
+							//x line
+							float avg = (h+s + sx+hx) / 2; 
+							if (h+s > hx+sx)	{ float transfer = s+h - avg; if (transfer > s) transfer = s; s -= transfer; sx += transfer; }
+							else				{ float transfer = sx+hx - avg; if (transfer > sx) transfer = sx; sx -= transfer; s += transfer; }
+
+							avg = (hx+sx + sX+hX) / 2; 
+							if (hx+sx > hX+sX)	{ float transfer = sx+hx - avg; if (transfer > sx) transfer = sx; sx -= transfer; sX += transfer; }
+							else				{ float transfer = sX+hX - avg; if (transfer > sX) transfer = sX; sX -= transfer; sx += transfer; }
+
+							avg = (h+s + sX+hX) / 2; 
+							if (h+s > hX+sX)	{ float transfer = s+h - avg; if (transfer > s) transfer = s; s -= transfer; sX += transfer; }
+							else				{ float transfer = sX+hX - avg; if (transfer > sX) transfer = sX; sX -= transfer; s += transfer; }
+
+							//z line
+							avg = (h+s + sz+hz) / 2; 
+							if (h+s > hz+sz)	{ float transfer = s+h - avg; if (transfer > s) transfer = s; s -= transfer; sz += transfer; }
+							else				{ float transfer = sz+hz - avg; if (transfer > sz) transfer = sz; sz -= transfer; s += transfer; }
+
+							avg = (hZ+sZ + sz+hz) / 2; 
+							if (hZ+sZ > hz+sz)	{ float transfer = sZ+hZ - avg; if (transfer > sZ) transfer = sZ; sZ -= transfer; sz += transfer; }
+							else				{ float transfer = sz+hz - avg; if (transfer > sz) transfer = sz; sz -= transfer; sZ += transfer; }
+
+							avg = (h+s + sz+hz) / 2; 
+							if (h+s > hz+sz)	{ float transfer = s+h - avg; if (transfer > s) transfer = s; s -= transfer; sz += transfer; }
+							else				{ float transfer = sz+hz - avg; if (transfer > sz) transfer = sz; sz -= transfer; s += transfer; }
+
+							//side pairs
+							avg = (hx+sx + sz+hz) / 2; 
+							if (hx+sx > hz+sz)	{ float transfer = sx+hx - avg; if (transfer > sx) transfer = sx; sx -= transfer; sz += transfer; }
+							else				{ float transfer = sz+hz - avg; if (transfer > sz) transfer = sz; sz -= transfer; sx += transfer; }
+
+							avg = (hX+sX + sZ+hZ) / 2; 
+							if (hX+sX > hZ+sZ)	{ float transfer = sX+hX - avg; if (transfer > sX) transfer = sX; sX -= transfer; sZ += transfer; }
+							else				{ float transfer = sZ+hZ - avg; if (transfer > sZ) transfer = sZ; sZ -= transfer; sX += transfer; }
+
+							avg = (hx+sx + sZ+hZ) / 2; 
+							if (hx+sx > hZ+sZ)	{ float transfer = sx+hx - avg; if (transfer > sx) transfer = sx; sx -= transfer; sZ += transfer; }
+							else				{ float transfer = sZ+hZ - avg; if (transfer > sZ) transfer = sZ; sZ -= transfer; sx += transfer; }
+
+							avg = (hX+sX + sz+hz) / 2; 
+							if (hX+sX > hz+sz)	{ float transfer = sX+hX - avg; if (transfer > sX) transfer = sX; sX -= transfer; sz += transfer; }
+							else				{ float transfer = sz+hz - avg; if (transfer > sz) transfer = sz; sz -= transfer; sX += transfer; }
+						//}
+						
+						//to matrix
+						m = sediments.arr;
+						m[pos]=s; m[pos-1]=sx; m[pos+1]=sX; m[pos-sizeX]=sz; m[pos+sizeX]=sZ;
+
+						if (sedimentSum != null)
+						{
+							m = sedimentSum.arr;
+							m[pos]+=s; m[pos-1]+=sx; m[pos+1]+=sX; m[pos-sizeX]+=sz; m[pos+sizeX]+=sZ;
+						}
+
+						
+				}
+				#endregion
+
+				#region Writing sediments back to height, adding smooth and ruffle
+				
+				int seed = 12345;
+				for(int j=heights.arr.Length-1; j>=0; j--) 
+				{
+					//writing heights
+					heights.arr[j] += sediments.arr[j];
+					
+					seed = 214013*seed + 2531011; 
+					float random = ((seed>>16)&0x7FFF) / 32768f;
+
+					int pos = order[j];
+					if (pos<0) continue;
+
+					float[] m = heights.arr; int sizeX = heights.rect.size.x;
+					float h = m[pos]; float hx = m[pos-1]; float hX = m[pos+1]; float hz = m[pos-sizeX]; float hZ = m[pos+sizeX];
+
+					//smoothing sediments a bit
+					float s = sediments.arr[pos];
+					if (s > 0.0001f)
+					{
+						float smooth = s/2f; if (smooth > 0.75f) smooth = 0.75f;
+						heights.arr[pos] = h*(1-smooth) + (hx+hX+hz+hZ)/4f*smooth;
+					}
+
+					else
+					{
+						float maxHeight = hx; if (hX>maxHeight) maxHeight=hX; if (hz>maxHeight) maxHeight=hz; if (hZ>maxHeight) maxHeight=hZ;
+						float minHeight = hx; if (hX<minHeight) minHeight=hX; if (hz<minHeight) minHeight=hz; if (hZ<minHeight) minHeight=hZ;
+						float randomHeight = random*(maxHeight-minHeight) + minHeight;
+						heights.arr[pos] = heights.arr[pos]*(1-ruffle) + randomHeight*ruffle;
+					}
+					//Cross height = new Cross(heights, pos);
+					//float maxAround = Mathf.Max(heights.array[pos-1], heights.array[pos+1], heights.array[pos-heights.rect.size.x], heights.array[pos+heights.rect.size.x]);
+					//heights.array[pos] = Mathf.Min(heights.array[pos], maxAround);
+
+					//heights.array[pos] = Mathf.Min(height.c, height.maxAround);
+					//heights.array[pos] = Mathf.Min(height.c, height.avgAround)*0.5f + height.c*0.5f;
+
+					//float maxHeight = height.maxAround;
+					//float minHeight = height.minAround;
+					//float randomHeight = random*(maxHeight-minHeight) + minHeight;
+					//heights.array[pos] = heights.array[pos]*(1-ruffle) + randomHeight*ruffle;
+				}
+				
+				#endregion
+
+			}//erosion iteration
+
+			static void LevelCells (float hX, float hz,  ref float sX, ref float sz)
+			{
+				float avg = (hX+sX + sz+hz) / 2; 
+				if (hX+sX > hz+sz)	{ float transfer = sX+hX - avg; if (transfer > sX) transfer = sX; sX -= transfer; sz += transfer; }
+				else				{ float transfer = sz+hz - avg; if (transfer > sz) transfer = sz; sz -= transfer; sX += transfer; }
+			}
+
+			static void LevelCells (float h1, float h2, float h3,  ref float s1, ref float s2, ref float s3)
+			{
+				//for (int i=0; i<3; i++)
+				//{
+					LevelCells(h1,h2, ref s1, ref s2);
+					LevelCells(h2,h3, ref s2, ref s3);
+					LevelCells(h3,h1, ref s3, ref s1);
+				//}
+			}
+
+			static void LevelCells (float h, float hx, float hX, float hz, float hZ, ref float s, ref float sx, ref float sX, ref float sz, ref float sZ)
+			{
+				//LevelCells(h,hx, ref s, ref sx); LevelCells(hx,hX, ref sx, ref sX); LevelCells(hX,h, ref sX, ref s);
+				//LevelCells(h,hz, ref s, ref sz); LevelCells(hz,hZ, ref sz, ref sZ); LevelCells(hZ,h, ref sZ, ref s);
+
+				//LevelCells(hx,hz, ref sx, ref sz); LevelCells(hX,hZ, ref sZ, ref sZ); LevelCells(hx,hZ, ref sx, ref sZ); LevelCells(hX,hz, ref sX, ref sz);
+				
+				/*for (int i=0; i<1; i++)
+				{
+					LevelCells(h,hx, ref s, ref sx); LevelCells(hx,hX, ref sx, ref sX); LevelCells(hX,hz, ref sX, ref sz); LevelCells(hz,hZ, ref sz, ref sZ); LevelCells(hZ,h, ref sZ, ref s);
+					LevelCells(h,hZ, ref s, ref sZ); LevelCells(hZ,hz, ref sZ, ref sz); LevelCells(hz,hX, ref sz, ref sX); LevelCells(hX,hx, ref sX, ref sx); LevelCells(h,hx, ref s, ref sx);
+				
+					LevelCells(hx,hz, ref sx, ref sz); LevelCells(hX,hZ, ref sX, ref sZ); LevelCells(h,hX, ref s, ref sX); LevelCells(hz,hx, ref sz, ref sx); 
+				}*/
+			}
+
+	}//erosion class
+
+}//namespace
