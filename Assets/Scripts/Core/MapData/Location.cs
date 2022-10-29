@@ -6,17 +6,21 @@ namespace Core.MapData {
     public class Location : IFdEnum {
         private static int _id;
 
-
-        public static readonly Location Space = new("Space", "Space", false);
-        public static readonly Location TestSpaceStation = new("Space Station", "SpaceStation", false);
-        public static readonly Location TerrainV1 = new("Flat World", "TerrainV1", true);
-        public static readonly Location TerrainV2 = new("Canyons", "TerrainV2", true);
-        public static readonly Location TerrainV3 = new("Biome World", "TerrainV3", true);
-        public static readonly Location TerrainGPUFoliageTest = new("GPU Foliage Test", "TerrainWorkspace", true);
-        public static readonly Location TeamwinFTW_Scene = new("TeamwinFTW scene", "TeamwinFTW_Scene", true);
-
+        // Declare locations here and add to the List() function below
         public static readonly Location ProvingGrounds = new("Proving Grounds",
             "A testing scene used for staging new features and testing flight mechanics", "ProvingGrounds", false);
+
+        public static readonly Location Space = new("Space", "Empty space - literally nothing here", "Space", false);
+        public static readonly Location TestSpaceStation = new("Space Station", "An enormous test space station asset", "SpaceStation", false);
+        public static readonly Location TerrainV1 = new("Flat World", "Terrain with peaks no higher than 2km", "TerrainV1", true);
+        public static readonly Location TerrainV2 = new("Canyons", "Terrain with peaks of 8km and deep, straight canyon grooves", "TerrainV2", true);
+        public static readonly Location TerrainV3 = new("Biome World", "A terrain with multiple mixed environments blended together", "TerrainV3", true);
+
+        public static readonly Location TerrainGPUFoliageTest = new("GPU Foliage Test",
+            "Terrain with lots of foliage relying on the GPU - feedback appreciated!", "TerrainWorkspace", true);
+
+        public static readonly Location TeamwinFTW_Scene = new("TeamwinFTW scene", "TeamwinFTW's world for testing abstract terrain generation","TeamwinFTW_Scene", true);
+
 
 
         private Location(string name, string description, string sceneToLoad, bool isTerrain) {
