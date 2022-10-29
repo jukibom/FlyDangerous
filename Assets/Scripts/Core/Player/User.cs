@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Audio;
+using Core.Player.HeadTracking;
 using FdUI;
 using GameUI;
 using JetBrains.Annotations;
@@ -20,6 +21,7 @@ namespace Core.Player {
         [SerializeField] private XROrigin xrOrigin;
         [SerializeField] private InputSystemUIInputModule pauseUIInputModule;
         [SerializeField] private InGameUI inGameUI;
+        [SerializeField] private HeadTrackingManager headTracking;
 
         [SerializeField] public bool movementEnabled;
         [SerializeField] public bool restartEnabled = true;
@@ -146,6 +148,9 @@ namespace Core.Player {
             }
 
             if (boostButtonForceEnabled) shipPlayer.Boost(_boost);
+
+            headTracking.SetShipVelocityVector(shipPlayer.Rigidbody.velocity);
+            shipCameraRig.SetHeadTransform(ref headTracking.HeadTransform);
         }
 
         public void OnEnable() {
@@ -585,7 +590,7 @@ namespace Core.Player {
             var mouseYInvert = Preferences.Instance.GetBool("mouseYInvert");
 
             var mouseIsRelative = Preferences.Instance.GetString("mouseInputMode") == "relative" ||
-                                  Preferences.Instance.GetBool("forceRelativeMouseWithFAOff") && !shipPlayer.IsRotationalFlightAssistActive;
+                                  (Preferences.Instance.GetBool("forceRelativeMouseWithFAOff") && !shipPlayer.IsRotationalFlightAssistActive);
 
             var mouseRelativeRate = Mathf.Clamp(Preferences.Instance.GetFloat("mouseRelativeRate"), 1, 50f);
 
@@ -605,17 +610,10 @@ namespace Core.Player {
             if (_mousePositionNormalized.y < -mouseDeadzoneY) continuousMouseY = (_mousePositionNormalized.y + mouseDeadzone) * sensitivityY;
 
             // calculate relative input from deltas including sensitivity
-            var relativeMouse = new Vector2(_mousePositionNormalizedDelta.x * sensitivityX, _mousePositionNormalizedDelta.y * sensitivityY);
-
-            // return to 0 by mouseRelativeRate
-            relativeMouse += Vector2.MoveTowards(new Vector2(
-                    _previousRelativeRate.x,
-                    _previousRelativeRate.y),
-                Vector2.zero, mouseRelativeRate / 500);
-
-            // store relative rate for relative return rate next frame
-            _previousRelativeRate.x = Mathf.Clamp(relativeMouse.x, -1, 1);
-            _previousRelativeRate.y = Mathf.Clamp(relativeMouse.y, -1, 1);
+            var relativeMouse = new Vector2(
+                _previousRelativeRate.x + _mousePositionNormalizedDelta.x * sensitivityX,
+                _previousRelativeRate.y + _mousePositionNormalizedDelta.y * sensitivityY
+            );
 
             // power curve (Mathf.Pow does not allow negatives because REASONS so abs and multiply by -1 if the original val is < 0)
             continuousMouseX = (continuousMouseX < 0 ? -1 : 1) * Mathf.Pow(Mathf.Abs(continuousMouseX), mousePowerCurve);
@@ -659,6 +657,16 @@ namespace Core.Player {
                 mouseIsRelative ? relativeMouse.y : continuousMouseY
             );
             inGameUI.MouseWidget.UpdateWidgetSprites(widgetPosition);
+
+            // return to 0 by mouseRelativeRate
+            _previousRelativeRate = Vector2.MoveTowards(new Vector2(
+                    relativeMouse.x,
+                    relativeMouse.y),
+                Vector2.zero, mouseRelativeRate / 500);
+
+            // store relative rate for relative return rate next frame
+            _previousRelativeRate.x = Mathf.Clamp(_previousRelativeRate.x, -1, 1);
+            _previousRelativeRate.y = Mathf.Clamp(_previousRelativeRate.y, -1, 1);
 
             // clamp to virtual screen 
             var extentsX = Screen.width * Mathf.Pow(sensitivityX, -1);

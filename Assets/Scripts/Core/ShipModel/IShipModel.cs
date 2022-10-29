@@ -73,5 +73,10 @@ namespace Core.ShipModel {
          * Set the color of the ship head-lights
          */
         public void SetHeadLightsColor(string htmlColor);
+
+        /**
+         * Ship is colliding with a holographic billboard
+         */
+        public void BillboardCollision();
     }
 }

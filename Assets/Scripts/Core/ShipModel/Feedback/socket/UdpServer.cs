@@ -1,8 +1,10 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 using Audio;
+using Core.Player;
 using Core.ShipModel.Feedback.interfaces;
 using Core.ShipModel.ShipIndicator;
+using FdUI;
 using JetBrains.Annotations;
 using Misc;
 using NaughtyAttributes;
@@ -26,6 +28,7 @@ namespace Core.ShipModel.Feedback.socket {
 
         private void FixedUpdate() {
             if (!_isEnabled) return;
+            if (!Game.Instance.InGame) return;
 
             if (_emitTimer >= emitIntervalSeconds) {
                 _emitTimer = 0;
@@ -36,15 +39,22 @@ namespace Core.ShipModel.Feedback.socket {
                 _telemetry.packetId = _packetId;
 
                 // Game State
-                _telemetry.gameVersion = Application.version.PadRight(20).ToCharArray();
+                var player = FdPlayer.FindLocalShipPlayer;
+                _telemetry.gameVersion = Application.version;
                 _telemetry.currentLevelName =
-                    (Game.Instance.LoadedLevelData.name != "" ? Game.Instance.LoadedLevelData.name : "None").PadRight(50).ToCharArray();
-                _telemetry.currentGameMode = Game.Instance.LoadedLevelData.gameType.Name.PadRight(50).ToCharArray();
-                _telemetry.currentMusicTrackName = (MusicManager.Instance.CurrentPlayingTrack?.Name ?? "None").PadRight(50).ToCharArray();
+                    Game.Instance.LoadedLevelData.name != "" ? Game.Instance.LoadedLevelData.name : "None";
+                _telemetry.currentGameMode = Game.Instance.LoadedLevelData.gameType.Name;
+                _telemetry.currentMusicTrackName = MusicManager.Instance.CurrentPlayingTrack?.Name ?? "None";
+                if (player != null) {
+                    _telemetry.currentShipName = player.ShipPhysics.ShipProfile?.shipModel ?? "None";
+                    _telemetry.playerName = player.ShipPhysics.ShipProfile?.playerName ?? "None";
+                    _telemetry.playerFlagIso = player.ShipPhysics.ShipProfile?.playerFlagFilename ?? "None";
+                }
+
                 _telemetry.currentPlayerCount = FdNetworkManager.Instance.numPlayers;
 
                 // Serialise and send
-                var packet = FlyDangerousTelemetryEncoder.EncodePacket(broadcastFormat, _telemetry);
+                var packet = FlyDangerousTelemetryEncoder.EncodePacket(broadcastFormat, ref _telemetry);
                 if (_socket != null && _ipEndPoint != null) _socket.SendTo(packet, _ipEndPoint);
                 _packetId++;
             }
@@ -82,6 +92,7 @@ namespace Core.ShipModel.Feedback.socket {
 
             _telemetry.shipWorldPosition = SerializableVector3.AssignOrCreateFromVector3(_telemetry.shipWorldPosition, shipInstrumentData.WorldPosition);
             _telemetry.shipAltitude = shipInstrumentData.Altitude;
+            _telemetry.shipHeightFromGround = shipInstrumentData.ShipHeightFromGround;
             _telemetry.shipSpeed = shipInstrumentData.Speed;
             _telemetry.accelerationMagnitudeNormalised = shipInstrumentData.AccelerationMagnitudeNormalised;
             _telemetry.gForce = shipInstrumentData.GForce;
@@ -125,18 +136,16 @@ namespace Core.ShipModel.Feedback.socket {
         }
 
         [Button("Start Server")]
-        [UsedImplicitly]
         private void StartServer() {
-            Debug.Log($"Starting {broadcastFormat} UDP Server ({_broadcastIpAddress}:{_broadcastPort}) ... ");
+            FdConsole.Instance.LogMessage($"Starting {broadcastFormat} Telemetry UDP Server ({_broadcastIpAddress}:{_broadcastPort}) ... ");
             _socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             _ipEndPoint = new IPEndPoint(_broadcastIpAddress, _broadcastPort);
             _isEnabled = true;
         }
 
         [Button("Stop Server")]
-        [UsedImplicitly]
         private void StopServer() {
-            Debug.Log("Shutting down UDP Server");
+            FdConsole.Instance.LogMessage($"Shutting down {broadcastFormat} Telemetry UDP Server");
             _packetId = 0;
             _socket?.Close();
             _socket = null;

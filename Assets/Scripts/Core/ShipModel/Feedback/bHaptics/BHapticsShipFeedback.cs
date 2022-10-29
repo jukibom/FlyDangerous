@@ -47,6 +47,7 @@ namespace Core.ShipModel.Feedback.bHaptics {
 
         public void OnShipFeedbackUpdate(IShipFeedbackData shipFeedbackData) {
             if (!_isEnabled) return;
+            if (!Game.Instance.InGame) return;
 
             if (shipFeedbackData.BoostSpoolStartThisFrame) {
                 boostSpoolVestHapticClip.Play();

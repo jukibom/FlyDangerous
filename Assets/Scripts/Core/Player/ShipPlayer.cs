@@ -6,13 +6,13 @@ using UnityEngine;
 
 namespace Core.Player {
     [RequireComponent(typeof(Rigidbody))]
-    [RequireComponent(typeof(ReflectionProbe))]
     public class ShipPlayer : FdPlayer {
         #region Attributes + Getters
 
         [SerializeField] private GameObject playerLogic;
         [SerializeField] private User user;
         [SerializeField] private ShipPhysics shipPhysics;
+        [SerializeField] private ReflectionProbe reflectionProbe;
 
         public User User => user;
         public ShipPhysics ShipPhysics => shipPhysics;
@@ -32,9 +32,10 @@ namespace Core.Player {
 
 
         private Transform _transform;
-        private Rigidbody _rigidbody;
 
         private bool _isDriftEnabled;
+
+        public Rigidbody Rigidbody { get; private set; }
 
         public bool IsAutoRotateDriftEnabled {
             get => _isDriftEnabled;
@@ -66,15 +67,15 @@ namespace Core.Player {
         [SyncVar] private string _trailColor;
         [SyncVar] private string _headLightsColor;
         public Flag PlayerFlag { get; private set; }
-        public ReflectionProbe ReflectionProbe { get; private set; }
+        public ReflectionProbe ReflectionProbe => reflectionProbe;
 
         private bool IsReady => _transform && _serverReady;
 
         public bool Freeze {
-            get => _rigidbody.constraints == RigidbodyConstraints.FreezeAll;
+            get => Rigidbody.constraints == RigidbodyConstraints.FreezeAll;
             set {
-                if (_rigidbody) {
-                    _rigidbody.constraints = value ? RigidbodyConstraints.FreezeAll : RigidbodyConstraints.None;
+                if (Rigidbody) {
+                    Rigidbody.constraints = value ? RigidbodyConstraints.FreezeAll : RigidbodyConstraints.None;
                     // reinitialise rigidbody by resetting the params
                     ShipPhysics.FlightParameters = ShipPhysics.FlightParameters;
                 }
@@ -103,10 +104,10 @@ namespace Core.Player {
         public void Awake() {
             playerLogic.SetActive(false);
             _transform = transform;
-            _rigidbody = GetComponent<Rigidbody>();
-            ReflectionProbe = GetComponent<ReflectionProbe>();
+            Rigidbody = GetComponent<Rigidbody>();
+
             // always disable reflections until explicitly enabled by settings on the local client
-            ReflectionProbe.enabled = false;
+            ReflectionProbe.gameObject.SetActive(false);
         }
 
         public void Start() {
@@ -171,7 +172,7 @@ namespace Core.Player {
             if (!isLocalPlayer) {
                 // rigidbody angular momentum constraints 
                 // TODO: Is this needed??
-                _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+                Rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
 
                 // force new layer for non-local player
                 var mask = LayerMask.NameToLayer("Non-Local Player");
@@ -185,13 +186,11 @@ namespace Core.Player {
         private void RefreshShipModel() {
             IEnumerator RefreshShipAsync() {
                 while (string.IsNullOrEmpty(_shipModelName)) yield return new WaitForFixedUpdate();
-                ShipPhysics.RefreshShipModel(new ShipProfile(playerName, playerFlag, _shipModelName, _primaryColor, _accentColor, _thrusterColor, _trailColor,
-                    _headLightsColor));
+                ShipPhysics.ShipProfile = new ShipProfile(playerName, playerFlag, _shipModelName, _primaryColor, _accentColor, _thrusterColor, _trailColor,
+                    _headLightsColor);
 
-                if (isLocalPlayer && shipPhysics.ShipModel != null) {
-                    shipPhysics.ShipModel.ShipCameraRig = user.ShipCameraRig;
-                }
-                
+                if (isLocalPlayer && shipPhysics.ShipModel != null) shipPhysics.ShipModel.ShipCameraRig = user.ShipCameraRig;
+
                 // handle any ship model specific stuff
                 shipPhysics.ShipModel?.SetIsLocalPlayer(isLocalPlayer);
             }
@@ -256,7 +255,7 @@ namespace Core.Player {
                 CmdUpdate(FloatingOrigin.Instance.Origin, _transform.localPosition, _transform.rotation, ShipPhysics.Velocity, ShipPhysics.AngularVelocity,
                     ShipPhysics.CurrentFrameThrust, ShipPhysics.CurrentFrameTorque);
 
-                ShipPhysics.CheckpointCollisionCheck();
+                ShipPhysics.LocalPlayerTriggerCollisionChecks();
                 ShipPhysics.GeometryCollisionCheck();
             }
         }
@@ -362,8 +361,8 @@ namespace Core.Player {
                 var offset = remoteOrigin - FloatingOrigin.Instance.Origin;
                 var localPosition = offset + position;
 
-                _rigidbody.velocity = Vector3.Lerp(_rigidbody.velocity, velocity, 0.1f);
-                _rigidbody.angularVelocity = angularVelocity;
+                Rigidbody.velocity = Vector3.Lerp(Rigidbody.velocity, velocity, 0.1f);
+                Rigidbody.angularVelocity = angularVelocity;
                 _transform.localPosition = Vector3.Lerp(_transform.localPosition, localPosition, 0.5f);
                 _transform.localRotation = Quaternion.Lerp(_transform.localRotation, rotation, 0.5f);
 

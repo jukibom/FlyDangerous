@@ -54,6 +54,7 @@ namespace Core {
                 case "graphics-terrain-details":
                 case "graphics-vsync":
                 case "bHapticsEnabled":
+                case "autoTrackSnapForward":
                     return true;
 
                 case "graphics-ssao":
@@ -68,6 +69,9 @@ namespace Core {
                 case "autoShipRoll":
                 case "telemetryEnabled":
                 case "simRacingStudioEnabled":
+                case "openTrackEnabled":
+                case "trackIrEnabled":
+                case "autoTrackEnabled":
                     return false;
 
                 default:
@@ -116,6 +120,14 @@ namespace Core {
                     return 11000;
                 case "simRacingStudioOutputPort":
                     return 33001;
+                case "autoTrackDamping":
+                    return 0.2f;
+                case "autoTrackHorizontalDegrees":
+                    return 45;
+                case "autoTrackDownDegrees":
+                    return 10;
+                case "autoTrackUpDegrees":
+                    return 30;
                 default:
                     Debug.LogWarning("Attempted to get preference " + key + " with no default specified");
                     return 0;

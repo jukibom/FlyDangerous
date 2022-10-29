@@ -15,16 +15,26 @@ New:
     * Added hold binding for alternate flight controls (#177)
     * Added Ultra reflection quality for refresh rate locked to frame rate (use at your own risk :P)
     * Added bHaptics support for Vest, Arms and Head (WIP, #194)
+    * Added support for OpenTrack head tracking (#65)
+    * Added support for TrackIR head tracking (#65)
+    * Added "Drift Cam" option which attempts to look in the direction of travel (within a sensible arc)
+        * Added associated options for head snap, smoothing and max rotational extents
     * Added UDP telemetry support for generic motion simulators etc (WIP, #115, more information to follow)
+    * Added descriptions to locations in Free Roam menu
+    * Added new boost pad modifiers to the Proving Grounds (see changes below)
     
 Changed:
     * Ship lights now operate as night vision
+    * Flight assist rotation correction strength buffed slightly 
     * Interior Calidris cockpit glass reflectivity not quite so glaring anymore 
     * Advanced input mode renamed "Custom" because some people assumed there was no way to rebind controls
     * Increased and standardised primary collider size across ships (shield)
     * Update target overlay font and graphic
     * Level panels load data in once per frame (Level UI element, ghosts, leaderboard entries) to eliminate stutter during menu transitions
-    * Updated to Unity 2022.1.16f1
+    * Moved testing objects scene to new location ("Proving Grounds"), Space scene is now actually empty for map creation
+    * Minor rework for leaderboards / ghosts panels, added loading state UI and auto-select players' PB (vs top ghost)
+    * Renamed `Throttle Increase / Decrease` to `Throttle Cruise Control Increase / Decrease` for clarity
+    * Updated to Unity 2022.1.20f1
     
 Fixes:
     * Possible fix for VKBs always reporting "Hat Up" on rebind (thanks to the painful manual debugging efforts of Giskard for this fix!)
@@ -34,6 +44,11 @@ Fixes:
     * Incorrect dimensions on some flags in dropdown (#196)
     * Fixed toggling alternate flight controls resetting axes (#178)
     * No longer possible to ever be underneath the terrain (e.g. through a crack in the tile margins), ship is always pushed up to compensate
+    * Bug causing camera damping to be forgotten on restart when using Arcade control scheme
+    * Fixed ship params not sticking between levels
+    * Fixed relative mouse mode applying return rate before sending input (leading to effectively no input at high return rates) 
+    * Culled UI elements from real time reflection probe (whoops!) 
+    * Fixed geometry reflecting from the ship perspective when realtime reflections are enabled (just don't ask how, I beg you)
 
 0.5.7
 New:

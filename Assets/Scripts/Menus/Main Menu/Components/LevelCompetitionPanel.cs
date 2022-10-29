@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -5,6 +6,8 @@ using System.Linq;
 using Core;
 using Core.MapData;
 using Core.Replays;
+using Core.Scores;
+using JetBrains.Annotations;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -23,11 +26,19 @@ namespace Menus.Main_Menu.Components {
         public void Populate(LevelData levelData) {
             _levelData = levelData;
             PopulateLeaderboardForLevel();
-            PopulateGhostsForLevel();
+            PopulateGhostsForLevel(() => {
+                // select the players' best score by default
+                var topScore = Score.ScoreForLevel(levelData);
+                foreach (var ghostListGhostEntry in ghostList.GhostEntries)
+                    // float comparison is always hairy af, it SHOULD be identical but <shrug emoji>
+                    // recorded score is sub-millisecond precision so at 5 decimal places the likelihood of a collision is farcically small
+                    if (Math.Abs(ghostListGhostEntry.replay.ScoreData.raceTime - topScore.PersonalBestTotalTime) < 0.00001f)
+                        ghostListGhostEntry.checkbox.isChecked = true;
+            });
         }
 
         public List<Replay> GetSelectedReplays() {
-            return ghostList.GetComponentsInChildren<GhostEntry>().ToList().FindAll(entry => entry.checkbox.isChecked).ConvertAll(entry => entry.replay);
+            return ghostList.GhostEntries.ToList().FindAll(entry => entry.checkbox.isChecked).ConvertAll(entry => entry.replay);
         }
 
         public void ClearGhosts() {
@@ -43,10 +54,10 @@ namespace Menus.Main_Menu.Components {
             var filePath = await leaderboardEntry.DownloadReplay(directory);
             if (filePath != "") {
                 var newReplay = Replay.LoadFromFilepath(filePath);
-                PopulateGhostsForLevel();
-
-                SelectReplaysInList(currentSelectedReplays);
-                SelectReplayInList(newReplay);
+                PopulateGhostsForLevel(() => {
+                    SelectReplaysInList(currentSelectedReplays);
+                    SelectReplayInList(newReplay);
+                });
             }
 
             // restore selection if the user has moved over to a ghost element which has subsequently been replaced with refreshed state
@@ -77,18 +88,20 @@ namespace Menus.Main_Menu.Components {
             Destroy(ghostEntry.gameObject);
         }
 
-        private void PopulateGhostsForLevel() {
-            ghostList.PopulateGhostsForLevel(_levelData);
-            if (Game.Instance.ActiveGameReplays != null)
-                SelectReplaysInList(Game.Instance.ActiveGameReplays);
+        private void PopulateGhostsForLevel([CanBeNull] Action onComplete = null) {
+            ghostList.PopulateGhostsForLevel(_levelData, () => {
+                if (Game.Instance.ActiveGameReplays != null)
+                    SelectReplaysInList(Game.Instance.ActiveGameReplays);
+                onComplete?.Invoke();
+            });
         }
 
         private async void PopulateLeaderboardForLevel() {
             leaderboard.gameObject.SetActive(FdNetworkManager.Instance.HasLeaderboardServices);
-            if (FdNetworkManager.Instance.HasLeaderboardServices) {
-                var leaderboardData = await FdNetworkManager.Instance.OnlineService!.Leaderboard!.FindOrCreateLeaderboard(_levelData.LevelHash());
-                leaderboard.LoadLeaderboard(leaderboardData);
-            }
+            if (!FdNetworkManager.Instance.HasLeaderboardServices) return;
+
+            var leaderboardData = await FdNetworkManager.Instance.OnlineService!.Leaderboard!.FindOrCreateLeaderboard(_levelData.LevelHash());
+            leaderboard.LoadLeaderboard(leaderboardData);
         }
 
         public void ClearLeaderboard() {
@@ -96,14 +109,11 @@ namespace Menus.Main_Menu.Components {
         }
 
         private void SelectReplaysInList(List<Replay> replays) {
-            ghostList.GetComponentsInChildren<GhostEntry>().ToList().ForEach(ghost => {
-                if (replays.Exists(replay => replay.Hash == ghost.replay.Hash))
-                    ghost.checkbox.isChecked = true;
-            });
+            ghostList.GhostEntries.ToList().ForEach(ghost => { ghost.checkbox.isChecked = replays.Exists(replay => replay.Hash == ghost.replay.Hash); });
         }
 
         private void SelectReplayInList(Replay replay) {
-            ghostList.GetComponentsInChildren<GhostEntry>().ToList().ForEach(ghost => {
+            ghostList.GhostEntries.ToList().ForEach(ghost => {
                 if (ghost.replay.Hash == replay.Hash) ghost.checkbox.isChecked = true;
             });
         }

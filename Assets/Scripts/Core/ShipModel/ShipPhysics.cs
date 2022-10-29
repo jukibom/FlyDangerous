@@ -4,6 +4,7 @@ using System.Linq;
 using Core.Player;
 using Core.ShipModel.Feedback;
 using Core.ShipModel.Feedback.interfaces;
+using Core.ShipModel.Modifiers;
 using Core.ShipModel.ShipIndicator;
 using JetBrains.Annotations;
 using Misc;
@@ -17,6 +18,7 @@ namespace Core.ShipModel {
     }
 
     [RequireComponent(typeof(FeedbackEngine))]
+    [RequireComponent(typeof(ModifierEngine))]
     public class ShipPhysics : MonoBehaviour {
         public delegate void BoostCancelledAction();
 
@@ -28,15 +30,16 @@ namespace Core.ShipModel {
         // is actually calculated from the rigid body bounding boxes and impacts the torque rotation physics.
         // Therefore, to maintains consistency with the flight parameters model this will likely never change.
         // Good fun! Yay one-way doors!
-        private static readonly Vector3 initialInertiaTensor = new(5189.9f, 5825.6f, 1471.6f);
+        private static readonly Vector3 InitialInertiaTensor = new(5189.9f, 5825.6f, 1471.6f);
 
         [SerializeField] private Rigidbody targetRigidbody;
 
         // ray-casting without per-frame allocation
-        private readonly RaycastHit[] _raycastHits = new RaycastHit[2];
+        private readonly RaycastHit[] _raycastHits = new RaycastHit[10];
         private readonly ShipFeedbackData _shipFeedbackData = new();
         private readonly ShipInstrumentData _shipInstrumentData = new();
         private readonly ShipMotionData _shipMotionData = new();
+        private int _billboardLayerMask;
         private float _boostCapacitorPercent = 100f;
         [CanBeNull] private Coroutine _boostCoroutine;
         private float _boostedMaxSpeedDelta;
@@ -52,16 +55,20 @@ namespace Core.ShipModel {
         private FeedbackEngine _feedbackEngine;
 
         private float _gForce;
+        private ModifierEngine _modifierEngine;
+        private int _modifierLayerMask;
 
         private Vector3 _prevVelocity;
 
         [CanBeNull] private IShipModel _shipModel;
 
         private ShipParameters _shipParameters;
+        private ShipProfile _shipProfile;
         private bool _stopShip;
         private float _velocityLimitCap;
 
         public FeedbackEngine FeedbackEngine => _feedbackEngine ? _feedbackEngine : _feedbackEngine = GetComponent<FeedbackEngine>();
+        public ref AppliedEffects AppliedEffects => ref _modifierEngine.AppliedEffects;
 
         public ShipParameters FlightParameters {
             get {
@@ -78,7 +85,16 @@ namespace Core.ShipModel {
                 targetRigidbody.maxAngularVelocity = value.maxAngularVelocity;
 
                 // setup angular momentum for collisions (higher multiplier = less spin)
-                targetRigidbody.inertiaTensor = initialInertiaTensor * value.inertiaTensorMultiplier;
+                targetRigidbody.inertiaTensor = InitialInertiaTensor * value.inertiaTensorMultiplier;
+            }
+        }
+
+        [CanBeNull]
+        public ShipProfile ShipProfile {
+            get => _shipProfile;
+            set {
+                _shipProfile = value;
+                RefreshShipModel(value);
             }
         }
 
@@ -146,23 +162,32 @@ namespace Core.ShipModel {
             }
         }
 
+        public void Awake() {
+            // init physics
+            FlightParameters = ShipParameters.Defaults;
+
+            // get components
+            _modifierEngine = GetComponent<ModifierEngine>();
+
+            // init layer mask ids
+            _checkpointLayerMask = LayerMask.NameToLayer("Checkpoint");
+            _modifierLayerMask = LayerMask.NameToLayer("Modifier");
+            _billboardLayerMask = LayerMask.NameToLayer("Billboard");
+        }
+
         public void Start() {
             // rigidbody non-configurable defaults
             targetRigidbody.centerOfMass = Vector3.zero;
             targetRigidbody.inertiaTensorRotation = Quaternion.identity;
-
-            // init physics
-            FlightParameters = ShipParameters.Defaults;
-
-            // init checkpoint mask id
-            _checkpointLayerMask = LayerMask.NameToLayer("Checkpoint");
         }
 
         private void FixedUpdate() {
+            _modifierEngine.FixedUpdate();
             if (_stopShip) UpdateShip(0, 0, 0, 0, 0, 0, false, false, true, true);
         }
 
         public void ResetPhysics(bool includeBoost = true) {
+            _modifierEngine.Reset();
             targetRigidbody.velocity = Vector3.zero;
             targetRigidbody.angularVelocity = Vector3.zero;
             _prevVelocity = Vector3.zero;
@@ -180,7 +205,7 @@ namespace Core.ShipModel {
         public event BoostCancelledAction OnBoostCancel;
         public event ShipPhysicsUpdated OnShipPhysicsUpdated;
 
-        public void RefreshShipModel(ShipProfile shipProfile) {
+        private void RefreshShipModel(ShipProfile shipProfile) {
             var shipData = ShipMeta.FromString(shipProfile.shipModel);
             // TODO: make this async
             var shipModel = Instantiate(Resources.Load(shipData.PrefabToLoad, typeof(GameObject)) as GameObject);
@@ -209,41 +234,11 @@ namespace Core.ShipModel {
             _collisionStartedThisFrame = startedThisFrame;
         }
 
-        // standard OnTriggerEnter doesn't cut the mustard at these speeds so we need to do something a bit more precise
         // called by ShipPlayer to ensure it's only called on the client!
-        public void CheckpointCollisionCheck() {
-            var frameVelocity = targetRigidbody.velocity * Time.fixedDeltaTime;
-            if (frameVelocity == Vector3.zero) return;
-
-            var start = targetRigidbody.transform.position;
-            var direction = frameVelocity.normalized;
-            var maxDistance = frameVelocity.magnitude * 2;
-            var orientation = Quaternion.LookRotation(frameVelocity);
-
-            // Check for checkpoint collisions using a velocity ray box rather than the inbuilt box check
-            var halfExtents = new Vector3(5, 3, frameVelocity.magnitude / 2);
-            var raycastHitCount = Physics.BoxCastNonAlloc(start, halfExtents, direction, _raycastHits, orientation, maxDistance, 1 << _checkpointLayerMask);
-
-            ExtDebug.DrawBoxCastBox(start, halfExtents, orientation, direction, maxDistance, Color.red);
-
-            var checkpointHitCount = 0;
-            var checkpointDistance = 0f;
-            Checkpoint checkpointFound = null;
-            for (var i = 0; i < raycastHitCount; i++) {
-                var raycastHit = _raycastHits[i];
-                var checkpoint = raycastHit.collider.GetComponentInParent<Checkpoint>();
-                if (checkpoint) {
-                    checkpointHitCount++;
-                    checkpointDistance = Mathf.Max(checkpointDistance, raycastHit.distance);
-                    if (checkpointHitCount > 1) checkpointFound = checkpoint;
-                }
-            }
-
-            if (checkpointFound != null) {
-                var excessTimeToHit = checkpointDistance / frameVelocity.magnitude * Time.fixedDeltaTime;
-                // Debug.Log("DISTANCE " + distance + $"   Time to hit: {excessTimeToHit}");
-                checkpointFound.Hit(excessTimeToHit);
-            }
+        public void LocalPlayerTriggerCollisionChecks() {
+            CheckpointCollisionCheck();
+            ModifierCollisionCheck();
+            BillboardCollisionCheck();
         }
 
         public void GeometryCollisionCheck() {
@@ -320,8 +315,9 @@ namespace Core.ShipModel {
                 targetRigidbody.velocity = Vector3.ClampMagnitude(targetRigidbody.velocity, _velocityLimitCap);
             }
 
-            // clamp max speed in general including boost variance (max boost speed minus max speed)
-            targetRigidbody.velocity = Vector3.ClampMagnitude(targetRigidbody.velocity, FlightParameters.maxSpeed + CurrentBoostedMaxSpeedDelta);
+            // clamp max speed in general including boost variance (max boost speed minus max speed) and applied effects
+            targetRigidbody.velocity = Vector3.ClampMagnitude(targetRigidbody.velocity,
+                FlightParameters.maxSpeed + CurrentBoostedMaxSpeedDelta + _modifierEngine.AppliedEffects.shipDeltaSpeedCap);
 
             // calculate g-force 
             _gForce = Math.Abs((Velocity - _prevVelocity).magnitude / (Time.fixedDeltaTime * 9.8f));
@@ -332,7 +328,7 @@ namespace Core.ShipModel {
                 _boostCapacitorPercent + FlightParameters.boostCapacityPercentChargeRate * Time.fixedDeltaTime);
 
             // copy defaults before modifying
-            MaxThrustWithBoost = FlightParameters.maxThrust;
+            MaxThrustWithBoost = FlightParameters.maxThrust + _modifierEngine.AppliedEffects.shipDeltaThrust;
             MaxTorqueWithBoost = FlightParameters.maxThrust * FlightParameters.torqueThrustMultiplier;
             CurrentBoostedMaxSpeedDelta = _boostedMaxSpeedDelta;
 
@@ -383,7 +379,7 @@ namespace Core.ShipModel {
             RotationalFlightAssistActive = rotationalFlightAssistActive;
 
             /* FLIGHT ASSISTS */
-            var maxSpeedWithBoost = FlightParameters.maxSpeed + CurrentBoostedMaxSpeedDelta;
+            var maxSpeedWithBoost = FlightParameters.maxSpeed + CurrentBoostedMaxSpeedDelta + _modifierEngine.AppliedEffects.shipDeltaSpeedCap;
             if (vectorFlightAssistActive) CalculateVectorControlFlightAssist(maxSpeedWithBoost);
             if (rotationalFlightAssistActive) CalculateRotationalDampeningFlightAssist();
 
@@ -403,6 +399,13 @@ namespace Core.ShipModel {
             }
 
             _prevVelocity = Velocity;
+        }
+
+        /**
+         * Write values directly to the modifier engine for replay purposes
+         */
+        public void OverwriteModifiers(Vector3 shipForce, float shipDeltaSpeedCap, float shipDeltaThrust) {
+            _modifierEngine.SetDirect(shipForce, shipDeltaSpeedCap, shipDeltaThrust);
         }
 
         // public overrides for motion data, used for multiplayer non-local client RPC calls
@@ -431,8 +434,11 @@ namespace Core.ShipModel {
             var nearestTerrain = PositionalHelpers.GetClosestCurrentTerrain(shipPosition);
 
             _shipInstrumentData.WorldPosition = absoluteShipPosition;
-            _shipInstrumentData.Altitude = Game.Instance.IsTerrainMap && nearestTerrain != null
+            _shipInstrumentData.ShipHeightFromGround = Game.Instance.IsTerrainMap && nearestTerrain != null
                 ? absoluteShipPosition.y - nearestTerrain.SampleHeight(shipPosition)
+                : Mathf.Infinity;
+            _shipInstrumentData.Altitude = Game.Instance.IsTerrainMap && nearestTerrain != null
+                ? absoluteShipPosition.y
                 : Mathf.Infinity;
             _shipInstrumentData.AccelerationMagnitudeNormalised =
                 (Math.Abs(CurrentFrameThrust.x) + Math.Abs(CurrentFrameThrust.y) + Math.Abs(CurrentFrameThrust.z)) /
@@ -462,8 +468,8 @@ namespace Core.ShipModel {
 
             if (_currentFrameCollision != null) {
                 var normalBuffer = _currentFrameCollision.contacts.Aggregate(Vector3.zero, (current, contact) => current + contact.normal);
-                var impact = _currentFrameCollision.relativeVelocity.magnitude / _shipParameters.maxBoostSpeed *
-                             Mathf.Abs(Vector3.Dot(normalBuffer.normalized, _prevVelocity.normalized));
+                var impact = Mathf.Clamp(_currentFrameCollision.relativeVelocity.magnitude / _shipParameters.maxBoostSpeed *
+                                         Mathf.Abs(Vector3.Dot(normalBuffer.normalized, _prevVelocity.normalized)), 0, 1);
 
                 _shipFeedbackData.CollisionThisFrame = true;
                 _shipFeedbackData.CollisionStartedThisFrame = _collisionStartedThisFrame;
@@ -536,7 +542,7 @@ namespace Core.ShipModel {
             /* THRUST */
             // standard thrust calculated per-axis (each axis has it's own max thrust component including boost)
             var thrust = thrustInput * MaxThrustWithBoost;
-            targetRigidbody.AddForce(transform.TransformDirection(thrust));
+            targetRigidbody.AddForce(transform.TransformDirection(thrust) + _modifierEngine.AppliedEffects.shipForce);
 
             /* TORQUE */
             // torque is applied entirely independently, this may be looked at later.
@@ -571,9 +577,9 @@ namespace Core.ShipModel {
             // convert global rigid body velocity into local space
             var localAngularVelocity = transform.InverseTransformDirection(targetRigidbody.angularVelocity);
 
-            Pitch = CalculateAssistedAxis(Pitch, localAngularVelocity.x * -1, 1f, 3.0f);
-            Yaw = CalculateAssistedAxis(Yaw, localAngularVelocity.y, 1f, 3.0f);
-            Roll = CalculateAssistedAxis(Roll, localAngularVelocity.z * -1, 1f, 3.0f);
+            Pitch = CalculateAssistedAxis(Pitch, localAngularVelocity.x * -1, 0.35f, 3.0f);
+            Yaw = CalculateAssistedAxis(Yaw, localAngularVelocity.y, 0.35f, 3.0f);
+            Roll = CalculateAssistedAxis(Roll, localAngularVelocity.z * -1, 0.35f, 3.0f);
         }
 
         /**
@@ -619,6 +625,74 @@ namespace Core.ShipModel {
             }
 
             return axis;
+        }
+
+        #endregion
+
+        #region Collisions
+
+        // Check for at least two of three possible collisions on a checkpoint object to build an effective boolean intersection:
+        // * Sphere of radius matching the inner circle
+        // * Cuboid of width / height matching the inner circle
+        // * Mesh of inner checkpoint (as fallback!)
+        private void CheckpointCollisionCheck() {
+            var rayHits = VelocityBoxCast(out var raycastHitCount, 1 << _checkpointLayerMask);
+
+            var checkpointHitCount = 0;
+            var checkpointDistance = 0f;
+            Checkpoint checkpointFound = null;
+            for (var i = 0; i < raycastHitCount; i++) {
+                var raycastHit = rayHits[i];
+                var checkpoint = raycastHit.collider.GetComponentInParent<Checkpoint>();
+                if (checkpoint) {
+                    checkpointHitCount++;
+                    checkpointDistance = Mathf.Max(checkpointDistance, raycastHit.distance);
+                    if (checkpointHitCount > 1) checkpointFound = checkpoint;
+                }
+            }
+
+            if (checkpointFound != null) {
+                var frameVelocity = targetRigidbody.velocity * Time.fixedDeltaTime;
+                var excessTimeToHit = checkpointDistance / frameVelocity.magnitude * Time.fixedDeltaTime;
+                // Debug.Log("DISTANCE " + distance + $"   Time to hit: {excessTimeToHit}");
+                checkpointFound.Hit(excessTimeToHit);
+            }
+        }
+
+        // Check for modifier and apply it if found
+        private void ModifierCollisionCheck() {
+            var rayHits = VelocityBoxCast(out var raycastHitCount, 1 << _modifierLayerMask);
+
+            for (var i = 0; i < raycastHitCount; i++) {
+                var raycastHit = rayHits[i];
+                var modifier = raycastHit.collider.GetComponentInParent(typeof(IModifier));
+                if (modifier) _modifierEngine.ApplyModifier(targetRigidbody, modifier as IModifier);
+            }
+        }
+
+        private void BillboardCollisionCheck() {
+            VelocityBoxCast(out var raycastHitCount, 1 << _billboardLayerMask);
+            if (raycastHitCount > 0) _shipModel?.BillboardCollision();
+        }
+
+        // standard OnTriggerEnter doesn't cut the mustard at these speeds so we need to do something a bit more precise
+        private RaycastHit[] VelocityBoxCast(out int rayHits, int layerMask) {
+            var frameVelocity = targetRigidbody.velocity * Time.fixedDeltaTime;
+            rayHits = 0;
+            if (frameVelocity == Vector3.zero) return _raycastHits;
+
+            var start = targetRigidbody.transform.position;
+            var direction = frameVelocity.normalized;
+            var maxDistance = frameVelocity.magnitude * 2;
+            var orientation = Quaternion.LookRotation(frameVelocity);
+
+            // Check for checkpoint collisions using a velocity ray box rather than the inbuilt box check
+            var halfExtents = new Vector3(5, 3, frameVelocity.magnitude / 2);
+            rayHits = Physics.BoxCastNonAlloc(start, halfExtents, direction, _raycastHits, orientation, maxDistance, layerMask);
+
+            ExtDebug.DrawBoxCastBox(start, halfExtents, orientation, direction, maxDistance, Color.red);
+
+            return _raycastHits;
         }
 
         #endregion

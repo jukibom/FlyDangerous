@@ -86,6 +86,8 @@ namespace Core {
         public SessionType SessionType { get; private set; } = SessionType.Singleplayer;
         public SessionStatus SessionStatus { get; set; } = SessionStatus.Offline;
 
+        public bool InGame => SessionStatus is SessionStatus.InGame or SessionStatus.Development;
+
         public bool IsVREnabled { get; private set; }
 
         public bool IsGameHotJoinable => LoadedLevelData.gameType.IsHotJoinable;
@@ -174,7 +176,7 @@ namespace Core {
             QualitySettings.vSyncCount = Preferences.Instance.GetBool("graphics-vsync") ? 1 : 0;
 
             var urp = (UniversalRenderPipelineAsset)GraphicsSettings.currentRenderPipeline;
-            urp.renderScale = Preferences.Instance.GetFloat("graphics-render-scale");
+            urp.renderScale = Mathf.Clamp(Preferences.Instance.GetFloat("graphics-render-scale"), 0.5f, 2);
 
             // For some maddening reason soft shadows is not exposed but flipping this bool does work so here's some awful reflection. yay!
             var type = urp.GetType();
@@ -205,7 +207,7 @@ namespace Core {
             var shipPlayer = FdPlayer.FindLocalShipPlayer;
             if (shipPlayer) {
                 var reflectionSetting = Preferences.Instance.GetString("graphics-reflections");
-                shipPlayer.ReflectionProbe.enabled = reflectionSetting != "off";
+                shipPlayer.ReflectionProbe.gameObject.SetActive(reflectionSetting != "off");
                 switch (reflectionSetting) {
                     case "ultra":
                         shipPlayer.ReflectionProbe.resolution = 512;

@@ -6,7 +6,7 @@ namespace Core.MapData {
     public class Location : IFdEnum {
         private static int _id;
 
-        // Declare locations here and add to the List() function below
+
         public static readonly Location Space = new("Space", "Space", false);
         public static readonly Location TestSpaceStation = new("Space Station", "SpaceStation", false);
         public static readonly Location TerrainV1 = new("Flat World", "TerrainV1", true);
@@ -15,9 +15,14 @@ namespace Core.MapData {
         public static readonly Location TerrainGPUFoliageTest = new("GPU Foliage Test", "TerrainWorkspace", true);
         public static readonly Location TeamwinFTW_Scene = new("TeamwinFTW scene", "TeamwinFTW_Scene", true);
 
-        private Location(string name, string sceneToLoad, bool isTerrain) {
+        public static readonly Location ProvingGrounds = new("Proving Grounds",
+            "A testing scene used for staging new features and testing flight mechanics", "ProvingGrounds", false);
+
+
+        private Location(string name, string description, string sceneToLoad, bool isTerrain) {
             Id = GenerateId;
             Name = name;
+            Description = description;
             SceneToLoad = sceneToLoad;
             IsTerrain = isTerrain;
         }
@@ -26,13 +31,14 @@ namespace Core.MapData {
 
         public string SceneToLoad { get; }
         public bool IsTerrain { get; }
-
-
+        public string Description { get; }
         public int Id { get; }
         public string Name { get; }
 
         public static IEnumerable<Location> List() {
-            return new[] { Space, TestSpaceStation, TerrainV1, TerrainV2, TerrainV3, TerrainGPUFoliageTest, TeamwinFTW_Scene};
+
+            return new[] { ProvingGrounds, Space, TestSpaceStation, TerrainV1, TerrainV2, TerrainV3, TerrainGPUFoliageTest, TeamwinFTW_Scene};
+
         }
 
         public static Location FromString(string locationString) {
