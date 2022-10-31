@@ -6,6 +6,8 @@ using UnityEngine;
 using System;
 using System.Threading;
 using Unity.Mathematics;
+using Core;
+using UnityEngine.PlayerLoop;
 
 public class MapGenerate : MonoBehaviour
 {
@@ -22,8 +24,8 @@ public class MapGenerate : MonoBehaviour
     [Range(0f, 1f)]
     public float persistance;
 
-    public int seed;
-    public Vector2 Offset;
+    int seed;
+
 
     public float meshheightmult;
     public AnimationCurve Meshheightcurve;
@@ -33,6 +35,16 @@ public class MapGenerate : MonoBehaviour
 
     Queue<MapThreadInfo<mapdata>> mapdatathreadsinfoqueue = new Queue<MapThreadInfo<mapdata>>();
     Queue<MapThreadInfo<MeshData>> meshdatathreadinfoqueue = new Queue<MapThreadInfo<MeshData>>();
+
+    private void Start()
+    {
+     //   seed = int.Parse(Game.Instance.Seed.Remove(4), System.Globalization.NumberStyles.HexNumber);
+    }
+    private void Awake()
+    {
+        seed = int.Parse(Game.Instance.Seed.Remove(4), System.Globalization.NumberStyles.HexNumber);
+    }
+    
     public void drawmapineditor()
     {
         mapdata mapdata = Generatemapdata(Vector2.zero);
@@ -86,6 +98,7 @@ public class MapGenerate : MonoBehaviour
     }
     void Update()
     {
+
         if (mapdatathreadsinfoqueue.Count > 0)
         {
             for(int i = 0;i<mapdatathreadsinfoqueue.Count;i++)
@@ -105,7 +118,9 @@ public class MapGenerate : MonoBehaviour
     }
     mapdata Generatemapdata(Vector2 center)
     {
-        float[,] noisemap = MapNoise.GenerateNoiseMap(MapChunkSize, MapChunkSize, seed, noisescale, octaves, persistance,center + Offset);
+
+        
+        float[,] noisemap = MapNoise.GenerateNoiseMap(MapChunkSize, MapChunkSize, seed, noisescale, octaves, persistance,center);
         Color[] colormap = new Color[MapChunkSize * MapChunkSize];
 
         for (int y = 0; y < MapChunkSize; y++)
