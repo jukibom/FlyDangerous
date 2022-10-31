@@ -24,8 +24,7 @@ public class MapGenerate : MonoBehaviour
     [Range(0f, 1f)]
     public float persistance;
 
-    int seed;
-
+    int seed = 1;
 
     public float meshheightmult;
     public AnimationCurve Meshheightcurve;
@@ -42,7 +41,12 @@ public class MapGenerate : MonoBehaviour
     }
     private void Awake()
     {
-        seed = int.Parse(Game.Instance.Seed.Remove(4), System.Globalization.NumberStyles.HexNumber);
+        
+        if(Game.Instance.InGame)
+        {
+            seed = Game.Instance.Seed.GetHashCode();
+        }
+
     }
     
     public void drawmapineditor()
@@ -60,7 +64,7 @@ public class MapGenerate : MonoBehaviour
         }
         else if (drawmode == Drawmode.Mesh)
         {
-             display.DrawMesh(MeshGenerator.GenerateTerrainMesh(mapdata.heightmap, meshheightmult, Meshheightcurve, editorpreviewlod,new Vector2(0,0)), TextureGenerator.TexturefromeColormap(mapdata.colormap, MapChunkSize, MapChunkSize));
+             display.DrawMesh(MeshGenerator.GenerateTerrainMesh(mapdata.heightmap, meshheightmult * noisescale, Meshheightcurve, editorpreviewlod), TextureGenerator.TexturefromeColormap(mapdata.colormap, MapChunkSize, MapChunkSize));
         }
     }
 
@@ -90,7 +94,7 @@ public class MapGenerate : MonoBehaviour
     }
     void Meshdatathread(int LOD, mapdata mapdata, Action<MeshData> callback)
     {
-        MeshData meshData = MeshGenerator.GenerateTerrainMesh(mapdata.heightmap, meshheightmult, Meshheightcurve , LOD,mapdata.chunkcoord);
+        MeshData meshData = MeshGenerator.GenerateTerrainMesh(mapdata.heightmap, meshheightmult * noisescale, Meshheightcurve , LOD);
         lock (meshdatathreadinfoqueue)
         {
             meshdatathreadinfoqueue.Enqueue(new MapThreadInfo<MeshData>(callback,meshData));
@@ -118,7 +122,7 @@ public class MapGenerate : MonoBehaviour
     }
     mapdata Generatemapdata(Vector2 center)
     {
-
+        if (octaves < 1) octaves = 1;
         
         float[,] noisemap = MapNoise.GenerateNoiseMap(MapChunkSize, MapChunkSize, seed, noisescale, octaves, persistance,center);
         Color[] colormap = new Color[MapChunkSize * MapChunkSize];

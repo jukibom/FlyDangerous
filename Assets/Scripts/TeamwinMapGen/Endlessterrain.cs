@@ -7,7 +7,7 @@ public class Endlessterrain : MonoBehaviour
 {
     const float scale = 15;
 
-    const float vieweroffsetthresholdforUpdate = 25f;
+    const float vieweroffsetthresholdforUpdate = 100f;
     const float sqrvieweroffsetthresholdforUpdate = vieweroffsetthresholdforUpdate * vieweroffsetthresholdforUpdate;
 
     public LODinfo[] detaillevels;
@@ -19,7 +19,6 @@ public class Endlessterrain : MonoBehaviour
 
     public Material MapMaterial;
 
-    public float height;
 
     public static Vector2 viewerPosition;
     Vector2 viewerpositionold;
@@ -83,6 +82,7 @@ public class Endlessterrain : MonoBehaviour
 
         if ((viewerpositionold - viewerPosition).sqrMagnitude > sqrvieweroffsetthresholdforUpdate)
         {
+            print("Updated Terrain");
             viewerpositionold = viewerPosition;
             UpdateVisibleChunks();
         }
@@ -116,7 +116,7 @@ public class Endlessterrain : MonoBehaviour
                 }
                 else
                 {
-                    TerrainchunkDictionary.Add(viewdChunkCoord, new TerrainChunk(viewdChunkCoord,chunkSize,detaillevels ,transform,MapMaterial,height));
+                    TerrainchunkDictionary.Add(viewdChunkCoord, new TerrainChunk(viewdChunkCoord,chunkSize,detaillevels ,transform,MapMaterial));
                 }
             }
         }
@@ -138,15 +138,15 @@ public class Endlessterrain : MonoBehaviour
         bool mapdataRecieved = false;
         int previousLODIndex = -1;
 
-        public TerrainChunk(Vector2 coord, int size, LODinfo[] detaillevels, Transform parent, Material mat,float localheight)
+        public TerrainChunk(Vector2 coord, int size, LODinfo[] detaillevels, Transform parent, Material mat)
         {
             this.detaillevels = detaillevels;
 
-            height = localheight;
+            height = 0;
             
             position = coord * size;
             bounds = new Bounds(position, Vector2.one * size);
-            Vector3 positionV3 = new Vector3(position.x, localheight, position.y);
+            Vector3 positionV3 = new Vector3(position.x, 0, position.y);
 
             meshObject = new GameObject("Terrain Chunk");
 
