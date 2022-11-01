@@ -14,7 +14,7 @@ public static class TextureGenerator
         return texture;
     }
 
-    public static Texture2D texturefromheightmap(float[,] heights)
+    public static Texture2D texturefromheightmap(Vector3[,] heights)
     {
         int width = heights.GetLength(0);
         int height = heights.GetLength(1);
@@ -25,7 +25,7 @@ public static class TextureGenerator
         {
             for (int x = 0; x < width; x++)
             {
-                colormap[y * width + x] = Color.Lerp(Color.black, Color.white, heights[x, y]);
+                colormap[y * width + x] = Color.Lerp(Color.black, Color.white, heights[x, y].y);
             }
         }
         return TexturefromeColormap(colormap, width, height);

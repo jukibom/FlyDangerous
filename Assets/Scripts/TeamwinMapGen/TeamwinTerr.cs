@@ -247,7 +247,7 @@ public class TeamwinTerr : MonoBehaviour
         {
             newverts[i].x = cellmesh.vertices[i].x + cellpos.x * scale * 2;
             newverts[i].z = cellmesh.vertices[i].z + cellpos.y * scale * 2;
-            newverts[i].y = math.pow(math.clamp(math.abs(cnoiseoct(new Vector3(newverts[i].x * freq, 0, newverts[i].z * freq), detail, 0.4f) - 0f) - canyonwidth, 0, 50), 0.4f)
+            newverts[i].y = math.pow(math.clamp(math.abs(cnoiseoct(new Vector3(newverts[i].x * freq, 0, newverts[i].z * freq),Mathf.RoundToInt(detail), 0.4f) - 0f) - canyonwidth, 0, 50), 0.4f)
                 * amp;
             newverts[i].y = newverts[i].y + yoffset * scale;
 
@@ -258,25 +258,17 @@ public class TeamwinTerr : MonoBehaviour
         cellmesh.RecalculateNormals();
         return cellmesh;
     }
-    public static float cnoiseoct(Vector3 v, float detail, float roughness)
+    public static float cnoiseoct(Vector3 v, int detail, float roughness)
     {
+        Vector2 coord2d = new Vector2(v.x, v.y);
         float c = 0f;
         float Scale = 0f;
-        for (int i = 1; i <= math.ceil(detail); i++)
+        for (int i = 1; i < detail; i++)
         {
-            if (i <= detail)
-            {
+            c += Mathf.PerlinNoise((coord2d * (float)math.pow(i, 2.0) * (1 / math.pow(i, 1 / roughness))).x, (coord2d * (float)math.pow(i, 2.0) * (1 / math.pow(i, 1 / roughness))).y);
+            //    c += noise.cnoise(v * (float)math.pow(i, 2.0)) * (1 / math.pow(i, 1 / roughness));
+            Scale += (1 / math.pow(i, 1 / roughness));
 
-                c += noise.cnoise(v * (float)math.pow(i, 2.0)) * (1 / math.pow(i, 1 / roughness));
-                Scale += (1 / math.pow(i, 1 / roughness));
-
-            }
-            else
-            {
-                float detfac = (math.clamp(1 + detail - i, 0, 1));
-                c += noise.cnoise(v * (float)math.pow(i, 2.0)) * (1 / math.pow(i, 1 / roughness) * detfac);
-                Scale += (1 / math.pow(i, 1 / roughness)) * detfac;
-            }
         }
         return c / Scale;
     }

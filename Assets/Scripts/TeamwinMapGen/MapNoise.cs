@@ -6,9 +6,9 @@ public static class MapNoise
 {
 
 
-    public static float[,] GenerateNoiseMap(int mapWidth, int mapHeight, int seed, float scale, int octaves, float persistance, Vector2 Offset)
+    public static Vector3[,] GenerateNoiseMap(int mapSize, int seed, float scale, int octaves, float persistance, Vector2 Offset)
     {
-        float[,] noiseMap = new float[mapWidth, mapHeight];
+        Vector3[,] noiseMap = new Vector3[mapSize, mapSize];
 
         System.Random PRNG = new System.Random(seed);
         Vector2[] octaveOffsets = new Vector2[octaves];
@@ -33,39 +33,47 @@ public static class MapNoise
             scale = 0.0001f;
         }
 
-        float halfwidth = mapWidth / 2f;
-        float halfheight = mapHeight / 2f;
+        float halfsize = mapSize / 2f;
 
-        for(int y = 0; y < mapHeight; y++)
+        for(int y = 0; y < mapSize; y++)
         {
-            for (int x = 0; x < mapWidth; x++)
+            for (int x = 0; x < mapSize; x++)
             {
                 amplitude = 1;
                 frequency = 1;
                 float noiseheight = 0;
 
+                noiseMap[x, y].x = 0;
+                noiseMap[x, y].z = 0;
+
+
                 for (int i = 0; i < octaves; i++)
                 {
-                    float sampleX = (x-halfwidth + octaveOffsets[i].x) / scale * frequency ;
-                    float sampleY = (y- halfheight + octaveOffsets[i].y) / scale * frequency;
+                    float sampleX = (x - halfsize + octaveOffsets[i].x) / scale * frequency;
+                    float sampleY = (y - halfsize + octaveOffsets[i].y) / scale * frequency;
 
                     float perlinvalue = Mathf.PerlinNoise(sampleX, sampleY)*2 -1;
                     noiseheight += perlinvalue * amplitude;
-                   
-
+                    noiseMap[x,y].x += (Mathf.PerlinNoise(sampleX+5000, sampleY+12223) * 2 - 1) * amplitude;
+                    noiseMap[x, y].z += (Mathf.PerlinNoise(sampleX + 500, sampleY + 4123) * 2 - 1) * amplitude;
                     amplitude *= persistance;
                     frequency *= 2;
                 }
+                
 
-                noiseMap[x, y] = noiseheight;
-               
+                noiseMap[x, y].y = noiseheight;
+
+
+
+
             }
         }
-        for (int y = 0; y < mapHeight; y++)
+        for (int y = 0; y < mapSize; y++)
         {
-            for (int x = 0; x < mapWidth; x++)
+            for (int x = 0; x < mapSize; x++)
             {
-                 noiseMap[x,y] = (noiseMap[x, y] + maxPossibleHeight) / (maxPossibleHeight * 2);
+                noiseMap[x,y].y = (noiseMap[x, y].y + maxPossibleHeight) / (maxPossibleHeight * 2);
+
             }
         }
 

@@ -16,7 +16,7 @@ public class MapGenerate : MonoBehaviour
     public Drawmode drawmode;
 
 
-    public const int MapChunkSize = 241;
+    public const int MapChunkSize = 481;
     [Range(0, 6)]
     public int editorpreviewlod;
     public float noisescale;
@@ -25,9 +25,10 @@ public class MapGenerate : MonoBehaviour
     [Range(0f, 1f)]
     public float persistance;
 
-    int seed = 1;
+    public int seed = 1;
 
     public float meshheightmult;
+    public float meshwidthmult;
     public AnimationCurve Meshheightcurve;
 
     public bool autoupdate;
@@ -73,7 +74,7 @@ public class MapGenerate : MonoBehaviour
         }
         else if (drawmode == Drawmode.Mesh)
         {
-             display.DrawMesh(MeshGenerator.GenerateTerrainMesh(mapdata.heightmap, meshheightmult * noisescale, Meshheightcurve, editorpreviewlod), TextureGenerator.TexturefromeColormap(mapdata.colormap, MapChunkSize, MapChunkSize));
+             display.DrawMesh(MeshGenerator.GenerateTerrainMesh(mapdata.heightmap, meshheightmult * noisescale, meshwidthmult*noisescale , Meshheightcurve, editorpreviewlod), TextureGenerator.TexturefromeColormap(mapdata.colormap, MapChunkSize, MapChunkSize));
         }
     }
 
@@ -103,7 +104,7 @@ public class MapGenerate : MonoBehaviour
     }
     void Meshdatathread(int LOD, mapdata mapdata, Action<MeshData> callback)
     {
-        MeshData meshData = MeshGenerator.GenerateTerrainMesh(mapdata.heightmap, meshheightmult * noisescale, Meshheightcurve , LOD);
+        MeshData meshData = MeshGenerator.GenerateTerrainMesh(mapdata.heightmap, meshheightmult * noisescale,meshwidthmult * noisescale, Meshheightcurve , LOD);
         lock (meshdatathreadinfoqueue)
         {
             meshdatathreadinfoqueue.Enqueue(new MapThreadInfo<MeshData>(callback,meshData));
@@ -133,14 +134,14 @@ public class MapGenerate : MonoBehaviour
     {
         if (octaves < 1) octaves = 1;
         
-        float[,] noisemap = MapNoise.GenerateNoiseMap(MapChunkSize, MapChunkSize, seed, noisescale, octaves, persistance,center);
+        Vector3[,] noisemap = MapNoise.GenerateNoiseMap(MapChunkSize, seed, noisescale, octaves, persistance,center);
         Color[] colormap = new Color[MapChunkSize * MapChunkSize];
 
         for (int y = 0; y < MapChunkSize; y++)
         {
             for (int x = 0; x < MapChunkSize; x++)
             {
-                float currentheight = noisemap[x, y];
+                float currentheight = noisemap[x, y].y;
                 for (int i = 0; i<regions.Length; i++)
                 {
                     if (currentheight >= regions[i].height)
@@ -190,11 +191,11 @@ public struct Terraintype
 }
 public struct mapdata
 {
-    public readonly float[,] heightmap;
+    public readonly Vector3[,] heightmap;
     public readonly Color[] colormap;
     public Vector2 chunkcoord;
 
-    public mapdata(float[,] heightmap, Color[] colormap, Vector2 chunkcoord)
+    public mapdata(Vector3[,] heightmap, Color[] colormap, Vector2 chunkcoord)
     {
         this.chunkcoord = chunkcoord;
         this.heightmap = heightmap;

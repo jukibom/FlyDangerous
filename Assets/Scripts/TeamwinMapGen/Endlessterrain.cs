@@ -220,6 +220,14 @@ public class Endlessterrain : MonoBehaviour
                             previousLODIndex = Lodindex;
                             meshfilter.mesh = lODMesh.mesh;
                             meshCollider.sharedMesh = lODMesh.mesh;
+                            if (Lodindex == 0)
+                            {
+                                meshCollider.enabled = true;
+                            }
+                            else
+                            {
+                                meshCollider.enabled = false;
+                            }
                         }
                         else if (!lODMesh.hasREquestedMesh)
                         {

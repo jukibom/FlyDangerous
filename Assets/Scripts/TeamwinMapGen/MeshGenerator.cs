@@ -2,14 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public static class MeshGenerator
 {
-    public static MeshData GenerateTerrainMesh(float[,] heightmap,float heightmult,AnimationCurve _heightcurve,int levelOfDetail)
+    public static MeshData GenerateTerrainMesh(Vector3[,] heightmap,float heightmult,float horizontalMult,AnimationCurve _heightcurve,int levelOfDetail)
     {
         AnimationCurve heightcurve = new AnimationCurve(_heightcurve.keys);
         int width = heightmap.GetLength(0);
         int height = heightmap.GetLength(1);
+
+        float horizontalStrength = horizontalMult;
 
         float topleftX = (width - 1) / -2f;
         float topleftz = (height - 1) / 2f;
@@ -24,11 +27,11 @@ public static class MeshGenerator
         {
             for (int x = 0; x < width; x+= meshSimplificationIncrement)
             {
-                float vertexheight = heightcurve.Evaluate(heightmap[x, y]) * heightmult;
+                float vertexheight = heightcurve.Evaluate(heightmap[x, y].y) * heightmult;
+                float xOffset = topleftX + x + (heightmap[x, y].x-0.5f) * horizontalStrength;
+                float zOffset = topleftz - y + (heightmap[x, y].z-0.5f) * horizontalStrength;
 
-
-
-                meshdata.vertices[vertexindex] = new Vector3(topleftX + x, vertexheight , topleftz - y);
+                meshdata.vertices[vertexindex] = new Vector3(xOffset, vertexheight , zOffset);
 
               //  meshdata.vertices[vertexindex] = new Vector3(topleftX + x, heightmap[x, y] * heightmult, topleftz - y);
 
@@ -52,6 +55,7 @@ public class MeshData
     public int[] triangles;
     public Vector2[] uvs;
 
+
     int triangleindex;
     public MeshData(int meshwidth, int meshheight)
     {
@@ -71,6 +75,9 @@ public class MeshData
     public Mesh createmesh()
     {
         Mesh mesh = new Mesh();
+
+        if (vertices.Length >= 65535) mesh.indexFormat = IndexFormat.UInt32;
+
         mesh.vertices = vertices;
         mesh.triangles = triangles;
         mesh.uv = uvs;
