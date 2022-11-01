@@ -8,6 +8,7 @@ using System.Threading;
 using Unity.Mathematics;
 using Core;
 using UnityEngine.PlayerLoop;
+using Misc;
 
 public class MapGenerate : MonoBehaviour
 {
@@ -37,16 +38,24 @@ public class MapGenerate : MonoBehaviour
 
     private void Start()
     {
-     //   seed = int.Parse(Game.Instance.Seed.Remove(4), System.Globalization.NumberStyles.HexNumber);
+        setseed();
     }
     private void Awake()
     {
-        
-        if(Game.Instance.InGame)
-        {
-            seed = Game.Instance.Seed.GetHashCode();
-        }
 
+        setseed();
+
+    }
+    void setseed()
+    {
+        if(Game.Instance.SessionStatus == SessionStatus.Loading)
+        {
+            seed = int.Parse(HashGenerator.ComputeSha256Hash(Game.Instance.Seed).Remove(0,56),System.Globalization.NumberStyles.HexNumber);
+        }
+        else
+        {
+            seed = 1;
+        }
     }
     
     public void drawmapineditor()
