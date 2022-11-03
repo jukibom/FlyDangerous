@@ -6,13 +6,13 @@ using UnityEngine.Rendering;
 
 public static class MeshGenerator
 {
-    public static MeshData GenerateTerrainMesh(Vector3[,] heightmap,float heightmult,float horizontalMult,AnimationCurve _heightcurve,int levelOfDetail)
+    public static MeshData GenerateTerrainMesh(Vector3[,] heightmap,int levelOfDetail)
     {
-        AnimationCurve heightcurve = new AnimationCurve(_heightcurve.keys);
+
         int width = heightmap.GetLength(0);
         int height = heightmap.GetLength(1);
 
-        float horizontalStrength = horizontalMult;
+
 
         float topleftX = (width - 1) / -2f;
         float topleftz = (height - 1) / 2f;
@@ -27,9 +27,9 @@ public static class MeshGenerator
         {
             for (int x = 0; x < width; x+= meshSimplificationIncrement)
             {
-                float vertexheight = heightcurve.Evaluate(heightmap[x, y].y) * heightmult;
-                float xOffset = topleftX + x + (heightmap[x, y].x-0.5f) * horizontalStrength;
-                float zOffset = topleftz - y + (heightmap[x, y].z-0.5f) * horizontalStrength;
+                float vertexheight = heightmap[x, y].y;
+                float xOffset = topleftX + x + (heightmap[x, y].x);
+                float zOffset = topleftz - y + (heightmap[x, y].z);
 
                 meshdata.vertices[vertexindex] = new Vector3(xOffset, vertexheight , zOffset);
 

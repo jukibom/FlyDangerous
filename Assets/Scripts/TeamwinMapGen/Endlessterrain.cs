@@ -7,7 +7,7 @@ public class Endlessterrain : MonoBehaviour
 {
     const float scale = 15;
 
-    const float vieweroffsetthresholdforUpdate = 100f;
+    const float vieweroffsetthresholdforUpdate = 40f;
     const float sqrvieweroffsetthresholdforUpdate = vieweroffsetthresholdforUpdate * vieweroffsetthresholdforUpdate;
 
     public LODinfo[] detaillevels;
@@ -15,7 +15,8 @@ public class Endlessterrain : MonoBehaviour
 
     public enum trackingmode { Transform, Tag}
     public trackingmode Trackingmode;
-    public Transform viewer;
+
+    public GameObject viewer;
 
     public Material MapMaterial;
 
@@ -30,11 +31,15 @@ public class Endlessterrain : MonoBehaviour
     Dictionary<Vector2,TerrainChunk> TerrainchunkDictionary = new Dictionary<Vector2, TerrainChunk>();
     static List<TerrainChunk> terrainchunksvisiblelastupdate = new List<TerrainChunk>();
 
+    GameObject taggedobj;
+
     void Start()
     {
+     /*
         TerrainchunkDictionary = new Dictionary<Vector2, TerrainChunk> ();
         terrainchunksvisiblelastupdate = new List<TerrainChunk> ();
         Initialize();
+        */
     }
 
     void Awake()
@@ -46,18 +51,10 @@ public class Endlessterrain : MonoBehaviour
 
     void Initialize()
     {
-        if (Trackingmode == trackingmode.Transform)
-        {
-            viewerPosition = new Vector2(viewer.position.x, viewer.position.z) / scale;
-        }
-        else
-        {
-            viewerPosition = new Vector2(GameObject.FindGameObjectWithTag("Terrain Gen Marker").transform.position.x,
-            GameObject.FindGameObjectWithTag("Terrain Gen Marker").transform.position.z);
-            viewerPosition -= new Vector2(gameObject.transform.position.x - gameObject.transform.localPosition.x, gameObject.transform.position.z - gameObject.transform.localPosition.z);
-            viewerPosition /= scale;
-        }
+        GameObject.Find("Mesh").SetActive(false);
 
+
+        updatedtrackedposition();
 
         maxViewDist = detaillevels[detaillevels.Length - 1].visibleDistThreshold;
         chunkSize = MapGenerate.MapChunkSize - 1;
@@ -66,32 +63,46 @@ public class Endlessterrain : MonoBehaviour
         UpdateVisibleChunks();
     }
 
-    void Update()
+    void updatedtrackedposition()
     {
-        if (Trackingmode == trackingmode.Transform)
+        taggedobj = GameObject.FindGameObjectWithTag("Terrain Gen Marker");
+
+        if (Trackingmode == trackingmode.Transform || taggedobj == null)
         {
-            viewerPosition = new Vector2(viewer.position.x, viewer.position.z) / scale;
+            viewerPosition = new Vector2(viewer.transform.position.x, viewer.transform.position.z) / scale;
         }
         else
         {
-            viewerPosition = new Vector2(GameObject.FindGameObjectWithTag("Terrain Gen Marker").transform.position.x,
-            GameObject.FindGameObjectWithTag("Terrain Gen Marker").transform.position.z);
+            viewerPosition = new Vector2(taggedobj.transform.position.x,
+            taggedobj.transform.position.z);
             viewerPosition -= new Vector2(gameObject.transform.position.x - gameObject.transform.localPosition.x, gameObject.transform.position.z - gameObject.transform.localPosition.z);
             viewerPosition /= scale;
         }
+    }
+
+    void Update()
+    {
+        updatedtrackedposition();
 
         if ((viewerpositionold - viewerPosition).sqrMagnitude > sqrvieweroffsetthresholdforUpdate)
         {
-            print("Updated Terrain");
-            viewerpositionold = viewerPosition;
-            UpdateVisibleChunks();
+            
+            if (taggedobj.transform.position.sqrMagnitude > 625 && taggedobj.transform.position.sqrMagnitude < 950625)
+            {
+                print("updated at distance" + taggedobj.transform.position.sqrMagnitude);
+                viewerpositionold = viewerPosition;
+                UpdateVisibleChunks();
+            }
+            else
+            {
+                print(taggedobj.transform.position.sqrMagnitude);
+            }
         }
     }
 
 
     void UpdateVisibleChunks()
     {
-
         for(int i = 0; i < terrainchunksvisiblelastupdate.Count; i++)
         {
             terrainchunksvisiblelastupdate[i].Setvisible(false);
