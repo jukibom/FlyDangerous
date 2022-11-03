@@ -104,13 +104,13 @@ public static class MapNoise
             for (int x = 0; x < mapSize; x++)
             {
                 noiseMap[x, y].y = (noiseMap[x, y].y + maxPossibleHeight) / (maxPossibleHeight * 2);
-                noiseMap[x, y].y = Heightcurve.Evaluate(noiseMap[x, y].y) * HeightNoiseData.amplitude*scale;
-
 
                 noiseMap[x, y].x = (noiseMap[x, y].x + maxPossibleWidth) / (maxPossibleWidth * 2);
                 noiseMap[x, y].z = (noiseMap[x, y].z + maxPossibleWidth) / (maxPossibleWidth * 2);
-                noiseMap[x, y].x = FlatDispcurve.Evaluate(noiseMap[x, y].x) * HorizontalNoisedata.amplitude * HorizontalNoisedata.frequency;
-                noiseMap[x, y].z = FlatDispcurve.Evaluate(noiseMap[x, y].z) * HorizontalNoisedata.amplitude * HorizontalNoisedata.frequency;
+                noiseMap[x, y].x = FlatDispcurve.Evaluate(noiseMap[x, y].y) * (noiseMap[x, y].x-0.5f) * HorizontalNoisedata.amplitude * HorizontalNoisedata.frequency;
+                noiseMap[x, y].z = FlatDispcurve.Evaluate(noiseMap[x, y].y) * (noiseMap[x,y].z-0.5f) * HorizontalNoisedata.amplitude * HorizontalNoisedata.frequency;
+
+                noiseMap[x, y].y = Heightcurve.Evaluate(noiseMap[x, y].y) * HeightNoiseData.amplitude * scale;
             }
         }
 
