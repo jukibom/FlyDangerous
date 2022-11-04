@@ -19,23 +19,16 @@ public class MapGenerate : MonoBehaviour
     public const int MapChunkSize = 241;
     [Range(0, 6)]
     public int editorpreviewlod;
-    public float noisescale;
 
-    public int octaves;
-    [Range(0f, 1f)]
-    public float persistance;
 
-    public int seed = 1;
 
-    public float meshheightmult;
-    public float meshwidthmult;
-    public AnimationCurve Meshheightcurve;
 
     public bool autoupdate;
     public bool useRegions;
     public Terraintype[] regions;
 
-    public MapNoise.NoiseData noisedata;
+    public MapNoise.NoiseData VerticalNoiseData;
+    public MapNoise.NoiseData HorizontalNoisedata;
 
     Queue<MapThreadInfo<mapdata>> mapdatathreadsinfoqueue = new Queue<MapThreadInfo<mapdata>>();
     Queue<MapThreadInfo<MeshData>> meshdatathreadinfoqueue = new Queue<MapThreadInfo<MeshData>>();
@@ -53,11 +46,11 @@ public class MapGenerate : MonoBehaviour
     {
         if(Game.Instance.SessionStatus == SessionStatus.Loading)
         {
-            seed = int.Parse(HashGenerator.ComputeSha256Hash(Game.Instance.Seed).Remove(0,56),System.Globalization.NumberStyles.HexNumber);
+            VerticalNoiseData.seed = int.Parse(HashGenerator.ComputeSha256Hash(Game.Instance.Seed).Remove(0,56),System.Globalization.NumberStyles.HexNumber);
         }
         else
         {
-            seed = 1;
+            VerticalNoiseData.seed = 1;
         }
     }
     
@@ -134,14 +127,8 @@ public class MapGenerate : MonoBehaviour
     }
     mapdata Generatemapdata(Vector2 center)
     {
-        if (octaves < 1) octaves = 1;
-        
-        MapNoise.NoiseData heightNoiseData = new MapNoise.NoiseData(seed,noisescale,meshheightmult,persistance,octaves,Meshheightcurve);
-        
-        
 
-
-        Vector3[,] noisemap = MapNoise.GenerateNoiseMap(MapChunkSize,center,heightNoiseData,noisedata);
+        Vector3[,] noisemap = MapNoise.GenerateNoiseMap(MapChunkSize,center,VerticalNoiseData ,HorizontalNoisedata);
         Color[] colormap = new Color[MapChunkSize * MapChunkSize];
 
         for (int y = 0; y < MapChunkSize; y++)
@@ -171,15 +158,7 @@ public class MapGenerate : MonoBehaviour
         return new mapdata(noisemap,colormap,center);
 
     }
-    private void OnValidate()
-    {
 
-        if (octaves < 0)
-        {
-            octaves = 0;
-        }
-
-    }
     struct MapThreadInfo<T>
     {
         public readonly Action<T> callback;
