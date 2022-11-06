@@ -1,10 +1,18 @@
+using Den.Tools;
 using Mono.Cecil;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Net.NetworkInformation;
+using Unity.Mathematics;
+using UnityEditor.XR.LegacyInputHelpers;
 using UnityEngine;
 
 public class Endlessterrain : MonoBehaviour
 {
+    public int Inseed;
+    static int seed;
     const float scale = 15;
 
     const float vieweroffsetthresholdforUpdate = 40f;
@@ -32,6 +40,9 @@ public class Endlessterrain : MonoBehaviour
     static List<TerrainChunk> terrainchunksvisiblelastupdate = new List<TerrainChunk>();
 
     GameObject taggedobj;
+    public Mesh meshtoinstance;
+    static Mesh staticstructuremesh;
+    static Material Instancedmaterial;
 
     void Start()
     {
@@ -51,6 +62,10 @@ public class Endlessterrain : MonoBehaviour
 
     void Initialize()
     {
+        staticstructuremesh = meshtoinstance;
+        Instancedmaterial = MapMaterial;
+
+        seed = Inseed;
         GameObject.Find("Mesh").SetActive(false);
 
 
@@ -96,6 +111,7 @@ public class Endlessterrain : MonoBehaviour
             else
             {
                 print(taggedobj.transform.position.sqrMagnitude);
+                UpdateVisibleChunks();
             }
         }
     }
@@ -149,6 +165,10 @@ public class Endlessterrain : MonoBehaviour
         bool mapdataRecieved = false;
         int previousLODIndex = -1;
 
+        
+
+        StructureInfo[] structures;
+
         public TerrainChunk(Vector2 coord, int size, LODinfo[] detaillevels, Transform parent, Material mat)
         {
             this.detaillevels = detaillevels;
@@ -181,6 +201,7 @@ public class Endlessterrain : MonoBehaviour
             }
 
             MapGenerator.RequestMapData( position ,OnMapDataRecieved);
+            structures = new StructureInfo[20];
         }
         public void UpdatePosition(Vector2 coord,int size, Transform parent)
         {
@@ -222,7 +243,6 @@ public class Endlessterrain : MonoBehaviour
                             break;
                         }
                     }
-
                     if (Lodindex != previousLODIndex)
                     {
                         LODMesh lODMesh = lodmeshes[Lodindex];
@@ -240,15 +260,58 @@ public class Endlessterrain : MonoBehaviour
                                 meshCollider.enabled = false;
                             }
                         }
-                        else if (!lODMesh.hasREquestedMesh)
+                        else if (!lODMesh.hasRequestedMesh)
                         {
                             lODMesh.RequestMesh(mapdata);
                         }
                     }
                     terrainchunksvisiblelastupdate.Add(this);
+
+                    if(meshObject.activeSelf)
+                    {
+                        UpdateStructures();
+                    }
                 }
 
                 Setvisible(visible);
+            }
+        }
+        void UpdateStructures()
+        {
+            float viewerdstfromnearestedge = Mathf.Sqrt(bounds.SqrDistance(viewerPosition));
+            System.Random PRNG = new System.Random(Mathf.RoundToInt(seed + position.y * position.x));
+            float size = bounds.size.x;
+            for (int i = 0; i < structures.Length - 1; i++)
+            {
+                if (!structures[i].isDefinied)
+                {
+                    structures[i].StructureOffset = new Vector3(PRNG.Next(Mathf.RoundToInt(size)) - size/2, PRNG.Next(Mathf.RoundToInt(size)) - size, PRNG.Next(Mathf.RoundToInt(size)) - size/2);
+
+                    Vector3 mapOffset;
+                    mapOffset = mapdata.heightmap[Mathf.RoundToInt(structures[i].StructureOffset.x + size / 2), Mathf.RoundToInt(-structures[i].StructureOffset.z + size / 2)];
+
+                    structures[i].StructureOffset.y = mapOffset.y;
+                    structures[i].StructureOffset.z = structures[i].StructureOffset.z + mapOffset.z;
+                    structures[i].StructureOffset.x = structures[i].StructureOffset.x + mapOffset.x;
+
+                    structures[i].StructureScale = new Vector3(1,1,1) * scale;
+                    structures[i].StructureRotation = quaternion.LookRotation(Vector3.forward, Vector3.up);
+                    structures[i].StructureID = 0;
+                    structures[i].isDefinied = true;
+                    structures[i].gameobject = new GameObject();
+                    structures[i].gameobject.AddComponent<MeshRenderer>();
+                    structures[i].gameobject.AddComponent<MeshFilter>();
+                    structures[i].gameobject.GetComponent<MeshRenderer>().material = Instancedmaterial;
+                    structures[i].gameobject.GetComponent<MeshFilter>().mesh = staticstructuremesh;
+                    structures[i].gameobject.AddComponent<MeshCollider>();
+                    structures[i].gameobject.GetComponent<MeshCollider>().sharedMesh = staticstructuremesh;
+                    structures[i].gameobject.transform.parent = meshObject.transform;
+                    structures[i].gameobject.transform.localScale = structures[i].StructureScale;
+                    structures[i].gameobject.transform.localPosition = (structures[i].StructureOffset);
+                    structures[i].gameobject.transform.rotation = structures[i].StructureRotation;
+
+                }
+                structures[i].gameobject.SetActive(viewerdstfromnearestedge < 300);
             }
         }
         public void Setvisible(bool visible)
@@ -259,11 +322,28 @@ public class Endlessterrain : MonoBehaviour
         {
             return meshObject.activeSelf;
         }
+        public int GetClosestIndex(Vector3 coord)
+        {
+            Mesh mesh = meshfilter.mesh;
+            float closestpoint = int.MaxValue;
+            int closestpointindex = 0;
+            for(int i = 0; i < mesh.vertices.Length;i++)
+            {
+                if ((mesh.vertices[i] - coord).sqrMagnitude < closestpoint) 
+                {
+                    closestpoint = (mesh.vertices[i] - coord).sqrMagnitude;
+                    closestpointindex = i;
+                }
+            }
+
+            return closestpointindex;
+        }
     }
+
     class LODMesh
     {
         public Mesh mesh;
-        public bool hasREquestedMesh;
+        public bool hasRequestedMesh;
         public bool hasmesh;
         int lod;
         System.Action updateCallback;
@@ -282,7 +362,7 @@ public class Endlessterrain : MonoBehaviour
         }
         public void RequestMesh(mapdata mapdata)
         {
-            hasREquestedMesh = true;
+            hasRequestedMesh = true;
             MapGenerator.RequestMeshData(lod, mapdata, OnMeshDataRecieved);
 
         }
@@ -292,7 +372,15 @@ public class Endlessterrain : MonoBehaviour
     {
         public int LOD;
         public float visibleDistThreshold;
-
-
+    }
+    [System.Serializable]
+    public struct StructureInfo
+    {
+        public bool isDefinied;
+        public int StructureID;
+        public Vector3 StructureScale;
+        public Vector3 StructureOffset;
+        public quaternion StructureRotation;
+        public GameObject gameobject;
     }
 }

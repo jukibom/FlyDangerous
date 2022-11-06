@@ -17,6 +17,12 @@ public class FPC_Shader : MonoBehaviour
             for (int i = 0; i < gameObjects.Count; i++)
             {
                 gameObjects[i].GetComponent<MeshRenderer>().material.SetVector("_World", gameObject.transform.position * -1);
+                List<GameObject> subgameObjects = new List<GameObject>();
+                gameObjects[i].GetChildGameObjects(subgameObjects);
+                for (int j = 0; j < subgameObjects.Count; j++)
+                {
+                    subgameObjects[j].GetComponent<MeshRenderer>().material.SetVector("_World", gameObject.transform.position * -1);
+                }
             }
             gameObject.transform.hasChanged = false;
         }
