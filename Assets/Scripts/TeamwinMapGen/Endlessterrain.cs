@@ -15,7 +15,7 @@ public class Endlessterrain : MonoBehaviour
     static int seed;
     const float scale = 15;
 
-    const float vieweroffsetthresholdforUpdate = 40f;
+    const float vieweroffsetthresholdforUpdate = 5f;
     const float sqrvieweroffsetthresholdforUpdate = vieweroffsetthresholdforUpdate * vieweroffsetthresholdforUpdate;
 
     public LODinfo[] detaillevels;
@@ -111,7 +111,6 @@ public class Endlessterrain : MonoBehaviour
             else
             {
                 print(taggedobj.transform.position.sqrMagnitude);
-                UpdateVisibleChunks();
             }
         }
     }
@@ -201,7 +200,7 @@ public class Endlessterrain : MonoBehaviour
             }
 
             MapGenerator.RequestMapData( position ,OnMapDataRecieved);
-            structures = new StructureInfo[20];
+            structures = new StructureInfo[100];
         }
         public void UpdatePosition(Vector2 coord,int size, Transform parent)
         {
@@ -294,8 +293,10 @@ public class Endlessterrain : MonoBehaviour
                     structures[i].StructureOffset.z = structures[i].StructureOffset.z + mapOffset.z;
                     structures[i].StructureOffset.x = structures[i].StructureOffset.x + mapOffset.x;
 
-                    structures[i].StructureScale = new Vector3(1,1,1) * scale;
-                    structures[i].StructureRotation = quaternion.LookRotation(Vector3.forward, Vector3.up);
+                    int ClosestIndex = GetClosestIndex(structures[i].StructureOffset);
+
+                    structures[i].StructureScale = new Vector3(.4f,.4f,.4f) * scale;
+                    structures[i].StructureRotation = quaternion.LookRotation(new Vector3(meshfilter.mesh.tangents[ClosestIndex].x, meshfilter.mesh.tangents[ClosestIndex].y, meshfilter.mesh.tangents[ClosestIndex].z), meshfilter.mesh.normals[ClosestIndex]);
                     structures[i].StructureID = 0;
                     structures[i].isDefinied = true;
                     structures[i].gameobject = new GameObject();
@@ -311,7 +312,7 @@ public class Endlessterrain : MonoBehaviour
                     structures[i].gameobject.transform.rotation = structures[i].StructureRotation;
 
                 }
-                structures[i].gameobject.SetActive(viewerdstfromnearestedge < 300);
+                structures[i].gameobject.SetActive(viewerdstfromnearestedge < 200);
             }
         }
         public void Setvisible(bool visible)
@@ -324,14 +325,14 @@ public class Endlessterrain : MonoBehaviour
         }
         public int GetClosestIndex(Vector3 coord)
         {
-            Mesh mesh = meshfilter.mesh;
+            Vector3[] verts = meshfilter.mesh.vertices;
             float closestpoint = int.MaxValue;
             int closestpointindex = 0;
-            for(int i = 0; i < mesh.vertices.Length;i++)
+            for(int i = 0; i < verts.Length;i++)
             {
-                if ((mesh.vertices[i] - coord).sqrMagnitude < closestpoint) 
+                if ((verts[i] - coord).sqrMagnitude < closestpoint) 
                 {
-                    closestpoint = (mesh.vertices[i] - coord).sqrMagnitude;
+                    closestpoint = (verts[i] - coord).sqrMagnitude;
                     closestpointindex = i;
                 }
             }
