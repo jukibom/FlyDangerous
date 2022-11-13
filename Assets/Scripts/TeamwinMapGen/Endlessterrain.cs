@@ -1,5 +1,6 @@
 using Den.Tools;
 using Mono.Cecil;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
@@ -42,6 +43,9 @@ public class Endlessterrain : MonoBehaviour
     GameObject taggedobj;
     public Mesh meshtoinstance;
     static Mesh staticstructuremesh;
+    public Mesh nearInstance;
+    static Mesh staticNear;
+    public Material MaterialtoInstance;
     static Material Instancedmaterial;
 
     void Start()
@@ -63,7 +67,8 @@ public class Endlessterrain : MonoBehaviour
     void Initialize()
     {
         staticstructuremesh = meshtoinstance;
-        Instancedmaterial = MapMaterial;
+        Instancedmaterial = MaterialtoInstance;
+        staticNear = nearInstance;
 
         seed = Inseed;
         GameObject.Find("Mesh").SetActive(false);
@@ -111,6 +116,7 @@ public class Endlessterrain : MonoBehaviour
             else
             {
                 print(taggedobj.transform.position.sqrMagnitude);
+                UpdateVisibleChunks();
             }
         }
     }
@@ -200,7 +206,7 @@ public class Endlessterrain : MonoBehaviour
             }
 
             MapGenerator.RequestMapData( position ,OnMapDataRecieved);
-            structures = new StructureInfo[100];
+            structures = new StructureInfo[400];
         }
         public void UpdatePosition(Vector2 coord,int size, Transform parent)
         {
@@ -258,18 +264,15 @@ public class Endlessterrain : MonoBehaviour
                             {
                                 meshCollider.enabled = false;
                             }
+                            UpdateStructures();
                         }
                         else if (!lODMesh.hasRequestedMesh)
                         {
                             lODMesh.RequestMesh(mapdata);
                         }
                     }
-                    terrainchunksvisiblelastupdate.Add(this);
 
-                    if(meshObject.activeSelf)
-                    {
-                        UpdateStructures();
-                    }
+                    terrainchunksvisiblelastupdate.Add(this);
                 }
 
                 Setvisible(visible);
@@ -280,40 +283,61 @@ public class Endlessterrain : MonoBehaviour
             float viewerdstfromnearestedge = Mathf.Sqrt(bounds.SqrDistance(viewerPosition));
             System.Random PRNG = new System.Random(Mathf.RoundToInt(seed + position.y * position.x));
             float size = bounds.size.x;
+            Vector3 lastposition = new Vector3();
             for (int i = 0; i < structures.Length - 1; i++)
             {
-                if (!structures[i].isDefinied)
+
+                if (structures[i] == null)
                 {
-                    structures[i].StructureOffset = new Vector3(PRNG.Next(Mathf.RoundToInt(size)) - size/2, PRNG.Next(Mathf.RoundToInt(size)) - size, PRNG.Next(Mathf.RoundToInt(size)) - size/2);
+                    
+                    if(i%40 == 0)
+                    {
+                        lastposition = new Vector3(PRNG.Next(Mathf.RoundToInt(size)) - size / 2, PRNG.Next(300)-300, PRNG.Next(Mathf.RoundToInt(size)) - size / 2);
+                        InitializeStructure(staticstructuremesh,i, 10f, PRNG, size,lastposition);
+                        lastposition = structures[i].StructureOffset;
+                    }
+                    else
+                    {
+                        Vector3 nearposition = new Vector3((float)PRNG.NextDouble()-0.5f, (float)PRNG.NextDouble() - 0.5f,(float)PRNG.NextDouble()-0.5f) *70f;
 
-                    Vector3 mapOffset;
-                    mapOffset = mapdata.heightmap[Mathf.RoundToInt(structures[i].StructureOffset.x + size / 2), Mathf.RoundToInt(-structures[i].StructureOffset.z + size / 2)];
-
-                    structures[i].StructureOffset.y = mapOffset.y;
-                    structures[i].StructureOffset.z = structures[i].StructureOffset.z + mapOffset.z;
-                    structures[i].StructureOffset.x = structures[i].StructureOffset.x + mapOffset.x;
-
-                    int ClosestIndex = GetClosestIndex(structures[i].StructureOffset);
-
-                    structures[i].StructureScale = new Vector3(.4f,.4f,.4f) * scale;
-                    structures[i].StructureRotation = quaternion.LookRotation(new Vector3(meshfilter.mesh.tangents[ClosestIndex].x, meshfilter.mesh.tangents[ClosestIndex].y, meshfilter.mesh.tangents[ClosestIndex].z), meshfilter.mesh.normals[ClosestIndex]);
-                    structures[i].StructureID = 0;
-                    structures[i].isDefinied = true;
-                    structures[i].gameobject = new GameObject();
-                    structures[i].gameobject.AddComponent<MeshRenderer>();
-                    structures[i].gameobject.AddComponent<MeshFilter>();
-                    structures[i].gameobject.GetComponent<MeshRenderer>().material = Instancedmaterial;
-                    structures[i].gameobject.GetComponent<MeshFilter>().mesh = staticstructuremesh;
-                    structures[i].gameobject.AddComponent<MeshCollider>();
-                    structures[i].gameobject.GetComponent<MeshCollider>().sharedMesh = staticstructuremesh;
-                    structures[i].gameobject.transform.parent = meshObject.transform;
-                    structures[i].gameobject.transform.localScale = structures[i].StructureScale;
-                    structures[i].gameobject.transform.localPosition = (structures[i].StructureOffset);
-                    structures[i].gameobject.transform.rotation = structures[i].StructureRotation;
-
+                        InitializeStructure(staticNear,i,math.pow(Mathf.Clamp01(1f - nearposition.magnitude * 0.022f),2) * 8f, PRNG, size,nearposition + lastposition);
+                    }
+                   
                 }
-                structures[i].gameobject.SetActive(viewerdstfromnearestedge < 200);
+
+                structures[i].isActive = viewerdstfromnearestedge < detaillevels[0].visibleDistThreshold;
+                structures[i].gameObject.SetActive(structures[i].isActive);
+
             }
+        }
+        public void InitializeStructure(Mesh meshToUse,int Index, float structscale,System.Random Seed, float size, Vector3 startingPoint)
+        {
+            
+            structures[Index] = new StructureInfo();
+            structures[Index].StructureOffset = startingPoint;
+            pointInfo pointInfo = new pointInfo();
+            pointInfo.SetClosestPoint(startingPoint, meshfilter.mesh);
+            pointInfo.SetClosestPoint(pointInfo.position, meshfilter.mesh);
+            structures[Index].StructureOffset = pointInfo.position;
+            //Vector3 mapOffset = mapdata.heightmap[Mathf.RoundToInt(structures[Index].StructureOffset.x + size / 2), Mathf.RoundToInt(-structures[Index].StructureOffset.z + size / 2)];
+
+           // structures[Index].StructureOffset.y = mapOffset.y;
+            //structures[Index].StructureOffset.z = structures[Index].StructureOffset.z + mapOffset.z;
+            //structures[Index].StructureOffset.x = structures[Index].StructureOffset.x + mapOffset.x;
+
+            
+            structures[Index].StructureRotation = quaternion.LookRotation(pointInfo.tangent + Vector3.Cross(pointInfo.tangent,pointInfo.normal)*((float)Seed.NextDouble()-0.5f),pointInfo.normal);
+            structures[Index].StructureScale = Vector3.one * structscale;
+            structures[Index].StructureID = 0;
+            structures[Index].isDefinied = true;
+            structures[Index].isCube = true;
+
+            structures[Index].material = Instancedmaterial;
+            structures[Index].mesh = meshToUse;
+
+            structures[Index].parent = meshObject.transform;
+
+            structures[Index].SetObject();
         }
         public void Setvisible(bool visible)
         {
@@ -323,22 +347,7 @@ public class Endlessterrain : MonoBehaviour
         {
             return meshObject.activeSelf;
         }
-        public int GetClosestIndex(Vector3 coord)
-        {
-            Vector3[] verts = meshfilter.mesh.vertices;
-            float closestpoint = int.MaxValue;
-            int closestpointindex = 0;
-            for(int i = 0; i < verts.Length;i++)
-            {
-                if ((verts[i] - coord).sqrMagnitude < closestpoint) 
-                {
-                    closestpoint = (verts[i] - coord).sqrMagnitude;
-                    closestpointindex = i;
-                }
-            }
 
-            return closestpointindex;
-        }
     }
 
     class LODMesh
@@ -375,13 +384,105 @@ public class Endlessterrain : MonoBehaviour
         public float visibleDistThreshold;
     }
     [System.Serializable]
-    public struct StructureInfo
+    public class StructureInfo
     {
         public bool isDefinied;
         public int StructureID;
         public Vector3 StructureScale;
         public Vector3 StructureOffset;
         public quaternion StructureRotation;
-        public GameObject gameobject;
+        public Mesh mesh;
+        public Material material;
+        public Transform parent;
+        public bool isActive;
+        public GameObject gameObject;
+        public bool isCube;
+        public void SetObject()
+        {
+            gameObject = new GameObject("Structure");
+
+            MeshFilter filter = gameObject.GetAddComponent<MeshFilter>(); filter.mesh = mesh;
+            MeshCollider collider = gameObject.GetAddComponent<MeshCollider>();
+            if (isCube)
+            {
+                collider.convex = true;
+            }
+            else
+            {
+                collider.convex = false;
+            }
+            collider.sharedMesh = mesh;
+            MeshRenderer renderer = gameObject.GetAddComponent<MeshRenderer>(); renderer.material = material;
+            gameObject.transform.parent = parent;
+            gameObject.transform.localPosition = StructureOffset;
+            gameObject.transform.rotation = StructureRotation;
+            gameObject.transform.localScale = StructureScale;
+            gameObject.SetActive(isActive);
+
+        }
+    }
+    public class pointInfo
+    {
+        public Vector3 position;
+        public Vector3 tangent;
+        public Vector3 normal;
+
+        public void SetClosestPoint(Vector3 startingPoint, Mesh mesh)
+        {
+            float[] closestdistances = new float[3];
+            Array.Fill(closestdistances, int.MaxValue);
+            int[] closestindecies = new int[3];
+            Vector3[] vertices = mesh.vertices;
+            for (int i = 0; i < vertices.Length; i++)
+            {
+                float dist = (vertices[i] - startingPoint).magnitude;
+                if (dist < closestdistances[0])
+                {
+                    closestdistances[2] = closestdistances[1];
+                    closestindecies[2] = closestindecies[1];
+                    closestdistances[1] = closestdistances[0];
+                    closestindecies[1] = closestindecies[0];
+                    closestindecies[0] = i;
+                    closestdistances[0] = dist;
+                }
+                else if(dist < closestdistances[1])
+                {
+                    closestdistances[2] = closestdistances[1];
+                    closestindecies[2] = closestindecies[1];
+                    closestindecies[1] = i;
+                    closestdistances[1] = dist;
+                }
+                else if(dist < closestdistances[2])
+                {
+                    closestindecies[2] = i;
+                    closestdistances[2] = dist;
+                }
+            }
+            float[] indexweights = new float[3];
+            float totalweight = 0;
+            for (int i = 0; i < indexweights.Length; i++)
+            {
+                indexweights[i] = 1f / closestdistances[i];
+                totalweight += indexweights[i];
+            }
+
+            Vector4[] tangents = mesh.tangents;
+            Vector3[] normals = mesh.normals;
+
+            tangent =
+                (tangents[closestindecies[0]] * indexweights[0] + 
+                tangents[closestindecies[1]] * indexweights[1] +
+                tangents[closestindecies[2]] * indexweights[2]) / totalweight;
+            normal =
+                (normals[closestindecies[0]] * indexweights[0] +
+                normals[closestindecies[1]] * indexweights[1] +
+                normals[closestindecies[2]] * indexweights[2]) / totalweight;
+            position =
+               (vertices[closestindecies[0]] * indexweights[0] +
+               vertices[closestindecies[1]] * indexweights[1] +
+               vertices[closestindecies[2]] * indexweights[2]) / totalweight;
+
+        }
+
     }
 }
