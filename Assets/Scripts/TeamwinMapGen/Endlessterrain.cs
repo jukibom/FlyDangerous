@@ -9,6 +9,7 @@ using System.Net.NetworkInformation;
 using Unity.Mathematics;
 using UnityEditor.XR.LegacyInputHelpers;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 public class Endlessterrain : MonoBehaviour
 {
@@ -16,7 +17,7 @@ public class Endlessterrain : MonoBehaviour
     static int seed;
     const float scale = 15;
 
-    const float vieweroffsetthresholdforUpdate = 5f;
+    const float vieweroffsetthresholdforUpdate = 10f;
     const float sqrvieweroffsetthresholdforUpdate = vieweroffsetthresholdforUpdate * vieweroffsetthresholdforUpdate;
 
     public LODinfo[] detaillevels;
@@ -116,7 +117,7 @@ public class Endlessterrain : MonoBehaviour
             else
             {
                 print(taggedobj.transform.position.sqrMagnitude);
-                UpdateVisibleChunks();
+             //   UpdateVisibleChunks();
             }
         }
     }
@@ -259,12 +260,17 @@ public class Endlessterrain : MonoBehaviour
                             if (Lodindex == 0)
                             {
                                 meshCollider.enabled = true;
+
+                                UpdateStructures(true);
+
                             }
                             else
                             {
                                 meshCollider.enabled = false;
+
+                                UpdateStructures(false);
                             }
-                            UpdateStructures();
+                            
                         }
                         else if (!lODMesh.hasRequestedMesh)
                         {
@@ -278,12 +284,14 @@ public class Endlessterrain : MonoBehaviour
                 Setvisible(visible);
             }
         }
-        void UpdateStructures()
+        void UpdateStructures(bool Collision)
         {
-            float viewerdstfromnearestedge = Mathf.Sqrt(bounds.SqrDistance(viewerPosition));
-            System.Random PRNG = new System.Random(Mathf.RoundToInt(seed + position.y * position.x));
+            Profiler.BeginSample("setPRNG");
+            PRNG PRNG = new PRNG(Mathf.RoundToInt(seed + position.y * position.x));
+            Profiler.EndSample();
             float size = bounds.size.x;
             Vector3 lastposition = new Vector3();
+            Profiler.BeginSample("start Structure Loop");
             for (int i = 0; i < structures.Length - 1; i++)
             {
 
@@ -292,32 +300,35 @@ public class Endlessterrain : MonoBehaviour
                     
                     if(i%40 == 0)
                     {
-                        lastposition = new Vector3(PRNG.Next(Mathf.RoundToInt(size)) - size / 2, PRNG.Next(300)-300, PRNG.Next(Mathf.RoundToInt(size)) - size / 2);
-                        InitializeStructure(staticstructuremesh,i, 10f, PRNG, size,lastposition);
+                        lastposition = new Vector3(PRNG.Next(Mathf.RoundToInt(size),0) - size / 2, PRNG.Next(300,0)-300, PRNG.Next(Mathf.RoundToInt(size),0) - size / 2);
+                        InitializeStructure(false,staticstructuremesh,i, 10f, PRNG, size,lastposition);
                         lastposition = structures[i].StructureOffset;
                     }
                     else
                     {
-                        Vector3 nearposition = new Vector3((float)PRNG.NextDouble()-0.5f, (float)PRNG.NextDouble() - 0.5f,(float)PRNG.NextDouble()-0.5f) *70f;
+                        Vector3 nearposition = new Vector3((float)PRNG.NextFloat()-0.5f, (float)PRNG.NextFloat() - 0.5f,(float)PRNG.NextFloat()-0.5f) *70f;
 
-                        InitializeStructure(staticNear,i,math.pow(Mathf.Clamp01(1f - nearposition.magnitude * 0.022f),2) * 8f, PRNG, size,nearposition + lastposition);
+                        InitializeStructure(true,staticNear,i,math.pow(Mathf.Clamp01(1f - nearposition.magnitude * 0.022f),2) * 8f, PRNG, size,nearposition + lastposition);
                     }
                    
                 }
 
-                structures[i].isActive = viewerdstfromnearestedge < detaillevels[0].visibleDistThreshold;
-                structures[i].gameObject.SetActive(structures[i].isActive);
+                structures[i].isActive = Collision;
+                structures[i].gameObject.SetActive(Collision);
 
             }
+            Profiler.EndSample();
         }
-        public void InitializeStructure(Mesh meshToUse,int Index, float structscale,System.Random Seed, float size, Vector3 startingPoint)
+        public void InitializeStructure(bool isSimple, Mesh meshToUse,int Index, float structscale,PRNG Seed, float size, Vector3 startingPoint)
         {
-            
+            Profiler.BeginSample("InitalizeStructures");
             structures[Index] = new StructureInfo();
             structures[Index].StructureOffset = startingPoint;
             pointInfo pointInfo = new pointInfo();
+            Profiler.BeginSample("GetClosestPoint");
             pointInfo.SetClosestPoint(startingPoint, meshfilter.mesh);
-            pointInfo.SetClosestPoint(pointInfo.position, meshfilter.mesh);
+            Profiler.EndSample();
+            Profiler.BeginSample("Set values");
             structures[Index].StructureOffset = pointInfo.position;
             //Vector3 mapOffset = mapdata.heightmap[Mathf.RoundToInt(structures[Index].StructureOffset.x + size / 2), Mathf.RoundToInt(-structures[Index].StructureOffset.z + size / 2)];
 
@@ -326,11 +337,11 @@ public class Endlessterrain : MonoBehaviour
             //structures[Index].StructureOffset.x = structures[Index].StructureOffset.x + mapOffset.x;
 
             
-            structures[Index].StructureRotation = quaternion.LookRotation(pointInfo.tangent + Vector3.Cross(pointInfo.tangent,pointInfo.normal)*((float)Seed.NextDouble()-0.5f),pointInfo.normal);
+            structures[Index].StructureRotation = quaternion.LookRotation(pointInfo.tangent + Vector3.Cross(pointInfo.tangent,pointInfo.normal)*((float)Seed.NextFloat()-0.5f),pointInfo.normal);
             structures[Index].StructureScale = Vector3.one * structscale;
             structures[Index].StructureID = 0;
             structures[Index].isDefinied = true;
-            structures[Index].isCube = true;
+            structures[Index].isCube = isSimple;
 
             structures[Index].material = Instancedmaterial;
             structures[Index].mesh = meshToUse;
@@ -338,6 +349,8 @@ public class Endlessterrain : MonoBehaviour
             structures[Index].parent = meshObject.transform;
 
             structures[Index].SetObject();
+            Profiler.EndSample();
+            Profiler.EndSample();
         }
         public void Setvisible(bool visible)
         {
@@ -433,6 +446,9 @@ public class Endlessterrain : MonoBehaviour
             Array.Fill(closestdistances, int.MaxValue);
             int[] closestindecies = new int[3];
             Vector3[] vertices = mesh.vertices;
+
+            Profiler.BeginSample("finding points");
+
             for (int i = 0; i < vertices.Length; i++)
             {
                 float dist = (vertices[i] - startingPoint).magnitude;
@@ -458,6 +474,8 @@ public class Endlessterrain : MonoBehaviour
                     closestdistances[2] = dist;
                 }
             }
+            Profiler.EndSample();
+            Profiler.BeginSample("Setting Normals and tangents");
             float[] indexweights = new float[3];
             float totalweight = 0;
             for (int i = 0; i < indexweights.Length; i++)
@@ -481,7 +499,33 @@ public class Endlessterrain : MonoBehaviour
                (vertices[closestindecies[0]] * indexweights[0] +
                vertices[closestindecies[1]] * indexweights[1] +
                vertices[closestindecies[2]] * indexweights[2]) / totalweight;
+            Profiler.EndSample();
+        }
 
+    }
+    public class PRNG
+    {
+        int seed;
+        int iterator = 0;
+
+        public PRNG(int seed)
+        {
+            this.seed = seed;
+        }
+        public int Next(int Max, int Min)
+        {
+            seed+=5321;
+
+            int num = seed >> (iterator % 32) ^ ~seed;
+            num = seed>>((~iterator + 7)%32) ^ num;
+            iterator = num;
+            num = math.abs(num % (Max + Min)) + Min;
+            return num;
+            
+        }
+        public float NextFloat()
+        {
+            return math.abs((Next(int.MaxValue,0)/2363f) % 1f);
         }
 
     }

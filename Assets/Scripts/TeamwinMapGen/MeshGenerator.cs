@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Profiling;
 using UnityEngine.Rendering;
 
 public static class MeshGenerator
 {
     public static MeshData GenerateTerrainMesh(Vector3[,] heightmap,int levelOfDetail)
     {
-
+        Profiler.BeginSample("GenerateMesh");
         int width = heightmap.GetLength(0);
         int height = heightmap.GetLength(1);
 
@@ -46,7 +47,9 @@ public static class MeshGenerator
                 vertexindex++;
             }
         }
+        Profiler.EndSample();
         return meshdata;
+
     }
 }
 public class MeshData
