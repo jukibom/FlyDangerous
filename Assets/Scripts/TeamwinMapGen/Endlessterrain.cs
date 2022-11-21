@@ -14,6 +14,8 @@ using UnityEngine.Profiling;
 public class Endlessterrain : MonoBehaviour
 {
     public int Inseed;
+    public float mainStructScale = 10f;
+    static float staticscale;
     static int seed;
     const float scale = 15;
 
@@ -42,12 +44,9 @@ public class Endlessterrain : MonoBehaviour
     static List<TerrainChunk> terrainchunksvisiblelastupdate = new List<TerrainChunk>();
 
     GameObject taggedobj;
-    public Mesh meshtoinstance;
-    static Mesh staticstructuremesh;
-    public Mesh nearInstance;
-    static Mesh staticNear;
-    public Material MaterialtoInstance;
-    static Material Instancedmaterial;
+
+    public GameObject structprefab;
+    public GameObject subStructprefab;
 
     void Start()
     {
@@ -67,9 +66,9 @@ public class Endlessterrain : MonoBehaviour
 
     void Initialize()
     {
-        staticstructuremesh = meshtoinstance;
-        Instancedmaterial = MaterialtoInstance;
-        staticNear = nearInstance;
+
+
+        staticscale = mainStructScale;
 
         seed = Inseed;
         GameObject.Find("Mesh").SetActive(false);
@@ -117,7 +116,7 @@ public class Endlessterrain : MonoBehaviour
             else
             {
                 print(taggedobj.transform.position.sqrMagnitude);
-             //   UpdateVisibleChunks();
+                UpdateVisibleChunks();
             }
         }
     }
@@ -149,7 +148,7 @@ public class Endlessterrain : MonoBehaviour
                 }
                 else
                 {
-                    TerrainchunkDictionary.Add(viewdChunkCoord, new TerrainChunk(viewdChunkCoord,chunkSize,detaillevels ,transform,MapMaterial));
+                    TerrainchunkDictionary.Add(viewdChunkCoord, new TerrainChunk(viewdChunkCoord,chunkSize,detaillevels ,transform,MapMaterial,structprefab, subStructprefab));
                 }
             }
         }
@@ -171,13 +170,17 @@ public class Endlessterrain : MonoBehaviour
         bool mapdataRecieved = false;
         int previousLODIndex = -1;
 
-        
+        public GameObject Structprefab;
+        public GameObject subStructPrefab;
 
         StructureInfo[] structures;
 
-        public TerrainChunk(Vector2 coord, int size, LODinfo[] detaillevels, Transform parent, Material mat)
+        public TerrainChunk(Vector2 coord, int size, LODinfo[] detaillevels, Transform parent, Material mat, GameObject structToInstance, GameObject subStruct)
         {
             this.detaillevels = detaillevels;
+
+            Structprefab = structToInstance;
+            subStructPrefab = subStruct;
 
             height = 0;
             
@@ -207,7 +210,7 @@ public class Endlessterrain : MonoBehaviour
             }
 
             MapGenerator.RequestMapData( position ,OnMapDataRecieved);
-            structures = new StructureInfo[400];
+            structures = new StructureInfo[200];
         }
         public void UpdatePosition(Vector2 coord,int size, Transform parent)
         {
@@ -301,14 +304,14 @@ public class Endlessterrain : MonoBehaviour
                     if(i%40 == 0)
                     {
                         lastposition = new Vector3(PRNG.Next(Mathf.RoundToInt(size),0) - size / 2, PRNG.Next(300,0)-300, PRNG.Next(Mathf.RoundToInt(size),0) - size / 2);
-                        InitializeStructure(false,staticstructuremesh,i, 10f, PRNG, size,lastposition);
+                        InitializeStructure(false,i, staticscale, PRNG, size,lastposition);
                         lastposition = structures[i].StructureOffset;
                     }
                     else
                     {
                         Vector3 nearposition = new Vector3((float)PRNG.NextFloat()-0.5f, (float)PRNG.NextFloat() - 0.5f,(float)PRNG.NextFloat()-0.5f) *70f;
 
-                        InitializeStructure(true,staticNear,i,math.pow(Mathf.Clamp01(1f - nearposition.magnitude * 0.022f),2) * 8f, PRNG, size,nearposition + lastposition);
+                        InitializeStructure(true,i,math.pow(Mathf.Clamp01(1f - nearposition.magnitude * 0.022f),2) * 8f, PRNG, size,nearposition + lastposition);
                     }
                    
                 }
@@ -319,7 +322,7 @@ public class Endlessterrain : MonoBehaviour
             }
             Profiler.EndSample();
         }
-        public void InitializeStructure(bool isSimple, Mesh meshToUse,int Index, float structscale,PRNG Seed, float size, Vector3 startingPoint)
+        public void InitializeStructure(bool isSimple,int Index, float structscale,PRNG Seed, float size, Vector3 startingPoint)
         {
             Profiler.BeginSample("InitalizeStructures");
             structures[Index] = new StructureInfo();
@@ -330,24 +333,24 @@ public class Endlessterrain : MonoBehaviour
             Profiler.EndSample();
             Profiler.BeginSample("Set values");
             structures[Index].StructureOffset = pointInfo.position;
-            //Vector3 mapOffset = mapdata.heightmap[Mathf.RoundToInt(structures[Index].StructureOffset.x + size / 2), Mathf.RoundToInt(-structures[Index].StructureOffset.z + size / 2)];
 
-           // structures[Index].StructureOffset.y = mapOffset.y;
-            //structures[Index].StructureOffset.z = structures[Index].StructureOffset.z + mapOffset.z;
-            //structures[Index].StructureOffset.x = structures[Index].StructureOffset.x + mapOffset.x;
-
-            
             structures[Index].StructureRotation = quaternion.LookRotation(pointInfo.tangent + Vector3.Cross(pointInfo.tangent,pointInfo.normal)*((float)Seed.NextFloat()-0.5f),pointInfo.normal);
             structures[Index].StructureScale = Vector3.one * structscale;
             structures[Index].StructureID = 0;
             structures[Index].isDefinied = true;
             structures[Index].isCube = isSimple;
 
-            structures[Index].material = Instancedmaterial;
-            structures[Index].mesh = meshToUse;
 
             structures[Index].parent = meshObject.transform;
 
+            if (!isSimple)
+            {
+                structures[Index].prefab = (GameObject)Instantiate(Structprefab);
+            }
+            else
+            {
+                structures[Index].prefab = (GameObject)Instantiate(subStructPrefab);
+            }
             structures[Index].SetObject();
             Profiler.EndSample();
             Profiler.EndSample();
@@ -399,6 +402,8 @@ public class Endlessterrain : MonoBehaviour
     [System.Serializable]
     public class StructureInfo
     {
+        public GameObject prefab;
+
         public bool isDefinied;
         public int StructureID;
         public Vector3 StructureScale;
@@ -412,26 +417,16 @@ public class Endlessterrain : MonoBehaviour
         public bool isCube;
         public void SetObject()
         {
-            gameObject = new GameObject("Structure");
 
-            MeshFilter filter = gameObject.GetAddComponent<MeshFilter>(); filter.mesh = mesh;
-            MeshCollider collider = gameObject.GetAddComponent<MeshCollider>();
-            if (isCube)
-            {
-                collider.convex = true;
-            }
-            else
-            {
-                collider.convex = false;
-            }
-            collider.sharedMesh = mesh;
-            MeshRenderer renderer = gameObject.GetAddComponent<MeshRenderer>(); renderer.material = material;
-            gameObject.transform.parent = parent;
-            gameObject.transform.localPosition = StructureOffset;
-            gameObject.transform.rotation = StructureRotation;
-            gameObject.transform.localScale = StructureScale;
-            gameObject.SetActive(isActive);
-
+                
+                gameObject = prefab;
+                gameObject.transform.SetParent(parent);
+                gameObject.transform.parent = parent;
+                gameObject.transform.localPosition = StructureOffset;
+                gameObject.transform.rotation = StructureRotation;
+                gameObject.transform.localScale = StructureScale;
+                gameObject.SetActive(isActive);
+            
         }
     }
     public class pointInfo

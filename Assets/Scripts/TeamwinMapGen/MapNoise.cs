@@ -17,12 +17,14 @@ public static class MapNoise
         int horSeed = HorizontalNoisedata.seed;
         float horFreq = HorizontalNoisedata.frequency;
         float horPers = HorizontalNoisedata.persistance;
+        float horX = HorizontalNoisedata.frequencyScale;
         int horOct = HorizontalNoisedata.octaves;
         float horAmp = HorizontalNoisedata.amplitude;
 
         int highSeed = HeightNoiseData.seed;
         float highFreq = HeightNoiseData.frequency;
         float highPers = HeightNoiseData.persistance;
+        float highX = HeightNoiseData.frequencyScale;
         int highOct = HeightNoiseData.octaves;
         float highAmp = HeightNoiseData.amplitude;
 
@@ -36,12 +38,12 @@ public static class MapNoise
 
 
                 Profiler.BeginSample("Calculating Noise");
-                noiseMap[x, y].y = OctavedNoise(highSeed, highFreq, highPers, highOct, new Vector2(sampleX, sampleY));
+                noiseMap[x, y].y = OctavedNoise(highSeed, highFreq, highX, highPers, highOct, new Vector2(sampleX, sampleY));
 
-                noiseMap[x, y].x = FlatDispcurve.Evaluate(noiseMap[x,y].y) * (OctavedNoise(horSeed + 50, horFreq, horPers, horOct, new Vector2(sampleX, sampleY))-0.5f)
+                noiseMap[x, y].x = FlatDispcurve.Evaluate(noiseMap[x,y].y) * (OctavedNoise(horSeed + 50, horFreq, horX, horPers, horOct, new Vector2(sampleX, sampleY))-0.5f)
                     * horAmp * horFreq;
 
-                noiseMap[x, y].z = FlatDispcurve.Evaluate(noiseMap[x, y].y) * (OctavedNoise(horSeed, horFreq, horPers, horOct, new Vector2(sampleX, sampleY))-0.5f)
+                noiseMap[x, y].z = FlatDispcurve.Evaluate(noiseMap[x, y].y) * (OctavedNoise(horSeed, horFreq, horX, horPers, horOct, new Vector2(sampleX, sampleY))-0.5f)
                     * horAmp * horFreq;
 
                 noiseMap[x,y].y = Heightcurve.Evaluate(noiseMap[x,y].y) * highAmp * highFreq;
@@ -57,6 +59,7 @@ public static class MapNoise
 
         public int seed;
         public float frequency;
+        public float frequencyScale = 1;
         public float amplitude;
         [Range(0f, 1f)]
         public float persistance;
@@ -72,7 +75,7 @@ public static class MapNoise
             this.heightCurve = heightCurve;
         }
     }
-    public static float OctavedNoise(int seed, float inFrequency, float persistance, int octaves, Vector2 Coord)
+    public static float OctavedNoise(int seed, float inFrequency, float Xscale , float persistance, int octaves, Vector2 Coord)
     {
         Profiler.BeginSample("VariableDeclaration");
         float amplitude = 1;
@@ -107,7 +110,7 @@ public static class MapNoise
         
         for (int i = 0; i < octaves; i++)
         {
-            float sampleX = (Coord.x + octaveOffsets[i].x) / inFrequency * frequency;
+            float sampleX = (Coord.x + octaveOffsets[i].x) / inFrequency * frequency * Xscale;
             float sampleY = (Coord.y + octaveOffsets[i].y) / inFrequency * frequency;
 
 
