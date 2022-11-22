@@ -210,7 +210,7 @@ public class Endlessterrain : MonoBehaviour
             }
 
             MapGenerator.RequestMapData( position ,OnMapDataRecieved);
-            structures = new StructureInfo[200];
+            structures = new StructureInfo[120];
         }
         public void UpdatePosition(Vector2 coord,int size, Transform parent)
         {
@@ -289,49 +289,44 @@ public class Endlessterrain : MonoBehaviour
         }
         void UpdateStructures(bool Collision)
         {
-            Profiler.BeginSample("setPRNG");
-            PRNG PRNG = new PRNG(Mathf.RoundToInt(seed + position.y * position.x));
-            Profiler.EndSample();
-            float size = bounds.size.x;
-            Vector3 lastposition = new Vector3();
-            Profiler.BeginSample("start Structure Loop");
-            for (int i = 0; i < structures.Length - 1; i++)
+            if (structures[0] == null)
             {
-
-                if (structures[i] == null)
+                PRNG PRNG = new PRNG(Mathf.RoundToInt(seed + position.y * position.x));
+                float size = bounds.size.x;
+                Vector3 lastposition = new Vector3();
+                for (int i = 0; i < structures.Length - 1; i++)
                 {
-                    
-                    if(i%40 == 0)
+                    if (i % 40 == 0)
                     {
-                        lastposition = new Vector3(PRNG.Next(Mathf.RoundToInt(size),0) - size / 2, PRNG.Next(300,0)-300, PRNG.Next(Mathf.RoundToInt(size),0) - size / 2);
-                        InitializeStructure(false,i, staticscale, PRNG, size,lastposition);
+                        lastposition = new Vector3(PRNG.Next(Mathf.RoundToInt(size), 0) - size / 2, PRNG.Next(300, 0) - 300, PRNG.Next(Mathf.RoundToInt(size), 0) - size / 2);
+                        InitializeStructure(false, i, staticscale, PRNG, size, lastposition);
                         lastposition = structures[i].StructureOffset;
                     }
                     else
                     {
-                        Vector3 nearposition = new Vector3((float)PRNG.NextFloat()-0.5f, (float)PRNG.NextFloat() - 0.5f,(float)PRNG.NextFloat()-0.5f) *70f;
+                        Vector3 nearposition = new Vector3((float)PRNG.NextFloat() - 0.5f, (float)PRNG.NextFloat() - 0.5f, (float)PRNG.NextFloat() - 0.5f) * 70f;
 
-                        InitializeStructure(true,i,math.pow(Mathf.Clamp01(1f - nearposition.magnitude * 0.022f),2) * 8f, PRNG, size,nearposition + lastposition);
+                        InitializeStructure(true, i, math.pow(Mathf.Clamp01(1f - nearposition.magnitude * 0.022f), 2) * 8f, PRNG, size, nearposition + lastposition);
                     }
-                   
                 }
-
-                structures[i].isActive = Collision;
-                structures[i].gameObject.SetActive(Collision);
-
             }
-            Profiler.EndSample();
+
+                for (int i = 0; i < structures.Length - 1; i++)
+                {
+                    structures[i].isActive = Collision;
+                    structures[i].gameObject.SetActive(Collision);
+                }
+            
         }
         public void InitializeStructure(bool isSimple,int Index, float structscale,PRNG Seed, float size, Vector3 startingPoint)
         {
-            Profiler.BeginSample("InitalizeStructures");
+
             structures[Index] = new StructureInfo();
             structures[Index].StructureOffset = startingPoint;
             pointInfo pointInfo = new pointInfo();
-            Profiler.BeginSample("GetClosestPoint");
+
             pointInfo.SetClosestPoint(startingPoint, meshfilter.mesh);
-            Profiler.EndSample();
-            Profiler.BeginSample("Set values");
+
             structures[Index].StructureOffset = pointInfo.position;
 
             structures[Index].StructureRotation = quaternion.LookRotation(pointInfo.tangent + Vector3.Cross(pointInfo.tangent,pointInfo.normal)*((float)Seed.NextFloat()-0.5f),pointInfo.normal);
@@ -352,8 +347,7 @@ public class Endlessterrain : MonoBehaviour
                 structures[Index].prefab = (GameObject)Instantiate(subStructPrefab);
             }
             structures[Index].SetObject();
-            Profiler.EndSample();
-            Profiler.EndSample();
+
         }
         public void Setvisible(bool visible)
         {
@@ -442,7 +436,7 @@ public class Endlessterrain : MonoBehaviour
             int[] closestindecies = new int[3];
             Vector3[] vertices = mesh.vertices;
 
-            Profiler.BeginSample("finding points");
+
 
             for (int i = 0; i < vertices.Length; i++)
             {
@@ -469,8 +463,7 @@ public class Endlessterrain : MonoBehaviour
                     closestdistances[2] = dist;
                 }
             }
-            Profiler.EndSample();
-            Profiler.BeginSample("Setting Normals and tangents");
+
             float[] indexweights = new float[3];
             float totalweight = 0;
             for (int i = 0; i < indexweights.Length; i++)
@@ -494,7 +487,7 @@ public class Endlessterrain : MonoBehaviour
                (vertices[closestindecies[0]] * indexweights[0] +
                vertices[closestindecies[1]] * indexweights[1] +
                vertices[closestindecies[2]] * indexweights[2]) / totalweight;
-            Profiler.EndSample();
+
         }
 
     }
