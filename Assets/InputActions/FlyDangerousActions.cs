@@ -88,7 +88,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""4d1e4d79-b0a7-44d9-97dc-53a8a06ee117"",
-                    ""path"": """",
+                    ""path"": ""<Gamepad>/rightStickPress"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
@@ -229,7 +229,7 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""6e784d43-c724-460a-abbf-e22a1ccc7d7f"",
-                    ""path"": """",
+                    ""path"": ""<Gamepad>/rightStickPress"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Everything"",
