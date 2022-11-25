@@ -103,7 +103,7 @@ namespace Core {
             set {
                 _shipParameters = value;
                 var ship = FdPlayer.FindLocalShipPlayer;
-                if (ship) ship.ShipPhysics.FlightParameters = _shipParameters;
+                if (ship != null) ship.ShipPhysics.FlightParameters = _shipParameters;
             }
         }
 
@@ -205,7 +205,7 @@ namespace Core {
 
             // reflections
             var shipPlayer = FdPlayer.FindLocalShipPlayer;
-            if (shipPlayer) {
+            if (shipPlayer != null) {
                 var reflectionSetting = Preferences.Instance.GetString("graphics-reflections");
                 shipPlayer.ReflectionProbe.gameObject.SetActive(reflectionSetting != "off");
                 switch (reflectionSetting) {
@@ -286,13 +286,9 @@ namespace Core {
 
                 // Position the active camera to the designated start location so we can be sure to load in anything
                 // important at that location as part of the load sequence
-                var loadingPlayer = FdPlayer.FindLocalLoadingPlayer;
-
-                yield return new WaitUntil(() => {
-                    loadingPlayer = FdPlayer.FindLocalLoadingPlayer;
-                    return loadingPlayer != null;
-                });
-
+                yield return FdPlayer.WaitForLoadingPlayer();
+                var loadingPlayer = FdPlayer.LocalLoadingPlayer;
+                
                 loadingPlayer.ShowLoadingRoom();
                 loadingPlayer.transform.position = levelData.startPosition.ToVector3();
 
@@ -309,12 +305,8 @@ namespace Core {
                 SessionStatus = SessionStatus.InGame;
 
                 // wait for local ship client object
-                while (!FdPlayer.FindLocalShipPlayer) {
-                    Debug.Log("Session loaded, waiting for player init");
-                    yield return new WaitForEndOfFrame();
-                }
-
-                var ship = FdPlayer.FindLocalShipPlayer;
+                yield return FdPlayer.WaitForShipPlayer();
+                var ship = FdPlayer.LocalShipPlayer;
 
                 // Allow the rigid body to initialise before setting new parameters!
                 yield return new WaitForEndOfFrame();
@@ -442,8 +434,9 @@ namespace Core {
                 mapMagic.enabled = false;
             }
 
-            var ship = FdPlayer.FindLocalShipPlayer;
-            if (ship) ship.User.DisableGameInput();
+            yield return FdPlayer.WaitForShipPlayer();
+            var ship = FdPlayer.LocalShipPlayer;
+            ship.User.DisableGameInput();
 
             IEnumerator LoadMenuScene() {
                 // during load we pause scaled time to prevent *absolutely anything* from interacting incorrectly
