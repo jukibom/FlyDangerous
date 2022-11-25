@@ -170,6 +170,7 @@ namespace Menus.Main_Menu {
             playerInput.enabled = false;
 
             // load engine if not already 
+            yield return new WaitForFixedUpdate();
             if (!FindObjectOfType<Engine>()) yield return SceneManager.LoadSceneAsync("Engine", LoadSceneMode.Additive);
 
             var sceneEnvironment = Environment.PlanetOrbitTop;
