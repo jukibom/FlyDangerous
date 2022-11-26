@@ -236,7 +236,7 @@ public class Endlessterrain : MonoBehaviour
             {
 
                 float viewerdstfromnearestedge = Mathf.Sqrt(bounds.SqrDistance(viewerPosition));
-                bool visible = viewerdstfromnearestedge <= maxViewDist;
+                bool visible = (viewerdstfromnearestedge) <= maxViewDist;
 
                 if (visible)
                 {
@@ -329,7 +329,7 @@ public class Endlessterrain : MonoBehaviour
 
             structures[Index].StructureOffset = pointInfo.position;
 
-            structures[Index].StructureRotation = quaternion.LookRotation(pointInfo.tangent + Vector3.Cross(pointInfo.tangent,pointInfo.normal)*((float)Seed.NextFloat()-0.5f),pointInfo.normal);
+            structures[Index].StructureRotation = quaternion.LookRotation(pointInfo.tangent * (Seed.NextFloat()-0.5f) * 2f + Vector3.Cross(pointInfo.tangent,pointInfo.normal)*((float)Seed.NextFloat()-0.5f)*3,pointInfo.normal);
             structures[Index].StructureScale = Vector3.one * structscale;
             structures[Index].StructureID = 0;
             structures[Index].isDefinied = true;
@@ -504,8 +504,10 @@ public class Endlessterrain : MonoBehaviour
         {
             seed+=5321;
 
-            int num = seed >> (iterator % 32) ^ ~seed;
+            int num = seed;
+            num = seed >> (iterator % 32) ^ seed << 5 + num;
             num = seed>>((~iterator + 7)%32) ^ num;
+
             iterator = num;
             num = math.abs(num % (Max + Min)) + Min;
             return num;

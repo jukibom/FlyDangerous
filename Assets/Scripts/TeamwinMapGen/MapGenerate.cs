@@ -10,6 +10,8 @@ using Unity.Mathematics;
 using Core;
 using UnityEngine.PlayerLoop;
 using Misc;
+using System.Security.Cryptography;
+using Steamworks;
 
 public class MapGenerate : MonoBehaviour
 {
@@ -28,8 +30,8 @@ public class MapGenerate : MonoBehaviour
     public bool useRegions;
     public Terraintype[] regions;
 
-    public MapNoise.NoiseData VerticalNoiseData;
-    public MapNoise.NoiseData HorizontalNoisedata;
+
+    public MapNoise.NoiseData[] Noisearray;
 
     Queue<MapThreadInfo<mapdata>> mapdatathreadsinfoqueue = new Queue<MapThreadInfo<mapdata>>();
     Queue<MapThreadInfo<MeshData>> meshdatathreadinfoqueue = new Queue<MapThreadInfo<MeshData>>();
@@ -47,11 +49,11 @@ public class MapGenerate : MonoBehaviour
     {
         if(Game.Instance.SessionStatus == SessionStatus.Loading)
         {
-            VerticalNoiseData.seed = int.Parse(HashGenerator.ComputeSha256Hash(Game.Instance.Seed).Remove(0,56),System.Globalization.NumberStyles.HexNumber);
+            Noisearray[1].seed = int.Parse(HashGenerator.ComputeSha256Hash(Game.Instance.Seed).Remove(0,56),System.Globalization.NumberStyles.HexNumber);
         }
         else
         {
-            VerticalNoiseData.seed = 1;
+           // Noisearray[1].seed = Noisearray[1].seed;
         }
     }
     
@@ -141,8 +143,14 @@ public class MapGenerate : MonoBehaviour
     }
     mapdata Generatemapdata(Vector2 center)
     {
+        /*
+        Endlessterrain.PRNG rng = new Endlessterrain.PRNG(VerticalNoiseData.seed);
+        VerticalNoiseData.persistance = math.lerp(0.3f,0.7f, rng.NextFloat());
+        VerticalNoiseData.frequencyScale = math.lerp(0.25f, 4.0f, math.sqrt(rng.NextFloat()));
+        HorizontalNoisedata.seed = rng.Next(1000000, -100000);
+        */
 
-        Vector3[,] noisemap = MapNoise.GenerateNoiseMap(MapChunkSize,center,VerticalNoiseData ,HorizontalNoisedata);
+        Vector3[,] noisemap = MapNoise.GenerateNoiseMap(MapChunkSize,center, Noisearray);
 
         Color[] colormap = new Color[MapChunkSize * MapChunkSize];
 
