@@ -9,7 +9,6 @@ using System.Net.NetworkInformation;
 using Unity.Mathematics;
 using UnityEditor.XR.LegacyInputHelpers;
 using UnityEngine;
-using UnityEngine.Profiling;
 
 public class Endlessterrain : MonoBehaviour
 {
@@ -19,7 +18,7 @@ public class Endlessterrain : MonoBehaviour
     static int seed;
     const float scale = 15;
 
-    const float vieweroffsetthresholdforUpdate = 10f;
+    const float vieweroffsetthresholdforUpdate = 1f;
     const float sqrvieweroffsetthresholdforUpdate = vieweroffsetthresholdforUpdate * vieweroffsetthresholdforUpdate;
 
     public LODinfo[] detaillevels;
@@ -173,7 +172,7 @@ public class Endlessterrain : MonoBehaviour
         public GameObject Structprefab;
         public GameObject subStructPrefab;
 
-        StructureInfo[] structures;
+        readonly StructureInfo[] structures;
 
         public TerrainChunk(Vector2 coord, int size, LODinfo[] detaillevels, Transform parent, Material mat, GameObject structToInstance, GameObject subStruct)
         {
@@ -311,11 +310,14 @@ public class Endlessterrain : MonoBehaviour
                 }
             }
 
-                for (int i = 0; i < structures.Length - 1; i++)
+            for (int i = 0; i < structures.Length - 1; i++)
+            {
+                if (structures[i].isActive != Collision)
                 {
                     structures[i].isActive = Collision;
                     structures[i].gameObject.SetActive(Collision);
                 }
+            }
             
         }
         public void InitializeStructure(bool isSimple,int Index, float structscale,PRNG Seed, float size, Vector3 startingPoint)

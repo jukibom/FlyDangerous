@@ -59,10 +59,8 @@ public class MapGenerate : MonoBehaviour
     
     public void drawmapineditor()
     {
-        Profiler.BeginSample("DrawInEditor");
-        Profiler.BeginSample("GenerateMapData");
+
         mapdata mapdata = Generatemapdata(Offset);
-        Profiler.EndSample();
         MapDisplay display = FindObjectOfType<MapDisplay>();
         if (drawmode == Drawmode.NoiseMap)
         {
@@ -76,7 +74,6 @@ public class MapGenerate : MonoBehaviour
         {
              display.DrawMesh(MeshGenerator.GenerateTerrainMesh(mapdata.heightmap, editorpreviewlod), TextureGenerator.TexturefromeColormap(mapdata.colormap, MapChunkSize, MapChunkSize));
         }
-        Profiler.EndSample();
     }
 
     public void RequestMapData(Vector2 center, Action<mapdata> callback)
@@ -116,29 +113,22 @@ public class MapGenerate : MonoBehaviour
 
         if (mapdatathreadsinfoqueue.Count > 0)
         {
-            Profiler.BeginSample("MapDataCallback");
             for(int i = 0;i<mapdatathreadsinfoqueue.Count;i++)
             {
                 MapThreadInfo<mapdata> threadinfo = mapdatathreadsinfoqueue.Dequeue();
                 threadinfo.callback(threadinfo.parameter);
             }
-            Profiler.EndSample();
         }
 
         if (meshdatathreadinfoqueue.Count > 0)
         {
 
-            Profiler.BeginSample("MeshDataCallback");
             for (int i = 0; i < meshdatathreadinfoqueue.Count; i++)
             {
-                Profiler.BeginSample("set threadinfo");
                 MapThreadInfo<MeshData> threadinfo = meshdatathreadinfoqueue.Dequeue();
-                Profiler.EndSample();
-                Profiler.BeginSample("Executecallback");
                 threadinfo.callback(threadinfo.parameter);
-                Profiler.EndSample();
+
             }
-            Profiler.EndSample();
         }
     }
     mapdata Generatemapdata(Vector2 center)

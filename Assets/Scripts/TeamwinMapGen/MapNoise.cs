@@ -1,7 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Profiling;
 using UnityEngine.UIElements;
 
 public static class MapNoise
@@ -47,7 +47,7 @@ public static class MapNoise
                     if (NoiseArray[i].isActive)
                     {
 
-                        Profiler.BeginSample("Active Noise Layer Calculation");
+                       
 
                         var freq = NoiseArray[i].frequency;
                         var seed = NoiseArray[i].seed;
@@ -62,11 +62,10 @@ public static class MapNoise
                         if (NoiseArray[i].isHorizontal)
                         {
 
-                            Profiler.BeginSample("Active Noise Layer calling");
+
                             float noiseHeightX = OctavedNoise(seed, freq, freqscale, pers, oct, new Vector2(sampleX, sampleY));
                             float noiseHeightY = OctavedNoise(seed + 50, freq, freqscale, pers, oct, new Vector2(sampleX, sampleY));
-                            Profiler.EndSample();
-                            Profiler.BeginSample("Postprocessing Noise");
+
                             noiseHeightX -= 0.5f;
                             noiseHeightY -= 0.5f;
 
@@ -80,16 +79,24 @@ public static class MapNoise
                                 noiseHeightX = curve.Evaluate(noiseHeightX);
                                 noiseHeightY = curve.Evaluate(noiseHeightY);
                             }
-                            noiseHeightX *= amp;
-                            noiseHeightY *= amp;
 
-                            if(NoiseArray[i].maskMode == NoiseData.MaskMode.Mask)
+                            if (NoiseArray[i].noiseType == NoiseData.NoiseType.Constant)
                             {
                                 noiseHeightX = curve.Evaluate(noiseMap[x, y].x);
                                 noiseHeightY = curve.Evaluate(noiseMap[x, y].z);
                             }
+                            if (NoiseArray[i].noiseType == NoiseData.NoiseType.Voronoi_Edge || NoiseArray[i].noiseType == NoiseData.NoiseType.Voronoi_Center)
+                            {
+                                noiseHeightX = curve.Evaluate(VorField(new Vector2(sampleX-500, sampleY + 300), freq, NoiseArray[i].noiseType == NoiseData.NoiseType.Voronoi_Edge));
+                                noiseHeightY = curve.Evaluate(VorField(new Vector2(sampleX, sampleY), freq, true));
+                            }
 
-                            if (NoiseArray[i].maskMode != NoiseData.MaskMode.Add)
+                            noiseHeightX *= amp;
+                            noiseHeightY *= amp;
+
+
+
+                            if (NoiseArray[i].maskMode == NoiseData.MaskMode.Multiply)
                             {
                                 noiseMap[x,y].x *= noiseHeightX;
                                 noiseMap[x,y].z *= noiseHeightY;
@@ -99,14 +106,12 @@ public static class MapNoise
                                 noiseMap[x, y].x += noiseHeightX;
                                 noiseMap[x, y].z += noiseHeightY;
                             }
-                            Profiler.EndSample();
+
                         }
                         else
-                        {
-                            Profiler.BeginSample("Active Noise Layer calling");
+                        { 
                             float noiseHeight = OctavedNoise(seed, freq, freqscale, pers, oct, new Vector2(sampleX, sampleY));
-                            Profiler.EndSample();
-                            Profiler.BeginSample("Postprocessing Noise");
+
 
                             if (NoiseArray[i].UseVertical)
                             {
@@ -118,11 +123,18 @@ public static class MapNoise
                                 noiseHeight = curve.Evaluate(noiseHeight);
                             }
 
-                            noiseHeight *= amp;
-                            if (NoiseArray[i].maskMode == NoiseData.MaskMode.Mask)
-                                noiseHeight = curve.Evaluate(noiseMap[x, y].y) * amp;
+                            if (NoiseArray[i].noiseType == NoiseData.NoiseType.Constant)
+                                noiseHeight = curve.Evaluate(noiseMap[x, y].y);
 
-                            if (NoiseArray[i].maskMode != NoiseData.MaskMode.Add)
+                            if (NoiseArray[i].noiseType == NoiseData.NoiseType.Voronoi_Edge || NoiseArray[i].noiseType == NoiseData.NoiseType.Voronoi_Center)
+
+                                noiseHeight = curve.Evaluate(VorField(new Vector2(sampleX, sampleY), freq, NoiseArray[i].noiseType == NoiseData.NoiseType.Voronoi_Edge));
+
+                            noiseHeight *= amp;
+
+
+
+                            if (NoiseArray[i].maskMode == NoiseData.MaskMode.Multiply)
                             {
                                 noiseMap[x, y].y *= noiseHeight;
 
@@ -132,9 +144,9 @@ public static class MapNoise
                                 noiseMap[x, y].y += noiseHeight;
 
                             }
-                            Profiler.EndSample();
+                            UnityEngine.Profiling.Profiler.EndSample();
                         }
-                        Profiler.EndSample();
+                        UnityEngine.Profiling.Profiler.EndSample();
                     }
                 }
             }
@@ -156,7 +168,9 @@ public static class MapNoise
         public int octaves;
         public AnimationCurve heightCurve;
         public bool UseVertical;
-        public enum MaskMode {Add, Multiply, Mask};
+        public enum NoiseType {Perlin, Constant, Voronoi_Edge, Voronoi_Center}
+        public NoiseType noiseType;
+        public enum MaskMode {Add, Multiply};
         public MaskMode maskMode;
         
         public NoiseData(int seed,float frequency,float amplitude,float persistance,int octaves,AnimationCurve heightCurve)
@@ -173,17 +187,51 @@ public static class MapNoise
             return new (heightCurve.keys);
         }
     }
+    public static float VorField(Vector2 Coord, float frequency, bool IsEdge)
+    {
+        Coord = Coord / frequency;
+        Vector2 quantizedCoord = new Vector2( Mathf.Round(Coord.x),Mathf.Round(Coord.y));
+        quantizedCoord -= new Vector2(1, 1);
+        Vector2[] points = new Vector2[9];
+        
+        for (int i = 0; i < 3; i++)
+        {
+            points[i * 3] = quantizedCoord + new Vector2(0,i);
+            points[i * 3 + 1] = quantizedCoord + new Vector2(1, i);
+            points[i * 3 + 2] = quantizedCoord + new Vector2(2, i);
+        }
+
+        Endlessterrain.PRNG rng;
+        float[] dists = new float[9];
+        for (int i = 0; i < 9; i++)
+        {
+            rng = new Endlessterrain.PRNG(Mathf.RoundToInt(points[i].magnitude + points[i].x*1.5231f + points[i].y * 12.51f));
+            rng.NextFloat();
+            points[i] += new Vector2(rng.NextFloat() - 0.5f, rng.NextFloat() - 0.5f);
+            dists[i] = Vector2.Distance(points[i],Coord);
+        }
+        Array.Sort(dists);
+        if(IsEdge)
+        {
+            return dists[1] - dists[0];
+        }
+        else
+        {
+            return dists[0];
+        }
+        
+    }
     public static float OctavedNoise(int seed, float inFrequency, float Xscale , float persistance, int octaves, Vector2 Coord)
     {
-        Profiler.BeginSample("VariableDeclaration");
+        UnityEngine.Profiling.Profiler.BeginSample("VariableDeclaration");
         float amplitude = 1;
 
         float maxPossibleHeight = 0;
 
         Vector2[] octaveOffsets = new Vector2[octaves];
 
-        Profiler.EndSample();
-        Profiler.BeginSample("SettingOffsets");
+        UnityEngine.Profiling.Profiler.EndSample();
+        UnityEngine.Profiling.Profiler.BeginSample("SettingOffsets");
         int offsetY = seed * 20;
         int offsetX = seed;
         for (int i = 0; i < octaves; i++)
@@ -198,9 +246,9 @@ public static class MapNoise
             maxPossibleHeight += amplitude;
             amplitude *= persistance;
         }
-        Profiler.EndSample();
+        UnityEngine.Profiling.Profiler.EndSample();
 
-        Profiler.BeginSample("PerlinCalculationLoop");
+        UnityEngine.Profiling.Profiler.BeginSample("PerlinCalculationLoop");
         amplitude = 1;
         float frequency = 1;
         float noiseheight = 0;
@@ -212,7 +260,7 @@ public static class MapNoise
             float sampleY = (Coord.y + octaveOffsets[i].y) / inFrequency * frequency;
 
 
-
+            
             noiseheight += Mathf.PerlinNoise(sampleX, sampleY) * amplitude;
 
             amplitude *= persistance;
@@ -220,7 +268,7 @@ public static class MapNoise
         }
         
         float height = noiseheight/maxPossibleHeight;
-        Profiler.EndSample();
+        UnityEngine.Profiling.Profiler.EndSample();
         return height;
 
     }
