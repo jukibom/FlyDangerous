@@ -30,15 +30,18 @@ public class MapGenerate : MonoBehaviour
     public bool useRegions;
     public Terraintype[] regions;
 
+    static bool isPlaying;
 
     public MapNoise.NoiseData[] Noisearray;
+    static MapNoise.NoiseData[] noisedata;
 
     Queue<MapThreadInfo<mapdata>> mapdatathreadsinfoqueue = new Queue<MapThreadInfo<mapdata>>();
     Queue<MapThreadInfo<MeshData>> meshdatathreadinfoqueue = new Queue<MapThreadInfo<MeshData>>();
 
     private void Start()
     {
-
+        isPlaying = true;
+        noisedata = Noisearray;
     }
     private void Awake()
     {
@@ -49,7 +52,7 @@ public class MapGenerate : MonoBehaviour
     {
         if(Game.Instance.SessionStatus == SessionStatus.Loading)
         {
-            Noisearray[1].seed = int.Parse(HashGenerator.ComputeSha256Hash(Game.Instance.Seed).Remove(0,56),System.Globalization.NumberStyles.HexNumber);
+            Noisearray[0].seed = int.Parse(HashGenerator.ComputeSha256Hash(Game.Instance.Seed).Remove(0,56),System.Globalization.NumberStyles.HexNumber);
         }
         else
         {
@@ -59,7 +62,7 @@ public class MapGenerate : MonoBehaviour
     
     public void drawmapineditor()
     {
-
+        isPlaying = false;
         mapdata mapdata = Generatemapdata(Offset);
         MapDisplay display = FindObjectOfType<MapDisplay>();
         if (drawmode == Drawmode.NoiseMap)
@@ -139,9 +142,15 @@ public class MapGenerate : MonoBehaviour
         VerticalNoiseData.frequencyScale = math.lerp(0.25f, 4.0f, math.sqrt(rng.NextFloat()));
         HorizontalNoisedata.seed = rng.Next(1000000, -100000);
         */
-
-        Vector3[,] noisemap = MapNoise.GenerateNoiseMap(MapChunkSize,center, Noisearray);
-
+        Vector3[,] noisemap;
+        if (!isPlaying)
+        {
+            noisemap = MapNoise.GenerateNoiseMap(MapChunkSize, center, Noisearray);
+        }
+        else
+        {
+            noisemap = MapNoise.GenerateNoiseMap(MapChunkSize, center, noisedata);
+        }
         Color[] colormap = new Color[MapChunkSize * MapChunkSize];
 
         for (int y = 0; y < MapChunkSize; y++)

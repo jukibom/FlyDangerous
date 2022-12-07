@@ -7,8 +7,10 @@ using System.Drawing;
 using System.Linq;
 using System.Net.NetworkInformation;
 using Unity.Mathematics;
-using UnityEditor.XR.LegacyInputHelpers;
+using UnityEditor.Profiling;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.Profiling;
 
 public class Endlessterrain : MonoBehaviour
 {
@@ -108,14 +110,12 @@ public class Endlessterrain : MonoBehaviour
             
             if (taggedobj.transform.position.sqrMagnitude > 625 && taggedobj.transform.position.sqrMagnitude < 950625)
             {
-                print("updated at distance" + taggedobj.transform.position.sqrMagnitude);
                 viewerpositionold = viewerPosition;
                 UpdateVisibleChunks();
             }
             else
             {
-                print(taggedobj.transform.position.sqrMagnitude);
-                UpdateVisibleChunks();
+              //  UpdateVisibleChunks();
             }
         }
     }
@@ -297,7 +297,7 @@ public class Endlessterrain : MonoBehaviour
                 {
                     if (i % 40 == 0)
                     {
-                        lastposition = new Vector3(PRNG.Next(Mathf.RoundToInt(size), 0) - size / 2, PRNG.Next(300, 0) - 300, PRNG.Next(Mathf.RoundToInt(size), 0) - size / 2);
+                        lastposition = new Vector3(PRNG.NextInt(Mathf.RoundToInt(size), 0) - size / 2, PRNG.NextInt(300, 0) - 300, PRNG.NextInt(Mathf.RoundToInt(size), 0) - size / 2);
                         InitializeStructure(false, i, staticscale, PRNG, size, lastposition);
                         lastposition = structures[i].StructureOffset;
                     }
@@ -502,22 +502,33 @@ public class Endlessterrain : MonoBehaviour
         {
             this.seed = seed;
         }
-        public int Next(int Max, int Min)
+        public int NextInt(int Max, int Min)
         {
-            seed+=5321;
-
-            int num = seed;
-            num = seed >> (iterator % 32) ^ seed << 5 + num;
-            num = seed>>((~iterator + 7)%32) ^ num;
-
-            iterator = num;
+            int num = Next();
             num = math.abs(num % (Max + Min)) + Min;
             return num;
             
         }
+        public int Next()
+        {
+            Profiler.BeginSample("PRNG Next");
+            seed += 5321;
+
+            int num = seed;
+            num = seed >> (iterator % 32) ^ seed << 5 + num;
+            num = seed >> ((~iterator + 7) % 32) ^ num;
+
+            iterator = num;
+            Profiler.EndSample();
+            return seed;
+        }
         public float NextFloat()
         {
-            return math.abs((Next(int.MaxValue,0)/2363f) % 1f);
+            Profiler.BeginSample("PRNG NextFloat");
+            float num = Next();
+            num = math.abs((Next() / 1.65486532f) % 1f);
+            Profiler.EndSample();
+            return num;
         }
 
     }
