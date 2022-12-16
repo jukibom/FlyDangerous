@@ -52,7 +52,11 @@ public class MapGenerate : MonoBehaviour
     {
         if(Game.Instance.SessionStatus == SessionStatus.Loading)
         {
-            Noisearray[0].seed = int.Parse(HashGenerator.ComputeSha256Hash(Game.Instance.Seed).Remove(0,56),System.Globalization.NumberStyles.HexNumber);
+
+            for(int i=0;i<Noisearray.Length;i++)
+            {
+                Noisearray[i].seed = int.Parse(HashGenerator.ComputeSha256Hash(Game.Instance.Seed).Remove(0, 56), System.Globalization.NumberStyles.HexNumber)-i;
+            }
         }
         else
         {
@@ -125,12 +129,10 @@ public class MapGenerate : MonoBehaviour
 
         if (meshdatathreadinfoqueue.Count > 0)
         {
-
             for (int i = 0; i < meshdatathreadinfoqueue.Count; i++)
             {
                 MapThreadInfo<MeshData> threadinfo = meshdatathreadinfoqueue.Dequeue();
                 threadinfo.callback(threadinfo.parameter);
-
             }
         }
     }

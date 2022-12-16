@@ -18,7 +18,7 @@ public class Endlessterrain : MonoBehaviour
     public float mainStructScale = 10f;
     static float staticscale;
     static int seed;
-    const float scale = 15;
+    const float scale = 60;
 
     const float vieweroffsetthresholdforUpdate = 1f;
     const float sqrvieweroffsetthresholdforUpdate = vieweroffsetthresholdforUpdate * vieweroffsetthresholdforUpdate;
@@ -115,7 +115,7 @@ public class Endlessterrain : MonoBehaviour
             }
             else
             {
-              //  UpdateVisibleChunks();
+                UpdateVisibleChunks();
             }
         }
     }
@@ -147,7 +147,9 @@ public class Endlessterrain : MonoBehaviour
                 }
                 else
                 {
+                    Profiler.BeginSample("Generating New Chunk");
                     TerrainchunkDictionary.Add(viewdChunkCoord, new TerrainChunk(viewdChunkCoord,chunkSize,detaillevels ,transform,MapMaterial,structprefab, subStructprefab));
+                    Profiler.EndSample();
                 }
             }
         }
