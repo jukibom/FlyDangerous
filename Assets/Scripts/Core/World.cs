@@ -44,6 +44,8 @@ namespace Core {
 
         private void PerformCorrection(Vector3 offset) {
             foreach (Transform child in transform) child.position -= offset;
+            foreach (Transform child in transform) child.hasChanged = true;
+
 
 #if NO_PAID_ASSETS
         }

@@ -19,6 +19,10 @@ namespace Core.MapData {
         public static readonly Location TerrainGPUFoliageTest = new("GPU Foliage Test",
             "Terrain with lots of foliage relying on the GPU - feedback appreciated!", "TerrainWorkspace", true);
 
+        public static readonly Location TeamwinFTW_Scene = new("TeamwinFTW scene", "TeamwinFTW's world for testing abstract terrain generation","TeamwinFTW_Scene", true);
+
+
+
         private Location(string name, string description, string sceneToLoad, bool isTerrain) {
             Id = GenerateId;
             Name = name;
@@ -36,7 +40,9 @@ namespace Core.MapData {
         public string Name { get; }
 
         public static IEnumerable<Location> List() {
-            return new[] { ProvingGrounds, Space, TestSpaceStation, TerrainV1, TerrainV2, TerrainV3, TerrainGPUFoliageTest };
+
+            return new[] { ProvingGrounds, Space, TestSpaceStation, TerrainV1, TerrainV2, TerrainV3, TerrainGPUFoliageTest, TeamwinFTW_Scene};
+
         }
 
         public static Location FromString(string locationString) {
