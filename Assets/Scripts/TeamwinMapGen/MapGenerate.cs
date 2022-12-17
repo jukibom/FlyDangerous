@@ -32,7 +32,7 @@ public class MapGenerate : MonoBehaviour
 
     static bool isPlaying;
 
-    public MapNoise.NoiseData[] Noisearray;
+    public MapNoise.NoiseData[] NoiseArray;
     static MapNoise.NoiseData[] noisedata;
 
     Queue<MapThreadInfo<mapdata>> mapdatathreadsinfoqueue = new Queue<MapThreadInfo<mapdata>>();
@@ -41,7 +41,7 @@ public class MapGenerate : MonoBehaviour
     private void Start()
     {
         isPlaying = true;
-        noisedata = Noisearray;
+        noisedata = NoiseArray;
     }
     private void Awake()
     {
@@ -53,9 +53,9 @@ public class MapGenerate : MonoBehaviour
         if(Game.Instance.SessionStatus == SessionStatus.Loading)
         {
 
-            for(int i=0;i<Noisearray.Length;i++)
+            for(int i=0;i<NoiseArray.Length;i++)
             {
-                Noisearray[i].seed = int.Parse(HashGenerator.ComputeSha256Hash(Game.Instance.Seed).Remove(0, 56), System.Globalization.NumberStyles.HexNumber)-i;
+                NoiseArray[i].seed = int.Parse(HashGenerator.ComputeSha256Hash(Game.Instance.Seed).Remove(0, 56), System.Globalization.NumberStyles.HexNumber)-i;
             }
         }
         else
@@ -147,7 +147,7 @@ public class MapGenerate : MonoBehaviour
         Vector3[,] noisemap;
         if (!isPlaying)
         {
-            noisemap = MapNoise.GenerateNoiseMap(MapChunkSize, center, Noisearray);
+            noisemap = MapNoise.GenerateNoiseMap(MapChunkSize, center, NoiseArray);
         }
         else
         {
