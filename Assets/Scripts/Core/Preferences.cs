@@ -112,6 +112,8 @@ namespace Core {
                     return 100;
                 case "volumeMusic":
                     return 30;
+                case "volumeMainMenuMusic":
+                    return 50;
                 case "volumeGhostSound":
                     return 25;
                 case "telemetryEmitIntervalSeconds":

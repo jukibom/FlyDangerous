@@ -47,12 +47,14 @@ namespace Core {
 
             var master = Preferences.Instance.GetFloat("volumeMaster").Remap(0, 100, 0.0001f, 1);
             var music = Preferences.Instance.GetFloat("volumeMusic").Remap(0, 100, 0.0001f, 1);
+            var mainMenuMusic = Preferences.Instance.GetFloat("volumeMainMenuMusic").Remap(0, 100, 0.0001f, 1);
             var sound = Preferences.Instance.GetFloat("volumeSound").Remap(0, 100, 0.0001f, 1);
             var ghostSound = Preferences.Instance.GetFloat("volumeGhostSound").Remap(0, 100, 0.0001f, 1);
             var ui = Preferences.Instance.GetFloat("volumeUi").Remap(0, 100, 0.0001f, 1);
 
             masterMixerGroup.audioMixer.SetFloat("masterVolume", Mathf.Log10(master) * 20);
             masterMixerGroup.audioMixer.SetFloat("musicVolume", Mathf.Log10(music) * 20);
+            masterMixerGroup.audioMixer.SetFloat("mainMenuMusicVolume", Mathf.Log10(mainMenuMusic) * 20);
             masterMixerGroup.audioMixer.SetFloat("soundVolume", Mathf.Log10(sound) * 20);
             masterMixerGroup.audioMixer.SetFloat("ghostSoundVolume", Mathf.Log10(ghostSound) * 20);
             masterMixerGroup.audioMixer.SetFloat("uiVolume", Mathf.Log10(ui) * 20);

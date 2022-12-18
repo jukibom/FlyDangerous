@@ -3,15 +3,20 @@ using System.Collections;
 using JetBrains.Annotations;
 using Misc;
 using UnityEngine;
+using UnityEngine.Audio;
 
 namespace Audio {
     [RequireComponent(typeof(AudioSource))]
     public class MusicManager : Singleton<MusicManager> {
+        [SerializeField] private AudioMixerGroup musicMixer;
+        [SerializeField] private AudioMixerGroup mainMenuMusicMixer;
+
         private AudioSource _audioSource;
         private Coroutine _fadeCoroutine;
 
         [CanBeNull] private AudioClip _introTrack;
         private AudioClip _loopingTrack;
+        private AudioMixerGroup _mixerGroupToUseOnPlay;
         private float _volume;
         [CanBeNull] public MusicTrack CurrentPlayingTrack { get; private set; }
 
@@ -26,7 +31,9 @@ namespace Audio {
             AudioSettings.OnAudioConfigurationChanged -= OnAudioConfigurationChanged;
         }
 
-        public void PlayMusic(MusicTrack musicTrack, bool includeIntro, bool fadeOut, bool fadeIn) {
+        public void PlayMusic(MusicTrack musicTrack, bool includeIntro, bool fadeOut, bool fadeIn, bool useMainMenuVolumeMixer = false) {
+            _mixerGroupToUseOnPlay = useMainMenuVolumeMixer ? mainMenuMusicMixer : musicMixer;
+
             var introTrack = musicTrack.HasIntro ? Resources.Load<AudioClip>($"Music/{musicTrack.IntroTrackToLoad}") : null;
             var loopingTrack = Resources.Load<AudioClip>($"Music/{musicTrack.MusicTrackToLoad}");
 
@@ -60,6 +67,7 @@ namespace Audio {
             StopMusic();
             CurrentPlayingTrack = musicTrack;
 
+            _audioSource.outputAudioMixerGroup = _mixerGroupToUseOnPlay;
             _audioSource.volume = _volume;
             _audioSource.clip = _loopingTrack;
             if (_introTrack && includeIntro) {
