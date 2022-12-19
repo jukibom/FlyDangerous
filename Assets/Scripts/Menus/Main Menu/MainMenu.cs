@@ -41,8 +41,6 @@ namespace Menus.Main_Menu {
             topMenu.Hide();
             titleMenu.Hide();
 
-            Engine.Instance.NightVision.SetNightVisionActive(false);
-
             // use this for testing bonkers string conversion issues
             // Thread.CurrentThread.CurrentCulture = new CultureInfo("fr-FR");
 
@@ -78,6 +76,10 @@ namespace Menus.Main_Menu {
             Game.OnVRStatus += OnVRStatus;
             Game.OnGameSettingsApplied += OnGameSettingsApplied;
             InputSystem.onDeviceChange += OnDeviceChange;
+
+            // load engine if not already 
+            if (!FindObjectOfType<Engine>()) SceneManager.LoadScene("Engine", LoadSceneMode.Additive);
+
             StartCoroutine(MenuLoad());
         }
 
@@ -96,7 +98,6 @@ namespace Menus.Main_Menu {
                 case "Puffin":
                     shipModel = puffinShipModel;
                     break;
-                case "Calidris":
                 default:
                     shipModel = calidrisShipModel;
                     break;
@@ -169,9 +170,10 @@ namespace Menus.Main_Menu {
             playerInput.user.ActivateControlScheme("Everything");
             playerInput.enabled = false;
 
-            // load engine if not already 
+            // allow one frame for the engine to load
             yield return new WaitForFixedUpdate();
-            if (!FindObjectOfType<Engine>()) yield return SceneManager.LoadSceneAsync("Engine", LoadSceneMode.Additive);
+
+            Engine.Instance.NightVision.SetNightVisionActive(false);
 
             var sceneEnvironment = Environment.PlanetOrbitTop;
 
