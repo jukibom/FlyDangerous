@@ -9,7 +9,7 @@ namespace Gameplay.Game_Modes.Components.Interfaces {
         /**
          * Flag set to prompt game to record a replay for this game mode
          */
-        public bool ShouldRecordReplay { get; }
+        public bool SupportsReplays { get; }
 
         /**
          * Prevent ship movement unless the boost button is held.

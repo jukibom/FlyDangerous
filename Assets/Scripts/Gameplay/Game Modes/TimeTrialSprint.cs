@@ -15,7 +15,7 @@ namespace Gameplay.Game_Modes {
         public IGameModeTimer GameModeTimer { get; set; }
 
         // Exposed game mode metadata
-        public bool ShouldRecordReplay => true;
+        public bool SupportsReplays => true;
         public bool RequireBoostHeldToStart => true;
         public GameModeScoreType GameModeScoreType => GameModeScoreType.Time;
         public bool AllowEarlyBoost => true;
