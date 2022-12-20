@@ -50,7 +50,7 @@ namespace GameUI.GameModes {
             yield return new WaitForSecondsRealtime(1);
             medalsScreen.gameObject.SetActive(false);
 
-            var uploadTask = UploadLeaderboardResultIfValid(score.PersonalBestTotalTime, levelData.LevelHash(), replayFileName,
+            var uploadTask = UploadLeaderboardResultIfValid(score.PersonalBestScore, levelData.LevelHash(), replayFileName,
                 replayFilePath);
             yield return new WaitUntil(() => uploadTask.IsCompleted);
 
@@ -74,9 +74,9 @@ namespace GameUI.GameModes {
         private IEnumerator ShowMedalScreen(Score score, Score previousBest, bool isValid) {
             medalsScreen.gameObject.SetActive(true);
 
-            var result = score.PersonalBestTotalTime;
-            var previousPersonalBest = previousBest is { HasPlayedPreviously: true } ? previousBest.PersonalBestTotalTime : 0;
-            var isNewPersonalBest = previousBest is { HasPlayedPreviously: false } || previousBest?.PersonalBestTotalTime > result;
+            var result = score.PersonalBestScore;
+            var previousPersonalBest = previousBest is { HasPlayedPreviously: true } ? previousBest.PersonalBestScore : 0;
+            var isNewPersonalBest = previousBest is { HasPlayedPreviously: false } || previousBest?.PersonalBestScore > result;
             var levelData = Game.Instance.LoadedLevelData;
 
             var authorTargetTime = Score.AuthorTimeTarget(levelData);

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Gameplay;
 using JetBrains.Annotations;
 using Mirror;
 using Misc;
@@ -7,16 +8,25 @@ using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Core.MapData {
-    public class CheckpointLocation {
+    public class SerializeableCheckpoint {
         public SerializableVector3 position;
         public SerializableVector3 rotation;
         public CheckpointType type;
+
+        public static SerializeableCheckpoint FromCheckpoint(Checkpoint checkpoint) {
+            var checkpointLocation = new SerializeableCheckpoint();
+            var transform = checkpoint.transform;
+            checkpointLocation.position = SerializableVector3.FromVector3(transform.localPosition);
+            checkpointLocation.rotation = SerializableVector3.FromVector3(transform.rotation.eulerAngles);
+            checkpointLocation.type = checkpoint.Type;
+            return checkpointLocation;
+        }
     }
 
     public class LevelData {
         public float authorTimeTarget = 0f;
 
-        public List<CheckpointLocation> checkpoints = new();
+        public List<SerializeableCheckpoint> checkpoints = new();
 
         [JsonConverter(typeof(FdEnumJsonConverter))]
         public Environment environment = Environment.NoonClear;

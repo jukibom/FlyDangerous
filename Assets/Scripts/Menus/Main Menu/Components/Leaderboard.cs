@@ -42,6 +42,11 @@ namespace Menus.Main_Menu.Components {
             GetEntries(LeaderboardFetchType.Friends);
         }
 
+        public void ShowFailed(string message) {
+            leaderboardText.text = message;
+            loadingOverlay.SetActive(false);
+        }
+
         private async void GetEntries(LeaderboardFetchType fetchType) {
             if (_addLeaderboardEntryCoroutine != null) StopCoroutine(_addLeaderboardEntryCoroutine);
 

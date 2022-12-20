@@ -21,10 +21,13 @@ namespace VFX {
         private VisualEffect _trailEffect;
         private Transform _transform;
 
+        public bool Active { get; set; }
+
         private void Awake() {
             _trailEffect = GetComponent<VisualEffect>();
             _transform = transform;
             _ready = true;
+            Active = true;
         }
 
         private void OnEnable() {
@@ -51,6 +54,8 @@ namespace VFX {
                     ? forceNormalised.z.Remap(0, 1, minSpawnRate, maxSpawnRate)
                     // set minimum spawn rate as a factor of velocity 
                     : vesselSpeedLocal.z.Remap(0, maxSpeed, minSpawnRate, maxSpawnRate / 2f);
+
+                if (!Active) spawnRate = 0;
 
                 _trailEffect.SetInt("_spawnRate", Mathf.FloorToInt(spawnRate));
 

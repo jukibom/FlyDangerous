@@ -1,5 +1,5 @@
 ﻿using System.Globalization;
-using Core.ShipModel.ShipIndicator;
+using Core.ShipModel.Feedback.interfaces;
 using Misc;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,6 +12,8 @@ namespace Core.ShipModel {
         [SerializeField] private Image boostCapacitorBar;
 
         public override void OnShipInstrumentUpdate(IShipInstrumentData shipInstrumentData) {
+            base.OnShipInstrumentUpdate(shipInstrumentData);
+
             if (velocityIndicator != null) velocityIndicator.text = shipInstrumentData.Speed.ToString(CultureInfo.InvariantCulture);
 
             if (accelerationBar != null) {

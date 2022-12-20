@@ -1,5 +1,5 @@
 ﻿using System.Globalization;
-using Core.ShipModel.ShipIndicator;
+using Core.ShipModel.Feedback.interfaces;
 using Misc;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,6 +7,7 @@ using UnityEngine.UI;
 namespace Core.ShipModel {
     public class CalidrisShipModel : SimpleShipModel {
         [SerializeField] private AudioSource proximityWarningAudioSource;
+
         [SerializeField] private Light proximityWarningLight;
         [SerializeField] private GameObject proximityWarning;
 
@@ -55,6 +56,8 @@ namespace Core.ShipModel {
         }
 
         public override void OnShipInstrumentUpdate(IShipInstrumentData shipInstrumentData) {
+            base.OnShipInstrumentUpdate(shipInstrumentData);
+
             #region Simple Indicators
 
             vectorAssistIcon.color = shipInstrumentData.VectorFlightAssistActive ? _positiveColor : _warningColor;
@@ -119,7 +122,7 @@ namespace Core.ShipModel {
             if (shipInstrumentData.BoostCapacitorPercent > 80)
                 boostCapacitorBar.color = Color.Lerp(_activeColor, _positiveColor, shipInstrumentData.BoostCapacitorPercent.Remap(80, 90, 0, 1));
             else if (shipInstrumentData.BoostCapacitorPercent < 30f)
-                boostCapacitorBar.color = Color.Lerp(_activeColor, _warningColor,  
+                boostCapacitorBar.color = Color.Lerp(_activeColor, _warningColor,
                     shipInstrumentData.BoostCapacitorPercent.Remap(30, 15, 0, 1));
             else
                 boostCapacitorBar.color = _activeColor;

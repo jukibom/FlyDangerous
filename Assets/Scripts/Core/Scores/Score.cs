@@ -33,8 +33,8 @@ namespace Core.Scores {
         }
 
         public bool HasPlayedPreviously => _scoreData.raceTime > 0;
-        public float PersonalBestTotalTime => _scoreData.raceTime;
-        public List<float> PersonalBestTimeSplits => _scoreData.splits;
+        public float PersonalBestScore => _scoreData.raceTime;
+        public List<float> PersonalBestSplits => _scoreData.splits ?? new List<float>();
 
         public static Score ScoreForLevel(LevelData levelData) {
             return new Score(levelData);

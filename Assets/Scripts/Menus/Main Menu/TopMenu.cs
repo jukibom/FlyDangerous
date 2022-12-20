@@ -60,6 +60,11 @@ namespace Menus.Main_Menu {
             Application.OpenURL("https://discord.gg/4daSEUKZ6A");
         }
 
+        public void OpenGithubLink() {
+            PlayOpenSound();
+            Application.OpenURL("https://github.com/jukibom/FlyDangerous");
+        }
+
         public override void OnCancel(BaseEventData eventData) {
             Progress(titleMenu, false);
         }

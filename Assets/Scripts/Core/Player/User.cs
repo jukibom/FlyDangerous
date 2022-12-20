@@ -29,7 +29,6 @@ namespace Core.Player {
         [SerializeField] public bool boostButtonForceEnabled;
         private bool _alternateFlightControls;
         private bool _autoRotateDrift;
-        private bool _boost;
         private Vector2 _cameraMouse;
         private bool _cameraRotateAxisControlsEnabled = true;
 
@@ -65,6 +64,8 @@ namespace Core.Player {
                     : Vector3.zero;
 
         public ShipCameraRig ShipCameraRig => shipCameraRig;
+
+        public bool BoostButtonHeld { get; private set; }
 
         public void Awake() {
             DisableGameInput();
@@ -121,33 +122,33 @@ namespace Core.Player {
                 shipPlayer.SetLateralV(lateralV);
                 shipPlayer.SetThrottle(throttle);
                 shipPlayer.VelocityLimiterIsPressed(_limiter);
-                shipPlayer.Boost(_boost);
-
-                // handle camera rig
-                if (_cameraRotateAxisControlsEnabled) {
-                    if ((Preferences.Instance.GetString("cameraMode") == "absolute" ||
-                         Preferences.Instance.GetString("controlSchemeType") == "arcade") &&
-                        !_mouseLookActive)
-                        shipCameraRig.SetPosition(new Vector2(_cameraX, _cameraY), CameraPositionUpdate.Absolute);
-
-                    else if (Preferences.Instance.GetString("cameraMode") == "relative" || _mouseLookActive)
-                        shipCameraRig.SetPosition(new Vector2(_cameraX, _cameraY), CameraPositionUpdate.Relative);
-                }
-                else {
-                    shipCameraRig.SetPosition(Vector2.zero, CameraPositionUpdate.Absolute);
-                }
-
-                if (_mouseLookActive)
-                    shipCameraRig.SetPosition(
-                        new Vector2(
-                            _mousePositionDelta.x / Screen.width * Preferences.Instance.GetFloat("mouseXSensitivity") * 100,
-                            _mousePositionDelta.y / Screen.height * Preferences.Instance.GetFloat("mouseYSensitivity") * 100
-                        ),
-                        CameraPositionUpdate.Relative
-                    );
+                shipPlayer.Boost(BoostButtonHeld);
             }
 
-            if (boostButtonForceEnabled) shipPlayer.Boost(_boost);
+            // handle camera rig
+            if (_cameraRotateAxisControlsEnabled) {
+                if ((Preferences.Instance.GetString("cameraMode") == "absolute" ||
+                     Preferences.Instance.GetString("controlSchemeType") == "arcade") &&
+                    !_mouseLookActive)
+                    shipCameraRig.SetPosition(new Vector2(_cameraX, _cameraY), CameraPositionUpdate.Absolute);
+
+                else if (Preferences.Instance.GetString("cameraMode") == "relative" || _mouseLookActive)
+                    shipCameraRig.SetPosition(new Vector2(_cameraX, _cameraY), CameraPositionUpdate.Relative);
+            }
+            else {
+                shipCameraRig.SetPosition(Vector2.zero, CameraPositionUpdate.Absolute);
+            }
+
+            if (_mouseLookActive)
+                shipCameraRig.SetPosition(
+                    new Vector2(
+                        _mousePositionDelta.x / Screen.width * Preferences.Instance.GetFloat("mouseXSensitivity") * 100,
+                        _mousePositionDelta.y / Screen.height * Preferences.Instance.GetFloat("mouseYSensitivity") * 100
+                    ),
+                    CameraPositionUpdate.Relative
+                );
+
+            if (boostButtonForceEnabled) shipPlayer.Boost(BoostButtonHeld);
 
             headTracking.SetShipVelocityVector(shipPlayer.Rigidbody.velocity);
             shipCameraRig.SetHeadTransform(ref headTracking.HeadTransform);
@@ -265,9 +266,6 @@ namespace Core.Player {
                 shipCameraRig.gameObject.SetActive(true);
                 xrOrigin.gameObject.SetActive(false);
             }
-
-            // if VR is enabled, we need to swap our active cameras and make UI panels operate in world space
-            inGameUI.SetMode(isVREnabled ? GameUIMode.VR : GameUIMode.Pancake);
         }
 
         public void ResetMouseToCentre() {
@@ -384,7 +382,7 @@ namespace Core.Player {
 
         [UsedImplicitly]
         public void OnBoost(InputValue value) {
-            _boost = value.isPressed;
+            BoostButtonHeld = value.isPressed;
         }
 
         [UsedImplicitly]
