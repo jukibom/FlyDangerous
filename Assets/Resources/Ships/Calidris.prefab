@@ -227,6 +227,7 @@ MonoBehaviour:
   - {fileID: 1418210222551806046}
   - {fileID: 2660842371991241472}
   shield: {fileID: 3390864894057479488}
+  ignitionAudioSource: {fileID: 201674343715437638}
   engineBoostAudioSource: {fileID: 3632842809499355508}
   externalBoostAudioSource: {fileID: 8823152912469975989}
   externalBoostThrusterAudioSource: {fileID: 4661411944172723155}
@@ -238,6 +239,7 @@ MonoBehaviour:
   velocityLimitDeactivateAudioSource: {fileID: 3223241181445396321}
   nightVisionActivateAudioSource: {fileID: 7540323171420338907}
   nightVisionDeactivateAudioSource: {fileID: 3665630398263980967}
+  indicatorCanvas: {fileID: 1706175210384395331}
   proximityWarningAudioSource: {fileID: 233817005848234475}
   proximityWarningLight: {fileID: 1690078007134255995}
   proximityWarning: {fileID: 3647725182143599138}
@@ -2780,6 +2782,160 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 100%
+--- !u!1 &3531011371337687369
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7872210601007228642}
+  - component: {fileID: 201674343715437638}
+  - component: {fileID: 5906040592787565258}
+  m_Layer: 6
+  m_Name: Engine Start Audio Emitter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7872210601007228642
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3531011371337687369}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.425, z: 1.35}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2781411510326446211}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &201674343715437638
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3531011371337687369}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 8680731304128483839, guid: 4d35772c6feef854a95b4dbe1c73b3bc, type: 2}
+  m_audioClip: {fileID: 8300000, guid: c51917733afb1dc409a65fab453113a8, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 0.35
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 127
+  DopplerLevel: 0
+  MinDistance: 1.5
+  MaxDistance: 30
+  Pan2D: 0
+  rolloffMode: 1
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.083333336
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1.1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!169 &5906040592787565258
+AudioLowPassFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3531011371337687369}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_LowpassResonanceQ: 1
+  lowpassLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.49977264
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &3531016096043637846
 GameObject:
   m_ObjectHideFlags: 0
@@ -5231,6 +5387,7 @@ MonoBehaviour:
   - {fileID: 1919489184860755578}
   baseForwardThrustScaleZ: 0.2558584
   boostForwardThrustScaleZ: 3
+  addTargetThrustToForwardThrusters: 0
 --- !u!1 &7238448723110631879
 GameObject:
   m_ObjectHideFlags: 0
@@ -7418,6 +7575,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 7872210601007228642}
   - {fileID: 5676802747069739919}
   - {fileID: 612273218953478972}
   - {fileID: 3522373605555278432}
@@ -7953,19 +8111,19 @@ MonoBehaviour:
   m_LensFlareData: {fileID: 11400000, guid: b93d50b1b4a457d47993d58b256cca33, type: 2}
   intensity: 1
   maxAttenuationDistance: 5000
-  maxAttenuationScale: 10000
+  maxAttenuationScale: 5000
   distanceAttenuationCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
       value: 1
-      inSlope: 0
-      outSlope: 0
+      inSlope: -1.5159519
+      outSlope: -1.5159519
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
+      outWeight: 0.11201629
     - serializedVersion: 3
       time: 1
       value: 0
@@ -7982,22 +8140,22 @@ MonoBehaviour:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
+      time: -0.0067041283
+      value: 0.98933744
+      inSlope: -23.97517
+      outSlope: -23.97517
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
+      outWeight: 0.072660156
     - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
+      time: 0.09937057
+      value: 0.2513466
+      inSlope: 0.028025618
+      outSlope: 0.028025618
+      tangentMode: 0
       weightedMode: 0
-      inWeight: 0
+      inWeight: 0.1965405
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -8544,19 +8702,19 @@ MonoBehaviour:
   m_LensFlareData: {fileID: 11400000, guid: b93d50b1b4a457d47993d58b256cca33, type: 2}
   intensity: 1
   maxAttenuationDistance: 5000
-  maxAttenuationScale: 10000
+  maxAttenuationScale: 5000
   distanceAttenuationCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
       value: 1
-      inSlope: 0
-      outSlope: 0
+      inSlope: -1.5159519
+      outSlope: -1.5159519
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
+      outWeight: 0.11201629
     - serializedVersion: 3
       time: 1
       value: 0
@@ -8573,22 +8731,22 @@ MonoBehaviour:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
+      time: -0.0067041283
+      value: 0.98933744
+      inSlope: -23.97517
+      outSlope: -23.97517
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
+      outWeight: 0.072660156
     - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
+      time: 0.09937057
+      value: 0.2513466
+      inSlope: 0.028025618
+      outSlope: 0.028025618
+      tangentMode: 0
       weightedMode: 0
-      inWeight: 0
+      inWeight: 0.1965405
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2

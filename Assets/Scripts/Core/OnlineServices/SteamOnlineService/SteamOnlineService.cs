@@ -6,6 +6,7 @@ namespace Core.OnlineServices.SteamOnlineService {
         private readonly SteamLeaderboardService _leaderboardService = new();
         private readonly SteamMultiplayer _multiplayer = new();
 
+        public string OnlineServiceName => "Steam";
         public string PlayerName => SteamManager.Initialized ? SteamFriends.GetPersonaName() : "STEAM NOT CONNECTED";
         public IMultiplayerService Multiplayer => _multiplayer;
         public ILeaderboardService Leaderboard => _leaderboardService;

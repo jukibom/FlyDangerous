@@ -1,60 +1,71 @@
-using Gameplay;
 using UnityEngine;
 
-public enum CheckpointType {
-    Start,
-    Check,
-    End
-}
+namespace Gameplay {
+    public enum CheckpointType {
+        Start,
+        Check,
+        End
+    }
 
-public class Checkpoint : MonoBehaviour {
-    [SerializeField] private CheckpointType type = CheckpointType.Check;
+    public class Checkpoint : MonoBehaviour {
+        // Invoke with the checkpoint object and the amount of time, in ms, left to hit the collider within the frame
+        public delegate void CheckpointHit(Checkpoint checkpoint, float excessTimeToHitSeconds);
 
-    [SerializeField] private MeshRenderer overlay;
-    [SerializeField] private Material checkMaterial;
-    [SerializeField] private Material validEndMaterial;
-    [SerializeField] private Material invalidEndMaterial;
-    [SerializeField] private AudioSource checkpointAudioSource;
+        public event CheckpointHit OnHit;
 
-    private Track _track;
+        [SerializeField] private CheckpointType type = CheckpointType.Check;
+        [SerializeField] private MeshRenderer overlay;
+        [SerializeField] private Material checkMaterial;
+        [SerializeField] private Material validEndMaterial;
+        [SerializeField] private Material invalidEndMaterial;
+        [SerializeField] private AudioSource checkpointAudioSource;
 
-    public CheckpointType Type {
-        get => type;
-        set {
-            type = value;
-            Reset();
+        private bool _isActive;
+        private bool _isValidEnd;
+
+        public CheckpointType Type {
+            get => type;
+            set {
+                type = value;
+                Reset();
+            }
         }
-    }
 
-    public void Reset() {
-        ShowOverlay();
-        if (Type == CheckpointType.Start) HideOverlay();
+        public bool IsHit => !_isActive;
 
-        if (Type == CheckpointType.Check) overlay.material = checkMaterial;
+        public void Reset() {
+            ShowOverlay();
+            if (Type == CheckpointType.Start) HideOverlay();
 
-        if (Type == CheckpointType.End) overlay.material = invalidEndMaterial;
-    }
+            if (Type == CheckpointType.Check) overlay.material = checkMaterial;
 
-    public void Update() {
-        if (Type == CheckpointType.End) overlay.material = _track.IsEndCheckpointValid ? validEndMaterial : invalidEndMaterial;
-    }
+            if (Type == CheckpointType.End) overlay.material = invalidEndMaterial;
 
-    private void OnEnable() {
-        _track = GetComponentInParent<Track>();
-    }
+            _isActive = Type != CheckpointType.Start;
+        }
 
-    public void ShowOverlay() {
-        overlay.gameObject.SetActive(true);
-    }
+        public void ToggleValidEndMaterial(bool isEnabled) {
+            overlay.material = isEnabled ? validEndMaterial : invalidEndMaterial;
+            _isValidEnd = isEnabled;
+        }
 
-    public void HideOverlay() {
-        overlay.gameObject.SetActive(false);
-    }
+        public void Hit(float excessTimeToHitSeconds) {
+            if (Type == CheckpointType.End && !_isValidEnd) return;
 
-    public void Hit(float excessTimeToHitMs) {
-        if (Type == CheckpointType.Start) return;
-        if (Type == CheckpointType.End && !_track.IsEndCheckpointValid) return;
-        _track.CheckpointHit(this, checkpointAudioSource, excessTimeToHitMs);
-        HideOverlay();
+            if (_isActive) {
+                _isActive = false;
+                OnHit?.Invoke(this, excessTimeToHitSeconds);
+                checkpointAudioSource.Play();
+                HideOverlay();
+            }
+        }
+
+        private void ShowOverlay() {
+            overlay.gameObject.SetActive(true);
+        }
+
+        private void HideOverlay() {
+            overlay.gameObject.SetActive(false);
+        }
     }
 }

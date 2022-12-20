@@ -32,7 +32,7 @@ namespace Menus.Main_Menu.Components {
                 foreach (var ghostListGhostEntry in ghostList.GhostEntries)
                     // float comparison is always hairy af, it SHOULD be identical but <shrug emoji>
                     // recorded score is sub-millisecond precision so at 5 decimal places the likelihood of a collision is farcically small
-                    if (Math.Abs(ghostListGhostEntry.replay.ScoreData.raceTime - topScore.PersonalBestTotalTime) < 0.00001f)
+                    if (Math.Abs(ghostListGhostEntry.replay.ScoreData.raceTime - topScore.PersonalBestScore) < 0.00001f)
                         ghostListGhostEntry.checkbox.isChecked = true;
             });
         }
@@ -100,8 +100,15 @@ namespace Menus.Main_Menu.Components {
             leaderboard.gameObject.SetActive(FdNetworkManager.Instance.HasLeaderboardServices);
             if (!FdNetworkManager.Instance.HasLeaderboardServices) return;
 
-            var leaderboardData = await FdNetworkManager.Instance.OnlineService!.Leaderboard!.FindOrCreateLeaderboard(_levelData.LevelHash());
-            leaderboard.LoadLeaderboard(leaderboardData);
+            try {
+                var leaderboardData = await FdNetworkManager.Instance.OnlineService!.Leaderboard!.FindOrCreateLeaderboard(_levelData.LevelHash());
+                leaderboard.LoadLeaderboard(leaderboardData);
+            }
+            catch {
+                var text = "Failed to connect o online services.";
+                if (FdNetworkManager.Instance.OnlineService?.OnlineServiceName == "Steam") text += "\nIs Steam in Offline mode?";
+                leaderboard.ShowFailed(text);
+            }
         }
 
         public void ClearLeaderboard() {

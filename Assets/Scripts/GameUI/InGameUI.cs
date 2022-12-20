@@ -8,10 +8,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace GameUI {
-    public enum GameUIMode {
-        Pancake,
-        VR
-    }
 
     public class InGameUI : MonoBehaviour, IPointerMoveHandler {
         [SerializeField] private Canvas screenSpaceCanvas;
@@ -38,10 +34,12 @@ namespace GameUI {
 
         private void OnEnable() {
             Game.OnPauseToggle += OnPauseToggle;
+            Game.OnVRStatus += SetVRStatus;
         }
 
         private void OnDisable() {
             Game.OnPauseToggle -= OnPauseToggle;
+            Game.OnVRStatus -= SetVRStatus;
         }
 
         public void OnPointerMove(PointerEventData eventData) {
@@ -65,33 +63,29 @@ namespace GameUI {
             if (!pauseSystem.IsPaused) pauseSystem.OnGameMenuToggle();
         }
 
-        public void SetMode(GameUIMode mode) {
+        private void SetVRStatus(bool isVREnabled) {
+            // if VR is enabled, we need to swap our active cameras and make UI panels operate in world space
             var screenSpaceRect = screenSpaceCanvas.GetComponent<RectTransform>();
 
-            switch (mode) {
-                case GameUIMode.VR: {
-                    screenSpaceCanvas.renderMode = RenderMode.WorldSpace;
-                    screenSpaceCanvas.worldCamera = vrMouseCamera;
-                    screenSpaceRect.localScale = new Vector3(0.001f, 0.001f, 0.001f);
-                    screenSpaceRect.localRotation = Quaternion.identity;
-                    screenSpaceRect.localPosition = new Vector3(0, 0.3f, 0.5f);
-                    screenSpaceRect.sizeDelta = new Vector2(1920, 1440f); // 4:3
-                    // we rely on the cockpit UI in VR mode!
-                    ShipStats.SetStatsVisible(false);
-                    break;
+            if (isVREnabled) {
+                screenSpaceCanvas.renderMode = RenderMode.WorldSpace;
+                screenSpaceCanvas.worldCamera = vrMouseCamera;
+                screenSpaceRect.localScale = new Vector3(0.001f, 0.001f, 0.001f);
+                screenSpaceRect.localRotation = Quaternion.identity;
+                screenSpaceRect.localPosition = new Vector3(0, 0.3f, 0.5f);
+                screenSpaceRect.sizeDelta = new Vector2(1920, 1440f); // 4:3
+                // we rely on the cockpit UI in VR mode!
+                ShipStats.SetStatsVisible(false);
+            }
+            else {
+                var uiCamera = GameObject.FindGameObjectWithTag("UICamera")?.GetComponent<Camera>();
+                if (uiCamera) {
+                    screenSpaceCanvas.renderMode = RenderMode.ScreenSpaceCamera;
+                    screenSpaceCanvas.worldCamera = uiCamera;
+                    screenSpaceRect.localScale = Vector3.one;
                 }
-                case GameUIMode.Pancake: {
-                    var uiCamera = GameObject.FindGameObjectWithTag("UICamera")?.GetComponent<Camera>();
-                    if (uiCamera) {
-                        screenSpaceCanvas.renderMode = RenderMode.ScreenSpaceCamera;
-                        screenSpaceCanvas.worldCamera = uiCamera;
-                        screenSpaceRect.localScale = Vector3.one;
-                    }
-                    else {
-                        throw new Exception("Failed to find UI camera while switching VR mode!");
-                    }
-
-                    break;
+                else {
+                    throw new Exception("Failed to find UI camera while switching VR mode!");
                 }
             }
         }

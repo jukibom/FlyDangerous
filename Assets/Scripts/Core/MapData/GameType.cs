@@ -1,20 +1,27 @@
 ﻿using System.Collections.Generic;
+using Gameplay.Game_Modes;
+using Gameplay.Game_Modes.Components.Interfaces;
+using JetBrains.Annotations;
 using Misc;
 
 namespace Core.MapData {
     public class GameType : IFdEnum {
         private static int _id;
 
-        public static readonly GameType FreeRoam = new("Free Roam", true, true, false);
-        public static readonly GameType TimeTrial = new("Time Trial", false, false, true);
-        public static readonly GameType Sprint = new("Sprint", false, false, true);
-        public static readonly GameType Laps = new("Laps", false, false, true);
-        public static readonly GameType HoonAttack = new("Hoon Attack", false, false, false);
-        public static readonly GameType Training = new("Training", false, false, true);
+        private static readonly IGameMode FreeRoamGameMode = new FreeRoam();
+        private static readonly IGameMode TimeTrialSprintGameMode = new TimeTrialSprint();
+        private static readonly IGameMode TimeTrialLapsGameMode = new TimeTrialLaps();
+        private static readonly IGameMode HoonAttackGameMode = new HoonAttack();
 
-        private GameType(string name, bool isHotJoinable, bool canWarpToHost, bool hasFixedStartLocation) {
+        public static readonly GameType FreeRoam = new("Free Roam", FreeRoamGameMode, true, true, false);
+        public static readonly GameType Sprint = new("Sprint", TimeTrialSprintGameMode, false, false, true);
+        public static readonly GameType Laps = new("Laps", TimeTrialLapsGameMode, false, false, true);
+        public static readonly GameType HoonAttack = new("Hoon Attack", HoonAttackGameMode, false, false, false);
+
+        private GameType(string name, IGameMode gameMode, bool isHotJoinable, bool canWarpToHost, bool hasFixedStartLocation) {
             Id = GenerateId;
             Name = name;
+            GameMode = gameMode;
             IsHotJoinable = isHotJoinable;
             CanWarpToHost = canWarpToHost;
             HasFixedStartLocation = hasFixedStartLocation;
@@ -28,12 +35,18 @@ namespace Core.MapData {
         public int Id { get; }
         public string Name { get; }
 
+        public IGameMode GameMode { get; }
+
         public static IEnumerable<GameType> List() {
-            return new[] { FreeRoam, TimeTrial, Sprint, Laps, HoonAttack,Training };
+            return new[] { FreeRoam, Sprint, Laps, HoonAttack };
         }
 
-        public static GameType FromString(string locationString) {
-            return FdEnum.FromString(List(), locationString);
+        [UsedImplicitly] // FdEnum.ReadJson
+        public static GameType FromString(string gameTypeString) {
+            // handler for old meta data
+            if (gameTypeString == "Time Trial") gameTypeString = "Sprint";
+
+            return FdEnum.FromString(List(), gameTypeString);
         }
 
         public static GameType FromId(int id) {

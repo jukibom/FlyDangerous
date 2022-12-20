@@ -1,7 +1,9 @@
-﻿using UnityEngine;
+﻿using Core.ShipModel.Feedback.interfaces;
+using UnityEngine;
 
 namespace Core.ShipModel.ShipIndicator {
     public class ShipInstrumentData : IShipInstrumentData {
+        public bool ShipActive { get; set; }
         public Vector3 WorldPosition { get; set; }
         public float ShipHeightFromGround { get; set; }
         public float Altitude { get; set; }
