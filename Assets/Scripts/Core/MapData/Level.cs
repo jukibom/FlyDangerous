@@ -7,7 +7,6 @@ namespace Core.MapData {
     public class Level : IFdEnum {
         private static int _id;
 
-        public static readonly Level GentleTest = new("A Gentle Test", "a-gentle-test", GameType.Sprint);
         public static readonly Level GentleStart = new("A Gentle Start", "a-gentle-start", GameType.Sprint);
         public static readonly Level UpsAndDowns = new("Ups and Downs", "ups-and-downs", GameType.Sprint);
         public static readonly Level AroundTheBlock = new("Around The Block", "around-the-block", GameType.Sprint);
@@ -46,7 +45,7 @@ namespace Core.MapData {
 
         public static IEnumerable<Level> List() {
             return new[] {
-                GentleTest, GentleStart, UpsAndDowns, AroundTheBlock, HoldOnToYourStomach, AroundTheStation, Snake, SpeedIsHalfTheBattle, YouMightWannaHoldBack,
+                GentleStart, UpsAndDowns, AroundTheBlock, HoldOnToYourStomach, AroundTheStation, Snake, SpeedIsHalfTheBattle, YouMightWannaHoldBack,
                 DeathValley, CrestLoop,
                 YouHaveHeadlightsRight, LimiterMastery, ThreadTheNeedle, MountainSpiral, LongRoad, HideAndSeek
             };
