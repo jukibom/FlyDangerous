@@ -7,7 +7,7 @@ namespace Gameplay.Game_Modes {
     public class FreeRoam : IGameMode {
         public GameModeUIHandler GameModeUIHandler { get; set; }
         public IGameModeLifecycle GameModeLifecycle { get; set; }
-        public bool ShouldRecordReplay => false;
+        public bool SupportsReplays => false;
         public bool RequireBoostHeldToStart => false;
 
         public void OnBegin() {

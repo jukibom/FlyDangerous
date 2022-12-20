@@ -19,8 +19,9 @@ namespace Gameplay {
         public GameModeCheckpoints GameModeCheckpoints => checkpointContainer;
 
         private void OnDestroy() {
-            foreach (var checkpoint in checkpointContainer.Checkpoints)
-                checkpoint.OnHit -= HandleOnCheckpointHit;
+            if (checkpointContainer != null)
+                foreach (var checkpoint in checkpointContainer.Checkpoints)
+                    checkpoint.OnHit -= HandleOnCheckpointHit;
         }
 
         private void HandleOnCheckpointHit(Checkpoint checkpoint, float excessTimeToHitSeconds) {

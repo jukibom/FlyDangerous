@@ -6,7 +6,7 @@ namespace Gameplay.Game_Modes {
     public class HoonAttack : IGameMode {
         public GameModeUIHandler GameModeUIHandler { get; set; }
         public IGameModeLifecycle GameModeLifecycle { get; set; }
-        public bool ShouldRecordReplay => true;
+        public bool SupportsReplays => true;
         public bool RequireBoostHeldToStart => true;
 
         public void OnBegin() {

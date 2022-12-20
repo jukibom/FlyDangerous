@@ -245,15 +245,16 @@ namespace Gameplay.Game_Modes {
         }
 
         private void StartReplayRecordIfSupported() {
-            if (_gameMode.ShouldRecordReplay) {
+            if (_gameMode.SupportsReplays) {
                 _replayRecorder.CancelRecording();
                 _replayRecorder.StartNewRecording(LocalPlayer.ShipPhysics);
             }
         }
 
         private void StartGhostsIfSupported() {
-            foreach (var activeReplay in Game.Instance.ActiveGameReplays)
-                ActiveGhosts.Add(Game.Instance.LoadGhost(activeReplay));
+            if (_gameMode.SupportsReplays)
+                foreach (var activeReplay in Game.Instance.ActiveGameReplays)
+                    ActiveGhosts.Add(Game.Instance.LoadGhost(activeReplay));
         }
 
         private void StopGhosts() {
