@@ -71,7 +71,7 @@ The game supports raw telemetry output in the form of a binary byte or json fire
 
 ## Building
 
-Unity build: 2022.1.20f1
+Unity build: 2022.2.1f1
 
 The release build is reliant on some paid assets (follow instructions underneath to build without for dev purposes!):
 
