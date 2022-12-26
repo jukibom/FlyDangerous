@@ -9,6 +9,10 @@ namespace Gameplay.Game_Modes {
         public bool SupportsReplays => true;
         public bool RequireBoostHeldToStart => true;
 
+        public void OnInitialise() {
+            throw new NotImplementedException();
+        }
+
         public void OnBegin() {
             throw new NotImplementedException();
         }

@@ -356,9 +356,6 @@ namespace Core {
 
                 FdConsole.Instance.LogMessage("Loaded level " + levelData.LevelHash());
 
-                FadeFromBlack();
-                yield return new WaitForSeconds(0.7f);
-
                 // if there's a track, initialise it
                 var track = FindObjectOfType<Track>();
                 if (track) {
@@ -368,6 +365,9 @@ namespace Core {
                 else {
                     Debug.LogWarning("No track in the world! Cannot initialise game mode");
                 }
+
+                FadeFromBlack();
+                yield return new WaitForSeconds(0.7f);
 
                 // if there's a track in the game world, start it
                 // if (track) yield return track.StartTrackWithCountdown();

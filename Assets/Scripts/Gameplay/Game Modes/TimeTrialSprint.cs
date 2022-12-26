@@ -26,6 +26,10 @@ namespace Gameplay.Game_Modes {
         private float _lastCheckpointHitTimeSeconds;
         private Coroutine _splitFadeOutCoroutine;
 
+        public virtual void OnInitialise() {
+            /* nothing to do */
+        }
+
         public virtual void OnBegin() {
             /* nothing to do */
         }
@@ -82,7 +86,7 @@ namespace Gameplay.Game_Modes {
                 if (endCheckpoint) endCheckpoint.ToggleValidEndMaterial(true);
 
                 // if we hit the end checkpoint in this state, we're done!
-                if (checkpoint.Type == CheckpointType.End) GameModeLifecycle.Complete();
+                if (checkpoint.Type == CheckpointType.End) LastCheckpointHit(_lastCheckpointHitTimeSeconds);
             }
         }
 
@@ -91,6 +95,10 @@ namespace Gameplay.Game_Modes {
             GameModeUIHandler.GameModeUIText.TopRightHeader.color = targetScore.MedalColor;
             GameModeUIHandler.GameModeUIText.TopRightHeader.text = $"TARGET {targetScore.Medal}".ToUpper();
             GameModeUIHandler.GameModeUIText.TopRightContent.text = TimeExtensions.TimeSecondsToString(targetScore.Score);
+        }
+
+        protected virtual void LastCheckpointHit(float hitAtTime) {
+            GameModeLifecycle.Complete();
         }
 
         protected void SetSplitTimer(float splitTimeSeconds, float previousSplitTimeSeconds = 0) {

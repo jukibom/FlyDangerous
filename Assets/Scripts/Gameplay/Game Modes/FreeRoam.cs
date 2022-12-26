@@ -10,6 +10,9 @@ namespace Gameplay.Game_Modes {
         public bool SupportsReplays => false;
         public bool RequireBoostHeldToStart => false;
 
+        public void OnInitialise() {
+        }
+
         public void OnBegin() {
         }
 
