@@ -122,6 +122,8 @@ namespace Core {
                     return 11000;
                 case "simRacingStudioOutputPort":
                     return 33001;
+                case "autoTrackAmount":
+                    return 0.5f;
                 case "autoTrackDamping":
                     return 0.2f;
                 case "autoTrackHorizontalDegrees":

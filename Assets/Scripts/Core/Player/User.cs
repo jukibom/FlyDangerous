@@ -495,6 +495,12 @@ namespace Core.Player {
         }
 
         [UsedImplicitly]
+        public void OnToggleCameraDrift(InputValue value) {
+            if (value.isPressed)
+                headTracking.IsAutoTrackEnabled = !headTracking.IsAutoTrackEnabled;
+        }
+
+        [UsedImplicitly]
         public void OnRecenterMouse(InputValue value) {
             ResetMouseToCentre();
         }

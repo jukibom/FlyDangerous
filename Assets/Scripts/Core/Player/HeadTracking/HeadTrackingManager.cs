@@ -19,6 +19,7 @@ namespace Core.Player.HeadTracking {
         private Vector3 _autoTrackMax;
         private Vector3 _autoTrackMin;
         private bool _autoTrackSnap;
+        private float _autoTrackAmount;
 
         private HeadTransform _headTransform;
         private OpenTrackData _openTrackData;
@@ -30,7 +31,7 @@ namespace Core.Player.HeadTracking {
 
         public bool IsOpenTrackEnabled { get; private set; }
         public bool IsTrackIrEnabled { get; private set; }
-        public bool IsAutoTrackEnabled { get; private set; }
+        public bool IsAutoTrackEnabled { get; set; }
 
         public ref HeadTransform HeadTransform => ref _headTransform;
 
@@ -76,11 +77,17 @@ namespace Core.Player.HeadTracking {
                 var lookDirection = Quaternion.LookRotation(transform.InverseTransformDirection(_shipVelocity), Vector3.up);
                 var clampedDirection = MathfExtensions.ClampRotation(lookDirection, _autoTrackMin, _autoTrackMax);
 
+                // use the speed of the ship to handle how much to look too
+                var speedAdjustedDirection = Quaternion.Lerp(Quaternion.identity, clampedDirection, _shipVelocity.magnitude.Remap(50, 300, 0, 1));
+
+                // use the amount as requested by the users' prefs as to how much to look
+                var preferenceAdjustedDirection = Quaternion.Lerp(Quaternion.identity, speedAdjustedDirection, _autoTrackAmount);
+
                 // if enabled and direction is outside the cone of vision, revert to forward
                 if (_autoTrackSnap && clampedDirection != lookDirection)
-                    clampedDirection = Quaternion.identity;
+                    preferenceAdjustedDirection = Quaternion.identity;
 
-                _autoTrackHeadOrientation = Quaternion.Lerp(_autoTrackHeadOrientation, clampedDirection, _autoTrackDamping);
+                _autoTrackHeadOrientation = Quaternion.Lerp(_autoTrackHeadOrientation, preferenceAdjustedDirection, _autoTrackDamping);
             }
             else {
                 _autoTrackHeadOrientation = Quaternion.identity;
@@ -115,6 +122,7 @@ namespace Core.Player.HeadTracking {
             IsOpenTrackEnabled = Preferences.Instance.GetBool("openTrackEnabled");
             IsTrackIrEnabled = Preferences.Instance.GetBool("trackIrEnabled");
             IsAutoTrackEnabled = Preferences.Instance.GetBool("autoTrackEnabled");
+            _autoTrackAmount = Preferences.Instance.GetFloat("autoTrackAmount");
             _autoTrackDamping = Preferences.Instance.GetFloat("autoTrackDamping").Remap(0, 1, 0.1f, 0.01f);
             _autoTrackMin = new Vector3(
                 -Preferences.Instance.GetFloat("autoTrackUpDegrees"),
