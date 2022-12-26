@@ -30,7 +30,6 @@ namespace Core.Player {
         private float _yawInput;
         private float _rollInput;
 
-
         private Transform _transform;
 
         private bool _isDriftEnabled;
@@ -194,7 +193,13 @@ namespace Core.Player {
                 ShipPhysics.ShipProfile = new ShipProfile(playerName, playerFlag, _shipModelName, _primaryColor, _accentColor, _thrusterColor, _trailColor,
                     _headLightsColor);
 
-                if (isLocalPlayer && shipPhysics.ShipModel != null) shipPhysics.ShipModel.ShipCameraRig = user.ShipCameraRig;
+                if (isLocalPlayer && shipPhysics.ShipModel != null) {
+                    shipPhysics.ShipModel.ShipCameraRig = user.ShipCameraRig;
+
+                    // subscribe to shield changes
+                    shipPhysics.ShipModel.Shield.OnShieldImpact -= CmdShieldImpact;
+                    shipPhysics.ShipModel.Shield.OnShieldImpact += CmdShieldImpact;
+                }
 
                 // handle any ship model specific stuff
                 shipPhysics.ShipModel?.SetIsLocalPlayer(isLocalPlayer);
@@ -392,8 +397,6 @@ namespace Core.Player {
 
                 ShipPhysics.UpdateBoostStatus();
                 ShipPhysics.UpdateMotionData(velocity, thrust, torque);
-                ShipPhysics.UpdateFeedbackData();
-                // ShipPhysics.UpdateInstrumentData();
             }
         }
 
@@ -404,8 +407,7 @@ namespace Core.Player {
 
         [ClientRpc]
         private void RpcBoost(float spoolTime, float boostTime) {
-            if (!isLocalPlayer)
-                ShipPhysics.ShipModel?.Boost(spoolTime, boostTime);
+            if (!isLocalPlayer) ShipPhysics.ShipModel?.Boost(spoolTime, boostTime);
         }
 
         [Command]
@@ -415,8 +417,17 @@ namespace Core.Player {
 
         [ClientRpc]
         private void RpcBoostCancel() {
-            if (!isLocalPlayer)
-                ShipPhysics.ShipModel?.BoostCancel();
+            if (!isLocalPlayer) ShipPhysics.ShipModel?.BoostCancel();
+        }
+
+        [Command]
+        private void CmdShieldImpact(float impactForceNormalised, Vector3 impactDirection) {
+            RpcSetShieldImpact(impactForceNormalised, impactDirection);
+        }
+
+        [ClientRpc]
+        private void RpcSetShieldImpact(float impactForceNormalised, Vector3 impactDirection) {
+            if (!isLocalPlayer) ShipPhysics.ShipModel?.Shield.ShieldImpact(impactForceNormalised, impactDirection);
         }
 
         [Command]

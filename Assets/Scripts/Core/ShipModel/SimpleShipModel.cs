@@ -86,6 +86,8 @@ namespace Core.ShipModel {
 
         public ShipCameraRig ShipCameraRig { get; set; }
 
+        public Shield Shield => shield;
+
         [CanBeNull] public ShipShake ShipShake { get; private set; }
 
         public MonoBehaviour Entity() {
@@ -212,11 +214,11 @@ namespace Core.ShipModel {
             if (shipFeedbackData.CollisionThisFrame) {
                 if (shipFeedbackData.CollisionStartedThisFrame) {
                     ShipShake?.AddShake(0.2f, shipFeedbackData.CollisionImpactNormalised * Time.fixedDeltaTime);
-                    shield.OnImpact(shipFeedbackData.CollisionImpactNormalised, shipFeedbackData.CollisionDirection);
+                    shield.ShieldImpact(shipFeedbackData.CollisionImpactNormalised, shipFeedbackData.CollisionDirection);
                 }
                 else {
                     ShipShake?.AddShake(Time.fixedDeltaTime * 3, shipFeedbackData.CollisionImpactNormalised * 3 * Time.fixedDeltaTime);
-                    shield.OnContinuousCollision(shipFeedbackData.CollisionDirection);
+                    shield.ContinuousCollision(shipFeedbackData.CollisionDirection);
                 }
             }
         }

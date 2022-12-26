@@ -10,6 +10,10 @@ namespace Core.ShipModel {
         private static readonly int ShieldOffset = Shader.PropertyToID("_ShieldOffset");
         private static readonly int ShieldFresnel = Shader.PropertyToID("_FresnelPower");
 
+        public delegate void ShieldImpactEvent(float impactForceNormalised, Vector3 impactDirection);
+
+        public event ShieldImpactEvent OnShieldImpact;
+
         [SerializeField] private MeshRenderer shieldMesh;
         [SerializeField] private MeshRenderer shieldImpactMesh;
         [SerializeField] private AudioSource shieldActivateAudioSource;
@@ -77,7 +81,8 @@ namespace Core.ShipModel {
             shieldActivateAudioSource.Stop();
         }
 
-        public void OnImpact(float impactForceNormalised, Vector3 impactDirection) {
+        public void ShieldImpact(float impactForceNormalised, Vector3 impactDirection) {
+            OnShieldImpact?.Invoke(impactForceNormalised, impactDirection);
             _targetShieldImpactAlpha += impactForceNormalised * shieldImpactForceAlphaMultiplier;
             _targetShieldAlpha += impactForceNormalised * maxShieldAlpha;
             _targetTurbulenceOffset += impactForceNormalised.Remap(0, 1, minTurbulenceOffset, maxTurbulenceOffset);
@@ -98,7 +103,7 @@ namespace Core.ShipModel {
             collisionAudioSource.Play();
         }
 
-        public void OnContinuousCollision(Vector3 collisionDirection) {
+        public void ContinuousCollision(Vector3 collisionDirection) {
             _targetDirection = Vector3.Lerp(_targetDirection, collisionDirection, 0.01f);
             shieldActivateAudioSource.transform.localPosition = _targetDirection;
             _targetShieldImpactAlpha += 0.01f * shieldImpactForceAlphaMultiplier;
