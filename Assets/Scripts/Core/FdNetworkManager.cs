@@ -266,7 +266,7 @@ namespace Core {
 
             // if a ship player which is the host already exists and the game mode permits it, warp there instead
             var hostShip = ShipPlayers.Find(s => s.isHost);
-            if (hostShip != null && Game.Instance.LoadedLevelData.gameType.CanWarpToHost) {
+            if (hostShip != null && Game.Instance.LoadedLevelData.gameType.GameMode.CanWarpToHost) {
                 position = hostShip.AbsoluteWorldPosition;
                 rotation = hostShip.transform.rotation;
             }
@@ -282,7 +282,7 @@ namespace Core {
 
                 try {
                     // TODO: radius should possibly be determined by the ship model itself!
-                    position = Game.Instance.LoadedLevelData.gameType.HasFixedStartLocation
+                    position = Game.Instance.LoadedLevelData.gameType.GameMode.HasFixedStartLocation
                         ? position
                         : PositionalHelpers.FindClosestEmptyPosition(position, 10);
 

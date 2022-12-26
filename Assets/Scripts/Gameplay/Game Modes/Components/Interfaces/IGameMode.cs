@@ -7,6 +7,21 @@ namespace Gameplay.Game_Modes.Components.Interfaces {
         public IGameModeLifecycle GameModeLifecycle { set; }
 
         /**
+         * Can users hot-join a session in multiplayer and bypass the lobby?
+         */
+        public bool IsHotJoinable { get; }
+
+        /**
+         * Can clients warp to the host with reset in multiplayer?
+         */
+        public bool CanWarpToHost { get; }
+
+        /**
+         * Does this game mode have a fixed start location (vs. dynamic / random)?
+         */
+        public bool HasFixedStartLocation { get; }
+
+        /**
          * Flag set to prompt game to record a replay for this game mode
          */
         public bool SupportsReplays { get; }

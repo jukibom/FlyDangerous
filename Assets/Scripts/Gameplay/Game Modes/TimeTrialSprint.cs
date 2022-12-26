@@ -15,6 +15,9 @@ namespace Gameplay.Game_Modes {
         public IGameModeTimer GameModeTimer { get; set; }
 
         // Exposed game mode metadata
+        public bool IsHotJoinable => false;
+        public bool CanWarpToHost => false;
+        public bool HasFixedStartLocation => true;
         public bool SupportsReplays => true;
         public bool RequireBoostHeldToStart => true;
         public GameModeScoreType GameModeScoreType => GameModeScoreType.Time;

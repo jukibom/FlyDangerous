@@ -205,8 +205,10 @@ namespace Gameplay.Game_Modes {
                 yield return StartCountdownIfRequired();
 
                 // make absolutely double-decker sure the player couldn't get away before the timer said so
-                LocalPlayer.SetTransformWorld(_startPosition, _startRotation);
-                LocalPlayer.ShipPhysics.ResetPhysics(false);
+                if (_gameMode.HasFixedStartLocation) {
+                    LocalPlayer.SetTransformWorld(_startPosition, _startRotation);
+                    LocalPlayer.ShipPhysics.ResetPhysics(false);
+                }
 
                 _gameModeLifecycle.EnableShipInput();
             }

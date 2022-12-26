@@ -13,24 +13,18 @@ namespace Core.MapData {
         private static readonly IGameMode TimeTrialLapsGameMode = new TimeTrialLaps();
         private static readonly IGameMode HoonAttackGameMode = new HoonAttack();
 
-        public static readonly GameType FreeRoam = new("Free Roam", FreeRoamGameMode, true, true, false);
-        public static readonly GameType Sprint = new("Sprint", TimeTrialSprintGameMode, false, false, true);
-        public static readonly GameType Laps = new("Laps", TimeTrialLapsGameMode, false, false, true);
-        public static readonly GameType HoonAttack = new("Hoon Attack", HoonAttackGameMode, false, false, false);
+        public static readonly GameType FreeRoam = new("Free Roam", FreeRoamGameMode);
+        public static readonly GameType Sprint = new("Sprint", TimeTrialSprintGameMode);
+        public static readonly GameType Laps = new("Laps", TimeTrialLapsGameMode);
+        public static readonly GameType HoonAttack = new("Hoon Attack", HoonAttackGameMode);
 
-        private GameType(string name, IGameMode gameMode, bool isHotJoinable, bool canWarpToHost, bool hasFixedStartLocation) {
+        private GameType(string name, IGameMode gameMode) {
             Id = GenerateId;
             Name = name;
             GameMode = gameMode;
-            IsHotJoinable = isHotJoinable;
-            CanWarpToHost = canWarpToHost;
-            HasFixedStartLocation = hasFixedStartLocation;
         }
 
         private static int GenerateId => _id++;
-        public bool IsHotJoinable { get; }
-        public bool CanWarpToHost { get; }
-        public bool HasFixedStartLocation { get; }
 
         public int Id { get; }
         public string Name { get; }

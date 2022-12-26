@@ -93,7 +93,7 @@ namespace Core {
 
         public bool IsVREnabled { get; private set; }
 
-        public bool IsGameHotJoinable => LoadedLevelData.gameType.IsHotJoinable;
+        public bool IsGameHotJoinable => LoadedLevelData.gameType.GameMode.IsHotJoinable;
 
         public ShipParameters ShipParameters {
             get {

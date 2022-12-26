@@ -6,6 +6,10 @@ namespace Gameplay.Game_Modes {
     public class HoonAttack : IGameMode {
         public GameModeUIHandler GameModeUIHandler { get; set; }
         public IGameModeLifecycle GameModeLifecycle { get; set; }
+
+        public bool IsHotJoinable => false;
+        public bool CanWarpToHost => false;
+        public bool HasFixedStartLocation => false;
         public bool SupportsReplays => true;
         public bool RequireBoostHeldToStart => true;
 

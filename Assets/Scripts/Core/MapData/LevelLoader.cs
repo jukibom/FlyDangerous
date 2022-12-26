@@ -89,7 +89,7 @@ namespace Core.MapData {
                 var rotationToWarpTo = Quaternion.Euler(LoadedLevelData.startRotation.ToVector3());
 
                 // if multiplayer free-roam and not the host, warp to the host
-                if (Game.Instance.SessionType == SessionType.Multiplayer && LoadedLevelData.gameType.CanWarpToHost && !ship.isHost)
+                if (Game.Instance.SessionType == SessionType.Multiplayer && LoadedLevelData.gameType.GameMode.CanWarpToHost && !ship.isHost)
                     FindObjectsOfType<ShipPlayer>().ToList().ForEach(otherShipPlayer => {
                         if (otherShipPlayer.isHost) {
                             var emptyPosition = PositionalHelpers.FindClosestEmptyPosition(otherShipPlayer.AbsoluteWorldPosition, 10);
