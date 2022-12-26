@@ -117,14 +117,14 @@ namespace Core.Player {
         private void OnEnable() {
             // perform positional correction on non-local client player objects like anything else in the world
             FloatingOrigin.OnFloatingOriginCorrection += NonLocalPlayerPositionCorrection;
-            ShipPhysics.OnBoost += CmdBoost;
-            ShipPhysics.OnBoostCancel += CmdBoostCancel;
+            ShipPhysics.OnBoost += DoBoost;
+            ShipPhysics.OnBoostCancel += BoostCancel;
         }
 
         private void OnDisable() {
             FloatingOrigin.OnFloatingOriginCorrection -= NonLocalPlayerPositionCorrection;
-            ShipPhysics.OnBoost -= CmdBoost;
-            ShipPhysics.OnBoostCancel -= CmdBoostCancel;
+            ShipPhysics.OnBoost -= DoBoost;
+            ShipPhysics.OnBoostCancel -= BoostCancel;
         }
 
         public override void OnStartLocalPlayer() {
@@ -173,6 +173,11 @@ namespace Core.Player {
                 // rigidbody angular momentum constraints 
                 // TODO: Is this needed??
                 Rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+
+                // ensure local ships don't try to do clever interpolation of rigidbody (there's too much going on!)
+                Rigidbody.interpolation = RigidbodyInterpolation.None;
+
+                shipPhysics.ShipActive = true;
 
                 // force new layer for non-local player
                 var mask = LayerMask.NameToLayer("Non-Local Player");
@@ -331,6 +336,22 @@ namespace Core.Player {
             }
         }
 
+        private void DoBoost(float spoolTime, float boostTime) {
+            // do local boost effects immediately
+            if (isLocalPlayer)
+                ShipPhysics.ShipModel?.Boost(spoolTime, boostTime);
+            // signal other clients to reflect boost effect
+            CmdBoost(spoolTime, boostTime);
+        }
+
+        private void BoostCancel() {
+            // local boost cancel immediately
+            if (isLocalPlayer)
+                ShipPhysics.ShipModel?.BoostCancel();
+            // signal to other players
+            CmdBoostCancel();
+        }
+
         /**
          * All axis should be between -1 and 1.
          */
@@ -369,16 +390,15 @@ namespace Core.Player {
                 // add velocity to position as position would have moved on server at that velocity
                 transform.localPosition += velocity * Time.fixedDeltaTime;
 
+                ShipPhysics.UpdateBoostStatus();
                 ShipPhysics.UpdateMotionData(velocity, thrust, torque);
+                ShipPhysics.UpdateFeedbackData();
+                // ShipPhysics.UpdateInstrumentData();
             }
         }
 
         [Command]
         private void CmdBoost(float spoolTime, float boostTime) {
-            // do local boost effects immediately
-            if (isLocalPlayer)
-                ShipPhysics.ShipModel?.Boost(spoolTime, boostTime);
-            // signal other clients to reflect boost effect
             RpcBoost(spoolTime, boostTime);
         }
 
@@ -390,8 +410,6 @@ namespace Core.Player {
 
         [Command]
         private void CmdBoostCancel() {
-            if (isLocalPlayer)
-                ShipPhysics.ShipModel?.BoostCancel();
             RpcBoostCancel();
         }
 

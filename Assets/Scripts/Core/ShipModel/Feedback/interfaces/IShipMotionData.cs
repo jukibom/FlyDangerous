@@ -4,6 +4,9 @@ namespace Core.ShipModel.Feedback.interfaces {
     // Typically used to provide physics data to integrations like motion rigs.
     // Most values are provided normalised (-1:1 or 0:1) using the maximums for ease of integration.
     public interface IShipMotionData {
+        // The ship is ready to fly
+        public bool ShipActive { get; }
+
         // The raw lateral velocity in ship local space m/s
         Vector3 CurrentLateralVelocity { get; }
 

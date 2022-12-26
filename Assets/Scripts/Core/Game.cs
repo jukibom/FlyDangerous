@@ -445,8 +445,8 @@ namespace Core {
             }
 
             yield return FdPlayer.WaitForShipPlayer();
-            var ship = FdPlayer.LocalShipPlayer;
-            ship.User.DisableGameInput();
+            var ship = FdPlayer.FindLocalShipPlayer;
+            if (ship != null) ship.User.DisableGameInput();
 
             IEnumerator LoadMenuScene() {
                 // during load we pause scaled time to prevent *absolutely anything* from interacting incorrectly

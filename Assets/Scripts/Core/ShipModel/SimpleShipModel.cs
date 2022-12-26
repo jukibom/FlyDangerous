@@ -172,15 +172,17 @@ namespace Core.ShipModel {
                 if (_shipActive) StartCoroutine(IgnitionSequenceFlicker());
             }
 
-            if (!_shipActive) indicatorCanvas.alpha = 0;
-            thrusterController.addTargetThrustToForwardThrusters = _shipActive ? 0.1f : 0;
-            thrusterController.enabled = _shipActive;
-            smokeEmitter.Active = _shipActive;
+            indicatorCanvas.enabled = _shipActive;
 
             #endregion
         }
 
         public virtual void OnShipMotionUpdate(IShipMotionData shipMotionData) {
+            // ship enabled thrust overrides
+            thrusterController.addTargetThrustToForwardThrusters = shipMotionData.ShipActive ? 0.1f : 0;
+            thrusterController.enabled = shipMotionData.ShipActive;
+            smokeEmitter.Active = shipMotionData.ShipActive;
+
             // TODO: I literally have no idea where this came from or why, maybe do some digging here?
             // At least it's localised now ...
             var torqueVec = new Vector3(
@@ -196,6 +198,7 @@ namespace Core.ShipModel {
             }
 
             thrusterController.UpdateThrusters(shipMotionData.CurrentLateralForceNormalised, torqueVec);
+
             smokeEmitter.UpdateThrustTrail(shipMotionData.CurrentLateralVelocity, shipMotionData.MaxSpeed,
                 shipMotionData.CurrentLateralForceNormalised);
             foliageCollider.radius = shipMotionData.CurrentLateralVelocity.magnitude.Remap(0, shipMotionData.MaxSpeed / 2, 4, 15);
