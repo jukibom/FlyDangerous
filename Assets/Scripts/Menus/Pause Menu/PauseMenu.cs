@@ -25,6 +25,8 @@ namespace Menus.Pause_Menu {
 
         [SerializeField] private Button quitButton;
 
+        private Coroutine fadeTextCoroutine;
+
         public void OnEnable() {
             // multiplayer specific UI changes
             var player = FdPlayer.FindLocalShipPlayer;
@@ -69,17 +71,19 @@ namespace Menus.Pause_Menu {
                 while (copyConfirmationText.color.a > 0.0f) {
                     copyConfirmationText.color = new Color(1f, 1f, 1f, copyConfirmationText.color.a - Time.unscaledDeltaTime);
 
-                    var localPosition = gameObject.transform.localPosition;
+                    var localPosition = transform.localPosition;
                     copyConfirmTransform.localPosition = new Vector3(
-                        localPosition.x + 160,
-                        copyConfirmationText.gameObject.transform.localPosition.y + Time.unscaledDeltaTime * 20,
+                        localPosition.x + 150,
+                        copyConfirmationText.transform.localPosition.y + Time.unscaledDeltaTime * 20,
                         localPosition.z
                     );
                     yield return null;
                 }
             }
 
-            StartCoroutine(FadeText());
+            if (fadeTextCoroutine != null)
+                StopCoroutine(fadeTextCoroutine);
+            fadeTextCoroutine = StartCoroutine(FadeText());
         }
 
         // if the user quick-closes with B button or ESC or whatever
