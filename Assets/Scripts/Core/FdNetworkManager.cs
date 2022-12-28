@@ -284,7 +284,7 @@ namespace Core {
                     // TODO: radius should possibly be determined by the ship model itself!
                     position = Game.Instance.LoadedLevelData.gameType.GameMode.HasFixedStartLocation
                         ? position
-                        : PositionalHelpers.FindClosestEmptyPosition(position, 10);
+                        : PositionalHelpers.FindClosestEmptyPosition(position, 10, ship.gameObject);
 
                     // update locally immediately for subsequent collision checks
                     ship.ShipPhysics.gameObject.SetActive(true);
