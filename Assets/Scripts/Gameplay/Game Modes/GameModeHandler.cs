@@ -67,9 +67,6 @@ namespace Gameplay.Game_Modes {
         public void InitialiseGameMode(ShipPlayer localPlayer, LevelData levelData, IGameMode gameMode, InGameUI inGameUI, Track track) {
             CheckValidity();
 
-            _startPosition = localPlayer.AbsoluteWorldPosition;
-            _startRotation = localPlayer.transform.rotation;
-
             _gameModeScore = new GameModeScore(gameMode, levelData);
             _gameModeTimer = new GameModeTimer();
             _gameModeLifecycle = new GameModeLifecycle(this, localPlayer, Restart, Complete);
@@ -106,6 +103,9 @@ namespace Gameplay.Game_Modes {
         }
 
         public void Begin() {
+            _startPosition = LocalPlayer.AbsoluteWorldPosition;
+            _startRotation = LocalPlayer.transform.rotation;
+
             HandleStartSequence();
         }
 
