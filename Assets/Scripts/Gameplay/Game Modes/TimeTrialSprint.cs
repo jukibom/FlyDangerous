@@ -26,11 +26,12 @@ namespace Gameplay.Game_Modes {
 
 
         private readonly List<float> _splits = new();
-        private float _lastCheckpointHitTimeSeconds;
+        protected float _lastCheckpointHitTimeSeconds;
         private Coroutine _splitFadeOutCoroutine;
 
         public virtual void OnInitialise() {
-            /* nothing to do */
+            _splits.Clear();
+            _lastCheckpointHitTimeSeconds = 0;
         }
 
         public virtual void OnBegin() {
@@ -50,6 +51,7 @@ namespace Gameplay.Game_Modes {
             GameModeUIHandler.GameModeUIText.CentralCanvasGroup.alpha = 0;
             GameModeCheckpoints.Reset();
             _splits.Clear();
+            _lastCheckpointHitTimeSeconds = 0;
         }
 
         public virtual void OnComplete() {
@@ -73,8 +75,8 @@ namespace Gameplay.Game_Modes {
             /* nothing to do */
         }
 
-        public virtual void OnCheckpointHit(Checkpoint checkpoint, float excessTimeToHitSeconds) {
-            _lastCheckpointHitTimeSeconds = GameModeTimer.CurrentSessionTimeSeconds + excessTimeToHitSeconds;
+        public virtual void OnCheckpointHit(Checkpoint checkpoint, float hitTimeSeconds) {
+            _lastCheckpointHitTimeSeconds = hitTimeSeconds;
 
             // store split 
             _splits.Add(_lastCheckpointHitTimeSeconds);
@@ -87,10 +89,12 @@ namespace Gameplay.Game_Modes {
                 // enable the end checkpoint
                 var endCheckpoint = GameModeCheckpoints.Checkpoints.Find(c => c.Type == CheckpointType.End);
                 if (endCheckpoint) endCheckpoint.ToggleValidEndMaterial(true);
-
-                // if we hit the end checkpoint in this state, we're done!
-                if (checkpoint.Type == CheckpointType.End) LastCheckpointHit(_lastCheckpointHitTimeSeconds);
             }
+        }
+
+        public virtual void OnLastCheckpointHit(float hitTimeSeconds) {
+            if (GameModeCheckpoints.AllCheckpointsHit)
+                GameModeLifecycle.Complete();
         }
 
         public void SetCurrentPersonalBest(float score, List<float> splits) {
@@ -100,9 +104,6 @@ namespace Gameplay.Game_Modes {
             GameModeUIHandler.GameModeUIText.TopRightContent.text = TimeExtensions.TimeSecondsToString(targetScore.Score);
         }
 
-        protected virtual void LastCheckpointHit(float hitAtTime) {
-            GameModeLifecycle.Complete();
-        }
 
         protected void SetSplitTimer(float splitTimeSeconds, float previousSplitTimeSeconds = 0) {
             GameModeUIHandler.GameModeUIText.CentralHeader.color = Color.white;

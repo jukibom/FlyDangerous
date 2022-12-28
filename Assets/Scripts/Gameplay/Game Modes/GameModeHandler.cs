@@ -45,7 +45,8 @@ namespace Gameplay.Game_Modes {
         private Coroutine _startSequenceCoroutine;
 
         private ShipPlayer LocalPlayer { get; set; }
-        public bool HasStarted => LocalPlayer != null && LocalPlayer.ShipPhysics.ShipActive;
+        public bool ShipActive => LocalPlayer != null && LocalPlayer.ShipPhysics.ShipActive;
+        public bool HasStarted => ShipActive && _gameModeCountdown.CountdownComplete;
 
         private void OnEnable() {
             _replayRecorder = GetComponent<ReplayRecorder>();
@@ -58,7 +59,7 @@ namespace Gameplay.Game_Modes {
         }
 
         private void FixedUpdate() {
-            if (HasStarted) {
+            if (ShipActive) {
                 _gameModeTimer.Tick(Time.fixedDeltaTime);
                 _gameMode.OnFixedUpdate();
             }
@@ -164,7 +165,10 @@ namespace Gameplay.Game_Modes {
         }
 
         private void OnCheckpointHit(Checkpoint checkpoint, float excessTimeToHitSeconds) {
-            _gameModeWithCheckpoint?.OnCheckpointHit(checkpoint, excessTimeToHitSeconds);
+            var hitTimeSeconds = _gameModeTimer.CurrentSessionTimeSeconds + excessTimeToHitSeconds;
+            _gameModeWithCheckpoint?.OnCheckpointHit(checkpoint, hitTimeSeconds);
+            if (checkpoint.Type == CheckpointType.End)
+                _gameModeWithCheckpoint?.OnLastCheckpointHit(hitTimeSeconds);
         }
 
         private void OnGameSettingsApplied() {
