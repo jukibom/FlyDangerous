@@ -3,17 +3,34 @@ using Core.Player;
 using FdUI;
 using Menus.Main_Menu;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace Menus.Options {
     public class OptionsMenu : MenuBase {
+        [SerializeField] private OptionsConfirmationDialog optionsConfirmationDialog;
+        [SerializeField] private Button cancelButton;
+
         public InputActionAsset actions;
         private bool _flightAssistDefaultsChanged;
         private SaveData _previousPrefs;
+        private SaveData _pendingPrefs;
 
         protected override void OnOpen() {
+            if (_pendingPrefs != null) {
+                Preferences.Instance.SetPreferences(_pendingPrefs);
+                _pendingPrefs = null;
+            }
+
             LoadPreferences();
+            var newPrefs = GetPreferencesFromOptionsPanel();
+            Preferences.Instance.SetPreferences(newPrefs);
+
+            if (_previousPrefs != null) Preferences.Instance.SetPreferences(_previousPrefs);
+
+            _previousPrefs = Preferences.Instance.GetCurrent().Clone();
+            optionsConfirmationDialog.Hide();
         }
 
         public void ToggleVR() {
@@ -23,8 +40,43 @@ namespace Menus.Options {
                 Game.Instance.EnableVR();
         }
 
+        public override void Cancel() {
+            Cancel(false);
+        }
+
+        public void Cancel(bool force) {
+            if (force) {
+                _previousPrefs = null;
+                _pendingPrefs = null;
+                base.Cancel();
+                return;
+            }
+
+            if (EventSystem.current.currentSelectedGameObject.GetInstanceID() == cancelButton.gameObject.GetInstanceID()) {
+                var newPrefs = GetPreferencesFromOptionsPanel();
+                var hasChanges = _previousPrefs.ToJsonString() != newPrefs.ToJsonString();
+
+                if (hasChanges) {
+                    _pendingPrefs = newPrefs;
+                    Progress(optionsConfirmationDialog);
+                }
+                else {
+                    _previousPrefs = null;
+                    _pendingPrefs = null;
+                    base.Cancel();
+                }
+            }
+            else {
+                cancelButton.Select();
+            }
+        }
+
         public void Apply() {
-            SavePreferences();
+            _previousPrefs = null;
+            var newPrefs = GetPreferencesFromOptionsPanel();
+            Preferences.Instance.SetPreferences(newPrefs);
+            Preferences.Instance.Save();
+
             SetDebugFlightParameters();
             Game.Instance.ApplyGameOptions();
             if (_flightAssistDefaultsChanged) {
@@ -35,16 +87,16 @@ namespace Menus.Options {
             Progress(caller, false, false);
         }
 
-        protected override void OnClose() {
-            // not sure about this - the hack here is to save the preferences, compare with previous and revert if the user chooses to discard.
-            SavePreferences();
-            if (_previousPrefs.ToJsonString() != Preferences.Instance.GetCurrent().ToJsonString())
-                Debug.Log("Discarded changed preferences! (TODO: confirmation dialog)");
-            // TODO: Confirmation dialog (if there is state to commit)
-
-            RevertPreferences();
-            Preferences.Instance.Save();
-        }
+        // protected override void OnClose() {
+        //     // not sure about this - the hack here is to save the preferences, compare with previous and revert if the user chooses to discard.
+        //     SavePreferences();
+        //     if (_previousPrefs.ToJsonString() != Preferences.Instance.GetCurrent().ToJsonString())
+        //         Debug.Log("Discarded changed preferences! (TODO: confirmation dialog)");
+        //     // TODO: Confirmation dialog (if there is state to commit)
+        //
+        //     RevertPreferences();
+        //     Preferences.Instance.Save();
+        // }
 
         public void OnFlightAssistDefaultsChange(Dropdown dropdown) {
             _flightAssistDefaultsChanged = Preferences.Instance.GetString("flightAssistDefault") != GetFlightAssistDefaultPreference(dropdown.value);
@@ -66,7 +118,6 @@ namespace Menus.Options {
             var toggleRadialOptions = GetComponentsInChildren<FdToggleGroup>(true);
             foreach (var toggleRadialOption in toggleRadialOptions)
                 toggleRadialOption.Value = Preferences.Instance.GetString(toggleRadialOption.Preference);
-            _previousPrefs = Preferences.Instance.GetCurrent().Clone();
         }
 
         private void RevertPreferences() {
@@ -74,7 +125,10 @@ namespace Menus.Options {
             Game.Instance.LoadBindings();
         }
 
-        private void SavePreferences() {
+        // Save all the settings but don't maintain that state in prefs and don't serialize to disk
+        private SaveData GetPreferencesFromOptionsPanel() {
+            var existing = Preferences.Instance.GetCurrent().Clone();
+
             Preferences.Instance.SetString("inputBindings", actions.SaveBindingOverridesAsJson());
 
             var toggleOptions = GetComponentsInChildren<ToggleOption>(true);
@@ -91,8 +145,10 @@ namespace Menus.Options {
             var toggleRadialOptions = GetComponentsInChildren<FdToggleGroup>(true);
             foreach (var toggleRadialOption in toggleRadialOptions) Preferences.Instance.SetString(toggleRadialOption.Preference, toggleRadialOption.Value);
 
+            var newPrefs = Preferences.Instance.GetCurrent();
+            Preferences.Instance.SetPreferences(existing);
 
-            Preferences.Instance.Save();
+            return newPrefs;
         }
 
         private void SetDebugFlightParameters() {
