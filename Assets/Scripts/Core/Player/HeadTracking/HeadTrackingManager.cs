@@ -14,26 +14,28 @@ namespace Core.Player.HeadTracking {
 
     public class HeadTrackingManager : MonoBehaviour {
         [SerializeField] private TrackIRComponent trackIr;
+
+        // prefs
         private float _autoTrackDamping;
-        private Quaternion _autoTrackHeadOrientation;
         private float _autoTrackDeadzone;
         private Vector3 _autoTrackMax;
         private Vector3 _autoTrackMin;
         private bool _autoTrackSnap;
         private float _autoTrackAmount;
 
+        // containers
+        private Vector3 _shipVelocity = Vector3.zero;
         private HeadTransform _headTransform;
         private OpenTrackData _openTrackData;
-        private Quaternion _openTrackHeadOrientation;
-        private Vector3 _openTrackHeadPosition;
-        private Vector3 _shipVelocity;
-        private Quaternion _trackIrHeadOrientation;
-        private Vector3 _trackIrHeadPosition;
+        private Vector3 _openTrackHeadPosition = Vector3.zero;
+        private Quaternion _openTrackHeadOrientation = Quaternion.identity;
+        private Vector3 _trackIrHeadPosition = Vector3.zero;
+        private Quaternion _trackIrHeadOrientation = Quaternion.identity;
+        private Quaternion _autoTrackHeadOrientation;
 
         public bool IsOpenTrackEnabled { get; private set; }
         public bool IsTrackIrEnabled { get; private set; }
         public bool IsAutoTrackEnabled { get; set; }
-
         public ref HeadTransform HeadTransform => ref _headTransform;
 
         private void FixedUpdate() {
