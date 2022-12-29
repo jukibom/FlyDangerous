@@ -1,4 +1,4 @@
-﻿using Misc;
+using Misc;
 using UnityEngine;
 
 namespace Core.Player.HeadTracking {
@@ -16,6 +16,7 @@ namespace Core.Player.HeadTracking {
         [SerializeField] private TrackIRComponent trackIr;
         private float _autoTrackDamping;
         private Quaternion _autoTrackHeadOrientation;
+        private float _autoTrackDeadzone;
         private Vector3 _autoTrackMax;
         private Vector3 _autoTrackMin;
         private bool _autoTrackSnap;
@@ -74,7 +75,14 @@ namespace Core.Player.HeadTracking {
 
             // Auto vector rotation
             if (IsAutoTrackEnabled && _shipVelocity.magnitude > 1) {
+                // the orientation toward the direction of travel
                 var lookDirection = Quaternion.LookRotation(transform.InverseTransformDirection(_shipVelocity), Vector3.up);
+
+                // deadzone cancel out of look direction
+                if (Quaternion.Angle(Quaternion.identity, lookDirection) < _autoTrackDeadzone)
+                    lookDirection = Quaternion.identity;
+
+                // keep within the users' defined "cone"
                 var clampedDirection = MathfExtensions.ClampRotation(lookDirection, _autoTrackMin, _autoTrackMax);
 
                 // use the speed of the ship to handle how much to look too
@@ -87,6 +95,7 @@ namespace Core.Player.HeadTracking {
                 if (_autoTrackSnap && clampedDirection != lookDirection)
                     preferenceAdjustedDirection = Quaternion.identity;
 
+                // smoothing
                 _autoTrackHeadOrientation = Quaternion.Lerp(_autoTrackHeadOrientation, preferenceAdjustedDirection, _autoTrackDamping);
             }
             else {
@@ -121,9 +130,10 @@ namespace Core.Player.HeadTracking {
         private void OnGameSettingsApplied() {
             IsOpenTrackEnabled = Preferences.Instance.GetBool("openTrackEnabled");
             IsTrackIrEnabled = Preferences.Instance.GetBool("trackIrEnabled");
-            IsAutoTrackEnabled = Preferences.Instance.GetBool("autoTrackEnabled");
+            IsAutoTrackEnabled = Preferences.Instance.GetBool("autoTrackEnabled") && Preferences.Instance.GetString("autoTrackBindType") != "hold";
             _autoTrackAmount = Preferences.Instance.GetFloat("autoTrackAmount");
             _autoTrackDamping = Preferences.Instance.GetFloat("autoTrackDamping").Remap(0, 1, 0.1f, 0.01f);
+            _autoTrackDeadzone = Preferences.Instance.GetFloat("autoTrackDeadzoneDegrees");
             _autoTrackMin = new Vector3(
                 -Preferences.Instance.GetFloat("autoTrackUpDegrees"),
                 -Preferences.Instance.GetFloat("autoTrackHorizontalDegrees"),

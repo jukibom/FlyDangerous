@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using Misc;
@@ -125,7 +125,9 @@ namespace Core {
                 case "autoTrackAmount":
                     return 0.5f;
                 case "autoTrackDamping":
-                    return 0.2f;
+                    return 0.5f;
+                case "autoTrackDeadzoneDegrees":
+                    return 0;
                 case "autoTrackHorizontalDegrees":
                     return 45;
                 case "autoTrackDownDegrees":
