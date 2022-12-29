@@ -1,4 +1,4 @@
-using Misc;
+﻿using Misc;
 using UnityEngine;
 
 namespace Core.Player.HeadTracking {
@@ -132,7 +132,7 @@ namespace Core.Player.HeadTracking {
             IsTrackIrEnabled = Preferences.Instance.GetBool("trackIrEnabled");
             IsAutoTrackEnabled = Preferences.Instance.GetBool("autoTrackEnabled") && Preferences.Instance.GetString("autoTrackBindType") != "hold";
             _autoTrackAmount = Preferences.Instance.GetFloat("autoTrackAmount");
-            _autoTrackDamping = Preferences.Instance.GetFloat("autoTrackDamping").Remap(0, 1, 0.1f, 0.01f);
+            _autoTrackDamping = Mathf.Pow(Preferences.Instance.GetFloat("autoTrackDamping").Remap(0, 1, 1f, 0.4f), 5);
             _autoTrackDeadzone = Preferences.Instance.GetFloat("autoTrackDeadzoneDegrees");
             _autoTrackMin = new Vector3(
                 -Preferences.Instance.GetFloat("autoTrackUpDegrees"),
