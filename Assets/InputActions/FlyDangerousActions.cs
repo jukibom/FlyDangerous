@@ -590,12 +590,12 @@ public partial class @FlyDangerousActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Toggle Camera Drift"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""81396ca8-1f19-4cb0-9ead-064f670f4c49"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [

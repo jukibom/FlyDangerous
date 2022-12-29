@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Misc;
@@ -204,6 +204,8 @@ namespace Core {
                 case "flightAssistRotationalBindType":
                     return "toggle";
                 case "mouseLookBindType":
+                    return "toggle";
+                case "autoTrackBindType":
                     return "toggle";
                 case "altFlightBindType":
                     return "toggle";
