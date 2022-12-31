@@ -16,22 +16,31 @@ This project aims to provide a ground-up reimplementation of a similar-enough fl
 
 [Follow me on twitter](https://juki.flydangero.us)
 
-## Planned Features
+## Features
 
 [Roadmap](https://github.com/users/jukibom/projects/1/views/5)
 
-Major features: 
+Implemented: 
 
-* Flight sticks of all shapes and sizes (done!)
+* Flight sticks of all shapes and sizes
 * Basic time trial map types
-  * Sprint: 1 start, checkpoints, 1 end (done!)
+  * Sprint: 1 start, checkpoints, 1 end
   * Laps 1 start block, checkpoints, lap counter
-* Leaderboards with automatic replay / ghost upload via Steam (done!)
-* Basic Multiplayer (done!)
-* VR Support (done!)
-* Infinite terrain generation (done!)
-  * Freeplay flight, seed generation (done!)
-  * Record + share racetracks (format supports it)
+* Leaderboards with automatic replay / ghost upload via Steam
+  * Download and race against ghosts
+* Basic Multiplayer
+* VR Support
+* Infinite terrain generation
+  * Freeplay flight, seed generation
+
+Planned:
+
+* Record + share racetracks (format implementation supports it, needs in-game tools)
+* Watch own or downloaded replays from various camera angles etc
+* Multiplayer game modes for races and small-scale tournaments
+* Score attack game mode
+
+Check the issues / roadmap for more details!
 
 ## Integrations
 
