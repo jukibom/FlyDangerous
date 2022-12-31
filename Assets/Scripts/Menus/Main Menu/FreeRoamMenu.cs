@@ -23,6 +23,7 @@ namespace Menus.Main_Menu {
         [SerializeField] private Text locationDescription;
 
         [CanBeNull] private LevelData _levelData;
+        private Scene _currentActiveScene;
 
         protected override void OnOpen() {
             var lastPlayedLocation = Preferences.Instance.GetString("lastPlayedFreeRoamLocation");
@@ -48,6 +49,7 @@ namespace Menus.Main_Menu {
 
             UpdateSeedField();
             _levelData = null;
+            _currentActiveScene = SceneManager.GetActiveScene();
         }
 
         public void ClosePanel() {
@@ -96,9 +98,10 @@ namespace Menus.Main_Menu {
             var environment = FdEnum.FromDropdownSelectionEvent(Environment.List(), eventData);
 
             IEnumerator ReplaceEnvironment(string scene) {
-                var currentEnvironment = SceneManager.GetActiveScene();
                 yield return SceneManager.LoadSceneAsync(scene, LoadSceneMode.Additive);
-                yield return SceneManager.UnloadSceneAsync(currentEnvironment);
+                var sceneToUnload = _currentActiveScene;
+                _currentActiveScene = SceneManager.GetActiveScene();
+                yield return SceneManager.UnloadSceneAsync(sceneToUnload);
             }
 
             StartCoroutine(ReplaceEnvironment(environment.SceneToLoad));
