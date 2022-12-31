@@ -33,19 +33,20 @@ namespace Gameplay {
             var levelData = new LevelData {
                 name = loadedLevelData.name,
                 authorTimeTarget = loadedLevelData.authorTimeTarget,
-                gameType = loadedLevelData.gameType, // TODO: this should come from the game mode initialised here!
+                gameType = loadedLevelData.gameType,
                 location = loadedLevelData.location,
                 musicTrack = loadedLevelData.musicTrack,
                 environment = loadedLevelData.environment,
-                terrainSeed = loadedLevelData.terrainSeed,
+                terrainSeed = string.IsNullOrEmpty(loadedLevelData.terrainSeed) ? null : loadedLevelData.terrainSeed,
                 startPosition = SerializableVector3.FromVector3(startPosition),
                 startRotation = SerializableVector3.FromVector3(startRotation.eulerAngles)
             };
 
             checkpointContainer.RefreshCheckpoints();
-            levelData.checkpoints = checkpointContainer
-                .Checkpoints
-                .ConvertAll(SerializebleCheckpoint.FromCheckpoint);
+            if (checkpointContainer.Checkpoints.Count > 0)
+                levelData.checkpoints = checkpointContainer
+                    .Checkpoints
+                    .ConvertAll(SerializebleCheckpoint.FromCheckpoint);
 
             billboardContainer.RefreshBillboardSpawners();
             if (billboardContainer.BillboardSpawners.Count > 0)

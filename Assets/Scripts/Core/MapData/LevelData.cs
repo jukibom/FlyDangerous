@@ -54,30 +54,34 @@ namespace Core.MapData {
     }
 
     public class LevelData {
-        public float authorTimeTarget = 0f;
-
-        public SerializableVector3 startPosition = new();
-        public SerializableVector3 startRotation = new();
-
-        public string musicTrack = "";
+        public int version = 1;
         public string name = "";
-
-        [CanBeNull] public List<SerializebleCheckpoint> checkpoints = null;
-
-        [CanBeNull] public List<SerializableBillboard> billboards = null;
-
-        [JsonConverter(typeof(FdEnumJsonConverter))]
-        public Environment environment = Environment.NoonClear;
 
         [JsonConverter(typeof(FdEnumJsonConverter))]
         public GameType gameType = GameType.FreeRoam;
 
         [JsonConverter(typeof(FdEnumJsonConverter))]
+        public Environment environment = Environment.NoonClear;
+
+        [JsonConverter(typeof(FdEnumJsonConverter))]
         public Location location = Location.Space;
 
-        [CanBeNull] public SerializableVector3 gravity = null;
         [CanBeNull] public string terrainSeed = null;
-        public int version = 1;
+
+        [CanBeNull] public SerializableVector3 gravity = null;
+
+        public string musicTrack = "";
+
+        public float authorTimeTarget;
+
+
+        public SerializableVector3 startPosition = new();
+        public SerializableVector3 startRotation = new();
+
+        [CanBeNull] public List<SerializebleCheckpoint> checkpoints = null;
+
+        [CanBeNull] public List<SerializableBillboard> billboards = null;
+
 
         public string LevelHash() {
             // generate the filename from a hash combination of name, checkpoints and location - this way they'll always be unique.
