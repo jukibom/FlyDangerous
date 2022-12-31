@@ -1,4 +1,6 @@
-![logo](https://user-images.githubusercontent.com/5649179/115070912-78705e80-9eed-11eb-9b18-70e6e05b2c8f.png)
+<p align="center">
+    <img src="https://github.com/jukibom/FlyDangerous/blob/main/Assets/Textures/UI/logo-dropshadow.png" alt="" data-canonical-src="https://github.com/jukibom/FlyDangerous/blob/main/Assets/Textures/UI/logo-dropshadow.png" width="400" />
+</p>
 
 ## A love letter to the Elite Dangerous racing community ❤
 
