@@ -480,7 +480,6 @@ namespace Core.ShipModel {
                 _shipFeedbackData.CollisionStartedThisFrame = _collisionStartedThisFrame;
                 _shipFeedbackData.CollisionImpactNormalised = impact;
                 _shipFeedbackData.CollisionDirection = targetRigidbody.transform.InverseTransformDirection(direction);
-                ;
 
                 // handle boost cap impact (this should go elsewhere!)
                 if (_collisionStartedThisFrame) _boostCapacitorPercent *= 1 - ShipFeedbackData.CollisionImpactNormalised;
@@ -509,11 +508,10 @@ namespace Core.ShipModel {
 
         private void ApplyFlightForces() {
             /* GRAVITY */
-            var gravity = Game.Instance.LoadedLevelData.gravity.ToVector3();
+            var gravity = Game.Instance.LoadedLevelData.gravity?.ToVector3() ?? Vector3.zero;
             targetRigidbody.AddForce(targetRigidbody.mass * gravity);
 
             /* INPUTS */
-
             var latH = LatH;
             var latV = LatV;
             var throttle = Throttle;

@@ -35,7 +35,7 @@ namespace Core.MapData {
             return new[] { FreeRoam, Sprint, Laps, HoonAttack };
         }
 
-        [UsedImplicitly] // FdEnum.ReadJson
+        [UsedImplicitly] // see FdEnum.ReadJson
         public static GameType FromString(string gameTypeString) {
             // handler for old meta data
             if (gameTypeString == "Time Trial") gameTypeString = "Sprint";

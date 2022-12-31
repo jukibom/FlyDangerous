@@ -479,6 +479,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4140260726040096930}
+  - component: {fileID: 3525670303478829989}
   - component: {fileID: 2577301103201249825}
   m_Layer: 0
   m_Name: Billboard
@@ -508,6 +509,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3525670303478829989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3620605603823397400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 524188eec7914ef7941ce4ab985a0eab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  billboard: {fileID: 2577301103201249825}
+  billboardType: Fly Dangerous
+  customMessage: 
+  tintOverride: {r: 1, g: 1, b: 1, a: 1}
+  colorIntensityOverride: 1
+  scrollSpeedOverride: 0
 --- !u!114 &2577301103201249825
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -523,10 +542,6 @@ MonoBehaviour:
   billboardText: {fileID: 4482574247205132736}
   renderTextureCamera: {fileID: 8920936213209681678}
   screen: {fileID: 8948730764630876991}
-  initialBillboardText: 
-  initialBillboardTexture: 
-  initialBillboardTint: {r: 1, g: 1, b: 1, a: 1}
-  initialBillboardScrollSpeed: 0
 --- !u!1 &7435648902277186282
 GameObject:
   m_ObjectHideFlags: 0

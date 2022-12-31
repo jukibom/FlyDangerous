@@ -62,7 +62,7 @@ namespace Menus.Main_Menu {
             var environment = Environment.FromId(environmentDropdown.value);
 
             levelData.gameType = GameType.FreeRoam;
-            levelData.terrainSeed = location.IsTerrain ? seedInput.text : "";
+            levelData.terrainSeed = location.IsTerrain ? seedInput.text : null;
             levelData.location = location;
             levelData.environment = environment;
 

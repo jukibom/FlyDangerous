@@ -1,4 +1,3 @@
-using System.Linq;
 using Core;
 using Core.MapData;
 using Gameplay.Game_Modes.Components;
@@ -13,7 +12,7 @@ namespace Gameplay {
 
         [SerializeField] private GameModeCheckpoints checkpointContainer;
         [SerializeField] private Transform modifierContainer;
-        [SerializeField] private Transform billboardContainer;
+        [SerializeField] private GameModeBillboards billboardContainer;
         [SerializeField] private Transform geometryContainer;
 
         public GameModeCheckpoints GameModeCheckpoints => checkpointContainer;
@@ -42,13 +41,17 @@ namespace Gameplay {
                 startRotation = SerializableVector3.FromVector3(startRotation.eulerAngles)
             };
 
+            checkpointContainer.RefreshCheckpoints();
             levelData.checkpoints = checkpointContainer
-                .GetComponentsInChildren<Checkpoint>()
-                .ToList()
-                .ConvertAll(SerializeableCheckpoint.FromCheckpoint);
+                .Checkpoints
+                .ConvertAll(SerializebleCheckpoint.FromCheckpoint);
+
+            billboardContainer.RefreshBillboardSpawners();
+            if (billboardContainer.BillboardSpawners.Count > 0)
+                levelData.billboards = billboardContainer.BillboardSpawners
+                    .ConvertAll(SerializableBillboard.FromBillboardSpawner);
 
             // TODO: modifiers
-            // TODO: billboards
             // TODO: geometry
 
             return levelData;
@@ -62,8 +65,10 @@ namespace Gameplay {
                     checkpoint.OnHit += HandleOnCheckpointHit;
                 });
 
+            if (levelData.billboards?.Count > 0)
+                levelData.billboards.ForEach(b => billboardContainer.AddBillboard(b));
+
             // TODO: modifiers
-            // TODO: billboards
             // TODO: geometry
         }
     }
