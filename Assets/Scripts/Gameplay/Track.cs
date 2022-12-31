@@ -32,6 +32,7 @@ namespace Gameplay {
 
             var levelData = new LevelData {
                 name = loadedLevelData.name,
+                authorTimeTarget = loadedLevelData.authorTimeTarget,
                 gameType = loadedLevelData.gameType, // TODO: this should come from the game mode initialised here!
                 location = loadedLevelData.location,
                 musicTrack = loadedLevelData.musicTrack,
