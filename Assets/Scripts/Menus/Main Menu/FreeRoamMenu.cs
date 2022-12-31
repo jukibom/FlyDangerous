@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Audio;
 using Core;
 using Core.MapData;
@@ -6,6 +7,7 @@ using JetBrains.Annotations;
 using Misc;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Environment = Core.MapData.Environment;
 
@@ -33,9 +35,9 @@ namespace Menus.Main_Menu {
 
             FdEnum.PopulateDropDown(Location.List(), locationDropdown, option => option.Name.ToUpper());
             FdEnum.PopulateDropDown(Environment.List(), environmentDropdown, option => option.Name.ToUpper());
-            FdEnum.PopulateDropDown(MusicTrack.List(), musicDropdown,
-                option =>
-                    (option.Artist != "" ? $"{option.Artist} - {option.Name}" : option.Name).ToUpper());
+            FdEnum.PopulateDropDown(MusicTrack.List(), musicDropdown, option => option.Artist != ""
+                ? $"{option.Name}  -  {option.Artist}".ToUpper()
+                : option.Name.ToUpper());
 
             locationDropdown.value = location.Id;
             environmentDropdown.value = environment.Id;
@@ -90,17 +92,22 @@ namespace Menus.Main_Menu {
         }
 
         [UsedImplicitly]
-        public void PreviewMusic(BaseEventData eventData) {
-            var dropdownItem = eventData.selectedObject;
-            var index = -1;
-            var parent = dropdownItem.transform.parent;
-            for (var i = 0; i < parent.childCount; i++) {
-                var child = parent.GetChild(i);
-                if (child.gameObject == dropdownItem)
-                    index = i - 1;
+        public void SetEnvironment(BaseEventData eventData) {
+            var environment = FdEnum.FromDropdownSelectionEvent(Environment.List(), eventData);
+
+            IEnumerator ReplaceEnvironment(string scene) {
+                var currentEnvironment = SceneManager.GetActiveScene();
+                yield return SceneManager.LoadSceneAsync(scene, LoadSceneMode.Additive);
+                yield return SceneManager.UnloadSceneAsync(currentEnvironment);
             }
 
-            MusicManager.Instance.PlayMusic(MusicTrack.FromId(index), false, false, true);
+            StartCoroutine(ReplaceEnvironment(environment.SceneToLoad));
+        }
+
+        [UsedImplicitly]
+        public void PreviewMusic(BaseEventData eventData) {
+            var musicTrack = FdEnum.FromDropdownSelectionEvent(MusicTrack.List(), eventData);
+            MusicManager.Instance.PlayMusic(musicTrack, false, false, true);
         }
 
         private void UpdateSeedField() {
