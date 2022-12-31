@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Audio;
 using Gameplay;
 using JetBrains.Annotations;
 using Mirror;
@@ -70,7 +71,8 @@ namespace Core.MapData {
 
         [CanBeNull] public SerializableVector3 gravity = null;
 
-        public string musicTrack = "";
+        [JsonConverter(typeof(FdEnumJsonConverter))]
+        public MusicTrack musicTrack = MusicTrack.None;
 
         public float authorTimeTarget;
 

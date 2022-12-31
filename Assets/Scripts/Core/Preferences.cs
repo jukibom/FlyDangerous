@@ -151,6 +151,8 @@ namespace Core {
                     return "Biome World";
                 case "lastPlayedFreeRoamEnvironment":
                     return "Sunrise Clear";
+                case "lastPlayedFreeRoamMusic":
+                    return "Juno";
                 case "playerName":
                     return "PLAYER NAME";
                 case "playerFlag":

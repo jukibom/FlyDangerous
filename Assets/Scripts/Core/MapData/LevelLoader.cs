@@ -35,8 +35,8 @@ namespace Core.MapData {
             _scenesLoading.Add(SceneManager.LoadSceneAsync(locationSceneToLoad, LoadSceneMode.Additive));
             _scenesLoading.ForEach(scene => scene.allowSceneActivation = false);
 
-            if (musicTrack != "")
-                MusicManager.Instance.PlayMusic(MusicTrack.FromString(musicTrack), true, true, false);
+            if (musicTrack != null)
+                MusicManager.Instance.PlayMusic(musicTrack, true, true, false);
             else
                 MusicManager.Instance.StopMusic(true);
 
@@ -196,7 +196,7 @@ namespace Core.MapData {
 
             // if terrain needs to generate, toggle special logic and wait for it to load all primary tiles
             var mapMagic = FindObjectOfType<MapMagicObject>();
-            if (mapMagic) {
+            if (mapMagic && LoadedLevelData.terrainSeed != null) {
                 mapMagic.graph.random = new Noise(LoadedLevelData.terrainSeed.GetHashCode(), 32768);
 
 #if !NO_PAID_ASSETS

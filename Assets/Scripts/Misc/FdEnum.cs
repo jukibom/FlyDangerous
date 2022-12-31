@@ -40,13 +40,13 @@ namespace Misc {
         public static void PopulateDropDown<T>(
             IEnumerable<T> enums,
             Dropdown dropdown,
-            Func<string, string>? textTransform = null,
+            Func<T, string>? textTransform = null,
             Func<T, Sprite>? useIcon = null
         ) where T : IFdEnum {
             var newOptions = new List<Dropdown.OptionData>();
 
             foreach (var option in enums) {
-                var dropDownOption = textTransform != null ? textTransform(option.Name) : option.Name;
+                var dropDownOption = textTransform != null ? textTransform(option) : option.Name;
                 var data = new Dropdown.OptionData(dropDownOption);
 
                 if (useIcon != null) {
