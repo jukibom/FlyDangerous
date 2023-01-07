@@ -41,7 +41,7 @@ namespace Core.MapData {
             serializableBillboard.rotation = SerializableVector3.FromVector3(transform.rotation.eulerAngles);
             serializableBillboard.type = billboardSpawner.BillboardData.Name;
 
-            if (billboardSpawner.BillboardData.Message != "")
+            if (!string.IsNullOrEmpty(billboardSpawner.Billboard.CustomMessage))
                 serializableBillboard.customMessage = billboardSpawner.Billboard.CustomMessage;
             if (!billboardSpawner.BillboardData.Tint.Equals(billboardSpawner.Billboard.Tint))
                 serializableBillboard.tintOverride = SerializableColor32.FromColor(billboardSpawner.Billboard.Tint);
@@ -102,6 +102,7 @@ namespace Core.MapData {
 
         public string ToJsonString() {
             return JsonConvert.SerializeObject(this, Formatting.Indented, new JsonSerializerSettings {
+                DefaultValueHandling = DefaultValueHandling.Ignore,
                 NullValueHandling = NullValueHandling.Ignore
             });
         }
