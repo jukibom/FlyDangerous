@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Core.MapData;
 using JetBrains.Annotations;
@@ -14,17 +15,17 @@ namespace Gameplay {
         [Dropdown("GetBillboardTypes")] [OnValueChanged("RefreshFromBillboardData")] [SerializeField]
         private string billboardType;
 
-        [ShowIf("ShouldShowCustomMessageField")] [OnValueChanged("SetFromAttributes")] [SerializeField]
+        [ShowIf("ShouldShowCustomMessageField")] [OnValueChanged("SetBillboardAttributes")] [SerializeField]
         private string customMessage;
 
-        [OnValueChanged("SetFromAttributes")] [SerializeField]
-        private Color tintOverride = Color.white;
+        [OnValueChanged("SetBillboardAttributes")] [SerializeField]
+        private Color colorTint = Color.white;
 
-        [OnValueChanged("SetFromAttributes")] [SerializeField]
-        private float colorIntensityOverride = 1;
+        [OnValueChanged("SetBillboardAttributes")] [SerializeField]
+        private float colorIntensity = 1;
 
-        [OnValueChanged("SetFromAttributes")] [SerializeField]
-        private float scrollSpeedOverride;
+        [OnValueChanged("SetBillboardAttributes")] [SerializeField]
+        private float scrollSpeed;
 
         private BillboardData _billboardData;
         public Billboard Billboard => billboard;
@@ -44,21 +45,32 @@ namespace Gameplay {
             }
         }
 
-        public void Deserialize(SerializableBillboard data) {
-            var billboardType = BillboardType.FromString(data.type);
+        public void Deserialize(SerializableBillboard serializedData) {
+            var billboardType = BillboardType.FromString(serializedData.type);
             BillboardData = billboardType.BillboardData;
 
             var billboardTransform = transform;
-            billboardTransform.position = data.position.ToVector3();
-            billboardTransform.rotation = Quaternion.Euler(data.rotation.ToVector3());
+            billboardTransform.position = serializedData.position.ToVector3();
+            billboardTransform.rotation = Quaternion.Euler(serializedData.rotation.ToVector3());
 
             // overrides
-            if (!string.IsNullOrEmpty(data.customMessage)) customMessage = data.customMessage;
-            if (data.tintOverride != null) tintOverride = data.tintOverride.ToColor();
-            if (data.tintIntensityOverride != null) colorIntensityOverride = data.tintIntensityOverride.Value;
-            if (data.scrollSpeedOverride != null) scrollSpeedOverride = data.scrollSpeedOverride.Value;
+            if (!string.IsNullOrEmpty(serializedData.customMessage)) customMessage = serializedData.customMessage;
 
-            BillboardData = billboardType.BillboardData;
+            colorTint = serializedData.tintOverride != null && !serializedData.tintOverride.ToColor().Equals(BillboardData.Tint)
+                ? serializedData.tintOverride.ToColor()
+                : BillboardData.Tint;
+
+            colorIntensity =
+                serializedData.tintIntensityOverride != null && Math.Abs(serializedData.tintIntensityOverride.Value - BillboardData.ColorIntensity) > 0.01f
+                    ? serializedData.tintIntensityOverride.Value
+                    : BillboardData.ColorIntensity;
+
+            scrollSpeed =
+                serializedData.scrollSpeedOverride != null && Math.Abs(serializedData.scrollSpeedOverride.Value - BillboardData.ScrollSpeed) > 0.01f
+                    ? serializedData.scrollSpeedOverride.Value
+                    : BillboardData.ScrollSpeed;
+
+            SetBillboardAttributes();
         }
 
         private void OnEnable() {
@@ -81,22 +93,25 @@ namespace Gameplay {
             ResetAll();
         }
 
+        /**
+         * Apply properties to billboard using overrides if different from the base data
+         */
         [UsedImplicitly]
-        private void SetFromAttributes() {
+        private void SetBillboardAttributes() {
             billboard.CustomMessage = customMessage != "" && ShouldShowCustomMessageField() ? customMessage : "";
-            billboard.Tint = tintOverride;
-            billboard.ColorIntensity = colorIntensityOverride;
-            billboard.ScrollSpeed = scrollSpeedOverride;
+            billboard.Tint = colorTint;
+            billboard.ColorIntensity = colorIntensity;
+            billboard.ScrollSpeed = scrollSpeed;
         }
 
         [Button("Reset to type default")]
         private void ResetAll() {
             var billboardData = BillboardType.FromString(billboardType).BillboardData;
             customMessage = billboardData.Message;
-            tintOverride = billboardData.Tint;
-            colorIntensityOverride = billboardData.ColorIntensity;
-            scrollSpeedOverride = billboardData.ScrollSpeed;
-            SetFromAttributes();
+            colorTint = billboardData.Tint;
+            colorIntensity = billboardData.ColorIntensity;
+            scrollSpeed = billboardData.ScrollSpeed;
+            SetBillboardAttributes();
         }
     }
 }

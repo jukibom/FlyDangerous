@@ -18,6 +18,7 @@ namespace Gameplay {
         private string _textureResource;
         private string _customMessage;
         private Color _tint;
+        private float _intensity;
         private float _scrollSpeed;
 
         private RenderTexture TextRenderTexture {
@@ -55,7 +56,13 @@ namespace Gameplay {
             }
         }
 
-        public float ColorIntensity { get; set; }
+        public float ColorIntensity {
+            get => _intensity;
+            set {
+                _intensity = value;
+                DrawTint();
+            }
+        }
 
         public float ScrollSpeed {
             get => _scrollSpeed;
@@ -103,7 +110,7 @@ namespace Gameplay {
         }
 
         private void DrawTint() {
-            var color = new Color(Tint.r * ColorIntensity, Tint.g * ColorIntensity, Tint.b * ColorIntensity);
+            var color = new Color(Tint.r * _intensity, Tint.g * _intensity, Tint.b * _intensity);
             screen.material.SetColor(TintProperty, color);
         }
     }
