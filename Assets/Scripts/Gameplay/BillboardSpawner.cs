@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Core.MapData;
@@ -32,7 +32,10 @@ namespace Gameplay {
         public Billboard Billboard => billboard;
 
         public BillboardData BillboardData {
-            get => _billboardData;
+            get {
+                if (_billboardData == null) _billboardData = BillboardType.FromString(billboardType).BillboardData;
+                return _billboardData;
+            }
             private set {
                 _billboardData = value;
                 billboardType = BillboardType.FromString(_billboardData.Name).Name;
