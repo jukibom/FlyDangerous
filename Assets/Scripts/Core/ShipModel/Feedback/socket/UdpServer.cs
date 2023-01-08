@@ -1,9 +1,9 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 using Audio;
+using Core.MapData.Serializable;
 using Core.Player;
 using Core.ShipModel.Feedback.interfaces;
-using Core.ShipModel.ShipIndicator;
 using FdUI;
 using JetBrains.Annotations;
 using Misc;

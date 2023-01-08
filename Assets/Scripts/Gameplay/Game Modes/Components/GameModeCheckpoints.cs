@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Core.MapData;
+using Core.MapData.Serializable;
 using Gameplay.Game_Modes.Components.Interfaces;
 using UnityEngine;
 
@@ -24,7 +24,7 @@ namespace Gameplay.Game_Modes.Components {
             Checkpoints = GetComponentsInChildren<Checkpoint>().ToList();
         }
 
-        public Checkpoint AddCheckpoint(SerializebleCheckpoint serializableCheckpoint) {
+        public Checkpoint AddCheckpoint(SerializableCheckpoint serializableCheckpoint) {
             var checkpoint = Instantiate(checkpointPrefab, transform);
 
             checkpoint.Type = serializableCheckpoint.type;

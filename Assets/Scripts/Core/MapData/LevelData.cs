@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Audio;
-using Gameplay;
+using Core.MapData.Serializable;
 using JetBrains.Annotations;
 using Mirror;
 using Misc;
@@ -9,51 +9,6 @@ using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Core.MapData {
-    public class SerializebleCheckpoint {
-        public SerializableVector3 position;
-        public SerializableVector3 rotation;
-        public CheckpointType type;
-
-        public static SerializebleCheckpoint FromCheckpoint(Checkpoint checkpoint) {
-            var checkpointLocation = new SerializebleCheckpoint();
-            var transform = checkpoint.transform;
-            checkpointLocation.position = SerializableVector3.FromVector3(transform.localPosition);
-            checkpointLocation.rotation = SerializableVector3.FromVector3(transform.rotation.eulerAngles);
-            checkpointLocation.type = checkpoint.Type;
-            return checkpointLocation;
-        }
-    }
-
-    public class SerializableBillboard {
-        public SerializableVector3 position;
-        public SerializableVector3 rotation;
-        public string type;
-
-        [CanBeNull] public SerializableColor32 tintOverride;
-        public float? tintIntensityOverride;
-        [CanBeNull] public string customMessage;
-        public float? scrollSpeedOverride;
-
-        public static SerializableBillboard FromBillboardSpawner(BillboardSpawner billboardSpawner) {
-            var serializableBillboard = new SerializableBillboard();
-            var transform = billboardSpawner.transform;
-            serializableBillboard.position = SerializableVector3.FromVector3(transform.localPosition);
-            serializableBillboard.rotation = SerializableVector3.FromVector3(transform.rotation.eulerAngles);
-            serializableBillboard.type = billboardSpawner.BillboardData.Name;
-
-            if (!string.IsNullOrEmpty(billboardSpawner.Billboard.CustomMessage))
-                serializableBillboard.customMessage = billboardSpawner.Billboard.CustomMessage;
-            if (!billboardSpawner.BillboardData.Tint.Equals(billboardSpawner.Billboard.Tint))
-                serializableBillboard.tintOverride = SerializableColor32.FromColor(billboardSpawner.Billboard.Tint);
-            if (Math.Abs(billboardSpawner.BillboardData.ColorIntensity - billboardSpawner.Billboard.ColorIntensity) > 0.01f)
-                serializableBillboard.tintIntensityOverride = billboardSpawner.Billboard.ColorIntensity;
-            if (Math.Abs(billboardSpawner.BillboardData.ScrollSpeed - billboardSpawner.Billboard.ScrollSpeed) > 0.01f)
-                serializableBillboard.scrollSpeedOverride = billboardSpawner.Billboard.ScrollSpeed;
-
-            return serializableBillboard;
-        }
-    }
-
     public class LevelData {
         public int version = 1;
         public string name = "";
@@ -80,7 +35,7 @@ namespace Core.MapData {
         public SerializableVector3 startPosition = new();
         public SerializableVector3 startRotation = new();
 
-        [CanBeNull] public List<SerializebleCheckpoint> checkpoints = null;
+        [CanBeNull] public List<SerializableCheckpoint> checkpoints = null;
 
         [CanBeNull] public List<SerializableBillboard> billboards = null;
 

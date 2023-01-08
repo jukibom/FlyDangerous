@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using UnityEngine;
 
-namespace Misc {
+namespace Core.MapData.Serializable {
     [StructLayout(LayoutKind.Explicit, Size = 12, CharSet = CharSet.Ansi)]
     public class SerializableColor32 {
         [FieldOffset(0)] public uint r;

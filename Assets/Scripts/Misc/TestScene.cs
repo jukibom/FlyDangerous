@@ -3,6 +3,7 @@ using System.IO;
 using Cinemachine;
 using Core;
 using Core.MapData;
+using Core.MapData.Serializable;
 using Core.Player;
 using Core.Replays;
 using Core.Scores;
@@ -27,7 +28,7 @@ namespace Misc {
         public bool shouldReplaySession;
         public Transform spawnLocation;
         public ShipGhost shipGhostPrefab;
-        
+
 
         private void Start() {
             // load engine scene if not already 

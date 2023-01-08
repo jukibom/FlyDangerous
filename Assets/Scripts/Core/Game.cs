@@ -6,6 +6,7 @@ using System.Reflection;
 using Audio;
 using Cinemachine;
 using Core.MapData;
+using Core.MapData.Serializable;
 using Core.Player;
 using Core.Replays;
 using Core.ShipModel;

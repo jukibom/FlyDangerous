@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Core.MapData;
+using Core.MapData.Serializable;
 using UnityEngine;
 
 namespace Gameplay.Game_Modes.Components {

@@ -1,7 +1,7 @@
 using Core;
 using Core.MapData;
+using Core.MapData.Serializable;
 using Gameplay.Game_Modes.Components;
-using Misc;
 using UnityEngine;
 
 namespace Gameplay {
@@ -46,7 +46,7 @@ namespace Gameplay {
             if (checkpointContainer.Checkpoints.Count > 0)
                 levelData.checkpoints = checkpointContainer
                     .Checkpoints
-                    .ConvertAll(SerializebleCheckpoint.FromCheckpoint);
+                    .ConvertAll(SerializableCheckpoint.FromCheckpoint);
 
             billboardContainer.RefreshBillboardSpawners();
             if (billboardContainer.BillboardSpawners.Count > 0)

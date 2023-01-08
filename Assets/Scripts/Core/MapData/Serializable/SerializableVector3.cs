@@ -2,8 +2,8 @@
 using System.Runtime.InteropServices;
 using UnityEngine;
 
-namespace Misc {
-    [StructLayout(LayoutKind.Explicit, Size=12, CharSet=CharSet.Ansi)]
+namespace Core.MapData.Serializable {
+    [StructLayout(LayoutKind.Explicit, Size = 12, CharSet = CharSet.Ansi)]
     public class SerializableVector3 {
         [FieldOffset(0)] public float x;
         [FieldOffset(4)] public float y;
@@ -11,7 +11,7 @@ namespace Misc {
 
         public SerializableVector3() {
         }
-        
+
         public SerializableVector3(Vector3 inVector) {
             x = inVector.x;
             y = inVector.y;
