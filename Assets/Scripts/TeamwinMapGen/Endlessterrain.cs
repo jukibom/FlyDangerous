@@ -18,7 +18,7 @@ public class Endlessterrain : MonoBehaviour
     public float mainStructScale = 10f;
     static float staticscale;
     static int seed;
-    const float scale = 60;
+    const float scale = 15;
 
     const float vieweroffsetthresholdforUpdate = 1f;
     const float sqrvieweroffsetthresholdforUpdate = vieweroffsetthresholdforUpdate * vieweroffsetthresholdforUpdate;

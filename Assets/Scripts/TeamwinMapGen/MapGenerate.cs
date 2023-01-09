@@ -38,6 +38,12 @@ public class MapGenerate : MonoBehaviour
     Queue<MapThreadInfo<mapdata>> mapdatathreadsinfoqueue = new Queue<MapThreadInfo<mapdata>>();
     Queue<MapThreadInfo<MeshData>> meshdatathreadinfoqueue = new Queue<MapThreadInfo<MeshData>>();
 
+    int MaxThreads = Environment.ProcessorCount - 4;
+    int ThreadsActive = 0;
+
+    Queue<ThreadStart> threadPool = new Queue<ThreadStart>();
+
+
     private void Start()
     {
         isPlaying = true;
@@ -45,8 +51,53 @@ public class MapGenerate : MonoBehaviour
     }
     private void Awake()
     {
-
         setseed();
+    }
+    void Update()
+    {
+        // Count Active Threads
+        if (ThreadsActive > MaxThreads)
+        {
+            print("Max Threads Exceeded: " + ThreadsActive);
+        }
+        else
+        {
+            print("Current Threads: " + ThreadsActive);
+            //Go through thread pool
+            if(threadPool.Count > 0)
+            {
+                for(int i = 0; i < threadPool.Count; i++)
+                {
+                    if(ThreadsActive < MaxThreads)
+                    {
+                        ThreadStart threadstart = threadPool.Dequeue();
+                        new Thread(threadstart).Start();
+                        ThreadsActive++;
+                    }
+                }
+            }
+        }
+
+        //Finalize Map Info Threads
+        if (mapdatathreadsinfoqueue.Count > 0)
+        {
+            for (int i = 0; i < mapdatathreadsinfoqueue.Count; i++)
+            {
+                MapThreadInfo<mapdata> threadinfo = mapdatathreadsinfoqueue.Dequeue();
+                threadinfo.callback(threadinfo.parameter);
+                ThreadsActive--;
+            }
+        }
+        //Finalize Mesh Data Threads
+        if (meshdatathreadinfoqueue.Count > 0)
+        {
+            for (int i = 0; i < meshdatathreadinfoqueue.Count; i++)
+            {
+                MapThreadInfo<MeshData> threadinfo = meshdatathreadinfoqueue.Dequeue();
+                threadinfo.callback(threadinfo.parameter);
+                ThreadsActive--;
+            }
+        }
     }
     void setseed()
     {
@@ -89,7 +140,15 @@ public class MapGenerate : MonoBehaviour
         {
             mapdataThread(center ,callback);
         };
-        new Thread(threadstart).Start();
+        if (ThreadsActive < MaxThreads)
+        {
+            new Thread(threadstart).Start();
+            ThreadsActive++;
+        }
+        else
+        {
+            threadPool.Enqueue(threadstart);
+        }
     }
     void mapdataThread(Vector2 center, Action<mapdata> callback)
     {
@@ -105,7 +164,15 @@ public class MapGenerate : MonoBehaviour
         {
             Meshdatathread(LOD, mapdata, callback);
         };
-        new Thread(threadstart).Start();
+        if (ThreadsActive < MaxThreads)
+        {
+            new Thread(threadstart).Start();
+            ThreadsActive++;
+        }
+        else
+        {
+            threadPool.Enqueue(threadstart);
+        }
     }
     void Meshdatathread(int LOD, mapdata mapdata, Action<MeshData> callback)
     {
@@ -115,27 +182,7 @@ public class MapGenerate : MonoBehaviour
             meshdatathreadinfoqueue.Enqueue(new MapThreadInfo<MeshData>(callback,meshData));
         }
     }
-    void Update()
-    {
-
-        if (mapdatathreadsinfoqueue.Count > 0)
-        {
-            for(int i = 0;i<mapdatathreadsinfoqueue.Count;i++)
-            {
-                MapThreadInfo<mapdata> threadinfo = mapdatathreadsinfoqueue.Dequeue();
-                threadinfo.callback(threadinfo.parameter);
-            }
-        }
-
-        if (meshdatathreadinfoqueue.Count > 0)
-        {
-            for (int i = 0; i < meshdatathreadinfoqueue.Count; i++)
-            {
-                MapThreadInfo<MeshData> threadinfo = meshdatathreadinfoqueue.Dequeue();
-                threadinfo.callback(threadinfo.parameter);
-            }
-        }
-    }
+    
     mapdata Generatemapdata(Vector2 center)
     {
         /*
