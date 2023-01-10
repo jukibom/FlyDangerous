@@ -38,7 +38,7 @@ public class MapGenerate : MonoBehaviour
     Queue<MapThreadInfo<mapdata>> mapdatathreadsinfoqueue = new Queue<MapThreadInfo<mapdata>>();
     Queue<MapThreadInfo<MeshData>> meshdatathreadinfoqueue = new Queue<MapThreadInfo<MeshData>>();
 
-    int MaxThreads = Environment.ProcessorCount - 3;
+    int MaxThreads = Environment.ProcessorCount - 4;
     int ThreadsActive = 0;
 
     int MaxChunks = 81;
@@ -251,7 +251,7 @@ public class MapGenerate : MonoBehaviour
     }
     public bool IsGenerating()
     {
-        return ThreadsActive > 0;
+        return ThreadsActive > 2;
     }
     public float GenerationProgress()
     {
