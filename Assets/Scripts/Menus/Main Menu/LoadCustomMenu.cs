@@ -52,9 +52,9 @@ namespace Menus.Main_Menu {
         }
 
         private void SetValidState() {
-            if (_levelData?.name.Length > 0 || _levelData?.terrainSeed.Length > 0) {
+            if (_levelData?.name.Length > 0 || _levelData?.terrainSeed?.Length > 0) {
                 mapInfo.text = _levelData.name;
-                mapInfo.text += _levelData.terrainSeed.Length > 0 ? "    < SEED: " + _levelData.terrainSeed + " >" : "";
+                mapInfo.text += _levelData.terrainSeed?.Length > 0 ? "    < SEED: " + _levelData.terrainSeed + " >" : "";
             }
             else {
                 mapInfo.text = "<Unknown>";

@@ -4,6 +4,7 @@ using Audio;
 using Core;
 using Core.MapData;
 using Core.ShipModel;
+using CustomWebSocketSharp;
 using JetBrains.Annotations;
 using Misc;
 using Unity.XR.CoreUtils;
@@ -36,6 +37,8 @@ namespace Menus.Main_Menu {
         private bool _shouldAnimate;
 
         private static bool FirstRun => Game.Instance.MenuFirstRun;
+
+        private string _menuLoadErrorMessage;
 
         private void Start() {
             topMenu.Hide();
@@ -111,9 +114,7 @@ namespace Menus.Main_Menu {
         }
 
         public void ShowDisconnectedDialog(string reason) {
-            topMenu.gameObject.SetActive(false);
-            disconnectionDialog.Open(topMenu);
-            disconnectionDialog.Reason = reason;
+            _menuLoadErrorMessage = reason;
         }
 
         // TODO: show time trial with previous level selected
@@ -247,7 +248,15 @@ namespace Menus.Main_Menu {
                 titleMenu.gameObject.SetActive(true);
             }
             else {
-                topMenu.gameObject.SetActive(true);
+                if (!_menuLoadErrorMessage.IsNullOrEmpty()) {
+                    topMenu.gameObject.SetActive(false);
+                    disconnectionDialog.Open(topMenu);
+                    disconnectionDialog.Reason = _menuLoadErrorMessage;
+                    _menuLoadErrorMessage = "";
+                }
+                else {
+                    topMenu.gameObject.SetActive(true);
+                }
             }
 
             Preferences.Instance.SetString("lastPlayedVersion", Application.version);

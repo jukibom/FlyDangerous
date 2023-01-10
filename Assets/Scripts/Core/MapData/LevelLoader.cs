@@ -35,8 +35,8 @@ namespace Core.MapData {
             _scenesLoading.Add(SceneManager.LoadSceneAsync(locationSceneToLoad, LoadSceneMode.Additive));
             _scenesLoading.ForEach(scene => scene.allowSceneActivation = false);
 
-            if (musicTrack != "")
-                MusicManager.Instance.PlayMusic(MusicTrack.FromString(musicTrack), true, true, false);
+            if (musicTrack != null)
+                MusicManager.Instance.PlayMusic(musicTrack, true, true, false);
             else
                 MusicManager.Instance.StopMusic(true);
 
@@ -89,7 +89,7 @@ namespace Core.MapData {
                 var rotationToWarpTo = Quaternion.Euler(LoadedLevelData.startRotation.ToVector3());
 
                 // if multiplayer free-roam and not the host, warp to the host
-                if (Game.Instance.SessionType == SessionType.Multiplayer && LoadedLevelData.gameType.CanWarpToHost && !ship.isHost)
+                if (Game.Instance.SessionType == SessionType.Multiplayer && LoadedLevelData.gameType.GameMode.CanWarpToHost && !ship.isHost)
                     FindObjectsOfType<ShipPlayer>().ToList().ForEach(otherShipPlayer => {
                         if (otherShipPlayer.isHost) {
                             var emptyPosition = PositionalHelpers.FindClosestEmptyPosition(otherShipPlayer.AbsoluteWorldPosition, 10);
@@ -148,47 +148,10 @@ namespace Core.MapData {
             var track = FindObjectOfType<Track>();
             var player = FdPlayer.LocalShipPlayer;
             if (track && player) return track.Serialize(player.AbsoluteWorldPosition, player.transform.rotation);
+
             // failed to find, this function has maybe been called in menu or invalid loaded state
             Debug.LogError("Failed to find required components to serialise level data!");
             return new LevelData();
-            // var levelData = new LevelData {
-            //     name = LoadedLevelData.name,
-            //     gameType = LoadedLevelData.gameType,
-            //     location = LoadedLevelData.location,
-            //     musicTrack = LoadedLevelData.musicTrack,
-            //     environment = LoadedLevelData.environment,
-            //     terrainSeed = LoadedLevelData.terrainSeed,
-            //     checkpoints = LoadedLevelData.checkpoints
-            // };
-            //
-            // var ship = FdPlayer.FindLocalShipPlayer;
-            // if (ship) {
-            //     var position = ship.AbsoluteWorldPosition;
-            //     var rotation = ship.transform.rotation;
-            //     levelData.startPosition = SerializableVector3.AssignOrCreateFromVector3(levelData.startPosition, position);
-            //     levelData.startRotation = SerializableVector3.AssignOrCreateFromVector3(levelData.startPosition, rotation.eulerAngles);
-            // }
-            //
-            // var track = FindObjectOfType<Track>();
-            // if (track) {
-            //     var checkpoints = track.Checkpoints;
-            //     levelData.checkpoints = new List<CheckpointLocation>();
-            //     foreach (var checkpoint in checkpoints) {
-            //         var checkpointLocation = new CheckpointLocation();
-            //         checkpointLocation.type = checkpoint.Type;
-            //         checkpointLocation.position = new SerializableVector3();
-            //         checkpointLocation.rotation = new SerializableVector3();
-            //
-            //         var checkpointTransform = checkpoint.transform;
-            //         var position = checkpointTransform.localPosition;
-            //         var rotation = checkpointTransform.rotation.eulerAngles;
-            //         checkpointLocation.position = SerializableVector3.FromVector3(position);
-            //         checkpointLocation.rotation = SerializableVector3.FromVector3(rotation);
-            //         levelData.checkpoints.Add(checkpointLocation);
-            //     }
-            // }
-            //
-            // return levelData;
         }
 
         private IEnumerator LoadGameScenes() {
@@ -227,24 +190,13 @@ namespace Core.MapData {
             var track = FindObjectOfType<Track>();
             if (track) track.Deserialize(LoadedLevelData);
 
-            // if (track && LoadedLevelData.checkpoints?.Count > 0)
-            //     LoadedLevelData.checkpoints.ForEach(c => {
-            //         var checkpointObject = Instantiate(checkpointPrefab, track.transform);
-            //         var checkpoint = checkpointObject.GetComponent<Checkpoint>();
-            //         checkpoint.Type = c.type;
-            //         var checkpointObjectTransform = checkpointObject.transform;
-            //         checkpointObjectTransform.position = c.position.ToVector3();
-            //         checkpointObjectTransform.rotation = Quaternion.Euler(c.rotation.ToVector3());
-            //         checkpoint.transform.parent = track.transform;
-            //     });
-
             // set floating origin on loading player now to force world components to update position
             var loadingPlayer = FdPlayer.FindLocalLoadingPlayer;
             if (loadingPlayer) loadingPlayer.SetFloatingOrigin();
 
             // if terrain needs to generate, toggle special logic and wait for it to load all primary tiles
             var mapMagic = FindObjectOfType<MapMagicObject>();
-            if (mapMagic) {
+            if (mapMagic && LoadedLevelData.terrainSeed != null) {
                 mapMagic.graph.random = new Noise(LoadedLevelData.terrainSeed.GetHashCode(), 32768);
 
 #if !NO_PAID_ASSETS

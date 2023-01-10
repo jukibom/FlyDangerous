@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Misc {
@@ -40,13 +41,13 @@ namespace Misc {
         public static void PopulateDropDown<T>(
             IEnumerable<T> enums,
             Dropdown dropdown,
-            Func<string, string>? textTransform = null,
+            Func<T, string>? textTransform = null,
             Func<T, Sprite>? useIcon = null
         ) where T : IFdEnum {
             var newOptions = new List<Dropdown.OptionData>();
 
             foreach (var option in enums) {
-                var dropDownOption = textTransform != null ? textTransform(option.Name) : option.Name;
+                var dropDownOption = textTransform != null ? textTransform(option) : option.Name;
                 var data = new Dropdown.OptionData(dropDownOption);
 
                 if (useIcon != null) {
@@ -74,6 +75,19 @@ namespace Misc {
             var flag = fdEnums.First(f => f.Id == targetId);
             var dropdownId = Array.IndexOf(fdEnums, flag);
             return dropdownId != -1 ? dropdownId : 0;
+        }
+
+        public static T FromDropdownSelectionEvent<T>(IEnumerable<T> enums, BaseEventData eventData) {
+            var dropdownItem = eventData.selectedObject;
+            var index = -1;
+            var parent = dropdownItem.transform.parent;
+            for (var i = 0; i < parent.childCount; i++) {
+                var child = parent.GetChild(i);
+                if (child.gameObject == dropdownItem)
+                    index = i - 1;
+            }
+
+            return enums.ToArray()[index];
         }
     }
 

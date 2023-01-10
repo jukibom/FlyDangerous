@@ -6,24 +6,28 @@ namespace Audio {
     public class MusicTrack : IFdEnum {
         private static int _id;
 
-        public static readonly MusicTrack MainMenu = new("Rock-Your-Body", "Main Menu/rock_your_body_loop", "Main Menu/rock_your_body_intro");
-        public static readonly MusicTrack Juno = new("Juno", "Levels/juno_loop", "Levels/juno_intro");
+        // Alphabetical order please (except None)!
+        public static readonly MusicTrack None = new("None", "", "");
 
         public static readonly MusicTrack BeautifulCatastrophe =
-            new("Beautiful Catastrophe", "Levels/beautiful_catastrophe_loop", "Levels/beautiful_catastrophe_intro");
-
-        public static readonly MusicTrack DigitalBattleground =
-            new("Digital Battleground", "Levels/digital_battleground_loop", "Levels/digital_battleground_intro");
+            new("Beautiful Catastrophe", "Ben Fox", "Levels/beautiful_catastrophe_loop", "Levels/beautiful_catastrophe_intro");
 
         public static readonly MusicTrack ChaosAtTheSpaceship =
-            new("Chaos At The Spaceship", "Levels/chaos_at_the_spaceship_loop", "Levels/chaos_at_the_spaceship_intro");
+            new("Chaos At The Spaceship", "Out of Flux", "Levels/chaos_at_the_spaceship_loop", "Levels/chaos_at_the_spaceship_intro");
 
-        public static readonly MusicTrack Hydra = new("Hydra", "Levels/hydra_loop", "Levels/hydra_intro");
-        public static readonly MusicTrack Hooligans = new("Hooligans", "Levels/hooligans_loop", "Levels/hooligans_intro");
+        public static readonly MusicTrack DigitalBattleground =
+            new("Digital Battleground", "Night Rider 87", "Levels/digital_battleground_loop", "Levels/digital_battleground_intro");
 
-        private MusicTrack(string name, string musicTrackToLoad, string introTrackToLoad = null) {
+        public static readonly MusicTrack Hooligans = new("Hooligans", "Evgeny Bardyuzha", "Levels/hooligans_loop", "Levels/hooligans_intro");
+        public static readonly MusicTrack Hydra = new("Hydra", "Kryptos", "Levels/hydra_loop", "Levels/hydra_intro");
+        public static readonly MusicTrack Juno = new("Juno", "OTNO", "Levels/juno_loop", "Levels/juno_intro");
+        public static readonly MusicTrack MainMenu = new("Rock Your Body", "FASSounds", "Main Menu/rock_your_body_loop", "Main Menu/rock_your_body_intro");
+
+
+        private MusicTrack(string name, string artist, string musicTrackToLoad, string introTrackToLoad = null) {
             Id = GenerateId;
             Name = name;
+            Artist = artist;
             IntroTrackToLoad = introTrackToLoad;
             MusicTrackToLoad = musicTrackToLoad;
         }
@@ -35,15 +39,18 @@ namespace Audio {
 
         public int Id { get; }
         public string Name { get; }
+        public string Artist { get; }
 
         public static IEnumerable<MusicTrack> List() {
             return new[] {
-                Juno,
+                None,
                 BeautifulCatastrophe,
-                DigitalBattleground,
                 ChaosAtTheSpaceship,
+                DigitalBattleground,
+                Hooligans,
                 Hydra,
-                Hooligans
+                Juno,
+                MainMenu
             };
         }
 

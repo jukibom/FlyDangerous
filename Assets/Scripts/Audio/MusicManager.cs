@@ -31,7 +31,7 @@ namespace Audio {
             AudioSettings.OnAudioConfigurationChanged -= OnAudioConfigurationChanged;
         }
 
-        public void PlayMusic(MusicTrack musicTrack, bool includeIntro, bool fadeOut, bool fadeIn, bool useMainMenuVolumeMixer = false) {
+        public void PlayMusic(MusicTrack musicTrack, bool includeIntro, bool withFadeOut, bool withFadeIn, bool useMainMenuVolumeMixer = false) {
             _mixerGroupToUseOnPlay = useMainMenuVolumeMixer ? mainMenuMusicMixer : musicMixer;
 
             var introTrack = musicTrack.HasIntro ? Resources.Load<AudioClip>($"Music/{musicTrack.IntroTrackToLoad}") : null;
@@ -44,11 +44,10 @@ namespace Audio {
             _introTrack = introTrack;
             _loopingTrack = loopingTrack;
 
-            if (fadeOut)
-                FadeOut(1f, () => Play(musicTrack, includeIntro));
-            else Play(musicTrack, includeIntro);
-
-            if (fadeIn) FadeIn();
+            if (withFadeOut)
+                FadeOut(1f, () => Play(musicTrack, includeIntro, withFadeIn));
+            else
+                Play(musicTrack, includeIntro, withFadeIn);
         }
 
         public void StopMusic(bool fade = false) {
@@ -59,12 +58,12 @@ namespace Audio {
                 _audioSource.Stop();
         }
 
-        private void Play([CanBeNull] MusicTrack musicTrack, bool includeIntro = true) {
-            if (musicTrack == null) return;
+        private void Play([CanBeNull] MusicTrack musicTrack, bool includeIntro = true, bool withFade = false) {
+            StopMusic();
+            if (musicTrack == null || musicTrack.MusicTrackToLoad == "") return;
 
             if (_fadeCoroutine != null) StopCoroutine(_fadeCoroutine);
 
-            StopMusic();
             CurrentPlayingTrack = musicTrack;
 
             _audioSource.outputAudioMixerGroup = _mixerGroupToUseOnPlay;
@@ -77,6 +76,8 @@ namespace Audio {
             else {
                 _audioSource.Play();
             }
+
+            if (withFade) FadeIn();
         }
 
         private void FadeOut(float duration = 1, Action onComplete = null) {

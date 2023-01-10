@@ -85,10 +85,13 @@ namespace Core.Scores {
 
         private static string ScoreHash(float score, LevelData levelData) {
             // generate the filename from a hash combination of score, checkpoints and location.
-            var checkpoints =
-                levelData.checkpoints.ConvertAll(checkpoint => checkpoint.position.ToString() + checkpoint.rotation);
             var checkpointText = "";
-            foreach (var checkpoint in checkpoints) checkpointText += checkpoint;
+            if (levelData.checkpoints != null) {
+                var checkpoints =
+                    levelData.checkpoints.ConvertAll(checkpoint => checkpoint.position.ToString() + checkpoint.rotation);
+                foreach (var checkpoint in checkpoints) checkpointText += checkpoint;
+            }
+
             return HashGenerator.ComputeSha256Hash(score.ToString(CultureInfo.InvariantCulture) + checkpointText + levelData.location.Name);
         }
 

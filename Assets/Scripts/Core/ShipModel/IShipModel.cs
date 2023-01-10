@@ -14,6 +14,7 @@ namespace Core.ShipModel {
      * commands (those marked as network aware) and some of which on the local client only.
      */
     public interface IShipModel : IShipInstruments, IShipMotion, IShipFeedback {
+        public Shield Shield { get; }
         public ShipShake ShipShake { get; }
         public ShipCameraRig ShipCameraRig { get; set; }
         public MonoBehaviour Entity();

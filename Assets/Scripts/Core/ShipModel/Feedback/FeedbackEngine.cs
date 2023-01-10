@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Core.ShipModel.Feedback.interfaces;
-using Core.ShipModel.ShipIndicator;
 using UnityEngine;
 
 namespace Core.ShipModel.Feedback {

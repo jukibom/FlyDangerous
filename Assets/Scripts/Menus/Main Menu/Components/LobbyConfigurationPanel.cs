@@ -77,9 +77,9 @@ namespace Menus.Main_Menu.Components {
         }
 
         private void Awake() {
-            FdEnum.PopulateDropDown(GameType.List(), gameModeDropdown, option => option.ToUpper());
-            FdEnum.PopulateDropDown(Environment.List(), environmentDropdown, option => option.ToUpper());
-            FdEnum.PopulateDropDown(Location.List(), locationDropdown, option => option.ToUpper());
+            FdEnum.PopulateDropDown(GameType.List(), gameModeDropdown, option => option.Name.ToUpper());
+            FdEnum.PopulateDropDown(Environment.List(), environmentDropdown, option => option.Name.ToUpper());
+            FdEnum.PopulateDropDown(Location.List(), locationDropdown, option => option.Name.ToUpper());
 
             // resume where we left on on lobby creation (if client, this is overwritten by message)
             LobbyLevelData = Game.Instance.LoadedLevelData;

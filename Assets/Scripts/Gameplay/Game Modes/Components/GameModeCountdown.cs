@@ -6,6 +6,8 @@ using UnityEngine;
 
 namespace Gameplay.Game_Modes.Components {
     public class GameModeCountdown {
+        public bool CountdownComplete { get; private set; }
+
         /**
          * Perform a countdown with sound firing a callback whenever a multiple of 1 second remains (and when it hits 0)
          */
@@ -30,6 +32,8 @@ namespace Gameplay.Game_Modes.Components {
 
                 onSecondsRemaining(remainingSeconds);
             }
+
+            CountdownComplete = true;
         }
     }
 }

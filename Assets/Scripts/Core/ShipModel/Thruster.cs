@@ -48,6 +48,10 @@ namespace Core.ShipModel {
         }
 
         private void Update() {
+            // weird multiplayer NaN shenanigans?!
+            _thrust = float.IsNaN(_thrust) ? 0 : _thrust;
+            targetThrust = float.IsNaN(targetThrust) ? 0 : targetThrust;
+
             _thrust = Mathf.Lerp(_thrust, targetThrust, 0.03f);
 
             _thrusterMaterial.SetFloat(thrustProperty, _thrust);

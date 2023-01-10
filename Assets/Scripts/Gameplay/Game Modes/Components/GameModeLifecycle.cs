@@ -15,6 +15,7 @@ namespace Gameplay.Game_Modes.Components {
         private readonly Action _onRestart;
         private readonly Action _onComplete;
 
+        public bool IsShipActive => _gameModeHandler.ShipActive;
         public bool HasStarted => _gameModeHandler.HasStarted;
 
         public GameModeLifecycle(GameModeHandler gameModeHandler, ShipPlayer shipPlayer, Action onRestart, Action onComplete) {

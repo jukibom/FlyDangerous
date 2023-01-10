@@ -86,6 +86,8 @@ namespace Core.ShipModel {
 
         public ShipCameraRig ShipCameraRig { get; set; }
 
+        public Shield Shield => shield;
+
         [CanBeNull] public ShipShake ShipShake { get; private set; }
 
         public MonoBehaviour Entity() {
@@ -172,15 +174,17 @@ namespace Core.ShipModel {
                 if (_shipActive) StartCoroutine(IgnitionSequenceFlicker());
             }
 
-            if (!_shipActive) indicatorCanvas.alpha = 0;
-            thrusterController.addTargetThrustToForwardThrusters = _shipActive ? 0.1f : 0;
-            thrusterController.enabled = _shipActive;
-            smokeEmitter.Active = _shipActive;
+            indicatorCanvas.enabled = _shipActive;
 
             #endregion
         }
 
         public virtual void OnShipMotionUpdate(IShipMotionData shipMotionData) {
+            // ship enabled thrust overrides
+            thrusterController.addTargetThrustToForwardThrusters = shipMotionData.ShipActive ? 0.1f : 0;
+            thrusterController.enabled = shipMotionData.ShipActive;
+            smokeEmitter.Active = shipMotionData.ShipActive;
+
             // TODO: I literally have no idea where this came from or why, maybe do some digging here?
             // At least it's localised now ...
             var torqueVec = new Vector3(
@@ -196,6 +200,7 @@ namespace Core.ShipModel {
             }
 
             thrusterController.UpdateThrusters(shipMotionData.CurrentLateralForceNormalised, torqueVec);
+
             smokeEmitter.UpdateThrustTrail(shipMotionData.CurrentLateralVelocity, shipMotionData.MaxSpeed,
                 shipMotionData.CurrentLateralForceNormalised);
             foliageCollider.radius = shipMotionData.CurrentLateralVelocity.magnitude.Remap(0, shipMotionData.MaxSpeed / 2, 4, 15);
@@ -209,11 +214,11 @@ namespace Core.ShipModel {
             if (shipFeedbackData.CollisionThisFrame) {
                 if (shipFeedbackData.CollisionStartedThisFrame) {
                     ShipShake?.AddShake(0.2f, shipFeedbackData.CollisionImpactNormalised * Time.fixedDeltaTime);
-                    shield.OnImpact(shipFeedbackData.CollisionImpactNormalised, shipFeedbackData.CollisionDirection);
+                    shield.ShieldImpact(shipFeedbackData.CollisionImpactNormalised, shipFeedbackData.CollisionDirection);
                 }
                 else {
                     ShipShake?.AddShake(Time.fixedDeltaTime * 3, shipFeedbackData.CollisionImpactNormalised * 3 * Time.fixedDeltaTime);
-                    shield.OnContinuousCollision(shipFeedbackData.CollisionDirection);
+                    shield.ContinuousCollision(shipFeedbackData.CollisionDirection);
                 }
             }
         }

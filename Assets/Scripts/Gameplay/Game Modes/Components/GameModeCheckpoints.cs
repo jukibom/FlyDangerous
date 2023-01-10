@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Core.MapData;
+using Core.MapData.Serializable;
 using Gameplay.Game_Modes.Components.Interfaces;
 using UnityEngine;
 
@@ -8,7 +8,7 @@ namespace Gameplay.Game_Modes.Components {
     public class GameModeCheckpoints : MonoBehaviour, IGameModeCheckpoints {
         [SerializeField] private Checkpoint checkpointPrefab;
 
-        public List<Checkpoint> Checkpoints { get; } = new();
+        public List<Checkpoint> Checkpoints { get; private set; } = new();
 
         // returns true if all checkpoints of type Check (not start or end) have been hit.
         public bool AllCheckpointsHit => Checkpoints
@@ -19,14 +19,19 @@ namespace Gameplay.Game_Modes.Components {
             Checkpoints.ForEach(c => c.Reset());
         }
 
-        public Checkpoint AddCheckpoint(SerializeableCheckpoint serializeableCheckpoint) {
+        public void RefreshCheckpoints() {
+            Checkpoints.Clear();
+            Checkpoints = GetComponentsInChildren<Checkpoint>().ToList();
+        }
+
+        public Checkpoint AddCheckpoint(SerializableCheckpoint serializableCheckpoint) {
             var checkpoint = Instantiate(checkpointPrefab, transform);
 
-            checkpoint.Type = serializeableCheckpoint.type;
+            checkpoint.Type = serializableCheckpoint.type;
 
             var checkpointObjectTransform = checkpoint.transform;
-            checkpointObjectTransform.position = serializeableCheckpoint.position.ToVector3();
-            checkpointObjectTransform.rotation = Quaternion.Euler(serializeableCheckpoint.rotation.ToVector3());
+            checkpointObjectTransform.position = serializableCheckpoint.position.ToVector3();
+            checkpointObjectTransform.rotation = Quaternion.Euler(serializableCheckpoint.rotation.ToVector3());
 
             Checkpoints.Add(checkpoint);
 

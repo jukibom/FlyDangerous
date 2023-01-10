@@ -451,13 +451,15 @@ namespace Core.Player {
         [UsedImplicitly]
         public void OnAltFlightControlsToggle(InputValue value) {
             var altFlightBindType = Preferences.Instance.GetString("altFlightBindType");
-            if (altFlightBindType == "toggle" && value.isPressed) {
-                _alternateFlightControls = !_alternateFlightControls;
-                UIAudioManager.Instance.Play(_alternateFlightControls ? "ship-alternate-flight-on" : "ship-alternate-flight-off");
-            }
-            else if (altFlightBindType == "hold") {
-                _alternateFlightControls = value.isPressed;
-                UIAudioManager.Instance.Play(_alternateFlightControls ? "ship-alternate-flight-on" : "ship-alternate-flight-off");
+            switch (altFlightBindType) {
+                case "toggle" when value.isPressed:
+                    _alternateFlightControls = !_alternateFlightControls;
+                    UIAudioManager.Instance.Play(_alternateFlightControls ? "ship-alternate-flight-on" : "ship-alternate-flight-off");
+                    break;
+                case "hold":
+                    _alternateFlightControls = value.isPressed;
+                    UIAudioManager.Instance.Play(_alternateFlightControls ? "ship-alternate-flight-on" : "ship-alternate-flight-off");
+                    break;
             }
 
             // restore values based on current input 
@@ -485,13 +487,26 @@ namespace Core.Player {
         [UsedImplicitly]
         public void OnMouselook(InputValue value) {
             var mouseLookType = Preferences.Instance.GetString("mouseLookBindType");
-            if (mouseLookType == "toggle" && value.isPressed) {
-                _mouseLookActive = !_mouseLookActive;
-                shipCameraRig.SoftReset();
-                Preferences.Instance.SetBool("mouseLook", _mouseLookActive);
+            switch (mouseLookType) {
+                case "toggle" when value.isPressed:
+                    _mouseLookActive = !_mouseLookActive;
+                    shipCameraRig.SoftReset();
+                    Preferences.Instance.SetBool("mouseLook", _mouseLookActive);
+                    break;
+                case "hold":
+                    _mouseLookActive = value.isPressed;
+                    break;
             }
+        }
 
-            if (mouseLookType == "hold") _mouseLookActive = value.isPressed;
+        [UsedImplicitly]
+        public void OnToggleCameraDrift(InputValue value) {
+            var autoLookBindType = Preferences.Instance.GetString("autoTrackBindType");
+            headTracking.IsAutoTrackEnabled = autoLookBindType switch {
+                "toggle" when value.isPressed => !headTracking.IsAutoTrackEnabled,
+                "hold" => value.isPressed,
+                _ => headTracking.IsAutoTrackEnabled
+            };
         }
 
         [UsedImplicitly]

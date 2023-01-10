@@ -1,8 +1,7 @@
-using System.Linq;
 using Core;
 using Core.MapData;
+using Core.MapData.Serializable;
 using Gameplay.Game_Modes.Components;
-using Misc;
 using UnityEngine;
 
 namespace Gameplay {
@@ -13,7 +12,7 @@ namespace Gameplay {
 
         [SerializeField] private GameModeCheckpoints checkpointContainer;
         [SerializeField] private Transform modifierContainer;
-        [SerializeField] private Transform billboardContainer;
+        [SerializeField] private GameModeBillboards billboardContainer;
         [SerializeField] private Transform geometryContainer;
 
         public GameModeCheckpoints GameModeCheckpoints => checkpointContainer;
@@ -33,22 +32,28 @@ namespace Gameplay {
 
             var levelData = new LevelData {
                 name = loadedLevelData.name,
-                gameType = loadedLevelData.gameType, // TODO: this should come from the game mode initialised here!
+                authorTimeTarget = loadedLevelData.authorTimeTarget,
+                gameType = loadedLevelData.gameType,
                 location = loadedLevelData.location,
                 musicTrack = loadedLevelData.musicTrack,
                 environment = loadedLevelData.environment,
-                terrainSeed = loadedLevelData.terrainSeed,
+                terrainSeed = string.IsNullOrEmpty(loadedLevelData.terrainSeed) ? null : loadedLevelData.terrainSeed,
                 startPosition = SerializableVector3.FromVector3(startPosition),
                 startRotation = SerializableVector3.FromVector3(startRotation.eulerAngles)
             };
 
-            levelData.checkpoints = checkpointContainer
-                .GetComponentsInChildren<Checkpoint>()
-                .ToList()
-                .ConvertAll(SerializeableCheckpoint.FromCheckpoint);
+            checkpointContainer.RefreshCheckpoints();
+            if (checkpointContainer.Checkpoints.Count > 0)
+                levelData.checkpoints = checkpointContainer
+                    .Checkpoints
+                    .ConvertAll(SerializableCheckpoint.FromCheckpoint);
+
+            billboardContainer.RefreshBillboardSpawners();
+            if (billboardContainer.BillboardSpawners.Count > 0)
+                levelData.billboards = billboardContainer.BillboardSpawners
+                    .ConvertAll(SerializableBillboard.FromBillboardSpawner);
 
             // TODO: modifiers
-            // TODO: billboards
             // TODO: geometry
 
             return levelData;
@@ -62,8 +67,10 @@ namespace Gameplay {
                     checkpoint.OnHit += HandleOnCheckpointHit;
                 });
 
+            if (levelData.billboards?.Count > 0)
+                levelData.billboards.ForEach(b => billboardContainer.AddBillboard(b));
+
             // TODO: modifiers
-            // TODO: billboards
             // TODO: geometry
         }
     }

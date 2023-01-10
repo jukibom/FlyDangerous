@@ -30,7 +30,6 @@ namespace Core.Player {
         private float _yawInput;
         private float _rollInput;
 
-
         private Transform _transform;
 
         private bool _isDriftEnabled;
@@ -117,14 +116,14 @@ namespace Core.Player {
         private void OnEnable() {
             // perform positional correction on non-local client player objects like anything else in the world
             FloatingOrigin.OnFloatingOriginCorrection += NonLocalPlayerPositionCorrection;
-            ShipPhysics.OnBoost += CmdBoost;
-            ShipPhysics.OnBoostCancel += CmdBoostCancel;
+            ShipPhysics.OnBoost += DoBoost;
+            ShipPhysics.OnBoostCancel += BoostCancel;
         }
 
         private void OnDisable() {
             FloatingOrigin.OnFloatingOriginCorrection -= NonLocalPlayerPositionCorrection;
-            ShipPhysics.OnBoost -= CmdBoost;
-            ShipPhysics.OnBoostCancel -= CmdBoostCancel;
+            ShipPhysics.OnBoost -= DoBoost;
+            ShipPhysics.OnBoostCancel -= BoostCancel;
         }
 
         public override void OnStartLocalPlayer() {
@@ -174,6 +173,11 @@ namespace Core.Player {
                 // TODO: Is this needed??
                 Rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
 
+                // ensure local ships don't try to do clever interpolation of rigidbody (there's too much going on!)
+                Rigidbody.interpolation = RigidbodyInterpolation.None;
+
+                shipPhysics.ShipActive = true;
+
                 // force new layer for non-local player
                 var mask = LayerMask.NameToLayer("Non-Local Player");
                 var protectedMask = LayerMask.NameToLayer("TransparentFX");
@@ -189,7 +193,13 @@ namespace Core.Player {
                 ShipPhysics.ShipProfile = new ShipProfile(playerName, playerFlag, _shipModelName, _primaryColor, _accentColor, _thrusterColor, _trailColor,
                     _headLightsColor);
 
-                if (isLocalPlayer && shipPhysics.ShipModel != null) shipPhysics.ShipModel.ShipCameraRig = user.ShipCameraRig;
+                if (isLocalPlayer && shipPhysics.ShipModel != null) {
+                    shipPhysics.ShipModel.ShipCameraRig = user.ShipCameraRig;
+
+                    // subscribe to shield changes
+                    shipPhysics.ShipModel.Shield.OnShieldImpact -= CmdShieldImpact;
+                    shipPhysics.ShipModel.Shield.OnShieldImpact += CmdShieldImpact;
+                }
 
                 // handle any ship model specific stuff
                 shipPhysics.ShipModel?.SetIsLocalPlayer(isLocalPlayer);
@@ -331,6 +341,22 @@ namespace Core.Player {
             }
         }
 
+        private void DoBoost(float spoolTime, float boostTime) {
+            // do local boost effects immediately
+            if (isLocalPlayer)
+                ShipPhysics.ShipModel?.Boost(spoolTime, boostTime);
+            // signal other clients to reflect boost effect
+            CmdBoost(spoolTime, boostTime);
+        }
+
+        private void BoostCancel() {
+            // local boost cancel immediately
+            if (isLocalPlayer)
+                ShipPhysics.ShipModel?.BoostCancel();
+            // signal to other players
+            CmdBoostCancel();
+        }
+
         /**
          * All axis should be between -1 and 1.
          */
@@ -369,36 +395,39 @@ namespace Core.Player {
                 // add velocity to position as position would have moved on server at that velocity
                 transform.localPosition += velocity * Time.fixedDeltaTime;
 
+                ShipPhysics.UpdateBoostStatus();
                 ShipPhysics.UpdateMotionData(velocity, thrust, torque);
             }
         }
 
         [Command]
         private void CmdBoost(float spoolTime, float boostTime) {
-            // do local boost effects immediately
-            if (isLocalPlayer)
-                ShipPhysics.ShipModel?.Boost(spoolTime, boostTime);
-            // signal other clients to reflect boost effect
             RpcBoost(spoolTime, boostTime);
         }
 
         [ClientRpc]
         private void RpcBoost(float spoolTime, float boostTime) {
-            if (!isLocalPlayer)
-                ShipPhysics.ShipModel?.Boost(spoolTime, boostTime);
+            if (!isLocalPlayer) ShipPhysics.ShipModel?.Boost(spoolTime, boostTime);
         }
 
         [Command]
         private void CmdBoostCancel() {
-            if (isLocalPlayer)
-                ShipPhysics.ShipModel?.BoostCancel();
             RpcBoostCancel();
         }
 
         [ClientRpc]
         private void RpcBoostCancel() {
-            if (!isLocalPlayer)
-                ShipPhysics.ShipModel?.BoostCancel();
+            if (!isLocalPlayer) ShipPhysics.ShipModel?.BoostCancel();
+        }
+
+        [Command]
+        private void CmdShieldImpact(float impactForceNormalised, Vector3 impactDirection) {
+            RpcSetShieldImpact(impactForceNormalised, impactDirection);
+        }
+
+        [ClientRpc]
+        private void RpcSetShieldImpact(float impactForceNormalised, Vector3 impactDirection) {
+            if (!isLocalPlayer) ShipPhysics.ShipModel?.Shield.ShieldImpact(impactForceNormalised, impactDirection);
         }
 
         [Command]

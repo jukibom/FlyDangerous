@@ -6,6 +6,7 @@ using System.Reflection;
 using Audio;
 using Cinemachine;
 using Core.MapData;
+using Core.MapData.Serializable;
 using Core.Player;
 using Core.Replays;
 using Core.ShipModel;
@@ -93,7 +94,7 @@ namespace Core {
 
         public bool IsVREnabled { get; private set; }
 
-        public bool IsGameHotJoinable => LoadedLevelData.gameType.IsHotJoinable;
+        public bool IsGameHotJoinable => LoadedLevelData.gameType.GameMode.IsHotJoinable;
 
         public ShipParameters ShipParameters {
             get {
@@ -356,9 +357,6 @@ namespace Core {
 
                 FdConsole.Instance.LogMessage("Loaded level " + levelData.LevelHash());
 
-                FadeFromBlack();
-                yield return new WaitForSeconds(0.7f);
-
                 // if there's a track, initialise it
                 var track = FindObjectOfType<Track>();
                 if (track) {
@@ -368,6 +366,9 @@ namespace Core {
                 else {
                     Debug.LogWarning("No track in the world! Cannot initialise game mode");
                 }
+
+                FadeFromBlack();
+                yield return new WaitForSeconds(0.7f);
 
                 // if there's a track in the game world, start it
                 // if (track) yield return track.StartTrackWithCountdown();
@@ -445,8 +446,8 @@ namespace Core {
             }
 
             yield return FdPlayer.WaitForShipPlayer();
-            var ship = FdPlayer.LocalShipPlayer;
-            ship.User.DisableGameInput();
+            var ship = FdPlayer.FindLocalShipPlayer;
+            if (ship != null) ship.User.DisableGameInput();
 
             IEnumerator LoadMenuScene() {
                 // during load we pause scaled time to prevent *absolutely anything* from interacting incorrectly

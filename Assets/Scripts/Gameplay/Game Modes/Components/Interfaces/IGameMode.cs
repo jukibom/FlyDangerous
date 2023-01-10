@@ -7,6 +7,21 @@ namespace Gameplay.Game_Modes.Components.Interfaces {
         public IGameModeLifecycle GameModeLifecycle { set; }
 
         /**
+         * Can users hot-join a session in multiplayer and bypass the lobby?
+         */
+        public bool IsHotJoinable { get; }
+
+        /**
+         * Can clients warp to the host with reset in multiplayer?
+         */
+        public bool CanWarpToHost { get; }
+
+        /**
+         * Does this game mode have a fixed start location (vs. dynamic / random)?
+         */
+        public bool HasFixedStartLocation { get; }
+
+        /**
          * Flag set to prompt game to record a replay for this game mode
          */
         public bool SupportsReplays { get; }
@@ -18,12 +33,18 @@ namespace Gameplay.Game_Modes.Components.Interfaces {
         public bool RequireBoostHeldToStart { get; }
 
         /**
-         * Called at the start and any time the user or game mechanics cause a restart
+         * Called during level load, before the game fades in from black in case the game
+         * mode needs to do any additional work before the level is visible.
+         */
+        public void OnInitialise();
+
+        /**
+         * Called at the start, once the level has fully loaded and the screen has faded in.
          */
         public void OnBegin();
 
         /**
-         * Called with standard unity FixedUpdate
+         * Called with standard unity FixedUpdate.
          */
         public void OnFixedUpdate();
 

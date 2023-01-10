@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Text;
-using Misc;
+using Core.MapData.Serializable;
 using Newtonsoft.Json;
 
 namespace Core.ShipModel.Feedback.socket {

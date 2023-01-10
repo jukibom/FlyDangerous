@@ -45,7 +45,7 @@ namespace Menus.Main_Menu {
         }
 
         // Close the dialog and re-open the calling dialog and trigger events
-        public void Cancel() {
+        public virtual void Cancel() {
             if (caller != null) caller.Open(null);
             PlayCancelSound();
             Hide();

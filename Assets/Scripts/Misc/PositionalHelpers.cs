@@ -58,7 +58,7 @@ namespace Misc {
         }
 
         // generate a valid location to spawn an object by checking in a Fibonacci sphere of ever-increasing radius until a position is found.
-        public static Vector3 FindClosestEmptyPosition(Vector3 originalPosition, int objectRadius) {
+        public static Vector3 FindClosestEmptyPosition(Vector3 originalPosition, int objectRadius, GameObject ignoreGameObject = null) {
             Physics.SyncTransforms();
 
             // -1 in this instance effectively means the original position with no transformation
@@ -84,7 +84,14 @@ namespace Misc {
                 // check to see if any existing ships or geometry are in this location
                 Physics.OverlapSphereNonAlloc(testPosition, objectRadius, hitColliders, collisionLayerMask);
 
-                return existingShipStartPosition || hitColliders[0] != null;
+                var hit = hitColliders[0];
+                var isCollision = hit != null;
+
+                if (ignoreGameObject && isCollision)
+                    if (hit.transform.root.gameObject.GetInstanceID() == ignoreGameObject.GetInstanceID())
+                        isCollision = false;
+
+                return existingShipStartPosition || isCollision;
             }
 
             while (NextPositionIsObstructed()) {
