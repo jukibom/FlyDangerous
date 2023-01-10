@@ -52,7 +52,6 @@ namespace Core.MapData {
             if (ship) {
                 // first let's check if this is a terrain world and handle that appropriately
                 var mapMagic = FindObjectOfType<MapMagicObject>();
-                var TWTerr = FindObjectOfType<MapGenerate>();
 
                 void DoReset(Vector3 position, Quaternion rotation) {
                     ship.SetTransformWorld(position, rotation);
