@@ -41,7 +41,11 @@ public class MapGenerate : MonoBehaviour
     int MaxThreads = Environment.ProcessorCount - 4;
     int ThreadsActive = 0;
 
+    int MaxChunks = 81;
+
     Queue<ThreadStart> threadPool = new Queue<ThreadStart>();
+
+    
 
 
     private void Start()
@@ -55,6 +59,10 @@ public class MapGenerate : MonoBehaviour
     }
     void Update()
     {
+        CleanupThreads();
+    }
+    public void CleanupThreads()
+    {
         // Count Active Threads
         if (ThreadsActive > MaxThreads)
         {
@@ -64,11 +72,11 @@ public class MapGenerate : MonoBehaviour
         {
             print("Current Threads: " + ThreadsActive);
             //Go through thread pool
-            if(threadPool.Count > 0)
+            if (threadPool.Count > 0)
             {
-                for(int i = 0; i < threadPool.Count; i++)
+                for (int i = 0; i < threadPool.Count; i++)
                 {
-                    if(ThreadsActive < MaxThreads)
+                    if (ThreadsActive < MaxThreads)
                     {
                         ThreadStart threadstart = threadPool.Dequeue();
                         new Thread(threadstart).Start();
@@ -240,6 +248,14 @@ public class MapGenerate : MonoBehaviour
             this.callback = callback;
             this.parameter = parameter;
         }
+    }
+    public bool IsGenerating()
+    {
+        return ThreadsActive > 2;
+    }
+    public float GenerationProgress()
+    {
+        return (ThreadsActive + threadPool.Count) / MaxChunks;
     }
 
 }
