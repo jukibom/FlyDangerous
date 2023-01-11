@@ -26,7 +26,7 @@ namespace FdUI {
             thumbnail.sprite = Level.Thumbnail;
 
             var score = Level.Score;
-            var personalBest = score.PersonalBestTotalTime;
+            var personalBest = score.PersonalBestScore;
 
             var platinumTargetTime = Level.Data.authorTimeTarget;
             var goldTargetTime = Score.GoldTimeTarget(Level.Data);

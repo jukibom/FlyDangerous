@@ -112,6 +112,8 @@ namespace Core {
                     return 100;
                 case "volumeMusic":
                     return 30;
+                case "volumeMainMenuMusic":
+                    return 50;
                 case "volumeGhostSound":
                     return 25;
                 case "telemetryEmitIntervalSeconds":
@@ -120,8 +122,12 @@ namespace Core {
                     return 11000;
                 case "simRacingStudioOutputPort":
                     return 33001;
+                case "autoTrackAmount":
+                    return 0.5f;
                 case "autoTrackDamping":
-                    return 0.2f;
+                    return 0.5f;
+                case "autoTrackDeadzoneDegrees":
+                    return 0;
                 case "autoTrackHorizontalDegrees":
                     return 45;
                 case "autoTrackDownDegrees":
@@ -145,6 +151,8 @@ namespace Core {
                     return "Biome World";
                 case "lastPlayedFreeRoamEnvironment":
                     return "Sunrise Clear";
+                case "lastPlayedFreeRoamMusic":
+                    return "Juno";
                 case "playerName":
                     return "PLAYER NAME";
                 case "playerFlag":
@@ -200,6 +208,8 @@ namespace Core {
                 case "flightAssistRotationalBindType":
                     return "toggle";
                 case "mouseLookBindType":
+                    return "toggle";
+                case "autoTrackBindType":
                     return "toggle";
                 case "altFlightBindType":
                     return "toggle";

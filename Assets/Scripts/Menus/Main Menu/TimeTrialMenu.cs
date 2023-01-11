@@ -51,7 +51,8 @@ namespace Menus.Main_Menu {
         }
 
         protected override void OnOpen() {
-            levelSelectPanel.LoadLevels(Level.List().ToList().FindAll(level => level.GameType == GameType.TimeTrial));
+            // TODO: we need a laps menu somewhere, somehow
+            levelSelectPanel.LoadLevels(Level.List().ToList().FindAll(level => level.GameType == GameType.Sprint));
         }
 
         public override void OnCancel(BaseEventData eventData) {

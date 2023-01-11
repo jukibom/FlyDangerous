@@ -15,6 +15,7 @@ namespace Core.Replays {
             Transform = transform;
             Rigidbody = GetComponent<Rigidbody>();
             ReplayTimeline = GetComponent<ReplayTimeline>();
+            shipPhysics.ShipActive = true;
         }
 
         private void Start() {

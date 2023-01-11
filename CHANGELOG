@@ -22,6 +22,11 @@ New:
     * Added UDP telemetry support for generic motion simulators etc (WIP, #115, more information to follow)
     * Added descriptions to locations in Free Roam menu
     * Added new boost pad modifiers to the Proving Grounds (see changes below)
+    * Added ability to set music volume on main menu independently (as a percentage of music volume)
+    * Added wait to beginning of time trials prompting users to hold boost (teach that boost can be early!)
+    * Added pride flags and changed "Country" label to "Flag" for profile dropdown  (#203 partial)
+    * Added ability set music track in Free Roam mode
+    * Added ability to preview environment and music in Free Roam menu
     
 Changed:
     * Ship lights now operate as night vision
@@ -34,6 +39,7 @@ Changed:
     * Moved testing objects scene to new location ("Proving Grounds"), Space scene is now actually empty for map creation
     * Minor rework for leaderboards / ghosts panels, added loading state UI and auto-select players' PB (vs top ghost)
     * Renamed `Throttle Increase / Decrease` to `Throttle Cruise Control Increase / Decrease` for clarity
+    * Added right stick click as a default VR calibration input (you're welcome, oddly angry self-important person)
     * Updated to Unity 2022.1.20f1
     
 Fixes:
@@ -49,6 +55,7 @@ Fixes:
     * Fixed relative mouse mode applying return rate before sending input (leading to effectively no input at high return rates) 
     * Culled UI elements from real time reflection probe (whoops!) 
     * Fixed geometry reflecting from the ship perspective when realtime reflections are enabled (just don't ask how, I beg you)
+    * Fixed pause menu failing to open first time after restarting after showing results screen
 
 0.5.7
 New:

@@ -70,7 +70,7 @@ namespace Menus.Options {
 
                 float targetHeightPercent = direction == ExpandingLineDirection.Open ? 1 : 0;
                 float startingHeightPercent = direction == ExpandingLineDirection.Open ? 0 : 1;
-                // float currentAnimationHeightPercent = startingHeightPercent;
+                _currentAnimationHeightPercent = startingHeightPercent;
 
                 bool HeightAssertion() {
                     return startingHeightPercent > targetHeightPercent

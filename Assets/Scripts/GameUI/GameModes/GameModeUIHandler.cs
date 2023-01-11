@@ -1,15 +1,23 @@
 using Core;
-using Core.MapData;
+using Core.Player;
+using Core.Scores;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace GameUI.GameModes {
     public class GameModeUIHandler : MonoBehaviour {
-        [SerializeField] private TimeTrialUI timeTrialUI;
+        [FormerlySerializedAs("screenText")] [SerializeField]
+        private GameModeUIText gameModeUIText;
 
-        public IGameModeUI ActiveGameModeUI { get; private set; }
+        [SerializeField] private HoldBoostButtonText holdBoostButtonText;
+        [SerializeField] private RaceResultsScreen raceResultsScreen;
+
+        public GameModeUIText GameModeUIText => gameModeUIText;
+        public HoldBoostButtonText HoldBoostButtonText => holdBoostButtonText;
+        public RaceResultsScreen RaceResultsScreen => raceResultsScreen;
 
         private void Awake() {
-            timeTrialUI.gameObject.SetActive(false);
+            HideResultsScreen();
         }
 
         private void OnEnable() {
@@ -20,16 +28,28 @@ namespace GameUI.GameModes {
             Game.OnRestart -= OnReset;
         }
 
-        public void SetGameMode(GameType gameType) {
-            if (gameType.Id == GameType.TimeTrial.Id) {
-                ActiveGameModeUI = timeTrialUI;
-                ActiveGameModeUI.gameObject.SetActive(true);
-            }
+        private void OnReset() {
+            HoldBoostButtonText.Reset();
         }
 
-        private void OnReset() {
-            ActiveGameModeUI?.HideResultsScreen();
-            ActiveGameModeUI?.ShowMainUI();
+        // Show and hide whatever game mode result screen there is
+        public void ShowResultsScreen(Score score, Score previousBest, bool isValid, string replayFilename, string replayFilepath) {
+            var player = FdPlayer.FindLocalShipPlayer;
+            if (player) {
+                player.User.ShipCameraRig.SwitchToEndScreenCamera();
+
+                // TODO: what the fuck does this have to do with UI?!
+                player.User.DisableGameInput();
+                player.User.pauseMenuEnabled = false;
+                player.ShipPhysics.BringToStop();
+            }
+
+            raceResultsScreen.gameObject.SetActive(true);
+            raceResultsScreen.Show(score, previousBest, isValid, replayFilename, replayFilepath);
+        }
+
+        public void HideResultsScreen() {
+            raceResultsScreen.Hide();
         }
     }
 }

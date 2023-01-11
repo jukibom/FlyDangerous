@@ -96,7 +96,7 @@ namespace Menus.Main_Menu.Components {
                 levelThumbnail.sprite = level.Thumbnail;
 
                 var score = level.Score;
-                var bestTime = score.PersonalBestTotalTime;
+                var bestTime = score.PersonalBestScore;
                 personalBest.text = bestTime > 0 ? TimeExtensions.TimeSecondsToString(bestTime) : "NONE";
 
                 var platinumTargetTime = level.Data.authorTimeTarget;

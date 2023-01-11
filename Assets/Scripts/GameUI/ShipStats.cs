@@ -1,6 +1,5 @@
 using System.Globalization;
 using Core.ShipModel.Feedback.interfaces;
-using Core.ShipModel.ShipIndicator;
 using Misc;
 using UnityEngine;
 using UnityEngine.UI;
@@ -31,13 +30,18 @@ namespace GameUI {
         private float _previousGForce;
         private float _targetUIAlpha;
 
+        public bool ForceHidden { get; set; }
+
         private void FixedUpdate() {
-            // _canvasGroup.alpha = Mathf.Lerp(_canvasGroup.alpha, _targetUIAlpha, 0.1f);
             _canvasGroup.alpha = Mathf.Clamp(_canvasGroup.alpha + _targetUIAlpha * Time.fixedDeltaTime * 2, 0, 1);
+
+            if (ForceHidden) _canvasGroup.alpha = 0;
         }
 
         private void OnEnable() {
             _canvasGroup = GetComponent<CanvasGroup>();
+            _canvasGroup.alpha = 0;
+            ForceHidden = true;
         }
 
         public void OnShipInstrumentUpdate(IShipInstrumentData shipInstrumentData) {

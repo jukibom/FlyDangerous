@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Core.ShipModel.Feedback {
     public class ShipMotionData : IShipMotionData {
+        public bool ShipActive { get; set; }
         public Vector3 CurrentLateralVelocity { get; set; }
         public Vector3 CurrentLateralForce { get; set; }
         public Vector3 CurrentAngularVelocity { get; set; }

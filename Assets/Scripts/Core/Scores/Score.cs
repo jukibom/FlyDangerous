@@ -33,8 +33,8 @@ namespace Core.Scores {
         }
 
         public bool HasPlayedPreviously => _scoreData.raceTime > 0;
-        public float PersonalBestTotalTime => _scoreData.raceTime;
-        public List<float> PersonalBestTimeSplits => _scoreData.splits;
+        public float PersonalBestScore => _scoreData.raceTime;
+        public List<float> PersonalBestSplits => _scoreData.splits ?? new List<float>();
 
         public static Score ScoreForLevel(LevelData levelData) {
             return new Score(levelData);
@@ -85,10 +85,13 @@ namespace Core.Scores {
 
         private static string ScoreHash(float score, LevelData levelData) {
             // generate the filename from a hash combination of score, checkpoints and location.
-            var checkpoints =
-                levelData.checkpoints.ConvertAll(checkpoint => checkpoint.position.ToString() + checkpoint.rotation);
             var checkpointText = "";
-            foreach (var checkpoint in checkpoints) checkpointText += checkpoint;
+            if (levelData.checkpoints != null) {
+                var checkpoints =
+                    levelData.checkpoints.ConvertAll(checkpoint => checkpoint.position.ToString() + checkpoint.rotation);
+                foreach (var checkpoint in checkpoints) checkpointText += checkpoint;
+            }
+
             return HashGenerator.ComputeSha256Hash(score.ToString(CultureInfo.InvariantCulture) + checkpointText + levelData.location.Name);
         }
 

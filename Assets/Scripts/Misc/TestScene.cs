@@ -3,6 +3,7 @@ using System.IO;
 using Cinemachine;
 using Core;
 using Core.MapData;
+using Core.MapData.Serializable;
 using Core.Player;
 using Core.Replays;
 using Core.Scores;
@@ -28,12 +29,11 @@ namespace Misc {
         public Transform spawnLocation;
         public ShipGhost shipGhostPrefab;
 
-        private void Awake() {
-            // load engine if not already 
-            if (!FindObjectOfType<Engine>()) SceneManager.LoadScene("Engine", LoadSceneMode.Additive);
-        }
 
         private void Start() {
+            // load engine scene if not already 
+            if (!FindObjectOfType<Engine>()) SceneManager.LoadScene("Engine", LoadSceneMode.Additive);
+
             IEnumerator StartGame() {
                 // allow game state to initialise
                 yield return new WaitForEndOfFrame();
@@ -77,7 +77,7 @@ namespace Misc {
 
                 // if there's a track, initialise it
                 var track = FindObjectOfType<Track>();
-                if (track) track.InitialiseTrack();
+                // if (track) track.InitialiseTrack();
 
                 // create a test other player
                 if (shouldShowTestShip) CreateTestSecondShip();

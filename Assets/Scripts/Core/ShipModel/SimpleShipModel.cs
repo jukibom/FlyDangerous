@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Core.Player;
 using Core.ShipModel.Feedback.interfaces;
-using Core.ShipModel.ShipIndicator;
 using JetBrains.Annotations;
 using Misc;
 using UnityEngine;
@@ -16,28 +15,32 @@ namespace Core.ShipModel {
      * Provide some basic ship functionality expected from all mesh objects in an override-able fashion.
      */
     public class SimpleShipModel : MonoBehaviour, IShipModel {
-        [SerializeField] private GameObject drawableContainer;
-        [SerializeField] private ThrusterController thrusterController;
-        [SerializeField] private Light shipLights;
-        [SerializeField] private SmokeEmitter smokeEmitter;
-        [SerializeField] public CapsuleCollider foliageCollider;
+        [SerializeField] protected GameObject drawableContainer;
+        [SerializeField] protected ThrusterController thrusterController;
+        [SerializeField] protected Light shipLights;
+        [SerializeField] protected SmokeEmitter smokeEmitter;
+        [SerializeField] protected CapsuleCollider foliageCollider;
 
-        [SerializeField] private List<MeshRenderer> primaryColorMeshes = new();
-        [SerializeField] private List<MeshRenderer> accentColorMeshes = new();
-        [SerializeField] private Shield shield;
+        [SerializeField] protected List<MeshRenderer> primaryColorMeshes = new();
+        [SerializeField] protected List<MeshRenderer> accentColorMeshes = new();
+        [SerializeField] protected Shield shield;
 
-        [SerializeField] private AudioSource engineBoostAudioSource;
-        [SerializeField] private AudioSource externalBoostAudioSource;
-        [SerializeField] private AudioSource externalBoostThrusterAudioSource;
-        [SerializeField] private AudioSource externalBoostInterruptedAudioSource;
-        [SerializeField] private AudioSource simpleToggleAudioSource;
-        [SerializeField] private AudioSource assistActivateAudioSource;
-        [SerializeField] private AudioSource assistDeactivateAudioSource;
-        [SerializeField] private AudioSource velocityLimitActivateAudioSource;
-        [SerializeField] private AudioSource velocityLimitDeactivateAudioSource;
-        [SerializeField] private AudioSource nightVisionActivateAudioSource;
-        [SerializeField] private AudioSource nightVisionDeactivateAudioSource;
+        [SerializeField] protected AudioSource ignitionAudioSource;
+        [SerializeField] protected AudioSource engineBoostAudioSource;
+        [SerializeField] protected AudioSource externalBoostAudioSource;
+        [SerializeField] protected AudioSource externalBoostThrusterAudioSource;
+        [SerializeField] protected AudioSource externalBoostInterruptedAudioSource;
+        [SerializeField] protected AudioSource simpleToggleAudioSource;
+        [SerializeField] protected AudioSource assistActivateAudioSource;
+        [SerializeField] protected AudioSource assistDeactivateAudioSource;
+        [SerializeField] protected AudioSource velocityLimitActivateAudioSource;
+        [SerializeField] protected AudioSource velocityLimitDeactivateAudioSource;
+        [SerializeField] protected AudioSource nightVisionActivateAudioSource;
+        [SerializeField] protected AudioSource nightVisionDeactivateAudioSource;
 
+        [SerializeField] protected CanvasGroup indicatorCanvas;
+
+        private bool _shipActive;
         private Coroutine _boostCoroutine;
         private bool _velocityLimiterActive;
 
@@ -82,6 +85,8 @@ namespace Core.ShipModel {
         }
 
         public ShipCameraRig ShipCameraRig { get; set; }
+
+        public Shield Shield => shield;
 
         [CanBeNull] public ShipShake ShipShake { get; private set; }
 
@@ -160,10 +165,26 @@ namespace Core.ShipModel {
         #region Rolling Updates
 
         public virtual void OnShipInstrumentUpdate(IShipInstrumentData shipInstrumentData) {
-            /* Indicators are entirely model-specific and should be implemented. */
+            #region Ignition and ship active state
+
+            // TODO: apply this region to puffin in base class ideally
+            if (_shipActive != shipInstrumentData.ShipActive) {
+                _shipActive = shipInstrumentData.ShipActive;
+
+                if (_shipActive) StartCoroutine(IgnitionSequenceFlicker());
+            }
+
+            indicatorCanvas.enabled = _shipActive;
+
+            #endregion
         }
 
         public virtual void OnShipMotionUpdate(IShipMotionData shipMotionData) {
+            // ship enabled thrust overrides
+            thrusterController.addTargetThrustToForwardThrusters = shipMotionData.ShipActive ? 0.1f : 0;
+            thrusterController.enabled = shipMotionData.ShipActive;
+            smokeEmitter.Active = shipMotionData.ShipActive;
+
             // TODO: I literally have no idea where this came from or why, maybe do some digging here?
             // At least it's localised now ...
             var torqueVec = new Vector3(
@@ -179,24 +200,25 @@ namespace Core.ShipModel {
             }
 
             thrusterController.UpdateThrusters(shipMotionData.CurrentLateralForceNormalised, torqueVec);
+
             smokeEmitter.UpdateThrustTrail(shipMotionData.CurrentLateralVelocity, shipMotionData.MaxSpeed,
                 shipMotionData.CurrentLateralForceNormalised);
             foliageCollider.radius = shipMotionData.CurrentLateralVelocity.magnitude.Remap(0, shipMotionData.MaxSpeed / 2, 4, 15);
 
             // if we're going faster than max (boost pad yay!) let's make that shield go woOOoooOoo
             var velocityNormalised = shipMotionData.CurrentLateralVelocityNormalised.magnitude;
-            if (shipMotionData.CurrentLateralVelocityNormalised.magnitude > 1.1f) shield.Fizzle();
+            if (velocityNormalised > 1.1f) shield.Fizzle();
         }
 
         public virtual void OnShipFeedbackUpdate(IShipFeedbackData shipFeedbackData) {
             if (shipFeedbackData.CollisionThisFrame) {
                 if (shipFeedbackData.CollisionStartedThisFrame) {
                     ShipShake?.AddShake(0.2f, shipFeedbackData.CollisionImpactNormalised * Time.fixedDeltaTime);
-                    shield.OnImpact(shipFeedbackData.CollisionImpactNormalised, shipFeedbackData.CollisionDirection);
+                    shield.ShieldImpact(shipFeedbackData.CollisionImpactNormalised, shipFeedbackData.CollisionDirection);
                 }
                 else {
                     ShipShake?.AddShake(Time.fixedDeltaTime * 3, shipFeedbackData.CollisionImpactNormalised * 3 * Time.fixedDeltaTime);
-                    shield.OnContinuousCollision(shipFeedbackData.CollisionDirection);
+                    shield.ContinuousCollision(shipFeedbackData.CollisionDirection);
                 }
             }
         }
@@ -266,6 +288,20 @@ namespace Core.ShipModel {
             externalBoostAudioSource.Stop();
             externalBoostThrusterAudioSource.Stop();
             if (_boostCoroutine != null) StopCoroutine(_boostCoroutine);
+        }
+
+        private IEnumerator IgnitionSequenceFlicker() {
+            shield.Fizzle(20);
+            ignitionAudioSource.Play();
+            float timeSeconds = 0;
+            uint intervalFrames = 3;
+            while (timeSeconds < 0.75f) {
+                timeSeconds += Time.fixedDeltaTime * intervalFrames;
+                indicatorCanvas.alpha = Random.Range(0f, 1f);
+                yield return YieldExtensions.WaitForFixedFrames(intervalFrames);
+            }
+
+            indicatorCanvas.alpha = 1;
         }
 
         #endregion

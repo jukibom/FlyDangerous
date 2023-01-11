@@ -4,6 +4,7 @@ using Audio;
 using Core;
 using Core.MapData;
 using Core.ShipModel;
+using CustomWebSocketSharp;
 using JetBrains.Annotations;
 using Misc;
 using Unity.XR.CoreUtils;
@@ -37,11 +38,11 @@ namespace Menus.Main_Menu {
 
         private static bool FirstRun => Game.Instance.MenuFirstRun;
 
+        private string _menuLoadErrorMessage;
+
         private void Start() {
             topMenu.Hide();
             titleMenu.Hide();
-
-            Engine.Instance.NightVision.SetNightVisionActive(false);
 
             // use this for testing bonkers string conversion issues
             // Thread.CurrentThread.CurrentCulture = new CultureInfo("fr-FR");
@@ -78,6 +79,10 @@ namespace Menus.Main_Menu {
             Game.OnVRStatus += OnVRStatus;
             Game.OnGameSettingsApplied += OnGameSettingsApplied;
             InputSystem.onDeviceChange += OnDeviceChange;
+
+            // load engine if not already 
+            if (!FindObjectOfType<Engine>()) SceneManager.LoadScene("Engine", LoadSceneMode.Additive);
+
             StartCoroutine(MenuLoad());
         }
 
@@ -96,7 +101,6 @@ namespace Menus.Main_Menu {
                 case "Puffin":
                     shipModel = puffinShipModel;
                     break;
-                case "Calidris":
                 default:
                     shipModel = calidrisShipModel;
                     break;
@@ -110,9 +114,7 @@ namespace Menus.Main_Menu {
         }
 
         public void ShowDisconnectedDialog(string reason) {
-            topMenu.gameObject.SetActive(false);
-            disconnectionDialog.Open(topMenu);
-            disconnectionDialog.Reason = reason;
+            _menuLoadErrorMessage = reason;
         }
 
         // TODO: show time trial with previous level selected
@@ -169,8 +171,10 @@ namespace Menus.Main_Menu {
             playerInput.user.ActivateControlScheme("Everything");
             playerInput.enabled = false;
 
-            // load engine if not already 
-            if (!FindObjectOfType<Engine>()) yield return SceneManager.LoadSceneAsync("Engine", LoadSceneMode.Additive);
+            // allow one frame for the engine to load
+            yield return new WaitForFixedUpdate();
+
+            Engine.Instance.NightVision.SetNightVisionActive(false);
 
             var sceneEnvironment = Environment.PlanetOrbitTop;
 
@@ -200,7 +204,7 @@ namespace Menus.Main_Menu {
             yield return new WaitForEndOfFrame();
             yield return new WaitForEndOfFrame();
 
-            MusicManager.Instance.PlayMusic(MusicTrack.MainMenu, FirstRun, false, false);
+            MusicManager.Instance.PlayMusic(MusicTrack.MainMenu, FirstRun, false, false, true);
             Game.Instance.SetFlatScreenCameraControllerActive(false);
 
             FloatingOrigin.Instance.FocalTransform = transform;
@@ -244,7 +248,15 @@ namespace Menus.Main_Menu {
                 titleMenu.gameObject.SetActive(true);
             }
             else {
-                topMenu.gameObject.SetActive(true);
+                if (!_menuLoadErrorMessage.IsNullOrEmpty()) {
+                    topMenu.gameObject.SetActive(false);
+                    disconnectionDialog.Open(topMenu);
+                    disconnectionDialog.Reason = _menuLoadErrorMessage;
+                    _menuLoadErrorMessage = "";
+                }
+                else {
+                    topMenu.gameObject.SetActive(true);
+                }
             }
 
             Preferences.Instance.SetString("lastPlayedVersion", Application.version);

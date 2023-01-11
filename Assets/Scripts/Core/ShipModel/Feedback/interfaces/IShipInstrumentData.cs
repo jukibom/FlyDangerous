@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
 
-namespace Core.ShipModel.ShipIndicator {
+namespace Core.ShipModel.Feedback.interfaces {
     // Typically used for displaying instrumentation in both the in-game ship and third party integrations
     // e.g. a custom display in a sim pit.
     // Many values are exposed as normalised (-1:1 or 0:1) for ease of integration.
     public interface IShipInstrumentData {
+        // The ship is ready to fly
+        public bool ShipActive { get; }
+
         // The world position coordinates from the world origin
         public Vector3 WorldPosition { get; }
 

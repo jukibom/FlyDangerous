@@ -6,11 +6,13 @@ using System.Reflection;
 using Audio;
 using Cinemachine;
 using Core.MapData;
+using Core.MapData.Serializable;
 using Core.Player;
 using Core.Replays;
 using Core.ShipModel;
 using FdUI;
 using Gameplay;
+using Gameplay.Game_Modes;
 using JetBrains.Annotations;
 using MapMagic.Core;
 using Menus.Main_Menu;
@@ -44,6 +46,7 @@ namespace Core {
         InGame
     }
 
+    [RequireComponent(typeof(GameModeHandler))]
     public class Game : Singleton<Game> {
         public delegate void GamePauseAction(bool enabled);
 
@@ -87,10 +90,11 @@ namespace Core {
         public SessionStatus SessionStatus { get; set; } = SessionStatus.Offline;
 
         public bool InGame => SessionStatus is SessionStatus.InGame or SessionStatus.Development;
+        public GameModeHandler GameModeHandler { get; private set; }
 
         public bool IsVREnabled { get; private set; }
 
-        public bool IsGameHotJoinable => LoadedLevelData.gameType.IsHotJoinable;
+        public bool IsGameHotJoinable => LoadedLevelData.gameType.GameMode.IsHotJoinable;
 
         public ShipParameters ShipParameters {
             get {
@@ -103,7 +107,7 @@ namespace Core {
             set {
                 _shipParameters = value;
                 var ship = FdPlayer.FindLocalShipPlayer;
-                if (ship) ship.ShipPhysics.FlightParameters = _shipParameters;
+                if (ship != null) ship.ShipPhysics.FlightParameters = _shipParameters;
             }
         }
 
@@ -124,6 +128,9 @@ namespace Core {
 
             // must be a level loader in the scene
             _levelLoader = FindObjectOfType<LevelLoader>();
+
+            // bootstrap for various game mode types
+            GameModeHandler = GetComponent<GameModeHandler>();
 
             // if there's a user object when the game starts, enable input (usually in the editor!)
             FindObjectOfType<ShipPlayer>()?.User.EnableGameInput();
@@ -205,7 +212,7 @@ namespace Core {
 
             // reflections
             var shipPlayer = FdPlayer.FindLocalShipPlayer;
-            if (shipPlayer) {
+            if (shipPlayer != null) {
                 var reflectionSetting = Preferences.Instance.GetString("graphics-reflections");
                 shipPlayer.ReflectionProbe.gameObject.SetActive(reflectionSetting != "off");
                 switch (reflectionSetting) {
@@ -286,12 +293,8 @@ namespace Core {
 
                 // Position the active camera to the designated start location so we can be sure to load in anything
                 // important at that location as part of the load sequence
-                var loadingPlayer = FdPlayer.FindLocalLoadingPlayer;
-
-                yield return new WaitUntil(() => {
-                    loadingPlayer = FdPlayer.FindLocalLoadingPlayer;
-                    return loadingPlayer != null;
-                });
+                yield return FdPlayer.WaitForLoadingPlayer();
+                var loadingPlayer = FdPlayer.LocalLoadingPlayer;
 
                 loadingPlayer.ShowLoadingRoom();
                 loadingPlayer.transform.position = levelData.startPosition.ToVector3();
@@ -309,12 +312,8 @@ namespace Core {
                 SessionStatus = SessionStatus.InGame;
 
                 // wait for local ship client object
-                while (!FdPlayer.FindLocalShipPlayer) {
-                    Debug.Log("Session loaded, waiting for player init");
-                    yield return new WaitForEndOfFrame();
-                }
-
-                var ship = FdPlayer.FindLocalShipPlayer;
+                yield return FdPlayer.WaitForShipPlayer();
+                var ship = FdPlayer.LocalShipPlayer;
 
                 // Allow the rigid body to initialise before setting new parameters!
                 yield return new WaitForEndOfFrame();
@@ -346,18 +345,11 @@ namespace Core {
 
                 yield return _levelLoader.HideLoadingScreen();
 
-                // set the game mode
-                ship.User.InGameUI.GameModeUIHandler.SetGameMode(LoadedLevelData.gameType);
-
-                // if there's a track, initialise it
-                var track = FindObjectOfType<Track>();
-                if (track) track.InitialiseTrack();
-
                 ship.ShipPhysics.FlightParameters = ShipParameters;
 
                 // resume the game
-                if (LoadedLevelData.gameType == GameType.Training) Time.timeScale = 0.5f;
-                else Time.timeScale = 1;
+                Time.timeScale = 1;
+
                 SetFlatScreenCameraControllerActive(!IsVREnabled);
 
                 // notify VR status (e.g. setting canvas world space, cameras, radial fog etc)
@@ -365,22 +357,31 @@ namespace Core {
 
                 FdConsole.Instance.LogMessage("Loaded level " + levelData.LevelHash());
 
+                // if there's a track, initialise it
+                var track = FindObjectOfType<Track>();
+                if (track) {
+                    var gameMode = levelData.gameType.GameMode;
+                    GameModeHandler.InitialiseGameMode(ship, levelData, gameMode, ship.User.InGameUI, track);
+                }
+                else {
+                    Debug.LogWarning("No track in the world! Cannot initialise game mode");
+                }
+
                 FadeFromBlack();
                 yield return new WaitForSeconds(0.7f);
 
                 // if there's a track in the game world, start it
-                if (track) yield return track.StartTrackWithCountdown();
+                // if (track) yield return track.StartTrackWithCountdown();
 
                 // store the starting position after any correction (e.g. move above terrain height)
                 // TODO: What impact, if any, does this have on level hashes??
                 var shipPosition = ship.AbsoluteWorldPosition;
                 _levelLoader.LoadedLevelData.startPosition = SerializableVector3.FromVector3(shipPosition);
 
-                // enable user input
-                ship.User.EnableGameInput();
-
                 // notify other players for e.g. targeting systems
                 ship.CmdNotifyPlayerLoaded();
+
+                GameModeHandler.Begin();
             }
 
             _loadingRoutine = StartCoroutine(LoadGame());
@@ -421,6 +422,8 @@ namespace Core {
             // save any pending preferences (e.g. mouselook, camera etc)
             Preferences.Instance.Save();
 
+            GameModeHandler.Quit();
+
             if (!FindObjectOfType<MainMenu>()) {
                 IEnumerator QuitAndShutdownNetwork() {
                     yield return LoadMainMenu(withDisconnectionReason);
@@ -442,8 +445,9 @@ namespace Core {
                 mapMagic.enabled = false;
             }
 
+            yield return FdPlayer.WaitForShipPlayer();
             var ship = FdPlayer.FindLocalShipPlayer;
-            if (ship) ship.User.DisableGameInput();
+            if (ship != null) ship.User.DisableGameInput();
 
             IEnumerator LoadMenuScene() {
                 // during load we pause scaled time to prevent *absolutely anything* from interacting incorrectly
@@ -453,11 +457,11 @@ namespace Core {
                 MusicManager.Instance.StopMusic(true);
                 yield return new WaitForSeconds(0.5f);
                 yield return SceneManager.LoadSceneAsync("Main Menu");
+                yield return new WaitForEndOfFrame();
+                NotifyVRStatus();
                 SetFlatScreenCameraControllerActive(false);
                 yield return new WaitForEndOfFrame();
                 ApplyGameOptions();
-                yield return new WaitForEndOfFrame();
-                NotifyVRStatus();
                 FreeCursor();
 
                 var mainMenu = FindObjectOfType<MainMenu>();
@@ -502,8 +506,7 @@ namespace Core {
                 FreeCursor();
             }
             else {
-                if (LoadedLevelData.gameType == GameType.Training) Time.timeScale = 0.5f;
-                else Time.timeScale = 1;
+                Time.timeScale = 1;
                 LockCursor();
             }
         }
@@ -560,7 +563,7 @@ namespace Core {
             IEnumerator DestroyGhost() {
                 shipGhost.ReplayTimeline.Stop();
                 var replayObject = shipGhost.ReplayTimeline.ShipReplayObject;
-                if (replayObject != null) Destroy(replayObject.Transform.gameObject);
+                if (replayObject != null && replayObject.Transform != null) Destroy(replayObject.Transform.gameObject);
                 Destroy(shipGhost.gameObject);
 
                 yield return new WaitForEndOfFrame();

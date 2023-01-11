@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4402866780619874757}
   - component: {fileID: 4518445560394306463}
+  - component: {fileID: 146624361674527084}
   m_Layer: 0
   m_Name: '@Socket'
   m_TagString: Untagged
@@ -44,3 +45,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f36bdb52a0d54c44ad4c191574764f5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  broadcastFormat: 1
+  emitIntervalSeconds: 0.02
+--- !u!114 &146624361674527084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7574676322588677613}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2cc89feed3748dc88b91fa29a23ad78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  listenPort: 11000
+  broadcastFormat: 1

@@ -14,24 +14,28 @@ namespace Core.Player.HeadTracking {
 
     public class HeadTrackingManager : MonoBehaviour {
         [SerializeField] private TrackIRComponent trackIr;
+
+        // prefs
         private float _autoTrackDamping;
-        private Quaternion _autoTrackHeadOrientation;
+        private float _autoTrackDeadzone;
         private Vector3 _autoTrackMax;
         private Vector3 _autoTrackMin;
         private bool _autoTrackSnap;
+        private float _autoTrackAmount;
 
+        // containers
+        private Vector3 _shipVelocity = Vector3.zero;
         private HeadTransform _headTransform;
         private OpenTrackData _openTrackData;
-        private Quaternion _openTrackHeadOrientation;
-        private Vector3 _openTrackHeadPosition;
-        private Vector3 _shipVelocity;
-        private Quaternion _trackIrHeadOrientation;
-        private Vector3 _trackIrHeadPosition;
+        private Vector3 _openTrackHeadPosition = Vector3.zero;
+        private Quaternion _openTrackHeadOrientation = Quaternion.identity;
+        private Vector3 _trackIrHeadPosition = Vector3.zero;
+        private Quaternion _trackIrHeadOrientation = Quaternion.identity;
+        private Quaternion _autoTrackHeadOrientation;
 
         public bool IsOpenTrackEnabled { get; private set; }
         public bool IsTrackIrEnabled { get; private set; }
-        public bool IsAutoTrackEnabled { get; private set; }
-
+        public bool IsAutoTrackEnabled { get; set; }
         public ref HeadTransform HeadTransform => ref _headTransform;
 
         private void FixedUpdate() {
@@ -73,14 +77,28 @@ namespace Core.Player.HeadTracking {
 
             // Auto vector rotation
             if (IsAutoTrackEnabled && _shipVelocity.magnitude > 1) {
+                // the orientation toward the direction of travel
                 var lookDirection = Quaternion.LookRotation(transform.InverseTransformDirection(_shipVelocity), Vector3.up);
+
+                // deadzone cancel out of look direction
+                if (Quaternion.Angle(Quaternion.identity, lookDirection) < _autoTrackDeadzone)
+                    lookDirection = Quaternion.identity;
+
+                // keep within the users' defined "cone"
                 var clampedDirection = MathfExtensions.ClampRotation(lookDirection, _autoTrackMin, _autoTrackMax);
+
+                // use the speed of the ship to handle how much to look too
+                var speedAdjustedDirection = Quaternion.Lerp(Quaternion.identity, clampedDirection, _shipVelocity.magnitude.Remap(50, 300, 0, 1));
+
+                // use the amount as requested by the users' prefs as to how much to look
+                var preferenceAdjustedDirection = Quaternion.Lerp(Quaternion.identity, speedAdjustedDirection, _autoTrackAmount);
 
                 // if enabled and direction is outside the cone of vision, revert to forward
                 if (_autoTrackSnap && clampedDirection != lookDirection)
-                    clampedDirection = Quaternion.identity;
+                    preferenceAdjustedDirection = Quaternion.identity;
 
-                _autoTrackHeadOrientation = Quaternion.Lerp(_autoTrackHeadOrientation, clampedDirection, _autoTrackDamping);
+                // smoothing
+                _autoTrackHeadOrientation = Quaternion.Lerp(_autoTrackHeadOrientation, preferenceAdjustedDirection, _autoTrackDamping);
             }
             else {
                 _autoTrackHeadOrientation = Quaternion.identity;
@@ -114,8 +132,10 @@ namespace Core.Player.HeadTracking {
         private void OnGameSettingsApplied() {
             IsOpenTrackEnabled = Preferences.Instance.GetBool("openTrackEnabled");
             IsTrackIrEnabled = Preferences.Instance.GetBool("trackIrEnabled");
-            IsAutoTrackEnabled = Preferences.Instance.GetBool("autoTrackEnabled");
-            _autoTrackDamping = Preferences.Instance.GetFloat("autoTrackDamping").Remap(0, 1, 0.1f, 0.01f);
+            IsAutoTrackEnabled = Preferences.Instance.GetBool("autoTrackEnabled") && Preferences.Instance.GetString("autoTrackBindType") != "hold";
+            _autoTrackAmount = Preferences.Instance.GetFloat("autoTrackAmount");
+            _autoTrackDamping = Mathf.Pow(Preferences.Instance.GetFloat("autoTrackDamping").Remap(0, 1, 1f, 0.4f), 5);
+            _autoTrackDeadzone = Preferences.Instance.GetFloat("autoTrackDeadzoneDegrees");
             _autoTrackMin = new Vector3(
                 -Preferences.Instance.GetFloat("autoTrackUpDegrees"),
                 -Preferences.Instance.GetFloat("autoTrackHorizontalDegrees"),

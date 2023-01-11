@@ -6,6 +6,7 @@ using Core.ShipModel.Feedback;
 using Core.ShipModel.Feedback.interfaces;
 using Core.ShipModel.Modifiers;
 using Core.ShipModel.ShipIndicator;
+using Gameplay;
 using JetBrains.Annotations;
 using Misc;
 using UnityEngine;
@@ -66,6 +67,8 @@ namespace Core.ShipModel {
         private ShipProfile _shipProfile;
         private bool _stopShip;
         private float _velocityLimitCap;
+
+        public bool ShipActive { get; set; }
 
         public FeedbackEngine FeedbackEngine => _feedbackEngine ? _feedbackEngine : _feedbackEngine = GetComponent<FeedbackEngine>();
         public ref AppliedEffects AppliedEffects => ref _modifierEngine.AppliedEffects;
@@ -264,6 +267,7 @@ namespace Core.ShipModel {
          * See fixed update
          */
         public void BringToStop() {
+            ShipActive = false;
             _stopShip = true;
         }
 
@@ -323,7 +327,7 @@ namespace Core.ShipModel {
             _gForce = Math.Abs((Velocity - _prevVelocity).magnitude / (Time.fixedDeltaTime * 9.8f));
         }
 
-        private void UpdateBoostStatus() {
+        public void UpdateBoostStatus() {
             _boostCapacitorPercent = Mathf.Min(100,
                 _boostCapacitorPercent + FlightParameters.boostCapacityPercentChargeRate * Time.fixedDeltaTime);
 
@@ -389,7 +393,7 @@ namespace Core.ShipModel {
             UpdateBoostStatus();
             ApplyFlightForces();
             UpdateInstrumentData();
-            UpdateMotionData();
+            UpdateMotionData(Velocity, CurrentFrameThrust, CurrentFrameTorque);
             UpdateFeedbackData();
 
             // correct for being underground in any scenario
@@ -408,15 +412,16 @@ namespace Core.ShipModel {
             _modifierEngine.SetDirect(shipForce, shipDeltaSpeedCap, shipDeltaThrust);
         }
 
-        // public overrides for motion data, used for multiplayer non-local client RPC calls
+        // update all motion data, can be used externally used for multiplayer non-local client RPC calls
         public void UpdateMotionData(Vector3 velocity, Vector3 thrust, Vector3 torque) {
+            _shipMotionData.ShipActive = ShipActive;
             _shipMotionData.CurrentLateralForce = thrust;
             _shipMotionData.CurrentLateralVelocity = velocity;
             _shipMotionData.CurrentAngularTorque = torque;
 
             _shipMotionData.CurrentAngularVelocity = AngularVelocity;
             _shipMotionData.CurrentLateralForceNormalised = thrust / MaxThrustWithBoost;
-            _shipMotionData.CurrentLateralVelocityNormalised = velocity / FlightParameters.maxBoostSpeed;
+            _shipMotionData.CurrentLateralVelocityNormalised = velocity / Math.Max(FlightParameters.maxSpeed, FlightParameters.maxBoostSpeed);
             _shipMotionData.CurrentAngularVelocityNormalised = AngularVelocity / FlightParameters.maxAngularVelocity;
             _shipMotionData.CurrentAngularTorqueNormalised = torque / (FlightParameters.maxThrust * FlightParameters.torqueThrustMultiplier);
 
@@ -424,15 +429,12 @@ namespace Core.ShipModel {
             _shipMotionData.MaxSpeed = FlightParameters.maxBoostSpeed;
         }
 
-        private void UpdateMotionData() {
-            UpdateMotionData(Velocity, CurrentFrameThrust, CurrentFrameTorque);
-        }
-
-        private void UpdateInstrumentData() {
+        public void UpdateInstrumentData() {
             var shipPosition = targetRigidbody.position;
             var absoluteShipPosition = FloatingOrigin.Instance.GetAbsoluteWorldPosition(targetRigidbody.transform);
             var nearestTerrain = PositionalHelpers.GetClosestCurrentTerrain(shipPosition);
 
+            _shipInstrumentData.ShipActive = ShipActive;
             _shipInstrumentData.WorldPosition = absoluteShipPosition;
             _shipInstrumentData.ShipHeightFromGround = Game.Instance.IsTerrainMap && nearestTerrain != null
                 ? absoluteShipPosition.y - nearestTerrain.SampleHeight(shipPosition)
@@ -460,22 +462,24 @@ namespace Core.ShipModel {
             _shipInstrumentData.RotationalFlightAssistActive = RotationalFlightAssistActive;
         }
 
-        private void UpdateFeedbackData() {
+        public void UpdateFeedbackData() {
             // Collision Handling
             _shipFeedbackData.CollisionThisFrame = false;
             _shipFeedbackData.CollisionImpactNormalised = 0;
             _shipFeedbackData.CollisionDirection = Vector3.zero;
 
             if (_currentFrameCollision != null) {
-                var normalBuffer = _currentFrameCollision.contacts.Aggregate(Vector3.zero, (current, contact) => current + contact.normal);
+                var contactPositionAverage = _currentFrameCollision.contacts.Aggregate(Vector3.zero, (current, contact) => current + contact.point) /
+                                             _currentFrameCollision.contactCount;
+                var direction = (contactPositionAverage - transform.position).normalized;
+
                 var impact = Mathf.Clamp(_currentFrameCollision.relativeVelocity.magnitude / _shipParameters.maxBoostSpeed *
-                                         Mathf.Abs(Vector3.Dot(normalBuffer.normalized, _prevVelocity.normalized)), 0, 1);
+                                         Mathf.Abs(Vector3.Dot(direction, _prevVelocity.normalized)), 0, 1);
 
                 _shipFeedbackData.CollisionThisFrame = true;
                 _shipFeedbackData.CollisionStartedThisFrame = _collisionStartedThisFrame;
                 _shipFeedbackData.CollisionImpactNormalised = impact;
-                _shipFeedbackData.CollisionDirection =
-                    targetRigidbody.transform.InverseTransformDirection(normalBuffer.normalized) * -1;
+                _shipFeedbackData.CollisionDirection = targetRigidbody.transform.InverseTransformDirection(direction);
 
                 // handle boost cap impact (this should go elsewhere!)
                 if (_collisionStartedThisFrame) _boostCapacitorPercent *= 1 - ShipFeedbackData.CollisionImpactNormalised;
@@ -504,11 +508,10 @@ namespace Core.ShipModel {
 
         private void ApplyFlightForces() {
             /* GRAVITY */
-            var gravity = Game.Instance.LoadedLevelData.gravity.ToVector3();
+            var gravity = Game.Instance.LoadedLevelData.gravity?.ToVector3() ?? Vector3.zero;
             targetRigidbody.AddForce(targetRigidbody.mass * gravity);
 
             /* INPUTS */
-
             var latH = LatH;
             var latV = LatV;
             var throttle = Throttle;

@@ -28,6 +28,8 @@ namespace Core.ShipModel {
         private float targetUpThrust;
         private float targetYawThrust;
 
+        public float addTargetThrustToForwardThrusters;
+
         private void FixedUpdate() {
             forwardThrusters.ForEach(thruster => {
                 var thrusterTransform = thruster.ThrusterMesh.transform;
@@ -73,6 +75,8 @@ namespace Core.ShipModel {
             DistributeThrust(pitchUpThrusters, pitchDownThrusters, targetPitchThrust);
             DistributeThrust(rollLeftThrusters, rollRightThrusters, targetRollThrust);
             DistributeThrust(yawRightThrusters, yawLeftThrusters, targetYawThrust);
+
+            forwardThrusters.ForEach(thruster => thruster.TargetThrust += addTargetThrustToForwardThrusters);
         }
 
         private void DistributeThrust(List<Thruster> positiveThrusters, List<Thruster> negativeThrusters,
