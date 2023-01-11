@@ -48,6 +48,7 @@ namespace Core.MapData {
             if (ship) {
                 // first let's check if this is a terrain world and handle that appropriately
                 var mapMagic = FindObjectOfType<MapMagicObject>();
+                var TWTerr = FindObjectOfType<MapGenerate>();
 
                 void DoReset(Vector3 position, Quaternion rotation) {
                     ship.SetTransformWorld(position, rotation);
@@ -235,6 +236,28 @@ namespace Core.MapData {
                 }
             }
 
+            // Generate TeamwinTerrain if its included in the current scene
+            var TWterr = FindObjectOfType<MapGenerate>();
+            if (TWterr)
+            {
+                while (TWterr.IsGenerating())
+                {
+                    try
+                    {
+                        var progressPercent = Mathf.Min(100, Mathf.Round(TWterr.GenerationProgress() * 100));
+
+                        // this entity may be destroyed by server shutdown...
+                        if (loadText != null) loadText.text = $"Generating terrain ({progressPercent}%)\n\n\nSeed: \"{LoadedLevelData.terrainSeed}\"";
+                    }
+                    catch
+                    {
+                        // ignored because it only updates loading text and weird race condition errors here in map magic and out of my control
+                    }
+                    //Run Cleanup to actually make the thread queue move forward
+                    TWterr.CleanupThreads();
+                }
+
+            }
             _scenesLoading.Clear();
         }
     }
