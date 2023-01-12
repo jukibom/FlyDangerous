@@ -114,7 +114,7 @@ public class MapGenerate : MonoBehaviour
 
             for(int i=0;i<NoiseArray.Length;i++)
             {
-                NoiseArray[i].seed = int.Parse(HashGenerator.ComputeSha256Hash(Game.Instance.Seed).Remove(0, 56), System.Globalization.NumberStyles.HexNumber)-i;
+                NoiseArray[i].seed = int.Parse(HashGenerator.ComputeSha256Hash(Game.Instance.Seed).Remove(0, 60), System.Globalization.NumberStyles.HexNumber)-i;
             }
         }
         else
