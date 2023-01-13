@@ -20,6 +20,7 @@ namespace Core.MapData {
             "Terrain with lots of foliage relying on the GPU - feedback appreciated!", "TerrainWorkspace", true);
 
         public static readonly Location TeamwinFTW_Scene = new("TeamwinFTW scene", "TeamwinFTW's world for testing abstract terrain generation","TeamwinFTW_Scene", true);
+        public static readonly Location LegacyScene = new("Legacy TeamwinFTW scene", "TeamwinFTW's original world for testing abstract terrain generation", "Legacy_TeamwinFTW_Scene", true);
 
 
 
@@ -41,7 +42,7 @@ namespace Core.MapData {
 
         public static IEnumerable<Location> List() {
 
-            return new[] { ProvingGrounds, Space, TestSpaceStation, TerrainV1, TerrainV2, TerrainV3, TerrainGPUFoliageTest, TeamwinFTW_Scene};
+            return new[] { ProvingGrounds, Space, TestSpaceStation, TerrainV1, TerrainV2, TerrainV3, TerrainGPUFoliageTest, TeamwinFTW_Scene, LegacyScene};
 
         }
 
