@@ -7,7 +7,6 @@ using System.Drawing;
 using System.Linq;
 using System.Net.NetworkInformation;
 using Unity.Mathematics;
-using UnityEditor.Profiling;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Profiling;
