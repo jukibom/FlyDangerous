@@ -53,8 +53,8 @@ namespace Menus.Main_Menu {
         }
 
         public void ClosePanel() {
-            if (MusicManager.Instance.CurrentPlayingTrack != MusicTrack.MainMenu)
-                MusicManager.Instance.PlayMusic(MusicTrack.MainMenu, false, false, false);
+            if (MusicManager.Instance.CurrentPlayingTrack != MusicTrack.RockYourBody)
+                MusicManager.Instance.PlayMusic(MusicTrack.RockYourBody, false, false, false);
             Cancel();
         }
 
@@ -105,12 +105,6 @@ namespace Menus.Main_Menu {
             }
 
             StartCoroutine(ReplaceEnvironment(environment.SceneToLoad));
-        }
-
-        [UsedImplicitly]
-        public void PreviewMusic(BaseEventData eventData) {
-            var musicTrack = FdEnum.FromDropdownSelectionEvent(MusicTrack.List(), eventData);
-            MusicManager.Instance.PlayMusic(musicTrack, false, false, true);
         }
 
         private void UpdateSeedField() {
