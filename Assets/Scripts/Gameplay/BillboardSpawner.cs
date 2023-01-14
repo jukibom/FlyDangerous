@@ -50,8 +50,8 @@ namespace Gameplay {
         }
 
         public void Deserialize(SerializableBillboard serializedData) {
-            var billboardType = BillboardType.FromString(serializedData.type);
-            BillboardData = billboardType.BillboardData;
+            var serializedBillboardType = BillboardType.FromString(serializedData.type);
+            BillboardData = serializedBillboardType.BillboardData;
 
             var billboardTransform = transform;
             billboardTransform.position = serializedData.position.ToVector3();

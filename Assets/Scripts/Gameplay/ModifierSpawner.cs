@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Core.MapData;
+using Core.MapData.Serializable;
 using Core.ShipModel.Modifiers.Boost;
 using JetBrains.Annotations;
 using NaughtyAttributes;
@@ -13,7 +15,12 @@ namespace Gameplay {
 
         [SerializeField] private ModifierBoost modifierBoost;
 
+        [ShowIf("ShowBoostAttributes")] [Range(1000, 50000)] [OnValueChanged("SetModifierAttributes")] [SerializeField]
+        private float boostTrailLength = 15000;
+
         private ModifierData _modifierData;
+
+        public float BoostTrailLength => boostTrailLength;
 
         public ModifierData ModifierData {
             get {
@@ -24,14 +31,29 @@ namespace Gameplay {
                 _modifierData = value;
                 modifierType = ModifierType.FromString(_modifierData.Name).Name;
 
-                if (_modifierData is BoostModifierData boostModifier) {
-                    // TODO: boost specific crap
-                }
+                if (_modifierData is BoostModifierData boostModifierData) boostTrailLength = boostModifierData.BoostLengthMeters;
+
+                ResetAll();
             }
         }
 
-        private void ResetAll() {
-            // TODO
+        public void Deserialize(SerializableModifier serializedData) {
+            var serializedModifierType = ModifierType.FromString(serializedData.type);
+            ModifierData = serializedModifierType.ModifierData;
+
+            var modifierTransform = transform;
+            modifierTransform.position = serializedData.position.ToVector3();
+            modifierTransform.rotation = Quaternion.Euler(serializedData.rotation.ToVector3());
+
+            // overrides
+            if (ModifierData is BoostModifierData boostModifierData)
+                boostTrailLength = serializedData.boostTrailLengthMeters != null &&
+                                   Math.Abs(serializedData.boostTrailLengthMeters.Value - boostModifierData.BoostLengthMeters) > 0.01f
+                    ? serializedData.boostTrailLengthMeters.Value
+                    : boostModifierData.BoostLengthMeters;
+
+            ResetAll();
+            SetModifierAttributes();
         }
 
         [UsedImplicitly]
@@ -43,6 +65,30 @@ namespace Gameplay {
         private void RefreshFromModifierData() {
             ModifierData = ModifierType.FromString(modifierType).ModifierData;
             ResetAll();
+        }
+
+        [UsedImplicitly]
+        private bool ShowBoostAttributes() {
+            return modifierType.Equals(ModifierType.BoostModifierType.Name);
+        }
+
+        [Button("Reset to type default")]
+        private void ResetAll() {
+            modifierBoost.gameObject.SetActive(false);
+
+            switch (modifierType) {
+                case "Boost":
+                    modifierBoost.gameObject.SetActive(true);
+                    break;
+            }
+        }
+
+        private void SetModifierAttributes() {
+            switch (modifierType) {
+                case "Boost":
+                    modifierBoost.BoostStreamLengthMeters = boostTrailLength;
+                    break;
+            }
         }
     }
 }

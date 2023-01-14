@@ -1,3 +1,4 @@
+using NaughtyAttributes;
 using UnityEngine;
 
 namespace Core.ShipModel.Modifiers.Boost {
@@ -8,13 +9,22 @@ namespace Core.ShipModel.Modifiers.Boost {
         [SerializeField] private ModifierBoostThrust modifierBoostThrust;
         [SerializeField] private ModifierBoostStream modifierBoostStream;
 
-        [Range(1000, 50000)] [SerializeField] private float boostStreamLengthMeters;
+        [Range(1000, 50000)] [OnValueChanged("BoostLengthChanged")] [SerializeField]
+        private float boostStreamLengthMeters;
+
+        public float BoostStreamLengthMeters {
+            get => boostStreamLengthMeters;
+            set {
+                boostStreamLengthMeters = value;
+                BoostLengthChanged();
+            }
+        }
 
         private void Awake() {
             boostStreamLengthMeters = modifierBoostStream.TrailLengthMeters;
         }
 
-        private void OnValidate() {
+        private void BoostLengthChanged() {
             modifierBoostStream.TrailLengthMeters = boostStreamLengthMeters;
         }
     }

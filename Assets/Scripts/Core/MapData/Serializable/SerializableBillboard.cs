@@ -31,5 +31,10 @@ namespace Core.MapData.Serializable {
 
             return serializableBillboard;
         }
+
+        // convert this object into a string for hash generation purposes (that is, any information pertinent to the level format for competition purposes)
+        public static string ToHashString(SerializableBillboard billboard) {
+            return billboard.position.ToString() + billboard.rotation;
+        }
     }
 }

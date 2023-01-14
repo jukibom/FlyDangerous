@@ -1,4 +1,4 @@
-﻿using Gameplay;
+using Gameplay;
 
 namespace Core.MapData.Serializable {
     public class SerializableCheckpoint {
@@ -13,6 +13,11 @@ namespace Core.MapData.Serializable {
             checkpointLocation.rotation = SerializableVector3.FromVector3(transform.rotation.eulerAngles);
             checkpointLocation.type = checkpoint.Type;
             return checkpointLocation;
+        }
+
+        // convert this object into a string for hash generation purposes (that is, any information pertinent to the level format for competition purposes)
+        public static string ToHashString(SerializableCheckpoint checkpoint) {
+            return checkpoint.position.ToString() + checkpoint.rotation;
         }
     }
 }

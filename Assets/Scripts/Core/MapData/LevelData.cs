@@ -39,20 +39,25 @@ namespace Core.MapData {
 
         [CanBeNull] public List<SerializableBillboard> billboards = null;
 
+        [CanBeNull] public List<SerializableModifier> modifiers = null;
+
 
         public string LevelHash() {
             // generate the filename from a hash combination of name, checkpoints and location - this way they'll always be unique.
             var checkpointText = "";
-            if (checkpoints != null) {
-                var checkpointStrings =
-                    checkpoints.ConvertAll(checkpoint => checkpoint.position.ToString() + checkpoint.rotation);
-                foreach (var checkpointString in checkpointStrings) checkpointText += checkpointString;
-            }
+            checkpoints?.ConvertAll(SerializableCheckpoint.ToHashString)
+                .ForEach(checkpointString => checkpointText += checkpointString);
 
-            // TODO: billboards, modifiers, geo
+            var billboardsText = "";
+            billboards?.ConvertAll(SerializableBillboard.ToHashString)
+                .ForEach(billboardString => billboardsText += billboardString);
+
+            var modifierText = "";
+            modifiers?.ConvertAll(SerializableModifier.ToHashString)
+                .ForEach(modifierString => modifierText += modifierString);
 
             return HashGenerator.ComputeSha256Hash(
-                name + checkpointText + location.Name);
+                name + checkpointText + billboardsText + modifierText + location.Name);
         }
 
         public string ToJsonString() {

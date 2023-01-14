@@ -11,7 +11,7 @@ namespace Gameplay {
         public event CheckpointHit OnCheckpointHit;
 
         [SerializeField] private GameModeCheckpoints checkpointContainer;
-        [SerializeField] private Transform modifierContainer;
+        [SerializeField] private GameModeModifiers modifierContainer;
         [SerializeField] private GameModeBillboards billboardContainer;
         [SerializeField] private Transform geometryContainer;
 
@@ -53,7 +53,11 @@ namespace Gameplay {
                 levelData.billboards = billboardContainer.BillboardSpawners
                     .ConvertAll(SerializableBillboard.FromBillboardSpawner);
 
-            // TODO: modifiers
+            modifierContainer.RefreshModifierSpawners();
+            if (modifierContainer.ModifierSpawners.Count > 0)
+                levelData.modifiers = modifierContainer.ModifierSpawners
+                    .ConvertAll(SerializableModifier.FromModifierSpawner);
+
             // TODO: geometry
 
             return levelData;
@@ -70,7 +74,9 @@ namespace Gameplay {
             if (levelData.billboards?.Count > 0)
                 levelData.billboards.ForEach(b => billboardContainer.AddBillboard(b));
 
-            // TODO: modifiers
+            if (levelData.modifiers?.Count > 0)
+                levelData.modifiers.ForEach(m => modifierContainer.AddModifier(m));
+
             // TODO: geometry
         }
     }
