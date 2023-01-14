@@ -204,7 +204,7 @@ namespace Menus.Main_Menu {
             yield return new WaitForEndOfFrame();
             yield return new WaitForEndOfFrame();
 
-            MusicManager.Instance.PlayMusic(MusicTrack.MainMenu, FirstRun, false, false, true);
+            MusicManager.Instance.PlayMusic(MusicTrack.RockYourBody, FirstRun, false, false, true);
             Game.Instance.SetFlatScreenCameraControllerActive(false);
 
             FloatingOrigin.Instance.FocalTransform = transform;
