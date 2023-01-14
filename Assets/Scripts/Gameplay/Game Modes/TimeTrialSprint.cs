@@ -35,7 +35,8 @@ namespace Gameplay.Game_Modes {
         }
 
         public virtual void OnBegin() {
-            /* nothing to do */
+            GameModeUIHandler.GameModeUIText.TopCanvasGroup.alpha = 1;
+            GameModeUIHandler.GameModeUIText.RightCanvasGroup.alpha = 1;
         }
 
         public virtual void OnFixedUpdate() {

@@ -45,6 +45,11 @@ namespace Gameplay.Game_Modes {
             }
         }
 
+        public override void OnBegin() {
+            base.OnBegin();
+            GameModeUIHandler.GameModeUIText.LeftCanvasGroup.alpha = 1;
+        }
+
         public override void OnRestart() {
             OnInitialise();
             base.OnRestart();

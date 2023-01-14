@@ -68,6 +68,12 @@ namespace Gameplay.Game_Modes {
         public void InitialiseGameMode(ShipPlayer localPlayer, LevelData levelData, IGameMode gameMode, InGameUI inGameUI, Track track) {
             CheckValidity();
 
+            _gameModeWithScore = null;
+            _gameModeWithCountdown = null;
+            _gameModeWithCheckpoint = null;
+            _gameModeWithTimer = null;
+            inGameUI.GameModeUIHandler.GameModeUIText.HideAll();
+
             _gameModeScore = new GameModeScore(gameMode, levelData);
             _gameModeTimer = new GameModeTimer();
             _gameModeLifecycle = new GameModeLifecycle(this, localPlayer, Restart, Complete);

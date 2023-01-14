@@ -44,6 +44,13 @@ namespace GameUI.GameModes {
             HideGameUIText(false);
         }
 
+        public void HideAll() {
+            TopCanvasGroup.alpha = 0;
+            LeftCanvasGroup.alpha = 0;
+            RightCanvasGroup.alpha = 0;
+            CentralCanvasGroup.alpha = 0;
+        }
+
         public void ShowGameUIText(bool animate = true) {
             gameObject.SetActive(true);
             if (!animate) {
