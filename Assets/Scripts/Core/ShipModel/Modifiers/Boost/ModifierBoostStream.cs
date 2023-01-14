@@ -11,6 +11,7 @@ namespace Core.ShipModel.Modifiers.Boost {
 
         [SerializeField] private float lengthMeters = 15000;
         [SerializeField] private float streamCapsuleEndCapRadius = 500;
+        [SerializeField] private Transform terrainGenEndpointMarker;
 
         private CapsuleCollider _capsuleCollider;
         private VisualEffect _visualEffect;
@@ -28,6 +29,8 @@ namespace Core.ShipModel.Modifiers.Boost {
                 capsuleCollider.height = lengthLocal;
                 capsuleCollider.center = new Vector3(0, 0, lengthLocal / 2 - capsuleCollider.radius);
                 vfx.SetFloat("_streamLength", lengthLocal);
+
+                terrainGenEndpointMarker.localPosition = new Vector3(0, 0, lengthLocal);
             }
         }
 
