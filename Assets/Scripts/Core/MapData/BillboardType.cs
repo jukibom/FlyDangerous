@@ -12,7 +12,7 @@ namespace Core.MapData {
         private static readonly BillboardData CustomMessageBillboard = new BillboardWithMessageData { Name = "Custom Message" };
 
         private static readonly BillboardData DirectionBillboard = new BillboardWithTextureData
-            { Name = "Direction", TextureResourceName = "Billboard Arrow", Tint = new Color(1, 1, 0), ColorIntensity = 5, ScrollSpeed = 0.2f };
+            { Name = "Direction", TextureResourceName = "Billboard Arrow", Tint = new Color(1, 1, 0), ColorIntensity = 35, ScrollSpeed = 0.2f };
 
         private static readonly BillboardData SquidColaBillboard = new BillboardWithTextureData
             { Name = "Squid Cola", TextureResourceName = "Billboard Squid Cola", ColorIntensity = 4 };
