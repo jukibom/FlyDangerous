@@ -16,6 +16,8 @@ namespace Menus.Main_Menu.Components {
     public class LevelSelectPanel : MonoBehaviour {
         public delegate void OnLevelSelectedAction();
 
+        [SerializeField] private TabGroup tabGroup;
+        [SerializeField] private Text footer;
         [SerializeField] private LevelUIElement levelUIElementPrefab;
         [SerializeField] private RectTransform levelPrefabContainer;
 
@@ -43,6 +45,31 @@ namespace Menus.Main_Menu.Components {
         public Level SelectedLevel { get; private set; }
         public List<Replay> SelectedReplays => competitionPanel.GetSelectedReplays();
         public event OnLevelSelectedAction OnLevelSelectedEvent;
+
+        private void OnEnable() {
+            tabGroup.OnTabSelected += OnLevelGroupTabSelected;
+        }
+
+        private void OnDisable() {
+            tabGroup.OnTabSelected -= OnLevelGroupTabSelected;
+        }
+
+        private void OnLevelGroupTabSelected(string tabId) {
+            switch (tabId) {
+                case "sprint":
+                    LoadLevels(Level.List().ToList().FindAll(level => level.GameType == GameType.Sprint && !level.IsLegacy));
+                    footer.text = "FOLLOW THE PATH, HIT EVERY CHECKPOINT, GET TO THE END.\nORDER OF CHECKPOINTS DOESN'T STRICTLY MATTER.";
+                    break;
+                case "laps":
+                    LoadLevels(Level.List().ToList().FindAll(level => level.GameType == GameType.Laps && !level.IsLegacy));
+                    footer.text = "FOLLOW THE CIRCUIT, HIT EVERY CHECKPOINT, COMPLETE ALL LAPS.\nORDER OF CHECKPOINTS DOESN'T STRICTLY MATTER.";
+                    break;
+                case "legacy":
+                    LoadLevels(Level.List().ToList().FindAll(level => level.GameType == GameType.Sprint && level.IsLegacy));
+                    footer.text = "THESE ARE OLD SPRINT MAPS AND MAY BE IMPOSSIBLE TO BEAT THE LEADERBOARD!\nHERE FOR POSTERITY.";
+                    break;
+            }
+        }
 
         public void LoadLevels(List<Level> levels) {
             foreach (var levelUI in levelPrefabContainer.gameObject.GetComponentsInChildren<LevelUIElement>()) Destroy(levelUI.gameObject);
@@ -92,7 +119,7 @@ namespace Menus.Main_Menu.Components {
 
         private void HighlightSelectedLevel(Level level) {
             if (level != null && SelectedLevel == null) {
-                levelName.text = level.Name;
+                levelName.text = level.Name.ToUpper();
                 levelThumbnail.sprite = level.Thumbnail;
 
                 var score = level.Score;

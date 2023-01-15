@@ -6,18 +6,24 @@ namespace FdUI {
         public List<TabButton> tabButtons = new();
         public TabButton defaultTab;
 
+        public delegate void TabSelectedAction(string tabId);
+
+        public event TabSelectedAction OnTabSelected;
+
+
         public void Start() {
             tabButtons.ForEach(tab => tab.Subscribe(this));
-            if (defaultTab != null) OnTabSelected(defaultTab);
+            if (defaultTab != null) SelectTab(defaultTab);
         }
 
-        public void OnTabSelected(TabButton button) {
+        public void SelectTab(TabButton button) {
             ResetTabs();
             button.SetSelectedState(true);
+            OnTabSelected?.Invoke(button.TabId);
         }
 
         private void ResetTabs() {
             tabButtons.ForEach(tab => { tab.SetSelectedState(false); });
         }
-    } 
+    }
 }

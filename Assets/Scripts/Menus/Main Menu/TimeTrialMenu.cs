@@ -1,6 +1,4 @@
-using System.Linq;
 using Core;
-using Core.MapData;
 using FdUI;
 using Menus.Main_Menu.Components;
 using UnityEngine;
@@ -48,11 +46,6 @@ namespace Menus.Main_Menu {
             Game.Instance.loadedMainLevel = levelSelectPanel.SelectedLevel;
             Game.Instance.ActiveGameReplays = levelSelectPanel.SelectedReplays;
             FdNetworkManager.Instance.StartGameLoadSequence(SessionType.Singleplayer, levelSelectPanel.SelectedLevel.Data);
-        }
-
-        protected override void OnOpen() {
-            // TODO: we need a laps menu somewhere, somehow
-            levelSelectPanel.LoadLevels(Level.List().ToList().FindAll(level => level.GameType == GameType.Sprint));
         }
 
         public override void OnCancel(BaseEventData eventData) {
