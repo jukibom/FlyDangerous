@@ -1,4 +1,4 @@
-using Gameplay;
+﻿using Gameplay;
 
 namespace Core.MapData.Serializable {
     public class SerializableCheckpoint {
@@ -17,7 +17,7 @@ namespace Core.MapData.Serializable {
 
         // convert this object into a string for hash generation purposes (that is, any information pertinent to the level format for competition purposes)
         public static string ToHashString(SerializableCheckpoint checkpoint) {
-            return checkpoint.position.ToString() + checkpoint.rotation;
+            return checkpoint.position.ToString() + checkpoint.rotation + checkpoint.type;
         }
     }
 }

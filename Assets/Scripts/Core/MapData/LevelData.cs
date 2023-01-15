@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Audio;
 using Core.MapData.Serializable;
 using JetBrains.Annotations;
@@ -10,7 +11,7 @@ using UnityEngine;
 
 namespace Core.MapData {
     public class LevelData {
-        public int version = 1;
+        [DefaultValue(1)] public int version = 1;
         public string name = "";
 
         [JsonConverter(typeof(FdEnumJsonConverter))]
@@ -56,8 +57,18 @@ namespace Core.MapData {
             modifiers?.ConvertAll(SerializableModifier.ToHashString)
                 .ForEach(modifierString => modifierText += modifierString);
 
-            return HashGenerator.ComputeSha256Hash(
-                name + checkpointText + billboardsText + modifierText + location.Name);
+            // TODO: geometry v_v
+            var geometryText = "";
+            // geometry?.ConvertAll(SerializableGeometry.ToHashString)
+            //     .ForEach(geometryString => geometryText += geometryString);
+
+            var hash = HashGenerator.ComputeSha256Hash(
+                checkpointText + billboardsText + modifierText + geometryText + location.Name);
+
+            // Map lookup for old hash algorithm
+            if (LevelDataHelper.OldMapLookup.TryGetValue(hash, out var oldHash)) return oldHash;
+
+            return hash;
         }
 
         public string ToJsonString() {
