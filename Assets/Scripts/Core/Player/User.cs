@@ -142,8 +142,8 @@ namespace Core.Player {
             if (_mouseLookActive)
                 shipCameraRig.SetPosition(
                     new Vector2(
-                        _mousePositionDelta.x / Screen.width * Preferences.Instance.GetFloat("mouseXSensitivity") * 100,
-                        _mousePositionDelta.y / Screen.height * Preferences.Instance.GetFloat("mouseYSensitivity") * 100
+                        _mousePositionDelta.x / Screen.width * Preferences.Instance.GetFloat("mouseXSensitivity") * 25,
+                        _mousePositionDelta.y / Screen.height * Preferences.Instance.GetFloat("mouseYSensitivity") * 25
                     ),
                     CameraPositionUpdate.Relative
                 );
