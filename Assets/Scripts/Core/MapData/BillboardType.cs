@@ -20,11 +20,20 @@ namespace Core.MapData {
         private static readonly BillboardData CopeBillboard = new BillboardWithTextureData
             { Name = "Cope", TextureResourceName = "Billboard Cope", ColorIntensity = 8, ScrollSpeed = 0 };
 
+        private static readonly BillboardData NewtonsGambitBillboard = new BillboardWithTextureData
+            { Name = "Newtons Gambit", TextureResourceName = "Billboard Newtons Gambit", ColorIntensity = 12 };
+
+        private static readonly BillboardData EdenPrimeBillboard = new BillboardWithTextureData
+            { Name = "Eden Prime", TextureResourceName = "Billboard Eden Prime", ColorIntensity = 8 };
+
+
         public static readonly BillboardType FlyDangerous = new(FlyDangerousBillboard);
         public static readonly BillboardType CustomMessage = new(CustomMessageBillboard);
         public static readonly BillboardType Direction = new(DirectionBillboard);
         public static readonly BillboardType SquidCola = new(SquidColaBillboard);
         public static readonly BillboardType Cope = new(CopeBillboard);
+        public static readonly BillboardType NewtonsGambit = new(NewtonsGambitBillboard);
+        public static readonly BillboardType EdenPrime = new(EdenPrimeBillboard);
 
         private BillboardType(BillboardData billboardData) {
             Id = GenerateId;
@@ -43,7 +52,9 @@ namespace Core.MapData {
                 CustomMessage,
                 Direction,
                 SquidCola,
-                Cope
+                Cope,
+                NewtonsGambit,
+                EdenPrime
             };
         }
 

@@ -49,6 +49,14 @@ namespace Gameplay {
             }
         }
 
+        private void Awake() {
+            RefreshFromBillboardData();
+        }
+
+        private void OnEnable() {
+            billboard = GetComponent<Billboard>();
+        }
+
         public void Deserialize(SerializableBillboard serializedData) {
             var serializedBillboardType = BillboardType.FromString(serializedData.type);
             BillboardData = serializedBillboardType.BillboardData;
@@ -75,10 +83,6 @@ namespace Gameplay {
                     : BillboardData.ScrollSpeed;
 
             SetBillboardAttributes();
-        }
-
-        private void OnEnable() {
-            billboard = GetComponent<Billboard>();
         }
 
         [UsedImplicitly]

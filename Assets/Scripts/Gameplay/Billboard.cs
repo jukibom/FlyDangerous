@@ -85,11 +85,14 @@ namespace Gameplay {
         }
 
         private void DrawTexture(string textureResource) {
+            renderTextureCamera.gameObject.SetActive(false);
             var texture = Resources.Load<Texture2D>($"billboards/{textureResource}");
             screen.material.SetTexture(BillboardTextureProperty, texture);
         }
 
         private void DrawText(string text) {
+            renderTextureCamera.gameObject.SetActive(true);
+
             void SetTextWithRenderTexture() {
                 billboardText.text = text;
                 renderTextureCamera.targetTexture = TextRenderTexture;
