@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Core.Scores;
 using Misc;
 using UnityEngine;
@@ -26,6 +26,11 @@ namespace Core.MapData {
         public static readonly Level HideAndSeek = new("Hide and Seek", "hide-and-seek", GameType.Sprint, true);
 
         // GLORIOUS NEW WORLD MAPS (for how long? who knows!)
+        public static readonly Level TinyTrial = new("Tiny Trial", "tiny-trial", GameType.Sprint);
+
+        // tests
+        public static readonly Level HideAndSeekLapTest = new("Hide and Seek but sexier", "hide-and-seek", GameType.Laps);
+
 
         private readonly string _jsonPath;
 
@@ -54,7 +59,8 @@ namespace Core.MapData {
             return new[] {
                 GentleStart, UpsAndDowns, AroundTheBlock, HoldOnToYourStomach, AroundTheStation, Snake, SpeedIsHalfTheBattle, YouMightWannaHoldBack,
                 DeathValley, CrestLoop,
-                YouHaveHeadlightsRight, LimiterMastery, ThreadTheNeedle, MountainSpiral, LongRoad, HideAndSeek
+                YouHaveHeadlightsRight, LimiterMastery, ThreadTheNeedle, MountainSpiral, LongRoad, HideAndSeek,
+                HideAndSeekLapTest, TinyTrial
             };
         }
 
