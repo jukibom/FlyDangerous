@@ -40,6 +40,8 @@ namespace Core.Replays {
         [Key(14)] public Vector3 modifierShipForce;
         [Key(15)] public float modifierShipDeltaSpeedCap;
         [Key(16)] public float modifierShipDeltaThrust;
+        [Key(17)] public float modifierShipDrag;
+        [Key(18)] public float modifierShipAngularDrag;
 
         public static InputFrameV110 Deserialize(string version, ref byte[] bytes) {
             if (version == "1.0.0") {

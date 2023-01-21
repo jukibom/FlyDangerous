@@ -408,8 +408,8 @@ namespace Core.ShipModel {
         /**
          * Write values directly to the modifier engine for replay purposes
          */
-        public void OverwriteModifiers(Vector3 shipForce, float shipDeltaSpeedCap, float shipDeltaThrust) {
-            _modifierEngine.SetDirect(shipForce, shipDeltaSpeedCap, shipDeltaThrust);
+        public void OverwriteModifiers(Vector3 shipForce, float shipDeltaSpeedCap, float shipDeltaThrust, float shipDrag, float shipAngularDrag) {
+            _modifierEngine.SetDirect(shipForce, shipDeltaSpeedCap, shipDeltaThrust, shipDrag, shipAngularDrag);
         }
 
         // update all motion data, can be used externally used for multiplayer non-local client RPC calls
@@ -542,6 +542,10 @@ namespace Core.ShipModel {
                 throttle * FlightParameters.throttleMultiplier
             );
 
+            /* DRAG */
+            targetRigidbody.drag = FlightParameters.drag + _modifierEngine.AppliedEffects.shipDrag;
+            targetRigidbody.angularDrag = FlightParameters.angularDrag + _modifierEngine.AppliedEffects.shipAngularDrag;
+
             /* THRUST */
             // standard thrust calculated per-axis (each axis has it's own max thrust component including boost)
             var thrust = thrustInput * MaxThrustWithBoost;
@@ -665,6 +669,10 @@ namespace Core.ShipModel {
         // Check for modifier and apply it if found
         private void ModifierCollisionCheck() {
             var rayHits = VelocityBoxCast(out var raycastHitCount, 1 << _modifierLayerMask);
+
+            // we use the modifier system to figure this out for local clients, so reset it every frame here
+            // (gross I know but it's simple and stupid and of that I am a big fan!)
+            Game.IsUnderWater = false;
 
             for (var i = 0; i < raycastHitCount; i++) {
                 var raycastHit = rayHits[i];

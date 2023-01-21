@@ -34,7 +34,7 @@ namespace Core.Replays {
         }
 
         public static ReplayMeta Version110(LevelData levelData) {
-            return new ReplayMeta("1.1.0", DateTime.Now, 10, 86, 67, levelData.LevelHash());
+            return new ReplayMeta("1.1.0", DateTime.Now, 10, 86, 71, levelData.LevelHash());
         }
     }
 }

@@ -93,6 +93,7 @@ namespace Core {
         public GameModeHandler GameModeHandler { get; private set; }
 
         public static bool IsVREnabled { get; private set; }
+        public static bool IsUnderWater { get; set; }
 
         public bool IsGameHotJoinable => LoadedLevelData.gameType.GameMode.IsHotJoinable;
 

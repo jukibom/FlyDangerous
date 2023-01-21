@@ -112,7 +112,7 @@ namespace Core.Replays {
                         ShipReplayObject?.ShipPhysics.NightVisionToggle(_ => { });
 
                     ShipReplayObject?.ShipPhysics.OverwriteModifiers(inputFrame.modifierShipForce, inputFrame.modifierShipDeltaSpeedCap,
-                        inputFrame.modifierShipDeltaThrust);
+                        inputFrame.modifierShipDeltaThrust, inputFrame.modifierShipDrag, inputFrame.modifierShipAngularDrag);
 
                     _inputTicks++;
                 }

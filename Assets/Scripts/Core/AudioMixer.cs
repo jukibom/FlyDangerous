@@ -63,5 +63,9 @@ namespace Core {
         public void SetMusicLowPassEnabled(bool isEnabled) {
             masterMixerGroup.audioMixer.SetFloat("musicCutoffFreq", isEnabled ? 480 : 22000);
         }
+
+        public void SetSfxLowPassEnabled(bool isEnabled) {
+            masterMixerGroup.audioMixer.SetFloat("soundCutoffFreq", isEnabled ? 480 : 22000);
+        }
     }
 }

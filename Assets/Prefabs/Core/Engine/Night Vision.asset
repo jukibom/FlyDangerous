@@ -303,6 +303,9 @@ MonoBehaviour:
   m_Name: Bloom
   m_EditorClassIdentifier: 
   active: 1
+  skipIterations:
+    m_OverrideState: 0
+    m_Value: 1
   threshold:
     m_OverrideState: 1
     m_Value: 0.35
@@ -321,12 +324,16 @@ MonoBehaviour:
   highQualityFiltering:
     m_OverrideState: 0
     m_Value: 0
-  skipIterations:
+  downscale:
     m_OverrideState: 0
-    m_Value: 1
+    m_Value: 0
+  maxIterations:
+    m_OverrideState: 0
+    m_Value: 6
   dirtTexture:
     m_OverrideState: 0
     m_Value: {fileID: 2800000, guid: 5ffa07c5910868f47a7f7e8848a0fe5c, type: 3}
+    dimension: 1
   dirtIntensity:
     m_OverrideState: 0
     m_Value: 2.89
