@@ -216,7 +216,7 @@ namespace Core.MapData {
 
                 // replace with user seed
                 mapMagic.graph.random = new Noise(LoadedLevelData.terrainSeed.GetHashCode(), 32768);
-                mapMagic.StartGenerate();
+                foreach (var terrainTile in mapMagic.tiles.All()) terrainTile.StartGenerate(mapMagic.graph);
                 yield return new WaitForEndOfFrame();
 
                 // wait for fully loaded local terrain
