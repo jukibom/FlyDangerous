@@ -31,12 +31,12 @@ namespace Misc {
 
 
         private void Start() {
-            // load engine scene if not already 
-            if (!FindObjectOfType<Engine>()) SceneManager.LoadScene("Engine", LoadSceneMode.Additive);
-
             IEnumerator StartGame() {
+                // load engine scene if not already 
+                if (!FindObjectOfType<Engine>()) yield return SceneManager.LoadSceneAsync("Engine", LoadSceneMode.Additive);
+
                 // allow game state to initialise
-                yield return new WaitForEndOfFrame();
+                yield return new WaitForFixedUpdate();
 
 #if !NO_PAID_ASSETS
                 // gpu instancer fun (paid asset!)
@@ -75,9 +75,17 @@ namespace Misc {
                 // apply graphics options
                 Game.Instance.ApplyGameOptions();
 
-                // if there's a track, initialise it
+                // init game mode handlers for free roam
                 var track = FindObjectOfType<Track>();
-                // if (track) track.InitialiseTrack();
+                if (player && track) {
+                    Game.Instance.LoadedLevelData.gameType = GameType.FreeRoam;
+                    Game.Instance.GameModeHandler.InitialiseGameMode(player, Game.Instance.LoadedLevelData, GameType.FreeRoam.GameMode, player.User.InGameUI,
+                        track);
+                }
+                else if (track == null) {
+                    Debug.LogWarning(
+                        "No track in the scene! You're in undefined behaviour territory as the game mode has not initialised! Consider adding an @World prefab to the loaded location scene.");
+                }
 
                 // create a test other player
                 if (shouldShowTestShip) CreateTestSecondShip();
@@ -103,6 +111,9 @@ namespace Misc {
 
                 // Fade in!
                 Game.Instance.FadeFromBlack();
+
+                // Start
+                Game.Instance.GameModeHandler.Begin();
 
                 // My work here is done
                 spawnLocation.gameObject.SetActive(false);
