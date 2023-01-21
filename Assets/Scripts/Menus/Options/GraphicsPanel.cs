@@ -62,7 +62,7 @@ public class GraphicsPanel : MonoBehaviour {
     }
 
     public void OnResolutionChange(int resolutionIndex) {
-        if (!Game.Instance.IsVREnabled) Screen.SetResolution(_resolutions[resolutionIndex].width, _resolutions[resolutionIndex].height, _screenMode);
+        if (!Game.IsVREnabled) Screen.SetResolution(_resolutions[resolutionIndex].width, _resolutions[resolutionIndex].height, _screenMode);
     }
 
     public void OnScreenModeChange(int screenModeIndex) {

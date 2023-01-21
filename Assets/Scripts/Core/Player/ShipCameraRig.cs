@@ -187,7 +187,7 @@ namespace Core.Player {
 
             SoftReset();
             ActiveCamera = newCamera;
-            user.InGameUI.ShipStats.SetStatsVisible(!Game.Instance.IsVREnabled && newCamera.showShipDataUI);
+            user.InGameUI.ShipStats.SetStatsVisible(!Game.IsVREnabled && newCamera.showShipDataUI);
             newCamera.SetCameraActive(true);
         }
 

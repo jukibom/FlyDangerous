@@ -13,7 +13,7 @@ namespace VFX {
 
         public void Awake() {
             _volume = GetComponent<Volume>();
-            UseRadialFog(!Game.Instance.IsVREnabled);
+            UseRadialFog(!Game.IsVREnabled);
         }
 
         public void OnEnable() {

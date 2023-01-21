@@ -57,7 +57,7 @@ namespace Core.Player {
         public InGameUI InGameUI => inGameUI;
 
         public Vector3 UserCameraPosition =>
-            Game.Instance.IsVREnabled
+            Game.IsVREnabled
                 ? xrOrigin.Camera.transform.position
                 : shipCameraRig.ActiveCamera != null
                     ? shipCameraRig.ActiveCamera.transform.position
@@ -529,7 +529,7 @@ namespace Core.Player {
 
         [UsedImplicitly]
         public void OnToggleFreeCam(InputValue value) {
-            if (!Game.Instance.IsVREnabled) {
+            if (!Game.IsVREnabled) {
                 _freeCamEnabled = !_freeCamEnabled;
                 if (_freeCamEnabled) {
                     DisableGameInput();

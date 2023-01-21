@@ -92,7 +92,7 @@ namespace Core {
         public bool InGame => SessionStatus is SessionStatus.InGame or SessionStatus.Development;
         public GameModeHandler GameModeHandler { get; private set; }
 
-        public bool IsVREnabled { get; private set; }
+        public static bool IsVREnabled { get; private set; }
 
         public bool IsGameHotJoinable => LoadedLevelData.gameType.GameMode.IsHotJoinable;
 

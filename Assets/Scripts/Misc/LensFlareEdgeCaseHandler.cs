@@ -29,7 +29,7 @@ namespace Misc {
         }
 
         private void OnApplySettings() {
-            HandleVisibility(Game.Instance.IsVREnabled);
+            HandleVisibility(Game.IsVREnabled);
         }
 
         private void OnVRStatus(bool IsEnabled) {

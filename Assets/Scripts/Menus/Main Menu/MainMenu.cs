@@ -235,7 +235,7 @@ namespace Menus.Main_Menu {
                 // show main title screen logo and set up various show-once dialogs... 
                 MenuBase startingPanel = topMenu;
 
-                if (Game.Instance.IsVREnabled && showVrCalibrationDialog) {
+                if (Game.IsVREnabled && showVrCalibrationDialog) {
                     startingPanel = vrCalibrationDialog;
                     vrCalibrationDialog.showWelcomeDialogNext = showWelcomeDialog;
                 }

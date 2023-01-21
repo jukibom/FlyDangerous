@@ -34,7 +34,7 @@ namespace Menus.Options {
         }
 
         public void ToggleVR() {
-            if (Game.Instance.IsVREnabled)
+            if (Game.IsVREnabled)
                 Game.Instance.DisableVRIfNeeded();
             else
                 Game.Instance.EnableVR();
