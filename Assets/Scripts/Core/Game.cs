@@ -62,6 +62,8 @@ namespace Core {
 
         public delegate void RestartLevelAction();
 
+        public delegate void WaterTransition(bool isSubmerged, Vector3 force);
+
         public delegate void VRToggledAction(bool enabled);
 
         [SerializeField] private InputActionAsset playerBindings;
@@ -93,7 +95,7 @@ namespace Core {
         public GameModeHandler GameModeHandler { get; private set; }
 
         public static bool IsVREnabled { get; private set; }
-        public static bool IsUnderWater { get; set; }
+        public static bool IsUnderWater { get; private set; }
 
         public bool IsGameHotJoinable => LoadedLevelData.gameType.GameMode.IsHotJoinable;
 
@@ -169,6 +171,7 @@ namespace Core {
         public static event GameSettingsApplyAction OnGameSettingsApplied;
         public static event GamePauseAction OnPauseToggle;
         public static event VRToggledAction OnVRStatus;
+        public static event WaterTransition OnWaterTransition;
 
         public void LoadBindings() {
             var bindings = Preferences.Instance.GetString("inputBindings");
@@ -259,6 +262,15 @@ namespace Core {
                 IsVREnabled = false;
                 NotifyVRStatus();
             }
+        }
+
+        public void WaterTransitioned(bool submerged) {
+            IsUnderWater = submerged;
+            var player = FdPlayer.FindLocalShipPlayer;
+            var velocity = Vector3.zero;
+            if (player != null) velocity = player.Rigidbody.velocity;
+
+            OnWaterTransition?.Invoke(IsUnderWater, velocity);
         }
 
         public void ResetHmdView(XROrigin xrOrigin, Transform targetTransform) {
@@ -424,6 +436,7 @@ namespace Core {
             Preferences.Instance.Save();
 
             GameModeHandler.Quit();
+            AudioMixer.Instance.Reset();
 
             if (!FindObjectOfType<MainMenu>()) {
                 IEnumerator QuitAndShutdownNetwork() {

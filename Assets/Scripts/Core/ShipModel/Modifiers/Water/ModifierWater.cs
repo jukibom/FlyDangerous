@@ -1,3 +1,4 @@
+using Core.Player;
 using UnityEngine;
 
 namespace Core.ShipModel.Modifiers.Water {
@@ -26,9 +27,11 @@ namespace Core.ShipModel.Modifiers.Water {
         }
 
         private void FixedUpdate() {
-            var isUnderWater = Game.IsUnderWater;
-            AudioMixer.Instance.SetMusicLowPassEnabled(isUnderWater);
-            AudioMixer.Instance.SetSfxLowPassEnabled(isUnderWater);
+            var player = FdPlayer.FindLocalShipPlayer;
+            if (player != null) {
+                var isUnderwaterNow = player.Position.y < transform.position.y;
+                if (isUnderwaterNow != Game.IsUnderWater) Game.Instance.WaterTransitioned(isUnderwaterNow);
+            }
         }
 
         private void OnFloatingOriginCorrection(Vector3 offset) {
@@ -51,7 +54,6 @@ namespace Core.ShipModel.Modifiers.Water {
         public void ApplyModifierEffect(Rigidbody ship, ref AppliedEffects effects) {
             effects.shipDrag = appliedDrag;
             effects.shipAngularDrag = appliedAngularDrag;
-            Game.IsUnderWater = true;
         }
     }
 }

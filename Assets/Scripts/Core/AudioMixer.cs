@@ -6,13 +6,26 @@ namespace Core {
     public class AudioMixer : Singleton<AudioMixer> {
         [SerializeField] private AudioMixerGroup masterMixerGroup;
 
+        private bool _isPaused;
+        private bool _isUnderwater;
+
         private void OnEnable() {
             Game.OnGameSettingsApplied += OnSettingsApplied;
+            Game.OnPauseToggle += OnPauseToggle;
+            Game.OnWaterTransition += OnWaterTransition;
             OnSettingsApplied();
         }
 
         private void OnDisable() {
             Game.OnGameSettingsApplied -= OnSettingsApplied;
+            Game.OnPauseToggle -= OnPauseToggle;
+            Game.OnWaterTransition -= OnWaterTransition;
+        }
+
+        public void Reset() {
+            _isPaused = false;
+            _isUnderwater = false;
+            RefreshCutoff();
         }
 
         private void OnSettingsApplied() {
@@ -60,12 +73,19 @@ namespace Core {
             masterMixerGroup.audioMixer.SetFloat("uiVolume", Mathf.Log10(ui) * 20);
         }
 
-        public void SetMusicLowPassEnabled(bool isEnabled) {
-            masterMixerGroup.audioMixer.SetFloat("musicCutoffFreq", isEnabled ? 480 : 22000);
+        private void RefreshCutoff() {
+            masterMixerGroup.audioMixer.SetFloat("musicCutoffFreq", _isPaused ? 480 : _isUnderwater ? 1000 : 22000);
+            masterMixerGroup.audioMixer.SetFloat("soundCutoffFreq", _isUnderwater ? 1000 : 22000);
         }
 
-        public void SetSfxLowPassEnabled(bool isEnabled) {
-            masterMixerGroup.audioMixer.SetFloat("soundCutoffFreq", isEnabled ? 480 : 22000);
+        private void OnPauseToggle(bool paused) {
+            _isPaused = paused;
+            RefreshCutoff();
+        }
+
+        private void OnWaterTransition(bool isSubmerged, Vector3 force) {
+            _isUnderwater = isSubmerged;
+            RefreshCutoff();
         }
     }
 }

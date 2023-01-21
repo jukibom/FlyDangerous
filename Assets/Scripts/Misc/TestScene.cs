@@ -84,7 +84,7 @@ namespace Misc {
                 }
                 else if (track == null) {
                     Debug.LogWarning(
-                        "No track in the scene! You're in undefined behaviour territory as the game mode has not initialised! Consider adding an @World prefab to the loaded location scene.");
+                        "No track in the scene! You're in undefined behaviour territory as the game mode has not initialised! Consider adding a World prefab to the loaded location scene.");
                 }
 
                 // create a test other player
@@ -111,6 +111,7 @@ namespace Misc {
 
                 // Fade in!
                 Game.Instance.FadeFromBlack();
+                yield return new WaitForSeconds(0.7f);
 
                 // Start
                 Game.Instance.GameModeHandler.Begin();

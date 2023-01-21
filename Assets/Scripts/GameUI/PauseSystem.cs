@@ -20,7 +20,6 @@ namespace GameUI {
         public void OnGameMenuToggle() {
             IsPaused = !IsPaused;
             Game.Instance.PauseGameToggle(IsPaused);
-            AudioMixer.Instance.SetMusicLowPassEnabled(IsPaused);
             menuContainer.SetActive(IsPaused);
 
             if (IsPaused) {

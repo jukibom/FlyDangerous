@@ -670,10 +670,6 @@ namespace Core.ShipModel {
         private void ModifierCollisionCheck() {
             var rayHits = VelocityBoxCast(out var raycastHitCount, 1 << _modifierLayerMask);
 
-            // we use the modifier system to figure this out for local clients, so reset it every frame here
-            // (gross I know but it's simple and stupid and of that I am a big fan!)
-            Game.IsUnderWater = false;
-
             for (var i = 0; i < raycastHitCount; i++) {
                 var raycastHit = rayHits[i];
                 var modifier = raycastHit.collider.GetComponentInParent(typeof(IModifier));
