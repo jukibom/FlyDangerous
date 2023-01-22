@@ -19,7 +19,6 @@ namespace Core.Replays {
         public int KeyFrameIntervalTicks { get; }
         public int KeyFrameBufferSizeBytes { get; }
         public int InputFrameBufferSizeBytes { get; }
-        public string LevelHash { get; set; }
 
         public string ToJsonString() {
             return JsonConvert.SerializeObject(this, Formatting.Indented);

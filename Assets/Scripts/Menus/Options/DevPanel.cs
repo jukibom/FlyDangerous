@@ -136,7 +136,8 @@ public class DevPanel : MonoBehaviour {
             boostCapacitorPercentCost = float.Parse(boostCapacitorCostTextField.text, CultureInfo.InvariantCulture),
             boostCapacityPercentChargeRate = float.Parse(boostCapacitorRechargeRateTextField.text, CultureInfo.InvariantCulture),
             inertiaTensorMultiplier = float.Parse(intertialTensorMultiplierTextField.text, CultureInfo.InvariantCulture),
-            minUserLimitedVelocity = float.Parse(minUserLimitedVelocityTextField.text, CultureInfo.InvariantCulture)
+            minUserLimitedVelocity = float.Parse(minUserLimitedVelocityTextField.text, CultureInfo.InvariantCulture),
+            boostSpoolUpTime = 1 // can't currently change this
         };
     }
 }
