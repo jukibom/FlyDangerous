@@ -74,8 +74,8 @@ namespace Core {
         }
 
         private void RefreshCutoff() {
-            masterMixerGroup.audioMixer.SetFloat("musicCutoffFreq", _isPaused ? 480 : _isUnderwater ? 1000 : 22000);
-            masterMixerGroup.audioMixer.SetFloat("soundCutoffFreq", _isUnderwater ? 1000 : 22000);
+            masterMixerGroup.audioMixer.SetFloat("musicCutoffFreq", _isPaused ? 480 : _isUnderwater ? 3000 : 22000);
+            masterMixerGroup.audioMixer.SetFloat("soundCutoffFreq", _isUnderwater ? 3000 : 22000);
         }
 
         private void OnPauseToggle(bool paused) {

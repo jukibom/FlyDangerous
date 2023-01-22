@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Core;
 using Core.ShipModel;
 using FdUI;
@@ -8,7 +9,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace GameUI {
-
     public class InGameUI : MonoBehaviour, IPointerMoveHandler {
         [SerializeField] private Canvas screenSpaceCanvas;
         [SerializeField] private Canvas worldSpaceCanvas;
@@ -21,6 +21,8 @@ namespace GameUI {
         [SerializeField] private CursorIcon cursor;
         [SerializeField] private Camera vrMouseCamera;
 
+        private Camera uiCamera;
+
         public DebugUI DebugUI => debugUI;
         public PauseSystem PauseSystem => pauseSystem;
         public ShipStats ShipStats => shipStats;
@@ -30,6 +32,11 @@ namespace GameUI {
 
         private void Awake() {
             OnPauseToggle(false);
+        }
+
+        private void Start() {
+            var cameras = FindObjectsOfType<Camera>(true).ToList();
+            uiCamera = cameras.Find(c => c.CompareTag("UICamera"));
         }
 
         private void OnEnable() {
@@ -78,7 +85,6 @@ namespace GameUI {
                 ShipStats.SetStatsVisible(false);
             }
             else {
-                var uiCamera = GameObject.FindGameObjectWithTag("UICamera")?.GetComponent<Camera>();
                 if (uiCamera) {
                     screenSpaceCanvas.renderMode = RenderMode.ScreenSpaceCamera;
                     screenSpaceCanvas.worldCamera = uiCamera;
