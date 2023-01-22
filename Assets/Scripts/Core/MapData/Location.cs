@@ -16,8 +16,8 @@ namespace Core.MapData {
         public static readonly Location TerrainV2 = new("Canyons", "Terrain with peaks of 8km and deep, straight canyon grooves", "TerrainV2", true);
         public static readonly Location TerrainV3 = new("Biome World", "A terrain with multiple mixed environments blended together", "TerrainV3", true);
 
-        public static readonly Location TerrainGPUFoliageTest = new("GPU Foliage Test",
-            "Terrain with lots of foliage relying on the GPU - feedback appreciated!", "TerrainWorkspace", true);
+        public static readonly Location TerrainV4 = new("Biome World v2",
+            "A terrain with multiple mixed environments blended together over very large distances with water mechanics", "TerrainWorkspace", false);
 
         private Location(string name, string description, string sceneToLoad, bool isTerrain) {
             Id = GenerateId;
@@ -36,7 +36,7 @@ namespace Core.MapData {
         public string Name { get; }
 
         public static IEnumerable<Location> List() {
-            return new[] { ProvingGrounds, Space, TestSpaceStation, TerrainV1, TerrainV2, TerrainV3, TerrainGPUFoliageTest };
+            return new[] { ProvingGrounds, Space, TestSpaceStation, TerrainV1, TerrainV2, TerrainV3, TerrainV4 };
         }
 
         public static Location FromString(string locationString) {
