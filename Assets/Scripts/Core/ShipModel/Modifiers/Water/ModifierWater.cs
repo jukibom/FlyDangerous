@@ -1,4 +1,5 @@
 using Core.Player;
+using MapMagic.Core;
 using UnityEngine;
 
 namespace Core.ShipModel.Modifiers.Water {
@@ -13,8 +14,11 @@ namespace Core.ShipModel.Modifiers.Water {
 
         private static readonly int FloatingOriginOffset = Shader.PropertyToID("_FloatingOriginOffset");
         private static readonly int PlaneSizeMeters = Shader.PropertyToID("_PlaneSizeMeters");
+        private static readonly int WaterFadeDistantStart = Shader.PropertyToID("_WaterFadeDistantStart");
+        private static readonly int WaterFadeDistantEnd = Shader.PropertyToID("_WaterFadeDistantEnd");
 
         private void OnEnable() {
+            Game.OnGameSettingsApplied += OnGameSettingsApplied;
             FloatingOrigin.OnFloatingOriginCorrection += OnFloatingOriginCorrection;
             _meshRenderer = GetComponent<MeshRenderer>();
 
@@ -23,6 +27,7 @@ namespace Core.ShipModel.Modifiers.Water {
         }
 
         private void OnDisable() {
+            Game.OnGameSettingsApplied -= OnGameSettingsApplied;
             FloatingOrigin.OnFloatingOriginCorrection -= OnFloatingOriginCorrection;
         }
 
@@ -31,6 +36,20 @@ namespace Core.ShipModel.Modifiers.Water {
             if (player != null) {
                 var isUnderwaterNow = player.Position.y < transform.position.y;
                 if (isUnderwaterNow != Game.IsUnderWater) Game.Instance.WaterTransitioned(isUnderwaterNow);
+            }
+        }
+
+        private void OnGameSettingsApplied() {
+            var mapMagic = FindObjectOfType<MapMagicObject>();
+            if (mapMagic) {
+                var tileChunkCount = Preferences.Instance.GetFloat("graphics-terrain-chunks") + 1; // include drafts
+                var tileSize = mapMagic.tileSize.x;
+
+                var fogEndDistance = tileSize * tileChunkCount - tileSize / 2;
+                var fogStartDistance = Mathf.Max(1000f, fogEndDistance - fogEndDistance / 1.5f);
+
+                _meshRenderer.material.SetFloat(WaterFadeDistantStart, fogStartDistance);
+                _meshRenderer.material.SetFloat(WaterFadeDistantEnd, fogEndDistance);
             }
         }
 
