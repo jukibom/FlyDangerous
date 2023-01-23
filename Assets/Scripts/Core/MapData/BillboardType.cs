@@ -9,13 +9,13 @@ namespace Core.MapData {
         private static readonly BillboardData FlyDangerousBillboard = new BillboardWithTextureData
             { Name = "Fly Dangerous", TextureResourceName = "Billboard Fly Dangerous", ColorIntensity = 8, ScrollSpeed = 0.2f };
 
-        private static readonly BillboardData CustomMessageBillboard = new BillboardWithMessageData { Name = "Custom Message" };
+        private static readonly BillboardData CustomMessageBillboard = new BillboardWithMessageData { Name = "Custom Message", ColorIntensity = 8 };
 
         private static readonly BillboardData DirectionBillboard = new BillboardWithTextureData
             { Name = "Direction", TextureResourceName = "Billboard Arrow", Tint = new Color(1, 1, 0), ColorIntensity = 35, ScrollSpeed = 0.2f };
 
         private static readonly BillboardData SquidColaBillboard = new BillboardWithTextureData
-            { Name = "Squid Cola", TextureResourceName = "Billboard Squid Cola", ColorIntensity = 4 };
+            { Name = "Squid Cola", TextureResourceName = "Billboard Squid Cola", ColorIntensity = 16 };
 
         private static readonly BillboardData CopeBillboard = new BillboardWithTextureData
             { Name = "Cope", TextureResourceName = "Billboard Cope", ColorIntensity = 8, ScrollSpeed = 0 };
@@ -26,6 +26,9 @@ namespace Core.MapData {
         private static readonly BillboardData EdenPrimeBillboard = new BillboardWithTextureData
             { Name = "Eden Prime", TextureResourceName = "Billboard Eden Prime", ColorIntensity = 8 };
 
+        private static readonly BillboardData EuropaBillboard = new BillboardWithTextureData
+            { Name = "Europa", TextureResourceName = "Billboard Europa", ColorIntensity = 8 };
+
 
         public static readonly BillboardType FlyDangerous = new(FlyDangerousBillboard);
         public static readonly BillboardType CustomMessage = new(CustomMessageBillboard);
@@ -34,6 +37,7 @@ namespace Core.MapData {
         public static readonly BillboardType Cope = new(CopeBillboard);
         public static readonly BillboardType NewtonsGambit = new(NewtonsGambitBillboard);
         public static readonly BillboardType EdenPrime = new(EdenPrimeBillboard);
+        public static readonly BillboardType Europa = new(EuropaBillboard);
 
         private BillboardType(BillboardData billboardData) {
             Id = GenerateId;
@@ -54,7 +58,8 @@ namespace Core.MapData {
                 SquidCola,
                 Cope,
                 NewtonsGambit,
-                EdenPrime
+                EdenPrime,
+                Europa
             };
         }
 
