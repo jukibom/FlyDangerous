@@ -68,7 +68,7 @@ namespace Misc {
             var hitColliders = new Collider[1];
             var testPosition = originalPosition;
 
-            LayerMask collisionLayerMask = LayerMask.GetMask("Default", "Player", "Non-Local Player");
+            LayerMask collisionLayerMask = LayerMask.GetMask("Default", "Player", "Non-Local Player", "Modifier");
 
             // set the next position and perform a simple sphere collision check, return the true if colliding
             bool NextPositionIsObstructed() {
