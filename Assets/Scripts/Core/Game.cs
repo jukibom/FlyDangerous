@@ -10,6 +10,7 @@ using Core.MapData.Serializable;
 using Core.Player;
 using Core.Replays;
 using Core.ShipModel;
+using Core.ShipModel.Modifiers.Water;
 using FdUI;
 using Gameplay;
 using Gameplay.Game_Modes;
@@ -355,6 +356,14 @@ namespace Core {
                 var instancer = FindObjectOfType<GPUInstancerMapMagic2Integration>();
                 if (treeManager && instancer) treeManager.transform.parent = instancer.transform;
 #endif
+
+                // if we have water in the world, toggle it on and off because some weird URP issue which doesn't handle the lighting properly on load
+                var water = FindObjectOfType<ModifierWater>();
+                if (water != null) {
+                    water.gameObject.SetActive(false);
+                    yield return new WaitForEndOfFrame();
+                    water.gameObject.SetActive(true);
+                }
 
                 yield return _levelLoader.HideLoadingScreen();
 
