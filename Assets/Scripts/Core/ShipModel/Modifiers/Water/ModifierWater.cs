@@ -3,7 +3,7 @@ using MapMagic.Core;
 using UnityEngine;
 
 namespace Core.ShipModel.Modifiers.Water {
-    public class ModiferWater : MonoBehaviour, IModifier {
+    public class ModifierWater : MonoBehaviour, IModifier {
         [SerializeField] private float appliedDrag;
         [SerializeField] private float appliedAngularDrag;
 

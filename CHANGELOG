@@ -1,10 +1,26 @@
 ﻿[unreleased]
 New:
+    * Fully rebuilt biome terrain world graph with new biomes:
+        * Desert (red, dunes)
+        * Tropical
+        * Coastline
+        * Arctic Tundra / Ice
+        * Rebuilt rocky biome
+        * Reworked mountain biome from GPU test
+        * Ocean / Rivers (with submersible mechanics)
+    * Added new boost pad modifiers to level format
+    * Added decorative billboards to level format
     * Ship Collisions (Change in collision gameplay means maps reliant on checkpoint rebounds at high end must have leaderboards reset)
         * Added visual shield effect for collisions (#183)
         * Added engine capacity penalty on collision proportional to impact (#183)
         * Added boost cancel on collision (#197)
         * Added collision, shield activate and boost cancel sfx (#197)
+   * Added bHaptics support for Vest, Arms and Head (WIP, #194)
+   * Added support for OpenTrack head tracking (#65)
+   * Added support for TrackIR head tracking (#65)
+   * Added UDP telemetry support for generic motion simulators etc
+   * Added "Drift Cam" option which attempts to look in the direction of travel (within a sensible arc)
+       * Added associated options for head snap, smoothing and max rotational extents
     * Added a bit of spit and polish to the title screen
         * Player profile ship is now shown on title screen
     * Added lens flare shaders to ship rear exhausts
@@ -14,18 +30,12 @@ New:
     * Device hot-plugging now supported (#153)
     * Added hold binding for alternate flight controls (#177)
     * Added Ultra reflection quality for refresh rate locked to frame rate (use at your own risk :P)
-    * Added bHaptics support for Vest, Arms and Head (WIP, #194)
-    * Added support for OpenTrack head tracking (#65)
-    * Added support for TrackIR head tracking (#65)
-    * Added "Drift Cam" option which attempts to look in the direction of travel (within a sensible arc)
-        * Added associated options for head snap, smoothing and max rotational extents
-    * Added UDP telemetry support for generic motion simulators etc (WIP, #115, more information to follow)
     * Added descriptions to locations in Free Roam menu
-    * Added new boost pad modifiers to the Proving Grounds (see changes below)
     * Added ability to set music volume on main menu independently (as a percentage of music volume)
     * Added wait to beginning of time trials prompting users to hold boost (teach that boost can be early!)
     * Added pride flags and changed "Country" label to "Flag" for profile dropdown  (#203 partial)
     * Added ability set music track in Free Roam mode
+    * Added six new music tracks
     * Added ability to preview environment and music in Free Roam menu
     
 Changed:
@@ -40,6 +50,7 @@ Changed:
     * Minor rework for leaderboards / ghosts panels, added loading state UI and auto-select players' PB (vs top ghost)
     * Renamed `Throttle Increase / Decrease` to `Throttle Cruise Control Increase / Decrease` for clarity
     * Added right stick click as a default VR calibration input (you're welcome, oddly angry self-important person)
+    * Removed GPU test terrain (thank you for feedback! will circle back to this)
     * Updated to Unity 2022.1.20f1
     
 Fixes:
