@@ -55,7 +55,7 @@ MonoBehaviour:
     m_Value: 10
   colorFilter:
     m_OverrideState: 1
-    m_Value: {r: 0.7803044, g: 0.9148718, b: 0.990566, a: 1}
+    m_Value: {r: 0.6839622, g: 0.8349825, b: 1, a: 1}
   hueShift:
     m_OverrideState: 0
     m_Value: 0
@@ -107,6 +107,127 @@ MonoBehaviour:
   - {fileID: 8088218318534670660}
   - {fileID: -4830114767695579804}
   - {fileID: -2542167435157175660}
+  - {fileID: 6343040858841496437}
+--- !u!114 &6343040858841496437
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74483714bbf784b45b0c9c7c76035dd8, type: 3}
+  m_Name: Fog
+  m_EditorClassIdentifier: 
+  active: 1
+  useSceneSettings:
+    m_OverrideState: 1
+    m_Value: 0
+  fogMode:
+    m_OverrideState: 1
+    m_Value: 2
+  globalDensity:
+    m_OverrideState: 1
+    m_Value: 0.08
+  fogStartDistance:
+    m_OverrideState: 1
+    m_Value: 0
+  fogEndDistance:
+    m_OverrideState: 0
+    m_Value: 600
+  colorSource:
+    m_OverrideState: 1
+    m_Value: 0
+  skyboxMipLevel:
+    m_OverrideState: 0
+    m_Value: 0
+  fogColor:
+    m_OverrideState: 1
+    m_Value: {r: 0.0044054748, g: 0.20765656, b: 0.31132078, a: 1}
+  fogColorGradient:
+    m_OverrideState: 0
+    m_Value: {fileID: 0}
+    dimension: 1
+  gradientDistance:
+    m_OverrideState: 0
+    m_Value: 1000
+  gradientUseFarClipPlane:
+    m_OverrideState: 0
+    m_Value: 1
+  distanceFog:
+    m_OverrideState: 1
+    m_Value: 1
+  distanceDensity:
+    m_OverrideState: 1
+    m_Value: 0.236
+  useRadialDistance:
+    m_OverrideState: 1
+    m_Value: 0
+  skyboxInfluence:
+    m_OverrideState: 0
+    m_Value: 0
+  enableDirectionalLight:
+    m_OverrideState: 0
+    m_Value: 0
+  useLightDirection:
+    m_OverrideState: 0
+    m_Value: 1
+  useLightColor:
+    m_OverrideState: 0
+    m_Value: 1
+  useLightIntensity:
+    m_OverrideState: 0
+    m_Value: 1
+  lightColor:
+    m_OverrideState: 0
+    m_Value: {r: 1, g: 0.89, b: 0.55, a: 1}
+  lightDirection:
+    m_OverrideState: 0
+    m_Value: {x: 0, y: 0.5, z: -1}
+  lightIntensity:
+    m_OverrideState: 0
+    m_Value: 1
+  heightFog:
+    m_OverrideState: 1
+    m_Value: 0
+  height:
+    m_OverrideState: 1
+    m_Value: -351.34
+  heightDensity:
+    m_OverrideState: 0
+    m_Value: 0.75
+  heightFogNoise:
+    m_OverrideState: 0
+    m_Value: 1
+  heightNoiseTex:
+    m_OverrideState: 0
+    m_Value: {fileID: 0}
+    dimension: 1
+  heightNoiseSize:
+    m_OverrideState: 0
+    m_Value: 0.25
+  heightNoiseStrength:
+    m_OverrideState: 0
+    m_Value: 1
+  heightNoiseSpeed:
+    m_OverrideState: 0
+    m_Value: 2
+  lightScattering:
+    m_OverrideState: 0
+    m_Value: 0
+  scatterIntensity:
+    m_OverrideState: 0
+    m_Value: 10
+  scatterThreshold:
+    m_OverrideState: 0
+    m_Value: 1
+  scatterDiffusion:
+    m_OverrideState: 0
+    m_Value: 10
+  scatterSoftKnee:
+    m_OverrideState: 0
+    m_Value: 0.5
 --- !u!114 &8088218318534670660
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -125,13 +246,13 @@ MonoBehaviour:
     m_Value: 1
   gaussianStart:
     m_OverrideState: 1
-    m_Value: 40
+    m_Value: 0
   gaussianEnd:
     m_OverrideState: 1
-    m_Value: 3000
+    m_Value: 400
   gaussianMaxRadius:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 1.5
   highQualitySampling:
     m_OverrideState: 0
     m_Value: 0
