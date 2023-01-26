@@ -11,8 +11,13 @@ namespace Core.MapData {
 
         private static readonly BillboardData CustomMessageBillboard = new BillboardWithMessageData { Name = "Custom Message", ColorIntensity = 8 };
 
-        private static readonly BillboardData DirectionBillboard = new BillboardWithTextureData
-            { Name = "Direction", TextureResourceName = "Billboard Arrow", Tint = new Color(1, 1, 0), ColorIntensity = 35, ScrollSpeed = 0.2f };
+        private static readonly BillboardData DirectionArrowSingleBillboard = new BillboardWithTextureData {
+            Name = "Direction Arrow Single", TextureResourceName = "Billboard Arrow Single", Tint = new Color(1, 1, 0), ColorIntensity = 35, ScrollSpeed = 0.2f
+        };
+
+        private static readonly BillboardData DirectionArrowDoubleBillboard = new BillboardWithTextureData {
+            Name = "Direction Arrow Double", TextureResourceName = "Billboard Arrow Double", Tint = new Color(1, 1, 0), ColorIntensity = 35, ScrollSpeed = 0.2f
+        };
 
         private static readonly BillboardData SquidColaBillboard = new BillboardWithTextureData
             { Name = "Squid Cola", TextureResourceName = "Billboard Squid Cola", ColorIntensity = 16 };
@@ -32,7 +37,8 @@ namespace Core.MapData {
 
         public static readonly BillboardType FlyDangerous = new(FlyDangerousBillboard);
         public static readonly BillboardType CustomMessage = new(CustomMessageBillboard);
-        public static readonly BillboardType Direction = new(DirectionBillboard);
+        public static readonly BillboardType DirectionArrowSingle = new(DirectionArrowSingleBillboard);
+        public static readonly BillboardType DirectionArrowDouble = new(DirectionArrowDoubleBillboard);
         public static readonly BillboardType SquidCola = new(SquidColaBillboard);
         public static readonly BillboardType Cope = new(CopeBillboard);
         public static readonly BillboardType NewtonsGambit = new(NewtonsGambitBillboard);
@@ -54,7 +60,8 @@ namespace Core.MapData {
             return new[] {
                 FlyDangerous,
                 CustomMessage,
-                Direction,
+                DirectionArrowSingle,
+                DirectionArrowDouble,
                 SquidCola,
                 Cope,
                 NewtonsGambit,
