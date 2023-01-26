@@ -29,7 +29,7 @@ namespace Core.ShipModel {
 
         // This magic number is the original inertiaTensor of the puffin ship which, unbeknownst to me at the time,
         // is actually calculated from the rigid body bounding boxes and impacts the torque rotation physics.
-        // Therefore, to maintains consistency with the flight parameters model this will likely never change.
+        // Therefore, to maintain consistency with the flight parameters model this will likely never change.
         // Good fun! Yay one-way doors!
         private static readonly Vector3 InitialInertiaTensor = new(5189.9f, 5825.6f, 1471.6f);
 

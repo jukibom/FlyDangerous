@@ -9,10 +9,13 @@ namespace Gameplay {
         private static readonly int BillboardTextureProperty = Shader.PropertyToID("_BillboardTexture");
         private static readonly int TintProperty = Shader.PropertyToID("_Tint");
         private static readonly int ScrollSpeedProperty = Shader.PropertyToID("_ScrollSpeed");
+        private static readonly int Dithering = Shader.PropertyToID("_UseDithering");
 
         [SerializeField] private Text billboardText;
         [SerializeField] private Camera renderTextureCamera;
         [SerializeField] private MeshRenderer screen;
+        [SerializeField] private Material billboardScreenTransparent;
+        [SerializeField] private Material billboardScreenDithered;
 
         private RenderTexture _renderTexture;
         private string _textureResource;
@@ -20,6 +23,7 @@ namespace Gameplay {
         private Color _tint;
         private float _intensity;
         private float _scrollSpeed;
+        private bool _useDithering;
 
         private RenderTexture TextRenderTexture {
             get {
@@ -69,6 +73,14 @@ namespace Gameplay {
             set {
                 _scrollSpeed = value;
                 screen.material.SetFloat(ScrollSpeedProperty, _scrollSpeed);
+            }
+        }
+
+        public bool UseDithering {
+            get => _useDithering;
+            set {
+                _useDithering = value;
+                screen.material = _useDithering ? billboardScreenDithered : billboardScreenTransparent;
             }
         }
 

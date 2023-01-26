@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Core.MapData;
 using Core.MapData.Serializable;
+using Core.ShipModel.Modifiers.Water;
 using JetBrains.Annotations;
 using NaughtyAttributes;
 using UnityEngine;
@@ -39,6 +40,9 @@ namespace Gameplay {
             private set {
                 _billboardData = value;
                 billboardType = BillboardType.FromString(_billboardData.Name).Name;
+
+                // if we have water in the scene, use fallback dithering to avoid z-buffer bullshit (otherwise use glorious alpha)
+                billboard.UseDithering = FindObjectOfType<ModifierWater>() != null;
 
                 if (_billboardData is BillboardWithMessageData messageBillboard) billboard.CustomMessage = messageBillboard.Message;
                 if (_billboardData is BillboardWithTextureData messageTexture) billboard.TextureResource = messageTexture.TextureResourceName;
