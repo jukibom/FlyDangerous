@@ -5,6 +5,7 @@ using Core.ShipModel.Feedback.interfaces;
 using JetBrains.Annotations;
 using Misc;
 using UnityEngine;
+using UnityEngine.VFX;
 using VFX;
 #if !NO_PAID_ASSETS
 using GPUInstancer;
@@ -39,6 +40,8 @@ namespace Core.ShipModel {
         [SerializeField] protected AudioSource nightVisionDeactivateAudioSource;
 
         [SerializeField] protected CanvasGroup indicatorCanvas;
+
+        [SerializeField] private VisualEffect waterSubmergeVfx;
 
         private bool _shipActive;
         private Coroutine _boostCoroutine;
@@ -158,6 +161,16 @@ namespace Core.ShipModel {
                 externalBoostAudioSource.Stop();
                 externalBoostThrusterAudioSource.Stop();
             }
+        }
+
+        public void WaterSubmerged(Vector3 surfaceImpactVelocity) {
+            waterSubmergeVfx.SetVector3("_impactVelocity", surfaceImpactVelocity);
+            waterSubmergeVfx.Play();
+            shield.Fizzle(5);
+        }
+
+        public void WaterEmerged(Vector3 surfaceImpactVelocity) {
+            Debug.Log("I JUST LEFT THE WATER :D (uh, todo effect!)");
         }
 
         #endregion

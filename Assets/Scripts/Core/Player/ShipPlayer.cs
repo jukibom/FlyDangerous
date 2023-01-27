@@ -116,14 +116,18 @@ namespace Core.Player {
         private void OnEnable() {
             // perform positional correction on non-local client player objects like anything else in the world
             FloatingOrigin.OnFloatingOriginCorrection += NonLocalPlayerPositionCorrection;
-            ShipPhysics.OnBoost += DoBoost;
-            ShipPhysics.OnBoostCancel += BoostCancel;
+            ShipPhysics.OnBoost += OnBoost;
+            ShipPhysics.OnBoostCancel += OnBoostCancel;
+            ShipPhysics.OnWaterSubmerged += OnWaterSubmerged;
+            ShipPhysics.OnWaterEmerged += OnWaterEmerged;
         }
 
         private void OnDisable() {
             FloatingOrigin.OnFloatingOriginCorrection -= NonLocalPlayerPositionCorrection;
-            ShipPhysics.OnBoost -= DoBoost;
-            ShipPhysics.OnBoostCancel -= BoostCancel;
+            ShipPhysics.OnBoost -= OnBoost;
+            ShipPhysics.OnBoostCancel -= OnBoostCancel;
+            ShipPhysics.OnWaterSubmerged -= OnWaterSubmerged;
+            ShipPhysics.OnWaterEmerged -= OnWaterEmerged;
         }
 
         public override void OnStartLocalPlayer() {
@@ -341,7 +345,7 @@ namespace Core.Player {
             }
         }
 
-        private void DoBoost(float spoolTime, float boostTime) {
+        private void OnBoost(float spoolTime, float boostTime) {
             // do local boost effects immediately
             if (isLocalPlayer)
                 ShipPhysics.ShipModel?.Boost(spoolTime, boostTime);
@@ -349,12 +353,28 @@ namespace Core.Player {
             CmdBoost(spoolTime, boostTime);
         }
 
-        private void BoostCancel() {
+        private void OnBoostCancel() {
             // local boost cancel immediately
             if (isLocalPlayer)
                 ShipPhysics.ShipModel?.BoostCancel();
             // signal to other players
             CmdBoostCancel();
+        }
+
+        private void OnWaterSubmerged() {
+            // local do immediately
+            if (isLocalPlayer)
+                ShipPhysics.ShipModel?.WaterSubmerged(ShipPhysics.Velocity);
+            // signal to other players
+            CmdWaterSubmerged();
+        }
+
+        private void OnWaterEmerged() {
+            // local do immediately
+            if (isLocalPlayer)
+                ShipPhysics.ShipModel?.WaterEmerged(ShipPhysics.Velocity);
+            // signal to other players
+            CmdWaterEmerged();
         }
 
         /**
@@ -418,6 +438,26 @@ namespace Core.Player {
         [ClientRpc]
         private void RpcBoostCancel() {
             if (!isLocalPlayer) ShipPhysics.ShipModel?.BoostCancel();
+        }
+
+        [Command]
+        private void CmdWaterSubmerged() {
+            RpcWaterSubmerged();
+        }
+
+        [ClientRpc]
+        private void RpcWaterSubmerged() {
+            if (!isLocalPlayer) ShipPhysics.ShipModel?.WaterSubmerged(ShipPhysics.Velocity);
+        }
+
+        [Command]
+        private void CmdWaterEmerged() {
+            RpcWaterEmerged();
+        }
+
+        [ClientRpc]
+        private void RpcWaterEmerged() {
+            if (!isLocalPlayer) ShipPhysics.ShipModel?.WaterEmerged(ShipPhysics.Velocity);
         }
 
         [Command]

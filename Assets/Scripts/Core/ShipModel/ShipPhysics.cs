@@ -5,6 +5,7 @@ using Core.Player;
 using Core.ShipModel.Feedback;
 using Core.ShipModel.Feedback.interfaces;
 using Core.ShipModel.Modifiers;
+using Core.ShipModel.Modifiers.Water;
 using Core.ShipModel.ShipIndicator;
 using Gameplay;
 using JetBrains.Annotations;
@@ -206,6 +207,8 @@ namespace Core.ShipModel {
 
         public event BoostFiredAction OnBoost;
         public event BoostCancelledAction OnBoostCancel;
+        public event BoostCancelledAction OnWaterSubmerged;
+        public event BoostCancelledAction OnWaterEmerged;
         public event ShipPhysicsUpdated OnShipPhysicsUpdated;
 
         private void RefreshShipModel(ShipProfile shipProfile) {
@@ -403,6 +406,17 @@ namespace Core.ShipModel {
             }
 
             _prevVelocity = Velocity;
+        }
+
+        public void WaterTransition(WaterTransition waterTransition) {
+            switch (waterTransition) {
+                case Modifiers.Water.WaterTransition.EnteringWater:
+                    OnWaterSubmerged?.Invoke();
+                    break;
+                case Modifiers.Water.WaterTransition.LeavingWater:
+                    OnWaterEmerged?.Invoke();
+                    break;
+            }
         }
 
         /**

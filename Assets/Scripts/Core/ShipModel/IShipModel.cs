@@ -51,8 +51,18 @@ namespace Core.ShipModel {
         public void BoostCancel();
 
         /**
-         * Set the main color of the ship as a html color
+         * Effects played when impacting the water
          */
+        public void WaterSubmerged(Vector3 surfaceImpactVelocity);
+
+        /**
+         * Effects played when leaving the water
+         */
+        public void WaterEmerged(Vector3 surfaceImpactVelocity);
+
+        /**
+          * Set the main color of the ship as a html color
+          */
         public void SetPrimaryColor(string htmlColor);
 
         /**

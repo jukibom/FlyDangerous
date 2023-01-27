@@ -3,6 +3,11 @@ using MapMagic.Core;
 using UnityEngine;
 
 namespace Core.ShipModel.Modifiers.Water {
+    public enum WaterTransition {
+        EnteringWater,
+        LeavingWater
+    }
+
     public class ModifierWater : MonoBehaviour, IModifier {
         [SerializeField] private float appliedDrag;
         [SerializeField] private float appliedAngularDrag;
@@ -35,9 +40,13 @@ namespace Core.ShipModel.Modifiers.Water {
             var player = FdPlayer.FindLocalShipPlayer;
             if (player != null) {
                 var isUnderwaterNow = player.Position.y < transform.position.y;
-                if (isUnderwaterNow != Game.IsUnderWater) Game.Instance.WaterTransitioned(isUnderwaterNow);
+                if (isUnderwaterNow != Game.IsUnderWater) {
+                    Game.Instance.WaterTransitioned(isUnderwaterNow);
+                    player.ShipPhysics.WaterTransition(isUnderwaterNow ? WaterTransition.EnteringWater : WaterTransition.LeavingWater);
+                }
             }
         }
+
 
         private void OnGameSettingsApplied() {
             var mapMagic = FindObjectOfType<MapMagicObject>();
