@@ -38,6 +38,8 @@ namespace Core.ShipModel {
         [SerializeField] protected AudioSource velocityLimitDeactivateAudioSource;
         [SerializeField] protected AudioSource nightVisionActivateAudioSource;
         [SerializeField] protected AudioSource nightVisionDeactivateAudioSource;
+        [SerializeField] protected AudioSource interiorWaterSubmergeAudioSource;
+        [SerializeField] protected AudioSource exteriorWaterSubmergeAudioSource;
 
         [SerializeField] protected CanvasGroup indicatorCanvas;
 
@@ -166,6 +168,13 @@ namespace Core.ShipModel {
             var water = FindObjectOfType<ModifierWater>();
             if (water != null) {
                 water.SubmergedVfx(atWorldPosition, surfaceImpactVelocity);
+
+                var impactVolume = surfaceImpactVelocity.magnitude.Remap(0, 500, 0, 1);
+                interiorWaterSubmergeAudioSource.volume = impactVolume;
+                exteriorWaterSubmergeAudioSource.volume = impactVolume;
+
+                interiorWaterSubmergeAudioSource.Play();
+                exteriorWaterSubmergeAudioSource.Play();
                 shield.Fizzle(5);
             }
         }
