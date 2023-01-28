@@ -31,6 +31,8 @@ namespace Core.ShipModel.Modifiers {
         }
 
         public void FixedUpdate() {
+            if (!Game.Instance.GameModeHandler.HasStarted) return;
+
             _appliedEffects.shipForce *= shipForceDamping;
             _appliedEffects.shipDeltaSpeedCap *= shipDeltaSpeedCapDamping;
             _appliedEffects.shipDeltaThrust *= shipDeltaThrustCapDamping;

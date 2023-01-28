@@ -37,12 +37,14 @@ namespace Core.ShipModel.Modifiers.Water {
         }
 
         private void FixedUpdate() {
-            var player = FdPlayer.FindLocalShipPlayer;
-            if (player != null) {
-                var isUnderwaterNow = player.Position.y < transform.position.y;
-                if (isUnderwaterNow != Game.IsUnderWater) {
-                    Game.Instance.WaterTransitioned(isUnderwaterNow);
-                    player.ShipPhysics.WaterTransition(isUnderwaterNow ? WaterTransition.EnteringWater : WaterTransition.LeavingWater);
+            if (Game.Instance.GameModeHandler != null && Game.Instance.GameModeHandler.HasStarted) {
+                var player = FdPlayer.FindLocalShipPlayer;
+                if (player != null) {
+                    var isUnderwaterNow = player.Position.y < transform.position.y;
+                    if (isUnderwaterNow != Game.IsUnderWater) {
+                        Game.Instance.WaterTransitioned(isUnderwaterNow);
+                        player.ShipPhysics.WaterTransition(isUnderwaterNow ? WaterTransition.EnteringWater : WaterTransition.LeavingWater);
+                    }
                 }
             }
         }

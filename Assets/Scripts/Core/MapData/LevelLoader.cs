@@ -185,8 +185,6 @@ namespace Core.MapData {
                 while (!_scenesLoading[i].isDone) yield return null;
             }
 
-            // checkpoint placement
-            // TODO: swap out for deserialiser, this is wildly inappropriate for this class
             var track = FindObjectOfType<Track>();
             if (track) track.Deserialize(LoadedLevelData);
 
