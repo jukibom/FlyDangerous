@@ -43,10 +43,11 @@ namespace Gameplay.Game_Modes {
 
         // lifecycle
         private Coroutine _startSequenceCoroutine;
+        private bool _gameStarted;
 
         private ShipPlayer LocalPlayer { get; set; }
         public bool ShipActive => LocalPlayer != null && LocalPlayer.ShipPhysics.ShipActive;
-        public bool HasStarted => ShipActive && (_gameModeCountdown?.CountdownComplete ?? true);
+        public bool HasStarted => ShipActive && _gameStarted;
 
         private void OnEnable() {
             _replayRecorder = GetComponent<ReplayRecorder>();
@@ -235,6 +236,8 @@ namespace Gameplay.Game_Modes {
                     else if (_gameModeWithCountdown.AllowEarlyBoost && timeRemaining <= 1) _gameModeLifecycle.EnableShipBoostInput();
                 });
             }
+
+            _gameStarted = true;
         }
 
         private IEnumerator WaitForBoostButtonIfNeeded() {
