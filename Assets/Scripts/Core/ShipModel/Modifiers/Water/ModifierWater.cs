@@ -55,9 +55,10 @@ namespace Core.ShipModel.Modifiers.Water {
             if (mapMagic) {
                 var tileChunkCount = Preferences.Instance.GetFloat("graphics-terrain-chunks") + 1; // include drafts
                 var tileSize = mapMagic.tileSize.x;
+                var tileGenBuffer = 1.7f; // a little leeway for time to generate tiles in the distance
 
-                var fogEndDistance = tileSize * tileChunkCount - tileSize / 2;
-                var fogStartDistance = Mathf.Max(1000f, fogEndDistance - fogEndDistance / 1.5f);
+                var fogEndDistance = (tileSize * tileChunkCount - tileSize / 2) / tileGenBuffer;
+                var fogStartDistance = Mathf.Max(1000f, fogEndDistance - fogEndDistance / 1.25f);
 
                 _meshRenderer.material.SetFloat(WaterFadeDistantStart, fogStartDistance);
                 _meshRenderer.material.SetFloat(WaterFadeDistantEnd, fogEndDistance);
