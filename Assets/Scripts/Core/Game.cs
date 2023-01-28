@@ -358,11 +358,18 @@ namespace Core {
 #endif
 
                 // if we have water in the world, toggle it on and off because some weird URP issue which doesn't handle the lighting properly on load
+                // same for reflection probes because ?!?!?!?!
+                // TODO: figure out why this jank happens, don't have time right now
                 var water = FindObjectOfType<ModifierWater>();
                 if (water != null) {
                     water.gameObject.SetActive(false);
+                    var shouldShowReflectionProbes = ship.ReflectionProbe.gameObject.activeSelf;
+                    ship.ReflectionProbe.gameObject.SetActive(false);
+
                     yield return new WaitForEndOfFrame();
+
                     water.gameObject.SetActive(true);
+                    ship.ReflectionProbe.gameObject.SetActive(shouldShowReflectionProbes);
                 }
 
                 yield return _levelLoader.HideLoadingScreen();
