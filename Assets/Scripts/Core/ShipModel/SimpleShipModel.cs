@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using Core.Player;
 using Core.ShipModel.Feedback.interfaces;
+using Core.ShipModel.Modifiers.Water;
 using JetBrains.Annotations;
 using Misc;
 using UnityEngine;
-using UnityEngine.VFX;
 using VFX;
 #if !NO_PAID_ASSETS
 using GPUInstancer;
@@ -40,8 +40,6 @@ namespace Core.ShipModel {
         [SerializeField] protected AudioSource nightVisionDeactivateAudioSource;
 
         [SerializeField] protected CanvasGroup indicatorCanvas;
-
-        [SerializeField] private VisualEffect waterSubmergeVfx;
 
         private bool _shipActive;
         private Coroutine _boostCoroutine;
@@ -163,10 +161,13 @@ namespace Core.ShipModel {
             }
         }
 
-        public void WaterSubmerged(Vector3 surfaceImpactVelocity) {
-            waterSubmergeVfx.SetVector3("_impactVelocity", surfaceImpactVelocity);
-            waterSubmergeVfx.Play();
-            shield.Fizzle(5);
+        public void WaterSubmerged(Vector3 atWorldPosition, Vector3 surfaceImpactVelocity) {
+            // TODO: cache this
+            var water = FindObjectOfType<ModifierWater>();
+            if (water != null) {
+                water.SubmergedVfx(atWorldPosition, surfaceImpactVelocity);
+                shield.Fizzle(5);
+            }
         }
 
         public void WaterEmerged(Vector3 surfaceImpactVelocity) {

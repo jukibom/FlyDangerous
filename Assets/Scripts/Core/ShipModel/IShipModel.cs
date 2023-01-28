@@ -53,7 +53,7 @@ namespace Core.ShipModel {
         /**
          * Effects played when impacting the water
          */
-        public void WaterSubmerged(Vector3 surfaceImpactVelocity);
+        public void WaterSubmerged(Vector3 atWorldPosition, Vector3 surfaceImpactVelocity);
 
         /**
          * Effects played when leaving the water

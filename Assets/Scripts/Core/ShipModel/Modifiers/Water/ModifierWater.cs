@@ -1,6 +1,7 @@
 using Core.Player;
 using MapMagic.Core;
 using UnityEngine;
+using UnityEngine.VFX;
 
 namespace Core.ShipModel.Modifiers.Water {
     public enum WaterTransition {
@@ -11,6 +12,7 @@ namespace Core.ShipModel.Modifiers.Water {
     public class ModifierWater : MonoBehaviour, IModifier {
         [SerializeField] private float appliedDrag;
         [SerializeField] private float appliedAngularDrag;
+        [SerializeField] private VisualEffect waterSubmergeVfx;
 
         [Tooltip("The default unity plane has a uv scale of 10 as it has 10x10 segments which each map to 1 full texture")] [SerializeField]
         private Vector2 planeUvScale = new(10, 10);
@@ -66,11 +68,11 @@ namespace Core.ShipModel.Modifiers.Water {
         }
 
         private void OnFloatingOriginCorrection(Vector3 offset) {
-            var planeTransform = transform;
-            var position = planeTransform.position;
+            var waterTransform = transform.parent;
+            var position = waterTransform.position;
 
             // water stays at fixed x and z position but height is maintained by floating origin
-            planeTransform.position = new Vector3(
+            waterTransform.position = new Vector3(
                 position.x,
                 position.y - offset.y,
                 position.z
@@ -85,6 +87,14 @@ namespace Core.ShipModel.Modifiers.Water {
         public void ApplyModifierEffect(Rigidbody ship, ref AppliedEffects effects) {
             effects.shipDrag = appliedDrag;
             effects.shipAngularDrag = appliedAngularDrag;
+        }
+
+        public void SubmergedVfx(Vector3 atWorldPosition, Vector3 surfaceImpactVelocity) {
+            var localPosition = transform.position + (atWorldPosition - FloatingOrigin.Instance.Origin);
+            var localPlanePosition = new Vector3(localPosition.x, 0, localPosition.z);
+            waterSubmergeVfx.SetVector3("_impactPositionLocal", localPlanePosition);
+            waterSubmergeVfx.SetVector3("_impactVelocity", surfaceImpactVelocity);
+            waterSubmergeVfx.Play();
         }
     }
 }

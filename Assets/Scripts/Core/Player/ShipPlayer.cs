@@ -364,9 +364,9 @@ namespace Core.Player {
         private void OnWaterSubmerged() {
             // local do immediately
             if (isLocalPlayer)
-                ShipPhysics.ShipModel?.WaterSubmerged(ShipPhysics.Velocity);
+                ShipPhysics.ShipModel?.WaterSubmerged(AbsoluteWorldPosition, ShipPhysics.Velocity);
             // signal to other players
-            CmdWaterSubmerged();
+            CmdWaterSubmerged(AbsoluteWorldPosition);
         }
 
         private void OnWaterEmerged() {
@@ -441,13 +441,13 @@ namespace Core.Player {
         }
 
         [Command]
-        private void CmdWaterSubmerged() {
-            RpcWaterSubmerged();
+        private void CmdWaterSubmerged(Vector3 atWorldPosition) {
+            RpcWaterSubmerged(atWorldPosition);
         }
 
         [ClientRpc]
-        private void RpcWaterSubmerged() {
-            if (!isLocalPlayer) ShipPhysics.ShipModel?.WaterSubmerged(ShipPhysics.Velocity);
+        private void RpcWaterSubmerged(Vector3 atWorldPosition) {
+            if (!isLocalPlayer) ShipPhysics.ShipModel?.WaterSubmerged(atWorldPosition, ShipPhysics.Velocity);
         }
 
         [Command]
