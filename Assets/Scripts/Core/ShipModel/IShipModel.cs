@@ -58,7 +58,7 @@ namespace Core.ShipModel {
         /**
          * Effects played when leaving the water
          */
-        public void WaterEmerged(Vector3 surfaceImpactVelocity);
+        public void WaterEmerged(Vector3 atWorldPosition, Vector3 surfaceImpactVelocity);
 
         /**
           * Set the main color of the ship as a html color

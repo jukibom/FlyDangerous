@@ -40,6 +40,7 @@ namespace Core.ShipModel {
         [SerializeField] protected AudioSource nightVisionDeactivateAudioSource;
         [SerializeField] protected AudioSource interiorWaterSubmergeAudioSource;
         [SerializeField] protected AudioSource exteriorWaterSubmergeAudioSource;
+        [SerializeField] protected AudioSource exteriorWaterEmergeAudioSource;
 
         [SerializeField] protected CanvasGroup indicatorCanvas;
 
@@ -167,7 +168,7 @@ namespace Core.ShipModel {
             // TODO: cache this
             var water = FindObjectOfType<ModifierWater>();
             if (water != null) {
-                water.SubmergedVfx(atWorldPosition, surfaceImpactVelocity);
+                water.PlaySubmergedVfx(atWorldPosition, surfaceImpactVelocity);
 
                 var impactVolume = surfaceImpactVelocity.magnitude.Remap(0, 500, 0, 1);
                 interiorWaterSubmergeAudioSource.pitch = Random.value.Remap(0, 1, 0.5f, 2f);
@@ -182,8 +183,19 @@ namespace Core.ShipModel {
             }
         }
 
-        public void WaterEmerged(Vector3 surfaceImpactVelocity) {
-            Debug.Log("I JUST LEFT THE WATER :D (uh, todo effect!)");
+        public void WaterEmerged(Vector3 atWorldPosition, Vector3 surfaceImpactVelocity) {
+            // TODO: cache this
+            var water = FindObjectOfType<ModifierWater>();
+            if (water != null) {
+                water.PlayEmergedVfx(atWorldPosition, surfaceImpactVelocity);
+
+                var impactVolume = surfaceImpactVelocity.magnitude.Remap(0, 500, 0, 1);
+                exteriorWaterEmergeAudioSource.pitch = Random.value.Remap(0, 1, 0.5f, 2f);
+
+                exteriorWaterEmergeAudioSource.volume = impactVolume;
+
+                exteriorWaterEmergeAudioSource.Play();
+            }
         }
 
         #endregion

@@ -13,6 +13,7 @@ namespace Core.ShipModel.Modifiers.Water {
         [SerializeField] private float appliedDrag;
         [SerializeField] private float appliedAngularDrag;
         [SerializeField] private VisualEffect waterSubmergeVfx;
+        [SerializeField] private VisualEffect waterEmergeVfx;
 
         [Tooltip("The default unity plane has a uv scale of 10 as it has 10x10 segments which each map to 1 full texture")] [SerializeField]
         private Vector2 planeUvScale = new(10, 10);
@@ -89,12 +90,20 @@ namespace Core.ShipModel.Modifiers.Water {
             effects.shipAngularDrag = appliedAngularDrag;
         }
 
-        public void SubmergedVfx(Vector3 atWorldPosition, Vector3 surfaceImpactVelocity) {
+        public void PlaySubmergedVfx(Vector3 atWorldPosition, Vector3 surfaceImpactVelocity) {
             var localPosition = transform.position + (atWorldPosition - FloatingOrigin.Instance.Origin);
             var localPlanePosition = new Vector3(localPosition.x, 0, localPosition.z);
             waterSubmergeVfx.SetVector3("_impactPositionLocal", localPlanePosition);
             waterSubmergeVfx.SetVector3("_impactVelocity", surfaceImpactVelocity);
             waterSubmergeVfx.Play();
+        }
+
+        public void PlayEmergedVfx(Vector3 atWorldPosition, Vector3 surfaceImpactVelocity) {
+            var localPosition = transform.position + (atWorldPosition - FloatingOrigin.Instance.Origin);
+            var localPlanePosition = new Vector3(localPosition.x, 0, localPosition.z);
+            waterEmergeVfx.SetVector3("_impactPositionLocal", localPlanePosition);
+            waterEmergeVfx.SetVector3("_impactVelocity", surfaceImpactVelocity);
+            waterEmergeVfx.Play();
         }
     }
 }
