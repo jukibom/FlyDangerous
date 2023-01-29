@@ -43,6 +43,11 @@ namespace VFX {
         }
 
         public void UpdateThrustTrail(Vector3 vesselSpeed, float maxSpeed, Vector3 forceNormalised) {
+            if (Game.IsUnderWater) {
+                _trailEffect.SetInt("_spawnRate", Mathf.FloorToInt(0));
+                return;
+            }
+
             if (_ready) {
                 var vesselSpeedLocal = _transform.InverseTransformDirection(vesselSpeed);
 
