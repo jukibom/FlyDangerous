@@ -400,9 +400,9 @@ namespace Core.ShipModel {
             UpdateFeedbackData();
 
             // correct for being underground in any scenario
-            if (_shipInstrumentData.Altitude < 0) {
+            if (_shipInstrumentData.ShipHeightFromGround < 0) {
                 var position = targetRigidbody.position;
-                targetRigidbody.position = new Vector3(position.x, position.y - _shipInstrumentData.Altitude, position.z);
+                targetRigidbody.position = new Vector3(position.x, position.y - (_shipInstrumentData.ShipHeightFromGround - 5), position.z);
             }
 
             _prevVelocity = Velocity;
@@ -443,10 +443,11 @@ namespace Core.ShipModel {
             _shipMotionData.MaxSpeed = FlightParameters.maxBoostSpeed;
         }
 
-        public void UpdateInstrumentData() {
+        private void UpdateInstrumentData() {
             var shipPosition = targetRigidbody.position;
             var absoluteShipPosition = FloatingOrigin.Instance.GetAbsoluteWorldPosition(targetRigidbody.transform);
             var nearestTerrain = PositionalHelpers.GetClosestCurrentTerrain(shipPosition);
+            var water = ModifierWater.Instance;
 
             _shipInstrumentData.ShipActive = ShipActive;
             _shipInstrumentData.WorldPosition = absoluteShipPosition;
@@ -454,7 +455,7 @@ namespace Core.ShipModel {
                 ? absoluteShipPosition.y - nearestTerrain.SampleHeight(shipPosition)
                 : Mathf.Infinity;
             _shipInstrumentData.Altitude = Game.Instance.IsTerrainMap && nearestTerrain != null
-                ? absoluteShipPosition.y
+                ? water != null ? absoluteShipPosition.y - water.WorldWaterHeight : absoluteShipPosition.y
                 : Mathf.Infinity;
             _shipInstrumentData.AccelerationMagnitudeNormalised =
                 (Math.Abs(CurrentFrameThrust.x) + Math.Abs(CurrentFrameThrust.y) + Math.Abs(CurrentFrameThrust.z)) /
@@ -476,7 +477,7 @@ namespace Core.ShipModel {
             _shipInstrumentData.RotationalFlightAssistActive = RotationalFlightAssistActive;
         }
 
-        public void UpdateFeedbackData() {
+        private void UpdateFeedbackData() {
             // Collision Handling
             _shipFeedbackData.CollisionThisFrame = false;
             _shipFeedbackData.CollisionImpactNormalised = 0;

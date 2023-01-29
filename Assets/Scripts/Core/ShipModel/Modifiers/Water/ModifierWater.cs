@@ -1,4 +1,5 @@
 using Core.Player;
+using JetBrains.Annotations;
 using MapMagic.Core;
 using UnityEngine;
 using UnityEngine.VFX;
@@ -10,6 +11,8 @@ namespace Core.ShipModel.Modifiers.Water {
     }
 
     public class ModifierWater : MonoBehaviour, IModifier {
+        [CanBeNull] public static ModifierWater Instance;
+
         [SerializeField] private float appliedDrag;
         [SerializeField] private float appliedAngularDrag;
         [SerializeField] private VisualEffect waterSubmergeVfx;
@@ -25,7 +28,11 @@ namespace Core.ShipModel.Modifiers.Water {
         private static readonly int WaterFadeDistantStart = Shader.PropertyToID("_WaterFadeDistantStart");
         private static readonly int WaterFadeDistantEnd = Shader.PropertyToID("_WaterFadeDistantEnd");
 
+        public float WorldWaterHeight => FloatingOrigin.Instance.Origin.y + transform.position.y;
+
         private void OnEnable() {
+            if (Instance != null) Debug.LogError("Multiple water modifiers in the scene! This is not allowed, expect nightmares");
+            Instance = this;
             Game.OnGameSettingsApplied += OnGameSettingsApplied;
             FloatingOrigin.OnFloatingOriginCorrection += OnFloatingOriginCorrection;
             _meshRenderer = GetComponent<MeshRenderer>();
@@ -35,6 +42,7 @@ namespace Core.ShipModel.Modifiers.Water {
         }
 
         private void OnDisable() {
+            Instance = null;
             Game.OnGameSettingsApplied -= OnGameSettingsApplied;
             FloatingOrigin.OnFloatingOriginCorrection -= OnFloatingOriginCorrection;
         }

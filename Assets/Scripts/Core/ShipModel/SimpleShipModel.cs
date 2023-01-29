@@ -165,8 +165,7 @@ namespace Core.ShipModel {
         }
 
         public void WaterSubmerged(Vector3 atWorldPosition, Vector3 surfaceImpactVelocity) {
-            // TODO: cache this
-            var water = FindObjectOfType<ModifierWater>();
+            var water = ModifierWater.Instance;
             if (water != null) {
                 water.PlaySubmergedVfx(atWorldPosition, surfaceImpactVelocity);
 
@@ -184,8 +183,7 @@ namespace Core.ShipModel {
         }
 
         public void WaterEmerged(Vector3 atWorldPosition, Vector3 surfaceImpactVelocity) {
-            // TODO: cache this
-            var water = FindObjectOfType<ModifierWater>();
+            var water = ModifierWater.Instance;
             if (water != null) {
                 water.PlayEmergedVfx(atWorldPosition, surfaceImpactVelocity);
 
