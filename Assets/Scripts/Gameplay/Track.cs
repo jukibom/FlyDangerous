@@ -5,20 +5,25 @@ using Core;
 using Core.MapData;
 using Core.MapData.Serializable;
 using Core.Player;
-using Core.Scores;
 using Gameplay.Game_Modes.Components;
 using JetBrains.Annotations;
 using NaughtyAttributes;
 using UnityEngine;
 #if UNITY_EDITOR
+using Core.Scores;
 using UnityEditor;
 #endif
 
 namespace Gameplay {
+    [ExecuteAlways]
     public class Track : MonoBehaviour {
         public delegate void CheckpointHit(Checkpoint checkpoint, float excessTimeToHitSeconds);
 
         public event CheckpointHit OnCheckpointHit;
+
+        [SerializeField] private Checkpoint checkpointPrefab;
+        [SerializeField] private ModifierSpawner modifierPrefab;
+        [SerializeField] private BillboardSpawner billboardPrefab;
 
         [SerializeField] private GameModeCheckpoints checkpointContainer;
         [SerializeField] private GameModeModifiers modifierContainer;
@@ -36,14 +41,19 @@ namespace Gameplay {
         [SerializeField] [OnValueChanged("UpdateTimesFromAuthor")]
         private float authorTimeTarget;
 
-        [ReadOnly] [SerializeField] private float goldTime;
-        [ReadOnly] [SerializeField] private float silverTime;
-        [ReadOnly] [SerializeField] private float bronzeTime;
+        [ReadOnly] [UsedImplicitly] [SerializeField]
+        private float goldTime;
+
+        [ReadOnly] [UsedImplicitly] [SerializeField]
+        private float silverTime;
+
+        [ReadOnly] [UsedImplicitly] [SerializeField]
+        private float bronzeTime;
 
         [HorizontalLine] [SerializeField] private Vector3 startPosition;
         [SerializeField] private Vector3 startRotation;
 
-        [Button("Set from ship position")]
+        [Button("Set start from ship position")]
         [UsedImplicitly]
         private void SetFromShip() {
 #if UNITY_EDITOR
@@ -129,6 +139,8 @@ namespace Gameplay {
             OnCheckpointHit?.Invoke(checkpoint, excessTimeToHitSeconds);
         }
 
+#if UNITY_EDITOR
+
         #region Editor Hooks
 
         [UsedImplicitly]
@@ -163,11 +175,92 @@ namespace Gameplay {
             bronzeTime = Score.BronzeTimeTarget(levelData);
         }
 
-        [Button("Copy to Clipboard")]
+        [Button("Copy level to Clipboard")]
         private void CopyToClipboard() {
             GUIUtility.systemCopyBuffer = Serialize().ToJsonString();
         }
 
         #endregion
+
+        #region Track editing
+
+        [HorizontalLine] [UsedImplicitly] [ReorderableList] [SerializeField]
+        private List<Checkpoint> Checkpoints = new();
+
+        [UsedImplicitly] [ReorderableList] [SerializeField]
+        private List<ModifierSpawner> Modifiers = new();
+
+        [UsedImplicitly] [ReorderableList] [SerializeField]
+        private List<BillboardSpawner> Billboards = new();
+
+        [Button("Create Checkpoint")]
+        [UsedImplicitly]
+        private void CreateCheckpoint() {
+            Instantiate(checkpointPrefab, checkpointContainer.transform);
+            ForceRefresh();
+        }
+
+        [Button("Create Checkpoint At Ship Location")]
+        [UsedImplicitly]
+        private void CreateCheckpointAtShip() {
+            var ship = FdPlayer.FindLocalShipPlayer;
+            if (ship == null) {
+                Debug.LogError("No ship found - are you actually playing?...");
+                return;
+            }
+
+            var checkpoint = Instantiate(checkpointPrefab, checkpointContainer.transform, true);
+            checkpoint.transform.SetPositionAndRotation(ship.Position, ship.transform.rotation);
+
+            ForceRefresh();
+        }
+
+        [Button("Create Checkpoint At Last Position")]
+        [UsedImplicitly]
+        private void CreateCheckpointAtLastPosition() {
+            if (checkpointContainer.Checkpoints.Count == 0) {
+                Debug.LogError("No checkpoints to get last position from!");
+                return;
+            }
+
+            var lastCheckpoint = checkpointContainer.Checkpoints.Last();
+            checkpointContainer.AddCheckpoint(SerializableCheckpoint.FromCheckpoint(lastCheckpoint));
+
+            ForceRefresh();
+        }
+
+        [Button("Create Modifier")]
+        [UsedImplicitly]
+        private void CreateModifier() {
+            Instantiate(modifierPrefab, modifierContainer.transform);
+            ForceRefresh();
+        }
+
+        [Button("Create Billboard")]
+        [UsedImplicitly]
+        private void CreateBillboard() {
+            Instantiate(billboardPrefab, billboardContainer.transform);
+            ForceRefresh();
+        }
+
+        #endregion
+
+        private void OnValidate() {
+            checkpointContainer.RefreshCheckpoints();
+            Checkpoints = checkpointContainer.Checkpoints;
+
+            modifierContainer.RefreshModifierSpawners();
+            Modifiers = modifierContainer.ModifierSpawners;
+
+            billboardContainer.RefreshBillboardSpawners();
+            Billboards = billboardContainer.BillboardSpawners;
+        }
+
+        [Button("Force Refresh")]
+        [UsedImplicitly]
+        private void ForceRefresh() {
+            OnValidate();
+        }
+#endif
     }
 }
