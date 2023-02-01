@@ -10,8 +10,11 @@ using JetBrains.Annotations;
 using NaughtyAttributes;
 using UnityEngine;
 #if UNITY_EDITOR
+using System.Collections;
 using Core.Scores;
 using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine.SceneManagement;
 #endif
 
 namespace Gameplay {
@@ -35,6 +38,9 @@ namespace Gameplay {
         [Dropdown("GetGameModes")] [OnValueChanged("SetGameMode")] [SerializeField]
         private string gameMode;
 
+        [Dropdown("GetEnvironments")] [OnValueChanged("SetEnvironment")] [SerializeField]
+        private string environment;
+
         [Dropdown("GetMusicTracks")] [OnValueChanged("PlayMusicTrack")] [SerializeField]
         private string musicTrack;
 
@@ -52,6 +58,8 @@ namespace Gameplay {
 
         [HorizontalLine] [SerializeField] private Vector3 startPosition;
         [SerializeField] private Vector3 startRotation;
+
+        private bool _loadingEnvironment;
 
         [Button("Set start from ship position")]
         [UsedImplicitly]
@@ -83,7 +91,7 @@ namespace Gameplay {
                 gameType = GameType.FromString(gameMode),
                 location = loadedLevelData.location,
                 musicTrack = MusicTrack.FromString(musicTrack),
-                environment = loadedLevelData.environment,
+                environment = Environment.FromString(environment),
                 terrainSeed = string.IsNullOrEmpty(loadedLevelData.terrainSeed) ? null : loadedLevelData.terrainSeed,
                 startPosition = SerializableVector3.FromVector3(overrideStartPosition ?? startPosition),
                 startRotation = SerializableVector3.FromVector3(overrideStartRotation?.eulerAngles ?? startRotation)
@@ -115,6 +123,7 @@ namespace Gameplay {
             trackName = levelData.name;
             gameMode = levelData.gameType.Name;
             authorTimeTarget = levelData.authorTimeTarget;
+            environment = levelData.environment.Name;
             musicTrack = levelData.musicTrack.Name;
 
             startPosition = levelData.startPosition.ToVector3();
@@ -158,13 +167,52 @@ namespace Gameplay {
         }
 
         [UsedImplicitly]
+        private List<string> GetEnvironments() {
+            return Environment.List().Select(b => b.Name).ToList();
+        }
+
+        [UsedImplicitly]
         private List<string> GetMusicTracks() {
             return MusicTrack.List().Select(b => b.Name).ToList();
         }
 
         [UsedImplicitly]
+        private void SetEnvironment() {
+            if (_loadingEnvironment) return;
+            _loadingEnvironment = true;
+
+            var sceneToLoad = Environment.FromString(environment).SceneToLoad;
+
+            IEnumerator SetNewEnvironment(string sceneName) {
+                // load new
+                if (Application.isPlaying)
+                    yield return SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+                else
+                    EditorSceneManager.OpenScene($"Assets/Scenes/Environments/{sceneName}.unity", OpenSceneMode.Additive);
+                SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
+
+
+                // unload any other matching environment scenes
+                foreach (var environmentType in Environment.List()) {
+                    if (environmentType.SceneToLoad == sceneName)
+                        continue;
+
+                    for (var i = 0; i < SceneManager.sceneCount; i++) {
+                        var loadedScene = SceneManager.GetSceneAt(i);
+                        if (loadedScene.name == environmentType.SceneToLoad) SceneManager.UnloadSceneAsync(loadedScene);
+                    }
+                }
+
+                _loadingEnvironment = false;
+            }
+
+            StartCoroutine(SetNewEnvironment(sceneToLoad));
+        }
+
+        [UsedImplicitly]
         private void PlayMusicTrack() {
-            MusicManager.Instance.PlayMusic(MusicTrack.FromString(musicTrack), true, true, false);
+            if (Application.isPlaying)
+                MusicManager.Instance.PlayMusic(MusicTrack.FromString(musicTrack), true, true, false);
         }
 
         [UsedImplicitly]

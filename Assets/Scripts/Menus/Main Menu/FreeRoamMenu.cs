@@ -34,7 +34,7 @@ namespace Menus.Main_Menu {
             var environment = Environment.FromString(lastPlayedEnvironment);
             var music = MusicTrack.FromString(lastPlayedMusic);
 
-            FdEnum.PopulateDropDown(Location.List(), locationDropdown, option => option.Name.ToUpper());
+            FdEnum.PopulateDropDown(Location.List(), locationDropdown, option => option.DisplayName.ToUpper());
             FdEnum.PopulateDropDown(Environment.List(), environmentDropdown, option => option.Name.ToUpper());
             FdEnum.PopulateDropDown(MusicTrack.List(), musicDropdown, option => option.Artist != ""
                 ? $"{option.Name}  -  {option.Artist}".ToUpper()
@@ -66,7 +66,7 @@ namespace Menus.Main_Menu {
         public void OnLocationChanged() {
             UpdateSeedField();
             var location = Location.FromId(locationDropdown.value);
-            locationDescriptionHeader.text = location.Name;
+            locationDescriptionHeader.text = location.DisplayName;
             locationDescription.text = location.Description;
         }
 

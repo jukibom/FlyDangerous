@@ -170,8 +170,8 @@ namespace Core.ShipModel {
                 water.PlaySubmergedVfx(atWorldPosition, surfaceImpactVelocity);
 
                 var impactVolume = surfaceImpactVelocity.magnitude.Remap(0, 500, 0, 1);
-                interiorWaterSubmergeAudioSource.pitch = Random.value.Remap(0, 1, 0.5f, 2f);
-                exteriorWaterSubmergeAudioSource.pitch = Random.value.Remap(0, 1, 0.5f, 2f);
+                interiorWaterSubmergeAudioSource.pitch = Random.value.Remap(0, 1, 0.125f, 0.5f);
+                exteriorWaterSubmergeAudioSource.pitch = Random.value.Remap(0, 1, 0.125f, 0.5f);
 
                 interiorWaterSubmergeAudioSource.volume = impactVolume;
                 exteriorWaterSubmergeAudioSource.volume = impactVolume;
@@ -188,7 +188,7 @@ namespace Core.ShipModel {
                 water.PlayEmergedVfx(atWorldPosition, surfaceImpactVelocity);
 
                 var impactVolume = surfaceImpactVelocity.magnitude.Remap(0, 500, 0, 1);
-                exteriorWaterEmergeAudioSource.pitch = Random.value.Remap(0, 1, 0.5f, 2f);
+                exteriorWaterEmergeAudioSource.pitch = Random.value.Remap(0, 1, 0.125f, 0.5f);
 
                 exteriorWaterEmergeAudioSource.volume = impactVolume;
 

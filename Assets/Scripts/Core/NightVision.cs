@@ -36,7 +36,7 @@ namespace Core {
         public void SetNightVisionActive(bool isActive) {
             _nightVisionEnabled = isActive;
             if (isActive) _volume.weight = 0.5f;
-            RenderSettings.ambientIntensity = isActive ? Game.Instance.LoadedLevelData.environment.NightVisionAmbientLight * 6 : 0;
+            RenderSettings.ambientIntensity = isActive ? Game.Instance.LoadedLevelData.environment.NightVisionAmbientLight * 3 : 0;
         }
 
         public void SetNightVisionColor(Color nightVisionColor) {

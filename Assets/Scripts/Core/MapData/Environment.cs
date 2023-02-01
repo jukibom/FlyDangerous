@@ -6,6 +6,7 @@ namespace Core.MapData {
         private static int _id;
 
         public static readonly Environment SunriseClear = new("Sunrise Clear", "Sunrise_Clear", 1.65f);
+        public static readonly Environment SunriseHazy = new("Sunrise Hazy", "Sunrise_Hazy", 1.65f);
         public static readonly Environment NoonClear = new("Noon Clear", "Noon_Clear", 0.9f);
         public static readonly Environment NoonCloudy = new("Noon Cloudy", "Noon_Cloudy", 0.8f);
         public static readonly Environment NoonStormy = new("Noon Stormy", "Noon_Stormy", 0.8f);
@@ -13,6 +14,7 @@ namespace Core.MapData {
         public static readonly Environment SunsetCloudy = new("Sunset Cloudy", "Sunset_Cloudy", 3);
         public static readonly Environment NightClear = new("Night Clear", "Night_Clear", 4);
         public static readonly Environment NightCloudy = new("Night Cloudy", "Night_Cloudy", 5);
+        public static readonly Environment ClearLowAtmosphere = new("Clear, Low Atmosphere", "Low_Atmosphere_Clear", 3);
         public static readonly Environment PlanetOrbitBottom = new("Red Planet", "Planet_Orbit_Bottom", 2.5f);
         public static readonly Environment PlanetOrbitTop = new("Blue Planet", "Planet_Orbit_Top", 1.8f);
         public static readonly Environment RedBlueNebula = new("Red / Blue Nebula", "Red_Blue_Nebula", 2.8f);
@@ -34,8 +36,8 @@ namespace Core.MapData {
 
         public static IEnumerable<Environment> List() {
             return new[] {
-                SunriseClear, NoonClear, NoonCloudy, NoonStormy, SunsetClear, SunsetCloudy, NightClear, NightCloudy, PlanetOrbitBottom, PlanetOrbitTop,
-                RedBlueNebula, YellowGreenNebula
+                SunriseClear, SunriseHazy, NoonClear, NoonCloudy, NoonStormy, SunsetClear, SunsetCloudy, NightClear, NightCloudy, ClearLowAtmosphere,
+                PlanetOrbitBottom, PlanetOrbitTop, RedBlueNebula, YellowGreenNebula
             };
         }
 

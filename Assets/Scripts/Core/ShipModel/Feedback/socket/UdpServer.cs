@@ -28,7 +28,7 @@ namespace Core.ShipModel.Feedback.socket {
 
         private void FixedUpdate() {
             if (!_isEnabled) return;
-            if (!Game.Instance.InGame) return;
+            if (!Game.Instance.InGame || !Game.Instance.GameModeHandler.HasStarted) return;
 
             if (_emitTimer >= emitIntervalSeconds) {
                 _emitTimer = 0;
