@@ -26,7 +26,12 @@ namespace Core.MapData {
         public static readonly Level HideAndSeek = new("Hide and Seek", "hide-and-seek", GameType.Sprint, true);
 
         // GLORIOUS NEW WORLD MAPS (for how long? who knows!)
+        public static readonly Level YouHaveToStartSomewhere = new("You Have to Start Somewhere", "you-have-to-start-somewhere", GameType.Sprint);
+        public static readonly Level ALittleVerticality = new("A Little Verticality", "a-little-verticality", GameType.Sprint);
         public static readonly Level TinyTrial = new("Tiny Trial", "tiny-trial", GameType.Sprint);
+        public static readonly Level Yeet = new("Yeet", "yeet", GameType.Sprint);
+        public static readonly Level Coaster = new("Coaster", "coaster", GameType.Sprint);
+        public static readonly Level LoopDeLoop = new("Loop-de-loop", "loop-de-loop", GameType.Sprint);
 
         // tests
         public static readonly Level HideAndSeekLapTest = new("Hide and Seek but sexier", "hide-and-seek", GameType.Laps);
@@ -58,9 +63,8 @@ namespace Core.MapData {
         public static IEnumerable<Level> List() {
             return new[] {
                 GentleStart, UpsAndDowns, AroundTheBlock, HoldOnToYourStomach, AroundTheStation, Snake, SpeedIsHalfTheBattle, YouMightWannaHoldBack,
-                DeathValley, CrestLoop,
-                YouHaveHeadlightsRight, LimiterMastery, ThreadTheNeedle, MountainSpiral, LongRoad, HideAndSeek,
-                HideAndSeekLapTest, TinyTrial
+                DeathValley, CrestLoop, YouHaveHeadlightsRight, LimiterMastery, ThreadTheNeedle, MountainSpiral, LongRoad, HideAndSeek,
+                YouHaveToStartSomewhere, ALittleVerticality, TinyTrial, Yeet, Coaster, LoopDeLoop, HideAndSeekLapTest
             };
         }
 
