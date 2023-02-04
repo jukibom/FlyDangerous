@@ -78,8 +78,12 @@ namespace Misc {
 
                 // check to see if any other ships have been assigned this exact start position (and are therefore currently loading also)
                 var existingShipStartPosition = false;
-                FdNetworkManager.Instance.ShipPlayers.ForEach(s =>
-                    existingShipStartPosition = existingShipStartPosition || s.AbsoluteWorldPosition.Equals(testPosition));
+                FdNetworkManager.Instance.ShipPlayers.ForEach(s => {
+                    // skip self!
+                    if (ignoreGameObject != null && s.transform.root.gameObject.GetInstanceID() == ignoreGameObject.GetInstanceID())
+                        return;
+                    existingShipStartPosition = existingShipStartPosition || s.AbsoluteWorldPosition.Equals(testPosition);
+                });
 
                 // check to see if any existing ships or geometry are in this location
                 Physics.OverlapSphereNonAlloc(testPosition, objectRadius, hitColliders, collisionLayerMask);
