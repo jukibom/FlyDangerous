@@ -67,6 +67,7 @@ namespace Gameplay.Game_Modes {
 
         public virtual void OnQuit() {
             if (_splitFadeOutCoroutine != null) Game.Instance.StopCoroutine(_splitFadeOutCoroutine);
+            if (_startTextCoroutine != null) Game.Instance.StopCoroutine(_startTextCoroutine);
         }
 
         public virtual void CountdownStarted() {
