@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Core.Player;
 using Core.Replays;
 using GameUI.Components;
+using JetBrains.Annotations;
 using Misc;
 using UnityEngine;
 using UnityEngine.U2D;
@@ -14,21 +15,25 @@ namespace Core.ShipModel {
         private readonly Dictionary<ShipPlayer, Target> _players = new();
         private Camera _mainCamera;
 
-        private void Update() {
+        // TODO: manual targetting system
+        [CanBeNull] private Target _activeTarget;
+
+        private void FixedUpdate() {
             // update camera if needed
             if (_mainCamera == null || _mainCamera.enabled == false || _mainCamera.gameObject.activeSelf == false)
                 _mainCamera = Camera.main;
 
             if (_mainCamera != null) {
+                FindClosestTarget();
+
                 // update target objects for players
                 foreach (var keyValuePair in _players) {
                     var player = keyValuePair.Key;
                     if (player == null) continue;
                     var target = keyValuePair.Value;
                     var targetName = player.playerName;
-                    var targetPosition = player.User.transform.position;
                     var icon = player.PlayerFlag != null ? flags.GetSprite(player.PlayerFlag.Filename) : null;
-                    UpdateTarget(target, targetPosition, targetName, icon);
+                    UpdateTarget(target, player.User.transform, targetName, icon);
                 }
 
                 foreach (var keyValuePair in _ghosts) {
@@ -36,9 +41,8 @@ namespace Core.ShipModel {
                     if (ghost.Transform == null) continue;
                     var target = keyValuePair.Value;
                     var targetName = ghost.PlayerName;
-                    var targetPosition = ghost.Transform.position;
                     var icon = ghost.PlayerFlag != null ? flags.GetSprite(ghost.PlayerFlag.Filename) : null;
-                    UpdateTarget(target, targetPosition, targetName, icon);
+                    UpdateTarget(target, ghost.Transform, targetName, icon);
                 }
             }
         }
@@ -60,7 +64,9 @@ namespace Core.ShipModel {
             Game.OnGhostRemoved -= ResetTargets;
         }
 
-        private void UpdateTarget(Target target, Vector3 targetPosition, string targetName, Sprite icon) {
+        private void UpdateTarget(Target target, Transform targetTransform, string targetName, Sprite icon) {
+            var targetPosition = targetTransform.position;
+
             var player = FdPlayer.FindLocalShipPlayer;
             var originPosition = player ? player.User.UserCameraPosition : Vector3.zero;
             var shipPosition = player ? player.transform.position : Vector3.zero;
@@ -76,11 +82,44 @@ namespace Core.ShipModel {
             var minDistance = 10f;
             var maxDistance = 30f + minDistance;
 
-            var targetTransform = target.transform;
-            targetTransform.position = Vector3.MoveTowards(originPosition, targetPosition + direction * minDistance, maxDistance);
-            targetTransform.rotation = _mainCamera.transform.rotation;
+            var targetIndicatorTransform = target.transform;
+            targetIndicatorTransform.position = Vector3.MoveTowards(originPosition, targetPosition + direction * minDistance, maxDistance);
+            targetIndicatorTransform.rotation = _mainCamera.transform.rotation;
 
             target.Opacity = distanceToShip.Remap(5, minDistance, 0, 1);
+            target.Update3dIndicatorOrientation(targetTransform, _mainCamera.transform);
+
+            target.Toggle3dIndicator(target == _activeTarget);
+        }
+
+        // auto-select a single target to show indicators (the one closest to center of screen)
+        private void FindClosestTarget() {
+            Target closest = null;
+            var distance = Mathf.Infinity;
+            foreach (var keyValuePair in _players) {
+                var targetPositionViewport = _mainCamera.WorldToViewportPoint(keyValuePair.Value.transform.position);
+                var targetPositionScreen = new Vector2(targetPositionViewport.x - 0.5f, targetPositionViewport.y - 0.5f);
+                var targetDistanceFromCenter = targetPositionScreen.magnitude;
+                if (targetDistanceFromCenter < distance) {
+                    distance = targetDistanceFromCenter;
+                    closest = keyValuePair.Value;
+                }
+            }
+
+            foreach (var keyValuePair in _ghosts) {
+                var targetPositionViewport = _mainCamera.WorldToViewportPoint(keyValuePair.Value.transform.position);
+                var targetPositionScreen = new Vector2(targetPositionViewport.x - 0.5f, targetPositionViewport.y - 0.5f);
+                var targetDistanceFromCenter = targetPositionScreen.magnitude;
+                if (targetDistanceFromCenter < distance) {
+                    distance = targetDistanceFromCenter;
+                    closest = keyValuePair.Value;
+                }
+            }
+
+            if (closest != null)
+                // only update the active target if we're *actually* looking at them (unless we don't have a target)
+                if (_activeTarget == null || distance < 0.05f)
+                    _activeTarget = closest;
         }
 
         public void ResetTargets() {
@@ -88,6 +127,7 @@ namespace Core.ShipModel {
             foreach (var keyValuePair in _ghosts) Destroy(keyValuePair.Value.gameObject);
             _players.Clear();
             _ghosts.Clear();
+            _activeTarget = null;
 
             foreach (var shipPlayer in FdNetworkManager.Instance.ShipPlayers)
                 if (!shipPlayer.isLocalPlayer) {

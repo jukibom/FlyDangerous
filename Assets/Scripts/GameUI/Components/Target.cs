@@ -1,5 +1,6 @@
 using System.Globalization;
 using JetBrains.Annotations;
+using Misc;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,9 +10,16 @@ namespace GameUI.Components {
         [SerializeField] private Text targetNameText;
         [SerializeField] private Text targetDistanceText;
         [SerializeField] private Image icon;
-        private CanvasGroup _canvasGroup;
+        [SerializeField] private GameObject targetIndicator2d;
 
+        [SerializeField] private Transform IndicatorModelTransform;
+        [SerializeField] private GameObject Front3dIndicator;
+
+        private MeshRenderer[] _front3dIndicatorMeshRenderers;
+
+        private CanvasGroup _canvasGroup;
         private float _targetDistanceMeters;
+        private bool _is3dIndicatorActive;
 
         public string Name {
             get => targetNameText.text;
@@ -43,6 +51,7 @@ namespace GameUI.Components {
 
         private void OnEnable() {
             _canvasGroup = GetComponent<CanvasGroup>();
+            _front3dIndicatorMeshRenderers = Front3dIndicator.GetComponentsInChildren<MeshRenderer>();
             Opacity = 0;
         }
 
@@ -62,6 +71,29 @@ namespace GameUI.Components {
                 text = AddPointZeroIfNeeded(Mathf.Max(0.1f, Mathf.Round(_targetDistanceMeters / 29980000f) / 10)) + "Ls";
 
             targetDistanceText.text = text;
+        }
+
+        public void Update3dIndicatorOrientation(Transform matchTransform, Transform cameraTransform) {
+            var orientation = matchTransform.rotation;
+            IndicatorModelTransform.gameObject.SetActive(_is3dIndicatorActive && _targetDistanceMeters > 100);
+            IndicatorModelTransform.rotation = orientation;
+
+            var frontOpacity = Mathf.Abs(Vector3.SignedAngle(cameraTransform.forward,
+                    cameraTransform.InverseTransformDirection(matchTransform.forward), cameraTransform.right))
+                .Remap(30, 180, 0, 1);
+
+            foreach (var meshRenderer in _front3dIndicatorMeshRenderers) {
+                var meshMaterial = meshRenderer.material;
+                meshMaterial.color = new Color(meshMaterial.color.r, meshMaterial.color.g, meshMaterial.color.b, frontOpacity);
+            }
+        }
+
+        public void Toggle3dIndicator(bool isActive) {
+            _is3dIndicatorActive = isActive;
+        }
+
+        public void Toggle2dIndicator(bool isActive) {
+            targetIndicator2d.SetActive(isActive);
         }
     }
 }
