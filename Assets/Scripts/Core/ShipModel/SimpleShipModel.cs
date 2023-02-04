@@ -49,8 +49,11 @@ namespace Core.ShipModel {
         private bool _velocityLimiterActive;
 
         public virtual void Start() {
-            // Init GPU Instance removal colliders 
+            // indicators start disabled and activate when the game mode enables the ship (for no other reason than it looks cool)
+            indicatorCanvas.alpha = 0;
+
 #if !NO_PAID_ASSETS
+            // Init GPU Instance removal colliders
             if (FindObjectOfType<GPUInstancerDetailManager>()) {
                 var grassInstanceRemover = foliageCollider.gameObject.AddComponent<GPUInstancerInstanceRemover>();
                 grassInstanceRemover.selectedColliders = new List<Collider> { foliageCollider };
@@ -208,9 +211,8 @@ namespace Core.ShipModel {
                 _shipActive = shipInstrumentData.ShipActive;
 
                 if (_shipActive) StartCoroutine(IgnitionSequenceFlicker());
+                else indicatorCanvas.alpha = 0;
             }
-
-            indicatorCanvas.enabled = _shipActive;
 
             #endregion
         }

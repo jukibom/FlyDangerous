@@ -13,6 +13,7 @@ namespace GameUI.GameModes {
         [SerializeField] private CanvasGroup leftCanvasGroup;
         [SerializeField] private CanvasGroup rightCanvasGroup;
         [SerializeField] private CanvasGroup centralCanvasGroup;
+        [SerializeField] private CanvasGroup centralNotificationCanvasGroup;
 
         [SerializeField] private Text topHeader;
         [SerializeField] private Text topSubHeader;
@@ -22,6 +23,7 @@ namespace GameUI.GameModes {
         [SerializeField] private Text topRightContent;
         [SerializeField] private Text centralHeader;
         [SerializeField] private Text centralContent;
+        [SerializeField] private Text centralNotification;
 
         private CanvasGroup _canvasGroup;
 
@@ -29,6 +31,7 @@ namespace GameUI.GameModes {
         public CanvasGroup LeftCanvasGroup => leftCanvasGroup;
         public CanvasGroup RightCanvasGroup => rightCanvasGroup;
         public CanvasGroup CentralCanvasGroup => centralCanvasGroup;
+        public CanvasGroup CentralNotificationCanvasGroup => centralNotificationCanvasGroup;
 
         public Text TopHeader => topHeader;
         public Text TopSubHeader => topSubHeader;
@@ -38,6 +41,7 @@ namespace GameUI.GameModes {
         public Text TopRightContent => topRightContent;
         public Text CentralHeader => centralHeader;
         public Text CentralContent => centralContent;
+        public Text CentralNotification => centralNotification;
 
         private void OnEnable() {
             _canvasGroup = GetComponent<CanvasGroup>();

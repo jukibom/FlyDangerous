@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using Core;
 using Gameplay.Game_Modes.Components.Interfaces;
 using GameUI.GameModes;
@@ -25,9 +27,10 @@ namespace Gameplay.Game_Modes {
         public float StartingCountdownTime => 2.5f;
 
 
-        private readonly List<float> _splits = new();
+        protected readonly List<float> _splits = new();
         protected float _lastCheckpointHitTimeSeconds;
-        private Coroutine _splitFadeOutCoroutine;
+        protected Coroutine _splitFadeOutCoroutine;
+        protected Coroutine _startTextCoroutine;
 
         public virtual void OnInitialise() {
             _splits.Clear();
@@ -37,19 +40,21 @@ namespace Gameplay.Game_Modes {
         public virtual void OnBegin() {
             GameModeUIHandler.GameModeUIText.TopCanvasGroup.alpha = 1;
             GameModeUIHandler.GameModeUIText.RightCanvasGroup.alpha = 1;
+            GameModeUIHandler.GameModeUIText.CentralNotificationCanvasGroup.alpha = 1;
+            if (_startTextCoroutine != null) Game.Instance.StopCoroutine(_startTextCoroutine);
+            _startTextCoroutine = Game.Instance.StartCoroutine(ShowStarterText());
         }
 
         public virtual void OnFixedUpdate() {
-            var time = GameModeTimer.CurrentSessionTimeSeconds;
-            var headerColor = time < -1 ? Color.red : time < 0 ? Color.yellow : time < 1.5f ? Color.green : Color.white;
-            GameModeUIHandler.GameModeUIText.TopHeader.color = headerColor;
-            GameModeUIHandler.GameModeUIText.TopHeader.text =
-                TimeExtensions.TimeSecondsToString(Mathf.Abs(GameModeTimer.CurrentSessionTimeSeconds));
+            // display 00:00:00 until it starts
+            var timerDisplay = Math.Max(0, GameModeTimer.CurrentSessionTimeSeconds);
+            GameModeUIHandler.GameModeUIText.TopHeader.text = TimeExtensions.TimeSecondsToString(Mathf.Abs(timerDisplay));
         }
 
         public virtual void OnRestart() {
             if (_splitFadeOutCoroutine != null) Game.Instance.StopCoroutine(_splitFadeOutCoroutine);
             GameModeUIHandler.GameModeUIText.CentralCanvasGroup.alpha = 0;
+            GameModeUIHandler.GameModeUIText.CentralNotificationCanvasGroup.alpha = 0;
             GameModeCheckpoints.Reset();
             _splits.Clear();
             _lastCheckpointHitTimeSeconds = 0;
@@ -128,6 +133,40 @@ namespace Gameplay.Game_Modes {
                     5f
                 )
             );
+        }
+
+        protected IEnumerator ShowStarterText() {
+            while (GameModeTimer.CurrentSessionTimeSeconds < 2.5f) {
+                var time = GameModeTimer.CurrentSessionTimeSeconds;
+
+                var starterTextColor = time < -1 ? Color.Lerp(Color.red, Color.white, time.Remap(-1.5f, -1f, 0, 1))
+                    : time < 0 ? Color.Lerp(Color.yellow, Color.white, time.Remap(-0.5f, 0, 0, 1))
+                    : time < 1.5f ? Color.Lerp(Color.green, Color.white, time.Remap(1, 1.5f, 0, 1)) : Color.white;
+
+                var starterText = time < -2 ? "" :
+                    time < -1 ? "READY" :
+                    time < 0 ? "SET" :
+                    "GO!";
+
+                GameModeUIHandler.GameModeUIText.CentralNotification.color = starterTextColor;
+                GameModeUIHandler.GameModeUIText.CentralNotification.text = starterText;
+
+                // get our current time for each second as value between 0 and 1 for purpose of font size animation fun times
+                var fontScaleFromTime = time < -1 ? 2 + time :
+                    time < 0 ? 1 + time :
+                    0; // on "GO" just stay at max scale
+
+                var scale = fontScaleFromTime.Remap(0.5f, 1f, 1f, 0.6f);
+                GameModeUIHandler.GameModeUIText.CentralNotification.transform.localScale = new Vector3(scale, scale, scale);
+
+                // fade out from 1.5s to 2.5s at start
+                GameModeUIHandler.GameModeUIText.CentralNotificationCanvasGroup.alpha = time.Remap(1.5f, 2f, 1, 0);
+                yield return new WaitForFixedUpdate();
+            }
+
+            // reset notification state for whatever future uses
+            GameModeUIHandler.GameModeUIText.CentralNotification.transform.localScale = Vector3.one;
+            GameModeUIHandler.GameModeUIText.CentralNotificationCanvasGroup.alpha = 0;
         }
     }
 }
