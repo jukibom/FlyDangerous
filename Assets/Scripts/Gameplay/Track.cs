@@ -244,7 +244,8 @@ namespace Gameplay {
         [Button("Create Checkpoint")]
         [UsedImplicitly]
         private void CreateCheckpoint() {
-            Instantiate(checkpointPrefab, checkpointContainer.transform);
+            var checkpoint = Instantiate(checkpointPrefab, checkpointContainer.transform);
+            Selection.activeGameObject = checkpoint.gameObject;
             ForceRefresh();
         }
 
@@ -259,6 +260,7 @@ namespace Gameplay {
 
             var checkpoint = Instantiate(checkpointPrefab, checkpointContainer.transform, true);
             checkpoint.transform.SetPositionAndRotation(ship.Position, ship.transform.rotation);
+            Selection.activeGameObject = checkpoint.gameObject;
 
             ForceRefresh();
         }
@@ -272,23 +274,44 @@ namespace Gameplay {
             }
 
             var lastCheckpoint = checkpointContainer.Checkpoints.Last();
-            checkpointContainer.AddCheckpoint(SerializableCheckpoint.FromCheckpoint(lastCheckpoint));
-
+            var checkpoint = checkpointContainer.AddCheckpoint(SerializableCheckpoint.FromCheckpoint(lastCheckpoint));
+            Selection.activeGameObject = checkpoint.gameObject;
             ForceRefresh();
         }
 
         [Button("Create Modifier")]
         [UsedImplicitly]
         private void CreateModifier() {
-            Instantiate(modifierPrefab, modifierContainer.transform);
+            var modifier = Instantiate(modifierPrefab, modifierContainer.transform);
+            Selection.activeGameObject = modifier.gameObject;
             ForceRefresh();
         }
 
         [Button("Create Billboard")]
         [UsedImplicitly]
         private void CreateBillboard() {
-            Instantiate(billboardPrefab, billboardContainer.transform);
+            var billboard = Instantiate(billboardPrefab, billboardContainer.transform);
+            Selection.activeGameObject = billboard.gameObject;
             ForceRefresh();
+        }
+
+        #endregion
+
+        #region Visualisation
+
+        private void RefreshLineRenderer() {
+            var curvedLineRenderer = GetComponent<CurvedLineRenderer>();
+
+            if (curvedLineRenderer.enabled)
+                // we add the curved line point as a child transform so it can be manually tweaked if needed in the editor without moving the checkpoints
+                foreach (var checkpoint in Checkpoints) {
+                    var curvedLinePoint = checkpoint.GetComponentInChildren<CurvedLinePoint>();
+                    if (curvedLinePoint != null) Destroy(curvedLinePoint.gameObject);
+
+                    var linePoint = new GameObject("Curved Line Point");
+                    linePoint.AddComponent<CurvedLinePoint>();
+                    linePoint.transform.SetParent(checkpoint.transform, false);
+                }
         }
 
         #endregion
@@ -304,10 +327,24 @@ namespace Gameplay {
             Billboards = billboardContainer.BillboardSpawners;
         }
 
+        [Button("Toggle line drawing")]
+        [UsedImplicitly]
+        private void ToggleLineDrawing() {
+            var lineRenderer = GetComponent<LineRenderer>();
+            var curvedLineRenderer = GetComponent<CurvedLineRenderer>();
+            var shouldShow = !lineRenderer.enabled;
+
+            lineRenderer.enabled = shouldShow;
+            curvedLineRenderer.enabled = shouldShow;
+
+            RefreshLineRenderer();
+        }
+
         [Button("Force Refresh")]
         [UsedImplicitly]
         private void ForceRefresh() {
             OnValidate();
+            RefreshLineRenderer();
         }
 #endif
     }
