@@ -48,6 +48,10 @@ namespace Menus.Main_Menu.Components {
 
         private void OnEnable() {
             tabGroup.OnTabSelected += OnLevelGroupTabSelected;
+
+            // try to find the first level in the list and select it if already loaded (e.g. returning to this menu)
+            var firstLevel = levelPrefabContainer.GetComponentsInChildren<LevelUIElement>().First();
+            if (firstLevel != null) firstLevel.GetComponent<Button>().Select();
         }
 
         private void OnDisable() {
