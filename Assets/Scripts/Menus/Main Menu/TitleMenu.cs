@@ -13,6 +13,8 @@ namespace Menus.Main_Menu {
         [SerializeField] private Image pressAnyButton;
         [SerializeField] private InputSystemUIInputModule inputHandler;
         [SerializeField] private Image cursor;
+        [SerializeField] private Image headerImage;
+        [SerializeField] private Sprite flyDangerousAFLogo;
 
         public MenuBase nextMenu;
 
@@ -24,6 +26,9 @@ namespace Menus.Main_Menu {
         }
 
         public void OnEnable() {
+            // lol
+            if (Game.IsAprilFools) headerImage.sprite = flyDangerousAFLogo;
+
             AddOnAnyKeyHandler();
             cursor.enabled = false;
         }

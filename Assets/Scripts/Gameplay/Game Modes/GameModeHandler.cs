@@ -8,6 +8,7 @@ using Core.Player;
 using Core.Replays;
 using Core.Scores;
 using Core.ShipModel;
+using CustomWebSocketSharp;
 using Gameplay.Game_Modes.Components;
 using Gameplay.Game_Modes.Components.Interfaces;
 using GameUI;
@@ -304,7 +305,7 @@ namespace Gameplay.Game_Modes {
             var bottomRightText = _inGameUI.GameModeUIHandler.MusicNameText;
 
             var musicTrack = _levelData.musicTrack;
-            bottomLeftText.text = $"\"{_levelData.name.ToUpper()}\"";
+            bottomLeftText.text = _levelData.name.IsNullOrEmpty() ? "" : $"\"{_levelData.name.ToUpper()}\"";
             bottomRightText.text = musicTrack == MusicTrack.None ? "" : $"MUSIC: {musicTrack.Artist.ToUpper()} - {musicTrack.Name.ToUpper()}";
             bottomCanvasGroup.alpha = 0;
 

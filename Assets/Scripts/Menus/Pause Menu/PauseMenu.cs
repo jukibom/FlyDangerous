@@ -25,9 +25,15 @@ namespace Menus.Pause_Menu {
 
         [SerializeField] private Button quitButton;
 
+        [SerializeField] private Image headerImage;
+        [SerializeField] private Sprite flyDangerousAFLogo;
+
         private Coroutine fadeTextCoroutine;
 
         public void OnEnable() {
+            // lol
+            if (Game.IsAprilFools) headerImage.sprite = flyDangerousAFLogo;
+
             // multiplayer specific UI changes
             var player = FdPlayer.FindLocalShipPlayer;
             if (player && Game.Instance.SessionType == SessionType.Multiplayer) {

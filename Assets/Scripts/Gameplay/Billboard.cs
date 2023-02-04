@@ -1,4 +1,5 @@
 using System.Collections;
+using Core;
 using Misc;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering;
@@ -97,6 +98,10 @@ namespace Gameplay {
         }
 
         private void DrawTexture(string textureResource) {
+            // lol
+            if (textureResource == "Billboard Fly Dangerous" && Game.IsAprilFools)
+                textureResource += " AF";
+
             renderTextureCamera.gameObject.SetActive(false);
             var texture = Resources.Load<Texture2D>($"billboards/{textureResource}");
             screen.material.SetTexture(BillboardTextureProperty, texture);

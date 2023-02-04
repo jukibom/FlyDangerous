@@ -3,6 +3,7 @@ using Menus.Options;
 using Mirror;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace Menus.Main_Menu {
     public class TopMenu : MenuBase {
@@ -13,6 +14,13 @@ namespace Menus.Main_Menu {
         [SerializeField] private OptionsMenu optionsMenu;
         [SerializeField] private PatchNotesMenu patchNotesMenu;
         [SerializeField] private GameObject patchNotesUpdatedText;
+        [SerializeField] private Image headerImage;
+        [SerializeField] private Sprite flyDangerousAFLogo;
+
+        private void OnEnable() {
+            // lol
+            if (Game.IsAprilFools) headerImage.sprite = flyDangerousAFLogo;
+        }
 
         public void Start() {
             // needed on game start
