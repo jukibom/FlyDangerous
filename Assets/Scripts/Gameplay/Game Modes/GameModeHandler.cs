@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Audio;
 using Core;
 using Core.MapData;
 using Core.Player;
@@ -27,6 +28,7 @@ namespace Gameplay.Game_Modes {
         private IGameMode _gameMode;
         private InGameUI _inGameUI;
         private Track _track;
+        private LevelData _levelData;
         private bool _isValid = true;
 
         // Handler refs
@@ -43,6 +45,7 @@ namespace Gameplay.Game_Modes {
 
         // lifecycle
         private Coroutine _startSequenceCoroutine;
+        private Coroutine _showLevelAndMusicName;
         private bool _gameStarted;
 
         private ShipPlayer LocalPlayer { get; set; }
@@ -84,6 +87,7 @@ namespace Gameplay.Game_Modes {
             _gameMode = gameMode;
             _inGameUI = inGameUI;
             _track = track;
+            _levelData = levelData;
 
             _track.OnCheckpointHit += OnCheckpointHit;
 
@@ -105,6 +109,9 @@ namespace Gameplay.Game_Modes {
             if (_gameModeWithTimer != null) _gameModeWithTimer.GameModeTimer = _gameModeTimer;
 
             _gameMode.OnInitialise();
+
+            if (_showLevelAndMusicName != null) StopCoroutine(_showLevelAndMusicName);
+            _showLevelAndMusicName = StartCoroutine(ShowLevelAndMusicName());
         }
 
         public void StartGame() {
@@ -161,6 +168,7 @@ namespace Gameplay.Game_Modes {
         public void Quit() {
             // premature quit out
             if (_startSequenceCoroutine != null) StopCoroutine(_startSequenceCoroutine);
+            if (_showLevelAndMusicName != null) StopCoroutine(_showLevelAndMusicName);
 
             // nuke all ghosts and references
             StopGhosts();
@@ -288,6 +296,32 @@ namespace Gameplay.Game_Modes {
         private void CheckValidity() {
             var version = Application.version;
             _isValid = _isValid && !version.Contains("-dev") && Game.Instance.ShipParameters.ToJsonString().Equals(ShipParameters.Defaults.ToJsonString());
+        }
+
+        private IEnumerator ShowLevelAndMusicName() {
+            var bottomCanvasGroup = _inGameUI.GameModeUIHandler.LevelDetailsCanvasGroup;
+            var bottomLeftText = _inGameUI.GameModeUIHandler.LevelNameText;
+            var bottomRightText = _inGameUI.GameModeUIHandler.MusicNameText;
+
+            var musicTrack = _levelData.musicTrack;
+            bottomLeftText.text = $"\"{_levelData.name.ToUpper()}\"";
+            bottomRightText.text = musicTrack == MusicTrack.None ? "" : $"MUSIC: {musicTrack.Artist.ToUpper()} - {musicTrack.Name.ToUpper()}";
+            bottomCanvasGroup.alpha = 0;
+
+            yield return new WaitForSeconds(1);
+            while (bottomCanvasGroup.alpha < 1) {
+                bottomCanvasGroup.alpha += Time.fixedDeltaTime * 2;
+                yield return new WaitForFixedUpdate();
+            }
+
+            yield return new WaitForSeconds(3);
+
+            while (bottomCanvasGroup.alpha > 0) {
+                bottomCanvasGroup.alpha -= Time.fixedDeltaTime * 2;
+                yield return new WaitForFixedUpdate();
+            }
+
+            bottomCanvasGroup.alpha = 0;
         }
     }
 }

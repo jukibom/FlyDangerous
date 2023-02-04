@@ -3,6 +3,7 @@ using Core.Player;
 using Core.Scores;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 namespace GameUI.GameModes {
     public class GameModeUIHandler : MonoBehaviour {
@@ -11,10 +12,15 @@ namespace GameUI.GameModes {
 
         [SerializeField] private HoldBoostButtonText holdBoostButtonText;
         [SerializeField] private RaceResultsScreen raceResultsScreen;
-
+        [SerializeField] private CanvasGroup levelDetailsCanvasGroup;
+        [SerializeField] private Text levelNameText;
+        [SerializeField] private Text musicNameText;
         public GameModeUIText GameModeUIText => gameModeUIText;
         public HoldBoostButtonText HoldBoostButtonText => holdBoostButtonText;
         public RaceResultsScreen RaceResultsScreen => raceResultsScreen;
+        public CanvasGroup LevelDetailsCanvasGroup => levelDetailsCanvasGroup;
+        public Text LevelNameText => levelNameText;
+        public Text MusicNameText => musicNameText;
 
         private void Awake() {
             HideResultsScreen();
