@@ -44,12 +44,6 @@ namespace Core.ShipModel.Modifiers.Boost {
             var effectOverDistanceNormalised = 1 - distance.magnitude / (lengthMeters - streamCapsuleEndCapRadius);
             effects.shipForce += Vector3.Lerp(Vector3.zero, streamTransform.forward * shipForceAdd, effectOverDistanceNormalised);
 
-            // apply force along the x / y pulling the ship into the centre
-            var directionToCenter = new Vector3(streamPosition.x, streamPosition.y, 0) -
-                                    new Vector3(shipPosition.x, shipPosition.y, 0);
-            effects.shipForce += Vector3.Lerp(Vector3.zero, directionToCenter.normalized * shipForceAdd,
-                effectOverDistanceNormalised * directionToCenter.normalized.magnitude);
-
             // apply additional thrust and max speed if the ship vector is facing the correct direction
             if (Vector3.Dot(transform.forward, shipRigidBody.velocity) > 0) {
                 effects.shipDeltaSpeedCap += Mathf.Lerp(0, shipSpeedAdd, effectOverDistanceNormalised);

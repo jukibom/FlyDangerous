@@ -11,7 +11,7 @@ namespace Core.ShipModel.Modifiers {
 
     public class ModifierEngine : MonoBehaviour {
         [SerializeField] private float shipDeltaSpeedCapDamping = 0.99f;
-        [SerializeField] private float shipDeltaThrustCapDamping = 0.998f;
+        [SerializeField] private float shipDeltaThrustCapDamping = 0.995f;
         [SerializeField] private float shipForceDamping = 0.8f;
         [SerializeField] private float shipDragDamping = 0.95f;
         [SerializeField] private float shipAngularDragDamping = 0.95f;
