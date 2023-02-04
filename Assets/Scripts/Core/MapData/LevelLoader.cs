@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Audio;
 using Cinemachine;
+using Core.MapData.Serializable;
 using Core.Player;
 using Den.Tools;
 using Gameplay;
@@ -147,7 +148,14 @@ namespace Core.MapData {
         private LevelData GenerateLevelData() {
             var track = FindObjectOfType<Track>();
             var player = FdPlayer.LocalShipPlayer;
-            if (track && player) return track.Serialize(player.AbsoluteWorldPosition, player.transform.rotation);
+            if (track && player) {
+                var startPosition = SerializableVector3.FromVector3(player.AbsoluteWorldPosition);
+                var startRotation = SerializableVector3.FromVector3(player.transform.rotation.eulerAngles);
+                var levelData = track.Serialize();
+                levelData.startPosition = startPosition;
+                levelData.startRotation = startRotation;
+                return levelData;
+            }
 
             // failed to find, this function has maybe been called in menu or invalid loaded state
             Debug.LogError("Failed to find required components to serialise level data!");
