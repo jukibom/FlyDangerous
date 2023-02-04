@@ -82,7 +82,7 @@ namespace Gameplay {
                     checkpoint.OnHit -= HandleOnCheckpointHit;
         }
 
-        public LevelData Serialize(Vector3? overrideStartPosition = null, Quaternion? overrideStartRotation = null) {
+        public LevelData Serialize() {
             var loadedLevelData = Game.Instance.LoadedLevelData;
 
             var levelData = new LevelData {
@@ -93,22 +93,22 @@ namespace Gameplay {
                 musicTrack = MusicTrack.FromString(musicTrack),
                 environment = Environment.FromString(environment),
                 terrainSeed = string.IsNullOrEmpty(loadedLevelData.terrainSeed) ? null : loadedLevelData.terrainSeed,
-                startPosition = SerializableVector3.FromVector3(overrideStartPosition ?? startPosition),
-                startRotation = SerializableVector3.FromVector3(overrideStartRotation?.eulerAngles ?? startRotation)
+                startPosition = SerializableVector3.FromVector3(startPosition),
+                startRotation = SerializableVector3.FromVector3(startRotation)
             };
 
-            checkpointContainer.RefreshCheckpoints();
+            // refresh containers
+            OnValidate();
+
             if (checkpointContainer.Checkpoints.Count > 0)
                 levelData.checkpoints = checkpointContainer
                     .Checkpoints
                     .ConvertAll(SerializableCheckpoint.FromCheckpoint);
 
-            billboardContainer.RefreshBillboardSpawners();
             if (billboardContainer.BillboardSpawners.Count > 0)
                 levelData.billboards = billboardContainer.BillboardSpawners
                     .ConvertAll(SerializableBillboard.FromBillboardSpawner);
 
-            modifierContainer.RefreshModifierSpawners();
             if (modifierContainer.ModifierSpawners.Count > 0)
                 levelData.modifiers = modifierContainer.ModifierSpawners
                     .ConvertAll(SerializableModifier.FromModifierSpawner);
@@ -122,7 +122,7 @@ namespace Gameplay {
         public void Deserialize(LevelData levelData) {
             trackName = levelData.name;
             gameMode = levelData.gameType.Name;
-            authorTimeTarget = levelData.authorTimeTarget;
+            authorTimeTarget = levelData.authorTimeTarget > 0 ? levelData.authorTimeTarget : 60;
             environment = levelData.environment.Name;
             musicTrack = levelData.musicTrack.Name;
 
@@ -241,14 +241,6 @@ namespace Gameplay {
         [UsedImplicitly] [ReorderableList] [SerializeField]
         private List<BillboardSpawner> Billboards = new();
 
-        [Button("Create Checkpoint")]
-        [UsedImplicitly]
-        private void CreateCheckpoint() {
-            var checkpoint = Instantiate(checkpointPrefab, checkpointContainer.transform);
-            Selection.activeGameObject = checkpoint.gameObject;
-            ForceRefresh();
-        }
-
         [Button("Create Checkpoint At Ship Location")]
         [UsedImplicitly]
         private void CreateCheckpointAtShip() {
@@ -258,41 +250,44 @@ namespace Gameplay {
                 return;
             }
 
-            var checkpoint = Instantiate(checkpointPrefab, checkpointContainer.transform, true);
+            var checkpoint = CreateNewTrackObject(checkpointPrefab, checkpointContainer);
             checkpoint.transform.SetPositionAndRotation(ship.Position, ship.transform.rotation);
-            Selection.activeGameObject = checkpoint.gameObject;
-
-            ForceRefresh();
         }
 
-        [Button("Create Checkpoint At Last Position")]
+        [Button("Create Checkpoint")]
         [UsedImplicitly]
-        private void CreateCheckpointAtLastPosition() {
-            if (checkpointContainer.Checkpoints.Count == 0) {
-                Debug.LogError("No checkpoints to get last position from!");
-                return;
-            }
-
-            var lastCheckpoint = checkpointContainer.Checkpoints.Last();
-            var checkpoint = checkpointContainer.AddCheckpoint(SerializableCheckpoint.FromCheckpoint(lastCheckpoint));
-            Selection.activeGameObject = checkpoint.gameObject;
-            ForceRefresh();
+        private void CreateCheckpointAtSelectedPosition() {
+            CreateNewTrackObject(checkpointPrefab, checkpointContainer);
         }
 
         [Button("Create Modifier")]
         [UsedImplicitly]
         private void CreateModifier() {
-            var modifier = Instantiate(modifierPrefab, modifierContainer.transform);
-            Selection.activeGameObject = modifier.gameObject;
-            ForceRefresh();
+            CreateNewTrackObject(modifierPrefab, modifierContainer);
         }
 
-        [Button("Create Billboard")]
+        [Button("Create Billboard ")]
         [UsedImplicitly]
         private void CreateBillboard() {
-            var billboard = Instantiate(billboardPrefab, billboardContainer.transform);
-            Selection.activeGameObject = billboard.gameObject;
+            CreateNewTrackObject(billboardPrefab, billboardContainer);
+        }
+
+
+        private T CreateNewTrackObject<T>(T objectToInstantiate, MonoBehaviour container) where T : MonoBehaviour {
+            var position = Vector3.zero;
+            var rotation = Quaternion.identity;
+
+            // if anything is currently selected in the editor, place it there instead of at origin
+            if (Selection.activeGameObject != null) {
+                position = Selection.activeGameObject.transform.position;
+                rotation = Selection.activeGameObject.transform.rotation;
+            }
+
+            var newObject = Instantiate(objectToInstantiate, container.transform);
+            newObject.transform.SetPositionAndRotation(position, rotation);
+            Selection.activeGameObject = newObject.gameObject;
             ForceRefresh();
+            return newObject;
         }
 
         #endregion
