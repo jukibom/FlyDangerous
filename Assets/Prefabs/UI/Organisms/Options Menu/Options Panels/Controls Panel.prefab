@@ -129,7 +129,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -40, y: -40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8027640668383768272
 CanvasRenderer:
@@ -387,6 +387,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1a7c5ef4e763e1428003b001abcac92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tabId: 
   tabPanel: {fileID: 4694160829341900054}
   selectedColor: {r: 0.5058824, g: 0.7607843, b: 1, a: 1}
 --- !u!224 &2162847551564551335 stripped
@@ -930,6 +931,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1a7c5ef4e763e1428003b001abcac92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tabId: 
   tabPanel: {fileID: 4694160829598222712}
   selectedColor: {r: 0.5058824, g: 0.7607843, b: 1, a: 1}
 --- !u!224 &2162847553250537663 stripped
@@ -1837,7 +1839,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 229506454713316803, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_Text
-      value: button7  |  Saitek Saitek X52 Pro Flight Control System
+      value: Button 3  |  Logitech Extreme 3D
       objectReference: {fileID: 0}
     - target: {fileID: 279085688582757737, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1969,7 +1971,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 334641363341856852, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_Text
-      value: stick/x  |  Saitek Saitek X52 Pro Flight Control System
+      value: Stick X  |  Logitech Extreme 3D
       objectReference: {fileID: 0}
     - target: {fileID: 334641363632496935, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
@@ -2543,6 +2545,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 579352211041990995, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
+      propertyPath: m_Text
+      value: Stick X  |  Saitek X52 Pro Flight Control System
+      objectReference: {fileID: 0}
     - target: {fileID: 579352211118635205, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -2857,7 +2863,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 731379333171223785, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_Text
-      value: button26  |  Saitek Saitek X52 Pro Flight Control System
+      value: Button 26  |  Saitek X52 Pro Flight Control System
       objectReference: {fileID: 0}
     - target: {fileID: 779833943592972704, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
@@ -3349,7 +3355,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1045245113869487218, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_Text
-      value: rz  |  Saitek Saitek X52 Pro Flight Control System
+      value: Rz  |  Logitech Extreme 3D
       objectReference: {fileID: 0}
     - target: {fileID: 1045245113913691620, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
@@ -3653,7 +3659,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1177190283428494880, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_Text
-      value: hat/right  |  Saitek Saitek X52 Pro Flight Control System
+      value: HatSwitch Right  |  Saitek X52 Pro Flight Control System
       objectReference: {fileID: 0}
     - target: {fileID: 1209720654919399289, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
@@ -3673,7 +3679,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1209720655334892080, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_Text
-      value: hat/down  |  Saitek Saitek X52 Pro Flight Control System
+      value: HatSwitch Down  |  Logitech Extreme 3D
       objectReference: {fileID: 0}
     - target: {fileID: 1209720655735336275, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
@@ -3837,7 +3843,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1322777304135382176, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_Text
-      value: hat/up  |  Saitek Saitek X52 Pro Flight Control System
+      value: HatSwitch Up  |  Saitek X52 Pro Flight Control System
       objectReference: {fileID: 0}
     - target: {fileID: 1350970857108718787, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
@@ -4197,7 +4203,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1473555274828625189, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_Text
-      value: hat/down  |  Saitek Saitek X52 Pro Flight Control System
+      value: HatSwitch Down  |  Saitek X52 Pro Flight Control System
       objectReference: {fileID: 0}
     - target: {fileID: 1475780802092088090, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
@@ -4273,7 +4279,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1489323999576541053, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_Text
-      value: button31  |  Saitek Saitek X52 Pro Flight Control System
+      value: Trigger  |  Logitech Extreme 3D
       objectReference: {fileID: 0}
     - target: {fileID: 1588930716790116363, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindText
@@ -4991,6 +4997,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1794083315118514644, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
+      propertyPath: m_Text
+      value: Stick Y  |  Saitek X52 Pro Flight Control System
+      objectReference: {fileID: 0}
     - target: {fileID: 1794083315339972775, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -5589,7 +5599,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1930347838929962094, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_Text
-      value: button27  |  Saitek Saitek X52 Pro Flight Control System
+      value: Button 27  |  Saitek X52 Pro Flight Control System
       objectReference: {fileID: 0}
     - target: {fileID: 1930347839333059341, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
@@ -6257,7 +6267,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2196456884111234085, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_Text
-      value: button4  |  Saitek Saitek X52 Pro Flight Control System
+      value: Button 4  |  Saitek X52 Pro Flight Control System
       objectReference: {fileID: 0}
     - target: {fileID: 2229861728530539892, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
@@ -6481,7 +6491,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2472650692015318793, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_Text
-      value: hat/up  |  Saitek Saitek X52 Pro Flight Control System
+      value: HatSwitch Up  |  Logitech Extreme 3D
       objectReference: {fileID: 0}
     - target: {fileID: 2472650692640010816, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
@@ -7145,7 +7155,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2905012057405325655, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_Text
-      value: button25  |  Saitek Saitek X52 Pro Flight Control System
+      value: Button 25  |  Saitek X52 Pro Flight Control System
       objectReference: {fileID: 0}
     - target: {fileID: 2905012058087167006, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
@@ -7474,6 +7484,10 @@ PrefabInstance:
     - target: {fileID: 3060744532347761303, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_Text
       value: unbound primary
+      objectReference: {fileID: 0}
+    - target: {fileID: 3060744532687971193, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
+      propertyPath: m_Text
+      value: Button 2  |  Logitech Extreme 3D
       objectReference: {fileID: 0}
     - target: {fileID: 3075649392703193054, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
@@ -8425,7 +8439,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3877298449583658429, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_Text
-      value: button4  |  Saitek Saitek X52 Pro Flight Control System
+      value: Button 4  |  Logitech Extreme 3D
       objectReference: {fileID: 0}
     - target: {fileID: 3920467990697467661, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
@@ -8781,7 +8795,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4089045888129407440, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_Text
-      value: button24  |  Saitek Saitek X52 Pro Flight Control System
+      value: Button 24  |  Saitek X52 Pro Flight Control System
       objectReference: {fileID: 0}
     - target: {fileID: 4089045888528766643, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
@@ -9731,6 +9745,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4825291687565985312, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
+      propertyPath: m_Text
+      value: Ry  |  Saitek X52 Pro Flight Control System
+      objectReference: {fileID: 0}
+    - target: {fileID: 4825291687630690254, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
+      propertyPath: m_Text
+      value: =  |  Keyboard
+      objectReference: {fileID: 0}
     - target: {fileID: 4833869955539948554, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -10077,7 +10099,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5114824078909454266, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_Text
-      value: button3  |  Saitek Saitek X52 Pro Flight Control System
+      value: Button 3  |  Saitek X52 Pro Flight Control System
       objectReference: {fileID: 0}
     - target: {fileID: 5122382650077710070, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
@@ -10899,6 +10921,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5587936237722711855, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
+      propertyPath: m_Text
+      value: Ry  |  Saitek X52 Pro Flight Control System
+      objectReference: {fileID: 0}
+    - target: {fileID: 5587936237792388801, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
+      propertyPath: m_Text
+      value: '-  |  Keyboard'
+      objectReference: {fileID: 0}
     - target: {fileID: 5589409908943663855, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -11691,6 +11721,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6248950804811257427, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
+      propertyPath: m_Text
+      value: Stick Down  |  Logitech Extreme 3D
+      objectReference: {fileID: 0}
     - target: {fileID: 6248950804992083901, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_Text
       value: Num 8  |  Keyboard
@@ -11821,7 +11855,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6342611885644566664, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_Text
-      value: hat/left  |  Saitek Saitek X52 Pro Flight Control System
+      value: HatSwitch Left  |  Logitech Extreme 3D
       objectReference: {fileID: 0}
     - target: {fileID: 6342611886280166917, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
@@ -13183,6 +13217,10 @@ PrefabInstance:
       propertyPath: m_Text
       value: Num 2  |  Keyboard
       objectReference: {fileID: 0}
+    - target: {fileID: 7215311501222515562, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
+      propertyPath: m_Text
+      value: Stick Up  |  Logitech Extreme 3D
+      objectReference: {fileID: 0}
     - target: {fileID: 7217157995973946583, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -14465,7 +14503,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7682067657293682097, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_Text
-      value: hat/right  |  Saitek Saitek X52 Pro Flight Control System
+      value: HatSwitch Right  |  Logitech Extreme 3D
       objectReference: {fileID: 0}
     - target: {fileID: 7682067657719136504, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
@@ -15457,7 +15495,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7973403978098187863, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_Text
-      value: button3  |  Saitek Saitek X52 Pro Flight Control System
+      value: Button 6  |  Logitech Extreme 3D
       objectReference: {fileID: 0}
     - target: {fileID: 8005801074041896800, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
@@ -15849,7 +15887,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8309414362272681399, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_Text
-      value: z  |  Saitek Saitek X52 Pro Flight Control System
+      value: Rz  |  Saitek X52 Pro Flight Control System
       objectReference: {fileID: 0}
     - target: {fileID: 8309414362354043937, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
@@ -16029,7 +16067,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8441297894470027279, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_Text
-      value: button19  |  Saitek Saitek X52 Pro Flight Control System
+      value: Button 19  |  Saitek X52 Pro Flight Control System
       objectReference: {fileID: 0}
     - target: {fileID: 8441297895067883138, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
@@ -16425,7 +16463,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8566501186487397975, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_Text
-      value: stick/y  |  Saitek Saitek X52 Pro Flight Control System
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 8566501186927563647, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
@@ -16573,7 +16611,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8566501187629193044, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_Text
-      value: Right Stick/Y  |  Gamepad
+      value: Right Stick Y  |  Xbox Controller
       objectReference: {fileID: 0}
     - target: {fileID: 8566501188120147049, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
@@ -16705,7 +16743,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8907932077644405459, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_Text
-      value: button8  |  Saitek Saitek X52 Pro Flight Control System
+      value: Button 8  |  Saitek X52 Pro Flight Control System
+      objectReference: {fileID: 0}
+    - target: {fileID: 8907932078102154045, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
+      propertyPath: m_Text
+      value: Button 5  |  Logitech Extreme 3D
       objectReference: {fileID: 0}
     - target: {fileID: 8920243401030147198, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
@@ -17081,7 +17123,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9186357940837511642, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_Text
-      value: hat/left  |  Saitek Saitek X52 Pro Flight Control System
+      value: HatSwitch Left  |  Saitek X52 Pro Flight Control System
       objectReference: {fileID: 0}
     - target: {fileID: 9212835061786381303, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
@@ -17122,6 +17164,50 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7406402409173532167}
     m_Modifications:
+    - target: {fileID: 10377373979886324, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 10377373979886324, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 10377373979886324, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 10377373979886324, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 10377373979886324, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 10377373979886324, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 10377374777738872, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 10377374777738872, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 10377374777738872, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 10377374777738872, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 10377374777738872, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 50595055510139707, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -17148,7 +17234,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 96269943799049443, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 843
+      value: 379
       objectReference: {fileID: 0}
     - target: {fileID: 96269943799049443, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_SizeDelta.y
@@ -17156,7 +17242,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 96269943799049443, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 421.5
+      value: 189.5
       objectReference: {fileID: 0}
     - target: {fileID: 96269943799049443, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -17198,6 +17284,30 @@ PrefabInstance:
       propertyPath: m_AnchorMin.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 259646499358346197, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 259646499358346197, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 259646499358346197, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 259646499358346197, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 259646499358346197, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 259646499358346197, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 293153296721583902, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -17208,7 +17318,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 293153296721583902, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 1686
+      value: 758
       objectReference: {fileID: 0}
     - target: {fileID: 293153296721583902, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_SizeDelta.y
@@ -17216,7 +17326,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 293153296721583902, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 863
+      value: 399
       objectReference: {fileID: 0}
     - target: {fileID: 293153296721583902, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -17232,7 +17342,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 423838100230143697, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 843
+      value: 379
       objectReference: {fileID: 0}
     - target: {fileID: 423838100230143697, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_SizeDelta.y
@@ -17240,7 +17350,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 423838100230143697, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 421.5
+      value: 189.5
       objectReference: {fileID: 0}
     - target: {fileID: 423838100230143697, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -17268,6 +17378,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 457259509943136826, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 603494541346490449, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 910805567492612002, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
@@ -17400,7 +17514,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 910805568801294764, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_Size
-      value: 0.53382355
+      value: 0.18421052
       objectReference: {fileID: 0}
     - target: {fileID: 910805568801294764, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_Value
@@ -17504,6 +17618,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1107258272652691346, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1345936869042534758, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1394370523014607833, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
@@ -17622,6 +17740,50 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1939203502345302979, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1939203502345302979, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1939203502345302979, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1939203502345302979, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1939203502345302979, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1939203502345302979, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1939203503158064975, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1939203503158064975, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1939203503158064975, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1939203503158064975, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1939203503158064975, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2059018244221308820, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -17700,7 +17862,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2122487582989516573, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 843
+      value: 379
       objectReference: {fileID: 0}
     - target: {fileID: 2122487582989516573, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_SizeDelta.y
@@ -17708,7 +17870,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2122487582989516573, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 421.5
+      value: 189.5
       objectReference: {fileID: 0}
     - target: {fileID: 2122487582989516573, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -18220,7 +18382,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4740853303535147037, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 843
+      value: 379
       objectReference: {fileID: 0}
     - target: {fileID: 4740853303535147037, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_SizeDelta.y
@@ -18228,7 +18390,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4740853303535147037, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 421.5
+      value: 189.5
       objectReference: {fileID: 0}
     - target: {fileID: 4740853303535147037, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -18274,6 +18436,46 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5451965721894194983, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5451965721894194983, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5451965721894194983, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5451965721894194983, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5451965721894194983, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5541861181747269222, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5541861181747269222, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5541861181747269222, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5541861181747269222, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5541861181747269222, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5595026759505838975, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -18332,7 +18534,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5595026760320632819, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 1726
+      value: 798
       objectReference: {fileID: 0}
     - target: {fileID: 5595026760320632819, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_SizeDelta.y
@@ -18340,7 +18542,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5595026760320632819, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 883
+      value: 419
       objectReference: {fileID: 0}
     - target: {fileID: 5595026760320632819, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -18366,6 +18568,26 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5865081536548044304, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5865081536548044304, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5865081536548044304, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5865081536548044304, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5865081536548044304, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5902373732491167665, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -18443,6 +18665,26 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6014945495688482094, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6207389672925790033, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6207389672925790033, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6207389672925790033, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6207389672925790033, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6207389672925790033, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
@@ -18730,6 +18972,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7780426993807971025, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7846527132166505600, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -18753,6 +18999,10 @@ PrefabInstance:
     - target: {fileID: 8027640667541814512, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_Padding.m_Left
       value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 8157162717228114918, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8207696308915824903, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: onToggle.m_PersistentCalls.m_Calls.Array.size
@@ -19277,6 +19527,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1a7c5ef4e763e1428003b001abcac92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tabId: 
   tabPanel: {fileID: 7497466274726721940}
   selectedColor: {r: 0.5058824, g: 0.7607843, b: 1, a: 1}
 --- !u!224 &5034378863119476414 stripped
@@ -21177,6 +21428,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1a7c5ef4e763e1428003b001abcac92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tabId: 
   tabPanel: {fileID: 7338884726419595239}
   selectedColor: {r: 0.5058824, g: 0.7607843, b: 1, a: 1}
 --- !u!1001 &8320925124968588701

@@ -327,25 +327,38 @@ namespace Menus.Options {
                 if (shouldReEnable) action.Enable();
             }
 
-            var inverted = IsInvertEnabled(action.bindings[bindingIndex]);
-            var deadzone = GetAxisDeadzone(action.bindings[bindingIndex]);
+            var inputBinding = action.bindings[bindingIndex];
+            var inverted = IsInvertEnabled(inputBinding);
+            var deadzone = GetAxisDeadzone(inputBinding);
 
             // Configure the rebind.
             ongoingRebind = action.PerformInteractiveRebinding(bindingIndex)
                 .WithoutGeneralizingPathOfSelectedControl()
+                .WithCancelingThrough("<Keyboard>/escape")
+                .WithControlsExcluding("<keyboard>/anyKey")
+                .WithControlsExcluding("/Mouse/press")
                 .OnComputeScore((control, _) => {
-                    // Very specific edge-case fix for VKB flight sticks (and possibly other devices?) reporting multiple devices with garbage data, this reduces the potential match score of those garbage inputs
-                    var score = 0f;
-                    if (control.IsPressed()) score += 1f;
+                    // default behaviour first (although we can't actually get at the magnitude because this callback is awful)
+                    float score = 0;
 
+                    // We don't want synthetic controls to not be bindable at all but they should
+                    // generally cede priority to controls that aren't synthetic. So we bump all
+                    // scores of controls that aren't synthetic.
                     if (!control.synthetic)
                         score += 1f;
 
+                    // Very specific edge-case fix for VKB flight sticks (and possibly other devices?) reporting multiple devices with garbage data, this reduces the potential match score of those garbage inputs
+                    if (control.IsPressed()) score += 1f;
                     if (control.parent != null && control.parent is not Joystick) score /= 2f;
 
+                    // increase score of component inputs for split axis (isConcrete just means "concrete value" in this context, e.g. stick/left vs stick/x, and hat/left vs hat/x)
+                    var isConcrete = control.synthetic || control.layout == "button" || control.layout == "DiscreteButton";
+                    if (inputBinding.isPartOfComposite && isConcrete) score += 1.5f;
+
+                    // Debug.Log($"OnComputeScore! path {control.path}, pressed {control.IsPressed()}, parent {control.parent}, mag {control.magnitude}, synthestic {control.synthetic}, composit {inputBinding.isPartOfComposite}, final score {score}");
                     return score;
                 })
-                .OnMatchWaitForAnother(0.5f)
+                .OnMatchWaitForAnother(0.75f)
                 .OnPotentialMatch(operation => {
                     // special case for delete key(s) - unbind the binding!
                     if (operation.selectedControl.path is "/Keyboard/delete" or "/Keyboard/backspace") {
@@ -356,21 +369,36 @@ namespace Menus.Options {
                         return;
                     }
 
-                    if (operation.selectedControl.path is "/Keyboard/escape") {
-                        operation.Cancel();
-                        return;
+                    // prevent button binds on full range axis
+                    if (!inputBinding.isPartOfComposite && operation.expectedControlType == "Axis" && operation.selectedControl.layout != "Axis") {
+                        operation.RemoveCandidate(operation.selectedControl);
+                        if (operation.candidates.Count == 0) {
+                            m_RebindText.color = Color.red;
+                            m_RebindText.text = "Cannot bind button to axis!";
+                        }
                     }
 
-                    // special case for Axis binds - we want to ignore button presses on axis binds (but not
-                    // necessarily axis binds on other button bindings). 
-                    // NOTE: This is not a direct comparison because "Button" bindings receive input "Key" from
-                    // the keyboard. No, I am not making this shit up I swear
-                    if (ongoingRebind.expectedControlType == "Axis" && operation.selectedControl.layout != "Axis")
-                        operation.Cancel();
+                    // prevent inputs which only match full range axis on split or button inputs
+                    if (inputBinding.isPartOfComposite && operation.expectedControlType == "Axis" && operation.selectedControl.layout == "Axis") {
+                        operation.RemoveCandidate(operation.selectedControl);
+                        if (operation.candidates.Count == 0) {
+                            m_RebindText.color = Color.red;
+                            m_RebindText.text = "Cannot bind full range axis to this action!";
+                        }
+                    }
+                    else {
+                        m_RebindText.color = Color.white;
+                        m_RebindText.text = $"{operation.selectedControl.device.displayName}\n\n{operation.selectedControl.displayName}";
+                    }
                 })
                 .OnComplete(
                     operation => {
-                        // restore previous axis settings if applicable (kill me now)
+                        if (operation.selectedControl == null) {
+                            PerformInteractiveRebind(bindingText, action, bindingIndex, bindingType, allCompositeParts);
+                            return;
+                        }
+
+                        // restore previous axis settings if applicable
                         if (ongoingRebind.expectedControlType == "Axis") ApplyAxisOverrides(action, bindingIndex, inverted, deadzone);
                         m_RebindOverlay?.SetActive(false);
                         m_RebindStopEvent?.Invoke(this, operation);
@@ -386,10 +414,6 @@ namespace Menus.Options {
                                 PerformInteractiveRebind(bindingText, action, nextBindingIndex, bindingType, true);
                         }
                     })
-                // this prevents binding to the `e` key, yes really
-                // actually this was supposedly fixed but now it binds everything as "any key" which um. Isn't correct. So this cludge stays
-                // .WithCancelingThrough("<Keyboard>/escape")
-                .WithCancelingThrough("an enormous string of absolute gibberish which overrides the default which is escape and causes the above bug")
                 .OnCancel(
                     operation => {
                         m_RebindStopEvent?.Invoke(this, operation);
@@ -410,7 +434,8 @@ namespace Menus.Options {
                 var text = (!string.IsNullOrEmpty(ongoingRebind.expectedControlType)
                                ? $"{partName.ToUpper()} {bindingTypeName.ToUpper()} BINDING\n\nWaiting for {ongoingRebind.expectedControlType} input..."
                                : $"{partName}\nWaiting for input...")
-                           + "\n\n-------------------------------------------\n\nESC to cancel\nDEL / BACKSPACE to clear binding\n\n(Please toggle numlock ON for keyboard)";
+                           + "\n\n-------------------------------------------\n\nESC to cancel\nDEL / BACKSPACE to clear binding";
+                m_RebindText.color = Color.white;
                 m_RebindText.text = text;
             }
 

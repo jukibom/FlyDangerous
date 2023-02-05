@@ -1,5 +1,6 @@
 ﻿using Core;
 using Core.Player;
+using CustomWebSocketSharp;
 using FdUI;
 using Menus.Main_Menu;
 using UnityEngine;
@@ -13,11 +14,16 @@ namespace Menus.Options {
         [SerializeField] private Button cancelButton;
 
         public InputActionAsset actions;
+
         private bool _flightAssistDefaultsChanged;
+
         private SaveData _previousPrefs;
         private SaveData _pendingPrefs;
+        private string _startingBindings;
 
         protected override void OnOpen() {
+            _startingBindings = Preferences.Instance.GetString("inputBindings");
+
             if (_pendingPrefs != null) {
                 Preferences.Instance.SetPreferences(_pendingPrefs);
                 _pendingPrefs = null;
@@ -48,6 +54,11 @@ namespace Menus.Options {
             if (force) {
                 _previousPrefs = null;
                 _pendingPrefs = null;
+                if (!_startingBindings.IsNullOrEmpty()) {
+                    Preferences.Instance.SetString("inputBindings", _startingBindings);
+                    _startingBindings = null;
+                }
+
                 base.Cancel();
                 return;
             }
@@ -87,23 +98,15 @@ namespace Menus.Options {
             Progress(caller, false, false);
         }
 
-        // protected override void OnClose() {
-        //     // not sure about this - the hack here is to save the preferences, compare with previous and revert if the user chooses to discard.
-        //     SavePreferences();
-        //     if (_previousPrefs.ToJsonString() != Preferences.Instance.GetCurrent().ToJsonString())
-        //         Debug.Log("Discarded changed preferences! (TODO: confirmation dialog)");
-        //     // TODO: Confirmation dialog (if there is state to commit)
-        //
-        //     RevertPreferences();
-        //     Preferences.Instance.Save();
-        // }
-
         public void OnFlightAssistDefaultsChange(Dropdown dropdown) {
             _flightAssistDefaultsChanged = Preferences.Instance.GetString("flightAssistDefault") != GetFlightAssistDefaultPreference(dropdown.value);
         }
 
         private void LoadPreferences() {
             Debug.Log("Load preferences");
+
+            Game.Instance.LoadBindings();
+
             var toggleOptions = GetComponentsInChildren<ToggleOption>(true);
             foreach (var toggleOption in toggleOptions) toggleOption.IsEnabled = Preferences.Instance.GetBool(toggleOption.Preference);
 
@@ -118,11 +121,6 @@ namespace Menus.Options {
             var toggleRadialOptions = GetComponentsInChildren<FdToggleGroup>(true);
             foreach (var toggleRadialOption in toggleRadialOptions)
                 toggleRadialOption.Value = Preferences.Instance.GetString(toggleRadialOption.Preference);
-        }
-
-        private void RevertPreferences() {
-            Preferences.Instance.SetPreferences(_previousPrefs);
-            Game.Instance.LoadBindings();
         }
 
         // Save all the settings but don't maintain that state in prefs and don't serialize to disk
