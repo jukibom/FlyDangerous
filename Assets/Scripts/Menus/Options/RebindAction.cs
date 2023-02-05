@@ -369,12 +369,16 @@ namespace Menus.Options {
                         return;
                     }
 
+                    var deviceName = operation.selectedControl.device.displayName;
+                    var bindName = operation.selectedControl.displayName;
+
                     // prevent button binds on full range axis
                     if (!inputBinding.isPartOfComposite && operation.expectedControlType == "Axis" && operation.selectedControl.layout != "Axis") {
                         operation.RemoveCandidate(operation.selectedControl);
                         if (operation.candidates.Count == 0) {
                             m_RebindText.color = Color.red;
-                            m_RebindText.text = "Cannot bind button to axis!";
+                            m_RebindText.text =
+                                $"{deviceName}\n\n{bindName}\n\n\nCannot bind to full range axis!";
                         }
                     }
 
@@ -383,12 +387,13 @@ namespace Menus.Options {
                         operation.RemoveCandidate(operation.selectedControl);
                         if (operation.candidates.Count == 0) {
                             m_RebindText.color = Color.red;
-                            m_RebindText.text = "Cannot bind full range axis to this action!";
+                            m_RebindText.text =
+                                $"{deviceName}\n\n{bindName}\n\n\nCannot bind full range axis to this action!";
                         }
                     }
-                    else {
+                    else if (operation.selectedControl != null) {
                         m_RebindText.color = Color.white;
-                        m_RebindText.text = $"{operation.selectedControl.device.displayName}\n\n{operation.selectedControl.displayName}";
+                        m_RebindText.text = $"{deviceName}\n\n{bindName}";
                     }
                 })
                 .OnComplete(
