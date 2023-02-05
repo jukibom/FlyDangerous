@@ -6,6 +6,7 @@ namespace Gameplay {
     [RequireComponent(typeof(CinemachineVirtualCamera))]
     public class ShipFreeCamera : MonoBehaviour {
         private float _ascendMotion;
+        private CinemachineHardLookAt _hardLookAt;
 
         private Vector2 _motion;
 
@@ -35,12 +36,14 @@ namespace Gameplay {
         private void OnEnable() {
             _virtualCamera = GetComponent<CinemachineVirtualCamera>();
             _transposer = _virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
+            _hardLookAt = _virtualCamera.GetCinemachineComponent<CinemachineHardLookAt>();
             ShipCamera = GetComponent<ShipCamera>();
             InitPosition(new Vector3(10, 0, 0));
         }
 
         public void InitPosition(Vector3 position) {
             _transposer.m_FollowOffset = position;
+            if (_hardLookAt != null) _hardLookAt.enabled = false;
         }
 
         public void Move(Vector2 motion) {
@@ -56,7 +59,7 @@ namespace Gameplay {
         }
 
         public void ToggleAimLock() {
-            Debug.Log("Todo: set target transform to ship?");
+            _hardLookAt.enabled = !_hardLookAt.enabled;
         }
 
         public void Zoom(float zoomAmount) {
