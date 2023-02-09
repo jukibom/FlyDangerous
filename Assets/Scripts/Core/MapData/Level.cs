@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Core.Scores;
 using Misc;
 using UnityEngine;
@@ -31,7 +31,9 @@ namespace Core.MapData {
         public static readonly Level TinyTrial = new("Tiny Trial", "tiny-trial", GameType.Sprint);
         public static readonly Level Yeet = new("Yeet", "yeet", GameType.Sprint);
         public static readonly Level Coaster = new("Coaster", "coaster", GameType.Sprint);
+        public static readonly Level ALittleDip = new("A Little Dip", "a-little-dip", GameType.Sprint);
         public static readonly Level LoopDeLoop = new("Loop-de-loop", "loop-de-loop", GameType.Sprint);
+        public static readonly Level Labyrinth = new("Labyrinth", "labyrinth", GameType.Sprint);
 
         // tests
         public static readonly Level HideAndSeekLapTest = new("Hide and Seek but sexier", "hide-and-seek", GameType.Laps);
@@ -64,7 +66,7 @@ namespace Core.MapData {
             return new[] {
                 GentleStart, UpsAndDowns, AroundTheBlock, HoldOnToYourStomach, AroundTheStation, Snake, SpeedIsHalfTheBattle, YouMightWannaHoldBack,
                 DeathValley, CrestLoop, YouHaveHeadlightsRight, LimiterMastery, ThreadTheNeedle, MountainSpiral, LongRoad, HideAndSeek,
-                YouHaveToStartSomewhere, ALittleVerticality, TinyTrial, Yeet, Coaster, LoopDeLoop, HideAndSeekLapTest
+                YouHaveToStartSomewhere, ALittleVerticality, TinyTrial, Yeet, Coaster, ALittleDip, LoopDeLoop, Labyrinth, HideAndSeekLapTest
             };
         }
 
