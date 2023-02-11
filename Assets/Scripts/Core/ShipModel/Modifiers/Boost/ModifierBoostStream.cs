@@ -29,7 +29,6 @@ namespace Core.ShipModel.Modifiers.Boost {
                 capsuleCollider.height = lengthLocal;
                 capsuleCollider.center = new Vector3(0, 0, lengthLocal / 2 - capsuleCollider.radius);
                 vfx.SetFloat("_streamLength", lengthLocal);
-
                 terrainGenEndpointMarker.localPosition = new Vector3(0, 0, lengthLocal);
             }
         }
@@ -49,6 +48,11 @@ namespace Core.ShipModel.Modifiers.Boost {
                 effects.shipDeltaSpeedCap += Mathf.Lerp(0, shipSpeedAdd, effectOverDistanceNormalised);
                 effects.shipDeltaThrust += Mathf.Lerp(0, shipThrustAdd, effectOverDistanceNormalised);
             }
+        }
+
+        // for some reason the unity editor insists on resetting the vfx which makes building levels a PITA
+        public void OnGUI() {
+            TrailLengthMeters = lengthMeters;
         }
     }
 }

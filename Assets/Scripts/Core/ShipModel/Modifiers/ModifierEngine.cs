@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Core.ShipModel.Modifiers {
     public struct AppliedEffects {
@@ -11,7 +12,7 @@ namespace Core.ShipModel.Modifiers {
 
     public class ModifierEngine : MonoBehaviour {
         [SerializeField] private float shipDeltaSpeedCapDamping = 0.99f;
-        [SerializeField] private float shipDeltaThrustCapDamping = 0.995f;
+        [SerializeField] private float shipDeltaThrustCapDamping = 0.993f;
         [SerializeField] private float shipForceDamping = 0.8f;
         [SerializeField] private float shipDragDamping = 0.95f;
         [SerializeField] private float shipAngularDragDamping = 0.95f;
@@ -23,8 +24,13 @@ namespace Core.ShipModel.Modifiers {
         [SerializeField] private float maxShipAngularDrag = 10;
 
         private AppliedEffects _appliedEffects;
+        private Func<bool> _isBoosting = () => false;
 
         public ref AppliedEffects AppliedEffects => ref _appliedEffects;
+
+        public void Initialize(Func<bool> isShipBoosting) {
+            _isBoosting = isShipBoosting;
+        }
 
         public void Reset() {
             _appliedEffects = new AppliedEffects();
@@ -33,8 +39,11 @@ namespace Core.ShipModel.Modifiers {
         public void FixedUpdate() {
             if (!Game.Instance.GameModeHandler.HasStarted) return;
 
+            // if boosting, reduce the damping of max speed (e.g. 0.99 becomes 0.995)
+            var currentSpeedCapDamping = _isBoosting() ? Mathf.Sqrt(shipDeltaSpeedCapDamping) : shipDeltaSpeedCapDamping;
+
+            _appliedEffects.shipDeltaSpeedCap *= currentSpeedCapDamping;
             _appliedEffects.shipForce *= shipForceDamping;
-            _appliedEffects.shipDeltaSpeedCap *= shipDeltaSpeedCapDamping;
             _appliedEffects.shipDeltaThrust *= shipDeltaThrustCapDamping;
             _appliedEffects.shipDrag *= shipDragDamping;
             _appliedEffects.shipAngularDrag *= shipAngularDragDamping;

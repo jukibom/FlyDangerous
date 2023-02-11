@@ -172,6 +172,7 @@ namespace Core.ShipModel {
 
             // get components
             _modifierEngine = GetComponent<ModifierEngine>();
+            _modifierEngine.Initialize(() => _boostStatus == BoostStatus.Active);
 
             // init layer mask ids
             _checkpointLayerMask = LayerMask.NameToLayer("Checkpoint");
