@@ -31,6 +31,9 @@ namespace Gameplay {
         private Vector3 _offset = Vector3.zero;
         private Vector3 _targetOffset = Vector3.zero;
 
+        private Coroutine _cameraResetCoroutine;
+        private float _cameraRotationDampingOnAwake;
+
         public string Name => cameraName;
 
         // Use the starting position of the active camera as the pivot otherwise the cinemachine system
@@ -53,6 +56,8 @@ namespace Gameplay {
 
         public void Awake() {
             BaseLocalPosition = transform.localPosition;
+            var rotationComponent = Camera.GetCinemachineComponent<CinemachineSameAsFollowTarget>();
+            if (rotationComponent != null) _cameraRotationDampingOnAwake = rotationComponent.m_Damping;
         }
 
         public void Reset() {
@@ -60,7 +65,6 @@ namespace Gameplay {
             // snap the camera, wait a frame for the "animation" (of nothing) to happen and re-enable damping.
             IEnumerator ResetPosition() {
                 var rotationComponent = Camera.GetCinemachineComponent<CinemachineSameAsFollowTarget>();
-                var previousDamping = rotationComponent.m_Damping;
 
                 if (rotationComponent) {
                     // reset position
@@ -73,12 +77,15 @@ namespace Gameplay {
 
                     // handle damping animation
                     rotationComponent.m_Damping = 0;
-                    yield return new WaitForEndOfFrame();
-                    rotationComponent.m_Damping = previousDamping;
+                    yield return YieldExtensions.WaitForFixedFrames(10);
+                    rotationComponent.m_Damping = _cameraRotationDampingOnAwake;
                 }
             }
 
-            if (gameObject.activeInHierarchy) StartCoroutine(ResetPosition());
+            if (gameObject.activeInHierarchy) {
+                if (_cameraResetCoroutine != null) StopCoroutine(_cameraResetCoroutine);
+                _cameraResetCoroutine = StartCoroutine(ResetPosition());
+            }
         }
 
         public void OnEnable() {
