@@ -18,7 +18,7 @@ namespace Core.ShipModel {
         // TODO: manual targetting system
         [CanBeNull] private Target _activeTarget;
 
-        private void FixedUpdate() {
+        private void Update() {
             // update camera if needed
             if (_mainCamera == null || _mainCamera.enabled == false || _mainCamera.gameObject.activeSelf == false)
                 _mainCamera = Camera.main;
@@ -87,7 +87,7 @@ namespace Core.ShipModel {
             targetIndicatorTransform.rotation = _mainCamera.transform.rotation;
 
             target.Opacity = distanceToShip.Remap(5, minDistance, 0, 1);
-            target.Update3dIndicatorOrientation(targetTransform, _mainCamera.transform);
+            target.Update3dIndicatorFromOrientation(targetTransform, _mainCamera.transform);
 
             target.Toggle3dIndicator(target == _activeTarget);
         }

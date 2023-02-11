@@ -13,13 +13,12 @@ namespace GameUI.Components {
         [SerializeField] private GameObject targetIndicator2d;
 
         [SerializeField] private Transform IndicatorModelTransform;
-        [SerializeField] private GameObject Front3dIndicator;
-
-        private MeshRenderer[] _front3dIndicatorMeshRenderers;
+        [SerializeField] private Indicator3D Indicator3D;
 
         private CanvasGroup _canvasGroup;
         private float _targetDistanceMeters;
         private bool _is3dIndicatorActive;
+        private float _facingForwardNormalized;
 
         public string Name {
             get => targetNameText.text;
@@ -51,7 +50,6 @@ namespace GameUI.Components {
 
         private void OnEnable() {
             _canvasGroup = GetComponent<CanvasGroup>();
-            _front3dIndicatorMeshRenderers = Front3dIndicator.GetComponentsInChildren<MeshRenderer>();
             Opacity = 0;
         }
 
@@ -73,19 +71,22 @@ namespace GameUI.Components {
             targetDistanceText.text = text;
         }
 
-        public void Update3dIndicatorOrientation(Transform matchTransform, Transform cameraTransform) {
+        public void Update3dIndicatorFromOrientation(Transform matchTransform, Transform cameraTransform) {
             var orientation = matchTransform.rotation;
             IndicatorModelTransform.gameObject.SetActive(_is3dIndicatorActive && _targetDistanceMeters > 100);
             IndicatorModelTransform.rotation = orientation;
 
-            var frontOpacity = Mathf.Abs(Vector3.SignedAngle(cameraTransform.forward,
-                    cameraTransform.InverseTransformDirection(matchTransform.forward), cameraTransform.right))
-                .Remap(30, 180, 0, 1);
+            var radialDirection = (IndicatorModelTransform.position - cameraTransform.position).normalized;
+            var angle = Vector3.SignedAngle(radialDirection, IndicatorModelTransform.forward, IndicatorModelTransform.up);
 
-            foreach (var meshRenderer in _front3dIndicatorMeshRenderers) {
-                var meshMaterial = meshRenderer.material;
-                meshMaterial.color = new Color(meshMaterial.color.r, meshMaterial.color.g, meshMaterial.color.b, frontOpacity);
-            }
+            // get opacity value from the target facing the camera and facing AWAY from the camera
+            var backwardOpacity = Mathf.Abs(angle).Remap(165, 135, 0, 1);
+            var forwardOpacity = Mathf.Abs(angle).Remap(15, 45, 0, 1);
+
+            var indicator3dFacingNormalised = backwardOpacity * forwardOpacity;
+
+            _facingForwardNormalized = Mathf.Lerp(_facingForwardNormalized, indicator3dFacingNormalised, 0.9f);
+            Indicator3D.SetFacingValueNormalized(_facingForwardNormalized);
         }
 
         public void Toggle3dIndicator(bool isActive) {
