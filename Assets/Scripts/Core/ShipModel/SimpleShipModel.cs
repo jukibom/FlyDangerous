@@ -321,6 +321,7 @@ namespace Core.ShipModel {
 
         private void Restart() {
             ShipShake?.Reset();
+            indicatorCanvas.alpha = 0;
             externalBoostInterruptedAudioSource.Stop();
             engineBoostAudioSource.Stop();
             externalBoostAudioSource.Stop();

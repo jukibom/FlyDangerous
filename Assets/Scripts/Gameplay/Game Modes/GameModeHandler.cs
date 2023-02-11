@@ -56,11 +56,13 @@ namespace Gameplay.Game_Modes {
         private void OnEnable() {
             _replayRecorder = GetComponent<ReplayRecorder>();
             Game.OnGameSettingsApplied += OnGameSettingsApplied;
+            Game.OnRestart += Restart;
         }
 
         private void OnDisable() {
             if (_track != null) _track.OnCheckpointHit -= OnCheckpointHit;
             Game.OnGameSettingsApplied -= OnGameSettingsApplied;
+            Game.OnRestart -= Restart;
         }
 
         private void FixedUpdate() {
@@ -125,7 +127,7 @@ namespace Gameplay.Game_Modes {
             HandleStartSequence();
         }
 
-        public void Restart() {
+        private void Restart() {
             StopGhosts();
             LocalPlayer.User.DisableUIInput();
             _inGameUI.GameModeUIHandler.GameModeUIText.HideGameUIText(false);

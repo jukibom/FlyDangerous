@@ -111,9 +111,6 @@ namespace Core.MapData {
                     // don't need to wait for full scene reload, just reset state and notify subscribers
                     DoReset(positionToWarpTo, rotationToWarpTo);
                 }
-
-                // Restart the scene
-                Game.Instance.GameModeHandler.Restart();
             }
             else {
                 Debug.LogWarning("No local ship player found for restart action");
