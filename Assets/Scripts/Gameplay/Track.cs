@@ -127,7 +127,7 @@ namespace Gameplay {
             musicTrack = levelData.musicTrack.Name;
 
             startPosition = levelData.startPosition.ToVector3();
-            startPosition = levelData.startRotation.ToVector3();
+            startRotation = levelData.startRotation.ToVector3();
 
             if (levelData.checkpoints?.Count > 0)
                 levelData.checkpoints.ForEach(c => {
@@ -161,6 +161,8 @@ namespace Gameplay {
         private void SetGameMode() {
             var player = FdPlayer.FindLocalShipPlayer;
             if (player) {
+                Game.Instance.LoadedLevelData.startPosition = SerializableVector3.FromVector3(player.AbsoluteWorldPosition);
+                Game.Instance.LoadedLevelData.startRotation = SerializableVector3.FromVector3(player.transform.rotation.eulerAngles);
                 Game.Instance.GameModeHandler.InitialiseGameMode(player, Serialize(), GameType.FromString(gameMode).GameMode, player.User.InGameUI, this);
                 Game.Instance.RestartSession();
             }
@@ -274,6 +276,7 @@ namespace Gameplay {
 
 
         private T CreateNewTrackObject<T>(T objectToInstantiate, MonoBehaviour container) where T : MonoBehaviour {
+            Undo.RecordObject(this, $"Create new {objectToInstantiate.name}");
             var position = Vector3.zero;
             var rotation = Quaternion.identity;
 
@@ -297,7 +300,7 @@ namespace Gameplay {
         private void RefreshLineRenderer() {
             var curvedLineRenderer = GetComponent<CurvedLineRenderer>();
 
-            if (curvedLineRenderer.enabled)
+            if (curvedLineRenderer.enabled) {
                 // we add the curved line point as a child transform so it can be manually tweaked if needed in the editor without moving the checkpoints
                 foreach (var checkpoint in Checkpoints) {
                     var curvedLinePoint = checkpoint.GetComponentInChildren<CurvedLinePoint>();
@@ -307,6 +310,20 @@ namespace Gameplay {
                     linePoint.AddComponent<CurvedLinePoint>();
                     linePoint.transform.SetParent(checkpoint.transform, false);
                 }
+
+                // Join up for laps
+                if (gameMode == GameType.Laps.Name) {
+                    var loopBackCheckpoint = Checkpoints.FindLast(c => c.Type == CheckpointType.End) ??
+                                             Checkpoints.Find(c => c.Type == CheckpointType.Start);
+                    if (loopBackCheckpoint != null) {
+                        var linePoint = new GameObject("Curved Line Point End");
+                        linePoint.AddComponent<CurvedLinePoint>();
+                        var loopBackTransform = loopBackCheckpoint.transform;
+                        linePoint.transform.SetPositionAndRotation(loopBackTransform.position, loopBackTransform.rotation);
+                        linePoint.transform.SetParent(checkpointContainer.transform, true);
+                    }
+                }
+            }
         }
 
         #endregion
