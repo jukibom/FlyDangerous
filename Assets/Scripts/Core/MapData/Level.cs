@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Core.Scores;
 using Misc;
 using UnityEngine;
@@ -26,17 +26,19 @@ namespace Core.MapData {
         public static readonly Level HideAndSeek = new("Hide and Seek", "hide-and-seek", GameType.Sprint, true);
 
         // GLORIOUS NEW WORLD MAPS (for how long? who knows!)
+        // Sprints
         public static readonly Level YouHaveToStartSomewhere = new("You Have to Start Somewhere", "you-have-to-start-somewhere", GameType.Sprint);
         public static readonly Level ALittleVerticality = new("A Little Verticality", "a-little-verticality", GameType.Sprint);
         public static readonly Level TinyTrial = new("Tiny Trial", "tiny-trial", GameType.Sprint);
         public static readonly Level Yeet = new("Yeet", "yeet", GameType.Sprint);
         public static readonly Level Coaster = new("Coaster", "coaster", GameType.Sprint);
+        public static readonly Level DesertDash = new("Desert Dash", "desert-dash", GameType.Sprint);
         public static readonly Level ALittleDip = new("A Little Dip", "a-little-dip", GameType.Sprint);
         public static readonly Level LoopDeLoop = new("Loop-de-loop", "loop-de-loop", GameType.Sprint);
         public static readonly Level Labyrinth = new("Labyrinth", "labyrinth", GameType.Sprint);
 
-        // tests
-        public static readonly Level HideAndSeekLapTest = new("Hide and Seek but sexier", "hide-and-seek", GameType.Laps);
+        // Laps
+        public static readonly Level AroundTheStationV2 = new("Around the Station", "around-the-station-v2", GameType.Laps);
 
 
         private readonly string _jsonPath;
@@ -66,7 +68,7 @@ namespace Core.MapData {
             return new[] {
                 GentleStart, UpsAndDowns, AroundTheBlock, HoldOnToYourStomach, AroundTheStation, Snake, SpeedIsHalfTheBattle, YouMightWannaHoldBack,
                 DeathValley, CrestLoop, YouHaveHeadlightsRight, LimiterMastery, ThreadTheNeedle, MountainSpiral, LongRoad, HideAndSeek,
-                YouHaveToStartSomewhere, ALittleVerticality, TinyTrial, Yeet, Coaster, ALittleDip, LoopDeLoop, Labyrinth, HideAndSeekLapTest
+                YouHaveToStartSomewhere, ALittleVerticality, TinyTrial, Yeet, Coaster, DesertDash, ALittleDip, LoopDeLoop, Labyrinth, AroundTheStationV2
             };
         }
 

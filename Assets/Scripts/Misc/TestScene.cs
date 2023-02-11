@@ -113,11 +113,11 @@ namespace Misc {
                 Game.Instance.FadeFromBlack();
                 yield return new WaitForSeconds(0.7f);
 
-                // Start
-                Game.Instance.GameModeHandler.Begin();
-
                 // My work here is done
                 spawnLocation.gameObject.SetActive(false);
+
+                // Start
+                Game.Instance.GameModeHandler.Begin();
             }
 
             StartCoroutine(StartGame());
@@ -134,7 +134,7 @@ namespace Misc {
         private void CreateTestSecondShip() {
             var player = FdPlayer.FindLocalShipPlayer;
             if (player) {
-                Instantiate(shipGhostPrefab, player.transform.position + new Vector3(0, 0, 10), Quaternion.identity);
+                Instantiate(shipGhostPrefab, player.transform.position + new Vector3(0, 0, 10), player.transform.rotation);
                 var targettingSystem = FindObjectOfType<TargettingSystem>();
                 if (targettingSystem) targettingSystem.ResetTargets();
             }
