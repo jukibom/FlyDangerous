@@ -53,7 +53,6 @@ namespace Core {
                 case "invertArcadeYAxis":
                 case "graphics-terrain-details":
                 case "graphics-vsync":
-                case "bHapticsEnabled":
                 case "autoTrackSnapForward":
                     return true;
 
@@ -67,6 +66,7 @@ namespace Core {
                 case "forceRelativeMouseWithFAOff":
                 case "autoShipRotation":
                 case "autoShipRoll":
+                case "bHapticsEnabled":
                 case "telemetryEnabled":
                 case "simRacingStudioEnabled":
                 case "openTrackEnabled":
