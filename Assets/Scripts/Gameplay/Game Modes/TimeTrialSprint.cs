@@ -53,6 +53,10 @@ namespace Gameplay.Game_Modes {
 
         public virtual void OnRestart() {
             if (_splitFadeOutCoroutine != null) Game.Instance.StopCoroutine(_splitFadeOutCoroutine);
+            if (_startTextCoroutine != null) Game.Instance.StopCoroutine(_startTextCoroutine);
+
+            GameModeUIHandler.GameModeUIText.TopCanvasGroup.alpha = 0;
+            GameModeUIHandler.GameModeUIText.RightCanvasGroup.alpha = 0;
             GameModeUIHandler.GameModeUIText.CentralCanvasGroup.alpha = 0;
             GameModeUIHandler.GameModeUIText.CentralNotificationCanvasGroup.alpha = 0;
             GameModeCheckpoints.Reset();

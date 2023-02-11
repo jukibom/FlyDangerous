@@ -27,5 +27,11 @@ namespace Misc {
 
             onComplete?.Invoke();
         }
+
+        // If coroutine isn't null, stop it before restarting it. Requires a handle to read and write to.
+        public static void StopAndStartCoroutine(this MonoBehaviour gameObject, ref Coroutine coroutineHandle, IEnumerator coroutine) {
+            if (coroutineHandle != null) gameObject.StopCoroutine(coroutineHandle);
+            coroutineHandle = gameObject.StartCoroutine(coroutine);
+        }
     }
 }

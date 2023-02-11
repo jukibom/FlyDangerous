@@ -46,6 +46,7 @@ namespace Core.ShipModel {
 
         private bool _shipActive;
         private Coroutine _boostCoroutine;
+        private Coroutine _ignitionSequenceFlickerCoroutine;
         private bool _velocityLimiterActive;
 
         public virtual void Start() {
@@ -210,8 +211,10 @@ namespace Core.ShipModel {
             if (_shipActive != shipInstrumentData.ShipActive) {
                 _shipActive = shipInstrumentData.ShipActive;
 
-                if (_shipActive) StartCoroutine(IgnitionSequenceFlicker());
-                else indicatorCanvas.alpha = 0;
+                if (_shipActive)
+                    this.StopAndStartCoroutine(ref _ignitionSequenceFlickerCoroutine, IgnitionSequenceFlicker());
+                else
+                    indicatorCanvas.alpha = 0;
             }
 
             #endregion
@@ -327,6 +330,7 @@ namespace Core.ShipModel {
             externalBoostAudioSource.Stop();
             externalBoostThrusterAudioSource.Stop();
             if (_boostCoroutine != null) StopCoroutine(_boostCoroutine);
+            if (_ignitionSequenceFlickerCoroutine != null) StopCoroutine(_ignitionSequenceFlickerCoroutine);
         }
 
         private IEnumerator IgnitionSequenceFlicker() {
