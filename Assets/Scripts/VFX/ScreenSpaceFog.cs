@@ -35,7 +35,7 @@ namespace VFX {
                 var tileGenBuffer = 1.7f; // a little leeway for time to generate tiles in the distance
 
                 var fogEndDistance = (tileSize * tileChunkCount - tileSize / 2) / tileGenBuffer;
-                var fogStartDistance = Mathf.Max(1000f, fogEndDistance - fogEndDistance / 1.25f);
+                var fogStartDistance = Mathf.Max(fogEndDistance / 2, fogEndDistance - tileSize);
 
                 fog.fogEndDistance.Override(fogEndDistance);
                 fog.fogStartDistance.Override(fogStartDistance);
