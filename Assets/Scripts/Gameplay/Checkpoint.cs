@@ -22,6 +22,7 @@ namespace Gameplay {
 
         private bool _isActive;
         private bool _isValidEnd;
+        private static readonly int seed = Shader.PropertyToID("_Seed");
 
         public CheckpointType Type {
             get => type;
@@ -41,6 +42,9 @@ namespace Gameplay {
 
             if (Type == CheckpointType.End) overlay.material = invalidEndMaterial;
 
+            overlay.material.SetFloat(seed, Random.Range(0, 1f));
+
+            _isValidEnd = false;
             _isActive = Type != CheckpointType.Start;
         }
 
