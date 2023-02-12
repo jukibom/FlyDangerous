@@ -329,6 +329,7 @@ namespace Core {
                 // wait for local ship client object
                 yield return FdPlayer.WaitForShipPlayer();
                 var ship = FdPlayer.LocalShipPlayer;
+                ship.User.ShipCameraRig.Reset();
 
                 // Allow the rigid body to initialise before setting new parameters!
                 yield return new WaitForEndOfFrame();
