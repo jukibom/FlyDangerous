@@ -31,6 +31,7 @@ namespace Core.MapData {
         public static readonly Level ALittleVerticality = new("A Little Verticality", "a-little-verticality", GameType.Sprint);
         public static readonly Level TinyTrial = new("Tiny Trial", "tiny-trial", GameType.Sprint);
         public static readonly Level Yeet = new("Yeet", "yeet", GameType.Sprint);
+        public static readonly Level Sightseeing = new("Sightseeing", "sightseeing", GameType.Sprint);
         public static readonly Level Coaster = new("Coaster", "coaster", GameType.Sprint);
         public static readonly Level DesertDash = new("Desert Dash", "desert-dash", GameType.Sprint);
         public static readonly Level ALittleDip = new("A Little Dip", "a-little-dip", GameType.Sprint);
@@ -68,7 +69,8 @@ namespace Core.MapData {
             return new[] {
                 GentleStart, UpsAndDowns, AroundTheBlock, HoldOnToYourStomach, AroundTheStation, Snake, SpeedIsHalfTheBattle, YouMightWannaHoldBack,
                 DeathValley, CrestLoop, YouHaveHeadlightsRight, LimiterMastery, ThreadTheNeedle, MountainSpiral, LongRoad, HideAndSeek,
-                YouHaveToStartSomewhere, ALittleVerticality, TinyTrial, Yeet, Coaster, DesertDash, ALittleDip, LoopDeLoop, Labyrinth, AroundTheStationV2
+                YouHaveToStartSomewhere, ALittleVerticality, TinyTrial, Yeet, Sightseeing, Coaster, DesertDash, ALittleDip, LoopDeLoop, Labyrinth,
+                AroundTheStationV2
             };
         }
 
