@@ -97,8 +97,10 @@ namespace Gameplay {
                 startRotation = SerializableVector3.FromVector3(startRotation)
             };
 
+#if UNITY_EDITOR
             // refresh containers
             OnValidate();
+#endif
 
             if (checkpointContainer.Checkpoints.Count > 0)
                 levelData.checkpoints = checkpointContainer
