@@ -273,6 +273,7 @@ namespace Core.ShipModel {
         public void BringToStop() {
             ShipActive = false;
             _stopShip = true;
+            _modifierEngine.Reset();
         }
 
         private void AttemptBoost() {
@@ -684,12 +685,14 @@ namespace Core.ShipModel {
 
         // Check for modifier and apply it if found
         private void ModifierCollisionCheck() {
-            var rayHits = VelocityBoxCast(out var raycastHitCount, 1 << _modifierLayerMask);
+            if (ShipActive) {
+                var rayHits = VelocityBoxCast(out var raycastHitCount, 1 << _modifierLayerMask);
 
-            for (var i = 0; i < raycastHitCount; i++) {
-                var raycastHit = rayHits[i];
-                var modifier = raycastHit.collider.GetComponentInParent(typeof(IModifier));
-                if (modifier) _modifierEngine.ApplyModifier(targetRigidbody, modifier as IModifier);
+                for (var i = 0; i < raycastHitCount; i++) {
+                    var raycastHit = rayHits[i];
+                    var modifier = raycastHit.collider.GetComponentInParent(typeof(IModifier));
+                    if (modifier) _modifierEngine.ApplyModifier(targetRigidbody, modifier as IModifier);
+                }
             }
         }
 
