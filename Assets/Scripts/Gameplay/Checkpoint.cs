@@ -1,3 +1,4 @@
+using NaughtyAttributes;
 using UnityEngine;
 
 namespace Gameplay {
@@ -13,7 +14,9 @@ namespace Gameplay {
 
         public event CheckpointHit OnHit;
 
-        [SerializeField] private CheckpointType type = CheckpointType.Check;
+        [OnValueChanged("Reset")] [SerializeField]
+        private CheckpointType type = CheckpointType.Check;
+
         [SerializeField] private MeshRenderer overlay;
         [SerializeField] private Material checkMaterial;
         [SerializeField] private Material validEndMaterial;
