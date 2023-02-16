@@ -68,6 +68,10 @@ namespace Menus.Main_Menu.Components {
                     LoadLevels(Level.List().ToList().FindAll(level => level.GameType == GameType.Laps && !level.IsLegacy));
                     footer.text = "FOLLOW THE CIRCUIT, HIT EVERY CHECKPOINT, COMPLETE ALL LAPS.\nORDER OF CHECKPOINTS DOESN'T STRICTLY MATTER.";
                     break;
+                case "puzzle":
+                    LoadLevels(Level.List().ToList().FindAll(level => level.GameType == GameType.Puzzle && !level.IsLegacy));
+                    footer.text = "NO DEFINED PATH AND NO DEFINED END, FIND THE FASTEST ROUTE.";
+                    break;
                 case "legacy":
                     LoadLevels(Level.List().ToList().FindAll(level => level.GameType == GameType.Sprint && level.IsLegacy));
                     footer.text = "THESE ARE OLD SPRINT MAPS AND MAY BE IMPOSSIBLE TO BEAT THE LEADERBOARD!\nHERE FOR POSTERITY.";

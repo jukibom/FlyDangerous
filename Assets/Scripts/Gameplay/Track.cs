@@ -71,6 +71,8 @@ namespace Gameplay {
             if (player) {
                 startPosition = player.AbsoluteWorldPosition;
                 startRotation = player.transform.rotation.eulerAngles;
+                Game.Instance.LoadedLevelData.startPosition = SerializableVector3.FromVector3(startPosition);
+                Game.Instance.LoadedLevelData.startRotation = SerializableVector3.FromVector3(startRotation);
             }
         }
 

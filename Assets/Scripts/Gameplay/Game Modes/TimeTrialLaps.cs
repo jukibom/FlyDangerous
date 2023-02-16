@@ -10,13 +10,13 @@ namespace Gameplay.Game_Modes {
     // If we find start, we use that until the first checkpoint is hit and then it becomes the end.
     // If we find end, that becomes start and the previous logic applies.
     public class TimeTrialLaps : TimeTrialSprint {
-        private enum TimeTrialCheckpointMode {
+        private enum TimeTrialLapsCheckpointMode {
             Start,
             End,
             Both
         }
 
-        private TimeTrialCheckpointMode _timeTrialCheckpointMode;
+        private TimeTrialLapsCheckpointMode _timeTrialLapsCheckpointMode;
 
         private Checkpoint _startCheckpoint;
         private Checkpoint _endCheckpoint;
@@ -34,14 +34,14 @@ namespace Gameplay.Game_Modes {
             _startCheckpoint = GameModeCheckpoints.Checkpoints.Find(c => c.Type == CheckpointType.Start);
             _endCheckpoint = GameModeCheckpoints.Checkpoints.Find(c => c.Type == CheckpointType.End);
 
-            if (_startCheckpoint != null) _timeTrialCheckpointMode = TimeTrialCheckpointMode.Start;
-            if (_endCheckpoint != null) _timeTrialCheckpointMode = TimeTrialCheckpointMode.End;
-            if (_startCheckpoint != null && _endCheckpoint != null) _timeTrialCheckpointMode = TimeTrialCheckpointMode.Both;
+            if (_startCheckpoint != null) _timeTrialLapsCheckpointMode = TimeTrialLapsCheckpointMode.Start;
+            if (_endCheckpoint != null) _timeTrialLapsCheckpointMode = TimeTrialLapsCheckpointMode.End;
+            if (_startCheckpoint != null && _endCheckpoint != null) _timeTrialLapsCheckpointMode = TimeTrialLapsCheckpointMode.Both;
 
-            if (_timeTrialCheckpointMode == TimeTrialCheckpointMode.End) {
+            if (_timeTrialLapsCheckpointMode == TimeTrialLapsCheckpointMode.End) {
                 _startCheckpoint = _endCheckpoint;
                 _startCheckpoint.Type = CheckpointType.Start;
-                _timeTrialCheckpointMode = TimeTrialCheckpointMode.Start;
+                _timeTrialLapsCheckpointMode = TimeTrialLapsCheckpointMode.Start;
             }
         }
 
@@ -70,7 +70,7 @@ namespace Gameplay.Game_Modes {
 
         public override void OnCheckpointHit(Checkpoint checkpoint, float hitTimeSeconds) {
             // if we only have a starting checkpoint, swap it to end after the first hit
-            if (_timeTrialCheckpointMode == TimeTrialCheckpointMode.Start) {
+            if (_timeTrialLapsCheckpointMode == TimeTrialLapsCheckpointMode.Start) {
                 _startCheckpoint.Type = CheckpointType.End;
                 _endCheckpoint = _startCheckpoint;
             }

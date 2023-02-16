@@ -10,12 +10,13 @@ namespace Core.MapData {
 
         private static readonly IGameMode FreeRoamGameMode = new FreeRoam();
         private static readonly IGameMode TimeTrialSprintGameMode = new TimeTrialSprint();
-        private static readonly IGameMode TimeTrialLapsGameMode = new TimeTrialLaps();
+        private static readonly IGameMode TimeTrialLapsGameMode = new TimeTrialPuzzle();
         private static readonly IGameMode HoonAttackGameMode = new HoonAttack();
 
         public static readonly GameType FreeRoam = new("Free Roam", FreeRoamGameMode);
         public static readonly GameType Sprint = new("Sprint", TimeTrialSprintGameMode);
         public static readonly GameType Laps = new("Laps", TimeTrialLapsGameMode);
+        public static readonly GameType Puzzle = new("Puzzle", TimeTrialLapsGameMode);
         public static readonly GameType HoonAttack = new("Hoon Attack", HoonAttackGameMode);
 
         private GameType(string name, IGameMode gameMode) {
@@ -32,7 +33,7 @@ namespace Core.MapData {
         public IGameMode GameMode { get; }
 
         public static IEnumerable<GameType> List() {
-            return new[] { FreeRoam, Sprint, Laps, HoonAttack };
+            return new[] { FreeRoam, Sprint, Laps, Puzzle, HoonAttack };
         }
 
         [UsedImplicitly] // see FdEnum.ReadJson
