@@ -30,6 +30,7 @@ namespace Core.MapData {
         public static readonly Level YouHaveToStartSomewhere = new("You Have to Start Somewhere", "you-have-to-start-somewhere", GameType.Sprint);
         public static readonly Level ALittleVerticality = new("A Little Verticality", "a-little-verticality", GameType.Sprint);
         public static readonly Level TinyTrial = new("Tiny Trial", "tiny-trial", GameType.Sprint);
+        public static readonly Level Corkscrew = new("Corkscrew", "corkscrew", GameType.Sprint);
         public static readonly Level Yeet = new("Yeet", "yeet", GameType.Sprint);
         public static readonly Level Chute = new("Chute", "chute", GameType.Sprint);
         public static readonly Level Sightseeing = new("Sightseeing", "sightseeing", GameType.Sprint);
@@ -71,11 +72,15 @@ namespace Core.MapData {
 
         public static IEnumerable<Level> List() {
             return new[] {
+                // legacy
                 GentleStart, UpsAndDowns, AroundTheBlock, HoldOnToYourStomach, AroundTheStation, Snake, SpeedIsHalfTheBattle, YouMightWannaHoldBack,
                 DeathValley, CrestLoop, YouHaveHeadlightsRight, LimiterMastery, ThreadTheNeedle, MountainSpiral, LongRoad, HideAndSeek,
-                YouHaveToStartSomewhere, ALittleVerticality, TinyTrial, Yeet, Chute, Sightseeing, Coaster, DesertDash, ALittleDip, MarshMarathon, LoopDeLoop,
-                Labyrinth,
+                // new sprints
+                YouHaveToStartSomewhere, ALittleVerticality, TinyTrial, Corkscrew, Yeet, Chute, Sightseeing, Coaster, DesertDash, ALittleDip, MarshMarathon,
+                LoopDeLoop, Labyrinth,
+                // new laps
                 AroundTheStationV2,
+                // new puzzle
                 DecisionsDecisions
             };
         }
