@@ -7,6 +7,7 @@ using Core.MapData;
 using Core.Player;
 using Core.Replays;
 using Core.Scores;
+using JetBrains.Annotations;
 using Menus.Main_Menu.Components;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,7 +20,12 @@ namespace GameUI.GameModes {
         [SerializeField] private LevelCompetitionPanel competitionPanel;
         [SerializeField] private GameObject uiButtons;
         [SerializeField] private Button defaultSelectedButton;
+        [SerializeField] private Button nextLevelButton;
         [SerializeField] private AudioListener temporaryAudioListener;
+
+        [CanBeNull] private Level CurrentLevel => Game.Instance.loadedMainLevel;
+        private Level NextLevel => Level.FromId(CurrentLevel?.Id + 1 ?? 0);
+        private bool IsNextLevelValid => NextLevel.Id > (CurrentLevel?.Id ?? 0) && NextLevel.GameType == CurrentLevel?.GameType;
 
         private void OnEnable() {
             Game.OnRestart += SetReplaysAndHideCursor;
@@ -39,6 +45,7 @@ namespace GameUI.GameModes {
 
         public void Show(Score score, Score previousBest, bool isValid, string replayFilename, string replayFilepath) {
             resultsScreenBackground.enabled = true;
+            nextLevelButton.gameObject.SetActive(IsNextLevelValid);
             StartCoroutine(ShowEndResultsScreen(score, previousBest, isValid, replayFilename, replayFilepath));
         }
 
@@ -63,7 +70,6 @@ namespace GameUI.GameModes {
                 player.User.restartEnabled = true;
             }
 
-            // TODO: animation
             competitionPanel.gameObject.SetActive(true);
             uiButtons.gameObject.SetActive(true);
             defaultSelectedButton.Select();
@@ -99,7 +105,6 @@ namespace GameUI.GameModes {
 
         private async Task UploadLeaderboardResultIfValid(float timeSeconds, string levelHash, string replayFileName, string replayFilePath) {
             if (FdNetworkManager.Instance.HasLeaderboardServices && replayFileName != "" && replayFilePath != "") {
-                // TODO: menu animation
                 uploadScreen.gameObject.SetActive(true);
 
                 var flagId = Flag.FromFilename(Preferences.Instance.GetString("playerFlag")).FixedId;
@@ -135,24 +140,31 @@ namespace GameUI.GameModes {
             FindObjectOfType<InGameUI>()?.OnPauseToggle(false);
         }
 
-        public void NextLevel() {
-            // TODO: probably something better than this hot bullshit but I am very much at the end of my tether (esp. the audio listener)
-            if (Game.Instance.loadedMainLevel != null) {
-                var nextLevel = Level.FromId(Game.Instance.loadedMainLevel.Id + 1);
+        public void LoadNextLevel() {
+            // if we've wrapped around or the game types don't match, yeet to main menu
+            if (!IsNextLevelValid) {
+                QuitToMenu();
+                return;
+            }
 
-                var replaysForNextLevel = Replay.ReplaysForLevel(nextLevel.Data).OrderBy(r => r.ScoreData.raceTime).ToList();
+            if (CurrentLevel != null) {
+                var replaysForNextLevel = Replay.ReplaysForLevel(NextLevel.Data).OrderBy(r => r.ScoreData.raceTime).ToList();
                 Game.Instance.ActiveGameReplays = new List<Replay>();
                 if (replaysForNextLevel.Count > 0) Game.Instance.ActiveGameReplays.Add(replaysForNextLevel.First());
 
-                FdNetworkManager.Instance.StartGameLoadSequence(SessionType.Singleplayer, nextLevel.Data);
-                Game.Instance.loadedMainLevel = nextLevel;
+                FdNetworkManager.Instance.StartGameLoadSequence(SessionType.Singleplayer, NextLevel.Data);
+                Game.Instance.loadedMainLevel = NextLevel;
 
+                // TODO: probably something better than this hot bullshit but I am very much at the end of my tether (esp. the audio listener)
                 // continue to play music while killing the ship and destroying the world (yeet ourselves off the ship!)
                 var lastBastionOfHope = FindObjectOfType<World>();
                 if (lastBastionOfHope) {
                     transform.parent = lastBastionOfHope.transform;
                     temporaryAudioListener.enabled = true;
                 }
+            }
+            else {
+                QuitToMenu();
             }
         }
     }
