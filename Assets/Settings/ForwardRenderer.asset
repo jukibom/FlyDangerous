@@ -43,15 +43,15 @@ MonoBehaviour:
     m_Bits: 2147483647
   m_DefaultStencilState:
     overrideStencilState: 0
-    stencilReference: 0
+    stencilReference: 15
     stencilCompareFunction: 8
-    passOperation: 0
-    failOperation: 0
-    zFailOperation: 0
+    passOperation: 4
+    failOperation: 1
+    zFailOperation: 1
   m_ShadowTransparentReceive: 1
   m_RenderingMode: 0
   m_DepthPrimingMode: 0
-  m_CopyDepthMode: 0
+  m_CopyDepthMode: 1
   m_AccurateGbufferNormals: 0
   m_IntermediateTextureMode: 1
 --- !u!114 &5161890783807516584
@@ -66,7 +66,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f62c9c65cf3354c93be831c8bc075510, type: 3}
   m_Name: ScreenSpaceAmbientOcclusion
   m_EditorClassIdentifier: 
-  m_Active: 1
+  m_Active: 0
   m_Settings:
     AOMethod: 1
     Downsample: 0
@@ -125,6 +125,6 @@ MonoBehaviour:
   settings:
     injectionPoint: 550
     alwaysEnable: 0
-    allowInSceneView: 0
+    allowInSceneView: 1
     allowedCameraTypes: 2
     skipTransparents: 1
