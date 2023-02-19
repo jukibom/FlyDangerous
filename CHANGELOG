@@ -10,15 +10,19 @@ New:
         * Ocean / Rivers (with submersible mechanics)
     * Added new boost pad modifiers to level format
     * Added decorative billboards to level format
-    * Ship Collisions (Change in collision gameplay means maps reliant on checkpoint rebounds at high end must have leaderboards reset)
+    * Added two new game modes - laps and puzzle
+    * Added 18 new time trial sprint maps and deprecated the old ones (still playable, see collisions feature below!)
+    * Added [?????] new time trial laps maps
+    * Added [?????] new puzzle maps
+    * Ship Collisions (Change in collision gameplay means maps reliant on checkpoint rebounds at high end are deprecated)
         * Added visual shield effect for collisions (#183)
         * Added engine capacity penalty on collision proportional to impact (#183)
         * Added boost cancel on collision (#197)
         * Added collision, shield activate and boost cancel sfx (#197)
-   * Added bHaptics support for Vest, Arms and Head (WIP, #194)
+   * Added bHaptics support for Vest, Arms and Head (#194)
    * Added support for OpenTrack head tracking (#65)
    * Added support for TrackIR head tracking (#65)
-   * Added UDP telemetry support for generic motion simulators etc
+   * Added UDP telemetry support for generic motion simulators etc (#65)
    * Added "Drift Cam" option which attempts to look in the direction of travel (within a sensible arc)
        * Added associated options for head snap, smoothing and max rotational extents
     * Added a bit of spit and polish to the title screen
@@ -38,6 +42,7 @@ New:
     * Added six new music tracks
     * Added map and music track name to first level start
     * Added ability to preview environment and music in Free Roam menu
+    * Added bonus surprise terrain
     * Added 3d indicators to ghosts and other players in multiplayer
         * There is no manual targetting system as of yet, you must look directly at a target to initiate the 3d indicator
         
@@ -73,6 +78,7 @@ Fixes:
     * Fixed geometry reflecting from the ship perspective when realtime reflections are enabled (just don't ask how, I beg you)
     * Fixed pause menu failing to open first time after restarting after showing results screen
     * Hopefully fixed another enormous pile of input binding bugs + updated to latest input system
+    * Honestly so many more little fixes that I just didn't bother to detail, this list is already too long
 
 0.5.7
 New:
