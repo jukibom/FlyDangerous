@@ -156,7 +156,7 @@ namespace GameUI.GameModes {
                 Game.Instance.loadedMainLevel = NextLevel;
 
                 // TODO: probably something better than this hot bullshit but I am very much at the end of my tether (esp. the audio listener)
-                // continue to play music while killing the ship and destroying the world (yeet ourselves off the ship!)
+                // continue to play music while killing the ship and destroying the world (yeet ourselves off the ship! world will die taking this with it)
                 var lastBastionOfHope = FindObjectOfType<World>();
                 if (lastBastionOfHope) {
                     transform.parent = lastBastionOfHope.transform;

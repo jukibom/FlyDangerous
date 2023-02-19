@@ -31,14 +31,15 @@ namespace Core.MapData {
         public static readonly Level ALittleVerticality = new("A Little Verticality", "a-little-verticality", GameType.Sprint);
         public static readonly Level TinyTrial = new("Tiny Trial", "tiny-trial", GameType.Sprint);
         public static readonly Level Corkscrew = new("Corkscrew", "corkscrew", GameType.Sprint);
-        public static readonly Level Yeet = new("Yeet", "yeet", GameType.Sprint);
-        public static readonly Level Chute = new("Chute", "chute", GameType.Sprint);
         public static readonly Level Sightseeing = new("Sightseeing", "sightseeing", GameType.Sprint);
-        public static readonly Level Coaster = new("Coaster", "coaster", GameType.Sprint);
+        public static readonly Level Yeet = new("Yeet", "yeet", GameType.Sprint);
+        public static readonly Level LoopDeLoop = new("Loop-de-loop", "loop-de-loop", GameType.Sprint);
         public static readonly Level DesertDash = new("Desert Dash", "desert-dash", GameType.Sprint);
+        public static readonly Level Chute = new("Chute", "chute", GameType.Sprint);
+        public static readonly Level Coaster = new("Coaster", "coaster", GameType.Sprint);
         public static readonly Level ALittleDip = new("A Little Dip", "a-little-dip", GameType.Sprint);
         public static readonly Level MarshMarathon = new("Marsh Marathon", "marsh-marathon", GameType.Sprint);
-        public static readonly Level LoopDeLoop = new("Loop-de-loop", "loop-de-loop", GameType.Sprint);
+        public static readonly Level TightSqueeze = new("Tight Squeeze", "tight-squeeze", GameType.Sprint);
         public static readonly Level Labyrinth = new("Labyrinth", "labyrinth", GameType.Sprint);
 
         // Laps
@@ -76,8 +77,9 @@ namespace Core.MapData {
                 GentleStart, UpsAndDowns, AroundTheBlock, HoldOnToYourStomach, AroundTheStation, Snake, SpeedIsHalfTheBattle, YouMightWannaHoldBack,
                 DeathValley, CrestLoop, YouHaveHeadlightsRight, LimiterMastery, ThreadTheNeedle, MountainSpiral, LongRoad, HideAndSeek,
                 // new sprints
-                YouHaveToStartSomewhere, ALittleVerticality, TinyTrial, Corkscrew, Yeet, Chute, Sightseeing, Coaster, DesertDash, ALittleDip, MarshMarathon,
-                LoopDeLoop, Labyrinth,
+                YouHaveToStartSomewhere, ALittleVerticality, TinyTrial, Corkscrew, Sightseeing, Yeet, LoopDeLoop, DesertDash, Chute, Coaster, ALittleDip,
+                MarshMarathon,
+                TightSqueeze, Labyrinth,
                 // new laps
                 AroundTheStationV2,
                 // new puzzle

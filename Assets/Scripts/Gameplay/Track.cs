@@ -56,25 +56,13 @@ namespace Gameplay {
         [ReadOnly] [UsedImplicitly] [SerializeField]
         private float bronzeTime;
 
-        [HorizontalLine] [SerializeField] private Vector3 startPosition;
-        [SerializeField] private Vector3 startRotation;
+        [OnValueChanged("UpdateStartLocation")] [HorizontalLine] [SerializeField]
+        private Vector3 startPosition;
+
+        [OnValueChanged("UpdateStartLocation")] [SerializeField]
+        private Vector3 startRotation;
 
         private bool _loadingEnvironment;
-
-        [Button("Set start from ship position")]
-        [UsedImplicitly]
-        private void SetFromShip() {
-#if UNITY_EDITOR
-            Undo.RecordObject(this, "Set player transform");
-#endif
-            var player = FdPlayer.FindLocalShipPlayer;
-            if (player) {
-                startPosition = player.AbsoluteWorldPosition;
-                startRotation = player.transform.rotation.eulerAngles;
-                Game.Instance.LoadedLevelData.startPosition = SerializableVector3.FromVector3(startPosition);
-                Game.Instance.LoadedLevelData.startRotation = SerializableVector3.FromVector3(startRotation);
-            }
-        }
 
         public GameModeCheckpoints GameModeCheckpoints => checkpointContainer;
 
@@ -168,6 +156,7 @@ namespace Gameplay {
                 Game.Instance.LoadedLevelData.startPosition = SerializableVector3.FromVector3(player.AbsoluteWorldPosition);
                 Game.Instance.LoadedLevelData.startRotation = SerializableVector3.FromVector3(player.transform.rotation.eulerAngles);
                 Game.Instance.GameModeHandler.InitialiseGameMode(player, Serialize(), GameType.FromString(gameMode).GameMode, player.User.InGameUI, this);
+                Game.Instance.GameModeHandler.Begin();
                 Game.Instance.RestartSession();
             }
         }
@@ -184,23 +173,18 @@ namespace Gameplay {
 
         [UsedImplicitly]
         private void SetEnvironment() {
+            var sceneToLoad = Environment.FromString(environment).SceneToLoad;
+            SetEnvironmentByName(sceneToLoad);
+        }
+
+        public void SetEnvironmentByName(string sceneToLoad) {
             if (_loadingEnvironment) return;
             _loadingEnvironment = true;
 
-            var sceneToLoad = Environment.FromString(environment).SceneToLoad;
-
-            IEnumerator SetNewEnvironment(string sceneName) {
-                // load new
-                if (Application.isPlaying)
-                    yield return SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-                else
-                    EditorSceneManager.OpenScene($"Assets/Scenes/Environments/{sceneName}.unity", OpenSceneMode.Additive);
-                SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
-
-
+            void Cleanup() {
                 // unload any other matching environment scenes
                 foreach (var environmentType in Environment.List()) {
-                    if (environmentType.SceneToLoad == sceneName)
+                    if (environmentType.SceneToLoad == sceneToLoad)
                         continue;
 
                     for (var i = 0; i < SceneManager.sceneCount; i++) {
@@ -212,7 +196,22 @@ namespace Gameplay {
                 _loadingEnvironment = false;
             }
 
-            StartCoroutine(SetNewEnvironment(sceneToLoad));
+
+            IEnumerator SetNewEnvironmentInGame(string sceneName) {
+                yield return SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+                SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
+                Cleanup();
+            }
+
+            // load new
+            if (Application.isPlaying) {
+                Game.Instance.StartCoroutine(SetNewEnvironmentInGame(sceneToLoad));
+            }
+            else {
+                EditorSceneManager.OpenScene($"Assets/Scenes/Environments/{sceneToLoad}.unity", OpenSceneMode.Additive);
+                SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneToLoad));
+                Cleanup();
+            }
         }
 
         [UsedImplicitly]
@@ -227,6 +226,24 @@ namespace Gameplay {
             goldTime = Score.GoldTimeTarget(levelData);
             silverTime = Score.SilverTimeTarget(levelData);
             bronzeTime = Score.BronzeTimeTarget(levelData);
+        }
+
+        [Button("Set start from ship position")]
+        [UsedImplicitly]
+        private void SetFromShip() {
+            Undo.RecordObject(this, "Set player transform");
+            var player = FdPlayer.FindLocalShipPlayer;
+            if (player) {
+                startPosition = player.AbsoluteWorldPosition;
+                startRotation = player.transform.rotation.eulerAngles;
+                UpdateStartLocation();
+            }
+        }
+
+        private void UpdateStartLocation() {
+            Game.Instance.LoadedLevelData.startPosition = SerializableVector3.FromVector3(startPosition);
+            Game.Instance.LoadedLevelData.startRotation = SerializableVector3.FromVector3(startRotation);
+            Game.Instance.GameModeHandler.Begin();
         }
 
         [Button("Copy level to Clipboard")]
