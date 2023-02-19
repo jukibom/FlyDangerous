@@ -105,6 +105,7 @@ namespace Core.ShipModel.Feedback.socket {
             _telemetry.boostCapacitorPercent = shipInstrumentData.BoostCapacitorPercent;
             _telemetry.boostTimerReady = shipInstrumentData.BoostTimerReady;
             _telemetry.boostChargeReady = shipInstrumentData.BoostChargeReady;
+            _telemetry.underWater = shipInstrumentData.UnderWater;
             _telemetry.lightsActive = shipInstrumentData.LightsActive;
             _telemetry.velocityLimiterActive = shipInstrumentData.VelocityLimiterActive;
             _telemetry.vectorFlightAssistActive = shipInstrumentData.VectorFlightAssistActive;
@@ -132,6 +133,8 @@ namespace Core.ShipModel.Feedback.socket {
                 SerializableVector3.AssignOrCreateFromVector3(_telemetry.currentAngularVelocityNormalised, shipMotionData.CurrentAngularVelocityNormalised);
             _telemetry.currentAngularTorqueNormalised =
                 SerializableVector3.AssignOrCreateFromVector3(_telemetry.currentAngularTorqueNormalised, shipMotionData.CurrentAngularTorqueNormalised);
+            _telemetry.shipWorldRotationEuler =
+                SerializableVector3.AssignOrCreateFromVector3(_telemetry.shipWorldRotationEuler, shipMotionData.WorldRotationEuler);
             _telemetry.maxSpeed = shipMotionData.MaxSpeed;
         }
 

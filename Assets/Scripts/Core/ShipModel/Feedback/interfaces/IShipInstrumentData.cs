@@ -56,6 +56,9 @@ namespace Core.ShipModel.Feedback.interfaces {
         // True if ship lights are enabled
         public bool LightsActive { get; }
 
+        // True if altitude is < 0
+        public bool UnderWater { get; }
+
         // True if velocity limiter is enabled
         public bool VelocityLimiterActive { get; }
 

@@ -473,6 +473,7 @@ namespace Core.ShipModel {
             _shipInstrumentData.BoostCapacitorPercent = _boostCapacitorPercent;
             _shipInstrumentData.BoostTimerReady = !_boostRecharging;
             _shipInstrumentData.BoostChargeReady = _boostCapacitorPercent > FlightParameters.boostCapacitorPercentCost;
+            _shipInstrumentData.UnderWater = _shipInstrumentData.Altitude < 0;
             _shipInstrumentData.LightsActive = IsShipLightsActive;
             _shipInstrumentData.VelocityLimiterActive = VelocityLimitActive;
             _shipInstrumentData.VectorFlightAssistActive = VectorFlightAssistActive;

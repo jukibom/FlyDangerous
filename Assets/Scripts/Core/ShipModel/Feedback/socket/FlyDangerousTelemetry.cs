@@ -43,6 +43,7 @@ namespace Core.ShipModel.Feedback.socket {
         public float boostCapacitorPercent;
         public bool boostTimerReady;
         public bool boostChargeReady;
+        public bool underWater;
         public bool lightsActive;
         public bool velocityLimiterActive;
         public bool vectorFlightAssistActive;
@@ -73,6 +74,7 @@ namespace Core.ShipModel.Feedback.socket {
         public SerializableVector3 currentLateralForceNormalised;
         public SerializableVector3 currentAngularVelocityNormalised;
         public SerializableVector3 currentAngularTorqueNormalised;
+        public SerializableVector3 shipWorldRotationEuler;
         public float maxSpeed;
 
         public void SetFromFlyDangerousTelemetryBytes(ref FlyDangerousTelemetryBytes telemetry) {
@@ -106,6 +108,7 @@ namespace Core.ShipModel.Feedback.socket {
             boostTimerReady = telemetry.boostTimerReady;
             boostChargeReady = telemetry.boostChargeReady;
             lightsActive = telemetry.lightsActive;
+            underWater = telemetry.underWater;
             velocityLimiterActive = telemetry.velocityLimiterActive;
             vectorFlightAssistActive = telemetry.vectorFlightAssistActive;
             rotationalFlightAssistActive = telemetry.rotationalFlightAssistActive;
@@ -131,6 +134,7 @@ namespace Core.ShipModel.Feedback.socket {
             currentLateralForceNormalised = telemetry.currentLateralForceNormalised;
             currentAngularVelocityNormalised = telemetry.currentAngularVelocityNormalised;
             currentAngularTorqueNormalised = telemetry.currentAngularTorqueNormalised;
+            shipWorldRotationEuler = telemetry.shipWorldRotationEuler;
             maxSpeed = telemetry.maxSpeed;
         }
 
@@ -188,6 +192,7 @@ namespace Core.ShipModel.Feedback.socket {
         public bool boostTimerReady;
         public bool boostChargeReady;
         public bool lightsActive;
+        public bool underWater;
         public bool velocityLimiterActive;
         public bool vectorFlightAssistActive;
         public bool rotationalFlightAssistActive;
@@ -217,6 +222,7 @@ namespace Core.ShipModel.Feedback.socket {
         public SerializableVector3 currentLateralForceNormalised;
         public SerializableVector3 currentAngularVelocityNormalised;
         public SerializableVector3 currentAngularTorqueNormalised;
+        public SerializableVector3 shipWorldRotationEuler;
         public float maxSpeed;
 
         // string helpers for char[] handling
@@ -256,6 +262,7 @@ namespace Core.ShipModel.Feedback.socket {
             boostTimerReady = telemetry.boostTimerReady;
             boostChargeReady = telemetry.boostChargeReady;
             lightsActive = telemetry.lightsActive;
+            underWater = telemetry.underWater;
             velocityLimiterActive = telemetry.velocityLimiterActive;
             vectorFlightAssistActive = telemetry.vectorFlightAssistActive;
             rotationalFlightAssistActive = telemetry.rotationalFlightAssistActive;
@@ -281,6 +288,7 @@ namespace Core.ShipModel.Feedback.socket {
             currentLateralForceNormalised = telemetry.currentLateralForceNormalised;
             currentAngularVelocityNormalised = telemetry.currentAngularVelocityNormalised;
             currentAngularTorqueNormalised = telemetry.currentAngularTorqueNormalised;
+            shipWorldRotationEuler = telemetry.shipWorldRotationEuler;
             maxSpeed = telemetry.maxSpeed;
         }
 

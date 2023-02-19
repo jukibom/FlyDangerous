@@ -19,6 +19,7 @@ namespace Core.ShipModel.ShipIndicator {
         public float BoostCapacitorPercent { get; set; }
         public bool BoostTimerReady { get; set; }
         public bool BoostChargeReady { get; set; }
+        public bool UnderWater { get; set; }
         public bool LightsActive { get; set; }
         public bool VelocityLimiterActive { get; set; }
         public bool VectorFlightAssistActive { get; set; }
