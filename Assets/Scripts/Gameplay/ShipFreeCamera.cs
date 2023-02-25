@@ -25,8 +25,8 @@ namespace Gameplay {
             )));
 
             transform.localRotation = Quaternion.Euler(transform.localRotation.eulerAngles + new Vector3(
-                _rotation.y * Time.unscaledDeltaTime * _motionMultiplier * -1,
-                _rotation.x * Time.unscaledDeltaTime * _motionMultiplier,
+                _rotation.y * Time.unscaledDeltaTime * -1,
+                _rotation.x * Time.unscaledDeltaTime,
                 0
             ));
 
@@ -51,7 +51,7 @@ namespace Gameplay {
         }
 
         public void LookAround(Vector2 rotation) {
-            _rotation = rotation * 10;
+            _rotation = rotation * 100;
         }
 
         public void Ascend(float ascension) {
