@@ -478,6 +478,7 @@ namespace Core.ShipModel {
             _shipInstrumentData.VelocityLimiterActive = VelocityLimitActive;
             _shipInstrumentData.VectorFlightAssistActive = VectorFlightAssistActive;
             _shipInstrumentData.RotationalFlightAssistActive = RotationalFlightAssistActive;
+            _shipInstrumentData.ThrustOverchargeNormalized = _modifierEngine.AppliedEffects.shipDeltaThrust / _shipParameters.maxThrust;
         }
 
         private void UpdateFeedbackData() {
@@ -561,8 +562,8 @@ namespace Core.ShipModel {
             );
 
             /* DRAG */
-            targetRigidbody.drag = FlightParameters.drag + _modifierEngine.AppliedEffects.shipDrag;
-            targetRigidbody.angularDrag = FlightParameters.angularDrag + _modifierEngine.AppliedEffects.shipAngularDrag;
+            targetRigidbody.drag = FlightParameters.drag + _modifierEngine.AppliedEffects.shipDeltaDrag;
+            targetRigidbody.angularDrag = FlightParameters.angularDrag + _modifierEngine.AppliedEffects.shipDeltaAngularDrag;
 
             /* THRUST */
             // standard thrust calculated per-axis (each axis has it's own max thrust component including boost)
@@ -583,7 +584,7 @@ namespace Core.ShipModel {
             ClampMaxSpeed(VelocityLimitActive);
 
             // output var for indicators etc
-            CurrentFrameThrust = thrustInput * FlightParameters.maxThrust;
+            CurrentFrameThrust = thrustInput * (FlightParameters.maxThrust + _modifierEngine.AppliedEffects.shipDeltaThrust);
             CurrentFrameTorque = torque / FlightParameters.inertiaTensorMultiplier;
         }
 

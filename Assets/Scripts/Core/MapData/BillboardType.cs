@@ -34,6 +34,9 @@ namespace Core.MapData {
         private static readonly BillboardData EuropaBillboard = new BillboardWithTextureData
             { Name = "Europa", TextureResourceName = "Billboard Europa", ColorIntensity = 8 };
 
+        private static readonly BillboardData DopefishBillboard = new BillboardWithTextureData
+            { Name = "Dopefish", TextureResourceName = "Billboard Dopefish", ColorIntensity = 12 };
+
 
         public static readonly BillboardType FlyDangerous = new(FlyDangerousBillboard);
         public static readonly BillboardType CustomMessage = new(CustomMessageBillboard);
@@ -44,6 +47,7 @@ namespace Core.MapData {
         public static readonly BillboardType NewtonsGambit = new(NewtonsGambitBillboard);
         public static readonly BillboardType EdenPrime = new(EdenPrimeBillboard);
         public static readonly BillboardType Europa = new(EuropaBillboard);
+        public static readonly BillboardType Dopefish = new(DopefishBillboard);
 
         private BillboardType(BillboardData billboardData) {
             Id = GenerateId;
@@ -66,7 +70,8 @@ namespace Core.MapData {
                 Cope,
                 NewtonsGambit,
                 EdenPrime,
-                Europa
+                Europa,
+                Dopefish
             };
         }
 

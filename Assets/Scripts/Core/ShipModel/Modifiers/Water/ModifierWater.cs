@@ -94,8 +94,8 @@ namespace Core.ShipModel.Modifiers.Water {
 
         // when underwater
         public void ApplyModifierEffect(Rigidbody ship, ref AppliedEffects effects) {
-            effects.shipDrag = appliedDrag;
-            effects.shipAngularDrag = appliedAngularDrag;
+            effects.shipDeltaDrag = appliedDrag;
+            effects.shipDeltaAngularDrag = appliedAngularDrag;
         }
 
         public void PlaySubmergedVfx(Vector3 atWorldPosition, Vector3 surfaceImpactVelocity) {

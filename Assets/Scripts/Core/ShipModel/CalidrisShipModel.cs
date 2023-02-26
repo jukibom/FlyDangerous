@@ -8,6 +8,10 @@ namespace Core.ShipModel {
     public class CalidrisShipModel : SimpleShipModel {
         [SerializeField] private AudioSource proximityWarningAudioSource;
 
+        [SerializeField] private GameObject overchargeWarningLight;
+        [SerializeField] private GameObject overchargeWarning;
+        [SerializeField] private Text overchargeAmountText;
+
         [SerializeField] private Light proximityWarningLight;
         [SerializeField] private GameObject proximityWarning;
 
@@ -41,7 +45,7 @@ namespace Core.ShipModel {
         // Lerping fun
         private float _previousAccelerationBarAmount;
         private float _previousGForce;
-        private float _proximityWarningFlashTimer;
+        private float _flashingLightTimer;
 
         private float _targetProximityWarning;
 
@@ -145,14 +149,27 @@ namespace Core.ShipModel {
 
             #endregion
 
+            #region Overcharge Alert
+
+            overchargeWarning.SetActive(false);
+            overchargeWarningLight.SetActive(false);
+            if (shipInstrumentData.ThrustOverchargeNormalized > 0.15f) {
+                overchargeWarning.SetActive(true);
+                overchargeWarningLight.SetActive(Mathf.Cos(_flashingLightTimer * 20 / Mathf.PI) > 0);
+            }
+
+            // show overcharge text to nearest 10%
+            overchargeAmountText.text = $"+{Mathf.Round(shipInstrumentData.ThrustOverchargeNormalized * 10) * 10}%";
+
+            #endregion
+
             #region Proximity Alert
 
             float proximity = 0;
             var showProximityWarning = false;
-            _proximityWarningFlashTimer += Time.fixedDeltaTime;
             if (shipInstrumentData.ProximityWarning) {
                 proximity = 1 - shipInstrumentData.ProximityWarningSeconds / 5;
-                showProximityWarning = Mathf.Cos(_proximityWarningFlashTimer * 20 / Mathf.PI) > 0;
+                showProximityWarning = Mathf.Cos(_flashingLightTimer * 20 / Mathf.PI) > 0;
             }
 
             proximityWarning.SetActive(showProximityWarning);
@@ -164,6 +181,8 @@ namespace Core.ShipModel {
             proximityWarningLight.intensity = _targetProximityWarning * 0.2f;
 
             #endregion
+
+            _flashingLightTimer += Time.fixedDeltaTime;
         }
 
         private void Restart() {

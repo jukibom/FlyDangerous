@@ -74,17 +74,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shipDeltaSpeedCapDamping: 0.99
-  shipDeltaThrustCapDamping: 0.998
+  shipDeltaThrustCapDamping: 0.9965
   shipForceDamping: 0.8
+  shipDragDamping: 0.95
+  shipAngularDragDamping: 0.95
   maxShipForce: 50000000
-  maxShipDeltaSpeed: 5000
+  maxShipDeltaSpeed: 10000
   maxShipDeltaThrust: 1000000
+  maxShipDrag: 10
+  maxShipAngularDrag: 10
 --- !u!1001 &2096375933786169274
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 2
+    serializedVersion: 3
     m_TransformParent: {fileID: 4969557051023498551}
     m_Modifications:
     - target: {fileID: 172445480452449185, guid: 6dfae0ad47b80844caf683dce03ecaf1, type: 3}
@@ -308,7 +312,9 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6dfae0ad47b80844caf683dce03ecaf1, type: 3}
 --- !u!4 &2261586734824294475 stripped
 Transform:
@@ -320,7 +326,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 2
+    serializedVersion: 3
     m_TransformParent: {fileID: 4969557051023498551}
     m_Modifications:
     - target: {fileID: 177074050465568752, guid: b0e2f4acb0320844fa3d799e82f58e18, type: 3}
@@ -380,7 +386,9 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b0e2f4acb0320844fa3d799e82f58e18, type: 3}
 --- !u!4 &4136914657196690307 stripped
 Transform:

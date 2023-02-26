@@ -26,5 +26,6 @@ namespace Core.ShipModel.ShipIndicator {
         public bool RotationalFlightAssistActive { get; set; }
         public bool ProximityWarning { get; set; }
         public float ProximityWarningSeconds { get; set; }
+        public float ThrustOverchargeNormalized { get; set; }
     }
 }

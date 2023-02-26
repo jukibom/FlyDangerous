@@ -3,16 +3,16 @@ using UnityEngine;
 
 namespace Core.ShipModel.Modifiers {
     public struct AppliedEffects {
-        internal Vector3 shipForce;
-        internal float shipDeltaSpeedCap;
-        internal float shipDeltaThrust;
-        internal float shipDrag;
-        internal float shipAngularDrag;
+        internal Vector3 shipForce; // used to directly influence the force acting on the ship (e.g. attractors)
+        internal float shipDeltaSpeedCap; // how much OVER the speed cap the ship can go
+        internal float shipDeltaThrust; // how much OVER the thrust cap the ship can output
+        internal float shipDeltaDrag; // additional rigid body drag
+        internal float shipDeltaAngularDrag; // additional rigid body angular drag
     }
 
     public class ModifierEngine : MonoBehaviour {
         [SerializeField] private float shipDeltaSpeedCapDamping = 0.99f;
-        [SerializeField] private float shipDeltaThrustCapDamping = 0.993f;
+        [SerializeField] private float shipDeltaThrustCapDamping = 0.99f;
         [SerializeField] private float shipForceDamping = 0.8f;
         [SerializeField] private float shipDragDamping = 0.95f;
         [SerializeField] private float shipAngularDragDamping = 0.95f;
@@ -45,14 +45,14 @@ namespace Core.ShipModel.Modifiers {
             _appliedEffects.shipDeltaSpeedCap *= currentSpeedCapDamping;
             _appliedEffects.shipForce *= shipForceDamping;
             _appliedEffects.shipDeltaThrust *= shipDeltaThrustCapDamping;
-            _appliedEffects.shipDrag *= shipDragDamping;
-            _appliedEffects.shipAngularDrag *= shipAngularDragDamping;
+            _appliedEffects.shipDeltaDrag *= shipDragDamping;
+            _appliedEffects.shipDeltaAngularDrag *= shipAngularDragDamping;
 
             _appliedEffects.shipForce = Vector3.ClampMagnitude(_appliedEffects.shipForce, maxShipForce);
             _appliedEffects.shipDeltaSpeedCap = Mathf.Min(_appliedEffects.shipDeltaSpeedCap, maxShipDeltaSpeed);
             _appliedEffects.shipDeltaThrust = Mathf.Min(_appliedEffects.shipDeltaThrust, maxShipDeltaThrust);
-            _appliedEffects.shipDrag = Mathf.Min(_appliedEffects.shipDrag, maxShipDrag);
-            _appliedEffects.shipAngularDrag = Mathf.Min(_appliedEffects.shipAngularDrag, maxShipAngularDrag);
+            _appliedEffects.shipDeltaDrag = Mathf.Min(_appliedEffects.shipDeltaDrag, maxShipDrag);
+            _appliedEffects.shipDeltaAngularDrag = Mathf.Min(_appliedEffects.shipDeltaAngularDrag, maxShipAngularDrag);
         }
 
         public void ApplyModifier(Rigidbody shipRigidBody, IModifier modifier) {
@@ -63,8 +63,8 @@ namespace Core.ShipModel.Modifiers {
             _appliedEffects.shipForce = shipForce;
             _appliedEffects.shipDeltaSpeedCap = shipDeltaSpeedCap;
             _appliedEffects.shipDeltaThrust = shipDeltaThrust;
-            _appliedEffects.shipDrag = shipDrag;
-            _appliedEffects.shipAngularDrag = shipAngularDrag;
+            _appliedEffects.shipDeltaDrag = shipDrag;
+            _appliedEffects.shipDeltaAngularDrag = shipAngularDrag;
         }
     }
 }

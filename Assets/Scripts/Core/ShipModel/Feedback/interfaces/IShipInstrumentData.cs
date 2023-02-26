@@ -73,5 +73,8 @@ namespace Core.ShipModel.Feedback.interfaces {
 
         // The number of seconds before a potential collision will occur if no vector change is made
         public float ProximityWarningSeconds { get; }
+
+        // The amount of additional thrust imparted by a boost modifier as a factor of max thrust output 
+        public float ThrustOverchargeNormalized { get; }
     }
 }
