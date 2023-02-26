@@ -10,7 +10,6 @@ namespace Gameplay {
         private static readonly int BillboardTextureProperty = Shader.PropertyToID("_BillboardTexture");
         private static readonly int TintProperty = Shader.PropertyToID("_Tint");
         private static readonly int ScrollSpeedProperty = Shader.PropertyToID("_ScrollSpeed");
-        private static readonly int Dithering = Shader.PropertyToID("_UseDithering");
 
         [SerializeField] private Text billboardText;
         [SerializeField] private Camera renderTextureCamera;

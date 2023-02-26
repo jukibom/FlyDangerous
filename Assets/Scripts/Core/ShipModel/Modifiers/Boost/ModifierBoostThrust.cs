@@ -9,9 +9,21 @@ namespace Core.ShipModel.Modifiers.Boost {
         [SerializeField] private float shipThrustAdd = 50000;
 
         private AudioSource _boostSound;
+        private MeshRenderer _meshRenderer;
+        private bool _useDistortion;
+        private static readonly int includeDistortion = Shader.PropertyToID("_includeDistortion");
 
-        public void Start() {
+        public bool UseDistortion {
+            get => _useDistortion;
+            set {
+                _useDistortion = value;
+                _meshRenderer.material.SetInt(includeDistortion, _useDistortion ? 1 : 0);
+            }
+        }
+
+        public void Awake() {
             _boostSound = GetComponent<AudioSource>();
+            _meshRenderer = GetComponent<MeshRenderer>();
         }
 
         public void ApplyModifierEffect(Rigidbody shipRigidBody, ref AppliedEffects effects) {

@@ -20,6 +20,11 @@ namespace Core.ShipModel.Modifiers.Boost {
             }
         }
 
+        public bool UseDistortion {
+            get => modifierBoostThrust.UseDistortion;
+            set => modifierBoostThrust.UseDistortion = value;
+        }
+
         private void Awake() {
             boostStreamLengthMeters = modifierBoostStream.TrailLengthMeters;
         }
