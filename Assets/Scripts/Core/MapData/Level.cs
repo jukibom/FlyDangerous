@@ -50,6 +50,7 @@ namespace Core.MapData {
         public static readonly Level AroundTheStationV2 = new("Around the Station", "around-the-station-v2", GameType.Laps);
         public static readonly Level CoastlineCircuit = new("Coastline Circuit", "coastline-circuit", GameType.Laps);
         public static readonly Level Slipstream = new("Slipstream", "slipstream", GameType.Laps);
+        public static readonly Level LongHaul = new("Long Haul", "long-haul", GameType.Laps);
 
         // Puzzle
         public static readonly Level DecisionsDecisions = new("Decisions decisions", "decisions-decisions", GameType.Puzzle);
@@ -86,7 +87,7 @@ namespace Core.MapData {
                 YouHaveToStartSomewhere, ALittleVerticality, TinyTrial, Slalom, RampingUp, Corkscrew, Sightseeing, Yeet, LoopDeLoop, DesertDash, Chute, Coaster,
                 ALittleDip, MarshMarathon, TightSqueeze, IslandHopping, Labyrinth, FreshHell,
                 // new laps
-                AroundTheStationV2, CoastlineCircuit, Slipstream,
+                AroundTheStationV2, CoastlineCircuit, Slipstream, LongHaul,
                 // new puzzle
                 DecisionsDecisions
             };
