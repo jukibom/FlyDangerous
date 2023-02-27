@@ -247,20 +247,23 @@ namespace Core {
         }
 
         public void EnableVR() {
-            IEnumerator StartXR() {
-                yield return XRGeneralSettings.Instance.Manager.InitializeLoader();
-                XRGeneralSettings.Instance.Manager.StartSubsystems();
+            IEnumerator StartVR() {
+                // Ludicrous workaround for dumb shit a unity update broke
+                // TODO: try not starting it twice in some magical future time
+                yield return StartXR();
+                StopXR();
+                yield return new WaitForFixedUpdate();
+                yield return StartXR();
                 IsVREnabled = true;
                 NotifyVRStatus();
             }
 
-            StartCoroutine(StartXR());
+            StartCoroutine(StartVR());
         }
 
         public void DisableVRIfNeeded() {
             if (IsVREnabled) {
-                XRGeneralSettings.Instance.Manager.StopSubsystems();
-                XRGeneralSettings.Instance.Manager.DeinitializeLoader();
+                StopXR();
                 IsVREnabled = false;
                 NotifyVRStatus();
             }
@@ -607,6 +610,16 @@ namespace Core {
 
         public void NotifyPlayerLoaded() {
             OnPlayerJoin?.Invoke();
+        }
+
+        private IEnumerator StartXR() {
+            yield return XRGeneralSettings.Instance.Manager.InitializeLoader();
+            XRGeneralSettings.Instance.Manager.StartSubsystems();
+        }
+
+        private void StopXR() {
+            XRGeneralSettings.Instance.Manager.StopSubsystems();
+            XRGeneralSettings.Instance.Manager.DeinitializeLoader();
         }
     }
 }

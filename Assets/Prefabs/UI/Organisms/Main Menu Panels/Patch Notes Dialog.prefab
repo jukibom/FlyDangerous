@@ -723,31 +723,45 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1.5
-  m_Text: "0.6.0-dev \n\nThis is NOT a release candidate, more is involved in this
-    build.\n\nNOTE: Leaderboards disabled on dev builds\n\nNew:\r\n    * Ship Collisions
-    (Change in collision gameplay means maps reliant on checkpoint rebounds at high
-    end must have leaderboards reset)\r\n        * Added visual shield effect for
-    collisions (#183)\r\n        * Added engine capacity penalty on collision proportional
-    to impact (#183)\r\n        * Added boost cancel on collision (#197)\r\n       
-    * Added collision, shield activate and boost cancel sfx (#197)\r\n    * Added
-    a bit of spit and polish to the title screen\r\n        * Player profile ship
-    is now shown on title screen\r\n    * Added lens flare shaders to ship rear exhausts\r\n       
-    * Note this is disabled in VR (#200) and with MSAA (#199) active.\r\n    * Added
-    support for ultra-wide displays by constraining the UI to a max width (#184)\r\n   
-    * Added Ability to disable VSync (#185 )\r\n    * Device hot-plugging now supported
-    (#153)\r\n    * Added hold binding for alternate flight controls (#177)\r\n   
-    * Added Ultra reflection quality for refresh rate locked to frame rate (use at
-    your own risk :P)\r\n    * Added bHaptics support for Vest, Arms and Head (WIP,
-    #194)\r\n    * Added support for OpenTrack head tracking (#65)\r\n    * Added
-    support for TrackIR head tracking (#65)\r\n    * Added \"Drift Cam\" option which
-    attempts to look in the direction of travel (within a sensible arc)\r\n       
+  m_Text: "0.6.0\n\nNew:\r\n    * Fully rebuilt biome terrain world graph with new
+    biomes:\r\n        * Desert (red, dunes)\r\n        * Tropical\r\n        * Coastline\r\n       
+    * Arctic Tundra / Ice\r\n        * Rebuilt rocky biome\r\n        * Reworked
+    mountain biome from GPU test\r\n        * Ocean / Rivers (with submersible mechanics)\r\n   
+    * Added new boost pad modifiers to level format\r\n    * Added decorative billboards
+    to level format\r\n    * Added two new game modes - laps and puzzle\r\n    *
+    Added 18 new time trial sprint maps and deprecated the old ones (still playable,
+    see collisions feature below!)\r\n    * Added [?????] new time trial laps maps\r\n   
+    * Added [?????] new puzzle maps\r\n    * Ship Collisions (Change in collision
+    gameplay means maps reliant on checkpoint rebounds at high end are deprecated)\r\n       
+    * Added visual shield effect for collisions (#183)\r\n        * Added engine
+    capacity penalty on collision proportional to impact (#183)\r\n        * Added
+    boost cancel on collision (#197)\r\n        * Added collision, shield activate
+    and boost cancel sfx (#197)\r\n   * Added bHaptics support for Vest, Arms and
+    Head (#194)\r\n   * Added support for OpenTrack head tracking (#65)\r\n   * Added
+    support for TrackIR head tracking (#65)\r\n   * Added UDP telemetry support for
+    generic motion simulators etc (#65)\r\n   * Added \"Drift Cam\" option which
+    attempts to look in the direction of travel (within a sensible arc)\r\n      
     * Added associated options for head snap, smoothing and max rotational extents\r\n   
-    * Added UDP telemetry support for generic motion simulators etc (WIP, #115, more
-    information to follow)\r\n    * Added descriptions to locations in Free Roam
-    menu\r\n    * Added new boost pad modifiers to the Proving Grounds (see changes
-    below)\r\n    * Added ability to set music volume on main menu independently
-    (as a percentage of music volume)\r\n    * Added pride flags and changed \"Country\"
-    label to \"Flag\" for profile dropdown  (#203 partial)\r\n    \r\nChanged:\r\n   
+    * Added a bit of spit and polish to the title screen\r\n        * Player profile
+    ship is now shown on title screen\r\n    * Added lens flare shaders to ship rear
+    exhausts\r\n        * Note this is disabled in VR (#200) and with MSAA (#199)
+    active.\r\n    * Added support for ultra-wide displays by constraining the UI
+    to a max width (#184)\r\n    * Added Ability to disable VSync (#185 )\r\n   
+    * Device hot-plugging now supported (#153)\r\n    * Added hold binding for alternate
+    flight controls (#177)\r\n    * Added Ultra reflection quality for refresh rate
+    locked to frame rate (use at your own risk :P)\r\n    * Added descriptions to
+    locations in Free Roam menu\r\n    * Added ability to set music volume on main
+    menu independently (as a percentage of music volume)\r\n    * Added wait to beginning
+    of time trials prompting users to hold boost (teach that boost can be early!)\r\n   
+    * Added pride flags and changed \"Country\" label to \"Flag\" for profile dropdown 
+    (#203 partial)\r\n    * Added ability set music track in Free Roam mode\r\n   
+    * Added six new music tracks\r\n    * Added map and music track name to first
+    level start\r\n    * Added ability to preview environment and music in Free Roam
+    menu\r\n    * Added bonus surprise terrain\r\n    * Added 3d indicators to ghosts
+    and other players in multiplayer\r\n        * There is no manual targetting system
+    as of yet, you must look directly at a target to initiate the 3d indicator\r\n   
+    * Added new indicators to Calidris cockpit (and only that ship + view, for now)
+    to show proximity alert and overcharge from boost singularities\r\n        \r\nChanged:\r\n   
     * Ship lights now operate as night vision\r\n    * Flight assist rotation correction
     strength buffed slightly \r\n    * Interior Calidris cockpit glass reflectivity
     not quite so glaring anymore \r\n    * Advanced input mode renamed \"Custom\"
@@ -761,24 +775,30 @@ MonoBehaviour:
     PB (vs top ghost)\r\n    * Renamed `Throttle Increase / Decrease` to `Throttle
     Cruise Control Increase / Decrease` for clarity\r\n    * Added right stick click
     as a default VR calibration input (you're welcome, oddly angry self-important
-    person)\r\n    * Updated to Unity 2022.1.20f1\r\n    \r\nFixes:\r\n    * Possible
-    fix for VKBs always reporting \"Hat Up\" on rebind (thanks to the painful manual
-    debugging efforts of Giskard for this fix!)\r\n    * Was previously possible
-    to unset protected bindings (which cannot then be rebound!)\r\n    * Fixed (hopefully!)
-    occasional rare crash on terrain load (#190)\r\n    * Collision detection should
-    be more accurate at high speeds (speculative detection mode increased collision
-    size with velocity!)\r\n    * Incorrect dimensions on some flags in dropdown
-    (#196)\r\n    * Fixed toggling alternate flight controls resetting axes (#178)\r\n   
-    * No longer possible to ever be underneath the terrain (e.g. through a crack
-    in the tile margins), ship is always pushed up to compensate\r\n    * Bug causing
-    camera damping to be forgotten on restart when using Arcade control scheme\r\n   
-    * Fixed ship params not sticking between levels\r\n    * Fixed relative mouse
-    mode applying return rate before sending input (leading to effectively no input
-    at high return rates) \r\n    * Culled UI elements from real time reflection
-    probe (whoops!) \r\n    * Fixed geometry reflecting from the ship perspective
-    when realtime reflections are enabled (just don't ask how, I beg you)\r\n   
-    * Fixed pause menu failing to open first time after restarting after showing
-    results screen\r\n"
+    person)\r\n    * Removed GPU test terrain (thank you for feedback! will circle
+    back to this)\r\n    * Better handled fog near distance - should have more terrain
+    visible now\r\n    * Added the ability to push out to 4 max terrain tiles - recommended
+    ONLY with new terrains, legacy terrain will take an eon to load!\r\n    * Updated
+    to Unity 2022.1.20f1\r\n    \r\nFixes:\r\n    * Possible fix for VKBs always
+    reporting \"Hat Up\" on rebind (thanks to the painful manual debugging efforts
+    of Giskard for this fix!)\r\n    * Was previously possible to unset protected
+    bindings (which cannot then be rebound!)\r\n    * Fixed (hopefully!) occasional
+    rare crash on terrain load (#190)\r\n    * Collision detection should be more
+    accurate at high speeds (speculative detection mode increased collision size
+    with velocity!)\r\n    * Incorrect dimensions on some flags in dropdown (#196)\r\n   
+    * Fixed toggling alternate flight controls resetting axes (#178)\r\n    * No
+    longer possible to ever be underneath the terrain (e.g. through a crack in the
+    tile margins), ship is always pushed up to compensate\r\n    * Bug causing camera
+    damping to be forgotten on restart when using Arcade control scheme\r\n    *
+    Fixed ship params not sticking between levels\r\n    * Fixed relative mouse mode
+    applying return rate before sending input (leading to effectively no input at
+    high return rates) \r\n    * Culled UI elements from real time reflection probe
+    (whoops!) \r\n    * Fixed geometry reflecting from the ship perspective when
+    realtime reflections are enabled (just don't ask how, I beg you)\r\n    * Fixed
+    pause menu failing to open first time after restarting after showing results
+    screen\r\n    * Hopefully fixed another enormous pile of input binding bugs +
+    updated to latest input system\r\n    * Honestly so many more little fixes that
+    I just didn't bother to detail, this list is already too long"
 --- !u!114 &8501361730435722574
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1186,7 +1206,7 @@ MonoBehaviour:
   m_UseGraphicAlpha: 1
 --- !u!95 &3739984000883946965
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1203,7 +1223,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!114 &6146967868598887221
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2660,7 +2680,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 2
+    serializedVersion: 3
     m_TransformParent: {fileID: 4911324391491633745}
     m_Modifications:
     - target: {fileID: 1267458087484041997, guid: affc708ba8599514c80709ef6909f882, type: 3}
@@ -2924,10 +2944,12 @@ PrefabInstance:
       value: 0.1.3 - PHYSICS + INPUT
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 4483186007137661772, guid: affc708ba8599514c80709ef6909f882, type: 3}
       insertIndex: -1
       addedObject: {fileID: 154205272907124459}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: affc708ba8599514c80709ef6909f882, type: 3}
 --- !u!224 &3203780501975765944 stripped
 RectTransform:
@@ -2944,7 +2966,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 2
+    serializedVersion: 3
     m_TransformParent: {fileID: 3739984000883946967}
     m_Modifications:
     - target: {fileID: 6291702346574653274, guid: 7f6395d7f158695469e04e970e119e8d, type: 3}
@@ -3108,6 +3130,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 6291702348231333095, guid: 7f6395d7f158695469e04e970e119e8d, type: 3}
       insertIndex: -1
@@ -3169,6 +3192,19 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6291702348231333095, guid: 7f6395d7f158695469e04e970e119e8d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6662370211036500402}
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6291702347496066626, guid: 7f6395d7f158695469e04e970e119e8d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8654065227452677776}
+    - targetCorrespondingSourceObject: {fileID: 6291702348231333092, guid: 7f6395d7f158695469e04e970e119e8d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3280074189359202629}
+    - targetCorrespondingSourceObject: {fileID: 6291702348231333092, guid: 7f6395d7f158695469e04e970e119e8d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3638287448610446819}
+    - targetCorrespondingSourceObject: {fileID: 6291702348231333092, guid: 7f6395d7f158695469e04e970e119e8d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8470575009058437934}
   m_SourcePrefab: {fileID: 100100000, guid: 7f6395d7f158695469e04e970e119e8d, type: 3}
 --- !u!224 &4911324390756276467 stripped
 RectTransform:
@@ -3267,7 +3303,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 2
+    serializedVersion: 3
     m_TransformParent: {fileID: 4911324391491633745}
     m_Modifications:
     - target: {fileID: 1267458087484041997, guid: affc708ba8599514c80709ef6909f882, type: 3}
@@ -3531,10 +3567,12 @@ PrefabInstance:
       value: 0.3.0 - MULTIPLAYER
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 4483186007137661772, guid: affc708ba8599514c80709ef6909f882, type: 3}
       insertIndex: -1
       addedObject: {fileID: 504270336701765942}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: affc708ba8599514c80709ef6909f882, type: 3}
 --- !u!224 &1317320093913161667 stripped
 RectTransform:
@@ -3551,7 +3589,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 2
+    serializedVersion: 3
     m_TransformParent: {fileID: 4911324391491633745}
     m_Modifications:
     - target: {fileID: 1267458087484041997, guid: affc708ba8599514c80709ef6909f882, type: 3}
@@ -3815,10 +3853,12 @@ PrefabInstance:
       value: 0.5.5 - BUGFIXES AND TWEAKS
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 4483186007137661772, guid: affc708ba8599514c80709ef6909f882, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1489926217186938229}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: affc708ba8599514c80709ef6909f882, type: 3}
 --- !u!224 &1344200995583951246 stripped
 RectTransform:
@@ -3835,7 +3875,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 2
+    serializedVersion: 3
     m_TransformParent: {fileID: 4911324391491633745}
     m_Modifications:
     - target: {fileID: 1267458087484041997, guid: affc708ba8599514c80709ef6909f882, type: 3}
@@ -4099,10 +4139,12 @@ PrefabInstance:
       value: 0.5.4 - STEAM EARLY ACCESS RELEASE
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 4483186007137661772, guid: affc708ba8599514c80709ef6909f882, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8799802500392050064}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: affc708ba8599514c80709ef6909f882, type: 3}
 --- !u!224 &1069007484288048642 stripped
 RectTransform:
@@ -4119,7 +4161,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 2
+    serializedVersion: 3
     m_TransformParent: {fileID: 4911324391491633745}
     m_Modifications:
     - target: {fileID: 1267458087484041997, guid: affc708ba8599514c80709ef6909f882, type: 3}
@@ -4383,10 +4425,12 @@ PrefabInstance:
       value: 0.1.1 - INITIAL RELEASE
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 4483186007137661772, guid: affc708ba8599514c80709ef6909f882, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4897664833549958878}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: affc708ba8599514c80709ef6909f882, type: 3}
 --- !u!224 &951589167715566848 stripped
 RectTransform:
@@ -4403,7 +4447,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 2
+    serializedVersion: 3
     m_TransformParent: {fileID: 3739984000746426619}
     m_Modifications:
     - target: {fileID: 609786913693381189, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
@@ -4539,7 +4583,9 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
 --- !u!114 &4292337633301776164 stripped
 MonoBehaviour:
@@ -4562,7 +4608,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 2
+    serializedVersion: 3
     m_TransformParent: {fileID: 4911324391491633745}
     m_Modifications:
     - target: {fileID: 1267458087484041997, guid: affc708ba8599514c80709ef6909f882, type: 3}
@@ -4826,10 +4872,12 @@ PrefabInstance:
       value: 0.5.0 - STEAM
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 4483186007137661772, guid: affc708ba8599514c80709ef6909f882, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2570352191011783971}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: affc708ba8599514c80709ef6909f882, type: 3}
 --- !u!224 &784230887814563360 stripped
 RectTransform:
@@ -4846,7 +4894,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 2
+    serializedVersion: 3
     m_TransformParent: {fileID: 4911324391491633745}
     m_Modifications:
     - target: {fileID: 1267458087484041997, guid: affc708ba8599514c80709ef6909f882, type: 3}
@@ -5110,10 +5158,12 @@ PrefabInstance:
       value: 0.3.0 - BUGFIXES
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 4483186007137661772, guid: affc708ba8599514c80709ef6909f882, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5381235285042333407}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: affc708ba8599514c80709ef6909f882, type: 3}
 --- !u!224 &3305406478232627824 stripped
 RectTransform:
@@ -5130,7 +5180,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 2
+    serializedVersion: 3
     m_TransformParent: {fileID: 4911324391491633745}
     m_Modifications:
     - target: {fileID: 1267458087484041997, guid: affc708ba8599514c80709ef6909f882, type: 3}
@@ -5394,10 +5444,12 @@ PrefabInstance:
       value: 0.5.3 - TIME TRIAL IMPROVEMENTS
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 4483186007137661772, guid: affc708ba8599514c80709ef6909f882, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1300083198733072474}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: affc708ba8599514c80709ef6909f882, type: 3}
 --- !u!224 &2892727914093920724 stripped
 RectTransform:
@@ -5414,7 +5466,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 2
+    serializedVersion: 3
     m_TransformParent: {fileID: 4911324391491633745}
     m_Modifications:
     - target: {fileID: 1267458087484041997, guid: affc708ba8599514c80709ef6909f882, type: 3}
@@ -5678,10 +5730,12 @@ PrefabInstance:
       value: 0.5.1 - BUGFIXES
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 4483186007137661772, guid: affc708ba8599514c80709ef6909f882, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5049833505226050708}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: affc708ba8599514c80709ef6909f882, type: 3}
 --- !u!224 &2678356256833476067 stripped
 RectTransform:
@@ -5698,7 +5752,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 2
+    serializedVersion: 3
     m_TransformParent: {fileID: 4911324391491633745}
     m_Modifications:
     - target: {fileID: 1267458087484041997, guid: affc708ba8599514c80709ef6909f882, type: 3}
@@ -5962,10 +6016,12 @@ PrefabInstance:
       value: 0.1.4 - ENVIRONMENTS
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 4483186007137661772, guid: affc708ba8599514c80709ef6909f882, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3960494672502981506}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: affc708ba8599514c80709ef6909f882, type: 3}
 --- !u!224 &2549247402827482381 stripped
 RectTransform:
@@ -5982,7 +6038,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 2
+    serializedVersion: 3
     m_TransformParent: {fileID: 4911324391491633745}
     m_Modifications:
     - target: {fileID: 1267458087484041997, guid: affc708ba8599514c80709ef6909f882, type: 3}
@@ -6246,10 +6302,12 @@ PrefabInstance:
       value: 0.4.0 - EVERYTHING
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 4483186007137661772, guid: affc708ba8599514c80709ef6909f882, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2712236391264487063}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: affc708ba8599514c80709ef6909f882, type: 3}
 --- !u!224 &1065727848153160649 stripped
 RectTransform:
@@ -6266,7 +6324,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 2
+    serializedVersion: 3
     m_TransformParent: {fileID: 4911324391491633745}
     m_Modifications:
     - target: {fileID: 1267458087484041997, guid: affc708ba8599514c80709ef6909f882, type: 3}
@@ -6530,10 +6588,12 @@ PrefabInstance:
       value: 0.4.1 - BUGFIX
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 4483186007137661772, guid: affc708ba8599514c80709ef6909f882, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4950420173884320654}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: affc708ba8599514c80709ef6909f882, type: 3}
 --- !u!224 &724677405230414770 stripped
 RectTransform:
@@ -6550,7 +6610,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 2
+    serializedVersion: 3
     m_TransformParent: {fileID: 4911324391491633745}
     m_Modifications:
     - target: {fileID: 1267458087484041997, guid: affc708ba8599514c80709ef6909f882, type: 3}
@@ -6814,10 +6874,12 @@ PrefabInstance:
       value: 0.5.2 - LEVEL TWEAKS + BUGFIX
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 4483186007137661772, guid: affc708ba8599514c80709ef6909f882, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7387868545904802134}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: affc708ba8599514c80709ef6909f882, type: 3}
 --- !u!224 &641749573582836720 stripped
 RectTransform:
@@ -6834,7 +6896,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 2
+    serializedVersion: 3
     m_TransformParent: {fileID: 4911324391491633745}
     m_Modifications:
     - target: {fileID: 1267458087484041997, guid: affc708ba8599514c80709ef6909f882, type: 3}
@@ -7098,10 +7160,12 @@ PrefabInstance:
       value: 0.2.1 - BUGFIXES
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 4483186007137661772, guid: affc708ba8599514c80709ef6909f882, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5839529692663924823}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: affc708ba8599514c80709ef6909f882, type: 3}
 --- !u!224 &380604506539760264 stripped
 RectTransform:
@@ -7118,7 +7182,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 2
+    serializedVersion: 3
     m_TransformParent: {fileID: 4911324391491633745}
     m_Modifications:
     - target: {fileID: 1267458087484041997, guid: affc708ba8599514c80709ef6909f882, type: 3}
@@ -7382,10 +7446,12 @@ PrefabInstance:
       value: 0.2.0 - VR
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 4483186007137661772, guid: affc708ba8599514c80709ef6909f882, type: 3}
       insertIndex: -1
       addedObject: {fileID: 567521729356615385}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: affc708ba8599514c80709ef6909f882, type: 3}
 --- !u!224 &337242221014349490 stripped
 RectTransform:
@@ -7402,7 +7468,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 2
+    serializedVersion: 3
     m_TransformParent: {fileID: 4911324391491633745}
     m_Modifications:
     - target: {fileID: 1267458087484041997, guid: affc708ba8599514c80709ef6909f882, type: 3}
@@ -7666,10 +7732,12 @@ PrefabInstance:
       value: 0.2.2 - BUGFIXES
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 4483186007137661772, guid: affc708ba8599514c80709ef6909f882, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3267963633693863312}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: affc708ba8599514c80709ef6909f882, type: 3}
 --- !u!224 &2235342381070787435 stripped
 RectTransform:
@@ -7686,7 +7754,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 2
+    serializedVersion: 3
     m_TransformParent: {fileID: 4911324391491633745}
     m_Modifications:
     - target: {fileID: 1267458087484041997, guid: affc708ba8599514c80709ef6909f882, type: 3}
@@ -7950,10 +8018,12 @@ PrefabInstance:
       value: 0.2.2b - BUGFIXES
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 4483186007137661772, guid: affc708ba8599514c80709ef6909f882, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2697693114922352586}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: affc708ba8599514c80709ef6909f882, type: 3}
 --- !u!224 &2196035685321445003 stripped
 RectTransform:
@@ -7970,7 +8040,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 2
+    serializedVersion: 3
     m_TransformParent: {fileID: 4911324391491633745}
     m_Modifications:
     - target: {fileID: 1267458087484041997, guid: affc708ba8599514c80709ef6909f882, type: 3}
@@ -8234,10 +8304,12 @@ PrefabInstance:
       value: 0.6.0 - GAMEPLAY UPDATE
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 4483186007137661772, guid: affc708ba8599514c80709ef6909f882, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1856272310935451195}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: affc708ba8599514c80709ef6909f882, type: 3}
 --- !u!224 &2090455224459715594 stripped
 RectTransform:
@@ -8254,7 +8326,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 2
+    serializedVersion: 3
     m_TransformParent: {fileID: 4911324391491633745}
     m_Modifications:
     - target: {fileID: 1267458087484041997, guid: affc708ba8599514c80709ef6909f882, type: 3}
@@ -8518,10 +8590,12 @@ PrefabInstance:
       value: 0.5.7 - HOTFIXES AND A LEVEL
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 4483186007137661772, guid: affc708ba8599514c80709ef6909f882, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2669745300145995176}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: affc708ba8599514c80709ef6909f882, type: 3}
 --- !u!224 &1381406132132609971 stripped
 RectTransform:
@@ -8538,7 +8612,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 2
+    serializedVersion: 3
     m_TransformParent: {fileID: 4911324391491633745}
     m_Modifications:
     - target: {fileID: 1267458087484041997, guid: affc708ba8599514c80709ef6909f882, type: 3}
@@ -8802,10 +8876,12 @@ PrefabInstance:
       value: 0.5.6 - BUGFIXES AND TWEAKS
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 4483186007137661772, guid: affc708ba8599514c80709ef6909f882, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3307893454483901298}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: affc708ba8599514c80709ef6909f882, type: 3}
 --- !u!224 &1228869306760082230 stripped
 RectTransform:
