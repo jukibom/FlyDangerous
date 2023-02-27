@@ -97,11 +97,11 @@ The release build is reliant on some paid assets (follow instructions underneath
  
 * Clone the repository
 
-* Find the forward renderer asset in `Assets/Settings` and remove the missing renderer feature in the inspector. This is the SC Post fog effect.
-
 * Go to Edit > Project Settings > Player > Other Settings > Scripting Define Symbols. Add a new define, call it `NO_PAID_ASSETS`. This will disable any code references to non-free assets.
 
 ![image](https://user-images.githubusercontent.com/5649179/121093848-8eabe400-c7e5-11eb-83a4-ba646ec68ffe.png)
+
+* **Optional**: If you do happen to have SC Post Effects, got to `Assets/Settings/UniversalRP-HighQuality` and swap out the `ForwardRendererNoFog` for `ForwardRenderer` (this is what is used in builds)
 
 ### Steam Integration
 
