@@ -2,6 +2,7 @@
 using UnityEngine;
 
 namespace Core.ShipModel.Modifiers {
+    [Serializable]
     public struct AppliedEffects {
         internal Vector3 shipForce; // used to directly influence the force acting on the ship (e.g. attractors)
         internal float shipDeltaSpeedCap; // how much OVER the speed cap the ship can go
@@ -23,17 +24,17 @@ namespace Core.ShipModel.Modifiers {
         [SerializeField] private float maxShipDrag = 10;
         [SerializeField] private float maxShipAngularDrag = 10;
 
-        private AppliedEffects _appliedEffects;
+        [SerializeField] private AppliedEffects appliedEffects;
         private Func<bool> _isBoosting = () => false;
 
-        public ref AppliedEffects AppliedEffects => ref _appliedEffects;
+        public ref AppliedEffects AppliedEffects => ref appliedEffects;
 
         public void Initialize(Func<bool> isShipBoosting) {
             _isBoosting = isShipBoosting;
         }
 
         public void Reset() {
-            _appliedEffects = new AppliedEffects();
+            appliedEffects = new AppliedEffects();
         }
 
         public void FixedUpdate() {
@@ -42,29 +43,29 @@ namespace Core.ShipModel.Modifiers {
             // if boosting, reduce the damping of max speed (e.g. 0.99 becomes 0.995)
             var currentSpeedCapDamping = _isBoosting() ? Mathf.Sqrt(shipDeltaSpeedCapDamping) : shipDeltaSpeedCapDamping;
 
-            _appliedEffects.shipDeltaSpeedCap *= currentSpeedCapDamping;
-            _appliedEffects.shipForce *= shipForceDamping;
-            _appliedEffects.shipDeltaThrust *= shipDeltaThrustCapDamping;
-            _appliedEffects.shipDeltaDrag *= shipDragDamping;
-            _appliedEffects.shipDeltaAngularDrag *= shipAngularDragDamping;
+            appliedEffects.shipDeltaSpeedCap *= currentSpeedCapDamping;
+            appliedEffects.shipForce *= shipForceDamping;
+            appliedEffects.shipDeltaThrust *= shipDeltaThrustCapDamping;
+            appliedEffects.shipDeltaDrag *= shipDragDamping;
+            appliedEffects.shipDeltaAngularDrag *= shipAngularDragDamping;
 
-            _appliedEffects.shipForce = Vector3.ClampMagnitude(_appliedEffects.shipForce, maxShipForce);
-            _appliedEffects.shipDeltaSpeedCap = Mathf.Min(_appliedEffects.shipDeltaSpeedCap, maxShipDeltaSpeed);
-            _appliedEffects.shipDeltaThrust = Mathf.Min(_appliedEffects.shipDeltaThrust, maxShipDeltaThrust);
-            _appliedEffects.shipDeltaDrag = Mathf.Min(_appliedEffects.shipDeltaDrag, maxShipDrag);
-            _appliedEffects.shipDeltaAngularDrag = Mathf.Min(_appliedEffects.shipDeltaAngularDrag, maxShipAngularDrag);
+            appliedEffects.shipForce = Vector3.ClampMagnitude(appliedEffects.shipForce, maxShipForce);
+            appliedEffects.shipDeltaSpeedCap = Mathf.Min(appliedEffects.shipDeltaSpeedCap, maxShipDeltaSpeed);
+            appliedEffects.shipDeltaThrust = Mathf.Min(appliedEffects.shipDeltaThrust, maxShipDeltaThrust);
+            appliedEffects.shipDeltaDrag = Mathf.Min(appliedEffects.shipDeltaDrag, maxShipDrag);
+            appliedEffects.shipDeltaAngularDrag = Mathf.Min(appliedEffects.shipDeltaAngularDrag, maxShipAngularDrag);
         }
 
         public void ApplyModifier(Rigidbody shipRigidBody, IModifier modifier) {
-            modifier.ApplyModifierEffect(shipRigidBody, ref _appliedEffects);
+            modifier.ApplyModifierEffect(shipRigidBody, ref appliedEffects);
         }
 
         public void SetDirect(Vector3 shipForce, float shipDeltaSpeedCap, float shipDeltaThrust, float shipDrag, float shipAngularDrag) {
-            _appliedEffects.shipForce = shipForce;
-            _appliedEffects.shipDeltaSpeedCap = shipDeltaSpeedCap;
-            _appliedEffects.shipDeltaThrust = shipDeltaThrust;
-            _appliedEffects.shipDeltaDrag = shipDrag;
-            _appliedEffects.shipDeltaAngularDrag = shipAngularDrag;
+            appliedEffects.shipForce = shipForce;
+            appliedEffects.shipDeltaSpeedCap = shipDeltaSpeedCap;
+            appliedEffects.shipDeltaThrust = shipDeltaThrust;
+            appliedEffects.shipDeltaDrag = shipDrag;
+            appliedEffects.shipDeltaAngularDrag = shipAngularDrag;
         }
     }
 }

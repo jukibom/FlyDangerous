@@ -130,7 +130,7 @@ namespace Core.ShipModel {
         public bool VelocityLimitActive { get; private set; }
         public bool VectorFlightAssistActive { get; private set; }
         public bool RotationalFlightAssistActive { get; private set; }
-        public bool IsShipLightsActive { get; private set; }
+        public bool IsNightVisionActive { get; private set; }
 
 
         [CanBeNull]
@@ -261,9 +261,9 @@ namespace Core.ShipModel {
             if (isValidHit) _shipInstrumentData.ProximityWarningSeconds = hitInfo.distance / velocity.magnitude;
         }
 
-        public void NightVisionToggle(Action<bool> shipLightStatus) {
-            IsShipLightsActive = !IsShipLightsActive;
-            shipLightStatus(IsShipLightsActive);
+        public void NightVisionToggle(bool isEnabled, Action<bool> shipLightStatus) {
+            IsNightVisionActive = isEnabled;
+            shipLightStatus(IsNightVisionActive);
         }
 
         /**
@@ -474,7 +474,7 @@ namespace Core.ShipModel {
             _shipInstrumentData.BoostTimerReady = !_boostRecharging;
             _shipInstrumentData.BoostChargeReady = _boostCapacitorPercent > FlightParameters.boostCapacitorPercentCost;
             _shipInstrumentData.UnderWater = _shipInstrumentData.Altitude < 0;
-            _shipInstrumentData.LightsActive = IsShipLightsActive;
+            _shipInstrumentData.LightsActive = IsNightVisionActive;
             _shipInstrumentData.VelocityLimiterActive = VelocityLimitActive;
             _shipInstrumentData.VectorFlightAssistActive = VectorFlightAssistActive;
             _shipInstrumentData.RotationalFlightAssistActive = RotationalFlightAssistActive;

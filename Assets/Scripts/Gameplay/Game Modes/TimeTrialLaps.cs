@@ -11,7 +11,7 @@ namespace Gameplay.Game_Modes {
     // If we find end, that becomes start and the previous logic applies.
     public class TimeTrialLaps : TimeTrialSprint {
         private enum TimeTrialLapsCheckpointMode {
-            Start,
+            StartOnly,
             End,
             Both
         }
@@ -34,14 +34,14 @@ namespace Gameplay.Game_Modes {
             _startCheckpoint = GameModeCheckpoints.Checkpoints.Find(c => c.Type == CheckpointType.Start);
             _endCheckpoint = GameModeCheckpoints.Checkpoints.Find(c => c.Type == CheckpointType.End);
 
-            if (_startCheckpoint != null) _timeTrialLapsCheckpointMode = TimeTrialLapsCheckpointMode.Start;
+            if (_startCheckpoint != null) _timeTrialLapsCheckpointMode = TimeTrialLapsCheckpointMode.StartOnly;
             if (_endCheckpoint != null) _timeTrialLapsCheckpointMode = TimeTrialLapsCheckpointMode.End;
             if (_startCheckpoint != null && _endCheckpoint != null) _timeTrialLapsCheckpointMode = TimeTrialLapsCheckpointMode.Both;
 
             if (_timeTrialLapsCheckpointMode == TimeTrialLapsCheckpointMode.End) {
                 _startCheckpoint = _endCheckpoint;
                 _startCheckpoint.Type = CheckpointType.Start;
-                _timeTrialLapsCheckpointMode = TimeTrialLapsCheckpointMode.Start;
+                _timeTrialLapsCheckpointMode = TimeTrialLapsCheckpointMode.StartOnly;
             }
         }
 
@@ -60,7 +60,7 @@ namespace Gameplay.Game_Modes {
 
             // display lap 1 as 00:00 until we're actually ready to count up
             List<float> lapTimesToDisplay;
-            if (!GameModeLifecycle.HasStarted)
+            if (!GameModeLifecycle.HasStarted || GameModeTimer.CurrentSessionTimeSeconds < 0)
                 lapTimesToDisplay = new List<float> { 0 };
             else
                 lapTimesToDisplay = new List<float>(_lapSplits) { GameModeTimer.CurrentSessionTimeSeconds - _timeAtPreviousLapCycle };
@@ -70,14 +70,14 @@ namespace Gameplay.Game_Modes {
 
         public override void OnCheckpointHit(Checkpoint checkpoint, float hitTimeSeconds) {
             // if we only have a starting checkpoint, swap it to end after the first hit
-            if (_timeTrialLapsCheckpointMode == TimeTrialLapsCheckpointMode.Start) {
+            if (_timeTrialLapsCheckpointMode == TimeTrialLapsCheckpointMode.StartOnly) {
                 _startCheckpoint.Type = CheckpointType.End;
                 _endCheckpoint = _startCheckpoint;
             }
 
             if (checkpoint.Type == CheckpointType.Check) _endCheckpoint.Reset();
 
-            base.OnCheckpointHit(checkpoint, hitTimeSeconds - _timeAtPreviousLapCycle);
+            base.OnCheckpointHit(checkpoint, hitTimeSeconds);
         }
 
         public override void OnLastCheckpointHit(float hitTimeSeconds) {

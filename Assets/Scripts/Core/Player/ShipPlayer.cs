@@ -333,8 +333,8 @@ namespace Core.Player {
             if (Preferences.Instance.GetBool("forceRelativeMouseWithFAOff")) User.ResetMouseToCentre();
         }
 
-        public void NightVisionToggle() {
-            ShipPhysics.NightVisionToggle(CmdSetNightVision);
+        public void SetNightVisionEnabled(bool isEnabled) {
+            ShipPhysics.NightVisionToggle(isEnabled, CmdSetNightVision);
         }
 
         public void VelocityLimiterIsPressed(bool isPressed) {

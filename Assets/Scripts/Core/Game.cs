@@ -25,7 +25,6 @@ using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 using UnityEngine.XR.Management;
 using Environment = System.Environment;
 #if !NO_PAID_ASSETS
@@ -321,8 +320,8 @@ namespace Core {
 
                 // wait for all known currently loading players to have finished loading
                 loadingPlayer.SetLoaded();
-                var loadText = GameObject.FindGameObjectWithTag("DynamicLoadingText").GetComponent<Text>();
-                loadText.text = "Waiting for all players to load ...";
+                var loadingRoom = FindObjectOfType<LoadingRoom>();
+                loadingRoom.CenterLoadingText = "Waiting for all players to load ...";
                 yield return WaitForAllPlayersLoaded();
 
                 loadingPlayer.RequestTransitionToShipPlayer();

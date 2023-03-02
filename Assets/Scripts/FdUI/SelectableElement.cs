@@ -1,5 +1,6 @@
 using Audio;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace FdUI {
     /**
@@ -9,6 +10,7 @@ namespace FdUI {
     public class SelectableElement : EventTrigger {
         public bool playSound = true;
         private bool _elementInteracting;
+        private Slider _slider;
 
         public override void OnPointerEnter(PointerEventData eventData) {
             if (playSound) PlaySound();

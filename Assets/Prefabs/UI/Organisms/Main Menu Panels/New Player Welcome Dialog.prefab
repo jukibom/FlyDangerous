@@ -202,7 +202,7 @@ MonoBehaviour:
   m_UseGraphicAlpha: 1
 --- !u!95 &1436108147975886139
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -219,7 +219,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!114 &5197949850666269882
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -330,6 +330,86 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!1 &1955943371444174113
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2457351028124261808}
+  - component: {fileID: 3679460220800532069}
+  - component: {fileID: 8181143093126260176}
+  m_Layer: 0
+  m_Name: Notice
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2457351028124261808
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1955943371444174113}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4108930340252746727}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &3679460220800532069
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1955943371444174113}
+  m_CullTransparentMesh: 1
+--- !u!114 &8181143093126260176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1955943371444174113}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: 2a10b83737e7e4a418a8e42486809645, type: 3}
+    m_FontSize: 20
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 10
+    m_MaxSize: 65
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: MORE SETTINGS AND INFORMATION IN THE OPTIONS MENU
 --- !u!1 &3865793313098784846
 GameObject:
   m_ObjectHideFlags: 0
@@ -597,6 +677,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 4108930340252746727}
     m_Modifications:
     - target: {fileID: 446814439440287808, guid: feb12799c0fad1d4d9ad760620395e08, type: 3}
@@ -1068,6 +1149,15 @@ PrefabInstance:
       value: 26.6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3677892308659153262, guid: feb12799c0fad1d4d9ad760620395e08, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1247669359655037610}
+    - targetCorrespondingSourceObject: {fileID: 3143281806577445026, guid: feb12799c0fad1d4d9ad760620395e08, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3808357195055604957}
   m_SourcePrefab: {fileID: 100100000, guid: feb12799c0fad1d4d9ad760620395e08, type: 3}
 --- !u!1 &3193989329291324835 stripped
 GameObject:
@@ -1111,11 +1201,17 @@ MonoBehaviour:
   toolTipText: A simplified, fixed-binding gamepad and keyboard input model suitable
     for beginners and those looking to just pick up and play. You can always switch
     back to these controls irrespective of your advanced bindings.
+--- !u!224 &4068471715732151774 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4592096024784492767, guid: feb12799c0fad1d4d9ad760620395e08, type: 3}
+  m_PrefabInstance: {fileID: 561958715389052161}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1436108146363501325
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 1436108148113141781}
     m_Modifications:
     - target: {fileID: 609786913693381189, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
@@ -1251,6 +1347,9 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
 --- !u!224 &1988463719433054149 stripped
 RectTransform:
@@ -1273,6 +1372,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 4108930340252746727}
     m_Modifications:
     - target: {fileID: 959697013099676001, guid: 867e83b6d6754d944aac22727e76575d, type: 3}
@@ -1544,6 +1644,12 @@ PrefabInstance:
       value: DEFAULT FLIGHT ASSISTS
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8031816776331519999, guid: 867e83b6d6754d944aac22727e76575d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5145969652328196444}
   m_SourcePrefab: {fileID: 100100000, guid: 867e83b6d6754d944aac22727e76575d, type: 3}
 --- !u!114 &1206881968060629830 stripped
 MonoBehaviour:
@@ -1587,11 +1693,17 @@ MonoBehaviour:
   toolTipText: Which flight assists are applied by default. These assists perform
     auto-correction back to zero at the cost of full ship control. Disable them all
     for the ultimate test of skill!
+--- !u!224 &6819455100624391723 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8031816776331519998, guid: 867e83b6d6754d944aac22727e76575d, type: 3}
+  m_PrefabInstance: {fileID: 3590825231065950677}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7818022866238035707
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 4108930340252746727}
     m_Modifications:
     - target: {fileID: 4900225197506252793, guid: 8c209f168aa51894d8451b119ec29ffe, type: 3}
@@ -1791,6 +1903,12 @@ PrefabInstance:
       value: AUTO SHIP ROTATION
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8031816776331519999, guid: 8c209f168aa51894d8451b119ec29ffe, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 290833630409293117}
   m_SourcePrefab: {fileID: 100100000, guid: 8c209f168aa51894d8451b119ec29ffe, type: 3}
 --- !u!1 &218860734610452740 stripped
 GameObject:
@@ -1812,6 +1930,11 @@ MonoBehaviour:
   toolTipText: When enabled, all ship rotations will be inferred from throttle, lateral
     and vertical thrusters. Rotational controls may still be bound and used independent
     of this system. Note that flight assist will be forced on in this mode.
+--- !u!224 &218860734610452741 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8031816776331519998, guid: 8c209f168aa51894d8451b119ec29ffe, type: 3}
+  m_PrefabInstance: {fileID: 7818022866238035707}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &2917816590210210050 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4900225197506252793, guid: 8c209f168aa51894d8451b119ec29ffe, type: 3}
@@ -1828,6 +1951,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 1436108147975886137}
     m_Modifications:
     - target: {fileID: 6291702346574653274, guid: 7f6395d7f158695469e04e970e119e8d, type: 3}
@@ -2035,6 +2159,36 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 6291702348231333095, guid: 7f6395d7f158695469e04e970e119e8d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4068471715732151774}
+    - targetCorrespondingSourceObject: {fileID: 6291702348231333095, guid: 7f6395d7f158695469e04e970e119e8d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 218860734610452741}
+    - targetCorrespondingSourceObject: {fileID: 6291702348231333095, guid: 7f6395d7f158695469e04e970e119e8d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6819455100624391723}
+    - targetCorrespondingSourceObject: {fileID: 6291702348231333095, guid: 7f6395d7f158695469e04e970e119e8d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1980163550064061517}
+    - targetCorrespondingSourceObject: {fileID: 6291702348231333095, guid: 7f6395d7f158695469e04e970e119e8d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1905348567495457967}
+    - targetCorrespondingSourceObject: {fileID: 6291702348231333095, guid: 7f6395d7f158695469e04e970e119e8d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2457351028124261808}
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6291702347496066626, guid: 7f6395d7f158695469e04e970e119e8d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3865793313266162752}
+    - targetCorrespondingSourceObject: {fileID: 6291702348231333092, guid: 7f6395d7f158695469e04e970e119e8d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6539761223339106485}
+    - targetCorrespondingSourceObject: {fileID: 6291702348231333092, guid: 7f6395d7f158695469e04e970e119e8d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6539761223339106486}
   m_SourcePrefab: {fileID: 100100000, guid: 7f6395d7f158695469e04e970e119e8d, type: 3}
 --- !u!1 &4108930338979862850 stripped
 GameObject:
@@ -2121,6 +2275,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 4108930340252746727}
     m_Modifications:
     - target: {fileID: 3292075289183379223, guid: 8c209f168aa51894d8451b119ec29ffe, type: 3}
@@ -2341,6 +2496,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4900225197506252793, guid: 8c209f168aa51894d8451b119ec29ffe, type: 3}
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8031816776331519999, guid: 8c209f168aa51894d8451b119ec29ffe, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2192823036050802058}
   m_SourcePrefab: {fileID: 100100000, guid: 8c209f168aa51894d8451b119ec29ffe, type: 3}
 --- !u!1 &1980163550064061516 stripped
 GameObject:
@@ -2363,11 +2524,17 @@ MonoBehaviour:
     and vertical thrusters. Rotational controls may still be bound and used independent
     of this system. Note that flight assist will be forced on in this mode. Always
     on in Arcade mode.
+--- !u!224 &1980163550064061517 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8031816776331519998, guid: 8c209f168aa51894d8451b119ec29ffe, type: 3}
+  m_PrefabInstance: {fileID: 8362140574769073075}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8432874445049092945
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 4108930340252746727}
     m_Modifications:
     - target: {fileID: 959697013099676001, guid: 867e83b6d6754d944aac22727e76575d, type: 3}
@@ -2696,6 +2863,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2407904371764767379, guid: 867e83b6d6754d944aac22727e76575d, type: 3}
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8031816776331519999, guid: 867e83b6d6754d944aac22727e76575d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4818834926611428037}
   m_SourcePrefab: {fileID: 100100000, guid: 867e83b6d6754d944aac22727e76575d, type: 3}
 --- !u!1 &1905348567495457966 stripped
 GameObject:
@@ -2717,6 +2890,11 @@ MonoBehaviour:
   toolTipText: 'Which flight assists are applied by default. These assists perform
     auto-correction back to zero at the cost of full ship control. Disable them all
     for the ultimate test of skill! Always On with Auto Rotation. '
+--- !u!224 &1905348567495457967 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8031816776331519998, guid: 867e83b6d6754d944aac22727e76575d, type: 3}
+  m_PrefabInstance: {fileID: 8432874445049092945}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &8671137896399477296 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 959697013099676001, guid: 867e83b6d6754d944aac22727e76575d, type: 3}

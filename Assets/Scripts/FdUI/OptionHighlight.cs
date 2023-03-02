@@ -20,7 +20,7 @@ namespace FdUI {
 
         private bool _selected;
 
-        private void OnEnable() {
+        private void Awake() {
             selectionImage.enabled = false;
             _baseColor = selectionImage.color;
             _hoverColor = new Color(_baseColor.r, _baseColor.g, _baseColor.b, _baseColor.a / 2);

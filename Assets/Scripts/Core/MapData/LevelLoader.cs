@@ -12,7 +12,6 @@ using MapMagic.Core;
 using Misc;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 #if !NO_PAID_ASSETS
 using GPUInstancer;
 #endif
@@ -64,14 +63,14 @@ namespace Core.MapData {
                     yield return new WaitForSeconds(0.1f);
 
                     // wait for fully loaded local terrain
-                    var loadText = GameObject.FindGameObjectWithTag("DynamicLoadingText").GetComponent<Text>();
+                    var loadingRoom = FindObjectOfType<LoadingRoom>();
                     while (mapMagic.IsGenerating()) {
                         try {
-                            var progressPercent = Mathf.Min(100, Mathf.Round(mapMagic.GetProgress() * 100));
-                            loadText.text = $"Generating terrain ({progressPercent}%)";
+                            var progressPercent = Mathf.Min(100, Mathf.Floor(mapMagic.GetProgress() * 100));
+                            loadingRoom.CenterLoadingText = $"Generating terrain ({progressPercent}%)";
                         }
                         catch {
-                            // ignored because it only updates loading text and weird race condition errors here in map magic and out of my control
+                            // ignored because it only updates loading text and weird race condition errors here in map magic are out of my control
                         }
 
                         yield return null;
@@ -164,7 +163,7 @@ namespace Core.MapData {
             Time.timeScale = 0;
 
             // grab the load text to draw to
-            var loadText = GameObject.FindGameObjectWithTag("DynamicLoadingText").GetComponent<Text>();
+            var loadingRoom = FindObjectOfType<LoadingRoom>();
 
             float progress = 0;
             for (var i = 0; i < _scenesLoading.Count; ++i)
@@ -177,9 +176,9 @@ namespace Core.MapData {
                     var progressPercent = Mathf.Min(100, Mathf.Round(totalProgress * 100));
 
                     // set loading text (last scene is always the engine)
-                    loadText.text = i == _scenesLoading.Count
-                        ? $"Loading Engine ({progressPercent}%)"
-                        : $"Loading Assets ({progressPercent}%)";
+                    loadingRoom.CenterLoadingText = i == _scenesLoading.Count
+                        ? $"Loading Engine ({progressPercent}%) ..."
+                        : $"Loading Assets ({progressPercent}%) ...";
 
                     yield return null;
                 }
@@ -225,10 +224,13 @@ namespace Core.MapData {
                 // wait for fully loaded local terrain
                 while (mapMagic.IsGenerating()) {
                     try {
-                        var progressPercent = Mathf.Min(100, Mathf.Round(mapMagic.GetProgress() * 100));
+                        var progressPercent = Mathf.Min(100, Mathf.Floor(mapMagic.GetProgress() * 100));
 
                         // this entity may be destroyed by server shutdown...
-                        if (loadText != null) loadText.text = $"Generating terrain ({progressPercent}%)\n\n\nSeed: \"{LoadedLevelData.terrainSeed}\"";
+                        if (loadingRoom != null) {
+                            loadingRoom.CenterLoadingText = progressPercent < 100 ? $"Generating terrain ({progressPercent}%) ..." : "Loading Environment ...";
+                            loadingRoom.FooterLoadingText = $"Seed: \"{LoadedLevelData.terrainSeed}\"";
+                        }
                     }
                     catch {
                         // ignored because it only updates loading text and weird race condition errors here in map magic and out of my control

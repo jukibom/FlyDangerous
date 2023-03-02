@@ -125,7 +125,7 @@ namespace Core.ShipModel {
             else nightVisionDeactivateAudioSource.Play();
 
             // enable the associated light
-            shipLights.enabled = !shipLights.enabled;
+            shipLights.enabled = active;
 
             // ensure that the local player ship lights take priority over all others
             var player = GetComponentInParent<ShipPlayer>();

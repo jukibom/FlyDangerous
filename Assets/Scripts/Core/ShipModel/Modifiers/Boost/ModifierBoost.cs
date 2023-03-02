@@ -1,3 +1,4 @@
+using Core.ShipModel.Modifiers.Water;
 using NaughtyAttributes;
 using UnityEngine;
 
@@ -20,13 +21,12 @@ namespace Core.ShipModel.Modifiers.Boost {
             }
         }
 
-        public bool UseDistortion {
-            get => modifierBoostThrust.UseDistortion;
-            set => modifierBoostThrust.UseDistortion = value;
-        }
-
         private void Awake() {
             boostStreamLengthMeters = modifierBoostStream.TrailLengthMeters;
+        }
+
+        private void OnEnable() {
+            modifierBoostThrust.UseDistortion = FindObjectOfType<ModifierWater>() == null;
         }
 
         private void BoostLengthChanged() {

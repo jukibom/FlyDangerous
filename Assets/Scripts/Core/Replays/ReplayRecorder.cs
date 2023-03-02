@@ -69,10 +69,12 @@ namespace Core.Replays {
                     lateralV = _targetShip.LatV,
                     boostHeld = _targetShip.BoostButtonHeld,
                     limiterHeld = _targetShip.VelocityLimitActive,
-                    shipLightsEnabled = _targetShip.IsShipLightsActive,
+                    shipLightsEnabled = _targetShip.IsNightVisionActive,
                     modifierShipForce = _targetShip.AppliedEffects.shipForce,
-                    modifierShipDeltaSpeedCap = _targetShip.AppliedEffects.shipDeltaThrust,
-                    modifierShipDeltaThrust = _targetShip.AppliedEffects.shipDeltaThrust
+                    modifierShipDeltaSpeedCap = _targetShip.AppliedEffects.shipDeltaSpeedCap,
+                    modifierShipDeltaThrust = _targetShip.AppliedEffects.shipDeltaThrust,
+                    modifierShipDrag = _targetShip.AppliedEffects.shipDeltaDrag,
+                    modifierShipAngularDrag = _targetShip.AppliedEffects.shipDeltaAngularDrag
                 });
 
                 _ticks++;

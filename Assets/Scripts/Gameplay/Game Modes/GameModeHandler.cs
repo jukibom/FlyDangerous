@@ -130,6 +130,7 @@ namespace Gameplay.Game_Modes {
         private void Restart() {
             StopGhosts();
             LocalPlayer.User.DisableUIInput();
+            LocalPlayer.SetNightVisionEnabled(false);
             _inGameUI.GameModeUIHandler.GameModeUIText.HideGameUIText(false);
             _inGameUI.GameModeUIHandler.RaceResultsScreen.Hide();
             _gameModeScore.Reset();
@@ -307,8 +308,10 @@ namespace Gameplay.Game_Modes {
             var bottomRightText = _inGameUI.GameModeUIHandler.MusicNameText;
 
             var musicTrack = _levelData.musicTrack;
-            bottomLeftText.text = _levelData.name.IsNullOrEmpty() ? "" : $"\"{_levelData.name.ToUpper()}\"";
-            bottomRightText.text = musicTrack == MusicTrack.None ? "" : $"MUSIC: {musicTrack.Artist.ToUpper()} - {musicTrack.Name.ToUpper()}";
+            bottomLeftText.text = _levelData.name.IsNullOrEmpty()
+                ? ""
+                : $"\"{_levelData.name.ToUpper()}\" {(_levelData.author.IsNullOrEmpty() ? "" : "by " + _levelData.author.ToUpper())}";
+            bottomRightText.text = musicTrack == MusicTrack.None ? "" : $"MUSIC: {musicTrack.Name.ToUpper()} by {musicTrack.Artist.ToUpper()}";
             bottomCanvasGroup.alpha = 0;
 
             yield return new WaitForSeconds(1);

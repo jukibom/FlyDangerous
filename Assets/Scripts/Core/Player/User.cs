@@ -291,7 +291,7 @@ namespace Core.Player {
 
         [UsedImplicitly]
         public void OnRestartFromLastCheckpoint() {
-            if (movementEnabled) Debug.Log("Lol there are no checkpoints yet ^_^");
+            if (movementEnabled) Debug.Log("lol no");
         }
 
         [UsedImplicitly]
@@ -425,7 +425,7 @@ namespace Core.Player {
 
         [UsedImplicitly]
         public void OnShipLightsToggle(InputValue value) {
-            shipPlayer.NightVisionToggle();
+            shipPlayer.SetNightVisionEnabled(!shipPlayer.ShipPhysics.IsNightVisionActive);
         }
 
         [UsedImplicitly]

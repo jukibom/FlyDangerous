@@ -138,6 +138,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Delegates: []
+  isSlider: 1
+  sliderIncrements: 0.5
   playSound: 1
 --- !u!1 &1944889945569303347
 GameObject:
@@ -425,7 +427,7 @@ RectTransform:
   m_Children:
   - {fileID: 4535296159011167534}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
@@ -684,6 +686,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Delegates: []
+  isSlider: 0
+  sliderIncrements: 0.5
   playSound: 1
 --- !u!1 &5042503808446584181
 GameObject:
@@ -840,6 +844,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 4535296159011167534}
     m_Modifications:
     - target: {fileID: 2222857714052348781, guid: 7979c4c410718cc4a8e1307f7cf5175b, type: 3}
@@ -1059,6 +1064,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4046174603634908570, guid: 7979c4c410718cc4a8e1307f7cf5175b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9057324069764021955}
   m_SourcePrefab: {fileID: 100100000, guid: 7979c4c410718cc4a8e1307f7cf5175b, type: 3}
 --- !u!114 &1981730958247924594 stripped
 MonoBehaviour:

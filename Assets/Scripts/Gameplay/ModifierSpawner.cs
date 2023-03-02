@@ -4,7 +4,6 @@ using System.Linq;
 using Core.MapData;
 using Core.MapData.Serializable;
 using Core.ShipModel.Modifiers.Boost;
-using Core.ShipModel.Modifiers.Water;
 using JetBrains.Annotations;
 using NaughtyAttributes;
 using UnityEngine;
@@ -80,7 +79,6 @@ namespace Gameplay {
             switch (modifierType) {
                 case "Boost":
                     modifierBoost.gameObject.SetActive(true);
-                    modifierBoost.UseDistortion = FindObjectOfType<ModifierWater>() == null;
                     break;
             }
         }

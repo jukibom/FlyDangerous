@@ -14,6 +14,8 @@ namespace Core.MapData {
         [DefaultValue(1)] public int version = 1;
         public string name = "";
 
+        public string author = "";
+
         [JsonConverter(typeof(FdEnumJsonConverter))]
         public GameType gameType = GameType.FreeRoam;
 

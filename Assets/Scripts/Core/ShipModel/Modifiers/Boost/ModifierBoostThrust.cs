@@ -17,13 +17,20 @@ namespace Core.ShipModel.Modifiers.Boost {
             get => _useDistortion;
             set {
                 _useDistortion = value;
-                _meshRenderer.material.SetInt(includeDistortion, _useDistortion ? 1 : 0);
+                MeshRenderer.material.SetInt(includeDistortion, _useDistortion ? 1 : 0);
+            }
+        }
+
+        private MeshRenderer MeshRenderer {
+            get {
+                if (_meshRenderer == null)
+                    _meshRenderer = GetComponent<MeshRenderer>();
+                return _meshRenderer;
             }
         }
 
         public void Awake() {
             _boostSound = GetComponent<AudioSource>();
-            _meshRenderer = GetComponent<MeshRenderer>();
         }
 
         public void ApplyModifierEffect(Rigidbody shipRigidBody, ref AppliedEffects effects) {

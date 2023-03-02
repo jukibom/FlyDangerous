@@ -2,14 +2,18 @@ using System;
 using System.Globalization;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace FdUI {
-    public class FdSlider : MonoBehaviour {
+    public class FdSlider : MonoBehaviour, IMoveHandler {
         [SerializeField] private InputField numberTextBox;
         [SerializeField] private Slider slider;
         [SerializeField] private float minValue;
         [SerializeField] private float maxValue;
+
+        [Tooltip("Set the slider increments from gamepad / keyboard input")] [SerializeField]
+        private float sliderIncrements = 0.5f;
 
         [SerializeField] public UnityEvent<float> onValueChanged;
 
@@ -60,6 +64,21 @@ namespace FdUI {
 
         private void OnValueChanged() {
             onValueChanged.Invoke(Value);
+        }
+
+        void IMoveHandler.OnMove(AxisEventData eventData) {
+            // handle left and right 
+            if (eventData.moveDir == MoveDirection.Left || eventData.moveDir == MoveDirection.Right) {
+                var multipleOf = sliderIncrements;
+                slider.value += eventData.moveDir == MoveDirection.Right ? multipleOf : -multipleOf;
+                // round to nearest increment value
+                slider.value = Mathf.Round(slider.value / multipleOf) * multipleOf;
+            }
+
+            // otherwise yeet the event up
+            else {
+                ExecuteEvents.ExecuteHierarchy(transform.parent.gameObject, eventData, ExecuteEvents.moveHandler);
+            }
         }
     }
 }

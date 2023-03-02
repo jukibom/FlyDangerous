@@ -34,6 +34,7 @@ namespace Gameplay {
         [SerializeField] private Transform geometryContainer;
 
         [HorizontalLine] [SerializeField] private string trackName;
+        [HorizontalLine] [SerializeField] private string authorName;
 
         [Dropdown("GetGameModes")] [OnValueChanged("SetGameMode")] [SerializeField]
         private string gameMode;
@@ -77,6 +78,7 @@ namespace Gameplay {
 
             var levelData = new LevelData {
                 name = trackName,
+                author = authorName,
                 authorTimeTarget = authorTimeTarget,
                 gameType = GameType.FromString(gameMode),
                 location = loadedLevelData.location,
@@ -113,6 +115,7 @@ namespace Gameplay {
         // Build level geometry from json
         public void Deserialize(LevelData levelData) {
             trackName = levelData.name;
+            authorName = levelData.author;
             gameMode = levelData.gameType.Name;
             authorTimeTarget = levelData.authorTimeTarget > 0 ? levelData.authorTimeTarget : 60;
             environment = levelData.environment.Name;
