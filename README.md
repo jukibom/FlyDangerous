@@ -93,7 +93,7 @@ The release build is reliant on some paid assets (follow instructions underneath
 
 **IF YOU DO NOT HAVE THESE ASSETS** (and, why would you?) and do not wish to buy them, follow these instructions to build:
 
-* Ensure you have https://assetstore.unity.com/packages/tools/terrain/mapmagic-2-165180 in your Unity account and download it with the in-build package manager under the "My Assets" tab (the free version of map magic will suffice, although you will miss some features and may not be able to load some terrains).
+* Ensure you have https://assetstore.unity.com/packages/tools/terrain/mapmagic-2-165180 in your Unity account and download it with the in-build package manager under the "My Assets" tab (the free version of map magic will suffice, although you will miss some features and may not be able to load some terrains). 
  
 * Clone the repository
 
@@ -101,7 +101,13 @@ The release build is reliant on some paid assets (follow instructions underneath
 
 ![image](https://user-images.githubusercontent.com/5649179/121093848-8eabe400-c7e5-11eb-83a4-ba646ec68ffe.png)
 
-* **Optional**: If you do happen to have SC Post Effects, got to `Assets/Settings/UniversalRP-HighQuality` and swap out the `ForwardRendererNoFog` for `ForwardRenderer` (this is what is used in builds)
+* Add Map Magic 2 to the project in the My Assets tab. You won't need the Compatibility or Demo folder, nor any of the additional assets. 
+
+![image](https://user-images.githubusercontent.com/5649179/221643540-58c737fa-9846-4097-9a73-8355a409f277.png)
+
+Once it's imported, move it into the `Standard Assets` folder so that it'll be ignored by git. If there's already a folder in there, just delete it first.
+
+* **Optional**: If you do happen to have SC Post Effects, got to `Assets/Settings/UniversalRP-HighQuality` and swap out the `ForwardRendererNoFog` for `ForwardRenderer` (this is what is used in builds).
 
 ### Steam Integration
 
