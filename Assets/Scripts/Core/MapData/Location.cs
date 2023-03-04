@@ -14,8 +14,8 @@ namespace Core.MapData {
 
         public static readonly Location Space = new("Space", "Space", "Empty space - literally nothing here", "Space", false);
 
-        public static readonly Location Achelous8A = new("Achelous 8A", "Achelous 8A",
-            "A ridiculously unlikely, spiky, and treacherous nightmare-terrain basically just here for the Newton's Gambit nutters.", "Achelous 8A", true);
+        public static readonly Location Achelous8A = new("Achelous 8A", "Achelous 8D",
+            "A ridiculously unlikely, spiky, and treacherous nightmare-terrain basically just here for the Newton's Gambit nutters.", "Achelous 8D", true);
 
         public static readonly Location ProvingGrounds = new("Proving Grounds", "Proving Grounds",
             "A testing scene used for staging new features and testing flight mechanics", "ProvingGrounds", false);
