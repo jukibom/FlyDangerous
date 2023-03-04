@@ -54,6 +54,8 @@ namespace Core.MapData {
         public static readonly Level LongHaul = new("Long Haul", "long-haul", GameType.Laps);
 
         // Puzzle
+        public static readonly Level Highways = new("Highways", "highways", GameType.Puzzle);
+        public static readonly Level Playground = new("Playground", "playground", GameType.Puzzle);
         public static readonly Level DecisionsDecisions = new("Decisions decisions", "decisions-decisions", GameType.Puzzle);
 
         private readonly string _jsonPath;
@@ -90,7 +92,7 @@ namespace Core.MapData {
                 // new laps
                 AroundTheStationV2, CoastlineCircuit, Slipstream, Speedway, LongHaul,
                 // new puzzle
-                DecisionsDecisions
+                DecisionsDecisions, Playground, Highways
             };
         }
 
