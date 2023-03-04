@@ -723,15 +723,15 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1.5
-  m_Text: "0.6.0\n\nNew:\r\n    * Fully rebuilt biome terrain world graph with new
+  m_Text: "0.6.0\r\nNew:\r\n    * Fully rebuilt biome terrain world graph with new
     biomes:\r\n        * Desert (red, dunes)\r\n        * Tropical\r\n        * Coastline\r\n       
     * Arctic Tundra / Ice\r\n        * Rebuilt rocky biome\r\n        * Reworked
     mountain biome from GPU test\r\n        * Ocean / Rivers (with submersible mechanics)\r\n   
     * Added new boost pad modifiers to level format\r\n    * Added decorative billboards
     to level format\r\n    * Added two new game modes - laps and puzzle\r\n    *
     Added 18 new time trial sprint maps and deprecated the old ones (still playable,
-    see collisions feature below!)\r\n    * Added [?????] new time trial laps maps\r\n   
-    * Added [?????] new puzzle maps\r\n    * Ship Collisions (Change in collision
+    see collisions feature below!)\r\n    * Added 5 new time trial circuit / laps
+    maps\r\n    * Added 3 new puzzle maps\r\n    * Ship Collisions (Change in collision
     gameplay means maps reliant on checkpoint rebounds at high end are deprecated)\r\n       
     * Added visual shield effect for collisions (#183)\r\n        * Added engine
     capacity penalty on collision proportional to impact (#183)\r\n        * Added
@@ -757,10 +757,11 @@ MonoBehaviour:
     (#203 partial)\r\n    * Added ability set music track in Free Roam mode\r\n   
     * Added six new music tracks\r\n    * Added map and music track name to first
     level start\r\n    * Added ability to preview environment and music in Free Roam
-    menu\r\n    * Added bonus surprise terrain\r\n    * Added 3d indicators to ghosts
-    and other players in multiplayer\r\n        * There is no manual targetting system
-    as of yet, you must look directly at a target to initiate the 3d indicator\r\n   
-    * Added new indicators to Calidris cockpit (and only that ship + view, for now)
+    menu\r\n    * Added track name, author and music track / artist on level load\r\n   
+    * Added bonus surprise terrain\r\n    * Added 3d indicators to ghosts and other
+    players in multiplayer\r\n        * There is no manual targetting system as of
+    yet, you must look directly at a target to initiate the 3d indicator\r\n    *
+    Added new indicators to Calidris cockpit (and only that ship + view, for now)
     to show proximity alert and overcharge from boost singularities\r\n        \r\nChanged:\r\n   
     * Ship lights now operate as night vision\r\n    * Flight assist rotation correction
     strength buffed slightly \r\n    * Interior Calidris cockpit glass reflectivity
@@ -778,27 +779,29 @@ MonoBehaviour:
     person)\r\n    * Removed GPU test terrain (thank you for feedback! will circle
     back to this)\r\n    * Better handled fog near distance - should have more terrain
     visible now\r\n    * Added the ability to push out to 4 max terrain tiles - recommended
-    ONLY with new terrains, legacy terrain will take an eon to load!\r\n    * Updated
-    to Unity 2022.1.20f1\r\n    \r\nFixes:\r\n    * Possible fix for VKBs always
-    reporting \"Hat Up\" on rebind (thanks to the painful manual debugging efforts
-    of Giskard for this fix!)\r\n    * Was previously possible to unset protected
-    bindings (which cannot then be rebound!)\r\n    * Fixed (hopefully!) occasional
-    rare crash on terrain load (#190)\r\n    * Collision detection should be more
-    accurate at high speeds (speculative detection mode increased collision size
-    with velocity!)\r\n    * Incorrect dimensions on some flags in dropdown (#196)\r\n   
-    * Fixed toggling alternate flight controls resetting axes (#178)\r\n    * No
-    longer possible to ever be underneath the terrain (e.g. through a crack in the
-    tile margins), ship is always pushed up to compensate\r\n    * Bug causing camera
-    damping to be forgotten on restart when using Arcade control scheme\r\n    *
-    Fixed ship params not sticking between levels\r\n    * Fixed relative mouse mode
-    applying return rate before sending input (leading to effectively no input at
-    high return rates) \r\n    * Culled UI elements from real time reflection probe
-    (whoops!) \r\n    * Fixed geometry reflecting from the ship perspective when
-    realtime reflections are enabled (just don't ask how, I beg you)\r\n    * Fixed
-    pause menu failing to open first time after restarting after showing results
-    screen\r\n    * Hopefully fixed another enormous pile of input binding bugs +
-    updated to latest input system\r\n    * Honestly so many more little fixes that
-    I just didn't bother to detail, this list is already too long"
+    ONLY with new terrains, legacy terrain will take an eon to load!\r\n    * Finally
+    added loading text to the VR view, it only took a YEAR...\r\n    * Updated to
+    Unity 2022.1.20f1\r\n    \r\nFixes:\r\n    * Possible fix for VKBs always reporting
+    \"Hat Up\" on rebind (thanks to the painful manual debugging efforts of Giskard
+    for this fix!)\r\n    * Was previously possible to unset protected bindings (which
+    cannot then be rebound!)\r\n    * Fixed (hopefully!) occasional rare crash on
+    terrain load (#190)\r\n    * Collision detection should be more accurate at high
+    speeds (speculative detection mode increased collision size with velocity!)\r\n   
+    * Incorrect dimensions on some flags in dropdown (#196)\r\n    * Fixed toggling
+    alternate flight controls resetting axes (#178)\r\n    * No longer possible to
+    ever be underneath the terrain (e.g. through a crack in the tile margins), ship
+    is always pushed up to compensate\r\n    * Bug causing camera damping to be forgotten
+    on restart when using Arcade control scheme\r\n    * Fixed ship params not sticking
+    between levels\r\n    * Fixed relative mouse mode applying return rate before
+    sending input (leading to effectively no input at high return rates) \r\n   
+    * Culled UI elements from real time reflection probe (whoops!) \r\n    * Fixed
+    geometry reflecting from the ship perspective when realtime reflections are enabled
+    (just don't ask how, I beg you)\r\n    * Fixed pause menu failing to open first
+    time after restarting after showing results screen\r\n    * Hopefully fixed another
+    enormous pile of input binding bugs + updated to latest input system\r\n    *
+    Sliders now work better with controller / keyboard input with pre-defined increments
+    and horizontal nav locks (UI is paaaaaain)\r\n    * Honestly so many more little
+    fixes that I just didn't bother to detail, this list is already too long"
 --- !u!114 &8501361730435722574
 MonoBehaviour:
   m_ObjectHideFlags: 0
