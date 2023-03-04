@@ -135,9 +135,13 @@ namespace GameUI.GameModes {
 
         // hide the mouse and do all the things that normally happens when un-pausing
         private void SetReplaysAndHideCursor() {
+            SetReplaysFromPanel();
+            FindObjectOfType<InGameUI>()?.OnPauseToggle(false);
+        }
+
+        public void SetReplaysFromPanel() {
             // overwrite ghosts if the panel is open (this can be triggered by a restart in general)
             if (competitionPanel.isActiveAndEnabled) Game.Instance.ActiveGameReplays = competitionPanel.GetSelectedReplays();
-            FindObjectOfType<InGameUI>()?.OnPauseToggle(false);
         }
 
         public void LoadNextLevel() {

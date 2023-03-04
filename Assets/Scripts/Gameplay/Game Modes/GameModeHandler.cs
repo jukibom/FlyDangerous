@@ -131,6 +131,7 @@ namespace Gameplay.Game_Modes {
             StopGhosts();
             LocalPlayer.User.DisableUIInput();
             LocalPlayer.SetNightVisionEnabled(false);
+            _inGameUI.GameModeUIHandler.RaceResultsScreen.SetReplaysFromPanel();
             _inGameUI.GameModeUIHandler.GameModeUIText.HideGameUIText(false);
             _inGameUI.GameModeUIHandler.RaceResultsScreen.Hide();
             _gameModeScore.Reset();
