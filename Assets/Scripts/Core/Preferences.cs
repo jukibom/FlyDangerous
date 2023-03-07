@@ -177,6 +177,8 @@ namespace Core {
                     return "borderless window";
                 case "graphics-anti-aliasing":
                     return "none";
+                case "graphics-texture-detail":
+                    return "high";
                 case "graphics-reflections":
                     return "low";
                 case "lastUsedServerJoinAddress":

@@ -213,6 +213,15 @@ namespace Core {
                     break;
             }
 
+            // mip map quality via texture detail (0 = full, 1 = 1/4th, 2 = 1/16th)
+            var textureDetail = Preferences.Instance.GetString("graphics-texture-detail");
+            QualitySettings.globalTextureMipmapLimit = textureDetail switch {
+                "high" => 0,
+                "medium" => 1,
+                "low" => 2,
+                _ => 0
+            };
+
             ssao.SetActive(Preferences.Instance.GetBool("graphics-ssao"));
 
             // reflections
