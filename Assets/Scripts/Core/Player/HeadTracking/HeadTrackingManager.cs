@@ -45,7 +45,7 @@ namespace Core.Player.HeadTracking {
             // OpenTrack Head Position
             if (IsOpenTrackEnabled) {
                 _openTrackData.ReceiveOpenTrackDataAsync(data => {
-                    // position is in cm in flipped in X and Z space, convert
+                    // position is in cm and flipped in X and Z space, convert
                     // max magnitude 1m in any direction
                     _openTrackHeadPosition = Vector3.ClampMagnitude(new Vector3(-(float)data.x / 100, (float)data.y / 100, (float)-data.z / 100), 1);
                     // orientation convert from vec 3 euler
@@ -60,15 +60,8 @@ namespace Core.Player.HeadTracking {
             // Track IR
             if (IsTrackIrEnabled) {
                 var trackIrTransform = trackIr.transform;
-                var trackIrLocalRotation = trackIrTransform.localRotation;
-
-                // for some reason the trackIR sdk outputs flipped z rotation? Not sure if that's an OpenTrack problem so make sure to 
-                // check with whoever actually owns one of these things
-                var rotationZFlip = trackIrLocalRotation.eulerAngles.z * -2;
-                var mirrorQuaternion = Quaternion.Euler(0, 0, rotationZFlip);
-
                 _trackIrHeadPosition = trackIrTransform.localPosition;
-                _trackIrHeadOrientation = trackIrLocalRotation * mirrorQuaternion;
+                _trackIrHeadOrientation = trackIrTransform.localRotation;
             }
             else {
                 _trackIrHeadPosition = Vector3.zero;
@@ -148,6 +141,7 @@ namespace Core.Player.HeadTracking {
             );
             _autoTrackSnap = Preferences.Instance.GetBool("autoTrackSnapForward");
 
+            // TODO: move this entirely to engine integrations, initialize it _once_ if the option is ever enabled and poll from there
             trackIr.gameObject.SetActive(IsTrackIrEnabled);
         }
     }
