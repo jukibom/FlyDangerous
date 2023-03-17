@@ -70,11 +70,11 @@ Be sure to have TrackIR installed and running when launching before launching in
 
 [bHaptics](https://www.bhaptics.com/) is a suite of haptic feedback hardware. Fly Dangerous supports the TactSuit (x16 / x40) body vest, Tactocity for Arms and Tactal head feedback modules. Enable with the checkbox and suit should power up in-game.
 
-### SimTools
+### Sim Racing Studio
 
-[SimTools](https://simtools.us/) is a universal motion simulation software suite with integration for various peripherals, motion rigs and related devices. Enable the checkbox here to integrate with SimTools.
+[Sim Racing Studio](https://www.simracingstudio.com/) is a universal motion simulation software suite with integration for various peripherals, motion rigs and related devices. Enable the checkbox here to integrate with SRS.
 
-By default it uses 127.0.0.1 and port 33001 (SimTools defaults) but may be modified in the config file (`simRacingStudioOutputAddress` and `simRacingStudioOutputPort`).
+By default it uses 127.0.0.1 and port 33001 (SRS defaults) but may be modified in the config file (`simRacingStudioOutputAddress` and `simRacingStudioOutputPort`).
 
 ### UDP Telemetry
 
