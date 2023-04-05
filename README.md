@@ -82,7 +82,7 @@ The game supports raw telemetry output in the form of a binary byte or json fire
 
 ## Building
 
-Unity build: 2022.2.1f1
+Unity build: 2022.2.13f1
 
 The release build is reliant on some paid assets (follow instructions underneath to build without for dev purposes!):
 
@@ -108,6 +108,10 @@ The release build is reliant on some paid assets (follow instructions underneath
 Once it's imported, move it into the `Standard Assets` folder so that it'll be ignored by git. If there's already a folder in there, just delete it first.
 
 * **Optional**: If you do happen to have SC Post Effects, got to `Assets/Settings/UniversalRP-HighQuality` and swap out the `ForwardRendererNoFog` for `ForwardRenderer` (this is what is used in builds).
+
+### Building for Linux and Apple (Silicon)
+
+By default, the terrain generation is only supported on Windows and Intel Macs. Additional plugins have been compiled for this purpose which can be downloaded from [this thread](https://github.com/jukibom/FlyDangerous/issues/108#issuecomment-1498022236) (compiled from [source here](https://gitlab.com/denispahunov/tools/-/tree/master/.NativeSources)). Extract the zip file to your installation of MapMagic in the Tools/Plugins folder.
 
 ### Steam Integration
 
