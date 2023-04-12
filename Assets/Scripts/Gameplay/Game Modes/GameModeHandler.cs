@@ -200,6 +200,8 @@ namespace Gameplay.Game_Modes {
         private void HandleStartSequence() {
             if (_startSequenceCoroutine != null) StopCoroutine(_startSequenceCoroutine);
 
+            // reset this flag on start, it's checked at the end of any game mode
+            _isValid = IsValid();
             _gameModeLifecycle.DisableAllShipInput();
             LocalPlayer.ShipPhysics.ShipActive = false;
 
@@ -298,9 +300,13 @@ namespace Gameplay.Game_Modes {
             ActiveGhosts = new List<ShipGhost>();
         }
 
+        // remember the last check and logical AND with new check - any time during the game mode that it's invalid will therefore invalidate the run.
         private void CheckValidity() {
-            var version = Application.version;
-            _isValid = _isValid && !version.Contains("-dev") && Game.Instance.ShipParameters.ToJsonString().Equals(ShipParameters.Defaults.ToJsonString());
+            _isValid = _isValid && IsValid();
+        }
+
+        private bool IsValid() {
+            return !Application.version.Contains("-dev") && Game.Instance.ShipParameters.ToJsonString().Equals(ShipParameters.Defaults.ToJsonString());
         }
 
         private IEnumerator ShowLevelAndMusicName() {
