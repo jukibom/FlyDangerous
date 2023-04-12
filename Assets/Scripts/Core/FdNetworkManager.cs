@@ -250,6 +250,7 @@ namespace Core {
                         TransitionToLobbyPlayer(shipPlayer);
 
                 // notify all clients about the new scene
+                Debug.Log("RETURN MESSAGE YEETED");
                 NetworkServer.SendToAll(new ReturnToLobbyMessage());
             }
             else {
@@ -515,6 +516,7 @@ namespace Core {
         }
 
         private void OnShowLobbyClientMsg(ReturnToLobbyMessage message) {
+            Debug.Log("QUIT MESSAGE RECEIVED");
             Game.Instance.QuitToLobby();
         }
 
