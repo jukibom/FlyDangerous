@@ -305,7 +305,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8358629113583290634}
-  - component: {fileID: 540646142820109067}
+  - component: {fileID: 6173151857095892619}
   - component: {fileID: 3907440634423962403}
   - component: {fileID: 8358629113583290636}
   - component: {fileID: 6265205460729339673}
@@ -332,14 +332,14 @@ RectTransform:
   - {fileID: 2062136961798778571}
   - {fileID: 7283075564832124328}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &540646142820109067
+--- !u!114 &6173151857095892619
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -352,9 +352,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneId: 0
+  _assetId: 1310119035
   serverOnly: 0
   visible: 0
-  m_AssetId: 399e53ad1d254b14e8928b0a1b081736
   hasSpawned: 0
 --- !u!114 &3907440634423962403
 MonoBehaviour:
@@ -368,6 +368,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32e6b5e3d02bfbf41b7c887e06efb48a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
   isHost: 0
@@ -415,6 +416,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 8358629113583290634}
     m_Modifications:
     - target: {fileID: 4046174603634908570, guid: 7979c4c410718cc4a8e1307f7cf5175b, type: 3}
@@ -578,6 +580,12 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4046174603634908570, guid: 7979c4c410718cc4a8e1307f7cf5175b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 925012573568432771}
   m_SourcePrefab: {fileID: 100100000, guid: 7979c4c410718cc4a8e1307f7cf5175b, type: 3}
 --- !u!224 &2062136961798778571 stripped
 RectTransform:

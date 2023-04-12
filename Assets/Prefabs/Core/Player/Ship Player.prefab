@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1767139775458680010}
+  - component: {fileID: 4490570879392219317}
   - component: {fileID: 1767139775458680005}
   - component: {fileID: 1767139775458680007}
-  - component: {fileID: 1767139775458680004}
   m_Layer: 6
   m_Name: Ship Player
   m_TagString: Untagged
@@ -37,6 +37,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4490570879392219317
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1767139775458680011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  _assetId: 297937414
+  serverOnly: 0
+  visible: 0
+  hasSpawned: 0
 --- !u!114 &1767139775458680005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -86,23 +103,6 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 2
---- !u!114 &1767139775458680004
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1767139775458680011}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sceneId: 0
-  _assetId: 297937414
-  serverOnly: 0
-  visible: 0
-  hasSpawned: 0
 --- !u!1 &2512135515928152596
 GameObject:
   m_ObjectHideFlags: 0
@@ -811,7 +811,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 54487937050516791, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: Button 6  |  Logitech Extreme 3D
+      value: Select  |  Gamepad
       objectReference: {fileID: 0}
     - target: {fileID: 55687390006147244, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Layer
@@ -1079,7 +1079,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 298010094061794878, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: HatSwitch Left  |  Logitech Extreme 3D
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 298010094427432914, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Layer
@@ -1295,7 +1295,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 494635592974138820, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: W  |  Keyboard
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 494635592974138822, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Layer
@@ -1407,7 +1407,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 580464264963623507, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: rz  |  Saitek Saitek X52 Pro Flight Control System
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 580464265052740502, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Layer
@@ -1539,7 +1539,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 648461285071390830, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Value
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 648461285250682544, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_SizeDelta.y
@@ -1551,7 +1551,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 648461285250682544, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -19773
+      value: -21627
       objectReference: {fileID: 0}
     - target: {fileID: 648461285433557285, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_AnchorMax.x
@@ -1643,7 +1643,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 841025487442110660, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: 1  |  Keyboard
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 841025487442110662, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Layer
@@ -1907,7 +1907,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1043501183615782891, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: button19  |  Saitek Saitek X52 Pro Flight Control System
+      value: Button North  |  Gamepad
       objectReference: {fileID: 0}
     - target: {fileID: 1043501184071129761, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Layer
@@ -2071,7 +2071,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1279847679693427285, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: HatSwitch Right  |  Logitech Extreme 3D
+      value: D-Pad/Right  |  Gamepad
       objectReference: {fileID: 0}
     - target: {fileID: 1279847679693427287, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Layer
@@ -2371,7 +2371,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1583571443160406451, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: Button 2  |  Logitech Extreme 3D
+      value: Left Stick Press  |  Gamepad
       objectReference: {fileID: 0}
     - target: {fileID: 1583571443660884063, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Layer
@@ -2471,7 +2471,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1608389318034213474, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: Z  |  Keyboard
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 1608389318039755442, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Layer
@@ -2967,7 +2967,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2050549113840149179, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_SizeDelta.x
-      value: -411.90137
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2054324662310132465, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Layer
@@ -3247,7 +3247,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2267210086000489918, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: Right Button  |  Mouse
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 2267210086130858718, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Layer
@@ -3279,7 +3279,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2269584340328731790, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: Stick Up  |  Logitech Extreme 3D
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 2269584340525385058, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Layer
@@ -3547,7 +3547,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2547835201963038572, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: HatSwitch Left  |  Logitech Extreme 3D
+      value: D-Pad/Left  |  Gamepad
       objectReference: {fileID: 0}
     - target: {fileID: 2547835201963038574, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Layer
@@ -4351,7 +4351,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3307466062678151607, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: Stick Down  |  Logitech Extreme 3D
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 3307466063134541053, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Layer
@@ -4699,7 +4699,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3766161858155706621, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: S  |  Keyboard
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 3766161858155706623, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Layer
@@ -4911,7 +4911,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3950385972995694885, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: '-  |  Keyboard'
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 3950385972995694887, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Layer
@@ -4923,7 +4923,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3950385973359243467, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: ry  |  Saitek Saitek X52 Pro Flight Control System
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 3950385973497282475, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Layer
@@ -5027,11 +5027,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4154606129556656170, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: =  |  Keyboard
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 4154606129864360388, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: ry  |  Saitek Saitek X52 Pro Flight Control System
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 4154606129864360390, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Layer
@@ -5227,7 +5227,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4442027097803649118, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: Button 6  |  Logitech Extreme 3D
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 4442027097864905138, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Layer
@@ -5615,7 +5615,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4891459948225257012, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: button24  |  Saitek Saitek X52 Pro Flight Control System
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 4891459948225257014, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Layer
@@ -6211,7 +6211,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5661076544222040665, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: Button 4  |  Logitech Extreme 3D
+      value: Button East  |  Gamepad
       objectReference: {fileID: 0}
     - target: {fileID: 5661076544222040667, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Layer
@@ -6375,11 +6375,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5847699359095334045, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: Button 2  |  Logitech Extreme 3D
+      value: Button West  |  Gamepad
       objectReference: {fileID: 0}
     - target: {fileID: 5847699359192544627, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: unbound primary
+      value: F  |  Keyboard
       objectReference: {fileID: 0}
     - target: {fileID: 5851465582957630321, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Layer
@@ -6547,7 +6547,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5984840153366185651, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: button25  |  Saitek Saitek X52 Pro Flight Control System
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 5984840153768397267, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Layer
@@ -6923,7 +6923,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6362337237435233297, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: 2  |  Keyboard
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 6362337237435233299, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Layer
@@ -6955,7 +6955,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6417171857686896877, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: HatSwitch Up  |  Logitech Extreme 3D
+      value: D-Pad/Up  |  Gamepad
       objectReference: {fileID: 0}
     - target: {fileID: 6417171857686896879, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Layer
@@ -7503,7 +7503,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7032151310537376650, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: button27  |  Saitek Saitek X52 Pro Flight Control System
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 7032151310862094950, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Layer
@@ -7835,7 +7835,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7186368688116065840, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: stick/y  |  Saitek Saitek X52 Pro Flight Control System
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 7186368688116065843, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Layer
@@ -7999,7 +7999,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7288408164428714945, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: Button 4  |  Logitech Extreme 3D
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 7288408164428714947, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Layer
@@ -8319,7 +8319,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7567652150240473924, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: HatSwitch Up  |  Logitech Extreme 3D
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 7567652150240473926, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Layer
@@ -8507,7 +8507,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7712688317769595332, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: HatSwitch Right  |  Logitech Extreme 3D
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 7712688317769595334, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Layer
@@ -8571,7 +8571,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7752678464352527828, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: HatSwitch Down  |  Logitech Extreme 3D
+      value: D-Pad/Down  |  Gamepad
       objectReference: {fileID: 0}
     - target: {fileID: 7752678464352527830, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Layer
@@ -8855,7 +8855,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8011305384498033345, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: HatSwitch Down  |  Logitech Extreme 3D
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 8011305384498033347, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Layer
@@ -8943,7 +8943,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8067606316203671705, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: Trigger  |  Logitech Extreme 3D
+      value: Button South  |  Gamepad
       objectReference: {fileID: 0}
     - target: {fileID: 8067606316203671707, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Layer
@@ -9163,7 +9163,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8176461985186470669, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: button26  |  Saitek Saitek X52 Pro Flight Control System
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 8176461985186470671, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Layer
@@ -9303,7 +9303,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8310413164080758455, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: stick/x  |  Saitek Saitek X52 Pro Flight Control System
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 8310413164362600389, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Layer
@@ -9495,7 +9495,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8493707114942466966, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: Rz  |  Logitech Extreme 3D
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 8493707115162187082, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Layer
@@ -9791,11 +9791,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8678893456361615911, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: Button 3  |  Logitech Extreme 3D
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 8678893456669418441, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: F  |  Keyboard
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 8678893456669418443, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Layer
@@ -10401,6 +10401,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 9210689702834014518, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_Text
+      value: unbound primary
+      objectReference: {fileID: 0}
     - target: {fileID: 9210689703276075226, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Layer
       value: 5
@@ -10467,7 +10471,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9221722727303944112, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: Stick X  |  Logitech Extreme 3D
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 9221722727303944115, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Layer
