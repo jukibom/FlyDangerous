@@ -330,6 +330,7 @@ namespace Menus.Options {
             var inputBinding = action.bindings[bindingIndex];
             var inverted = IsInvertEnabled(inputBinding);
             var deadzone = GetAxisDeadzone(inputBinding);
+            var invalid = false;
 
             // Configure the rebind.
             ongoingRebind = action.PerformInteractiveRebinding(bindingIndex)
@@ -372,25 +373,33 @@ namespace Menus.Options {
                     var deviceName = operation.selectedControl.device.displayName;
                     var bindName = operation.selectedControl.displayName;
 
+                    //validity check time
+                    invalid = false;
+
                     // prevent button binds on full range axis
-                    if (!inputBinding.isPartOfComposite && operation.expectedControlType == "Axis" && operation.selectedControl.layout != "Axis") {
-                        operation.RemoveCandidate(operation.selectedControl);
-                        if (operation.candidates.Count == 0) {
-                            m_RebindText.color = Color.red;
-                            m_RebindText.text =
-                                $"{deviceName}\n\n{bindName}\n\n\nCannot bind to full range axis!";
-                        }
+                    if (operation.expectedControlType == "Axis" && operation.selectedControl.layout != "Axis") {
+                        invalid = true;
+
+                        m_RebindText.color = Color.red;
+                        m_RebindText.text =
+                            $"{deviceName}\n\n{bindName}\n\n\nCannot bind to full range axis!";
                     }
 
                     // prevent inputs which only match full range axis on split or button inputs
                     if (inputBinding.isPartOfComposite && operation.expectedControlType == "Axis" && operation.selectedControl.layout == "Axis") {
-                        operation.RemoveCandidate(operation.selectedControl);
-                        if (operation.candidates.Count == 0) {
-                            m_RebindText.color = Color.red;
-                            m_RebindText.text =
-                                $"{deviceName}\n\n{bindName}\n\n\nCannot bind full range axis to this action!";
-                        }
+                        invalid = true;
+
+                        m_RebindText.color = Color.red;
+                        m_RebindText.text =
+                            $"{deviceName}\n\n{bindName}\n\n\nCannot bind full range axis to this action!";
                     }
+
+                    if (invalid) {
+                        // remove this and all other candidates because we want to invalidate this without cancelling the operation
+                        operation.RemoveCandidate(operation.selectedControl);
+                        foreach (var operationCandidate in operation.candidates) operation.RemoveCandidate(operationCandidate);
+                    }
+
                     else if (operation.selectedControl != null) {
                         m_RebindText.color = Color.white;
                         m_RebindText.text = $"{deviceName}\n\n{bindName}";
@@ -398,7 +407,13 @@ namespace Menus.Options {
                 })
                 .OnComplete(
                     operation => {
-                        if (operation.selectedControl == null) {
+                        if (operation.selectedControl == null || invalid) {
+                            // MAKE DAMN SURE IT ACTUALLY IS EMPTY BECAUSE APPARENTLY REMOVING EVERYTHING DOESN'T WORK IF YOU MASH THE KEYBOARD
+                            // WHAT IS THIS NONSENSE JESUS CHRIST
+                            var binding = operation.action.bindings[bindingIndex];
+                            binding.overridePath = "";
+                            operation.action.ChangeBinding(bindingIndex).To(binding);
+
                             PerformInteractiveRebind(bindingText, action, bindingIndex, bindingType, allCompositeParts);
                             return;
                         }
