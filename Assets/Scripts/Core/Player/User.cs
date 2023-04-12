@@ -45,9 +45,9 @@ namespace Core.Player {
         private Vector2 _mousePositionNormalized;
         private Vector2 _mousePositionNormalizedDelta;
         private Vector2 _mousePositionScreen;
-        private float _pitch;
-        private Vector2 _previousRelativeRate;
+        private Vector2 _mousePreviousRelativeRate;
         private bool _reverse;
+        private float _pitch;
         private float _roll;
         private float _targetThrottle;
         private float _targetThrottleIncrement;
@@ -269,12 +269,16 @@ namespace Core.Player {
         }
 
         public void ResetMouseToCentre() {
-            var warpedPosition = new Vector2(Screen.width / 2f, Screen.height / 2f);
-            Mouse.current.WarpCursorPosition(warpedPosition);
-            InputState.Change(Mouse.current.position, warpedPosition);
-            _mousePositionScreen = warpedPosition;
-            _mousePositionNormalized = new Vector2(0, 0);
-            _mousePositionDelta = new Vector2(0, 0);
+            var screenCentre = new Vector2(Screen.width / 2f, Screen.height / 2f);
+            Mouse.current.WarpCursorPosition(screenCentre);
+            InputState.Change(Mouse.current.position, screenCentre);
+            _mousePositionScreen = screenCentre;
+
+            _mousePositionNormalized = Vector2.zero;
+            _mousePositionNormalizedDelta = Vector2.zero;
+            _mousePositionDelta = Vector2.zero;
+            _mousePreviousRelativeRate = Vector2.zero;
+
             inGameUI.MouseWidget.ResetToCentre();
         }
 
@@ -624,8 +628,8 @@ namespace Core.Player {
 
             // calculate relative input from deltas including sensitivity
             var relativeMouse = new Vector2(
-                _previousRelativeRate.x + _mousePositionNormalizedDelta.x * sensitivityX,
-                _previousRelativeRate.y + _mousePositionNormalizedDelta.y * sensitivityY
+                _mousePreviousRelativeRate.x + _mousePositionNormalizedDelta.x * sensitivityX,
+                _mousePreviousRelativeRate.y + _mousePositionNormalizedDelta.y * sensitivityY
             );
 
             // power curve (Mathf.Pow does not allow negatives because REASONS so abs and multiply by -1 if the original val is < 0)
@@ -672,14 +676,14 @@ namespace Core.Player {
             inGameUI.MouseWidget.UpdateWidgetSprites(widgetPosition);
 
             // return to 0 by mouseRelativeRate
-            _previousRelativeRate = Vector2.MoveTowards(new Vector2(
+            _mousePreviousRelativeRate = Vector2.MoveTowards(new Vector2(
                     relativeMouse.x,
                     relativeMouse.y),
                 Vector2.zero, mouseRelativeRate / 500);
 
             // store relative rate for relative return rate next frame
-            _previousRelativeRate.x = Mathf.Clamp(_previousRelativeRate.x, -1, 1);
-            _previousRelativeRate.y = Mathf.Clamp(_previousRelativeRate.y, -1, 1);
+            _mousePreviousRelativeRate.x = Mathf.Clamp(_mousePreviousRelativeRate.x, -1, 1);
+            _mousePreviousRelativeRate.y = Mathf.Clamp(_mousePreviousRelativeRate.y, -1, 1);
 
             // clamp to virtual screen 
             var extentsX = Screen.width * Mathf.Pow(sensitivityX, -1);
