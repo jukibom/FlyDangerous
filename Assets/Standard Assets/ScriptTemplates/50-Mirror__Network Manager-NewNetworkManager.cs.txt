@@ -14,6 +14,16 @@ public class #SCRIPTNAME# : NetworkManager
     // have to cast to this type everywhere.
     public static new #SCRIPTNAME# singleton { get; private set; }
 
+    /// <summary>
+    /// Runs on both Server and Client
+    /// Networking is NOT initialized when this fires
+    /// </summary>
+    public override void Awake()
+    {
+        base.Awake();
+        singleton = this;
+    }
+
     #region Unity Callbacks
 
     public override void OnValidate()
@@ -25,18 +35,8 @@ public class #SCRIPTNAME# : NetworkManager
     /// Runs on both Server and Client
     /// Networking is NOT initialized when this fires
     /// </summary>
-    public override void Awake()
-    {
-        base.Awake();
-    }
-
-    /// <summary>
-    /// Runs on both Server and Client
-    /// Networking is NOT initialized when this fires
-    /// </summary>
     public override void Start()
     {
-        singleton = this;
         base.Start();
     }
 
@@ -169,7 +169,7 @@ public class #SCRIPTNAME# : NetworkManager
     /// </summary>
     /// <param name="conn">Connection of the client...may be null</param>
     /// <param name="exception">Exception thrown from the Transport.</param>
-    public override void OnServerError(NetworkConnectionToClient conn, Exception exception) { }
+    public override void OnServerError(NetworkConnectionToClient conn, TransportError transportError, string message) { }
 
     #endregion
 
@@ -188,10 +188,7 @@ public class #SCRIPTNAME# : NetworkManager
     /// Called on clients when disconnected from a server.
     /// <para>This is called on the client when it disconnects from the server. Override this function to decide what happens when the client disconnects.</para>
     /// </summary>
-    public override void OnClientDisconnect()
-    {
-        base.OnClientDisconnect();
-    }
+    public override void OnClientDisconnect() { }
 
     /// <summary>
     /// Called on clients when a servers tells the client it is no longer ready.
@@ -203,7 +200,7 @@ public class #SCRIPTNAME# : NetworkManager
     /// Called on client when transport raises an exception.</summary>
     /// </summary>
     /// <param name="exception">Exception thrown from the Transport.</param>
-    public override void OnClientError(Exception exception) { }
+    public override void OnClientError(TransportError transportError, string message) { }
 
     #endregion
 

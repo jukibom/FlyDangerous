@@ -438,7 +438,7 @@ namespace Core {
 
         // Graceful leave game and decide if to transition back to lobby
         public void LeaveSession() {
-            if (SessionType == SessionType.Multiplayer && NetworkClient.isHostClient)
+            if (SessionType == SessionType.Multiplayer && NetworkClient.activeHost)
                 FdNetworkManager.Instance.StartReturnToLobbySequence();
             else
                 QuitToMenu();

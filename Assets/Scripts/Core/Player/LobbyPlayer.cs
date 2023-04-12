@@ -49,10 +49,10 @@ namespace Core.Player {
         public override void OnStartClient() {
             base.OnStartClient();
             // show or hide the input field or static label depending on authority
-            playerNameLabel.transform.parent.gameObject.SetActive(!hasAuthority);
-            playerNameTextEntry.gameObject.SetActive(hasAuthority);
+            playerNameLabel.transform.parent.gameObject.SetActive(!isOwned);
+            playerNameTextEntry.gameObject.SetActive(isOwned);
             playerNameTextEntry.interactable = !Misc.Player.IsUsingOnlineName;
-            if (hasAuthority) CmdSetReadyStatus(isHost);
+            if (isOwned) CmdSetReadyStatus(isHost);
             UpdateDisplay();
         }
 
@@ -74,11 +74,11 @@ namespace Core.Player {
             Preferences.Instance.Save();
         }
 
-        private void OnPlayerNameChanged(string oldName, string newName) {
+        private void OnPlayerNameChanged(string _, string __) {
             UpdateDisplay();
         }
 
-        private void OnReadyStatusChanged(bool oldStatus, bool newStatus) {
+        private void OnReadyStatusChanged(bool _, bool newStatus) {
             isReady = newStatus;
             UpdateDisplay();
         }
@@ -97,7 +97,7 @@ namespace Core.Player {
             readyStatus.enabled = isReady;
 
             // Client-side UI changes to start button
-            if (LobbyUI && hasAuthority) {
+            if (LobbyUI && isOwned) {
                 if (isHost)
                     LobbyUI.StartButton.label.text = "START GAME";
                 else if (!isReady)
@@ -108,10 +108,10 @@ namespace Core.Player {
         }
 
         [Command]
-        private void CmdSetPlayerName(string name) {
-            if (name == "") name = "UNNAMED SCRUB";
+        private void CmdSetPlayerName(string newPlayerName) {
+            if (newPlayerName == "") newPlayerName = "UNNAMED SCRUB";
 
-            playerName = name;
+            playerName = newPlayerName;
             UpdateDisplay();
         }
 
@@ -137,7 +137,7 @@ namespace Core.Player {
 
         [ClientRpc]
         private void RpcUpdateLobby(LevelData lobbyLevelData, short maxPlayers) {
-            if (!NetworkClient.isHostClient) {
+            if (!NetworkClient.activeHost) {
                 var configPanel = FindObjectOfType<LobbyConfigurationPanel>();
                 if (configPanel) {
                     configPanel.maxPlayers = maxPlayers;

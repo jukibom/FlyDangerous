@@ -397,7 +397,7 @@ namespace Mirror.Weaver
 
             MethodDefinition serialize = new MethodDefinition(SerializeMethodName,
                     MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.HideBySig,
-                    weaverTypes.Import<bool>());
+                    weaverTypes.Import(typeof(void)));
 
             serialize.Parameters.Add(new ParameterDefinition("writer", ParameterAttributes.None, weaverTypes.Import<NetworkWriter>()));
             serialize.Parameters.Add(new ParameterDefinition("forceAll", ParameterAttributes.None, weaverTypes.Import<bool>()));
@@ -405,10 +405,7 @@ namespace Mirror.Weaver
 
             serialize.Body.InitLocals = true;
 
-            // loc_0,  this local variable is to determine if any variable was dirty
-            VariableDefinition dirtyLocal = new VariableDefinition(weaverTypes.Import<bool>());
-            serialize.Body.Variables.Add(dirtyLocal);
-
+            // base.SerializeSyncVars(writer, forceAll);
             MethodReference baseSerialize = Resolvers.TryResolveMethodInParents(netBehaviourSubclass.BaseType, assembly, SerializeMethodName);
             if (baseSerialize != null)
             {
@@ -419,16 +416,20 @@ namespace Mirror.Weaver
                 // forceAll
                 worker.Emit(OpCodes.Ldarg_2);
                 worker.Emit(OpCodes.Call, baseSerialize);
-                // set dirtyLocal to result of base.OnSerialize()
-                worker.Emit(OpCodes.Stloc_0);
             }
 
-            // Generates: if (forceAll);
+            // Generates:
+            //   if (forceAll)
+            //   {
+            //       writer.WriteInt(health);
+            //       ...
+            //   }
             Instruction initialStateLabel = worker.Create(OpCodes.Nop);
             // forceAll
-            worker.Emit(OpCodes.Ldarg_2);
-            worker.Emit(OpCodes.Brfalse, initialStateLabel);
+            worker.Emit(OpCodes.Ldarg_2);                    // load 'forceAll' flag
+            worker.Emit(OpCodes.Brfalse, initialStateLabel); // start the 'if forceAll' branch
 
+            // generates write.Write(syncVar) for each SyncVar in forceAll case
             foreach (FieldDefinition syncVarDef in syncVars)
             {
                 FieldReference syncVar = syncVarDef;
@@ -442,7 +443,21 @@ namespace Mirror.Weaver
                 // this
                 worker.Emit(OpCodes.Ldarg_0);
                 worker.Emit(OpCodes.Ldfld, syncVar);
-                MethodReference writeFunc = writers.GetWriteFunc(syncVar.FieldType, ref WeavingFailed);
+                MethodReference writeFunc;
+                // For NBs we always need to use the default NetworkBehaviour write func
+                // since the reader counter part uses that exact layout which is not easy to change
+                // without introducing more edge cases
+                // effectively this disallows custom NB-type writers/readers on SyncVars
+                // see: https://github.com/MirrorNetworking/Mirror/issues/2680
+                if (syncVar.FieldType.IsDerivedFrom<NetworkBehaviour>())
+                {
+                    writeFunc = writers.GetWriteFunc(weaverTypes.Import<NetworkBehaviour>(), ref WeavingFailed);
+                }
+                else
+                {
+                    writeFunc = writers.GetWriteFunc(syncVar.FieldType, ref WeavingFailed);
+                }
+
                 if (writeFunc != null)
                 {
                     worker.Emit(OpCodes.Call, writeFunc);
@@ -455,14 +470,13 @@ namespace Mirror.Weaver
                 }
             }
 
-            // always return true if forceAll
-
-            // Generates: return true
-            worker.Emit(OpCodes.Ldc_I4_1);
+            // if (forceAll) then always return at the end of the 'if' case
             worker.Emit(OpCodes.Ret);
 
-            // Generates: end if (forceAll);
+            // end the 'if' case for "if (forceAll)"
             worker.Append(initialStateLabel);
+
+            ////////////////////////////////////////////////////////////////////
 
             // write dirty bits before the data fields
             // Generates: writer.WritePackedUInt64 (base.get_syncVarDirtyBits ());
@@ -480,7 +494,6 @@ namespace Mirror.Weaver
             int dirtyBit = syncVarAccessLists.GetSyncVarStart(netBehaviourSubclass.BaseType.FullName);
             foreach (FieldDefinition syncVarDef in syncVars)
             {
-
                 FieldReference syncVar = syncVarDef;
                 if (netBehaviourSubclass.HasGenericParameters)
                 {
@@ -504,7 +517,21 @@ namespace Mirror.Weaver
                 worker.Emit(OpCodes.Ldarg_0);
                 worker.Emit(OpCodes.Ldfld, syncVar);
 
-                MethodReference writeFunc = writers.GetWriteFunc(syncVar.FieldType, ref WeavingFailed);
+                MethodReference writeFunc;
+                // For NBs we always need to use the default NetworkBehaviour write func
+                // since the reader counter part uses that exact layout which is not easy to change
+                // without introducing more edge cases
+                // effectively this disallows custom NB-type writers/readers on SyncVars
+                // see: https://github.com/MirrorNetworking/Mirror/issues/2680
+                if (syncVar.FieldType.IsDerivedFrom<NetworkBehaviour>())
+                {
+                    writeFunc = writers.GetWriteFunc(weaverTypes.Import<NetworkBehaviour>(), ref WeavingFailed);
+                }
+                else
+                {
+                    writeFunc = writers.GetWriteFunc(syncVar.FieldType, ref WeavingFailed);
+                }
+                
                 if (writeFunc != null)
                 {
                     worker.Emit(OpCodes.Call, writeFunc);
@@ -516,11 +543,6 @@ namespace Mirror.Weaver
                     return;
                 }
 
-                // something was dirty
-                worker.Emit(OpCodes.Ldc_I4_1);
-                // set dirtyLocal to true
-                worker.Emit(OpCodes.Stloc_0);
-
                 worker.Append(varLabel);
                 dirtyBit += 1;
             }
@@ -529,8 +551,7 @@ namespace Mirror.Weaver
             //worker.Emit(OpCodes.Ldstr, $"Injected Serialize {netBehaviourSubclass.Name}");
             //worker.Emit(OpCodes.Call, WeaverTypes.logErrorReference);
 
-            // generate: return dirtyLocal
-            worker.Emit(OpCodes.Ldloc_0);
+            // generate: return
             worker.Emit(OpCodes.Ret);
             netBehaviourSubclass.Methods.Add(serialize);
         }
@@ -589,10 +610,9 @@ namespace Mirror.Weaver
                 worker.Emit(OpCodes.Ldflda, netIdField);
                 worker.Emit(OpCodes.Call, weaverTypes.generatedSyncVarDeserialize_NetworkIdentity);
             }
-            // TODO this only uses the persistent netId for types DERIVED FROM NB.
-            //      not if the type is just 'NetworkBehaviour'.
-            //      this is what original implementation did too. fix it after.
-            else if (syncVar.FieldType.IsDerivedFrom<NetworkBehaviour>())
+            // handle both NetworkBehaviour and inheritors.
+            // fixes: https://github.com/MirrorNetworking/Mirror/issues/2939
+            else if (syncVar.FieldType.IsDerivedFrom<NetworkBehaviour>() || syncVar.FieldType.Is<NetworkBehaviour>())
             {
                 // reader
                 worker.Emit(OpCodes.Ldarg_1);

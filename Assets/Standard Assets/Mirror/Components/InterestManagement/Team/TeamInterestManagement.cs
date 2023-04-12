@@ -6,42 +6,52 @@ namespace Mirror
     [AddComponentMenu("Network/ Interest Management/ Team/Team Interest Management")]
     public class TeamInterestManagement : InterestManagement
     {
-        readonly Dictionary<string, HashSet<NetworkIdentity>> teamObjects =
-            new Dictionary<string, HashSet<NetworkIdentity>>();
-
-        readonly Dictionary<NetworkIdentity, string> lastObjectTeam =
-            new Dictionary<NetworkIdentity, string>();
-
+        readonly Dictionary<string, HashSet<NetworkIdentity>> teamObjects = new Dictionary<string, HashSet<NetworkIdentity>>();
+        readonly Dictionary<NetworkIdentity, string> lastObjectTeam = new Dictionary<NetworkIdentity, string>();
         readonly HashSet<string> dirtyTeams = new HashSet<string>();
 
+        [ServerCallback]
         public override void OnSpawned(NetworkIdentity identity)
         {
-            if (!identity.TryGetComponent<NetworkTeam>(out NetworkTeam networkTeam))
+            if (!identity.TryGetComponent(out NetworkTeam identityNetworkTeam))
                 return;
 
-            string currentTeam = networkTeam.teamId;
-            lastObjectTeam[identity] = currentTeam;
+            string networkTeamId = identityNetworkTeam.teamId;
+            lastObjectTeam[identity] = networkTeamId;
 
-            // string.Empty is never a valid teamId...do not add to teamObjects collection
-            if (currentTeam == string.Empty)
+            // Null / Empty string is never a valid teamId...do not add to teamObjects collection
+            if (string.IsNullOrWhiteSpace(networkTeamId))
                 return;
 
-            // Debug.Log($"MatchInterestManagement.OnSpawned({identity.name}) currentMatch: {currentTeam}");
-            if (!teamObjects.TryGetValue(currentTeam, out HashSet<NetworkIdentity> objects))
+            //Debug.Log($"TeamInterestManagement.OnSpawned {identity.name} {networkTeamId}");
+
+            if (!teamObjects.TryGetValue(networkTeamId, out HashSet<NetworkIdentity> objects))
             {
                 objects = new HashSet<NetworkIdentity>();
-                teamObjects.Add(currentTeam, objects);
+                teamObjects.Add(networkTeamId, objects);
             }
 
             objects.Add(identity);
+
+            // Team ID could have been set in NetworkBehaviour::OnStartServer on this object.
+            // Since that's after OnCheckObserver is called it would be missed, so force Rebuild here.
+            // Add the current team to dirtyTeams for Update to rebuild it.
+            dirtyTeams.Add(networkTeamId);
         }
 
+        [ServerCallback]
         public override void OnDestroyed(NetworkIdentity identity)
         {
-            lastObjectTeam.TryGetValue(identity, out string currentTeam);
-            lastObjectTeam.Remove(identity);
-            if (currentTeam != string.Empty && teamObjects.TryGetValue(currentTeam, out HashSet<NetworkIdentity> objects) && objects.Remove(identity))
-                RebuildTeamObservers(currentTeam);
+            // Don't RebuildSceneObservers here - that will happen in Update.
+            // Multiple objects could be destroyed in same frame and we don't
+            // want to rebuild for each one...let Update do it once.
+            // We must add the current team to dirtyTeams for Update to rebuild it.
+            if (lastObjectTeam.TryGetValue(identity, out string currentTeam))
+            {
+                lastObjectTeam.Remove(identity);
+                if (!string.IsNullOrWhiteSpace(currentTeam) && teamObjects.TryGetValue(currentTeam, out HashSet<NetworkIdentity> objects) && objects.Remove(identity))
+                    dirtyTeams.Add(currentTeam);
+            }
         }
 
         // internal so we can update from tests
@@ -55,24 +65,24 @@ namespace Mirror
             foreach (NetworkIdentity netIdentity in NetworkServer.spawned.Values)
             {
                 // Ignore objects that don't have a NetworkTeam component
-                if (!netIdentity.TryGetComponent<NetworkTeam>(out NetworkTeam networkTeam))
+                if (!netIdentity.TryGetComponent(out NetworkTeam identityNetworkTeam))
                     continue;
 
-                string newTeam = networkTeam.teamId;
+                string networkTeamId = identityNetworkTeam.teamId;
                 if (!lastObjectTeam.TryGetValue(netIdentity, out string currentTeam))
                     continue;
 
-                // string.Empty is never a valid teamId
+                // Null / Empty string is never a valid teamId
                 // Nothing to do if teamId hasn't changed
-                if (string.IsNullOrWhiteSpace(newTeam) || newTeam == currentTeam)
+                if (string.IsNullOrWhiteSpace(networkTeamId) || networkTeamId == currentTeam)
                     continue;
 
                 // Mark new/old Teams as dirty so they get rebuilt
-                UpdateDirtyTeams(newTeam, currentTeam);
+                UpdateDirtyTeams(networkTeamId, currentTeam);
 
                 // This object is in a new team so observers in the prior team
                 // and the new team need to rebuild their respective observers lists.
-                UpdateTeamObjects(netIdentity, newTeam, currentTeam);
+                UpdateTeamObjects(netIdentity, networkTeamId, currentTeam);
             }
 
             // rebuild all dirty teams
@@ -84,8 +94,8 @@ namespace Mirror
 
         void UpdateDirtyTeams(string newTeam, string currentTeam)
         {
-            // string.Empty is never a valid teamId
-            if (currentTeam != string.Empty)
+            // Null / Empty string is never a valid teamId
+            if (!string.IsNullOrWhiteSpace(currentTeam))
                 dirtyTeams.Add(currentTeam);
 
             dirtyTeams.Add(newTeam);
@@ -119,7 +129,7 @@ namespace Mirror
         public override bool OnCheckObserver(NetworkIdentity identity, NetworkConnectionToClient newObserver)
         {
             // Always observed if no NetworkTeam component
-            if (!identity.TryGetComponent<NetworkTeam>(out NetworkTeam identityNetworkTeam))
+            if (!identity.TryGetComponent(out NetworkTeam identityNetworkTeam))
                 return true;
 
             if (identityNetworkTeam.forceShown)
@@ -130,15 +140,14 @@ namespace Mirror
                 return false;
 
             // Always observed if no NetworkTeam component
-            if (!newObserver.identity.TryGetComponent<NetworkTeam>(out NetworkTeam newObserverNetworkTeam))
+            if (!newObserver.identity.TryGetComponent(out NetworkTeam newObserverNetworkTeam))
                 return true;
 
-            if (newObserverNetworkTeam.forceShown)
-                return true;
-
-            // string.Empty is never a valid teamId
+            // Null / Empty string is never a valid teamId
             if (string.IsNullOrWhiteSpace(newObserverNetworkTeam.teamId))
                 return false;
+
+            //Debug.Log($"TeamInterestManagement.OnCheckObserver {identity.name} {identityNetworkTeam.teamId} | {newObserver.identity.name} {newObserverNetworkTeam.teamId}");
 
             // Observed only if teamId's match
             return identityNetworkTeam.teamId == newObserverNetworkTeam.teamId;
@@ -147,7 +156,7 @@ namespace Mirror
         public override void OnRebuildObservers(NetworkIdentity identity, HashSet<NetworkConnectionToClient> newObservers)
         {
             // If this object doesn't have a NetworkTeam then it's visible to all clients
-            if (!identity.TryGetComponent<NetworkTeam>(out NetworkTeam networkTeam))
+            if (!identity.TryGetComponent(out NetworkTeam networkTeam))
             {
                 AddAllConnections(newObservers);
                 return;
@@ -160,8 +169,8 @@ namespace Mirror
                 return;
             }
 
-            // string.Empty is never a valid teamId
-            if (networkTeam.teamId == string.Empty)
+            // Null / Empty string is never a valid teamId
+            if (string.IsNullOrWhiteSpace(networkTeam.teamId))
                 return;
 
             // Abort if this team hasn't been created yet by OnSpawned or UpdateTeamObjects

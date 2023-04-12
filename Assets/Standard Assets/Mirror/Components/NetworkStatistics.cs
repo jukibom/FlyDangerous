@@ -4,9 +4,11 @@ using UnityEngine;
 namespace Mirror
 {
     /// <summary>
-    /// Shows Network messages and bytes sent & received per second.
-    /// <para>Add this component to the same object as Network Manager.</para>
+    /// Shows Network messages and bytes sent and received per second.
     /// </summary>
+    /// <remarks>
+    /// <para>Add this component to the same object as Network Manager.</para>
+    /// </remarks>
     [AddComponentMenu("Network/Network Statistics")]
     [DisallowMultipleComponent]
     [HelpURL("https://mirror-networking.gitbook.io/docs/components/network-statistics")]
@@ -17,43 +19,43 @@ namespace Mirror
 
         // ---------------------------------------------------------------------
 
-        // CLIENT
+        // CLIENT (public fields for other components to grab statistics)
         // long bytes to support >2GB
-        int clientIntervalReceivedPackets;
-        long clientIntervalReceivedBytes;
-        int clientIntervalSentPackets;
-        long clientIntervalSentBytes;
+        [HideInInspector] public int  clientIntervalReceivedPackets;
+        [HideInInspector] public long clientIntervalReceivedBytes;
+        [HideInInspector] public int  clientIntervalSentPackets;
+        [HideInInspector] public long clientIntervalSentBytes;
 
         // results from last interval
         // long bytes to support >2GB
-        int clientReceivedPacketsPerSecond;
-        long clientReceivedBytesPerSecond;
-        int clientSentPacketsPerSecond;
-        long clientSentBytesPerSecond;
+        [HideInInspector] public int  clientReceivedPacketsPerSecond;
+        [HideInInspector] public long clientReceivedBytesPerSecond;
+        [HideInInspector] public int  clientSentPacketsPerSecond;
+        [HideInInspector] public long clientSentBytesPerSecond;
 
         // ---------------------------------------------------------------------
 
-        // SERVER
+        // SERVER (public fields for other components to grab statistics)
         // capture interval
         // long bytes to support >2GB
-        int serverIntervalReceivedPackets;
-        long serverIntervalReceivedBytes;
-        int serverIntervalSentPackets;
-        long serverIntervalSentBytes;
+        [HideInInspector] public int  serverIntervalReceivedPackets;
+        [HideInInspector] public long serverIntervalReceivedBytes;
+        [HideInInspector] public int  serverIntervalSentPackets;
+        [HideInInspector] public long serverIntervalSentBytes;
 
         // results from last interval
         // long bytes to support >2GB
-        int serverReceivedPacketsPerSecond;
-        long serverReceivedBytesPerSecond;
-        int serverSentPacketsPerSecond;
-        long serverSentBytesPerSecond;
+        [HideInInspector] public int  serverReceivedPacketsPerSecond;
+        [HideInInspector] public long serverReceivedBytesPerSecond;
+        [HideInInspector] public int  serverSentPacketsPerSecond;
+        [HideInInspector] public long serverSentBytesPerSecond;
 
-        // NetworkManager sets Transport.activeTransport in Awake().
+        // NetworkManager sets Transport.active in Awake().
         // so let's hook into it in Start().
         void Start()
         {
             // find available transport
-            Transport transport = Transport.activeTransport;
+            Transport transport = Transport.active;
             if (transport != null)
             {
                 transport.OnClientDataReceived += OnClientReceive;
@@ -67,7 +69,7 @@ namespace Mirror
         void OnDestroy()
         {
             // remove transport hooks
-            Transport transport = Transport.activeTransport;
+            Transport transport = Transport.active;
             if (transport != null)
             {
                 transport.OnClientDataReceived -= OnClientReceive;
@@ -145,8 +147,8 @@ namespace Mirror
             if (NetworkClient.active || NetworkServer.active)
             {
                 // create main GUI area
-                // 105 is below NetworkManager HUD in all cases.
-                GUILayout.BeginArea(new Rect(10, 105, 215, 300));
+                // 120 is below NetworkManager HUD in all cases.
+                GUILayout.BeginArea(new Rect(10, 120, 215, 300));
 
                 // show client / server stats if active
                 if (NetworkClient.active) OnClientGUI();

@@ -86,7 +86,7 @@ namespace Core.OnlineServices.SteamOnlineService {
             SteamFriends.SetRichPresence("status", "In Multiplayer Lobby");
             SteamFriends.SetRichPresence("connect", $"connect/{SteamUser.GetSteamID().ToString()}");
 
-            _createLobbyTask.SetResult(true);
+            _createLobbyTask.TrySetResult(true);
         }
 
         private void OnLobbyJoined(LobbyEnter_t ctx) {
@@ -94,14 +94,14 @@ namespace Core.OnlineServices.SteamOnlineService {
                 _currentSteamLobbyID = ctx.m_ulSteamIDLobby;
                 Debug.Log("OnLobbyEntered for lobby with id: " + _currentSteamLobbyID);
 
-                _joinLobbyTask.SetResult(true);
+                _joinLobbyTask.TrySetResult(true);
             }
         }
 
         private void OnGetLobbiesList(LobbyMatchList_t ctx) {
             var lobbies = new List<CSteamID>();
             for (var i = 0; i < ctx.m_nLobbiesMatching; i++) lobbies.Add(SteamMatchmaking.GetLobbyByIndex(i));
-            _getLobbyListTask.SetResult(lobbies);
+            _getLobbyListTask.TrySetResult(lobbies);
         }
 
         private void OnGetLobbyInfo(LobbyDataUpdate_t ctx) {
@@ -117,7 +117,7 @@ namespace Core.OnlineServices.SteamOnlineService {
                     gameMode = SteamMatchmaking.GetLobbyData(lobbyId, "gameType")
                 };
                 _getLobbyInfoTaskList.Remove(ctx.m_ulSteamIDLobby);
-                task.SetResult(lobbyInfo);
+                task.TrySetResult(lobbyInfo);
             }
         }
     }

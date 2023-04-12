@@ -65,8 +65,8 @@ namespace Core {
             // use online services and steam mirror transport
             OnlineService = new SteamOnlineService();
             Destroy(GetComponent<KcpTransport>());
-            Transport.activeTransport = gameObject.AddComponent<FizzySteamworks>();
-            transport = Transport.activeTransport;
+            Transport.active = gameObject.AddComponent<FizzySteamworks>();
+            transport = Transport.active;
 #endif
         }
 
@@ -250,7 +250,6 @@ namespace Core {
                         TransitionToLobbyPlayer(shipPlayer);
 
                 // notify all clients about the new scene
-                Debug.Log("RETURN MESSAGE YEETED");
                 NetworkServer.SendToAll(new ReturnToLobbyMessage());
             }
             else {
@@ -516,7 +515,6 @@ namespace Core {
         }
 
         private void OnShowLobbyClientMsg(ReturnToLobbyMessage message) {
-            Debug.Log("QUIT MESSAGE RECEIVED");
             Game.Instance.QuitToLobby();
         }
 
