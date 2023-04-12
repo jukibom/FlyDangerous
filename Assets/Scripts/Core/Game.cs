@@ -488,30 +488,25 @@ namespace Core {
                 mapMagic.enabled = false;
             }
 
-            yield return FdPlayer.WaitForShipPlayer();
             var ship = FdPlayer.FindLocalShipPlayer;
             if (ship != null) ship.User.DisableGameInput();
 
-            IEnumerator LoadMenuScene() {
-                // during load we pause scaled time to prevent *absolutely anything* from interacting incorrectly
-                Time.timeScale = 1;
+            // during load we pause scaled time to prevent *absolutely anything* from interacting incorrectly
+            Time.timeScale = 1;
 
-                FadeToBlack();
-                MusicManager.Instance.StopMusic(true);
-                yield return new WaitForSeconds(0.5f);
-                yield return SceneManager.LoadSceneAsync("Main Menu");
-                yield return new WaitForEndOfFrame();
-                NotifyVRStatus();
-                SetFlatScreenCameraControllerActive(false);
-                yield return new WaitForEndOfFrame();
-                ApplyGameOptions();
-                FreeCursor();
+            FadeToBlack();
+            MusicManager.Instance.StopMusic(true);
+            yield return new WaitForSeconds(0.5f);
+            yield return SceneManager.LoadSceneAsync("Main Menu");
+            yield return new WaitForEndOfFrame();
+            NotifyVRStatus();
+            SetFlatScreenCameraControllerActive(false);
+            yield return new WaitForEndOfFrame();
+            ApplyGameOptions();
+            FreeCursor();
 
-                var mainMenu = FindObjectOfType<MainMenu>();
-                if (mainMenu && withDisconnectionReason != null) mainMenu.ShowDisconnectedDialog(withDisconnectionReason);
-            }
-
-            yield return LoadMenuScene();
+            var mainMenu = FindObjectOfType<MainMenu>();
+            if (mainMenu && withDisconnectionReason != null) mainMenu.ShowDisconnectedDialog(withDisconnectionReason);
         }
 
         public void QuitGame() {
