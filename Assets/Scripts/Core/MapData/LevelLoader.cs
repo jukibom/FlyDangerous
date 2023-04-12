@@ -55,7 +55,7 @@ namespace Core.MapData {
                     onRestart();
                 }
 
-                // the terrain will not be loaded if we teleport there, we need to fade to black, wait for terrain to load, then fade back. This should still be faster than full reload.
+                // the terrain will not necessarily be loaded if we teleport there, we need to fade to black, wait for terrain to load, then fade back. This should still be faster than full reload.
                 IEnumerator LoadTerrainAndReset(Vector3 position, Quaternion rotation) {
                     ship.SetTransformWorld(position, rotation);
                     ship.Reset();
@@ -102,7 +102,8 @@ namespace Core.MapData {
                 var distanceToStart = Vector3.Distance(shipPosition, positionToWarpTo);
 
                 // TODO: Make this distance dynamic based on tiles?
-                if (mapMagic && ship && distanceToStart > 20000) {
+                var gameMode = Game.Instance.LoadedLevelData.gameType.GameMode;
+                if (!gameMode.IsStartLocationAlwaysPreLoaded && mapMagic && ship && distanceToStart > 20000) {
                     yield return ShowLoadingScreen(true);
                     yield return LoadTerrainAndReset(positionToWarpTo, rotationToWarpTo);
                 }

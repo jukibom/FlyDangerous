@@ -2,14 +2,17 @@
 New:
     * Added global texture quality setting to Options panel - use this for low video memory systems to squeeze the most out of them on terrain worlds!
         * Need to make this specific to textures over a certain size really, this applies to everything including level thumbnails and UI elements etc.
-    * Added support for threaded terrain generation on Linux / Steam Deck
+    * Added support for threaded terrain generation on Linux / Steam Deck (#108)
 
 Changed:        
     * Moved level order around a little to compensate for brick-wall difficulty
+    * Removed fade to black on level restarts in terrain maps with checkpoints (all necessary terrain is always in memory to prevent stutters for 
+      time-sensitive game modes so this was never necessary in anything but free roam) (#166)
     * Updated to Unity 2022.2.13f1
     
 Fixed:
-    * Support for Apple Silicon should now actually work...
+    * Support for Apple Silicon should now actually work... (#108)
+    * No longer possible to get the leaderboard into a weird state by restarting just before collision with final checkpoint (#166)
 
 0.6.0-hotfix.1
 Fixed:

@@ -22,6 +22,11 @@ namespace Gameplay.Game_Modes.Components.Interfaces {
         public bool HasFixedStartLocation { get; }
 
         /**
+         * denotes that a restart can always immediately snap without any load time (e.g. if a start position keeps terrain in memory)
+         */
+        public bool IsStartLocationAlwaysPreLoaded { get; }
+
+        /**
          * Flag set to prompt game to record a replay for this game mode
          */
         public bool SupportsReplays { get; }

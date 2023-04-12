@@ -8,6 +8,7 @@ namespace Gameplay.Game_Modes {
 
         public bool IsHotJoinable => false;
         public bool CanWarpToHost => false;
+        public bool IsStartLocationAlwaysPreLoaded => false;
         public bool HasFixedStartLocation => false;
         public bool SupportsReplays => true;
         public bool RequireBoostHeldToStart => true;
