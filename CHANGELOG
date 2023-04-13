@@ -2,12 +2,14 @@
 New:
     * Added global texture quality setting to Options panel - use this for low video memory systems to squeeze the most out of them on terrain worlds!
         * Note this does not affect UI textures / sprites - you will need to be in-game to visually identify this change.
+    * Added flight vector indicators and associated options toggle (#18)
     * Added support for threaded terrain generation on Linux / Steam Deck (#108)
-
+    
 Changed:        
     * Moved level order around a little to compensate for brick-wall difficulty
     * Removed fade to black on level restarts in terrain maps with checkpoints (all necessary terrain is always in memory to prevent stutters for 
       time-sensitive game modes so this was never necessary in anything but free roam) (#166)
+    * Moved some options into new Gameplay options tab
     * Updated Mirror Networking to v78.3.0
     * Updated Steamworks SDK to v1.53 via updated Steamworks.NET
     * Updated to Unity 2022.2.13f1

@@ -50,6 +50,7 @@ namespace Core {
         private bool GetDefaultBool(string key) {
             switch (key) {
                 case "showSpaceDust":
+                case "showTrueVectorIndicator":
                 case "invertArcadeYAxis":
                 case "graphics-terrain-details":
                 case "graphics-vsync":

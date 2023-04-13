@@ -17,6 +17,7 @@ namespace GameUI {
         [SerializeField] private ShipStats shipStats;
         [SerializeField] private MouseWidget mouseWidget;
         [SerializeField] private TargettingSystem targettingSystem;
+        [SerializeField] private IndicatorSystem indicatorSystem;
         [SerializeField] private GameModeUIHandler gameModeUIHandler;
         [SerializeField] private CursorIcon cursor;
         [SerializeField] private Camera vrMouseCamera;
@@ -28,6 +29,7 @@ namespace GameUI {
         public ShipStats ShipStats => shipStats;
         public MouseWidget MouseWidget => mouseWidget;
         public TargettingSystem TargettingSystem => targettingSystem;
+        public IndicatorSystem IndicatorSystem => indicatorSystem;
         public GameModeUIHandler GameModeUIHandler => gameModeUIHandler;
 
         private void Awake() {
