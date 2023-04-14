@@ -68,28 +68,32 @@ namespace Core.ShipModel {
             var targetPosition = targetTransform.position;
 
             var player = FdPlayer.FindLocalShipPlayer;
-            var originPosition = player ? player.User.UserCameraPosition : Vector3.zero;
-            var shipPosition = player ? player.transform.position : Vector3.zero;
+            if (player) {
+                var originPosition = player.User.UserCameraPosition;
+                var shipPosition = player.transform.position;
 
-            var distance = Vector3.Distance(originPosition, targetPosition);
-            var distanceToShip = Vector3.Distance(shipPosition, targetPosition);
-            var direction = (targetPosition - originPosition).normalized;
+                var distance = Vector3.Distance(originPosition, targetPosition);
+                var distanceToShip = Vector3.Distance(shipPosition, targetPosition);
+                var direction = (targetPosition - originPosition).normalized;
 
-            target.Name = targetName;
-            target.DistanceMeters = distance;
-            target.Icon = icon;
+                target.Name = targetName;
+                target.DistanceMeters = distance;
+                target.Icon = icon;
 
-            var minDistance = 10f;
-            var maxDistance = 30f + minDistance;
+                var minDistance = 10f;
+                var maxDistance = 30f + minDistance;
 
-            var targetIndicatorTransform = target.transform;
-            targetIndicatorTransform.position = Vector3.MoveTowards(originPosition, targetPosition + direction * minDistance, maxDistance);
-            targetIndicatorTransform.rotation = _mainCamera.transform.rotation;
+                var targetIndicatorTransform = target.transform;
+                var lookAtUpVector = Game.IsVREnabled ? player.transform.up : _mainCamera.transform.up;
 
-            target.Opacity = distanceToShip.Remap(5, minDistance, 0, 1);
-            target.Update3dIndicatorFromOrientation(targetTransform, _mainCamera.transform);
+                targetIndicatorTransform.position = Vector3.MoveTowards(originPosition, targetPosition + direction * minDistance, maxDistance);
+                targetIndicatorTransform.LookAt(_mainCamera.transform, lookAtUpVector);
 
-            target.Toggle3dIndicator(target == _activeTarget);
+                target.Opacity = distanceToShip.Remap(5, minDistance, 0, 1);
+                target.Update3dIndicatorFromOrientation(targetTransform, _mainCamera.transform);
+
+                target.Toggle3dIndicator(target == _activeTarget);
+            }
         }
 
         // auto-select a single target to show indicators (the one closest to center of screen)
