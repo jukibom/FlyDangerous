@@ -34,7 +34,6 @@ namespace Core.MapData {
         public static readonly Level Corkscrew = new("Corkscrew", "corkscrew", GameType.Sprint);
         public static readonly Level Sightseeing = new("Sightseeing", "sightseeing", GameType.Sprint);
         public static readonly Level Yeet = new("Yeet", "yeet", GameType.Sprint);
-        public static readonly Level LoopDeLoop = new("Loop-de-loop", "loop-de-loop", GameType.Sprint);
         public static readonly Level DesertDash = new("Desert Dash", "desert-dash", GameType.Sprint);
         public static readonly Level Chute = new("Chute", "chute", GameType.Sprint);
         public static readonly Level Coaster = new("Coaster", "coaster", GameType.Sprint);
@@ -42,6 +41,7 @@ namespace Core.MapData {
         public static readonly Level MarshMarathon = new("Marsh Marathon", "marsh-marathon", GameType.Sprint);
         public static readonly Level TightSqueeze = new("Tight Squeeze", "tight-squeeze", GameType.Sprint);
         public static readonly Level TwistsAndTurns = new("Twists and Turns", "twists-and-turns", GameType.Sprint);
+        public static readonly Level LoopDeLoop = new("Loop-de-loop", "loop-de-loop", GameType.Sprint);
         public static readonly Level Slalom = new("Slalom", "slalom", GameType.Sprint);
         public static readonly Level IslandHopping = new("Island Hopping", "island-hopping", GameType.Sprint);
         public static readonly Level Labyrinth = new("Labyrinth", "labyrinth", GameType.Sprint);
@@ -88,8 +88,8 @@ namespace Core.MapData {
                 GentleStart, UpsAndDowns, AroundTheBlock, HoldOnToYourStomach, AroundTheStation, Snake, SpeedIsHalfTheBattle, YouMightWannaHoldBack,
                 DeathValley, CrestLoop, YouHaveHeadlightsRight, LimiterMastery, ThreadTheNeedle, MountainSpiral, LongRoad, HideAndSeek,
                 // new sprints
-                YouHaveToStartSomewhere, ALittleVerticality, TinyTrial, RampingUp, Corkscrew, Sightseeing, Yeet, LoopDeLoop, DesertDash, Chute, Coaster,
-                ALittleDip, MarshMarathon, TightSqueeze, TwistsAndTurns, Slalom, IslandHopping, Labyrinth, FreshHell,
+                YouHaveToStartSomewhere, ALittleVerticality, TinyTrial, RampingUp, Corkscrew, Sightseeing, Yeet, DesertDash, Chute, Coaster,
+                ALittleDip, MarshMarathon, TightSqueeze, TwistsAndTurns, LoopDeLoop, Slalom, IslandHopping, Labyrinth, FreshHell,
                 // new laps
                 AroundTheStationV2, CoastlineCircuit, Slipstream, Speedway, LongHaul,
                 // new puzzle
