@@ -41,6 +41,7 @@ namespace Core.MapData {
         public static readonly Level ALittleDip = new("A Little Dip", "a-little-dip", GameType.Sprint);
         public static readonly Level MarshMarathon = new("Marsh Marathon", "marsh-marathon", GameType.Sprint);
         public static readonly Level TightSqueeze = new("Tight Squeeze", "tight-squeeze", GameType.Sprint);
+        public static readonly Level TwistsAndTurns = new("Twists and Turns", "twists-and-turns", GameType.Sprint);
         public static readonly Level Slalom = new("Slalom", "slalom", GameType.Sprint);
         public static readonly Level IslandHopping = new("Island Hopping", "island-hopping", GameType.Sprint);
         public static readonly Level Labyrinth = new("Labyrinth", "labyrinth", GameType.Sprint);
@@ -88,7 +89,7 @@ namespace Core.MapData {
                 DeathValley, CrestLoop, YouHaveHeadlightsRight, LimiterMastery, ThreadTheNeedle, MountainSpiral, LongRoad, HideAndSeek,
                 // new sprints
                 YouHaveToStartSomewhere, ALittleVerticality, TinyTrial, RampingUp, Corkscrew, Sightseeing, Yeet, LoopDeLoop, DesertDash, Chute, Coaster,
-                ALittleDip, MarshMarathon, TightSqueeze, Slalom, IslandHopping, Labyrinth, FreshHell,
+                ALittleDip, MarshMarathon, TightSqueeze, TwistsAndTurns, Slalom, IslandHopping, Labyrinth, FreshHell,
                 // new laps
                 AroundTheStationV2, CoastlineCircuit, Slipstream, Speedway, LongHaul,
                 // new puzzle
