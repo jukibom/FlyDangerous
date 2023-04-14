@@ -31,6 +31,8 @@ namespace Core.ShipModel {
         }
 
         private void Update() {
+            if (_mainCamera == null) return;
+
             var tviForwardTransform = tviForward.transform;
             var tviReverseTransform = tviReverse.transform;
             var tviForwardLocalPosition = tviForwardTransform.localPosition;

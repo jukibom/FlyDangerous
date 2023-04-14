@@ -100,28 +100,32 @@ namespace Gameplay {
         }
 
         public void SetCameraActive(bool active) {
-            if (active) Camera.MoveToTopOfPrioritySubqueue();
+            if (active) {
+                Camera.MoveToTopOfPrioritySubqueue();
+                _offset = Vector3.zero;
+                _targetOffset = Vector3.zero;
+            }
+
             AudioListener.enabled = active;
             foreach (var audioLowPassFilter in FindObjectsOfType<AudioLowPassFilter>()) audioLowPassFilter.enabled = useLowPassAudio && active;
         }
 
-        public void UpdateVelocityFov(Vector3 velocity, float maxVelocity) {
+        public void UpdateVelocityFov(Vector3 velocity, float maxVelocity, bool lerp = true) {
             var velocityNormalised = velocity.z / maxVelocity;
             var fov = Mathf.Lerp(Camera.m_Lens.FieldOfView,
                 velocityNormalised.Remap(0, 1, _baseFov, _baseFov + 10),
-                smoothSpeed
+                lerp ? smoothSpeed : 1
             );
             Camera.m_Lens.FieldOfView = fov;
-            Game.Instance.InGameUICamera.fieldOfView = fov;
         }
 
-        public Vector3 GetCameraOffset(Vector3 force, float maxForce) {
+        public Vector3 GetCameraOffset(Vector3 force, float maxForce, bool lerp = true) {
             var forceNormalised = force / maxForce;
             _targetOffset = Vector3.Lerp(_targetOffset, new Vector3(
                 forceNormalised.x.Remap(-1, 1, _currentMaxOffset.x, -_currentMaxOffset.x),
                 forceNormalised.y.Remap(-1, 1, _currentMaxOffset.y, -_currentMaxOffset.y),
                 forceNormalised.z.Remap(-1, 1, _currentMaxOffset.z, -_currentMaxOffset.z)
-            ), 0.1f);
+            ), lerp ? 0.1f : 1);
 
             _offset = Vector3.Lerp(_offset, _targetOffset, 0.04f);
             return _offset;

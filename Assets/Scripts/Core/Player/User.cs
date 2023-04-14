@@ -56,12 +56,11 @@ namespace Core.Player {
 
         public InGameUI InGameUI => inGameUI;
 
-        public Vector3 UserCameraPosition =>
+        [CanBeNull]
+        public Transform UserCameraTransform =>
             Game.IsVREnabled
-                ? xrOrigin.Camera.transform.position
-                : shipCameraRig.ActiveCamera != null
-                    ? shipCameraRig.ActiveCamera.transform.position
-                    : Vector3.zero;
+                ? xrOrigin.Camera.transform
+                : shipCameraRig.CurrentCameraTransform;
 
         public ShipCameraRig ShipCameraRig => shipCameraRig;
 

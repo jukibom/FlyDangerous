@@ -29,8 +29,20 @@ namespace Core.Player {
         private HeadTransform _headTransform;
         private Transform _transform;
 
+        private Vector3 prevVelocity;
+        private float prevMaxVelocity;
+        private Vector3 prevForce;
+        private float prevMaxForce;
+
         [CanBeNull] public ShipCamera ActiveCamera { get; private set; }
         public ShipFreeCamera ShipFreeCamera => freeCamera;
+
+        // Hacky transform getter which returns either the active camera transform OR the cinemachine camera 
+        // during camera transitions. The cinemachine camera is hot garbage for floating origin but is more
+        // appropriate during transitions where the transform is used to calculate positions in the HUD etc.
+        public Transform CurrentCameraTransform =>
+            Game.Instance.CinemachineBrain.IsBlending || ActiveCamera == null ? Game.Instance.CinemachineBrain.transform : ActiveCamera.transform;
+
 
         public void Reset() {
             RecoverPreferredCameraFromPreferences();
@@ -149,10 +161,15 @@ namespace Core.Player {
             _currentRotation = Vector2.zero;
         }
 
-        public void UpdateCameras(Vector3 velocity, float maxVelocity, Vector3 force, float maxForce) {
+        public void UpdateCameras(Vector3 velocity, float maxVelocity, Vector3 force, float maxForce, bool lerp = true) {
             if (ActiveCamera != null && ActiveCamera.cameraType != CameraType.FreeCam) {
-                ActiveCamera.UpdateVelocityFov(velocity, maxVelocity);
-                _cameraOffset = ActiveCamera.GetCameraOffset(force, maxForce);
+                prevVelocity = velocity;
+                prevMaxVelocity = maxVelocity;
+                prevForce = force;
+                prevMaxForce = maxForce;
+
+                ActiveCamera.UpdateVelocityFov(velocity, maxVelocity, lerp);
+                _cameraOffset = ActiveCamera.GetCameraOffset(force, maxForce, lerp);
             }
         }
 
@@ -168,6 +185,8 @@ namespace Core.Player {
                     // otherwise cycle through and save the new preferred camera;
                     var index = cameras.IndexOf(ActiveCamera);
                     SetActiveCamera(index == cameras.Count - 1 ? cameras[0] : cameras[index + 1]);
+                    // force camera positional and FOV update without any smoothing
+                    UpdateCameras(prevVelocity, prevMaxVelocity, prevForce, prevMaxForce, false);
                     Preferences.Instance.SetString("preferredCamera", ActiveCamera!.Name);
                 }
         }

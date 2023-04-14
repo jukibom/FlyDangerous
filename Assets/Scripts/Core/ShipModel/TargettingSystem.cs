@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Cinemachine;
 using Core.Player;
 using Core.Replays;
 using GameUI.Components;
@@ -18,7 +19,34 @@ namespace Core.ShipModel {
         // TODO: manual targetting system
         [CanBeNull] private Target _activeTarget;
 
+        private void OnEnable() {
+            Game.OnVRStatus += OnVRStatusChanged;
+            Game.OnPlayerJoin += ResetTargets;
+            Game.OnPlayerLeave += ResetTargets;
+            Game.OnGhostAdded += ResetTargets;
+            Game.OnGhostRemoved += ResetTargets;
+            CinemachineCore.CameraUpdatedEvent.AddListener(OnCinemachineUpdate);
+            _mainCamera = Camera.main;
+        }
+
+        private void OnDisable() {
+            Game.OnVRStatus -= OnVRStatusChanged;
+            Game.OnPlayerJoin -= ResetTargets;
+            Game.OnPlayerLeave -= ResetTargets;
+            Game.OnGhostAdded -= ResetTargets;
+            Game.OnGhostRemoved -= ResetTargets;
+            CinemachineCore.CameraUpdatedEvent.RemoveListener(OnCinemachineUpdate);
+        }
+
         private void Update() {
+            if (Game.IsVREnabled) CustomUpdate();
+        }
+
+        private void OnCinemachineUpdate(CinemachineBrain _) {
+            if (!Game.IsVREnabled) CustomUpdate();
+        }
+
+        private void CustomUpdate() {
             // update camera if needed
             if (_mainCamera == null || _mainCamera.enabled == false || _mainCamera.gameObject.activeSelf == false)
                 _mainCamera = Camera.main;
@@ -47,50 +75,34 @@ namespace Core.ShipModel {
             }
         }
 
-        private void OnEnable() {
-            Game.OnVRStatus += OnVRStatusChanged;
-            Game.OnPlayerJoin += ResetTargets;
-            Game.OnPlayerLeave += ResetTargets;
-            Game.OnGhostAdded += ResetTargets;
-            Game.OnGhostRemoved += ResetTargets;
-            _mainCamera = Camera.main;
-        }
-
-        private void OnDisable() {
-            Game.OnVRStatus -= OnVRStatusChanged;
-            Game.OnPlayerJoin -= ResetTargets;
-            Game.OnPlayerLeave -= ResetTargets;
-            Game.OnGhostAdded -= ResetTargets;
-            Game.OnGhostRemoved -= ResetTargets;
-        }
-
         private void UpdateTarget(Target target, Transform targetTransform, string targetName, Sprite icon) {
             var targetPosition = targetTransform.position;
 
             var player = FdPlayer.FindLocalShipPlayer;
             if (player) {
-                var originPosition = player.User.UserCameraPosition;
+                var origin = player.User.UserCameraTransform;
                 var shipPosition = player.transform.position;
 
-                var distance = Vector3.Distance(originPosition, targetPosition);
                 var distanceToShip = Vector3.Distance(shipPosition, targetPosition);
-                var direction = (targetPosition - originPosition).normalized;
+                var direction = (targetPosition - origin.position).normalized;
 
                 target.Name = targetName;
-                target.DistanceMeters = distance;
+                target.DistanceMeters = distanceToShip;
                 target.Icon = icon;
 
                 var minDistance = 10f;
                 var maxDistance = 30f + minDistance;
 
                 var targetIndicatorTransform = target.transform;
-                var lookAtUpVector = Game.IsVREnabled ? player.transform.up : _mainCamera.transform.up;
+                var lookAtTransform = Game.IsVREnabled
+                    ? player.transform
+                    : origin;
 
-                targetIndicatorTransform.position = Vector3.MoveTowards(originPosition, targetPosition + direction * minDistance, maxDistance);
-                targetIndicatorTransform.LookAt(_mainCamera.transform, lookAtUpVector);
+                targetIndicatorTransform.position = Vector3.MoveTowards(origin.position, targetPosition + direction * minDistance, maxDistance);
+                targetIndicatorTransform.LookAt(origin.transform, lookAtTransform.up);
 
                 target.Opacity = distanceToShip.Remap(5, minDistance, 0, 1);
-                target.Update3dIndicatorFromOrientation(targetTransform, _mainCamera.transform);
+                target.Update3dIndicatorFromOrientation(targetTransform, lookAtTransform);
 
                 target.Toggle3dIndicator(target == _activeTarget);
             }

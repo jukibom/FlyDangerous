@@ -72,7 +72,6 @@ namespace Core {
         [SerializeField] private CrossFade crossfade;
         [SerializeField] private ShipGhost shipGhostPrefab;
 
-        private CinemachineBrain _cinemachine;
         private Vector3 _hmdPosition;
         private Quaternion _hmdRotation;
         private LevelLoader _levelLoader;
@@ -81,6 +80,8 @@ namespace Core {
         private ShipParameters _shipParameters;
 
         [CanBeNull] public Level loadedMainLevel;
+
+        public CinemachineBrain CinemachineBrain { get; private set; }
 
         // The level data most recently used to load a map
         public LevelData LoadedLevelData => _levelLoader.LoadedLevelData;
@@ -128,7 +129,10 @@ namespace Core {
 
         public void Start() {
             // must be a cinemachine controller in the scene
-            _cinemachine = FindObjectOfType<CinemachineBrain>();
+            CinemachineBrain = FindObjectOfType<CinemachineBrain>();
+
+            // handle cinemachine nonsense
+            CinemachineCore.CameraUpdatedEvent.AddListener(OnCinemachineUpdate);
 
             // must be a level loader in the scene
             _levelLoader = FindObjectOfType<LevelLoader>();
@@ -154,6 +158,10 @@ namespace Core {
             // load hmd position from preferences
             _hmdPosition = Preferences.Instance.GetVector3("hmdPosition");
             _hmdRotation = Quaternion.Euler(Preferences.Instance.GetVector3("hmdRotation"));
+        }
+
+        private void OnCinemachineUpdate(CinemachineBrain brain) {
+            InGameUICamera.fieldOfView = brain.OutputCamera.fieldOfView;
         }
 
         private void OnDestroy() {
@@ -550,7 +558,7 @@ namespace Core {
         }
 
         public void SetFlatScreenCameraControllerActive(bool active) {
-            _cinemachine.gameObject.SetActive(active);
+            CinemachineBrain.gameObject.SetActive(active);
         }
 
         public void NotifyVRStatus() {
