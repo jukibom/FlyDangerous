@@ -330,6 +330,7 @@ namespace Menus.Options {
             var inputBinding = action.bindings[bindingIndex];
             var inverted = IsInvertEnabled(inputBinding);
             var deadzone = GetAxisDeadzone(inputBinding);
+            var previousBinding = string.IsNullOrEmpty(inputBinding.overridePath) ? inputBinding.path : inputBinding.overridePath;
             var invalid = false;
 
             // Configure the rebind.
@@ -377,7 +378,7 @@ namespace Menus.Options {
                     invalid = false;
 
                     // prevent button binds on full range axis
-                    if (operation.expectedControlType == "Axis" && operation.selectedControl.layout != "Axis") {
+                    if (!inputBinding.isPartOfComposite && operation.expectedControlType == "Axis" && operation.selectedControl.layout != "Axis") {
                         invalid = true;
 
                         m_RebindText.color = Color.red;
@@ -386,7 +387,8 @@ namespace Menus.Options {
                     }
 
                     // prevent inputs which only match full range axis on split or button inputs
-                    if (inputBinding.isPartOfComposite && operation.expectedControlType == "Axis" && operation.selectedControl.layout == "Axis") {
+                    if ((operation.expectedControlType != "Axis" || (inputBinding.isPartOfComposite && operation.expectedControlType == "Axis")) &&
+                        operation.selectedControl.layout == "Axis") {
                         invalid = true;
 
                         m_RebindText.color = Color.red;
@@ -411,7 +413,7 @@ namespace Menus.Options {
                             // MAKE DAMN SURE IT ACTUALLY IS EMPTY BECAUSE APPARENTLY REMOVING EVERYTHING DOESN'T WORK IF YOU MASH THE KEYBOARD
                             // WHAT IS THIS NONSENSE JESUS CHRIST
                             var binding = operation.action.bindings[bindingIndex];
-                            binding.overridePath = "";
+                            binding.overridePath = previousBinding;
                             operation.action.ChangeBinding(bindingIndex).To(binding);
 
                             PerformInteractiveRebind(bindingText, action, bindingIndex, bindingType, allCompositeParts);
