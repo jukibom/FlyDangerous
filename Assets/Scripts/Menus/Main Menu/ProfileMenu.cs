@@ -38,12 +38,14 @@ namespace Menus.Main_Menu {
         [SerializeField] private FlexibleColorPicker playerShipThrusterColorPicker;
         [SerializeField] private FlexibleColorPicker playerShipTrailColorPicker;
         [SerializeField] private FlexibleColorPicker playerShipHeadLightsColorPicker;
-        private string _playerShipAccentColor;
-        private string _playerShipHeadLightsColor;
-
+        [SerializeField] private FlexibleColorPicker playerHUDColorPicker;
         private string _playerShipPrimaryColor;
+        private string _playerShipAccentColor;
         private string _playerShipThrusterColor;
         private string _playerShipTrailColor;
+        private string _playerShipHeadLightsColor;
+        private string _playerHUDLightsColor;
+
         private bool _ready;
         private ShipMeta _selectedShip;
 
@@ -60,6 +62,7 @@ namespace Menus.Main_Menu {
                 var playerShipTrailColor = $"#{ColorUtility.ToHtmlStringRGB(playerShipTrailColorPicker.color)}";
                 var playerShipHeadLightsColor =
                     $"#{ColorUtility.ToHtmlStringRGB(playerShipHeadLightsColorPicker.color)}";
+                var playerHUDColor = $"#{ColorUtility.ToHtmlStringRGB(playerHUDColorPicker.color)}";
 
                 if (playerShipPrimaryColor != _playerShipPrimaryColor) {
                     _playerShipPrimaryColor = playerShipPrimaryColor;
@@ -83,6 +86,11 @@ namespace Menus.Main_Menu {
 
                 if (playerShipHeadLightsColor != _playerShipHeadLightsColor) {
                     _playerShipHeadLightsColor = playerShipHeadLightsColor;
+                    shouldUpdate = true;
+                }
+
+                if (playerHUDColor != _playerHUDLightsColor) {
+                    _playerHUDLightsColor = playerHUDColor;
                     shouldUpdate = true;
                 }
 
@@ -112,6 +120,7 @@ namespace Menus.Main_Menu {
             Preferences.Instance.SetString("playerShipThrusterColor", _playerShipThrusterColor);
             Preferences.Instance.SetString("playerShipTrailColor", _playerShipTrailColor);
             Preferences.Instance.SetString("playerShipHeadLightsColor", _playerShipHeadLightsColor);
+            Preferences.Instance.SetString("playerHUDIndicatorColor", _playerHUDLightsColor);
             Preferences.Instance.Save();
 
             // grab the main menu and update the ship if available
@@ -157,6 +166,10 @@ namespace Menus.Main_Menu {
             lightPreview.color = ParseColor(htmlColor);
         }
 
+        public void SetHUDColor(string htmlColor) {
+            _playerHUDLightsColor = htmlColor;
+        }
+
         public void SetCancelButtonEnabled(bool active) {
             cancelButton.interactable = active;
         }
@@ -179,12 +192,14 @@ namespace Menus.Main_Menu {
                 _playerShipThrusterColor = Preferences.Instance.GetString("playerShipThrusterColor");
                 _playerShipTrailColor = Preferences.Instance.GetString("playerShipTrailColor");
                 _playerShipHeadLightsColor = Preferences.Instance.GetString("playerShipHeadLightsColor");
+                _playerHUDLightsColor = Preferences.Instance.GetString("playerHUDIndicatorColor");
 
                 playerShipPrimaryColorPicker.color = ParseColor(_playerShipPrimaryColor);
                 playerShipAccentColorPicker.color = ParseColor(_playerShipAccentColor);
                 playerShipThrusterColorPicker.color = ParseColor(_playerShipThrusterColor);
                 playerShipTrailColorPicker.color = ParseColor(_playerShipTrailColor);
                 playerShipHeadLightsColorPicker.color = ParseColor(_playerShipHeadLightsColor);
+                playerHUDColorPicker.color = ParseColor(_playerHUDLightsColor);
 
                 SetShip(ShipMeta.FromString(Preferences.Instance.GetString("playerShipDesign")));
                 _ready = true;
@@ -210,6 +225,7 @@ namespace Menus.Main_Menu {
             SetThrusterColor(_playerShipThrusterColor);
             SetTrailColor(_playerShipTrailColor);
             SetShipLightColor(_playerShipHeadLightsColor);
+            SetHUDColor(_playerHUDLightsColor);
         }
 
         // if there's no more ships to the left or right of the data structure, disable those buttons

@@ -108,7 +108,7 @@ namespace GameUI {
 
         private void OnGameSettingsApplied() {
             foreach (var colourTintImage in colourTintImages) {
-                var htmlColor = Preferences.Instance.GetString("hudIndicatorColor");
+                var htmlColor = Preferences.Instance.GetString("playerHUDIndicatorColor");
                 colourTintImage.color = ColorExtensions.ParseHtmlColor(htmlColor);
             }
         }

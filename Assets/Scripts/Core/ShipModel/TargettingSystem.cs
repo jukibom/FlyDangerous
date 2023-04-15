@@ -147,7 +147,7 @@ namespace Core.ShipModel {
             _ghosts.Clear();
             _activeTarget = null;
 
-            var targetHtmlColor = Preferences.Instance.GetString("hudIndicatorColor");
+            var targetHtmlColor = Preferences.Instance.GetString("playerHUDIndicatorColor");
             var targetColor = ColorExtensions.ParseHtmlColor(targetHtmlColor);
 
             foreach (var shipPlayer in FdNetworkManager.Instance.ShipPlayers)
