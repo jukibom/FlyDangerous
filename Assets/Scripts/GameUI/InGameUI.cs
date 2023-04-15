@@ -1,12 +1,15 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Core;
 using Core.ShipModel;
 using FdUI;
 using Game_UI;
 using GameUI.GameModes;
+using Misc;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace GameUI {
     public class InGameUI : MonoBehaviour, IPointerMoveHandler {
@@ -21,6 +24,9 @@ namespace GameUI {
         [SerializeField] private GameModeUIHandler gameModeUIHandler;
         [SerializeField] private CursorIcon cursor;
         [SerializeField] private Camera vrMouseCamera;
+
+        [Tooltip("All images in the UI which respect the users' UI color preference")] [SerializeField]
+        private List<Image> colourTintImages;
 
         private Camera uiCamera;
 
@@ -44,11 +50,13 @@ namespace GameUI {
         private void OnEnable() {
             Game.OnPauseToggle += OnPauseToggle;
             Game.OnVRStatus += SetVRStatus;
+            Game.OnGameSettingsApplied += OnGameSettingsApplied;
         }
 
         private void OnDisable() {
             Game.OnPauseToggle -= OnPauseToggle;
             Game.OnVRStatus -= SetVRStatus;
+            Game.OnGameSettingsApplied -= OnGameSettingsApplied;
         }
 
         public void OnPointerMove(PointerEventData eventData) {
@@ -95,6 +103,13 @@ namespace GameUI {
                 else {
                     throw new Exception("Failed to find UI camera while switching VR mode!");
                 }
+            }
+        }
+
+        private void OnGameSettingsApplied() {
+            foreach (var colourTintImage in colourTintImages) {
+                var htmlColor = Preferences.Instance.GetString("hudIndicatorColor");
+                colourTintImage.color = ColorExtensions.ParseHtmlColor(htmlColor);
             }
         }
     }

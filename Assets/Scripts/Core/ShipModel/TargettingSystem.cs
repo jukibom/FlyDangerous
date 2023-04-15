@@ -25,6 +25,7 @@ namespace Core.ShipModel {
             Game.OnPlayerLeave += ResetTargets;
             Game.OnGhostAdded += ResetTargets;
             Game.OnGhostRemoved += ResetTargets;
+            Game.OnGameSettingsApplied += OnGameSettingsApplied;
             CinemachineCore.CameraUpdatedEvent.AddListener(OnCinemachineUpdate);
             _mainCamera = Camera.main;
         }
@@ -35,6 +36,7 @@ namespace Core.ShipModel {
             Game.OnPlayerLeave -= ResetTargets;
             Game.OnGhostAdded -= ResetTargets;
             Game.OnGhostRemoved -= ResetTargets;
+            Game.OnGameSettingsApplied -= OnGameSettingsApplied;
             CinemachineCore.CameraUpdatedEvent.RemoveListener(OnCinemachineUpdate);
         }
 
@@ -145,14 +147,19 @@ namespace Core.ShipModel {
             _ghosts.Clear();
             _activeTarget = null;
 
+            var targetHtmlColor = Preferences.Instance.GetString("hudIndicatorColor");
+            var targetColor = ColorExtensions.ParseHtmlColor(targetHtmlColor);
+
             foreach (var shipPlayer in FdNetworkManager.Instance.ShipPlayers)
                 if (!shipPlayer.isLocalPlayer) {
                     var target = Instantiate(targetPrefab, transform);
+                    target.SetColor(targetColor);
                     _players.Add(shipPlayer, target);
                 }
 
             foreach (var replayShip in FindObjectsOfType<ShipGhost>()) {
                 var target = Instantiate(targetPrefab, transform);
+                target.SetColor(targetColor);
                 _ghosts.Add(replayShip, target);
             }
         }
@@ -160,6 +167,10 @@ namespace Core.ShipModel {
         private void OnVRStatusChanged(bool vrEnabled) {
             // rebuild targets to reset all rotations
             if (!vrEnabled) ResetTargets();
+        }
+
+        private void OnGameSettingsApplied() {
+            ResetTargets();
         }
     }
 }

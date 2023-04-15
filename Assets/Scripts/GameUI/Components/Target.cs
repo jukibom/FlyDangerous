@@ -10,6 +10,7 @@ namespace GameUI.Components {
         [SerializeField] private Text targetNameText;
         [SerializeField] private Text targetDistanceText;
         [SerializeField] private Image icon;
+        [SerializeField] private Image outline;
         [SerializeField] private GameObject targetIndicator2d;
 
         [SerializeField] private Transform IndicatorModelTransform;
@@ -87,6 +88,12 @@ namespace GameUI.Components {
 
             _facingForwardNormalized = Mathf.Lerp(_facingForwardNormalized, indicator3dFacingNormalised, 0.9f);
             Indicator3D.SetFacingValueNormalized(_facingForwardNormalized);
+        }
+
+        public void SetColor(Color color) {
+            outline.color = color;
+            targetDistanceText.color = color;
+            targetNameText.color = color;
         }
 
         public void Toggle3dIndicator(bool isActive) {
