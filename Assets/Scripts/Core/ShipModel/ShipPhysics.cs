@@ -463,6 +463,7 @@ namespace Core.ShipModel {
                 (Math.Abs(CurrentFrameThrust.x) + Math.Abs(CurrentFrameThrust.y) + Math.Abs(CurrentFrameThrust.z)) /
                 FlightParameters.maxThrust;
             _shipInstrumentData.Speed = VelocityMagnitude;
+            _shipInstrumentData.Gravity = Math.Abs(Game.Instance.LoadedLevelData.gravity?.y ?? 0);
             _shipInstrumentData.GForce = _gForce;
             _shipInstrumentData.PitchPositionNormalised = Pitch;
             _shipInstrumentData.RollPositionNormalised = Roll;

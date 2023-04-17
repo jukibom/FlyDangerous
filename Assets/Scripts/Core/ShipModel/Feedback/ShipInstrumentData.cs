@@ -8,6 +8,7 @@ namespace Core.ShipModel.ShipIndicator {
         public float ShipHeightFromGround { get; set; }
         public float Altitude { get; set; }
         public float Speed { get; set; }
+        public float Gravity { get; set; }
         public float AccelerationMagnitudeNormalised { get; set; }
         public float GForce { get; set; }
         public float PitchPositionNormalised { get; set; }

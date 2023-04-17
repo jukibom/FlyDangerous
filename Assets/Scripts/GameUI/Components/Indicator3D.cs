@@ -22,6 +22,15 @@ namespace GameUI.Components {
             _rightTriangleBottomTransform = rightTriangleBottom.transform;
         }
 
+        public void SetUIColor(Color color) {
+            frontTriangleTop.material.color = color;
+            frontTriangleBottom.material.color = color;
+            leftTriangleTop.material.color = color;
+            leftTriangleBottom.material.color = color;
+            rightTriangleTop.material.color = color;
+            rightTriangleBottom.material.color = color;
+        }
+
         // facing value = 0 when facing (either toward or away) from camera and 1 when it isn't.
         public void SetFacingValueNormalized(float facingValue) {
             // opacity of front triangle

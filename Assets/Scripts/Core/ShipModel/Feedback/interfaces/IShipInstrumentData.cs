@@ -20,6 +20,9 @@ namespace Core.ShipModel.Feedback.interfaces {
         // The raw velocity magnitude in m/s
         public float Speed { get; }
 
+        // The level gravity in m/s^2
+        public float Gravity { get; }
+
         // The amount of acceleration applied as a normalised value.
         public float AccelerationMagnitudeNormalised { get; }
 

@@ -28,6 +28,9 @@ namespace GameUI {
         [Tooltip("All images in the UI which respect the users' UI color preference")] [SerializeField]
         private List<Image> colourTintImages;
 
+        [Tooltip("All text in the UI which respect the users' UI color preference")] [SerializeField]
+        private List<Text> colourTintTextElements;
+
         private Camera uiCamera;
 
         public DebugUI DebugUI => debugUI;
@@ -110,6 +113,11 @@ namespace GameUI {
             foreach (var colourTintImage in colourTintImages) {
                 var htmlColor = Preferences.Instance.GetString("playerHUDIndicatorColor");
                 colourTintImage.color = ColorExtensions.ParseHtmlColor(htmlColor);
+            }
+
+            foreach (var colourTintText in colourTintTextElements) {
+                var htmlColor = Preferences.Instance.GetString("playerHUDIndicatorColor");
+                colourTintText.color = ColorExtensions.ParseHtmlColor(htmlColor);
             }
         }
     }

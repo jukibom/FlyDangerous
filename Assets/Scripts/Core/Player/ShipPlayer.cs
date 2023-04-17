@@ -145,6 +145,7 @@ namespace Core.Player {
 
             // register local player UI 
             ShipPhysics.FeedbackEngine.SubscribeFeedbackObject(user.InGameUI.ShipStats);
+            ShipPhysics.FeedbackEngine.SubscribeFeedbackObject(user.InGameUI.IndicatorSystem);
 
             // register integrations
             foreach (var integration in Engine.Instance.Integrations) ShipPhysics.FeedbackEngine.SubscribeFeedbackObject(integration);

@@ -94,6 +94,7 @@ namespace GameUI.Components {
             outline.color = color;
             targetDistanceText.color = color;
             targetNameText.color = color;
+            Indicator3D.SetUIColor(color);
         }
 
         public void Toggle3dIndicator(bool isActive) {

@@ -66,7 +66,7 @@ namespace FdUI {
             onValueChanged.Invoke(Value);
         }
 
-        void IMoveHandler.OnMove(AxisEventData eventData) {
+        public void OnMove(AxisEventData eventData) {
             // handle left and right 
             if (eventData.moveDir == MoveDirection.Left || eventData.moveDir == MoveDirection.Right) {
                 var multipleOf = sliderIncrements;
