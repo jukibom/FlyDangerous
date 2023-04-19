@@ -262,7 +262,6 @@ namespace Core.Player {
         public static readonly Flag Zambia = new(253, "Zambia", "zm");
         public static readonly Flag Zimbabwe = new(254, "Zimbabwe", "zw");
         public static readonly Flag Pride = new(255, "Pride", "pride");
-        public static readonly Flag PrideProgress = new(263, "Pride - Progress", "pride-progress");
         public static readonly Flag PrideAgender = new(256, "Pride - Agender", "pride-agender");
         public static readonly Flag PrideAromantic = new(257, "Pride - Aromantic", "pride-aromantic");
         public static readonly Flag PrideAsexual = new(258, "Pride - Asexual", "pride-asexual");
@@ -270,10 +269,11 @@ namespace Core.Player {
         public static readonly Flag PrideGenderfluid = new(260, "Pride - Genderfluid", "pride-genderfluid");
         public static readonly Flag PrideGenderqueer = new(261, "Pride - Genderqueer", "pride-genderqueer");
         public static readonly Flag PrideIntersex = new(262, "Pride - Intersex", "pride-intersex");
-        public static readonly Flag PrideLesbian = new(263, "Pride - Lesbian", "pride-lesbian");
+        public static readonly Flag PrideProgress = new(263, "Pride - Progress", "pride-progress");
         public static readonly Flag PrideNonBinary = new(264, "Pride - Non-Binary", "pride-nonbinary");
         public static readonly Flag PridePansexual = new(265, "Pride - Pansexual", "pride-pan");
         public static readonly Flag PrideTrans = new(266, "Pride - Trans", "pride-trans");
+        public static readonly Flag PrideLesbian = new(267, "Pride - Lesbian", "pride-lesbian");
 
         private Flag(int fixedId, string name, string filename) {
             Id = GenerateId;
