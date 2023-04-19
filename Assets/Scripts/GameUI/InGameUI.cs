@@ -15,6 +15,8 @@ using CameraType = Gameplay.CameraType;
 
 namespace GameUI {
     public class InGameUI : MonoBehaviour, IPointerMoveHandler {
+        private static readonly int open = Animator.StringToHash("Open");
+
         [SerializeField] private Canvas screenSpaceCanvas;
         [SerializeField] private Canvas worldSpaceCanvas;
         [SerializeField] private DebugUI debugUI;
@@ -93,6 +95,18 @@ namespace GameUI {
 
         public void OnGameMenuToggle() {
             if (!pauseSystem.IsPaused) pauseSystem.OnGameMenuToggle();
+        }
+
+        public void ShowWorldCanvas(bool animate = false) {
+            worldSpaceCanvas.gameObject.SetActive(true);
+            if (animate) {
+                var animator = worldSpaceCanvas.GetComponent<Animator>();
+                if (animator) animator.SetBool(open, true);
+            }
+        }
+
+        public void HideWorldCanvas() {
+            worldSpaceCanvas.gameObject.SetActive(false);
         }
 
         private void SetVRStatus(bool isVREnabled) {

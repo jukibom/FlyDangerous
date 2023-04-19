@@ -80,6 +80,7 @@ namespace Gameplay.Game_Modes {
             _gameModeWithCheckpoint = null;
             _gameModeWithTimer = null;
             inGameUI.GameModeUIHandler.GameModeUIText.HideAll();
+            inGameUI.HideWorldCanvas();
 
             _gameModeScore = new GameModeScore(gameMode, levelData);
             _gameModeTimer = new GameModeTimer();
@@ -134,6 +135,7 @@ namespace Gameplay.Game_Modes {
             _inGameUI.GameModeUIHandler.RaceResultsScreen.SetReplaysFromPanel();
             _inGameUI.GameModeUIHandler.GameModeUIText.HideGameUIText(false);
             _inGameUI.GameModeUIHandler.RaceResultsScreen.Hide();
+            _inGameUI.HideWorldCanvas();
             _gameModeScore.Reset();
             _gameModeTimer.Reset();
             _gameMode.OnRestart();
@@ -222,6 +224,8 @@ namespace Gameplay.Game_Modes {
                 // but they also dictate the countdown time.
                 _gameModeTimer.Start(_gameMode);
                 _inGameUI.ShipStats.ForceHidden = false;
+                _inGameUI.IndicatorSystem.gameObject.SetActive(true);
+                _inGameUI.ShowWorldCanvas(true);
                 StartReplayRecordIfSupported();
                 StartGhostsIfSupported();
                 _gameModeScore.Reset();
