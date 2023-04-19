@@ -15,6 +15,8 @@ namespace Core.ShipModel {
         private readonly Dictionary<IReplayShip, Target> _ghosts = new();
         private readonly Dictionary<ShipPlayer, Target> _players = new();
         private Camera _mainCamera;
+        private bool _userShouldShow = true;
+        private bool _systemShouldShow = true;
 
         // TODO: manual targetting system
         [CanBeNull] private Target _activeTarget;
@@ -46,6 +48,16 @@ namespace Core.ShipModel {
 
         private void OnCinemachineUpdate(CinemachineBrain _) {
             if (!Game.IsVREnabled) CustomUpdate();
+        }
+
+        public void UserToggleVisibility(bool shouldShow) {
+            _userShouldShow = shouldShow;
+            UpdateVisibility();
+        }
+
+        public void SystemToggleVisibility(bool shouldShow) {
+            _systemShouldShow = shouldShow;
+            UpdateVisibility();
         }
 
         private void CustomUpdate() {
@@ -171,6 +183,10 @@ namespace Core.ShipModel {
 
         private void OnGameSettingsApplied() {
             ResetTargets();
+        }
+
+        private void UpdateVisibility() {
+            gameObject.SetActive(_userShouldShow && _systemShouldShow);
         }
     }
 }

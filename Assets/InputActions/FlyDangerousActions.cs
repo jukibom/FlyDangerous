@@ -596,6 +596,15 @@ public partial class @FlyDangerousActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Toggle Indicator HUD"",
+                    ""type"": ""Value"",
+                    ""id"": ""a7d7a338-3cea-4962-bd16-3c3fd022dacb"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -2213,6 +2222,28 @@ public partial class @FlyDangerousActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Everything"",
                     ""action"": ""Toggle Camera Drift"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f4498381-23b1-41ed-baa7-acbd6407d877"",
+                    ""path"": ""<Keyboard>/h"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Toggle Indicator HUD"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""998f6a3f-2444-4ad9-bfab-6f65246c2561"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Toggle Indicator HUD"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -4100,6 +4131,7 @@ public partial class @FlyDangerousActions: IInputActionCollection2, IDisposable
         m_Ship_RotateCameraV = m_Ship.FindAction("Rotate Camera V", throwIfNotFound: true);
         m_Ship_ToggleCameraRotateControls = m_Ship.FindAction("Toggle Camera Rotate Controls", throwIfNotFound: true);
         m_Ship_ToggleCameraDrift = m_Ship.FindAction("Toggle Camera Drift", throwIfNotFound: true);
+        m_Ship_ToggleIndicatorHUD = m_Ship.FindAction("Toggle Indicator HUD", throwIfNotFound: true);
         // ShipArcade
         m_ShipArcade = asset.FindActionMap("ShipArcade", throwIfNotFound: true);
         m_ShipArcade_RestartFromLastCheckpoint = m_ShipArcade.FindAction("Restart From Last Checkpoint", throwIfNotFound: true);
@@ -4386,6 +4418,7 @@ public partial class @FlyDangerousActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Ship_RotateCameraV;
     private readonly InputAction m_Ship_ToggleCameraRotateControls;
     private readonly InputAction m_Ship_ToggleCameraDrift;
+    private readonly InputAction m_Ship_ToggleIndicatorHUD;
     public struct ShipActions
     {
         private @FlyDangerousActions m_Wrapper;
@@ -4422,6 +4455,7 @@ public partial class @FlyDangerousActions: IInputActionCollection2, IDisposable
         public InputAction @RotateCameraV => m_Wrapper.m_Ship_RotateCameraV;
         public InputAction @ToggleCameraRotateControls => m_Wrapper.m_Ship_ToggleCameraRotateControls;
         public InputAction @ToggleCameraDrift => m_Wrapper.m_Ship_ToggleCameraDrift;
+        public InputAction @ToggleIndicatorHUD => m_Wrapper.m_Ship_ToggleIndicatorHUD;
         public InputActionMap Get() { return m_Wrapper.m_Ship; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -4527,6 +4561,9 @@ public partial class @FlyDangerousActions: IInputActionCollection2, IDisposable
             @ToggleCameraDrift.started += instance.OnToggleCameraDrift;
             @ToggleCameraDrift.performed += instance.OnToggleCameraDrift;
             @ToggleCameraDrift.canceled += instance.OnToggleCameraDrift;
+            @ToggleIndicatorHUD.started += instance.OnToggleIndicatorHUD;
+            @ToggleIndicatorHUD.performed += instance.OnToggleIndicatorHUD;
+            @ToggleIndicatorHUD.canceled += instance.OnToggleIndicatorHUD;
         }
 
         private void UnregisterCallbacks(IShipActions instance)
@@ -4627,6 +4664,9 @@ public partial class @FlyDangerousActions: IInputActionCollection2, IDisposable
             @ToggleCameraDrift.started -= instance.OnToggleCameraDrift;
             @ToggleCameraDrift.performed -= instance.OnToggleCameraDrift;
             @ToggleCameraDrift.canceled -= instance.OnToggleCameraDrift;
+            @ToggleIndicatorHUD.started -= instance.OnToggleIndicatorHUD;
+            @ToggleIndicatorHUD.performed -= instance.OnToggleIndicatorHUD;
+            @ToggleIndicatorHUD.canceled -= instance.OnToggleIndicatorHUD;
         }
 
         public void RemoveCallbacks(IShipActions instance)
@@ -5110,6 +5150,7 @@ public partial class @FlyDangerousActions: IInputActionCollection2, IDisposable
         void OnRotateCameraV(InputAction.CallbackContext context);
         void OnToggleCameraRotateControls(InputAction.CallbackContext context);
         void OnToggleCameraDrift(InputAction.CallbackContext context);
+        void OnToggleIndicatorHUD(InputAction.CallbackContext context);
     }
     public interface IShipArcadeActions
     {

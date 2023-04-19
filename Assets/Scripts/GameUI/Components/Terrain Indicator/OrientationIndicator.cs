@@ -26,6 +26,10 @@ namespace GameUI.Components.Terrain_Indicator {
             }
         }
 
+        private void Start() {
+            RefreshColors();
+        }
+
         private void OnEnable() {
             Game.OnGameSettingsApplied += OnGameSettingsApplied;
         }
@@ -44,11 +48,15 @@ namespace GameUI.Components.Terrain_Indicator {
         }
 
         private void OnGameSettingsApplied() {
+            RefreshColors();
+        }
+
+        private void RefreshColors() {
             var uiColor = ColorExtensions.ParseHtmlColor(Preferences.Instance.GetString("playerHUDIndicatorColor"));
-            foreach (var image in GetComponentsInChildren<Image>())
+            foreach (var image in GetComponentsInChildren<Image>(true))
                 if (!excludedUIColorImages.Contains(image))
                     image.color = uiColor;
-            foreach (var text in GetComponentsInChildren<Text>()) text.color = uiColor;
+            foreach (var text in GetComponentsInChildren<Text>(true)) text.color = uiColor;
         }
     }
 }

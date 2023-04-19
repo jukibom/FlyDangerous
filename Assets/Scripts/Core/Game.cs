@@ -52,6 +52,8 @@ namespace Core {
 
         public delegate void GameSettingsApplyAction();
 
+        public delegate void CameraChangedAction(ShipCamera camera);
+
         public delegate void GhostAddedAction();
 
         public delegate void GhostRemovedAction();
@@ -178,6 +180,7 @@ namespace Core {
         public static event GhostRemovedAction OnGhostRemoved;
         public static event RestartLevelAction OnRestart;
         public static event GameSettingsApplyAction OnGameSettingsApplied;
+        public static event CameraChangedAction OnCameraChanged;
         public static event GamePauseAction OnPauseToggle;
         public static event VRToggledAction OnVRStatus;
         public static event WaterTransition OnWaterTransition;
@@ -190,6 +193,10 @@ namespace Core {
         public void ApplyGameOptions() {
             ApplyGraphicsOptions();
             OnGameSettingsApplied?.Invoke();
+        }
+
+        public void CameraChanged(ShipCamera newCamera) {
+            OnCameraChanged?.Invoke(newCamera);
         }
 
         private void ApplyGraphicsOptions() {

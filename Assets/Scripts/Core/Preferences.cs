@@ -50,13 +50,17 @@ namespace Core {
         private bool GetDefaultBool(string key) {
             switch (key) {
                 case "showSpaceDust":
+                case "showForwardVectorIndicator":
                 case "showTrueVectorIndicator":
+                case "showFlightOrientationIndicators":
                 case "invertArcadeYAxis":
                 case "graphics-terrain-details":
                 case "graphics-vsync":
                 case "autoTrackSnapForward":
                     return true;
 
+                case "showFlightOrientationIndicatorsInSpace":
+                case "showFlightOrientationIndicatorsInThirdPerson":
                 case "graphics-ssao":
                 case "graphics-soft-shadows":
                 case "enableMouseFlightControls":
@@ -135,6 +139,8 @@ namespace Core {
                     return 10;
                 case "autoTrackUpDegrees":
                     return 30;
+                case "flightOrientationIndicatorScale":
+                    return 1f;
                 default:
                     Debug.LogWarning("Attempted to get preference " + key + " with no default specified");
                     return 0;

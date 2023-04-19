@@ -5,11 +5,13 @@ using Core;
 using Core.ShipModel;
 using FdUI;
 using Game_UI;
+using Gameplay;
 using GameUI.GameModes;
 using Misc;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using CameraType = Gameplay.CameraType;
 
 namespace GameUI {
     public class InGameUI : MonoBehaviour, IPointerMoveHandler {
@@ -54,12 +56,21 @@ namespace GameUI {
             Game.OnPauseToggle += OnPauseToggle;
             Game.OnVRStatus += SetVRStatus;
             Game.OnGameSettingsApplied += OnGameSettingsApplied;
+            Game.OnCameraChanged += OnCameraChanged;
         }
 
         private void OnDisable() {
             Game.OnPauseToggle -= OnPauseToggle;
             Game.OnVRStatus -= SetVRStatus;
             Game.OnGameSettingsApplied -= OnGameSettingsApplied;
+            Game.OnCameraChanged -= OnCameraChanged;
+        }
+
+        private void OnCameraChanged(ShipCamera shipCamera) {
+            // UI visibility
+            var validCamera = shipCamera.cameraType != CameraType.FreeCam;
+            ShipStats.SetStatsVisible(!Game.IsVREnabled && shipCamera.showShipDataUI && validCamera);
+            IndicatorSystem.OnCameraChanged(shipCamera.cameraType);
         }
 
         public void OnPointerMove(PointerEventData eventData) {
@@ -77,6 +88,7 @@ namespace GameUI {
             cursor.gameObject.SetActive(isPaused);
             cursor.SetLocalPosition(Vector2.zero);
             worldSpaceCanvas.enabled = !isPaused;
+            targettingSystem.SystemToggleVisibility(!isPaused);
         }
 
         public void OnGameMenuToggle() {

@@ -29,6 +29,7 @@ namespace Core.Player {
         [SerializeField] public bool boostButtonForceEnabled;
         private bool _alternateFlightControls;
         private bool _autoRotateDrift;
+        private bool _showIndicatorHud = true;
         private Vector2 _cameraMouse;
         private bool _cameraRotateAxisControlsEnabled = true;
 
@@ -510,6 +511,17 @@ namespace Core.Player {
                 "hold" => value.isPressed,
                 _ => headTracking.IsAutoTrackEnabled
             };
+        }
+
+        [UsedImplicitly]
+        public void OnToggleIndicatorHUD(InputValue value) {
+            if (value.isPressed) {
+                UIAudioManager.Instance.Play("ui-nav");
+
+                _showIndicatorHud = !_showIndicatorHud;
+                inGameUI.IndicatorSystem.ToggleVisibility(_showIndicatorHud);
+                inGameUI.TargettingSystem.UserToggleVisibility(_showIndicatorHud);
+            }
         }
 
         [UsedImplicitly]

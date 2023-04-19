@@ -4,16 +4,18 @@ using GameUI.Components.Terrain_Indicator;
 using Misc;
 using UnityEngine;
 using UnityEngine.UI;
+using CameraType = Gameplay.CameraType;
 
 namespace Core.ShipModel {
     public class IndicatorSystem : MonoBehaviour, IShipInstruments, IShipMotion {
+        [SerializeField] private GameObject forwardCrosshairIndicator;
         [SerializeField] private CanvasGroup tviIndicators;
         [SerializeField] private Image tviForward;
         [SerializeField] private Image tviReverse;
         [SerializeField] private float tviAlphaSmoothing = 0.5f;
         [SerializeField] private float tviPositionalSmoothing = 0.5f;
         [SerializeField] private int indicatorDistance = 500;
-        [SerializeField] private GameObject terrainIndicator;
+        [SerializeField] private CanvasGroup terrainIndicator;
         [SerializeField] private OrientationIndicator orientationIndicator;
         [SerializeField] private HeightDeltaIndicator heightDeltaIndicator;
         [SerializeField] private HeightMarker heightIndicator;
@@ -23,6 +25,8 @@ namespace Core.ShipModel {
         [SerializeField] private Text zCoord;
         [SerializeField] private Text gravity;
 
+        private bool _userShouldShow = true;
+        private bool _cameraShouldShowOrientationIndicators = true;
         private Camera _mainCamera;
         private readonly Vector3 _stationaryDirectionVector = new(0, 0, 1);
         private Vector3 _lookAtUpVector;
@@ -33,7 +37,21 @@ namespace Core.ShipModel {
         private IShipMotionData _shipMotionData;
 
         private void OnEnable() {
-            // terrainIndicator.SetActive(Game.Instance.LoadedLevelData.location.IsTerrain);
+            Game.OnGameSettingsApplied += OnGameSettingsApplied;
+        }
+
+        private void OnDisable() {
+            Game.OnGameSettingsApplied -= OnGameSettingsApplied;
+        }
+
+        private void OnGameSettingsApplied() {
+            var player = FdPlayer.FindLocalShipPlayer;
+            if (player) {
+                var activeCamera = player.User.ShipCameraRig.ActiveCamera;
+                if (activeCamera) OnCameraChanged(activeCamera.cameraType);
+            }
+
+            UpdateVisibility();
         }
 
         public void OnShipInstrumentUpdate(IShipInstrumentData shipInstrumentData) {
@@ -46,15 +64,24 @@ namespace Core.ShipModel {
             UpdateHeightDeltaIndicator();
         }
 
+        public void OnCameraChanged(CameraType cameraType) {
+            _cameraShouldShowOrientationIndicators = cameraType == CameraType.FirstPerson ||
+                                                     (cameraType == CameraType.ThirdPerson &&
+                                                      Preferences.Instance.GetBool("showFlightOrientationIndicatorsInThirdPerson"));
+            UpdateVisibility();
+        }
+
+        public void ToggleVisibility(bool shouldShow) {
+            _userShouldShow = shouldShow;
+            UpdateVisibility();
+        }
+
         private void FixedUpdate() {
             // update camera if needed
             if (_mainCamera == null || _mainCamera.enabled == false || _mainCamera.gameObject.activeSelf == false)
                 _mainCamera = Camera.main;
 
-            if (Preferences.Instance.GetBool("showTrueVectorIndicator"))
-                UpdateTVIs();
-            else
-                _targetTVIAlpha = 0;
+            UpdateTVIs();
         }
 
         private void Update() {
@@ -122,6 +149,19 @@ namespace Core.ShipModel {
 
         private void UpdateHeightDeltaIndicator() {
             heightDeltaIndicator.IndicatorValueNormalized = _shipMotionData.CurrentLateralVelocity.y / (_shipMotionData.MaxSpeed * 0.5f);
+        }
+
+        private void UpdateVisibility() {
+            forwardCrosshairIndicator.SetActive(_userShouldShow && Preferences.Instance.GetBool("showForwardVectorIndicator"));
+            terrainIndicator.gameObject.SetActive(_userShouldShow &&
+                                                  _cameraShouldShowOrientationIndicators &&
+                                                  Preferences.Instance.GetBool("showFlightOrientationIndicators") &&
+                                                  (Preferences.Instance.GetBool("showFlightOrientationIndicatorsInSpace") ||
+                                                   Game.Instance.LoadedLevelData.location.IsTerrain));
+            tviIndicators.gameObject.SetActive(_userShouldShow && Preferences.Instance.GetBool("showTrueVectorIndicator"));
+
+            var terrainIndicatorScale = Preferences.Instance.GetFloat("flightOrientationIndicatorScale").Remap(0.5f, 3f, 20, 70);
+            terrainIndicator.transform.localScale = new Vector3(terrainIndicatorScale, terrainIndicatorScale, 1);
         }
     }
 }
