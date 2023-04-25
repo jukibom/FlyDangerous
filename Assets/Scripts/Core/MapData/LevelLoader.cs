@@ -200,26 +200,33 @@ namespace Core.MapData {
             // if terrain needs to generate, toggle special logic and wait for it to load all primary tiles
             var mapMagic = FindObjectOfType<MapMagicObject>();
             if (mapMagic && LoadedLevelData.terrainSeed != null) {
-                mapMagic.graph.random = new Noise(LoadedLevelData.terrainSeed.GetHashCode(), 32768);
-
 #if !NO_PAID_ASSETS
                 // gpu instancer initialisation (paid asset!)
                 var cam = FindObjectOfType<CinemachineBrain>(true).gameObject.GetComponent<Camera>();
                 var gpuInstancer = FindObjectOfType<GPUInstancerMapMagic2Integration>();
-                if (mapMagic && gpuInstancer) {
+                if (gpuInstancer) {
                     gpuInstancer.floatingOriginTransform = mapMagic.transform;
                     GPUInstancerAPI.SetCamera(cam);
                     gpuInstancer.SetCamera(cam);
                 }
 #endif
 
-                // our terrain gen may start disabled to prevent painful threading fun
+                // absolutely nuke everything, we have very little control of lifecycle with respect to scene loading and what's already going on
+                foreach (var terrainTile in mapMagic.tiles.All()) terrainTile.StopGenerate();
+
+                // our terrain gen may start disabled to prevent painful threading fun so enable it now
                 mapMagic.enabled = true;
                 yield return new WaitForEndOfFrame();
 
                 // replace with user seed
                 mapMagic.graph.random = new Noise(LoadedLevelData.terrainSeed.GetHashCode(), 32768);
-                foreach (var terrainTile in mapMagic.tiles.All()) terrainTile.StartGenerate(mapMagic.graph);
+
+                // reset and restart terrain gen (in case any tiles have already begun generating with the wrong seed!) 
+                foreach (var terrainTile in mapMagic.tiles.All()) {
+                    terrainTile.ResetTerrain();
+                    terrainTile.StartGenerate(mapMagic.graph);
+                }
+
                 yield return new WaitForEndOfFrame();
 
                 // wait for fully loaded local terrain
