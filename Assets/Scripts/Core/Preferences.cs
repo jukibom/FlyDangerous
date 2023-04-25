@@ -207,7 +207,7 @@ namespace Core {
                 case "playerShipHeadLightsColor":
                     return "#FFF4D6";
                 case "playerHUDIndicatorColor":
-                    return "#FFFFFF";
+                    return "#FA8B01";
                 case "preferredCamera":
                     return "external far";
                 case "cameraMode":
