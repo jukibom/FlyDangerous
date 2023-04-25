@@ -48,7 +48,10 @@ namespace Core.MapData.Serializable {
             }, // Long Road
             {
                 "47d9d929873b2a61ce5ae502715a095056ddc23f740e9818d95f91bc51bde0a1", "8b7f9f7b4d0b5a29f6b6bc3a3778424f45d85baad750df2d0df68da95e08768a"
-            } // Hide and Seek
+            }, // Hide and Seek
+            {
+                "bf12c922d1ca3c821bc0806767936a02efa288f5b5c8e025f6cbd29047159e0f", "7cb8a97784df5f5a3615c27e62bf3bf026679ba84afa2ae6634dc79cad3e09e7"
+            } // Fresh Hell (Achelous renamed!)
         };
     }
 }

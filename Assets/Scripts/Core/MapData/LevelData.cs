@@ -68,9 +68,7 @@ namespace Core.MapData {
                 checkpointText + billboardsText + modifierText + geometryText + location.Name);
 
             // Map lookup for old hash algorithm
-            if (LevelDataHelper.OldMapLookup.TryGetValue(hash, out var oldHash)) return oldHash;
-
-            return hash;
+            return LevelDataHelper.OldMapLookup.TryGetValue(hash, out var oldHash) ? oldHash : hash;
         }
 
         public string ToJsonString() {

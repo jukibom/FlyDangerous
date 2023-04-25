@@ -20,11 +20,11 @@ namespace Core.MapData {
         public static readonly Location ProvingGrounds = new("Proving Grounds", "Proving Grounds",
             "A testing scene used for staging new features and testing flight mechanics", "ProvingGrounds", false);
 
-        public static readonly Location TerrainV1 = new("Flat World", "Mountains (Legacy)",
-            "Terrain with peaks no higher than 2km - only here for compatibility with legacy maps", "TerrainV1", true);
+        public static readonly Location TerrainV1 = new("Flat World", "Mountains",
+            "Terrain with peaks no higher than 2km", "TerrainV1", true);
 
-        public static readonly Location TerrainV2 = new("Canyons", "Canyons (Legacy)",
-            "Terrain with peaks of 8km and deep, straight canyon grooves - only here for compatibility with legacy maps", "TerrainV2", true);
+        public static readonly Location TerrainV2 = new("Canyons", "Canyons",
+            "Terrain with peaks of 8km and deep, straight canyon grooves", "TerrainV2", true);
 
 
         private Location(string name, string displayName, string description, string sceneToLoad, bool isTerrain) {
