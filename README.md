@@ -14,8 +14,6 @@ This project aims to provide a ground-up reimplementation of a similar-enough fl
 
 [Join the discord](https://discord.flydangero.us)
 
-[Follow me on twitter](https://juki.flydangero.us)
-
 ## Features
 
 [Roadmap](https://github.com/users/jukibom/projects/1/views/5)
