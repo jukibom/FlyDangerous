@@ -204,30 +204,25 @@ namespace Core {
 
             var urp = (UniversalRenderPipelineAsset)GraphicsSettings.currentRenderPipeline;
             urp.renderScale = Mathf.Clamp(Preferences.Instance.GetFloat("graphics-render-scale"), 0.5f, 2);
+            
+            ssao.SetActive(Preferences.Instance.GetBool("graphics-ssao"));
 
+            // soft shadows
             // For some maddening reason soft shadows is not exposed but flipping this bool does work so here's some awful reflection. yay!
             var type = urp.GetType();
             var bindingFlags = BindingFlags.Instance | BindingFlags.NonPublic;
             var fInfo = type.GetField("m_SoftShadowsSupported", bindingFlags);
             if (fInfo != null) fInfo.SetValue(urp, Preferences.Instance.GetBool("graphics-soft-shadows"));
 
-            var msaa = Preferences.Instance.GetString("graphics-anti-aliasing");
-            switch (msaa) {
-                case "8x":
-                    urp.msaaSampleCount = 8;
-                    break;
-                case "4x":
-                    urp.msaaSampleCount = 4;
-                    break;
-                case "2x":
-                    urp.msaaSampleCount = 2;
-                    break;
-                case "none":
-                case "default":
-                    urp.msaaSampleCount = 0;
-                    break;
-            }
-
+            // anti aliasing
+            // TODO: probably deprecate this and hopefully replace with TAA when URP supports it
+            urp.msaaSampleCount = Preferences.Instance.GetString("graphics-anti-aliasing") switch {
+                "8x" => 8,
+                "4x" => 4,
+                "2x" => 2,
+                _ => 0
+            };
+            
             // mip map quality via texture detail (0 = full, 1 = 1/4th, 2 = 1/16th)
             var textureDetail = Preferences.Instance.GetString("graphics-texture-detail");
             QualitySettings.globalTextureMipmapLimit = textureDetail switch {
@@ -236,32 +231,24 @@ namespace Core {
                 "low" => 2,
                 _ => 0
             };
-
-            ssao.SetActive(Preferences.Instance.GetBool("graphics-ssao"));
-
+            
             // reflections
             var shipPlayer = FdPlayer.FindLocalShipPlayer;
             if (shipPlayer != null) {
                 var reflectionSetting = Preferences.Instance.GetString("graphics-reflections");
-                shipPlayer.ReflectionProbe.gameObject.SetActive(reflectionSetting != "off");
-                switch (reflectionSetting) {
-                    case "ultra":
-                        shipPlayer.ReflectionProbe.resolution = 512;
-                        shipPlayer.ReflectionProbe.timeSlicingMode = ReflectionProbeTimeSlicingMode.NoTimeSlicing;
-                        break;
-                    case "high":
-                        shipPlayer.ReflectionProbe.resolution = 512;
-                        shipPlayer.ReflectionProbe.timeSlicingMode = ReflectionProbeTimeSlicingMode.AllFacesAtOnce;
-                        break;
-                    case "medium":
-                        shipPlayer.ReflectionProbe.resolution = 256;
-                        shipPlayer.ReflectionProbe.timeSlicingMode = ReflectionProbeTimeSlicingMode.IndividualFaces;
-                        break;
-                    default: // low and any other string value
-                        shipPlayer.ReflectionProbe.resolution = 128;
-                        shipPlayer.ReflectionProbe.timeSlicingMode = ReflectionProbeTimeSlicingMode.IndividualFaces;
-                        break;
-                }
+                var reflectionProbe = shipPlayer.ReflectionProbe;
+                reflectionProbe.gameObject.SetActive(reflectionSetting != "off");
+                reflectionProbe.resolution = reflectionSetting switch {
+                    "ultra" => 512,
+                    "high" => 512,
+                    "medium" => 256,
+                    _ => 128
+                };
+                reflectionProbe.timeSlicingMode = reflectionSetting switch {
+                    "ultra" => ReflectionProbeTimeSlicingMode.NoTimeSlicing,
+                    "high" => ReflectionProbeTimeSlicingMode.AllFacesAtOnce,
+                    _ => ReflectionProbeTimeSlicingMode.IndividualFaces
+                };
             }
 
             // fps cap

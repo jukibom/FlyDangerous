@@ -317,6 +317,7 @@ namespace Core.ShipModel {
 
         // TODO: clamping should be based on input rather than modifying the rigid body - if gravity pulls you down (or boost pads increase speed!)
         //   then that's fine, similar to if a collision yeets you into a spinning mess.
+        //   Maybe gravity could be applied via the modifier engine? This is already appended to the cap... 
         private void ClampMaxSpeed(bool velocityLimiterActive) {
             // clamp max speed if user is holding the velocity limiter button down
             if (velocityLimiterActive) {

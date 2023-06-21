@@ -1,6 +1,10 @@
 using Mirror;
 
 namespace Core.Player {
+    /// <summary>
+    /// Represents a player during the game's loading process, inheriting from the FdPlayer class. Contains syncing variables
+    /// for player name, host status, and loading status.
+    /// </summary>
     public class LoadingPlayer : FdPlayer {
         [SyncVar] public string playerName;
 
@@ -14,32 +18,51 @@ namespace Core.Player {
             isLoaded = false;
         }
 
+        /// <summary>
+        /// Called when the local player object has been set up on this client. Sets the game object's tag to indicate its role in terrain
+        /// generation focus.
+        /// </summary>
         public override void OnStartLocalPlayer() {
             // set tag for terrain generation focus
             gameObject.tag = "Terrain Gen Marker";
         }
 
-        // On local client start
+        /// <summary>
+        /// On local client start set the name
+        /// </summary>
         public override void OnStartAuthority() {
             CmdSetPlayerName(Misc.Player.LocalPlayerName);
         }
 
+        /// <summary>
+        /// Requests a transition from the LoadingPlayer state to the ShipPlayer state by invoking the CmdRequestTransitionToShipPlayer command.
+        /// </summary>
         public void RequestTransitionToShipPlayer() {
             CmdRequestTransitionToShipPlayer();
         }
 
-        // show the loading camera, geo etc. This should only apply to local client instance!
+
+        /// <summary>
+        /// Shows the loading room for the local client instance only by attaching the LoadingRoom object to the current player's transform.
+        /// </summary>
         public void ShowLoadingRoom() {
+            // show the loading camera, geo etc. This should only apply to local client instance!
             var loadingRoom = FindObjectOfType<LoadingRoom>();
             if (loadingRoom) loadingRoom.transform.SetParent(transform, false);
         }
 
-        // register self as floating origin focus
+        /// <summary>
+        /// Sets this LoadingPlayer instance as the focus of the FloatingOrigin. This causes the FloatingOrigin to update its position
+        /// and rotation based on this instance's transform.
+        /// </summary>
         public void SetFloatingOrigin() {
             FloatingOrigin.Instance.FocalTransform = transform;
             FloatingOrigin.Instance.ForceUpdate();
         }
 
+        /// <summary>
+        /// Sets the current LoadingPlayer instance into the loaded state by calling the CmdSetIsLoaded command.
+        /// </summary>
         public void SetLoaded() {
             CmdSetIsLoaded();
         }

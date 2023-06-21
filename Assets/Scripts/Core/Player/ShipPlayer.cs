@@ -398,14 +398,14 @@ namespace Core.Player {
 
         // On each client, update the position of this object if it's not the local player.
         [ClientRpc]
-        private void RpcUpdate(Vector3 remoteOrigin, Vector3 position, Quaternion rotation, Vector3 velocity, Vector3 angularVelocity, Vector3 thrust,
-            Vector3 torque) {
+        private void RpcUpdate(Vector3 remoteOrigin, Vector3 position, Quaternion rotation, Vector3 velocity, Vector3 angularVelocity, Vector3 thrust, Vector3 torque) {
             if (!isLocalPlayer && IsReady) {
                 // Calculate the local difference to position based on the local clients' floating origin.
                 // If these values are gigantic, that doesn't really matter as they only update at fixed distances.
                 // We'll lose precision here but we add our position on top after-the-fact, so we always have
-                // local-level precision.
-                var offset = remoteOrigin - FloatingOrigin.Instance.Origin;
+                // local-level precision (when clients are near to each other and that precision is important).
+                var localOffset = FloatingOrigin.Instance.Origin;
+                var offset = remoteOrigin - localOffset;
                 var localPosition = offset + position;
 
                 Rigidbody.velocity = Vector3.Lerp(Rigidbody.velocity, velocity, 0.1f);
