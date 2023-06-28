@@ -34,15 +34,18 @@ namespace FdUI {
         }
 
         public void OnSliderChanged() {
-            numberTextBox.text = slider.wholeNumbers
+            numberTextBox.text = slider.wholeNumbers || slider.value >= 100
                 ? slider.value.ToString("0")
-                : slider.value.ToString("0.00");
+                : slider.value >= 10
+                    ? slider.value.ToString("0.0")
+                    : slider.value.ToString("0.00");
             OnValueChanged();
         }
 
         public void OnTextEntryChanged() {
             try {
-                var value = Math.Min(Math.Max(float.Parse(numberTextBox.text, CultureInfo.InvariantCulture), minValue), maxValue);
+                var value = Math.Min(Math.Max(float.Parse(numberTextBox.text, CultureInfo.InvariantCulture), minValue),
+                    maxValue);
                 slider.value = slider.wholeNumbers ? (int)value : value;
                 numberTextBox.text = slider.wholeNumbers
                     ? value.ToString("0")
