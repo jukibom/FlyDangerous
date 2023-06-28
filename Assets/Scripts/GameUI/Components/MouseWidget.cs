@@ -1,5 +1,4 @@
 using System;
-using Core;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,6 +14,8 @@ namespace Game_UI {
 
         private Image _crosshairImage;
 
+        public bool ShouldShow { get; set; }
+
         // Start is called before the first frame update
         private void Start() {
             _crosshairImage = crosshair.GetComponent<Image>();
@@ -24,9 +25,8 @@ namespace Game_UI {
         // Update is called once per frame
         private void Update() {
             // pref determines draw active
-            var shouldShow = Preferences.Instance.GetBool("showMouseWidget");
-            crosshair.SetActive(shouldShow);
-            arrow.SetActive(shouldShow);
+            crosshair.SetActive(ShouldShow);
+            arrow.SetActive(ShouldShow);
 
             // position
             arrow.transform.localPosition = Vector3.ClampMagnitude(new Vector3(
