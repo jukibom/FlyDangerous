@@ -13,6 +13,7 @@ using UnityEngine.InputSystem.UI;
 using UnityEngine.InputSystem.Users;
 
 namespace Core.Player {
+    [RequireComponent(typeof(MouseShipInput))]
     public class User : MonoBehaviour {
         [SerializeField] private ShipPlayer shipPlayer;
         [SerializeField] private ShipArcadeFlightComputer shipArcadeFlightComputer;
@@ -26,33 +27,30 @@ namespace Core.Player {
         [SerializeField] public bool restartEnabled = true;
         [SerializeField] public bool pauseMenuEnabled = true;
         [SerializeField] public bool boostButtonForceEnabled;
+        private MouseShipInput _mouseShipInput;
         private bool _alternateFlightControls;
         private bool _autoRotateDrift;
         private bool _showIndicatorHud = true;
+
         private Vector2 _cameraMouse;
         private bool _cameraRotateAxisControlsEnabled = true;
-
         private float _cameraX;
         private float _cameraY;
-
         private bool _freeCamEnabled;
 
-        private float _lateralH;
-        private float _lateralV;
-        private bool _limiter;
         private bool _mouseLookActive;
-        private Vector2 _mousePositionDelta;
-        private Vector2 _mousePositionNormalized;
-        private Vector2 _mousePositionNormalizedDelta;
-        private Vector2 _mousePositionScreen;
-        private Vector2 _mousePreviousRelativeRate;
         private bool _reverse;
         private float _pitch;
         private float _roll;
+        private float _yaw;
+        private float _throttle;
+        private float _lateralH;
+        private float _lateralV;
+        private bool _limiter;
+
         private float _targetThrottle;
         private float _targetThrottleIncrement;
-        private float _throttle;
-        private float _yaw;
+        private Vector2 _mousePositionDelta;
 
         public InGameUI InGameUI => inGameUI;
 
@@ -67,6 +65,7 @@ namespace Core.Player {
         public bool BoostButtonHeld { get; private set; }
 
         public void Awake() {
+            _mouseShipInput = GetComponent<MouseShipInput>();
             DisableGameInput();
             DisableUIInput();
             ResetMouseToCentre();
@@ -97,21 +96,26 @@ namespace Core.Player {
                     Preferences.Instance.GetBool("enableMouseFlightControls") &&
                     Preferences.Instance.GetString("controlSchemeType") == "advanced"
                 ) {
-                    CalculateMouseInput(
-                        out var mousePitch, out var mouseRoll, out var mouseYaw, out var mouseLateralH, out var mouseLateralV, out var mouseThrottle);
-                    pitch += mousePitch;
-                    roll += mouseRoll;
-                    yaw += mouseYaw;
-                    lateralH += mouseLateralH;
-                    lateralV += mouseLateralV;
-                    throttle += mouseThrottle;
+                    var mouseMode = Preferences.Instance.GetString("mouseInputMode") == "relative" ||
+                                    (Preferences.Instance.GetBool("forceRelativeMouseWithFAOff") &&
+                                     !shipPlayer.IsRotationalFlightAssistActive)
+                        ? MouseMode.Relative
+                        : MouseMode.Continuous;
+                    var mouseInput = _mouseShipInput.CalculateMouseInput(mouseMode);
+                    pitch += mouseInput.pitch;
+                    roll += mouseInput.roll;
+                    yaw += mouseInput.yaw;
+                    throttle += mouseInput.throttle;
+                    lateralH += mouseInput.lateralH;
+                    lateralV += mouseInput.lateralV;
                 }
 
                 // if user has any auto-roll handling set, invoke the arcade flight computer to override the inputs
                 if (Preferences.Instance.GetBool("autoShipRoll") ||
                     Preferences.Instance.GetBool("autoShipRotation") ||
                     Preferences.Instance.GetString("controlSchemeType") == "arcade")
-                    shipArcadeFlightComputer.UpdateShipFlightInput(ref lateralH, ref lateralV, ref throttle, ref pitch, ref yaw, ref roll, _autoRotateDrift);
+                    shipArcadeFlightComputer.UpdateShipFlightInput(ref lateralH, ref lateralV, ref throttle, ref pitch,
+                        ref yaw, ref roll, _autoRotateDrift);
 
                 // update the player
                 shipPlayer.SetPitch(pitch);
@@ -154,7 +158,8 @@ namespace Core.Player {
         }
 
         public void OnEnable() {
-            _mouseLookActive = Preferences.Instance.GetString("controlSchemeType") == "advanced" && Preferences.Instance.GetBool("mouseLook");
+            _mouseLookActive = Preferences.Instance.GetString("controlSchemeType") == "advanced" &&
+                               Preferences.Instance.GetBool("mouseLook");
             Game.OnVRStatus += SetVRStatus;
             InputSystem.onDeviceChange += OnDeviceChange;
             ResetMouseToCentre();
@@ -185,8 +190,13 @@ namespace Core.Player {
             }
 
             // ensure that the global action set of the control scheme type is enabled
-            playerInput.actions.FindActionMap(Preferences.Instance.GetString("controlSchemeType") == "arcade" ? "GlobalArcade" : "Global").Enable();
-            playerInput.actions.FindActionMap(Preferences.Instance.GetString("controlSchemeType") == "advanced" ? "GlobalArcade" : "Global").Disable();
+            playerInput.actions
+                .FindActionMap(Preferences.Instance.GetString("controlSchemeType") == "arcade"
+                    ? "GlobalArcade"
+                    : "Global").Enable();
+            playerInput.actions.FindActionMap(Preferences.Instance.GetString("controlSchemeType") == "advanced"
+                ? "GlobalArcade"
+                : "Global").Disable();
 
             playerInput.currentActionMap.Enable();
 
@@ -205,7 +215,8 @@ namespace Core.Player {
             }
 
             FdConsole.Instance.LogMessage("---");
-            foreach (var playerInputDevice in playerInput.devices) FdConsole.Instance.LogMessage(playerInputDevice.name + " paired");
+            foreach (var playerInputDevice in playerInput.devices)
+                FdConsole.Instance.LogMessage(playerInputDevice.name + " paired");
 
             ResetMouseToCentre();
         }
@@ -271,14 +282,8 @@ namespace Core.Player {
             var screenCentre = new Vector2(Screen.width / 2f, Screen.height / 2f);
             Mouse.current.WarpCursorPosition(screenCentre);
             InputState.Change(Mouse.current.position, screenCentre);
-            _mousePositionScreen = screenCentre;
 
-            _mousePositionNormalized = Vector2.zero;
-            _mousePositionNormalizedDelta = Vector2.zero;
-            _mousePositionDelta = Vector2.zero;
-            _mousePreviousRelativeRate = Vector2.zero;
-
-            inGameUI.MouseWidget.ResetToCentre();
+            _mouseShipInput.ResetToCentre(screenCentre);
         }
 
         // Event responders for PlayerInput, only valid in-game.
@@ -422,7 +427,8 @@ namespace Core.Player {
 
         [UsedImplicitly]
         public void OnRotationalFlightAssistToggle(InputValue value) {
-            if (Preferences.Instance.GetString("flightAssistRotationalBindType") == "toggle" && !value.isPressed) return;
+            if (Preferences.Instance.GetString("flightAssistRotationalBindType") == "toggle" &&
+                !value.isPressed) return;
             shipPlayer.SetFlightAssistRotationalDampeningEnabled(!shipPlayer.IsRotationalFlightAssistActive);
         }
 
@@ -457,30 +463,45 @@ namespace Core.Player {
             switch (altFlightBindType) {
                 case "toggle" when value.isPressed:
                     _alternateFlightControls = !_alternateFlightControls;
-                    UIAudioManager.Instance.Play(_alternateFlightControls ? "ship-alternate-flight-on" : "ship-alternate-flight-off");
+                    UIAudioManager.Instance.Play(_alternateFlightControls
+                        ? "ship-alternate-flight-on"
+                        : "ship-alternate-flight-off");
                     break;
                 case "hold":
                     _alternateFlightControls = value.isPressed;
-                    UIAudioManager.Instance.Play(_alternateFlightControls ? "ship-alternate-flight-on" : "ship-alternate-flight-off");
+                    UIAudioManager.Instance.Play(_alternateFlightControls
+                        ? "ship-alternate-flight-on"
+                        : "ship-alternate-flight-off");
                     break;
             }
 
             // restore values based on current input 
             // (if we do nothing then last held, unbound input will continue forever and if we reset to 0 then any held, identical input will also be reset!)
             var playerInput = GetComponent<PlayerInput>();
-            _pitch = _alternateFlightControls ? playerInput.actions["Pitch Alt"].ReadValue<float>() : playerInput.actions["Pitch"].ReadValue<float>();
-            _roll = _alternateFlightControls ? playerInput.actions["Roll Alt"].ReadValue<float>() : playerInput.actions["Roll"].ReadValue<float>();
-            _yaw = _alternateFlightControls ? playerInput.actions["Yaw Alt"].ReadValue<float>() : playerInput.actions["Yaw"].ReadValue<float>();
-            _throttle = _alternateFlightControls ? playerInput.actions["Throttle Alt"].ReadValue<float>() : playerInput.actions["Throttle"].ReadValue<float>();
-            _lateralH = _alternateFlightControls ? playerInput.actions["LateralH Alt"].ReadValue<float>() : playerInput.actions["LateralH"].ReadValue<float>();
-            _lateralV = _alternateFlightControls ? playerInput.actions["LateralV Alt"].ReadValue<float>() : playerInput.actions["LateralV"].ReadValue<float>();
+            _pitch = _alternateFlightControls
+                ? playerInput.actions["Pitch Alt"].ReadValue<float>()
+                : playerInput.actions["Pitch"].ReadValue<float>();
+            _roll = _alternateFlightControls
+                ? playerInput.actions["Roll Alt"].ReadValue<float>()
+                : playerInput.actions["Roll"].ReadValue<float>();
+            _yaw = _alternateFlightControls
+                ? playerInput.actions["Yaw Alt"].ReadValue<float>()
+                : playerInput.actions["Yaw"].ReadValue<float>();
+            _throttle = _alternateFlightControls
+                ? playerInput.actions["Throttle Alt"].ReadValue<float>()
+                : playerInput.actions["Throttle"].ReadValue<float>();
+            _lateralH = _alternateFlightControls
+                ? playerInput.actions["LateralH Alt"].ReadValue<float>()
+                : playerInput.actions["LateralH"].ReadValue<float>();
+            _lateralV = _alternateFlightControls
+                ? playerInput.actions["LateralV Alt"].ReadValue<float>()
+                : playerInput.actions["LateralV"].ReadValue<float>();
         }
 
         [UsedImplicitly]
         public void OnMouseRawDelta(InputValue value) {
             _mousePositionDelta = value.Get<Vector2>();
-            _mousePositionScreen.x += _mousePositionDelta.x;
-            _mousePositionScreen.y += _mousePositionDelta.y;
+            _mouseShipInput.SetMouseInput(_mousePositionDelta);
         }
 
         [UsedImplicitly]
@@ -597,130 +618,6 @@ namespace Core.Player {
             if (input > 0) input = 1;
             if (input < 0) input = -1;
             if (input != 0) ShipCameraRig.ShipFreeCamera.IncrementMotionMultiplier(input);
-        }
-
-        private void CalculateMouseInput(out float pitchMouseInput, out float rollMouseInput, out float yawMouseInput,
-            out float lateralHMouseInput, out float lateralVMouseInput, out float throttleMouseInput) {
-            float pitch = 0, roll = 0, yaw = 0, throttle = 0, lateralH = 0, lateralV = 0;
-
-            // get prefs
-            var mouseXAxisBindPref = Preferences.Instance.GetString("mouseXAxis");
-            var mouseYAxisBindPref = Preferences.Instance.GetString("mouseYAxis");
-
-            var sensitivityXPref = Preferences.Instance.GetFloat("mouseXSensitivity");
-            var sensitivityYPref = Preferences.Instance.GetFloat("mouseYSensitivity");
-
-            var mouseXInvertPref = Preferences.Instance.GetBool("mouseXInvert");
-            var mouseYInvertPref = Preferences.Instance.GetBool("mouseYInvert");
-
-            var mouseIsRelativePref = Preferences.Instance.GetString("mouseInputMode") == "relative" ||
-                                      (Preferences.Instance.GetBool("forceRelativeMouseWithFAOff") &&
-                                       !shipPlayer.IsRotationalFlightAssistActive);
-
-            var mouseRelativeRatePref = Mathf.Clamp(Preferences.Instance.GetFloat("mouseRelativeRate"), 1, 50f);
-
-            var mouseDeadzonePref = Mathf.Clamp(Preferences.Instance.GetFloat("mouseDeadzone"), 0, 1);
-            var mousePowerCurvePref = Mathf.Clamp(Preferences.Instance.GetFloat("mousePowerCurve"), 1, 3);
-
-            // add extra room for power curve
-            var normalizedClamp = 1 + mouseDeadzonePref;
-
-            // convert to normalized screen space (center is 0,0)
-            var mouseXNormalized = (_mousePositionScreen.x / Screen.width * 2 - 1) * sensitivityXPref;
-            var mouseYNormalized = (_mousePositionScreen.y / Screen.height * 2 - 1) * sensitivityYPref;
-            _mousePositionNormalizedDelta.x = _mousePositionDelta.x / Screen.width;
-            _mousePositionNormalizedDelta.y = _mousePositionDelta.y / Screen.height;
-
-            // clamp to max extents of mouse input
-            _mousePositionNormalized.x = Mathf.Clamp(mouseXNormalized, -normalizedClamp, normalizedClamp);
-            _mousePositionNormalized.y = Mathf.Clamp(mouseYNormalized, -normalizedClamp, normalizedClamp);
-
-            // write back the clamped values to keep our max mouse position intact
-            _mousePositionScreen.x = (_mousePositionNormalized.x / sensitivityXPref + 1) / 2 * Screen.width;
-            _mousePositionScreen.y = (_mousePositionNormalized.y / sensitivityYPref + 1) / 2 * Screen.height;
-
-            // calculate continuous input including deadzone and sensitivity
-            var continuousMouseX = 0f;
-            var continuousMouseY = 0f;
-            if (_mousePositionNormalized.x > mouseDeadzonePref)
-                continuousMouseX = _mousePositionNormalized.x - mouseDeadzonePref;
-            if (_mousePositionNormalized.x < -mouseDeadzonePref)
-                continuousMouseX = _mousePositionNormalized.x + mouseDeadzonePref;
-            if (_mousePositionNormalized.y > mouseDeadzonePref)
-                continuousMouseY = _mousePositionNormalized.y - mouseDeadzonePref;
-            if (_mousePositionNormalized.y < -mouseDeadzonePref)
-                continuousMouseY = _mousePositionNormalized.y + mouseDeadzonePref;
-
-            // calculate relative input from deltas including sensitivity
-            var relativeMouse = new Vector2(
-                _mousePreviousRelativeRate.x + _mousePositionNormalizedDelta.x * sensitivityXPref,
-                _mousePreviousRelativeRate.y + _mousePositionNormalizedDelta.y * sensitivityYPref
-            );
-
-            // power curve (Mathf.Pow does not allow negatives because REASONS so abs and multiply by -1 if the original val is < 0)
-            continuousMouseX = (continuousMouseX < 0 ? -1 : 1) *
-                               Mathf.Pow(Mathf.Abs(continuousMouseX), mousePowerCurvePref);
-            continuousMouseY = (continuousMouseY < 0 ? -1 : 1) *
-                               Mathf.Pow(Mathf.Abs(continuousMouseY), mousePowerCurvePref);
-            relativeMouse.x = (relativeMouse.x < 0 ? -1 : 1) *
-                              Mathf.Pow(Mathf.Abs(relativeMouse.x), mousePowerCurvePref);
-            relativeMouse.y = (relativeMouse.y < 0 ? -1 : 1) *
-                              Mathf.Pow(Mathf.Abs(relativeMouse.y), mousePowerCurvePref);
-
-            // set the input for a given axis 
-            void SetInput(string axis, float amount, bool shouldInvert) {
-                var invert = shouldInvert ? -1 : 1;
-
-                switch (axis) {
-                    case "pitch":
-                        pitch += amount * invert;
-                        break;
-                    case "roll":
-                        roll += amount * invert;
-                        break;
-                    case "yaw":
-                        yaw += amount * invert;
-                        break;
-                    case "lateral h":
-                        lateralH += amount * invert;
-                        break;
-                    case "lateral v":
-                        lateralV += amount * invert;
-                        break;
-                    case "throttle":
-                        throttle += amount * invert;
-                        break;
-                }
-            }
-
-            // send input depending on mouse mode
-            SetInput(mouseXAxisBindPref, mouseIsRelativePref ? relativeMouse.x : continuousMouseX, mouseXInvertPref);
-            SetInput(mouseYAxisBindPref, mouseIsRelativePref ? relativeMouse.y : continuousMouseY, mouseYInvertPref);
-
-            // update widget graphics
-            var widgetPosition = new Vector2(
-                mouseIsRelativePref ? relativeMouse.x : continuousMouseX,
-                mouseIsRelativePref ? relativeMouse.y : continuousMouseY
-            );
-            inGameUI.MouseWidget.UpdateWidgetSprites(widgetPosition);
-
-            // return to 0 by mouseRelativeRate
-            _mousePreviousRelativeRate = Vector2.MoveTowards(new Vector2(
-                    relativeMouse.x,
-                    relativeMouse.y),
-                Vector2.zero, mouseRelativeRatePref / 500);
-
-            // store relative rate for relative return rate next frame
-            _mousePreviousRelativeRate.x = Mathf.Clamp(_mousePreviousRelativeRate.x, -1, 1);
-            _mousePreviousRelativeRate.y = Mathf.Clamp(_mousePreviousRelativeRate.y, -1, 1);
-
-            // we're done
-            pitchMouseInput = pitch;
-            rollMouseInput = roll;
-            yawMouseInput = yaw;
-            lateralHMouseInput = lateralH;
-            lateralVMouseInput = lateralV;
-            throttleMouseInput = throttle;
         }
 
         private void OnDeviceChange(InputDevice device, InputDeviceChange change) {

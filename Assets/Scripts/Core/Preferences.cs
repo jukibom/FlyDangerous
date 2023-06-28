@@ -57,6 +57,7 @@ namespace Core {
                 case "graphics-terrain-details":
                 case "graphics-vsync":
                 case "autoTrackSnapForward":
+                case "mouseRelativeReturnOnlyOnNoInput":
                     return true;
 
                 case "showFlightOrientationIndicatorsInSpace":
@@ -67,6 +68,7 @@ namespace Core {
                 case "showMouseWidget":
                 case "mouseXInvert":
                 case "mouseYInvert":
+                case "mouseSeparateRelativeSensitivity":
                 case "mouseLook":
                 case "forceRelativeMouseWithFAOff":
                 case "autoShipRotation":
@@ -104,10 +106,14 @@ namespace Core {
                     return 1000;
                 case "mouseXSensitivity":
                 case "mouseYSensitivity":
+                case "mouseXRelativeSensitivity":
+                case "mouseYRelativeSensitivity":
                     return 0.5f;
                 case "mouseDeadzone":
                     return 0;
                 case "mouseRelativeRate":
+                    return 50.0f;
+                case "mouseRelativeCurve":
                     return 25.0f;
                 case "mousePowerCurve":
                     return 1.0f;

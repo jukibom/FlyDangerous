@@ -902,8 +902,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8165869081144972043}
-  - component: {fileID: 8165869081144972042}
   - component: {fileID: 8165869081144972041}
+  - component: {fileID: 8165869081144972042}
+  - component: {fileID: 5915903463324213705}
   m_Layer: 0
   m_Name: User
   m_TagString: Untagged
@@ -930,29 +931,6 @@ Transform:
   m_Father: {fileID: 6133412330555986360}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8165869081144972042
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8165869081144972037}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: becec9dc1a5274c48acc14abaf6986a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  shipPlayer: {fileID: 0}
-  shipArcadeFlightComputer: {fileID: 5730277539670157778}
-  shipCameraRig: {fileID: 5431932561140638915}
-  xrOrigin: {fileID: 1770569352624991730}
-  pauseUIInputModule: {fileID: 8165869081867346850}
-  inGameUI: {fileID: 4109853613154166522}
-  headTracking: {fileID: 3982430373260285006}
-  movementEnabled: 1
-  restartEnabled: 1
-  pauseMenuEnabled: 1
-  boostButtonForceEnabled: 0
 --- !u!114 &8165869081144972041
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -983,6 +961,43 @@ MonoBehaviour:
   m_DefaultActionMap: ShipArcade
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &8165869081144972042
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8165869081144972037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: becec9dc1a5274c48acc14abaf6986a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shipPlayer: {fileID: 0}
+  shipArcadeFlightComputer: {fileID: 5730277539670157778}
+  shipCameraRig: {fileID: 5431932561140638915}
+  xrOrigin: {fileID: 1770569352624991730}
+  pauseUIInputModule: {fileID: 8165869081867346850}
+  inGameUI: {fileID: 4109853613154166522}
+  mouseShipInput: {fileID: 0}
+  headTracking: {fileID: 3982430373260285006}
+  movementEnabled: 1
+  restartEnabled: 1
+  pauseMenuEnabled: 1
+  boostButtonForceEnabled: 0
+--- !u!114 &5915903463324213705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8165869081144972037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0abacf9c0a3b48a1b3b9024b3c7c2e28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inGameUI: {fileID: 4109853613154166522}
 --- !u!1 &8165869081206140114
 GameObject:
   m_ObjectHideFlags: 0
@@ -2369,115 +2384,151 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 90892086976027132, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.99999565
+      value: 0.98039514
       objectReference: {fileID: 0}
     - target: {fileID: 90892086976027132, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.999997
+      value: 0.003921592
+      objectReference: {fileID: 0}
+    - target: {fileID: 90892086976027132, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_Color.r
+      value: 0.96863043
       objectReference: {fileID: 0}
     - target: {fileID: 367881358914929689, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.99999565
+      value: 0.98039514
       objectReference: {fileID: 0}
     - target: {fileID: 367881358914929689, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.999997
+      value: 0.003921592
+      objectReference: {fileID: 0}
+    - target: {fileID: 367881358914929689, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_Color.r
+      value: 0.96863043
       objectReference: {fileID: 0}
     - target: {fileID: 389119543462190116, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: button25  |  Saitek Saitek X52 Pro Flight Control System
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 526694473936695268, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: unbound primary
+      value: F  |  Keyboard
       objectReference: {fileID: 0}
     - target: {fileID: 526694474436525578, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: Button 2  |  Logitech Extreme 3D
+      value: X  |  Xbox Controller
       objectReference: {fileID: 0}
     - target: {fileID: 604730259146976340, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.99999565
+      value: 0.98039514
       objectReference: {fileID: 0}
     - target: {fileID: 604730259146976340, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.999997
+      value: 0.003921592
+      objectReference: {fileID: 0}
+    - target: {fileID: 604730259146976340, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_Color.r
+      value: 0.96863043
       objectReference: {fileID: 0}
     - target: {fileID: 1018818756963085958, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: 2  |  Keyboard
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 1071423232568521902, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.99999565
+      value: 0.98039514
       objectReference: {fileID: 0}
     - target: {fileID: 1071423232568521902, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.999997
+      value: 0.003921592
+      objectReference: {fileID: 0}
+    - target: {fileID: 1071423232568521902, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_Color.r
+      value: 0.96863043
       objectReference: {fileID: 0}
     - target: {fileID: 1109677225912089210, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: HatSwitch Up  |  Logitech Extreme 3D
+      value: D-Pad Up  |  Xbox Controller
       objectReference: {fileID: 0}
     - target: {fileID: 1192188069687395118, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.99999565
+      value: 0.98039514
       objectReference: {fileID: 0}
     - target: {fileID: 1192188069687395118, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.999997
+      value: 0.003921592
+      objectReference: {fileID: 0}
+    - target: {fileID: 1192188069687395118, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_Color.r
+      value: 0.96863043
       objectReference: {fileID: 0}
     - target: {fileID: 1320950467926609943, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.99999565
+      value: 0.98039514
       objectReference: {fileID: 0}
     - target: {fileID: 1320950467926609943, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.999997
+      value: 0.003921592
+      objectReference: {fileID: 0}
+    - target: {fileID: 1320950467926609943, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_Color.r
+      value: 0.96863043
       objectReference: {fileID: 0}
     - target: {fileID: 1334652897402985436, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.99999565
+      value: 0.98039514
       objectReference: {fileID: 0}
     - target: {fileID: 1334652897402985436, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.999997
+      value: 0.003921592
+      objectReference: {fileID: 0}
+    - target: {fileID: 1334652897402985436, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_Color.r
+      value: 0.96863043
       objectReference: {fileID: 0}
     - target: {fileID: 1552042752162612387, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: button24  |  Saitek Saitek X52 Pro Flight Control System
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 1799237938278402254, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: Button 4  |  Logitech Extreme 3D
+      value: B  |  Xbox Controller
       objectReference: {fileID: 0}
     - target: {fileID: 2240170019264984029, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.99999565
+      value: 0.98039514
       objectReference: {fileID: 0}
     - target: {fileID: 2240170019264984029, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.999997
+      value: 0.003921592
+      objectReference: {fileID: 0}
+    - target: {fileID: 2240170019264984029, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_Color.r
+      value: 0.96863043
       objectReference: {fileID: 0}
     - target: {fileID: 2507535033975036271, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.99999565
+      value: 0.98039514
       objectReference: {fileID: 0}
     - target: {fileID: 2507535033975036271, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.999997
+      value: 0.003921592
+      objectReference: {fileID: 0}
+    - target: {fileID: 2507535033975036271, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_Color.r
+      value: 0.96863043
       objectReference: {fileID: 0}
     - target: {fileID: 2573727877342269697, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: Rz  |  Logitech Extreme 3D
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 2683167907044156448, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: stick/x  |  Saitek Saitek X52 Pro Flight Control System
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 2814928549471666586, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: button26  |  Saitek Saitek X52 Pro Flight Control System
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 2826849801537518584, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_RootOrder
@@ -2533,27 +2584,35 @@ PrefabInstance:
       objectReference: {fileID: 8165869081144972042}
     - target: {fileID: 2866304164790222347, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.99999565
+      value: 0.98039514
       objectReference: {fileID: 0}
     - target: {fileID: 2866304164790222347, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.999997
+      value: 0.003921592
+      objectReference: {fileID: 0}
+    - target: {fileID: 2866304164790222347, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_Color.r
+      value: 0.96863043
       objectReference: {fileID: 0}
     - target: {fileID: 2995493771543711015, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: Stick X  |  Logitech Extreme 3D
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 3006983143738446753, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: N  |  Keyboard
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 3113489695430083248, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.99999565
+      value: 0.98039514
       objectReference: {fileID: 0}
     - target: {fileID: 3113489695430083248, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.999997
+      value: 0.003921592
+      objectReference: {fileID: 0}
+    - target: {fileID: 3113489695430083248, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_Color.r
+      value: 0.96863043
       objectReference: {fileID: 0}
     - target: {fileID: 3296757046734522691, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_AnchorMax.y
@@ -2577,175 +2636,227 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3321859774452414814, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: F  |  Keyboard
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 3321859774626031792, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: Button 3  |  Logitech Extreme 3D
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 3518751094016040114, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.99999565
+      value: 0.98039514
       objectReference: {fileID: 0}
     - target: {fileID: 3518751094016040114, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.999997
+      value: 0.003921592
+      objectReference: {fileID: 0}
+    - target: {fileID: 3518751094016040114, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_Color.r
+      value: 0.96863043
       objectReference: {fileID: 0}
     - target: {fileID: 3696789938995431766, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: Button 4  |  Logitech Extreme 3D
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 3878477238697393319, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: stick/y  |  Saitek Saitek X52 Pro Flight Control System
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 4035007679704062237, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: button27  |  Saitek Saitek X52 Pro Flight Control System
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 4126948235509426262, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: HatSwitch Down  |  Logitech Extreme 3D
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 4151728914909075982, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: Trigger  |  Logitech Extreme 3D
+      value: A  |  Xbox Controller
       objectReference: {fileID: 0}
     - target: {fileID: 4196906462497372436, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.99999565
+      value: 0.98039514
       objectReference: {fileID: 0}
     - target: {fileID: 4196906462497372436, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.999997
+      value: 0.003921592
+      objectReference: {fileID: 0}
+    - target: {fileID: 4196906462497372436, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_Color.r
+      value: 0.96863043
       objectReference: {fileID: 0}
     - target: {fileID: 4422811264651961171, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: HatSwitch Right  |  Logitech Extreme 3D
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 4451054465529050841, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.99999565
+      value: 0.98039514
       objectReference: {fileID: 0}
     - target: {fileID: 4451054465529050841, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.999997
+      value: 0.003921592
+      objectReference: {fileID: 0}
+    - target: {fileID: 4451054465529050841, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_Color.r
+      value: 0.96863043
       objectReference: {fileID: 0}
     - target: {fileID: 4453562545948659996, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.99999565
+      value: 0.98039514
       objectReference: {fileID: 0}
     - target: {fileID: 4453562545948659996, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.999997
+      value: 0.003921592
+      objectReference: {fileID: 0}
+    - target: {fileID: 4453562545948659996, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_Color.r
+      value: 0.96863043
       objectReference: {fileID: 0}
     - target: {fileID: 4467300059311423299, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: HatSwitch Down  |  Logitech Extreme 3D
+      value: D-Pad Down  |  Xbox Controller
       objectReference: {fileID: 0}
     - target: {fileID: 4570504677037631955, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: HatSwitch Up  |  Logitech Extreme 3D
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 4628055345547006197, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: Z  |  Keyboard
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 4868949296845439780, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: Button 2  |  Logitech Extreme 3D
+      value: Left Stick Press  |  Xbox Controller
       objectReference: {fileID: 0}
     - target: {fileID: 4889768657224706835, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.99999565
+      value: 0.98039514
       objectReference: {fileID: 0}
     - target: {fileID: 4889768657224706835, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.999997
+      value: 0.003921592
+      objectReference: {fileID: 0}
+    - target: {fileID: 4889768657224706835, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_Color.r
+      value: 0.96863043
       objectReference: {fileID: 0}
     - target: {fileID: 4951654481578556694, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.99999565
+      value: 0.98039514
       objectReference: {fileID: 0}
     - target: {fileID: 4951654481578556694, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.999997
+      value: 0.003921592
+      objectReference: {fileID: 0}
+    - target: {fileID: 4951654481578556694, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_Color.r
+      value: 0.96863043
       objectReference: {fileID: 0}
     - target: {fileID: 5039875976843615430, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.99999565
+      value: 0.98039514
       objectReference: {fileID: 0}
     - target: {fileID: 5039875976843615430, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.999997
+      value: 0.003921592
+      objectReference: {fileID: 0}
+    - target: {fileID: 5039875976843615430, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_Color.r
+      value: 0.96863043
       objectReference: {fileID: 0}
     - target: {fileID: 5164200437655996610, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: HatSwitch Right  |  Logitech Extreme 3D
+      value: D-Pad Right  |  Xbox Controller
       objectReference: {fileID: 0}
     - target: {fileID: 5266727415485189657, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: Stick Up  |  Logitech Extreme 3D
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 5268857312149696297, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: Right Button  |  Mouse
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 5328566828246695936, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.99999565
+      value: 0.98039514
       objectReference: {fileID: 0}
     - target: {fileID: 5328566828246695936, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.999997
+      value: 0.003921592
+      objectReference: {fileID: 0}
+    - target: {fileID: 5328566828246695936, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_Color.r
+      value: 0.96863043
+      objectReference: {fileID: 0}
+    - target: {fileID: 5340426720983136300, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5689373278691190474, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.99999565
+      value: 0.98039514
       objectReference: {fileID: 0}
     - target: {fileID: 5689373278691190474, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.999997
+      value: 0.003921592
+      objectReference: {fileID: 0}
+    - target: {fileID: 5689373278691190474, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_Color.r
+      value: 0.96863043
       objectReference: {fileID: 0}
     - target: {fileID: 5815640477682624339, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: W  |  Keyboard
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 5929759507462991017, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: HatSwitch Left  |  Logitech Extreme 3D
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 6244687549842556832, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: Button 6  |  Logitech Extreme 3D
+      value: Select  |  Xbox Controller
       objectReference: {fileID: 0}
     - target: {fileID: 6249148924523466553, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.99999565
+      value: 0.98039514
       objectReference: {fileID: 0}
     - target: {fileID: 6249148924523466553, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.999997
+      value: 0.003921592
+      objectReference: {fileID: 0}
+    - target: {fileID: 6249148924523466553, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_Color.r
+      value: 0.96863043
       objectReference: {fileID: 0}
     - target: {fileID: 6304952119361939104, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.99999565
+      value: 0.98039514
       objectReference: {fileID: 0}
     - target: {fileID: 6304952119361939104, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.999997
+      value: 0.003921592
+      objectReference: {fileID: 0}
+    - target: {fileID: 6304952119361939104, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_Color.r
+      value: 0.96863043
       objectReference: {fileID: 0}
     - target: {fileID: 6346487273923892604, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: button19  |  Saitek Saitek X52 Pro Flight Control System
+      value: Y  |  Xbox Controller
+      objectReference: {fileID: 0}
+    - target: {fileID: 6617072408512557860, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_Text
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 6756506070582194771, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: 1  |  Keyboard
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 6802189625389224132, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: rz  |  Saitek Saitek X52 Pro Flight Control System
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 6816143449625007078, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_AnchorMax.x
@@ -2773,79 +2884,99 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6816143450148099111, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -55692
+      value: -56619
       objectReference: {fileID: 0}
     - target: {fileID: 6941805570317866001, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.99999565
+      value: 0.98039514
       objectReference: {fileID: 0}
     - target: {fileID: 6941805570317866001, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.999997
+      value: 0.003921592
+      objectReference: {fileID: 0}
+    - target: {fileID: 6941805570317866001, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_Color.r
+      value: 0.96863043
       objectReference: {fileID: 0}
     - target: {fileID: 6970047595848165980, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: ry  |  Saitek Saitek X52 Pro Flight Control System
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 6970047596077464498, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: '-  |  Keyboard'
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 7033911643168885920, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.99999565
+      value: 0.98039514
       objectReference: {fileID: 0}
     - target: {fileID: 7033911643168885920, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.999997
+      value: 0.003921592
+      objectReference: {fileID: 0}
+    - target: {fileID: 7033911643168885920, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_Color.r
+      value: 0.96863043
       objectReference: {fileID: 0}
     - target: {fileID: 7074057707768373866, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: S  |  Keyboard
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 7767937897854266057, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: Button 6  |  Logitech Extreme 3D
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 8052473532332038995, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: ry  |  Saitek Saitek X52 Pro Flight Control System
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 8052473532505492157, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: =  |  Keyboard
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 8302782170494490803, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.99999565
+      value: 0.98039514
       objectReference: {fileID: 0}
     - target: {fileID: 8302782170494490803, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.999997
+      value: 0.003921592
+      objectReference: {fileID: 0}
+    - target: {fileID: 8302782170494490803, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_Color.r
+      value: 0.96863043
       objectReference: {fileID: 0}
     - target: {fileID: 8445296986363858427, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: HatSwitch Left  |  Logitech Extreme 3D
+      value: D-Pad Left  |  Xbox Controller
       objectReference: {fileID: 0}
     - target: {fileID: 8492251281701726389, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.99999565
+      value: 0.98039514
       objectReference: {fileID: 0}
     - target: {fileID: 8492251281701726389, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.999997
+      value: 0.003921592
+      objectReference: {fileID: 0}
+    - target: {fileID: 8492251281701726389, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_Color.r
+      value: 0.96863043
       objectReference: {fileID: 0}
     - target: {fileID: 8903186128749480736, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: Stick Down  |  Logitech Extreme 3D
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 9172923972295468052, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.99999565
+      value: 0.98039514
       objectReference: {fileID: 0}
     - target: {fileID: 9172923972295468052, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.999997
+      value: 0.003921592
+      objectReference: {fileID: 0}
+    - target: {fileID: 9172923972295468052, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_Color.r
+      value: 0.96863043
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
