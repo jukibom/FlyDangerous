@@ -66,6 +66,7 @@ namespace Core {
                 case "graphics-soft-shadows":
                 case "enableMouseFlightControls":
                 case "showMouseWidget":
+                case "showMouseWidgetValues":
                 case "mouseXInvert":
                 case "mouseYInvert":
                 case "mouseSeparateRelativeSensitivity":

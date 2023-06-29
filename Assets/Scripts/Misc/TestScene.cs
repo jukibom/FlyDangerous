@@ -33,7 +33,11 @@ namespace Misc {
         private void Start() {
             IEnumerator StartGame() {
                 // load engine scene if not already 
-                if (!FindObjectOfType<Engine>()) yield return SceneManager.LoadSceneAsync("Engine", LoadSceneMode.Additive);
+                if (!FindObjectOfType<Engine>())
+                    yield return SceneManager.LoadSceneAsync("Engine", LoadSceneMode.Additive);
+
+                // remove the spawn object
+                spawnLocation.gameObject.SetActive(false);
 
                 // allow game state to initialise
                 yield return new WaitForFixedUpdate();
@@ -54,7 +58,8 @@ namespace Misc {
                 var pos = spawnLocation.position;
                 var rot = spawnLocation.rotation;
                 Game.Instance.LoadedLevelData.startPosition = new SerializableVector3(pos.x, pos.y, pos.z);
-                Game.Instance.LoadedLevelData.startRotation = new SerializableVector3(rot.eulerAngles.x, rot.eulerAngles.y, rot.eulerAngles.z);
+                Game.Instance.LoadedLevelData.startRotation =
+                    new SerializableVector3(rot.eulerAngles.x, rot.eulerAngles.y, rot.eulerAngles.z);
 
                 yield return new WaitForEndOfFrame();
 
@@ -79,7 +84,8 @@ namespace Misc {
                 var track = FindObjectOfType<Track>();
                 if (player && track) {
                     Game.Instance.LoadedLevelData.gameType = GameType.FreeRoam;
-                    Game.Instance.GameModeHandler.InitialiseGameMode(player, Game.Instance.LoadedLevelData, GameType.FreeRoam.GameMode, player.User.InGameUI,
+                    Game.Instance.GameModeHandler.InitialiseGameMode(player, Game.Instance.LoadedLevelData,
+                        GameType.FreeRoam.GameMode, player.User.InGameUI,
                         track);
                 }
                 else if (track == null) {
@@ -103,7 +109,8 @@ namespace Misc {
                     if (Directory.Exists(path)) {
                         var ghostPaths = Directory.GetFiles(path);
                         Debug.Log("Loading ghosts from " + path);
-                        foreach (var ghostPath in ghostPaths) Game.Instance.LoadGhost(Replay.LoadFromFilepath(ghostPath));
+                        foreach (var ghostPath in ghostPaths)
+                            Game.Instance.LoadGhost(Replay.LoadFromFilepath(ghostPath));
                     }
                 }
 
@@ -112,9 +119,6 @@ namespace Misc {
                 // Fade in!
                 Game.Instance.FadeFromBlack();
                 yield return new WaitForSeconds(0.7f);
-
-                // My work here is done
-                spawnLocation.gameObject.SetActive(false);
 
                 // Start
                 Game.Instance.GameModeHandler.Begin();
@@ -134,7 +138,8 @@ namespace Misc {
         private void CreateTestSecondShip() {
             var player = FdPlayer.FindLocalShipPlayer;
             if (player) {
-                Instantiate(shipGhostPrefab, player.transform.position + new Vector3(0, 0, 10), player.transform.rotation);
+                Instantiate(shipGhostPrefab, player.transform.position + new Vector3(0, 0, 10),
+                    player.transform.rotation);
                 var targettingSystem = FindObjectOfType<TargettingSystem>();
                 if (targettingSystem) targettingSystem.ResetTargets();
             }

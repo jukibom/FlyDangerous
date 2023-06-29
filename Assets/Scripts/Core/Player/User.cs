@@ -156,7 +156,10 @@ namespace Core.Player {
             headTracking.SetShipVelocityVector(shipPlayer.Rigidbody.velocity);
             shipCameraRig.SetHeadTransform(ref headTracking.HeadTransform);
 
-            inGameUI.MouseWidget.ShouldShow = !_mouseLookActive && Preferences.Instance.GetBool("showMouseWidget");
+            inGameUI.MouseWidget.ShouldShowWidget =
+                !_mouseLookActive && Preferences.Instance.GetBool("showMouseWidget");
+            inGameUI.MouseWidget.ShouldShowText =
+                !_mouseLookActive && Preferences.Instance.GetBool("showMouseWidgetValues");
         }
 
         public void OnEnable() {

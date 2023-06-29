@@ -19,30 +19,31 @@ namespace Core.Player {
     public class MouseShipInput : MonoBehaviour {
         [SerializeField] private InGameUI inGameUI;
 
-        private MouseMode _mouseMode;
-        private Vector2 _mousePositionDelta;
-        private Vector2 _mousePositionScreen;
+        private Vector2 _positionDelta;
+        private Vector2 _positionScreen;
 
-        private Vector2 _mouseContinuousInputPosition;
-        private Vector2 _mouseRelativeInputPosition;
-        private Vector2 _mousePreviousRelativeRate;
+        // private Vector2 _continuousInput;
+        private Vector2 _widgetPosition;
+        private Vector2 _widgetInputActual;
+        private Vector2 _currentRelativeInput;
+        private Vector2 _previousRelativeInput;
 
-        private string _mouseXAxisBindPref;
-        private string _mouseYAxisBindPref;
+        private string _xAxisBindPref;
+        private string _yAxisBindPref;
         private float _sensitivityXPref;
         private float _sensitivityYPref;
         private float _sensitivityXRelativeOnlyPref;
         private float _sensitivityYRelativeOnlyPref;
-        private bool _mouseXInvertPref;
-        private bool _mouseYInvertPref;
-        private bool _mouseRelativeOnlyOnNoInput;
-        private bool _mouseSeparateRelativeSensitivity;
-        private float _mouseRelativeRatePref;
-        private float _mouseRelativeCurvePref;
-        private float _mouseDeadzonePref;
-        private float _mousePowerCurvePref;
+        private bool _xInvertPref;
+        private bool _yInvertPref;
+        private bool _relativeOnlyOnNoInput;
+        private bool _separateRelativeSensitivity;
+        private float _relativeRatePref;
+        private float _relativeCurvePref;
+        private float _deadzonePref;
+        private float _powerCurvePref;
 
-        private bool _mouseInputThisFrame;
+        private bool _wasInputThisFrame;
 
         private void OnEnable() {
             Game.OnGameSettingsApplied += OnSettingApplied;
@@ -53,123 +54,119 @@ namespace Core.Player {
         }
 
         private void FixedUpdate() {
-            if (_mouseMode == MouseMode.Relative) UpdateRelativeReturnRate();
+            UpdateRelativeReturnRate();
         }
 
         private void Update() {
             // update widget graphics
-            var widgetPosition = new Vector2(
-                _mouseMode == MouseMode.Relative ? _mouseRelativeInputPosition.x : _mouseContinuousInputPosition.x,
-                _mouseMode == MouseMode.Relative ? _mouseRelativeInputPosition.y : _mouseContinuousInputPosition.y
-            );
-            inGameUI.MouseWidget.UpdateWidgetSprites(widgetPosition);
+            inGameUI.MouseWidget.UpdateWidgetSprites(_widgetPosition, _widgetInputActual);
         }
 
         public void ResetToCentre(Vector2 mouseCenter) {
-            _mousePositionScreen = mouseCenter;
-            _mousePositionDelta = Vector2.zero;
-            _mousePreviousRelativeRate = Vector2.zero;
+            _positionScreen = mouseCenter;
+            _positionDelta = Vector2.zero;
+            _previousRelativeInput = Vector2.zero;
 
-            _mouseContinuousInputPosition = Vector2.zero;
-            _mouseRelativeInputPosition = Vector2.zero;
+            _widgetPosition = Vector2.zero;
+            _widgetInputActual = Vector2.zero;
             inGameUI.MouseWidget.ResetToCentre();
         }
 
         public void SetMouseInput(Vector2 mousePositionDelta) {
-            if (mousePositionDelta.x != 0 || mousePositionDelta.y != 0) _mouseInputThisFrame = true;
+            if (mousePositionDelta.x != 0 || mousePositionDelta.y != 0) _wasInputThisFrame = true;
 
-            _mousePositionDelta = mousePositionDelta;
-            _mousePositionScreen.x += _mousePositionDelta.x;
-            _mousePositionScreen.y += _mousePositionDelta.y;
+            _positionDelta = mousePositionDelta;
+            _positionScreen.x += _positionDelta.x;
+            _positionScreen.y += _positionDelta.y;
         }
 
         public MouseInput CalculateMouseInput(MouseMode mouseMode) {
-            _mouseMode = mouseMode;
-
             var mouseInput = new MouseInput();
             switch (mouseMode) {
                 case MouseMode.Continuous:
-                    // add extra room for power curve
-                    var normalizedClamp = 1 + _mouseDeadzonePref;
-
                     // convert to normalized screen space (center is 0,0)
-                    var mouseXNormalized = (_mousePositionScreen.x / Screen.width * 2 - 1) * _sensitivityXPref;
-                    var mouseYNormalized = (_mousePositionScreen.y / Screen.height * 2 - 1) * _sensitivityYPref;
+                    var xNormalized = (_positionScreen.x / Screen.width * 2 - 1) * _sensitivityXPref;
+                    var yNormalized = (_positionScreen.y / Screen.height * 2 - 1) * _sensitivityYPref;
 
                     // clamp to max extents of mouse input
-                    Vector2 mousePositionNormalized;
-                    mousePositionNormalized.x = Mathf.Clamp(mouseXNormalized, -normalizedClamp, normalizedClamp);
-                    mousePositionNormalized.y = Mathf.Clamp(mouseYNormalized, -normalizedClamp, normalizedClamp);
+                    Vector2 positionNormalized;
+                    positionNormalized.x = Mathf.Clamp(xNormalized, -1, 1);
+                    positionNormalized.y = Mathf.Clamp(yNormalized, -1, 1);
 
                     // write back the clamped values to keep our max mouse position intact
-                    _mousePositionScreen.x = (mousePositionNormalized.x / _sensitivityXPref + 1) / 2 * Screen.width;
-                    _mousePositionScreen.y = (mousePositionNormalized.y / _sensitivityYPref + 1) / 2 * Screen.height;
+                    _positionScreen.x = (positionNormalized.x / _sensitivityXPref + 1) / 2 * Screen.width;
+                    _positionScreen.y = (positionNormalized.y / _sensitivityYPref + 1) / 2 * Screen.height;
 
-                    CalculateMouseInputContinuous(ref mouseInput, mousePositionNormalized);
+                    CalculateMouseInputContinuous(ref mouseInput, positionNormalized);
                     break;
                 case MouseMode.Relative:
-                    Vector2 mousePositionNormalizedDelta;
-                    mousePositionNormalizedDelta.x = _mousePositionDelta.x / Screen.width;
-                    mousePositionNormalizedDelta.y = _mousePositionDelta.y / Screen.height;
+                    Vector2 positionNormalizedDelta;
+                    positionNormalizedDelta.x = _positionDelta.x / Screen.width;
+                    positionNormalizedDelta.y = _positionDelta.y / Screen.height;
 
-                    CalculateMouseInputRelative(ref mouseInput, mousePositionNormalizedDelta);
+                    CalculateMouseInputRelative(ref mouseInput, positionNormalizedDelta);
                     break;
             }
 
             return mouseInput;
         }
 
-        private void CalculateMouseInputContinuous(ref MouseInput mouseInput, Vector2 mousePositionNormalized) {
-            // calculate continuous input including deadzone and sensitivity
-            if (mousePositionNormalized.x > _mouseDeadzonePref)
-                _mouseContinuousInputPosition.x = mousePositionNormalized.x - _mouseDeadzonePref;
-            if (mousePositionNormalized.x < -_mouseDeadzonePref)
-                _mouseContinuousInputPosition.x = mousePositionNormalized.x + _mouseDeadzonePref;
-            if (mousePositionNormalized.y > _mouseDeadzonePref)
-                _mouseContinuousInputPosition.y = mousePositionNormalized.y - _mouseDeadzonePref;
-            if (mousePositionNormalized.y < -_mouseDeadzonePref)
-                _mouseContinuousInputPosition.y = mousePositionNormalized.y + _mouseDeadzonePref;
+        private void CalculateMouseInputContinuous(ref MouseInput mouseInput, Vector2 positionNormalized) {
+            _widgetPosition = positionNormalized;
+            var input = positionNormalized;
 
-            _mouseRelativeInputPosition.x = (_mouseRelativeInputPosition.x < 0 ? -1 : 1) *
-                                            Mathf.Pow(Mathf.Abs(_mouseRelativeInputPosition.x), _mousePowerCurvePref);
-            _mouseRelativeInputPosition.y = (_mouseRelativeInputPosition.y < 0 ? -1 : 1) *
-                                            Mathf.Pow(Mathf.Abs(_mouseRelativeInputPosition.y), _mousePowerCurvePref);
+            // deadzone
+            if (input.magnitude < _deadzonePref) input = Vector2.zero;
+            else input = input * (input.magnitude - _deadzonePref) / (1 - _deadzonePref);
 
-            // send input depending on mouse mode
-            SetInput(ref mouseInput, _mouseXAxisBindPref, _mouseContinuousInputPosition.x, _mouseXInvertPref);
-            SetInput(ref mouseInput, _mouseYAxisBindPref, _mouseContinuousInputPosition.y, _mouseYInvertPref);
+            // power curve
+            input.x = (input.x < 0 ? -1 : 1) * Mathf.Pow(Mathf.Abs(input.x), _powerCurvePref);
+            input.y = (input.y < 0 ? -1 : 1) * Mathf.Pow(Mathf.Abs(input.y), _powerCurvePref);
+
+            // clamp input
+            input.x = Mathf.Clamp(input.x, -1, 1);
+            input.y = Mathf.Clamp(input.y, -1, 1);
+
+            // send input
+            SetInput(ref mouseInput, _xAxisBindPref, input.x, _xInvertPref);
+            SetInput(ref mouseInput, _yAxisBindPref, input.y, _yInvertPref);
+            _widgetInputActual = input;
         }
 
+        private void CalculateMouseInputRelative(ref MouseInput mouseInput, Vector2 positionNormalizedDelta) {
+            var sensitivityX = _separateRelativeSensitivity ? _sensitivityXRelativeOnlyPref : _sensitivityXPref;
+            var sensitivityY = _separateRelativeSensitivity ? _sensitivityYRelativeOnlyPref : _sensitivityYPref;
 
-        private void CalculateMouseInputRelative(ref MouseInput mouseInput, Vector2 mousePositionNormalizedDelta) {
-            var sensitivityX = _mouseSeparateRelativeSensitivity ? _sensitivityXRelativeOnlyPref : _sensitivityXPref;
-            var sensitivityY = _mouseSeparateRelativeSensitivity ? _sensitivityYRelativeOnlyPref : _sensitivityYPref;
+            // get relative input from deltas including sensitivity
+            var delta = new Vector2(positionNormalizedDelta.x * sensitivityX, positionNormalizedDelta.y * sensitivityY);
 
-            // calculate relative input from deltas including sensitivity
-            _mouseRelativeInputPosition.x =
-                _mousePreviousRelativeRate.x + mousePositionNormalizedDelta.x * sensitivityX;
-            _mouseRelativeInputPosition.y =
-                _mousePreviousRelativeRate.y + mousePositionNormalizedDelta.y * sensitivityY;
+            // calculate relative input from deltas and previous input
+            _currentRelativeInput.x = _previousRelativeInput.x + delta.x;
+            _currentRelativeInput.y = _previousRelativeInput.y + delta.y;
 
-            // store relative rate for relative return rate next frame
-            _mousePreviousRelativeRate.x = Mathf.Clamp(_mouseRelativeInputPosition.x, -1, 1);
-            _mousePreviousRelativeRate.y = Mathf.Clamp(_mouseRelativeInputPosition.y, -1, 1);
+            var input = _currentRelativeInput;
+            _widgetPosition = input;
 
-            // handle relative input deadzone
-            if (_mouseRelativeInputPosition.x < _mouseDeadzonePref &&
-                _mouseRelativeInputPosition.x > -_mouseDeadzonePref) _mouseRelativeInputPosition.x = 0;
-            if (_mouseRelativeInputPosition.y < _mouseDeadzonePref &&
-                _mouseRelativeInputPosition.y > -_mouseDeadzonePref) _mouseRelativeInputPosition.y = 0;
+            // deadzone
+            if (input.magnitude < _deadzonePref) input = Vector2.zero;
+            else input = input * (input.magnitude - _deadzonePref) / (1 - _deadzonePref);
 
-            // power curve (Mathf.Pow does not allow negatives because REASONS so abs and multiply by -1 if the original val is < 0)
-            _mouseRelativeInputPosition.x = (_mouseRelativeInputPosition.x < 0 ? -1 : 1) *
-                                            Mathf.Pow(Mathf.Abs(_mouseRelativeInputPosition.x), _mousePowerCurvePref);
-            _mouseRelativeInputPosition.y = (_mouseRelativeInputPosition.y < 0 ? -1 : 1) *
-                                            Mathf.Pow(Mathf.Abs(_mouseRelativeInputPosition.y), _mousePowerCurvePref);
+            // power curve
+            input.x = (input.x < 0 ? -1 : 1) * Mathf.Pow(Mathf.Abs(input.x), _powerCurvePref);
+            input.y = (input.y < 0 ? -1 : 1) * Mathf.Pow(Mathf.Abs(input.y), _powerCurvePref);
 
-            // send input depending on mouse mode
-            SetInput(ref mouseInput, _mouseXAxisBindPref, _mouseRelativeInputPosition.x, _mouseXInvertPref);
-            SetInput(ref mouseInput, _mouseYAxisBindPref, _mouseRelativeInputPosition.y, _mouseYInvertPref);
+            // store relative rate for next frame
+            _previousRelativeInput.x = Mathf.Clamp(_currentRelativeInput.x, -1, 1);
+            _previousRelativeInput.y = Mathf.Clamp(_currentRelativeInput.y, -1, 1);
+
+            // clamp input
+            input.x = Mathf.Clamp(input.x, -1, 1);
+            input.y = Mathf.Clamp(input.y, -1, 1);
+
+            // send input
+            SetInput(ref mouseInput, _xAxisBindPref, input.x, _xInvertPref);
+            SetInput(ref mouseInput, _yAxisBindPref, input.y, _yInvertPref);
+            _widgetInputActual = input;
         }
 
         private void SetInput(ref MouseInput mouseInput, string axis, float amount, bool shouldInvert) {
@@ -198,45 +195,44 @@ namespace Core.Player {
         }
 
         private void UpdateRelativeReturnRate() {
-            if (_mouseInputThisFrame) {
-                _mouseInputThisFrame = false;
-                if (_mouseRelativeOnlyOnNoInput) return;
+            if (_wasInputThisFrame) {
+                _wasInputThisFrame = false;
+                if (_relativeOnlyOnNoInput) return;
             }
 
             // return to 0 by mouseRelativeRate
-            var distance = _mouseRelativeInputPosition.magnitude;
-            var returnCurve = Mathf.Clamp(1 + distance - Mathf.Pow(distance, 1 / _mouseRelativeCurvePref), 0, 1);
-            var returnRate = _mouseRelativeRatePref / 500 * returnCurve;
-            _mousePreviousRelativeRate = Vector2.MoveTowards(new Vector2(
-                    _mouseRelativeInputPosition.x,
-                    _mouseRelativeInputPosition.y),
-                Vector2.zero, returnRate);
-
-            // store relative rate for relative return rate next frame
-            _mousePreviousRelativeRate.x = Mathf.Clamp(_mousePreviousRelativeRate.x, -1, 1);
-            _mousePreviousRelativeRate.y = Mathf.Clamp(_mousePreviousRelativeRate.y, -1, 1);
+            var distance = _previousRelativeInput.magnitude;
+            var returnCurve = Mathf.Clamp(1 + distance - Mathf.Pow(distance, 1 / _relativeCurvePref), 0, 1);
+            var returnRate = _relativeRatePref / 500 * returnCurve;
+            _previousRelativeInput =
+                Vector2.MoveTowards(new Vector2(_currentRelativeInput.x, _currentRelativeInput.y), Vector2.zero,
+                    returnRate);
         }
 
         private void OnSettingApplied() {
-            _mouseXAxisBindPref = Preferences.Instance.GetString("mouseXAxis");
-            _mouseYAxisBindPref = Preferences.Instance.GetString("mouseYAxis");
+            _xAxisBindPref = Preferences.Instance.GetString("mouseXAxis");
+            _yAxisBindPref = Preferences.Instance.GetString("mouseYAxis");
 
-            _mouseXInvertPref = Preferences.Instance.GetBool("mouseXInvert");
-            _mouseYInvertPref = Preferences.Instance.GetBool("mouseYInvert");
-            _mouseSeparateRelativeSensitivity = Preferences.Instance.GetBool("mouseSeparateRelativeSensitivity");
+            _xInvertPref = Preferences.Instance.GetBool("mouseXInvert");
+            _yInvertPref = Preferences.Instance.GetBool("mouseYInvert");
+            _separateRelativeSensitivity = Preferences.Instance.GetBool("mouseSeparateRelativeSensitivity");
 
-            _sensitivityXPref = Preferences.Instance.GetFloat("mouseXSensitivity");
-            _sensitivityYPref = Preferences.Instance.GetFloat("mouseYSensitivity");
-            _sensitivityXRelativeOnlyPref = Preferences.Instance.GetFloat("mouseXRelativeSensitivity");
-            _sensitivityYRelativeOnlyPref = Preferences.Instance.GetFloat("mouseYRelativeSensitivity");
+            _sensitivityXPref = Mathf.Clamp(Preferences.Instance.GetFloat("mouseXSensitivity"), 0.5f, 5f);
+            _sensitivityYPref = Mathf.Clamp(Preferences.Instance.GetFloat("mouseYSensitivity"), 0.5f, 5f);
+            _sensitivityXRelativeOnlyPref =
+                Mathf.Clamp(Preferences.Instance.GetFloat("mouseXRelativeSensitivity"), 0.5f, 5f);
+            _sensitivityYRelativeOnlyPref =
+                Mathf.Clamp(Preferences.Instance.GetFloat("mouseYRelativeSensitivity"), 0.5f, 5f);
 
 
-            _mouseRelativeOnlyOnNoInput = Preferences.Instance.GetBool("mouseRelativeReturnOnlyOnNoInput");
-            _mouseRelativeRatePref = Mathf.Clamp(Preferences.Instance.GetFloat("mouseRelativeRate"), 1, 50);
-            _mouseRelativeCurvePref = Mathf.Clamp(Preferences.Instance.GetFloat("mouseRelativeCurve"), 1, 100);
+            _relativeOnlyOnNoInput = Preferences.Instance.GetBool("mouseRelativeReturnOnlyOnNoInput");
+            _relativeRatePref = Mathf.Clamp(Preferences.Instance.GetFloat("mouseRelativeRate"), 1, 100);
+            _relativeCurvePref = Mathf.Clamp(Preferences.Instance.GetFloat("mouseRelativeCurve"), 1, 100);
 
-            _mouseDeadzonePref = Mathf.Clamp(Preferences.Instance.GetFloat("mouseDeadzone"), 0, 1);
-            _mousePowerCurvePref = Mathf.Clamp(Preferences.Instance.GetFloat("mousePowerCurve"), 1, 3);
+            _deadzonePref = Mathf.Clamp(Preferences.Instance.GetFloat("mouseDeadzone"), 0, 0.5f);
+            _powerCurvePref = Mathf.Clamp(Preferences.Instance.GetFloat("mousePowerCurve"), 1, 3);
+
+            inGameUI.MouseWidget.UpdateDeadzone(_deadzonePref);
         }
     }
 }
