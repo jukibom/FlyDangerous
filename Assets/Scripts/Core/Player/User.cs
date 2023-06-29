@@ -288,6 +288,7 @@ namespace Core.Player {
             Mouse.current.WarpCursorPosition(screenCentre);
             InputState.Change(Mouse.current.position, screenCentre);
 
+            _mousePositionDelta = Vector2.zero;
             _mouseShipInput.ResetToCentre(screenCentre);
         }
 

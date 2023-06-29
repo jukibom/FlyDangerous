@@ -38,6 +38,7 @@ namespace Gameplay.Game_Modes.Components {
         public void EnableShipInput() {
             _shipPlayer.Freeze = false;
             _shipPlayer.User.movementEnabled = true;
+            _shipPlayer.User.ResetMouseToCentre();
         }
 
         public void EnableShipBoostInput() {
