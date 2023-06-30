@@ -17,11 +17,11 @@ namespace Core.MapData {
         public static readonly Level YouHaveToStartSomewhere = new("You Have to Start Somewhere", "you-have-to-start-somewhere", GameType.Sprint);
         public static readonly Level ALittleVerticality = new("A Little Verticality", "a-little-verticality", GameType.Sprint);
         public static readonly Level UpsAndDowns = new("Ups and Downs", "ups-and-downs", GameType.Sprint);
-        public static readonly Level AroundTheBlock = new("Around The Block", "around-the-block", GameType.Sprint);
         public static readonly Level HoldOnToYourStomach = new("Hold on to your stomach", "hold-on-to-your-stomach", GameType.Sprint);
         public static readonly Level TinyTrial = new("Tiny Trial", "tiny-trial", GameType.Sprint);
         public static readonly Level RampingUp = new("Ramping Up", "ramping-up", GameType.Sprint);
         public static readonly Level AroundTheStation = new("Around the station", "around-the-station", GameType.Sprint);
+        public static readonly Level AroundTheBlock = new("Around The Block", "around-the-block", GameType.Sprint);
         public static readonly Level SpeedIsHalfTheBattle = new("Speed is Only Half the Battle", "speed-is-only-half-the-battle", GameType.Sprint);
         public static readonly Level DeathValley = new("Death Valley", "death-valley", GameType.Sprint);
         public static readonly Level Snake = new("Snake", "snake", GameType.Sprint);
@@ -87,8 +87,8 @@ namespace Core.MapData {
                 GentleStart, LimiterMastery, YouHaveHeadlightsRight, HideAndSeek,
 
                 // sprints
-                YouHaveToStartSomewhere, ALittleVerticality, UpsAndDowns, AroundTheBlock,
-                HoldOnToYourStomach, TinyTrial, RampingUp, AroundTheStation, SpeedIsHalfTheBattle,
+                YouHaveToStartSomewhere, ALittleVerticality, UpsAndDowns,
+                HoldOnToYourStomach, TinyTrial, RampingUp, AroundTheStation, AroundTheBlock, SpeedIsHalfTheBattle,
                 DeathValley, Snake, Corkscrew, Sightseeing, Yeet, DesertDash, Coaster,
                 ALittleDip, MarshMarathon, YouMightWannaHoldBack, TightSqueeze, ThreadTheNeedle,
                 Chute, TwistsAndTurns, MountainSpiral, LoopDeLoop, CrestLoop, Slalom, LongRoad,
