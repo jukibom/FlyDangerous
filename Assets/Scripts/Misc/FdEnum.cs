@@ -29,7 +29,7 @@ namespace Misc {
         public static T FromString<T>(IEnumerable<T> enums, string name) where T : IFdEnum {
             var fdEnums = enums as T[] ?? enums.ToArray();
             try {
-                return fdEnums.Single(l => l.Name == name);
+                return fdEnums.Single(l => l.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
             }
             catch {
                 var firstElement = fdEnums.First();

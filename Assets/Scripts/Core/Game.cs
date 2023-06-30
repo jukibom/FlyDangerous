@@ -204,7 +204,7 @@ namespace Core {
 
             var urp = (UniversalRenderPipelineAsset)GraphicsSettings.currentRenderPipeline;
             urp.renderScale = Mathf.Clamp(Preferences.Instance.GetFloat("graphics-render-scale"), 0.5f, 2);
-            
+
             ssao.SetActive(Preferences.Instance.GetBool("graphics-ssao"));
 
             // soft shadows
@@ -222,7 +222,7 @@ namespace Core {
                 "2x" => 2,
                 _ => 0
             };
-            
+
             // mip map quality via texture detail (0 = full, 1 = 1/4th, 2 = 1/16th)
             var textureDetail = Preferences.Instance.GetString("graphics-texture-detail");
             QualitySettings.globalTextureMipmapLimit = textureDetail switch {
@@ -231,7 +231,7 @@ namespace Core {
                 "low" => 2,
                 _ => 0
             };
-            
+
             // reflections
             var shipPlayer = FdPlayer.FindLocalShipPlayer;
             if (shipPlayer != null) {
@@ -601,13 +601,15 @@ namespace Core {
         public void RemoveGhost(ShipGhost shipGhost) {
             // we have to wait a frame for all deletions to occur before firing any events
             IEnumerator DestroyGhost() {
-                shipGhost.ReplayTimeline.Stop();
-                var replayObject = shipGhost.ReplayTimeline.ShipReplayObject;
-                if (replayObject != null && replayObject.Transform != null) Destroy(replayObject.Transform.gameObject);
-                Destroy(shipGhost.gameObject);
+                if (shipGhost != null) {
+                    shipGhost.ReplayTimeline.Stop();
+                    var replayObject = shipGhost.ReplayTimeline.ShipReplayObject;
+                    if (replayObject != null && replayObject.Transform != null) Destroy(replayObject.Transform.gameObject);
+                    Destroy(shipGhost.gameObject);
 
-                yield return new WaitForEndOfFrame();
-                OnGhostRemoved?.Invoke();
+                    yield return new WaitForEndOfFrame();
+                    OnGhostRemoved?.Invoke();
+                }
             }
 
             StartCoroutine(DestroyGhost());

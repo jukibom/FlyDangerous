@@ -136,7 +136,10 @@ namespace Gameplay.Game_Modes {
             GameModeUIHandler.GameModeUIText.CentralCanvasGroup.alpha = 1;
             _splitFadeOutCoroutine = Game.Instance.StartCoroutine(
                 YieldExtensions.SimpleAnimationTween(
-                    val => GameModeUIHandler.GameModeUIText.CentralCanvasGroup.alpha = 1 - val,
+                    val => {
+                        if (GameModeUIHandler.GameModeUIText.CentralCanvasGroup != null)
+                            GameModeUIHandler.GameModeUIText.CentralCanvasGroup.alpha = 1 - val;
+                    },
                     5f
                 )
             );
