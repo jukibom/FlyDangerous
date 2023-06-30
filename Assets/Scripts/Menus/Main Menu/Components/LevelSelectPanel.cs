@@ -150,8 +150,10 @@ namespace Menus.Main_Menu.Components {
         }
 
         public void DeSelectLevel() {
+            levelFlowLayoutGroup.enabled = true;
             SwitchToLevelSelectScreen(() => {
-                levelFlowLayoutGroup.enabled = true;
+                levelFlowLayoutGroup.GetComponentInParent<ScrollRect>().enabled = true;
+
                 // select the previous level if there is one
                 if (SelectedLevel != null)
                     levelPrefabContainer.GetComponentsInChildren<LevelUIElement>()
@@ -170,6 +172,8 @@ namespace Menus.Main_Menu.Components {
 
         private void SwitchToSummaryScreen() {
             levelFlowLayoutGroup.enabled = false;
+            levelFlowLayoutGroup.GetComponentInParent<ScrollRect>().enabled = false;
+
             if (_panelAnimationHideCoroutine != null) StopCoroutine(_panelAnimationHideCoroutine);
             if (_panelAnimationShowCoroutine != null) StopCoroutine(_panelAnimationShowCoroutine);
             OnLevelSelectedEvent?.Invoke();

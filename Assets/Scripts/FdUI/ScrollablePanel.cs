@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Misc;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -22,7 +23,10 @@ namespace FdUI {
             var selectedElement = EventSystem.current.currentSelectedGameObject;
             var positionInScrollRect = _scrollRect.content.InverseTransformPoint(selectedElement.transform.position) * -1;
 
-            AnimateScrollbarToNormalizedPosition(1 - positionInScrollRect.y / (_scrollRect.content.rect.height - 60));
+            var normalizedPosition = (1 - positionInScrollRect.y / (_scrollRect.content.rect.height - 60))
+                .Remap(0.1f, 0.9f, 0, 1); // add a little leeway towards the edges of the scroll rect
+
+            AnimateScrollbarToNormalizedPosition(normalizedPosition);
         }
 
         private void AnimateScrollbarToNormalizedPosition(float position) {
