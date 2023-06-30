@@ -64,7 +64,7 @@ namespace Menus.Main_Menu.Components {
                 var ghostEntry = Instantiate(ghostEntryPrefab);
                 ghostEntry.GetComponent<RectTransform>().SetParent(ghostEntryContainer, false);
                 ghostEntry.playerName.text = replay.ShipProfile.playerName;
-                ghostEntry.score.text = TimeExtensions.TimeSecondsToString(replay.ScoreData.raceTime);
+                ghostEntry.score.text = TimeExtensions.TimeSecondsToStringWithMilliseconds(replay.ScoreData.raceTime);
                 ghostEntry.entryDate.text = replay.ReplayMeta.CreationDate.ToShortDateString();
                 ghostEntry.replay = replay;
                 ghostEntry.checkbox.isChecked = false;

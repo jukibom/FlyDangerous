@@ -102,7 +102,7 @@ namespace Gameplay.Game_Modes {
         protected void UpdateLapCounterUI(List<float> timesToDisplay) {
             GameModeUIHandler.GameModeUIText.TopLeftHeader.text = "LAPS";
             GameModeUIHandler.GameModeUIText.TopLeftContent.text = timesToDisplay
-                .ConvertAll(TimeExtensions.TimeSecondsToString)
+                .ConvertAll(TimeExtensions.TimeSecondsToStringWithMilliseconds)
                 .Select((time, index) => new { time, index })
                 .Aggregate("", (acc, cur) => $"{acc}{cur.index + 1}: {cur.time}\n");
         }

@@ -132,17 +132,17 @@ namespace Menus.Main_Menu.Components {
 
                 var score = level.Score;
                 var bestTime = score.PersonalBestScore;
-                personalBest.text = bestTime > 0 ? TimeExtensions.TimeSecondsToString(bestTime) : "NONE";
+                personalBest.text = bestTime > 0 ? TimeExtensions.TimeSecondsToStringWithMilliseconds(bestTime) : "NONE";
 
                 var platinumTargetTime = level.Data.authorTimeTarget;
                 var goldTargetTime = Score.GoldTimeTarget(level.Data);
                 var silverTargetTime = Score.SilverTimeTarget(level.Data);
                 var bronzeTargetTime = Score.BronzeTimeTarget(level.Data);
 
-                platinumTarget.text = TimeExtensions.TimeSecondsToString(platinumTargetTime);
-                goldTarget.text = TimeExtensions.TimeSecondsToString(goldTargetTime);
-                silverTarget.text = TimeExtensions.TimeSecondsToString(silverTargetTime);
-                bronzeTarget.text = TimeExtensions.TimeSecondsToString(bronzeTargetTime);
+                platinumTarget.text = TimeExtensions.TimeSecondsToStringWithMilliseconds(platinumTargetTime);
+                goldTarget.text = TimeExtensions.TimeSecondsToStringWithMilliseconds(goldTargetTime);
+                silverTarget.text = TimeExtensions.TimeSecondsToStringWithMilliseconds(silverTargetTime);
+                bronzeTarget.text = TimeExtensions.TimeSecondsToStringWithMilliseconds(bronzeTargetTime);
 
                 // if user hasn't beaten author time, hide it!
                 platinumMedalContainer.gameObject.SetActive(score.HasPlayedPreviously && bestTime <= platinumTargetTime);

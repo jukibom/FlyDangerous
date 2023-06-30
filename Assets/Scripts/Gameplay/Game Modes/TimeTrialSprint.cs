@@ -50,7 +50,7 @@ namespace Gameplay.Game_Modes {
         public virtual void OnFixedUpdate() {
             // display 00:00:00 until it starts
             var timerDisplay = Math.Max(0, GameModeTimer.CurrentSessionTimeSeconds);
-            GameModeUIHandler.GameModeUIText.TopHeader.text = TimeExtensions.TimeSecondsToString(Mathf.Abs(timerDisplay));
+            GameModeUIHandler.GameModeUIText.TopHeader.text = TimeExtensions.TimeSecondsToStringWithMillisecondTenths(Mathf.Abs(timerDisplay));
         }
 
         public virtual void OnRestart() {
@@ -114,16 +114,16 @@ namespace Gameplay.Game_Modes {
             var targetScore = GameModeScore.NextTargetScore();
             GameModeUIHandler.GameModeUIText.TopRightHeader.color = targetScore.MedalColor;
             GameModeUIHandler.GameModeUIText.TopRightHeader.text = $"TARGET {targetScore.Medal}".ToUpper();
-            GameModeUIHandler.GameModeUIText.TopRightContent.text = TimeExtensions.TimeSecondsToString(targetScore.Score);
+            GameModeUIHandler.GameModeUIText.TopRightContent.text = TimeExtensions.TimeSecondsToStringWithMilliseconds(targetScore.Score);
         }
 
 
         protected void SetSplitTimer(float splitTimeSeconds, float previousSplitTimeSeconds = 0) {
             GameModeUIHandler.GameModeUIText.CentralHeader.color = Color.white;
-            GameModeUIHandler.GameModeUIText.CentralHeader.text = TimeExtensions.TimeSecondsToString(splitTimeSeconds);
+            GameModeUIHandler.GameModeUIText.CentralHeader.text = TimeExtensions.TimeSecondsToStringWithMilliseconds(splitTimeSeconds);
             if (previousSplitTimeSeconds > 0) {
                 var deltaSplit = splitTimeSeconds - previousSplitTimeSeconds;
-                var deltaSplitText = TimeExtensions.TimeSecondsToString(deltaSplit);
+                var deltaSplitText = TimeExtensions.TimeSecondsToStringWithMilliseconds(deltaSplit);
                 GameModeUIHandler.GameModeUIText.CentralContent.color = deltaSplit > 0 ? Color.red : Color.green;
                 GameModeUIHandler.GameModeUIText.CentralContent.text = deltaSplit > 0 ? $"+{deltaSplitText}" : deltaSplitText;
             }

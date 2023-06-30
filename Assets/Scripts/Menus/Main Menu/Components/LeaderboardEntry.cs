@@ -37,7 +37,7 @@ namespace Menus.Main_Menu.Components {
             if (_entry != null) {
                 rank.text = _entry.Rank.ToString();
                 playerName.text = _entry.Player;
-                score.text = TimeExtensions.TimeSecondsToString(_entry.Score / 1000f);
+                score.text = TimeExtensions.TimeSecondsToStringWithMilliseconds(_entry.Score / 1000f);
                 flagIcon.SetFlag(Flag.FromFixedId(_entry.FlagId));
             }
         }
