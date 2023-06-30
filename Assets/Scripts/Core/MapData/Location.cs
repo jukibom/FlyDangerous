@@ -50,6 +50,9 @@ namespace Core.MapData {
         }
 
         public static Location FromString(string locationString) {
+            // renamed at some point, make sure ghosts refer to the new place
+            if (locationString == "Achelous 8A") locationString = "Achelous 8D";
+
             return FdEnum.FromString(List(), locationString);
         }
 

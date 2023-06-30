@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace Core.MapData.Serializable {
-    public class LevelDataHelper {
+    public static class LevelDataHelper {
         public static Dictionary<string, string> OldMapLookup = new() {
             {
                 "b61450e646e8a215ade7643a2a143d40ab2ae353a35d018a537f6f23c9824c05", "59edba84985793d319370ee42f649631fd21f317e32fc0bbab5b179425bb2dd3"
@@ -10,20 +10,22 @@ namespace Core.MapData.Serializable {
                 "5b295193cb7ce327c5ec5a3a915476526ace99885e6659292801e9c2df0371d9", "b7c849a463e4973ffdd9340a8413ebde437e11642b7194fe9976e1772b2ff30b"
             }, // Ups and Downs
             {
-                "73865acd51c9708f0460c93d786228db11d99108a83363aa79a67570f2d8fcd1", "100d1fb8d0b5809d89217157f11e33572ef8fbf8ad2c7324173398dbc4a284a4"
+                "7ec5b215cf565681e61e8ae25ab211aadc581264b7b96b7e5f7285422f5c3e49", "100d1fb8d0b5809d89217157f11e33572ef8fbf8ad2c7324173398dbc4a284a4"
             }, // Around the block
             {
                 "7427ebaba3bdef67856d2b02b07cee72659d7d8fa208ca10f3b8d16220fbb188", "0ffdeed0899c63d0dfa4e339842764b4d73bd90ebf49f5ff6e34620ca290b357"
             }, // Hold on to your Stomach
             {
-                "39b9abf2169afda350aecb3deb34a2780642262d3813caad50d133ebe1a37d2d", "f9e77ad7b89fe7f80027263356927c46181417e97a4cde0ddb1c9283683398c2"
+                "df81eeecf441772d6d60ddf5fab509fcb391f00450e8258cfa6266a857593b2b", "f9e77ad7b89fe7f80027263356927c46181417e97a4cde0ddb1c9283683398c2"
             }, // Around the Station
-            { "9fbb4e0ce9d67ffd28013f94e14480b9b39bde4184956d07eb6b5ce39ead0374", "1d12b7b6cf492877de0bc55a1503101be6aad12bcb054086883d2e2c88126839" }, // Snake
+            {
+                "9fbb4e0ce9d67ffd28013f94e14480b9b39bde4184956d07eb6b5ce39ead0374", "1d12b7b6cf492877de0bc55a1503101be6aad12bcb054086883d2e2c88126839"
+            }, // Snake
             {
                 "9f7bc8f9f4b270020b98847689232eff8f5a4afee8b6f312a11d92130d4c68f4", "28717e0173d79b83061279c4e9c2e5f10488b6bdb36688255f7c90d244d3a4a2"
             }, // Speed is only half the battle
             {
-                "101c46782e92fa00afd172395acdd9e09bf42663ad88425fadfb86ef239395d4", "790dbcc3528b52fbf10adbd592b9a89f52621e9dbded0f44b63b0371053479ac"
+                "49a9108401f253e90590991bdc4d670eb9207ff962a538feb020e0d222f878f6", "790dbcc3528b52fbf10adbd592b9a89f52621e9dbded0f44b63b0371053479ac"
             }, // You Might Wanna Hold Back a Bit
             {
                 "c534f72e4261195128b613b32e5919e5961fb2c7b398bfaa101eb91dc91f166b", "8657048592eee0ee04196716df4cccfbbed733f2b3b4a23d5fa3bb1e8a2172d3"
@@ -38,7 +40,7 @@ namespace Core.MapData.Serializable {
                 "3f187d013bbcece93236e2bbf808c336325ae4ba17a9738b616e6228cf64c320", "7dc9ec3fd8561551fef7c3013222ec66a08e9f920aea39c8c60a867d46069b21"
             }, // Limiter Mastery
             {
-                "6558d51a1c4a9e1524f1190ba8bcaccb22076914d24b4e321906a0f2111dc7d1", "2c1df43c456f66e281e3794756ac92ec31d1fe0ae82990ce0461ef5bec2e6fd9"
+                "a0ae24815470085976e078154faf933a07bc969fae06929be4b44a5f6c6423d2", "2c1df43c456f66e281e3794756ac92ec31d1fe0ae82990ce0461ef5bec2e6fd9"
             }, // Thread the Needle
             {
                 "54525e5f59d9eb3d2638b018139142943bcc0233e11b6caa2f8782ff844418e4", "e8821db37b24269de8077c270bdc15f1c9177c24a2ed4758aa659c5f49e49ccf"

@@ -2,20 +2,26 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!21 &2100000
 Material:
-  serializedVersion: 6
+  serializedVersion: 8
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Pine
   m_Shader: {fileID: 4800000, guid: 99134b1f0c27d54469a840832a28fadf, type: 3}
-  m_ShaderKeywords: EFFECT_BUMP _WINDQUALITY_FASTEST
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - EFFECT_BUMP
+  - _WINDQUALITY_FASTEST
+  m_InvalidKeywords: []
   m_LightmapFlags: 6
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -171,6 +177,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: 194fe379248d6364c9319b6b179bee57, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _texcoord:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -191,32 +201,43 @@ Material:
     - _AO: 3.02
     - _AlphaClip: 0
     - _AlphaClipThreshold: 0.33
+    - _AlphaCutoff: 0.5
     - _AmbientPower: 3
     - _AppearAngle: 0.3
+    - _BaseDetail: 1
     - _BaseLight: 0.05
     - _BillboardKwToggle: 0
-    - _BillboardShadowFade: 0.5
+    - _BillboardShadowFade: 0.504
     - _Blend: 0
     - _BumpScale: 1
     - _ClearCoat: 0
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
+    - _ColorShifting: 1
+    - _ColorSource: 0
+    - _ColorVariation: 0.15
     - _Cull: 2
+    - _CullMode: 2
     - _Culling: 2
     - _Cutoff: 0.11
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DirectPower: 0.25
+    - _DoubleSidedNormalMode: 0
     - _DstBlend: 10
     - _EnableExternalAlpha: 0
     - _EnableHeightBlend: 0
     - _EnableInstancedPerPixelNormal: 1
     - _EnvironmentReflections: 1
+    - _GlobalTurbulenceInfluence: 1
+    - _GlobalWindInfluence: 1
     - _GlossMapScale: 1
     - _Glossiness: 0.075
     - _GlossinessSource: 0
     - _GlossyReflections: 1
+    - _Height: 0
     - _HeightTransition: 0
+    - _Hue: -0.5
     - _HueVariationKwToggle: 0
     - _Metallic: 0
     - _Metallic0: 0
@@ -241,6 +262,7 @@ Material:
     - _ShakingAmplitude: 0.1
     - _ShakingFrequency: 3
     - _Shininess: 0.7
+    - _Smooth: 0.02
     - _Smoothness: 0
     - _Smoothness0: 0.5
     - _Smoothness1: 0.5
@@ -255,10 +277,18 @@ Material:
     - _SubsurfaceIndirect: 0
     - _SubsurfaceKwToggle: 0
     - _Surface: 1
+    - _TextureInfluence: 0.5
+    - _TransNormalDistortion: 1
+    - _TransScale: 1
+    - _TransScattering: 1
+    - _Translucency: 4
+    - _TranslucencyEnum: 1
     - _TwoSided: 2
     - _UVSec: 0
+    - _Value: 1
     - _VanishAngle: 0.2
     - _WINDQUALITY: 4
+    - _WindModeLeaves: 0
     - _WindQuality: 1
     - _WindSize: 150
     - _WindSpeed: 5
@@ -270,6 +300,7 @@ Material:
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 0.7794118, g: 0.7794118, b: 0.7794118, a: 1}
+    - _DetailColor: {r: 1, g: 1, b: 1, a: 0}
     - _Emission: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
@@ -280,6 +311,7 @@ Material:
     - _Specular: {r: 0.08088237, g: 0.08088237, b: 0.08088237, a: 0}
     - _SubsurfaceColor: {r: 1, g: 1, b: 1, a: 1}
     - _TranslucencyColor: {r: 0, g: 0, b: 0, a: 1}
+    - _TranslucencyTint: {r: 1, g: 1, b: 1, a: 0}
     - _TreeInstanceColor: {r: 1, g: 1, b: 1, a: 1}
     - _TreeInstanceScale: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

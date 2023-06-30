@@ -9,46 +9,45 @@ namespace Core.MapData {
 
         // LEGACY MAPS
         public static readonly Level GentleStart = new("A Gentle Start", "a-gentle-start", GameType.Sprint, true);
-        public static readonly Level UpsAndDowns = new("Ups and Downs", "ups-and-downs", GameType.Sprint, true);
-        public static readonly Level AroundTheBlock = new("Around The Block", "around-the-block", GameType.Sprint, true);
-        public static readonly Level HoldOnToYourStomach = new("Hold on to your stomach", "hold-on-to-your-stomach", GameType.Sprint, true);
-        public static readonly Level AroundTheStation = new("Around the station", "around-the-station", GameType.Sprint, true);
-        public static readonly Level Snake = new("Snake", "snake", GameType.Sprint, true);
-        public static readonly Level SpeedIsHalfTheBattle = new("Speed is Only Half the Battle", "speed-is-only-half-the-battle", GameType.Sprint, true);
-        public static readonly Level YouMightWannaHoldBack = new("You Might Wanna Hold Back a Bit", "you-might-wanna-hold-back-a-bit", GameType.Sprint, true);
-        public static readonly Level DeathValley = new("Death Valley", "death-valley", GameType.Sprint, true);
-        public static readonly Level CrestLoop = new("Crest Loop", "crest-loop", GameType.Sprint, true);
-        public static readonly Level YouHaveHeadlightsRight = new("You Have Headlights, Right?", "you-have-headlights-right", GameType.Sprint, true);
         public static readonly Level LimiterMastery = new("Limiter Mastery", "limiter-mastery", GameType.Sprint, true);
-        public static readonly Level ThreadTheNeedle = new("Thread The Needle", "thread-the-needle", GameType.Sprint, true);
-        public static readonly Level MountainSpiral = new("Mountain Spiral", "mountain-spiral", GameType.Sprint, true);
-        public static readonly Level LongRoad = new("Long Road", "long-road", GameType.Sprint, true);
+        public static readonly Level YouHaveHeadlightsRight = new("You Have Headlights, Right?", "you-have-headlights-right", GameType.Sprint, true);
         public static readonly Level HideAndSeek = new("Hide and Seek", "hide-and-seek", GameType.Sprint, true);
 
-        // GLORIOUS NEW WORLD MAPS (for how long? who knows!)
         // Sprints
         public static readonly Level YouHaveToStartSomewhere = new("You Have to Start Somewhere", "you-have-to-start-somewhere", GameType.Sprint);
         public static readonly Level ALittleVerticality = new("A Little Verticality", "a-little-verticality", GameType.Sprint);
+        public static readonly Level UpsAndDowns = new("Ups and Downs", "ups-and-downs", GameType.Sprint);
+        public static readonly Level AroundTheBlock = new("Around The Block", "around-the-block", GameType.Sprint);
+        public static readonly Level HoldOnToYourStomach = new("Hold on to your stomach", "hold-on-to-your-stomach", GameType.Sprint);
         public static readonly Level TinyTrial = new("Tiny Trial", "tiny-trial", GameType.Sprint);
         public static readonly Level RampingUp = new("Ramping Up", "ramping-up", GameType.Sprint);
+        public static readonly Level AroundTheStation = new("Around the station", "around-the-station", GameType.Sprint);
+        public static readonly Level SpeedIsHalfTheBattle = new("Speed is Only Half the Battle", "speed-is-only-half-the-battle", GameType.Sprint);
+        public static readonly Level DeathValley = new("Death Valley", "death-valley", GameType.Sprint);
+        public static readonly Level Snake = new("Snake", "snake", GameType.Sprint);
         public static readonly Level Corkscrew = new("Corkscrew", "corkscrew", GameType.Sprint);
         public static readonly Level Sightseeing = new("Sightseeing", "sightseeing", GameType.Sprint);
         public static readonly Level Yeet = new("Yeet", "yeet", GameType.Sprint);
         public static readonly Level DesertDash = new("Desert Dash", "desert-dash", GameType.Sprint);
-        public static readonly Level Chute = new("Chute", "chute", GameType.Sprint);
         public static readonly Level Coaster = new("Coaster", "coaster", GameType.Sprint);
         public static readonly Level ALittleDip = new("A Little Dip", "a-little-dip", GameType.Sprint);
         public static readonly Level MarshMarathon = new("Marsh Marathon", "marsh-marathon", GameType.Sprint);
+        public static readonly Level YouMightWannaHoldBack = new("You Might Wanna Hold Back a Bit", "you-might-wanna-hold-back-a-bit", GameType.Sprint);
         public static readonly Level TightSqueeze = new("Tight Squeeze", "tight-squeeze", GameType.Sprint);
+        public static readonly Level ThreadTheNeedle = new("Thread The Needle", "thread-the-needle", GameType.Sprint);
+        public static readonly Level Chute = new("Chute", "chute", GameType.Sprint);
         public static readonly Level TwistsAndTurns = new("Twists and Turns", "twists-and-turns", GameType.Sprint);
+        public static readonly Level MountainSpiral = new("Mountain Spiral", "mountain-spiral", GameType.Sprint);
         public static readonly Level LoopDeLoop = new("Loop-de-loop", "loop-de-loop", GameType.Sprint);
+        public static readonly Level CrestLoop = new("Crest Loop", "crest-loop", GameType.Sprint);
         public static readonly Level Slalom = new("Slalom", "slalom", GameType.Sprint);
+        public static readonly Level LongRoad = new("Long Road", "long-road", GameType.Sprint);
         public static readonly Level IslandHopping = new("Island Hopping", "island-hopping", GameType.Sprint);
         public static readonly Level Labyrinth = new("Labyrinth", "labyrinth", GameType.Sprint);
         public static readonly Level FreshHell = new("Fresh Hell", "fresh-hell", GameType.Sprint);
 
         // Laps
-        public static readonly Level AroundTheStationV2 = new("Around the Station", "around-the-station-v2", GameType.Laps);
+        public static readonly Level AroundTheStationV2 = new("Around the Station Again", "around-the-station-v2", GameType.Laps);
         public static readonly Level CoastlineCircuit = new("Coastline Circuit", "coastline-circuit", GameType.Laps);
         public static readonly Level Slipstream = new("Slipstream", "slipstream", GameType.Laps);
         public static readonly Level Speedway = new("Speedway", "Speedway", GameType.Laps);
@@ -85,13 +84,19 @@ namespace Core.MapData {
         public static IEnumerable<Level> List() {
             return new[] {
                 // legacy
-                GentleStart, UpsAndDowns, AroundTheBlock, HoldOnToYourStomach, AroundTheStation, Snake, SpeedIsHalfTheBattle, YouMightWannaHoldBack,
-                DeathValley, CrestLoop, YouHaveHeadlightsRight, LimiterMastery, ThreadTheNeedle, MountainSpiral, LongRoad, HideAndSeek,
-                // new sprints
-                YouHaveToStartSomewhere, ALittleVerticality, TinyTrial, RampingUp, Corkscrew, Sightseeing, Yeet, DesertDash, Chute, Coaster,
-                ALittleDip, MarshMarathon, TightSqueeze, TwistsAndTurns, LoopDeLoop, Slalom, IslandHopping, Labyrinth, FreshHell,
+                GentleStart, LimiterMastery, YouHaveHeadlightsRight, HideAndSeek,
+
+                // sprints
+                YouHaveToStartSomewhere, ALittleVerticality, UpsAndDowns, AroundTheBlock,
+                HoldOnToYourStomach, TinyTrial, RampingUp, AroundTheStation, SpeedIsHalfTheBattle,
+                DeathValley, Snake, Corkscrew, Sightseeing, Yeet, DesertDash, Coaster,
+                ALittleDip, MarshMarathon, YouMightWannaHoldBack, TightSqueeze, ThreadTheNeedle,
+                Chute, TwistsAndTurns, MountainSpiral, LoopDeLoop, CrestLoop, Slalom, LongRoad,
+                IslandHopping, Labyrinth, FreshHell,
+
                 // new laps
                 AroundTheStationV2, CoastlineCircuit, Slipstream, Speedway, LongHaul,
+
                 // new puzzle
                 DecisionsDecisions, Playground, Highways
             };
