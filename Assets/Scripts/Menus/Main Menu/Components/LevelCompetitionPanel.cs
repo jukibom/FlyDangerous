@@ -105,7 +105,7 @@ namespace Menus.Main_Menu.Components {
                 leaderboard.LoadLeaderboard(leaderboardData);
             }
             catch {
-                var text = "Failed to connect o online services.";
+                var text = "Failed to connect to online services.";
                 if (FdNetworkManager.Instance.OnlineService?.OnlineServiceName == "Steam") text += "\nIs Steam in Offline mode?";
                 leaderboard.ShowFailed(text);
             }
