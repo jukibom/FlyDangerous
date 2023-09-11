@@ -20,10 +20,11 @@ namespace Menus.Options {
                 var actionReference = rebindAction.actionReference;
                 for (var i = 0; i < actionReference.action.bindings.Count; i++) {
                     var binding = actionReference.action.bindings[i];
-                    binding.overridePath = "";
-                    actionReference.action.ChangeBinding(binding);
-                    actionReference.action.ApplyBindingOverride(binding);
-                    actionReference.action.ApplyBindingOverride("");
+                    if (binding.isComposite) {
+                        continue;
+                    }
+                    
+                    actionReference.action.ApplyBindingOverride(i, "");
                 }
 
                 rebindAction.UpdateBindingDisplay();
