@@ -120,7 +120,7 @@ MonoBehaviour:
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 1
   m_Cameras: []
-  m_RendererIndex: 1
+  m_RendererIndex: -1
   m_VolumeLayerMask:
     serializedVersion: 2
     m_Bits: 0
@@ -515,7 +515,7 @@ MonoBehaviour:
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 1
   m_Cameras: []
-  m_RendererIndex: 1
+  m_RendererIndex: -1
   m_VolumeLayerMask:
     serializedVersion: 2
     m_Bits: 0
@@ -2434,27 +2434,27 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 90892086976027132, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.98039514
+      value: 0.18227424
       objectReference: {fileID: 0}
     - target: {fileID: 90892086976027132, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.003921592
+      value: 0.35181272
       objectReference: {fileID: 0}
     - target: {fileID: 90892086976027132, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.r
-      value: 0.96863043
+      value: 0.99590105
       objectReference: {fileID: 0}
     - target: {fileID: 367881358914929689, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.98039514
+      value: 0.18227424
       objectReference: {fileID: 0}
     - target: {fileID: 367881358914929689, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.003921592
+      value: 0.35181272
       objectReference: {fileID: 0}
     - target: {fileID: 367881358914929689, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.r
-      value: 0.96863043
+      value: 0.99590105
       objectReference: {fileID: 0}
     - target: {fileID: 389119543462190116, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
@@ -2466,19 +2466,51 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 526694474436525578, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: Button West  |  Gamepad
+      value: X  |  Xbox Controller
+      objectReference: {fileID: 0}
+    - target: {fileID: 586903209059449342, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 586903209059449342, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 586903209059449342, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 586903209059449342, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 586903209059449342, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 604730259146976340, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.98039514
+      value: 0.18227424
       objectReference: {fileID: 0}
     - target: {fileID: 604730259146976340, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.003921592
+      value: 0.35181272
       objectReference: {fileID: 0}
     - target: {fileID: 604730259146976340, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.r
-      value: 0.96863043
+      value: 0.99590105
+      objectReference: {fileID: 0}
+    - target: {fileID: 658614587298756042, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.b
+      value: 0.18431373
+      objectReference: {fileID: 0}
+    - target: {fileID: 658614587298756042, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.g
+      value: 0.34901962
+      objectReference: {fileID: 0}
+    - target: {fileID: 658614587298756042, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.r
+      value: 0.99607843
       objectReference: {fileID: 0}
     - target: {fileID: 1018818756963085958, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
@@ -2486,55 +2518,99 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1071423232568521902, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.98039514
+      value: 0.18227424
       objectReference: {fileID: 0}
     - target: {fileID: 1071423232568521902, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.003921592
+      value: 0.35181272
       objectReference: {fileID: 0}
     - target: {fileID: 1071423232568521902, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.r
-      value: 0.96863043
+      value: 0.99590105
+      objectReference: {fileID: 0}
+    - target: {fileID: 1073140887208593616, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1073140887208593616, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1073140887208593616, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1073140887208593616, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1073140887208593616, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1109677225912089210, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: D-Pad/Up  |  Gamepad
+      value: D-Pad Up  |  Xbox Controller
       objectReference: {fileID: 0}
     - target: {fileID: 1192188069687395118, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.98039514
+      value: 0.18227424
       objectReference: {fileID: 0}
     - target: {fileID: 1192188069687395118, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.003921592
+      value: 0.35181272
       objectReference: {fileID: 0}
     - target: {fileID: 1192188069687395118, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.r
-      value: 0.96863043
+      value: 0.99590105
+      objectReference: {fileID: 0}
+    - target: {fileID: 1203678672477168441, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.b
+      value: 0.18431373
+      objectReference: {fileID: 0}
+    - target: {fileID: 1203678672477168441, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.g
+      value: 0.34901962
+      objectReference: {fileID: 0}
+    - target: {fileID: 1203678672477168441, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.r
+      value: 0.99607843
+      objectReference: {fileID: 0}
+    - target: {fileID: 1243026583292615979, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.b
+      value: 0.18431373
+      objectReference: {fileID: 0}
+    - target: {fileID: 1243026583292615979, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.g
+      value: 0.34901962
+      objectReference: {fileID: 0}
+    - target: {fileID: 1243026583292615979, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.r
+      value: 0.99607843
       objectReference: {fileID: 0}
     - target: {fileID: 1320950467926609943, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.98039514
+      value: 0.18227424
       objectReference: {fileID: 0}
     - target: {fileID: 1320950467926609943, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.003921592
+      value: 0.35181272
       objectReference: {fileID: 0}
     - target: {fileID: 1320950467926609943, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.r
-      value: 0.96863043
+      value: 0.99590105
       objectReference: {fileID: 0}
     - target: {fileID: 1334652897402985436, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.98039514
+      value: 0.18227424
       objectReference: {fileID: 0}
     - target: {fileID: 1334652897402985436, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.003921592
+      value: 0.35181272
       objectReference: {fileID: 0}
     - target: {fileID: 1334652897402985436, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.r
-      value: 0.96863043
+      value: 0.99590105
       objectReference: {fileID: 0}
     - target: {fileID: 1552042752162612387, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
@@ -2542,35 +2618,99 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1799237938278402254, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: Button East  |  Gamepad
+      value: button3  |  Logitech Logitech Extreme 3D
+      objectReference: {fileID: 0}
+    - target: {fileID: 2057474205669521217, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.b
+      value: 0.18431373
+      objectReference: {fileID: 0}
+    - target: {fileID: 2057474205669521217, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.g
+      value: 0.34901962
+      objectReference: {fileID: 0}
+    - target: {fileID: 2057474205669521217, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.r
+      value: 0.99607843
+      objectReference: {fileID: 0}
+    - target: {fileID: 2118715077369273298, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2118715077369273298, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2118715077369273298, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2118715077369273298, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2118715077369273298, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2192952403066184779, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.b
+      value: 0.18431373
+      objectReference: {fileID: 0}
+    - target: {fileID: 2192952403066184779, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.g
+      value: 0.34901962
+      objectReference: {fileID: 0}
+    - target: {fileID: 2192952403066184779, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.r
+      value: 0.99607843
       objectReference: {fileID: 0}
     - target: {fileID: 2240170019264984029, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.98039514
+      value: 0.18227424
       objectReference: {fileID: 0}
     - target: {fileID: 2240170019264984029, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.003921592
+      value: 0.35181272
       objectReference: {fileID: 0}
     - target: {fileID: 2240170019264984029, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.r
-      value: 0.96863043
+      value: 0.99590105
       objectReference: {fileID: 0}
     - target: {fileID: 2507535033975036271, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.98039514
+      value: 0.18227424
       objectReference: {fileID: 0}
     - target: {fileID: 2507535033975036271, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.003921592
+      value: 0.35181272
       objectReference: {fileID: 0}
     - target: {fileID: 2507535033975036271, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.r
-      value: 0.96863043
+      value: 0.99590105
+      objectReference: {fileID: 0}
+    - target: {fileID: 2524353317006713345, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2524353317006713345, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2524353317006713345, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2524353317006713345, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2524353317006713345, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2573727877342269697, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: unbound secondary
+      value: rz  |  Logitech Logitech Extreme 3D
       objectReference: {fileID: 0}
     - target: {fileID: 2683167907044156448, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
@@ -2632,21 +2772,33 @@ PrefabInstance:
       propertyPath: user
       value: 
       objectReference: {fileID: 8165869081144972042}
+    - target: {fileID: 2865713227132427906, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.b
+      value: 0.18431373
+      objectReference: {fileID: 0}
+    - target: {fileID: 2865713227132427906, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.g
+      value: 0.34901962
+      objectReference: {fileID: 0}
+    - target: {fileID: 2865713227132427906, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.r
+      value: 0.99607843
+      objectReference: {fileID: 0}
     - target: {fileID: 2866304164790222347, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.98039514
+      value: 0.18227424
       objectReference: {fileID: 0}
     - target: {fileID: 2866304164790222347, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.003921592
+      value: 0.35181272
       objectReference: {fileID: 0}
     - target: {fileID: 2866304164790222347, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.r
-      value: 0.96863043
+      value: 0.99590105
       objectReference: {fileID: 0}
     - target: {fileID: 2995493771543711015, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: unbound secondary
+      value: stick/x  |  Logitech Logitech Extreme 3D
       objectReference: {fileID: 0}
     - target: {fileID: 3006983143738446753, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
@@ -2654,15 +2806,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3113489695430083248, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.98039514
+      value: 0.18227424
       objectReference: {fileID: 0}
     - target: {fileID: 3113489695430083248, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.003921592
+      value: 0.35181272
       objectReference: {fileID: 0}
     - target: {fileID: 3113489695430083248, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.r
-      value: 0.96863043
+      value: 0.99590105
       objectReference: {fileID: 0}
     - target: {fileID: 3296757046734522691, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_AnchorMax.y
@@ -2686,7 +2838,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3321859774452414814, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: unbound primary
+      value: F  |  Keyboard
       objectReference: {fileID: 0}
     - target: {fileID: 3321859774626031792, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
@@ -2694,19 +2846,55 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3518751094016040114, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.98039514
+      value: 0.18227424
       objectReference: {fileID: 0}
     - target: {fileID: 3518751094016040114, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.003921592
+      value: 0.35181272
       objectReference: {fileID: 0}
     - target: {fileID: 3518751094016040114, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.r
-      value: 0.96863043
+      value: 0.99590105
       objectReference: {fileID: 0}
     - target: {fileID: 3696789938995431766, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
       value: unbound secondary
+      objectReference: {fileID: 0}
+    - target: {fileID: 3745651694263968729, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.b
+      value: 0.18431373
+      objectReference: {fileID: 0}
+    - target: {fileID: 3745651694263968729, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.g
+      value: 0.34901962
+      objectReference: {fileID: 0}
+    - target: {fileID: 3745651694263968729, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.r
+      value: 0.99607843
+      objectReference: {fileID: 0}
+    - target: {fileID: 3792917619721768056, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.b
+      value: 0.18431373
+      objectReference: {fileID: 0}
+    - target: {fileID: 3792917619721768056, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.g
+      value: 0.34901962
+      objectReference: {fileID: 0}
+    - target: {fileID: 3792917619721768056, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.r
+      value: 0.99607843
+      objectReference: {fileID: 0}
+    - target: {fileID: 3873332948677631022, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.b
+      value: 0.18431373
+      objectReference: {fileID: 0}
+    - target: {fileID: 3873332948677631022, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.g
+      value: 0.34901962
+      objectReference: {fileID: 0}
+    - target: {fileID: 3873332948677631022, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.r
+      value: 0.99607843
       objectReference: {fileID: 0}
     - target: {fileID: 3878477238697393319, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
@@ -2716,25 +2904,37 @@ PrefabInstance:
       propertyPath: m_Text
       value: unbound secondary
       objectReference: {fileID: 0}
+    - target: {fileID: 4040930069457308834, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.b
+      value: 0.18431373
+      objectReference: {fileID: 0}
+    - target: {fileID: 4040930069457308834, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.g
+      value: 0.34901962
+      objectReference: {fileID: 0}
+    - target: {fileID: 4040930069457308834, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.r
+      value: 0.99607843
+      objectReference: {fileID: 0}
     - target: {fileID: 4126948235509426262, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
       value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 4151728914909075982, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: Button South  |  Gamepad
+      value: trigger  |  Logitech Logitech Extreme 3D
       objectReference: {fileID: 0}
     - target: {fileID: 4196906462497372436, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.98039514
+      value: 0.18227424
       objectReference: {fileID: 0}
     - target: {fileID: 4196906462497372436, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.003921592
+      value: 0.35181272
       objectReference: {fileID: 0}
     - target: {fileID: 4196906462497372436, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.r
-      value: 0.96863043
+      value: 0.99590105
       objectReference: {fileID: 0}
     - target: {fileID: 4422811264651961171, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
@@ -2742,31 +2942,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4451054465529050841, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.98039514
+      value: 0.18227424
       objectReference: {fileID: 0}
     - target: {fileID: 4451054465529050841, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.003921592
+      value: 0.35181272
       objectReference: {fileID: 0}
     - target: {fileID: 4451054465529050841, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.r
-      value: 0.96863043
+      value: 0.99590105
       objectReference: {fileID: 0}
     - target: {fileID: 4453562545948659996, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.98039514
+      value: 0.18227424
       objectReference: {fileID: 0}
     - target: {fileID: 4453562545948659996, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.003921592
+      value: 0.35181272
       objectReference: {fileID: 0}
     - target: {fileID: 4453562545948659996, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.r
-      value: 0.96863043
+      value: 0.99590105
       objectReference: {fileID: 0}
     - target: {fileID: 4467300059311423299, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: D-Pad/Down  |  Gamepad
+      value: D-Pad Down  |  Xbox Controller
       objectReference: {fileID: 0}
     - target: {fileID: 4570504677037631955, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
@@ -2776,49 +2976,73 @@ PrefabInstance:
       propertyPath: m_Text
       value: unbound primary
       objectReference: {fileID: 0}
+    - target: {fileID: 4672569688661139964, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.b
+      value: 0.18431373
+      objectReference: {fileID: 0}
+    - target: {fileID: 4672569688661139964, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.g
+      value: 0.34901962
+      objectReference: {fileID: 0}
+    - target: {fileID: 4672569688661139964, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.r
+      value: 0.99607843
+      objectReference: {fileID: 0}
     - target: {fileID: 4868949296845439780, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: Left Stick Press  |  Gamepad
+      value: button4  |  Logitech Logitech Extreme 3D
       objectReference: {fileID: 0}
     - target: {fileID: 4889768657224706835, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.98039514
+      value: 0.18227424
       objectReference: {fileID: 0}
     - target: {fileID: 4889768657224706835, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.003921592
+      value: 0.35181272
       objectReference: {fileID: 0}
     - target: {fileID: 4889768657224706835, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.r
-      value: 0.96863043
+      value: 0.99590105
       objectReference: {fileID: 0}
     - target: {fileID: 4951654481578556694, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.98039514
+      value: 0.18227424
       objectReference: {fileID: 0}
     - target: {fileID: 4951654481578556694, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.003921592
+      value: 0.35181272
       objectReference: {fileID: 0}
     - target: {fileID: 4951654481578556694, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.r
-      value: 0.96863043
+      value: 0.99590105
       objectReference: {fileID: 0}
     - target: {fileID: 5039875976843615430, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.98039514
+      value: 0.18227424
       objectReference: {fileID: 0}
     - target: {fileID: 5039875976843615430, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.003921592
+      value: 0.35181272
       objectReference: {fileID: 0}
     - target: {fileID: 5039875976843615430, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.r
-      value: 0.96863043
+      value: 0.99590105
       objectReference: {fileID: 0}
     - target: {fileID: 5164200437655996610, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: D-Pad/Right  |  Gamepad
+      value: D-Pad Right  |  Xbox Controller
+      objectReference: {fileID: 0}
+    - target: {fileID: 5210037460404764516, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.b
+      value: 0.18431373
+      objectReference: {fileID: 0}
+    - target: {fileID: 5210037460404764516, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.g
+      value: 0.34901962
+      objectReference: {fileID: 0}
+    - target: {fileID: 5210037460404764516, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.r
+      value: 0.99607843
       objectReference: {fileID: 0}
     - target: {fileID: 5266727415485189657, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
@@ -2830,15 +3054,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5328566828246695936, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.98039514
+      value: 0.18227424
       objectReference: {fileID: 0}
     - target: {fileID: 5328566828246695936, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.003921592
+      value: 0.35181272
       objectReference: {fileID: 0}
     - target: {fileID: 5328566828246695936, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.r
-      value: 0.96863043
+      value: 0.99590105
       objectReference: {fileID: 0}
     - target: {fileID: 5340426720983136300, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_SizeDelta.x
@@ -2846,15 +3070,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5689373278691190474, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.98039514
+      value: 0.18227424
       objectReference: {fileID: 0}
     - target: {fileID: 5689373278691190474, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.003921592
+      value: 0.35181272
       objectReference: {fileID: 0}
     - target: {fileID: 5689373278691190474, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.r
-      value: 0.96863043
+      value: 0.99590105
+      objectReference: {fileID: 0}
+    - target: {fileID: 5701859428467309587, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.b
+      value: 0.18431373
+      objectReference: {fileID: 0}
+    - target: {fileID: 5701859428467309587, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.g
+      value: 0.34901962
+      objectReference: {fileID: 0}
+    - target: {fileID: 5701859428467309587, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.r
+      value: 0.99607843
       objectReference: {fileID: 0}
     - target: {fileID: 5815640477682624339, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
@@ -2864,41 +3100,121 @@ PrefabInstance:
       propertyPath: m_Text
       value: unbound secondary
       objectReference: {fileID: 0}
+    - target: {fileID: 5977648940371477545, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.b
+      value: 0.18431373
+      objectReference: {fileID: 0}
+    - target: {fileID: 5977648940371477545, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.g
+      value: 0.34901962
+      objectReference: {fileID: 0}
+    - target: {fileID: 5977648940371477545, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.r
+      value: 0.99607843
+      objectReference: {fileID: 0}
+    - target: {fileID: 6102535068553591041, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.b
+      value: 0.18431373
+      objectReference: {fileID: 0}
+    - target: {fileID: 6102535068553591041, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.g
+      value: 0.34901962
+      objectReference: {fileID: 0}
+    - target: {fileID: 6102535068553591041, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.r
+      value: 0.99607843
+      objectReference: {fileID: 0}
+    - target: {fileID: 6106484410514789176, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.b
+      value: 0.18431373
+      objectReference: {fileID: 0}
+    - target: {fileID: 6106484410514789176, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.g
+      value: 0.34901962
+      objectReference: {fileID: 0}
+    - target: {fileID: 6106484410514789176, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.r
+      value: 0.99607843
+      objectReference: {fileID: 0}
     - target: {fileID: 6244687549842556832, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: Select  |  Gamepad
+      value: Select  |  Xbox Controller
       objectReference: {fileID: 0}
     - target: {fileID: 6249148924523466553, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.98039514
+      value: 0.18227424
       objectReference: {fileID: 0}
     - target: {fileID: 6249148924523466553, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.003921592
+      value: 0.35181272
       objectReference: {fileID: 0}
     - target: {fileID: 6249148924523466553, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.r
-      value: 0.96863043
+      value: 0.99590105
       objectReference: {fileID: 0}
     - target: {fileID: 6304952119361939104, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.98039514
+      value: 0.18227424
       objectReference: {fileID: 0}
     - target: {fileID: 6304952119361939104, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.003921592
+      value: 0.35181272
       objectReference: {fileID: 0}
     - target: {fileID: 6304952119361939104, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.r
-      value: 0.96863043
+      value: 0.99590105
       objectReference: {fileID: 0}
     - target: {fileID: 6346487273923892604, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: Button North  |  Gamepad
+      value: Y  |  Xbox Controller
+      objectReference: {fileID: 0}
+    - target: {fileID: 6424563093967552853, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.b
+      value: 0.18431373
+      objectReference: {fileID: 0}
+    - target: {fileID: 6424563093967552853, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.g
+      value: 0.34901962
+      objectReference: {fileID: 0}
+    - target: {fileID: 6424563093967552853, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.r
+      value: 0.99607843
+      objectReference: {fileID: 0}
+    - target: {fileID: 6482467007924479051, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.b
+      value: 0.18431373
+      objectReference: {fileID: 0}
+    - target: {fileID: 6482467007924479051, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.g
+      value: 0.34901962
+      objectReference: {fileID: 0}
+    - target: {fileID: 6482467007924479051, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.r
+      value: 0.99607843
       objectReference: {fileID: 0}
     - target: {fileID: 6617072408512557860, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: unbound secondary
+      value: stick/y  |  Logitech Logitech Extreme 3D
+      objectReference: {fileID: 0}
+    - target: {fileID: 6620939849684755752, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6620939849684755752, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6620939849684755752, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6620939849684755752, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6620939849684755752, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6756506070582194771, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
@@ -2916,6 +3232,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6816143449625007078, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6816143449826745266, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -2924,29 +3244,69 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6816143449987551942, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6816143449987551942, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6816143449987551993, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_Size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6816143449987551993, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_Value
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6816143450148099111, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6816143450148099111, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 0.00012207031
       objectReference: {fileID: 0}
     - target: {fileID: 6816143450148099111, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -56619
+      value: -63108
+      objectReference: {fileID: 0}
+    - target: {fileID: 6816143450731046810, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6816143450731046810, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6816143450731046810, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6816143450731046810, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6816143450919911990, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6816143450919911990, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6941805570317866001, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.98039514
+      value: 0.18227424
       objectReference: {fileID: 0}
     - target: {fileID: 6941805570317866001, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.003921592
+      value: 0.35181272
       objectReference: {fileID: 0}
     - target: {fileID: 6941805570317866001, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.r
-      value: 0.96863043
+      value: 0.99590105
       objectReference: {fileID: 0}
     - target: {fileID: 6970047595848165980, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
@@ -2958,19 +3318,79 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7033911643168885920, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.98039514
+      value: 0.18227424
       objectReference: {fileID: 0}
     - target: {fileID: 7033911643168885920, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.003921592
+      value: 0.35181272
       objectReference: {fileID: 0}
     - target: {fileID: 7033911643168885920, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.r
-      value: 0.96863043
+      value: 0.99590105
       objectReference: {fileID: 0}
     - target: {fileID: 7074057707768373866, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
       value: unbound primary
+      objectReference: {fileID: 0}
+    - target: {fileID: 7385819092327779251, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.b
+      value: 0.18431373
+      objectReference: {fileID: 0}
+    - target: {fileID: 7385819092327779251, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.g
+      value: 0.34901962
+      objectReference: {fileID: 0}
+    - target: {fileID: 7385819092327779251, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.r
+      value: 0.99607843
+      objectReference: {fileID: 0}
+    - target: {fileID: 7450879966991792289, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.b
+      value: 0.18431373
+      objectReference: {fileID: 0}
+    - target: {fileID: 7450879966991792289, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.g
+      value: 0.34901962
+      objectReference: {fileID: 0}
+    - target: {fileID: 7450879966991792289, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.r
+      value: 0.99607843
+      objectReference: {fileID: 0}
+    - target: {fileID: 7475349021932235682, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.b
+      value: 0.18431373
+      objectReference: {fileID: 0}
+    - target: {fileID: 7475349021932235682, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.g
+      value: 0.34901962
+      objectReference: {fileID: 0}
+    - target: {fileID: 7475349021932235682, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.r
+      value: 0.99607843
+      objectReference: {fileID: 0}
+    - target: {fileID: 7696631636953836694, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.b
+      value: 0.18431373
+      objectReference: {fileID: 0}
+    - target: {fileID: 7696631636953836694, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.g
+      value: 0.34901962
+      objectReference: {fileID: 0}
+    - target: {fileID: 7696631636953836694, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.r
+      value: 0.99607843
+      objectReference: {fileID: 0}
+    - target: {fileID: 7719441318740744869, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.b
+      value: 0.18431373
+      objectReference: {fileID: 0}
+    - target: {fileID: 7719441318740744869, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.g
+      value: 0.34901962
+      objectReference: {fileID: 0}
+    - target: {fileID: 7719441318740744869, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.r
+      value: 0.99607843
       objectReference: {fileID: 0}
     - target: {fileID: 7767937897854266057, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
@@ -2986,47 +3406,115 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8302782170494490803, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.98039514
+      value: 0.18227424
       objectReference: {fileID: 0}
     - target: {fileID: 8302782170494490803, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.003921592
+      value: 0.35181272
       objectReference: {fileID: 0}
     - target: {fileID: 8302782170494490803, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.r
-      value: 0.96863043
+      value: 0.99590105
       objectReference: {fileID: 0}
     - target: {fileID: 8445296986363858427, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: D-Pad/Left  |  Gamepad
+      value: D-Pad Left  |  Xbox Controller
+      objectReference: {fileID: 0}
+    - target: {fileID: 8479269108856774187, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.b
+      value: 0.18431373
+      objectReference: {fileID: 0}
+    - target: {fileID: 8479269108856774187, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.g
+      value: 0.34901962
+      objectReference: {fileID: 0}
+    - target: {fileID: 8479269108856774187, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.r
+      value: 0.99607843
       objectReference: {fileID: 0}
     - target: {fileID: 8492251281701726389, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.98039514
+      value: 0.18227424
       objectReference: {fileID: 0}
     - target: {fileID: 8492251281701726389, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.003921592
+      value: 0.35181272
       objectReference: {fileID: 0}
     - target: {fileID: 8492251281701726389, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.r
-      value: 0.96863043
+      value: 0.99590105
+      objectReference: {fileID: 0}
+    - target: {fileID: 8501815763853457733, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.b
+      value: 0.18431373
+      objectReference: {fileID: 0}
+    - target: {fileID: 8501815763853457733, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.g
+      value: 0.34901962
+      objectReference: {fileID: 0}
+    - target: {fileID: 8501815763853457733, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.r
+      value: 0.99607843
+      objectReference: {fileID: 0}
+    - target: {fileID: 8889088519320662887, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8889088519320662887, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8889088519320662887, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8889088519320662887, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8889088519320662887, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8903186128749480736, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
       value: unbound secondary
       objectReference: {fileID: 0}
+    - target: {fileID: 9066374228285795401, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.b
+      value: 0.18431373
+      objectReference: {fileID: 0}
+    - target: {fileID: 9066374228285795401, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.g
+      value: 0.34901962
+      objectReference: {fileID: 0}
+    - target: {fileID: 9066374228285795401, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.r
+      value: 0.99607843
+      objectReference: {fileID: 0}
+    - target: {fileID: 9086257608266007545, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.b
+      value: 0.18431373
+      objectReference: {fileID: 0}
+    - target: {fileID: 9086257608266007545, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.g
+      value: 0.34901962
+      objectReference: {fileID: 0}
+    - target: {fileID: 9086257608266007545, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: targetColor.r
+      value: 0.99607843
+      objectReference: {fileID: 0}
     - target: {fileID: 9172923972295468052, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.b
-      value: 0.98039514
+      value: 0.18227424
       objectReference: {fileID: 0}
     - target: {fileID: 9172923972295468052, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.g
-      value: 0.003921592
+      value: 0.35181272
       objectReference: {fileID: 0}
     - target: {fileID: 9172923972295468052, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Color.r
-      value: 0.96863043
+      value: 0.99590105
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

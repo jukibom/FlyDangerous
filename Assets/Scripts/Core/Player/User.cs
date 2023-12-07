@@ -160,6 +160,24 @@ namespace Core.Player {
                 !_mouseLookActive && Preferences.Instance.GetBool("showMouseWidget");
             inGameUI.MouseWidget.ShouldShowText =
                 !_mouseLookActive && Preferences.Instance.GetBool("showMouseWidgetValues");
+
+            // draw input values
+            // TODO: Tidy this up, reuse for replays etc (move to ship physics class most likely)
+            var showInputDisplay = Preferences.Instance.GetBool("enableInputOverlay");
+            inGameUI.InputDisplay.gameObject.SetActive(showInputDisplay);
+            if (showInputDisplay) {
+                var showRaw = Preferences.Instance.GetBool("enableInputOverlayAsRaw");
+                var multiplier = showRaw ? 32768 : 1;
+                inGameUI.InputDisplay.UpdateAxisDisplay(
+                    _pitch * multiplier,
+                    _roll * multiplier,
+                    _yaw * multiplier,
+                    _throttle * multiplier,
+                    _lateralV * multiplier,
+                    _lateralH * multiplier,
+                    !showRaw
+                );
+            }
         }
 
         public void OnEnable() {

@@ -26,6 +26,7 @@ namespace GameUI {
         [SerializeField] private TargettingSystem targettingSystem;
         [SerializeField] private IndicatorSystem indicatorSystem;
         [SerializeField] private GameModeUIHandler gameModeUIHandler;
+        [SerializeField] private InputDisplay inputDisplay;
         [SerializeField] private CursorIcon cursor;
         [SerializeField] private Camera vrMouseCamera;
 
@@ -44,6 +45,7 @@ namespace GameUI {
         public TargettingSystem TargettingSystem => targettingSystem;
         public IndicatorSystem IndicatorSystem => indicatorSystem;
         public GameModeUIHandler GameModeUIHandler => gameModeUIHandler;
+        public InputDisplay InputDisplay => inputDisplay;
 
         private void Awake() {
             OnPauseToggle(false);
