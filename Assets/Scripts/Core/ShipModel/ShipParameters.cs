@@ -30,12 +30,14 @@ namespace Core.ShipModel {
             boostRechargeTime = 4f,
             boostCapacitorPercentCost = 70f,
             boostCapacityPercentChargeRate = 10f,
+            boostMaxDivertablePower = 0.4f,
             minUserLimitedVelocity = 250f
         };
 
         public float angularDrag;
         public float boostCapacitorPercentCost;
         public float boostCapacityPercentChargeRate;
+        public float boostMaxDivertablePower;
         public float boostMaxSpeedDropOffTime;
         public float boostRechargeTime;
         public float boostSpoolUpTime;
