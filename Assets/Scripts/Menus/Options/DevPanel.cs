@@ -3,6 +3,9 @@ using Core;
 using Core.ShipModel;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.Rendering.DebugUI;
+
+
 
 public class DevPanel : MonoBehaviour {
     [SerializeField] private InputField massTextField;
@@ -30,12 +33,19 @@ public class DevPanel : MonoBehaviour {
     [SerializeField] private InputField boostMaxDivertablePowerTextField;
     [SerializeField] private InputField intertialTensorMultiplierTextField;
     [SerializeField] private InputField minUserLimitedVelocityTextField;
+    [SerializeField] private InputField boostDivertEfficiencyTextField;
+    [SerializeField] private InputField boostSpoolUpTimeTextField;
 
-    private bool _initialised;
+    private bool _initialised; 
 
     // Start is called before the first frame update
     private void Start() {
         var defaults = ShipParameters.Defaults;
+
+        if (Game.Instance.ShipParameters.mass == defaults.mass)
+            massTextField.transform.parent.transform.parent.gameObject.SetActive(false);
+        if (Game.Instance.ShipParameters.inertiaTensorMultiplier == defaults.inertiaTensorMultiplier)
+            intertialTensorMultiplierTextField.transform.parent.transform.parent.gameObject.SetActive(false);
 
         massTextField.placeholder.GetComponent<Text>().text =
             defaults.mass.ToString(CultureInfo.InvariantCulture);
@@ -87,6 +97,10 @@ public class DevPanel : MonoBehaviour {
             defaults.inertiaTensorMultiplier.ToString(CultureInfo.InvariantCulture);
         minUserLimitedVelocityTextField.placeholder.GetComponent<Text>().text =
             defaults.minUserLimitedVelocity.ToString(CultureInfo.InvariantCulture);
+        boostDivertEfficiencyTextField.placeholder.GetComponent<Text>().text =
+            defaults.boostDivertEfficiency.ToString(CultureInfo.InvariantCulture);
+        boostSpoolUpTimeTextField.placeholder.GetComponent<Text>().text =
+            defaults.boostSpoolUpTime.ToString(CultureInfo.InvariantCulture);
 
         UpdateTextFields(Game.Instance.ShipParameters);
     }
@@ -97,12 +111,20 @@ public class DevPanel : MonoBehaviour {
 
     public void CopyToClipboard() {
         GUIUtility.systemCopyBuffer = GetFlightParams().ToJsonString();
+
     }
 
     public void LoadFromClipboard() {
         var data = GUIUtility.systemCopyBuffer;
         var parameters = ShipParameters.FromJsonString(data);
-        if (parameters != null) UpdateTextFields(parameters);
+        if (parameters != null)
+        {
+            if (parameters.mass != ShipParameters.Defaults.mass) 
+                massTextField.transform.parent.transform.parent.gameObject.SetActive(true);
+            if (parameters.inertiaTensorMultiplier != ShipParameters.Defaults.inertiaTensorMultiplier) 
+                intertialTensorMultiplierTextField.transform.parent.transform.parent.gameObject.SetActive(true);
+            UpdateTextFields(parameters);
+        }
     }
 
     // Update is called once per frame
@@ -157,11 +179,18 @@ public class DevPanel : MonoBehaviour {
             parameters.inertiaTensorMultiplier.ToString(CultureInfo.InvariantCulture);
         minUserLimitedVelocityTextField.text =
             parameters.minUserLimitedVelocity.ToString(CultureInfo.InvariantCulture);
+        boostDivertEfficiencyTextField.text =
+            parameters.boostDivertEfficiency.ToString(CultureInfo.InvariantCulture);
+        boostSpoolUpTimeTextField.text =
+            parameters.boostSpoolUpTime.ToString(CultureInfo.InvariantCulture);
+
 
         _initialised = true;
     }
 
     public ShipParameters GetFlightParams() {
+        
+
         if (!_initialised) return ShipParameters.Defaults;
 
         return new ShipParameters {
@@ -215,7 +244,10 @@ public class DevPanel : MonoBehaviour {
                 float.Parse(intertialTensorMultiplierTextField.text, CultureInfo.InvariantCulture),
             minUserLimitedVelocity =
                 float.Parse(minUserLimitedVelocityTextField.text, CultureInfo.InvariantCulture),
-            boostSpoolUpTime = 1 // can't currently change this
+            boostDivertEfficiency =
+                float.Parse(boostDivertEfficiencyTextField.text, CultureInfo.InvariantCulture),
+            boostSpoolUpTime =
+                float.Parse(boostSpoolUpTimeTextField.text, CultureInfo.InvariantCulture),
         };
     }
 }

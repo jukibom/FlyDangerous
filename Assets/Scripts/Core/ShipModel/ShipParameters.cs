@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 namespace Core.ShipModel {
@@ -31,8 +33,39 @@ namespace Core.ShipModel {
             boostCapacitorPercentCost = 70f,
             boostCapacityPercentChargeRate = 10f,
             boostMaxDivertablePower = 0.4f,
-            minUserLimitedVelocity = 250f
+            minUserLimitedVelocity = 250f,
+            boostDivertEfficiency = 1f
         };
+
+        private class NullableParameters{
+            public float? angularDrag { get; set; }
+            public float? boostCapacitorPercentCost { get; set; }
+            public float? boostCapacityPercentChargeRate { get; set; }
+            public float? boostMaxDivertablePower { get; set; }
+            public float? boostMaxSpeedDropOffTime { get; set; }
+            public float? boostRechargeTime { get; set; }
+            public float? boostSpoolUpTime { get; set; }
+            public float? drag { get; set; }
+            public float? inertiaTensorMultiplier { get; set; }
+            public float? latHMultiplier { get; set; }
+            public float? latVMultiplier { get; set; }
+            public float? mass { get; set; }
+            public float? maxAngularVelocity { get; set; }
+            public float? maxBoostSpeed { get; set; }
+            public float? maxSpeed { get; set; }
+            public float? maxThrust { get; set; }
+            public float? minUserLimitedVelocity { get; set; }
+            public float? pitchMultiplier { get; set; }
+            public float? rollMultiplier { get; set; }
+            public float? throttleMultiplier { get; set; }
+            public float? thrustBoostMultiplier { get; set; }
+            public float? torqueBoostMultiplier { get; set; }
+            public float? torqueThrustMultiplier { get; set; }
+            public float? totalBoostRotationalTime { get; set; }
+            public float? totalBoostTime { get; set; }
+            public float? yawMultiplier { get; set; }
+            public float? boostDivertEfficiency { get; set; }
+        }
 
         public float angularDrag;
         public float boostCapacitorPercentCost;
@@ -60,19 +93,35 @@ namespace Core.ShipModel {
         public float totalBoostRotationalTime;
         public float totalBoostTime;
         public float yawMultiplier;
+        public float boostDivertEfficiency;
 
         public string ToJsonString() {
-            return JsonConvert.SerializeObject(this, Formatting.Indented);
+            var json = JsonConvert.SerializeObject(this, Formatting.Indented);
+            var jObject = JObject.Parse(json);
+            if ((float)jObject.GetValue("mass") == ShipParameters.Defaults.mass)
+                jObject.Remove("mass");
+            if ((float)jObject.GetValue("inertiaTensorMultiplier") == ShipParameters.Defaults.inertiaTensorMultiplier)
+                jObject.Remove("inertiaTensorMultiplier");
+
+            return jObject.ToString(Formatting.Indented);
         }
 
         [CanBeNull]
         public static ShipParameters FromJsonString(string json) {
             try {
-                var parameters = JsonConvert.DeserializeObject<ShipParameters>(json);
-                if (parameters?.maxAngularVelocity == 0) parameters.maxAngularVelocity = Defaults.maxAngularVelocity;
-                if (parameters?.boostSpoolUpTime == 0) parameters.boostSpoolUpTime = Defaults.boostSpoolUpTime;
+                ShipParameters returnedParameters = ShipParameters.Defaults;
 
-                return parameters;
+                var parameters = JsonConvert.DeserializeObject<NullableParameters>(json);
+                
+                var type = typeof(ShipParameters);
+                var properties = type.GetProperties();
+
+                foreach (var property in properties)
+                {
+                    if (property.GetValue(parameters) != null)
+                            property.SetValue(returnedParameters, property.GetValue(parameters));
+                }
+                return returnedParameters;
             }
             catch (Exception e) {
                 Debug.LogWarning(e.Message);

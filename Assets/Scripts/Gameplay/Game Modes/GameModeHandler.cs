@@ -252,7 +252,7 @@ namespace Gameplay.Game_Modes {
                 yield return _gameModeCountdown.CountdownWithSound(_gameModeWithCountdown.StartingCountdownTime, timeRemaining => {
                     if (timeRemaining <= 0)
                         _gameModeWithCountdown.CountdownComplete();
-                    else if (_gameModeWithCountdown.AllowEarlyBoost && timeRemaining <= 1) _gameModeLifecycle.EnableShipBoostInput();
+                    else if (_gameModeWithCountdown.AllowEarlyBoost && timeRemaining <= Game.Instance.ShipParameters.boostSpoolUpTime) _gameModeLifecycle.EnableShipBoostInput();
                 });
             }
 

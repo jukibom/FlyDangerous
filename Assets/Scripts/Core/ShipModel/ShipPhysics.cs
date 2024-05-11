@@ -575,8 +575,8 @@ namespace Core.ShipModel {
                 if (delta > 0) {
                     var latInputTotal = Mathf.Abs(latH) + Mathf.Abs(latV);
                     if (latInputTotal > 0) {
-                        var latHComponent = Mathf.Abs(latH) / latInputTotal;
-                        var latVComponent = Mathf.Abs(latV) / latInputTotal;
+                        var latHComponent = Mathf.Abs(latH) / latInputTotal * FlightParameters.boostDivertEfficiency;
+                        var latVComponent = Mathf.Abs(latV) / latInputTotal * FlightParameters.boostDivertEfficiency; ;
                         latH *= 1 + delta * latHComponent;
                         latV *= 1 + delta * latVComponent;
                     }
