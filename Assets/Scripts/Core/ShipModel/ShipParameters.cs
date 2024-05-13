@@ -96,14 +96,7 @@ namespace Core.ShipModel {
         public float boostDivertEfficiency;
 
         public string ToJsonString() {
-            var json = JsonConvert.SerializeObject(this, Formatting.Indented);
-            var jObject = JObject.Parse(json);
-            if ((float)jObject.GetValue("mass") == ShipParameters.Defaults.mass)
-                jObject.Remove("mass");
-            if ((float)jObject.GetValue("inertiaTensorMultiplier") == ShipParameters.Defaults.inertiaTensorMultiplier)
-                jObject.Remove("inertiaTensorMultiplier");
-
-            return jObject.ToString(Formatting.Indented);
+                return JsonConvert.SerializeObject(this, Formatting.Indented);
         }
 
         [CanBeNull]

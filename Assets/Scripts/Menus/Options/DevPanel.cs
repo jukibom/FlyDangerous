@@ -1,6 +1,8 @@
 using System.Globalization;
 using Core;
 using Core.ShipModel;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityEngine.Rendering.DebugUI;
@@ -46,6 +48,8 @@ public class DevPanel : MonoBehaviour {
             massTextField.transform.parent.transform.parent.gameObject.SetActive(false);
         if (Game.Instance.ShipParameters.inertiaTensorMultiplier == defaults.inertiaTensorMultiplier)
             intertialTensorMultiplierTextField.transform.parent.transform.parent.gameObject.SetActive(false);
+        if (Game.Instance.ShipParameters.boostSpoolUpTime == defaults.boostSpoolUpTime) // remove this once boost Spool uptime is properly implemented
+            boostSpoolUpTimeTextField.transform.parent.transform.parent.gameObject.SetActive(false);
 
         massTextField.placeholder.GetComponent<Text>().text =
             defaults.mass.ToString(CultureInfo.InvariantCulture);
@@ -110,8 +114,17 @@ public class DevPanel : MonoBehaviour {
     }
 
     public void CopyToClipboard() {
-        GUIUtility.systemCopyBuffer = GetFlightParams().ToJsonString();
+        var json = GetFlightParams().ToJsonString();
 
+        var jObject = JObject.Parse(json);
+        if ((float)jObject.GetValue("mass") == ShipParameters.Defaults.mass)
+            jObject.Remove("mass");
+        if ((float)jObject.GetValue("inertiaTensorMultiplier") == ShipParameters.Defaults.inertiaTensorMultiplier)
+            jObject.Remove("inertiaTensorMultiplier");
+        if ((float)jObject.GetValue("boostSpoolUpTime") == ShipParameters.Defaults.boostSpoolUpTime) // again remove if boost spool up time has been properly implemented. 
+            jObject.Remove("boostSpoolUpTime");
+
+        GUIUtility.systemCopyBuffer = jObject.ToString(Formatting.Indented);
     }
 
     public void LoadFromClipboard() {
