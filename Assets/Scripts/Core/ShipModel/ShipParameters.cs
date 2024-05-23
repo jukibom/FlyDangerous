@@ -70,10 +70,9 @@ namespace Core.ShipModel {
         public float yawMultiplier;
         public float boostDivertEfficiency;
 
-
         private static string[] nameList = {
             "angularDrag",
-            "boostCapacitorPercentCost{",
+            "boostCapacitorPercentCost",
             "boostCapacityPercentChargeRate",
             "boostMaxDivertablePower",
             "boostMaxSpeedDropOffTime",
@@ -109,7 +108,6 @@ namespace Core.ShipModel {
         public static ShipParameters FromJsonString(string json) {
             
             try {
-                
                 JObject parameters = JObject.Parse(json);
                 JObject defaults = JObject.Parse(ShipParameters.Defaults.ToJsonString());
                 
@@ -125,5 +123,6 @@ namespace Core.ShipModel {
                 return null;
             }
         }
+
     }
 }
