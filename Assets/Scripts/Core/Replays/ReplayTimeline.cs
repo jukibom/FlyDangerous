@@ -48,6 +48,7 @@ namespace Core.Replays {
             Replay = replay;
             ShipReplayObject = ship;
             ship.ShipPhysics.ShipProfile = replay.ShipProfile;
+            ship.ShipPhysics.FlightParameters = replay.ShipParameters;
 
             // hide all rendering assets until told to show (e.g. by distance in FixedUpdate)
             if (ship.ShipPhysics.ShipModel != null) ship.ShipPhysics.ShipModel.SetVisible(false);

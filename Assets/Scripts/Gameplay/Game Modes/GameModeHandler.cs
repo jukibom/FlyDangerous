@@ -125,7 +125,7 @@ namespace Gameplay.Game_Modes {
             _startPosition = LocalPlayer.AbsoluteWorldPosition;
             _startRotation = LocalPlayer.transform.rotation;
 
-            HandleStartSequence();
+                HandleStartSequence();
         }
 
         private void Restart() {
@@ -310,7 +310,14 @@ namespace Gameplay.Game_Modes {
         }
 
         private bool IsValid() {
-            return !Application.version.Contains("-dev") && Game.Instance.ShipParameters.ToJsonString().Equals(ShipParameters.Defaults.ToJsonString());
+            try 
+            {
+                return !Application.version.Contains("-dev") && Game.Instance.ShipParameters.ToString().Equals(Game.Instance.LoadedLevelData.shipParameters.ToString()); 
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         private IEnumerator ShowLevelAndMusicName() {
@@ -323,7 +330,7 @@ namespace Gameplay.Game_Modes {
                 ? ""
                 : $"\"{_levelData.name.ToUpper()}\" {(_levelData.author.IsNullOrEmpty() ? "" : "by " + _levelData.author.ToUpper())}";
             bottomRightText.text = musicTrack == MusicTrack.None ? "" : $"MUSIC: {musicTrack.Name.ToUpper()} by {musicTrack.Artist.ToUpper()}";
-            bottomCanvasGroup.alpha = 0;
+            bottomCanvasGroup.alpha = 0; 
 
             yield return new WaitForSeconds(1);
             while (bottomCanvasGroup.alpha < 1) {

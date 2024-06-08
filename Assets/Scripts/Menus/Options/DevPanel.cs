@@ -5,8 +5,6 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEngine.Rendering.DebugUI;
-
 
 
 public class DevPanel : MonoBehaviour {
@@ -42,14 +40,10 @@ public class DevPanel : MonoBehaviour {
 
     // Start is called before the first frame update
     private void Start() {
-        var defaults = ShipParameters.Defaults;
+        var defaults = ShipParameters.CreateDefaults();
 
-        if (Game.Instance.ShipParameters.mass == defaults.mass)
-            massTextField.transform.parent.transform.parent.gameObject.SetActive(false);
-        if (Game.Instance.ShipParameters.inertiaTensorMultiplier == defaults.inertiaTensorMultiplier)
-            intertialTensorMultiplierTextField.transform.parent.transform.parent.gameObject.SetActive(false);
-        if (Game.Instance.ShipParameters.boostSpoolUpTime == defaults.boostSpoolUpTime) // remove this once boost Spool uptime is properly implemented
-            boostSpoolUpTimeTextField.transform.parent.transform.parent.gameObject.SetActive(false);
+        
+        boostSpoolUpTimeTextField.transform.parent.transform.parent.gameObject.SetActive(false); // remove once audio issues are fixed
 
         massTextField.placeholder.GetComponent<Text>().text =
             defaults.mass.ToString(CultureInfo.InvariantCulture);
@@ -109,39 +103,46 @@ public class DevPanel : MonoBehaviour {
         UpdateTextFields(Game.Instance.ShipParameters);
     }
 
+    public void EnableLegacyTextfields() {
+        massTextField.transform.parent.transform.parent.gameObject.SetActive(true);
+        intertialTensorMultiplierTextField.transform.parent.transform.parent.gameObject.SetActive(true);
+    }
+
     public void RestoreDefaults() {
-        UpdateTextFields(ShipParameters.Defaults);
+        UpdateTextFields(ShipParameters.CreateDefaults());
     }
 
     public void CopyToClipboard() {
         var json = GetFlightParams().ToJsonString();
 
         var jObject = JObject.Parse(json);
-        if ((float)jObject.GetValue("mass") == ShipParameters.Defaults.mass)
+        if ((float)jObject.GetValue("mass") == ShipParameters.CreateDefaults().mass)
             jObject.Remove("mass");
-        if ((float)jObject.GetValue("inertiaTensorMultiplier") == ShipParameters.Defaults.inertiaTensorMultiplier)
+        if ((float)jObject.GetValue("inertiaTensorMultiplier") == ShipParameters.CreateDefaults().inertiaTensorMultiplier)
             jObject.Remove("inertiaTensorMultiplier");
-        if ((float)jObject.GetValue("boostSpoolUpTime") == ShipParameters.Defaults.boostSpoolUpTime) // again remove if boost spool up time has been properly implemented. 
+        if ((float)jObject.GetValue("boostSpoolUpTime") == ShipParameters.CreateDefaults().boostSpoolUpTime) // again remove oncce audio issues are fixed. 
             jObject.Remove("boostSpoolUpTime");
 
         GUIUtility.systemCopyBuffer = jObject.ToString(Formatting.Indented);
     }
 
     public void LoadFromClipboard() {
-        var data = GUIUtility.systemCopyBuffer;
+        var data = GUIUtility.systemCopyBuffer.ToString();
         var parameters = ShipParameters.FromJsonString(data);
         if (parameters != null)
         {
-            if (parameters.mass != ShipParameters.Defaults.mass) 
-                massTextField.transform.parent.transform.parent.gameObject.SetActive(true);
-            if (parameters.inertiaTensorMultiplier != ShipParameters.Defaults.inertiaTensorMultiplier) 
-                intertialTensorMultiplierTextField.transform.parent.transform.parent.gameObject.SetActive(true);
+            if (Game.Instance.ShipParameters.mass == ShipParameters.CreateDefaults().mass && Game.Instance.ShipParameters.inertiaTensorMultiplier == ShipParameters.CreateDefaults().inertiaTensorMultiplier) //Nececary IF stamement because ShipParameters can be changed before the menu is opened for the first time.  
+                EnableLegacyTextfields();
             UpdateTextFields(parameters);
         }
     }
 
     // Update is called once per frame
     public void UpdateTextFields(ShipParameters parameters) {
+
+        if (Game.Instance.ShipParameters.mass == ShipParameters.CreateDefaults().mass && Game.Instance.ShipParameters.inertiaTensorMultiplier == ShipParameters.CreateDefaults().inertiaTensorMultiplier) //Nececary IF stamement because ShipParameters can be changed before the menu is opened for the first time.  
+            EnableLegacyTextfields();
+
         massTextField.text =
             parameters.mass.ToString(CultureInfo.InvariantCulture);
         maxSpeedTextField.text =
@@ -197,14 +198,12 @@ public class DevPanel : MonoBehaviour {
         boostSpoolUpTimeTextField.text =
             parameters.boostSpoolUpTime.ToString(CultureInfo.InvariantCulture);
 
-
         _initialised = true;
     }
 
     public ShipParameters GetFlightParams() {
-        
 
-        if (!_initialised) return ShipParameters.Defaults;
+        if (!_initialised) return ShipParameters.CreateDefaults();
 
         return new ShipParameters {
             mass =

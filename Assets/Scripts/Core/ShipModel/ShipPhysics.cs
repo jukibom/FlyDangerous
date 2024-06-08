@@ -78,7 +78,7 @@ namespace Core.ShipModel {
 
         public ShipParameters FlightParameters {
             get {
-                if (!targetRigidbody || _shipParameters == null) return ShipParameters.Defaults;
+                if (!targetRigidbody || _shipParameters == null) return ShipParameters.CreateDefaults();
                 return _shipParameters;
             }
             set {
@@ -175,7 +175,7 @@ namespace Core.ShipModel {
 
         public void Awake() {
             // init physics
-            FlightParameters = ShipParameters.Defaults;
+            FlightParameters = ShipParameters.CreateDefaults();
 
             // get components
             _modifierEngine = GetComponent<ModifierEngine>();
