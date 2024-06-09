@@ -131,8 +131,9 @@ public class DevPanel : MonoBehaviour {
         var parameters = ShipParameters.FromJsonString(data);
         if (parameters != null)
         {
-            if (Game.Instance.ShipParameters.mass == ShipParameters.CreateDefaults().mass && Game.Instance.ShipParameters.inertiaTensorMultiplier == ShipParameters.CreateDefaults().inertiaTensorMultiplier) //Nececary IF stamement because ShipParameters can be changed before the menu is opened for the first time.  
+            if (parameters.mass != ShipParameters.CreateDefaults().mass || parameters.inertiaTensorMultiplier != ShipParameters.CreateDefaults().inertiaTensorMultiplier) //Nececary IF stamement because ShipParameters can be changed before the menu is opened for the first time.  
                 EnableLegacyTextfields();
+
             UpdateTextFields(parameters);
         }
     }
@@ -140,7 +141,7 @@ public class DevPanel : MonoBehaviour {
     // Update is called once per frame
     public void UpdateTextFields(ShipParameters parameters) {
 
-        if (Game.Instance.ShipParameters.mass == ShipParameters.CreateDefaults().mass && Game.Instance.ShipParameters.inertiaTensorMultiplier == ShipParameters.CreateDefaults().inertiaTensorMultiplier) //Nececary IF stamement because ShipParameters can be changed before the menu is opened for the first time.  
+        if (Game.Instance.ShipParameters.mass != ShipParameters.CreateDefaults().mass || Game.Instance.ShipParameters.inertiaTensorMultiplier != ShipParameters.CreateDefaults().inertiaTensorMultiplier) //Nececary IF stamement because ShipParameters can be changed before the menu is opened for the first time.  
             EnableLegacyTextfields();
 
         massTextField.text =
