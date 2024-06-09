@@ -106,10 +106,10 @@ namespace Core {
         public ShipParameters ShipParameters {
             get {
                 if (_shipParameters != null) return _shipParameters;
-                _shipParameters = ShipParameters.Defaults;
+                _shipParameters = ShipParameters.CreateDefaults();
                 var player = FdPlayer.FindLocalShipPlayer;
                 if (player != null) _shipParameters = player.ShipPhysics.FlightParameters;
-                return _shipParameters;
+                return _shipParameters; 
             }
             set {
                 _shipParameters = value;
@@ -328,6 +328,8 @@ namespace Core {
                 loadingPlayer.transform.position = levelData.startPosition.ToVector3();
 
                 yield return _levelLoader.StartGame(levelData);
+
+                Game.Instance.ActiveGameReplays = Replay.ReplaysForLevel(levelData);
 
                 // wait for all known currently loading players to have finished loading
                 loadingPlayer.SetLoaded();
