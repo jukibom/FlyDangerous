@@ -35,7 +35,7 @@ public class DevPanel : MonoBehaviour {
 
     // Start is called before the first frame update
     private void Start() {
-        var defaults = ShipParameters.Defaults;
+        var defaults = ShipParameters.GetDefaults();
 
         massTextField.placeholder.GetComponent<Text>().text =
             defaults.mass.ToString(CultureInfo.InvariantCulture);
@@ -92,7 +92,7 @@ public class DevPanel : MonoBehaviour {
     }
 
     public void RestoreDefaults() {
-        UpdateTextFields(ShipParameters.Defaults);
+        UpdateTextFields(ShipParameters.GetDefaults());
     }
 
     public void CopyToClipboard() {
@@ -162,7 +162,7 @@ public class DevPanel : MonoBehaviour {
     }
 
     public ShipParameters GetFlightParams() {
-        if (!_initialised) return ShipParameters.Defaults;
+        if (!_initialised) return ShipParameters.GetDefaults();
 
         return new ShipParameters {
             mass =
