@@ -106,7 +106,7 @@ namespace Core {
         public ShipParameters ShipParameters {
             get {
                 if (_shipParameters != null) return _shipParameters;
-                _shipParameters = ShipParameters.GetDefaults();
+                _shipParameters = ShipParameters.Defaults();
                 var player = FdPlayer.FindLocalShipPlayer;
                 if (player != null) _shipParameters = player.ShipPhysics.FlightParameters;
                 return _shipParameters;

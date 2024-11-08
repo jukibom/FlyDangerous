@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 
-namespace Core.ShipModel {
-    public class ShipParameters {
+namespace Core.ShipModel
+{
+    public class ShipParameters
+    {
 
         private class DefaultValues
         {
@@ -38,95 +41,94 @@ namespace Core.ShipModel {
             public const float minUserLimitedVelocity = 250f;
         }
 
-        private static string[] nameList = { 
-            //IMPORTANT changing the order of these will change the hash string of the shipParameters. Only add parameters at the end! 
-            "boostCapacitorPercentCost",
-            "boostCapacityPercentChargeRate",
-            "boostMaxDivertablePower",
-            "boostMaxSpeedDropOffTime",
-            "boostRechargeTime",
-            "boostSpoolUpTime",
-            "drag",
-            "angularDrag",
-            "inertiaTensorMultiplier",
-            "latHMultiplier",
-            "latVMultiplier",
-            "mass",
-            "maxAngularVelocity",
-            "maxBoostSpeed",
-            "maxSpeed",
-            "maxThrust",
-            "minUserLimitedVelocity",
-            "pitchMultiplier",
-            "yawMultiplier",
-            "rollMultiplier",
-            "throttleMultiplier",
-            "thrustBoostMultiplier",
-            "torqueBoostMultiplier",
-            "torqueThrustMultiplier",
-            "totalBoostRotationalTime",
-            "totalBoostTime"
-        };
-
-        public static ShipParameters GetDefaults()
+        public static ShipParameters Defaults()
         {
-            return new();
+            return new(
+                
+                );
         }
 
+        [JsonProperty(Order = 1)]
         [DefaultValue(DefaultValues.boostCapacitorPercentCost)]
         public float boostCapacitorPercentCost = DefaultValues.boostCapacitorPercentCost;
+        [JsonProperty(Order = 2)]
         [DefaultValue(DefaultValues.boostCapacityPercentChargeRate)]
         public float boostCapacityPercentChargeRate = DefaultValues.boostCapacityPercentChargeRate;
+        [JsonProperty(Order = 3)]
         [DefaultValue(DefaultValues.boostMaxDivertablePower)]
         public float boostMaxDivertablePower = DefaultValues.boostMaxDivertablePower;
+        [JsonProperty(Order = 4)]
         [DefaultValue(DefaultValues.boostMaxSpeedDropOffTime)]
         public float boostMaxSpeedDropOffTime = DefaultValues.boostMaxSpeedDropOffTime;
+        [JsonProperty(Order = 5)]
         [DefaultValue(DefaultValues.boostRechargeTime)]
         public float boostRechargeTime = DefaultValues.boostRechargeTime;
+        [JsonProperty(Order = 6)]
         [DefaultValue(DefaultValues.boostSpoolUpTime)]
         public float boostSpoolUpTime = DefaultValues.boostSpoolUpTime;
+        [JsonProperty(Order = 7)]
         [DefaultValue(DefaultValues.drag)]
         public float drag = DefaultValues.drag;
+        [JsonProperty(Order = 8)]
         [DefaultValue(DefaultValues.angularDrag)]
         public float angularDrag = DefaultValues.angularDrag;
+        [JsonProperty(Order = 9)]
         [DefaultValue(DefaultValues.inertiaTensorMultiplier)]
         public float inertiaTensorMultiplier = DefaultValues.inertiaTensorMultiplier;
+        [JsonProperty(Order = 10)]
         [DefaultValue(DefaultValues.latHMultiplier)]
         public float latHMultiplier = DefaultValues.latHMultiplier;
+        [JsonProperty(Order = 11)]
         [DefaultValue(DefaultValues.latVMultiplier)]
         public float latVMultiplier = DefaultValues.latVMultiplier;
+        [JsonProperty(Order = 12)]
         [DefaultValue(DefaultValues.mass)]
         public float mass = DefaultValues.mass;
+        [JsonProperty(Order = 13)]
         [DefaultValue(DefaultValues.maxAngularVelocity)]
         public float maxAngularVelocity = DefaultValues.maxAngularVelocity;
+        [JsonProperty(Order = 14)]
         [DefaultValue(DefaultValues.maxBoostSpeed)]
         public float maxBoostSpeed = DefaultValues.maxBoostSpeed;
+        [JsonProperty(Order = 15)]
         [DefaultValue(DefaultValues.maxSpeed)]
         public float maxSpeed = DefaultValues.maxSpeed;
+        [JsonProperty(Order = 16)]
         [DefaultValue(DefaultValues.maxThrust)]
         public float maxThrust = DefaultValues.maxThrust;
+        [JsonProperty(Order = 17)]
         [DefaultValue(DefaultValues.minUserLimitedVelocity)]
         public float minUserLimitedVelocity = DefaultValues.minUserLimitedVelocity;
+        [JsonProperty(Order = 18)]
         [DefaultValue(DefaultValues.pitchMultiplier)]
         public float pitchMultiplier = DefaultValues.pitchMultiplier;
+        [JsonProperty(Order = 19)]
         [DefaultValue(DefaultValues.yawMultiplier)]
         public float yawMultiplier = DefaultValues.yawMultiplier;
+        [JsonProperty(Order = 20)]
         [DefaultValue(DefaultValues.rollMultiplier)]
         public float rollMultiplier = DefaultValues.rollMultiplier;
+        [JsonProperty(Order = 21)]
         [DefaultValue(DefaultValues.throttleMultiplier)]
         public float throttleMultiplier = DefaultValues.throttleMultiplier;
+        [JsonProperty(Order = 22)]
         [DefaultValue(DefaultValues.thrustBoostMultiplier)]
         public float thrustBoostMultiplier = DefaultValues.thrustBoostMultiplier;
+        [JsonProperty(Order = 23)]
         [DefaultValue(DefaultValues.torqueBoostMultiplier)]
         public float torqueBoostMultiplier = DefaultValues.torqueBoostMultiplier;
+        [JsonProperty(Order = 24)]
         [DefaultValue(DefaultValues.torqueThrustMultiplier)]
         public float torqueThrustMultiplier = DefaultValues.torqueThrustMultiplier;
+        [JsonProperty(Order = 25)]
         [DefaultValue(DefaultValues.totalBoostRotationalTime)]
         public float totalBoostRotationalTime = DefaultValues.totalBoostRotationalTime;
+        [JsonProperty(Order = 26)]
         [DefaultValue(DefaultValues.totalBoostTime)]
         public float totalBoostTime = DefaultValues.totalBoostTime;
 
-        public string ToJsonString() {
+        public string ToJsonString()
+        {
             return JsonConvert.SerializeObject(this, Formatting.Indented);
         }
 
@@ -137,13 +139,12 @@ namespace Core.ShipModel {
             try
             {
                 JObject parameters = JObject.Parse(json);
-                JObject defaults = JObject.Parse(ShipParameters.GetDefaults().ToJsonString());
+                JObject defaults = JObject.Parse(ShipParameters.Defaults().ToJsonString());
 
-                foreach (string parameter in nameList)
-                {
+                foreach (string parameter in defaults.Properties())
                     if (!parameters.ContainsKey(parameter))
                         parameters.Add(parameter, defaults[parameter]);
-                }
+                
                 return JsonConvert.DeserializeObject<ShipParameters>(parameters.ToString());
             }
             catch (Exception e)
