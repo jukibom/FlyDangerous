@@ -27,30 +27,30 @@ namespace Core.Player {
         [SerializeField] public bool restartEnabled = true;
         [SerializeField] public bool pauseMenuEnabled = true;
         [SerializeField] public bool boostButtonForceEnabled;
-        private MouseShipInput _mouseShipInput;
         private bool _alternateFlightControls;
         private bool _autoRotateDrift;
-        private bool _showIndicatorHud = true;
 
         private Vector2 _cameraMouse;
         private bool _cameraRotateAxisControlsEnabled = true;
         private float _cameraX;
         private float _cameraY;
         private bool _freeCamEnabled;
-
-        private bool _mouseLookActive;
-        private bool _reverse;
-        private float _pitch;
-        private float _roll;
-        private float _yaw;
-        private float _throttle;
         private float _lateralH;
         private float _lateralV;
         private bool _limiter;
 
+        private bool _mouseLookActive;
+        private Vector2 _mousePositionDelta;
+        private MouseShipInput _mouseShipInput;
+        private float _pitch;
+        private bool _reverse;
+        private float _roll;
+        private bool _showIndicatorHud = true;
+
         private float _targetThrottle;
         private float _targetThrottleIncrement;
-        private Vector2 _mousePositionDelta;
+        private float _throttle;
+        private float _yaw;
 
         public InGameUI InGameUI => inGameUI;
 
@@ -645,6 +645,8 @@ namespace Core.Player {
         }
 
         private void OnDeviceChange(InputDevice device, InputDeviceChange change) {
+            if (change is not (InputDeviceChange.Added or InputDeviceChange.Removed)) return;
+
             var playerInput = GetComponent<PlayerInput>();
             if (change == InputDeviceChange.Added) InputUser.PerformPairingWithDevice(device, playerInput.user);
             if (change == InputDeviceChange.Removed) playerInput.user.UnpairDevice(device);
