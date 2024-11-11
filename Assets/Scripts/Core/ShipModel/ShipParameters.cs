@@ -8,6 +8,9 @@ namespace Core.ShipModel
 {
     public class ShipParameters
     {
+        // Helper for comparison. 
+        public static ShipParameters Defaults => new();
+        
         // used for member vars and json default declarations
         private struct DefaultValues
         {
@@ -37,11 +40,6 @@ namespace Core.ShipModel
             public const float BoostCapacityPercentChargeRate = 10f;
             public const float BoostMaxDivertablePower = 0.4f;
             public const float MinUserLimitedVelocity = 250f;
-        }
-
-        public static ShipParameters Defaults()
-        {
-            return new();
         }
         
         [JsonProperty(Order = 1), DefaultValue(DefaultValues.Mass)]

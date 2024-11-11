@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.ComponentModel;
 using System.Linq;
 using Core.Player;
 using Core.ShipModel.Feedback;
@@ -12,8 +11,6 @@ using Gameplay;
 using JetBrains.Annotations;
 using Misc;
 using UnityEngine;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Core.ShipModel {
     public enum BoostStatus {
@@ -81,7 +78,7 @@ namespace Core.ShipModel {
 
         public ShipParameters FlightParameters {
             get {
-                if (!targetRigidbody || _shipParameters == null) return ShipParameters.Defaults();
+                if (!targetRigidbody || _shipParameters == null) return ShipParameters.Defaults;
                 return _shipParameters;
             }
             set {
@@ -178,7 +175,7 @@ namespace Core.ShipModel {
 
         public void Awake() {
             // init physics
-            FlightParameters = ShipParameters.Defaults();
+            FlightParameters = ShipParameters.Defaults;
 
             // get components
             _modifierEngine = GetComponent<ModifierEngine>();
