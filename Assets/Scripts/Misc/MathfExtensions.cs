@@ -40,5 +40,30 @@ namespace Misc {
 
             return q;
         }
+
+        /// <summary>
+        /// Framerate-independent smoothing (lerp replacement)
+        /// https://www.youtube.com/watch?v=LSNQuFEDOyQ
+        ///
+        /// Usage:
+        ///     float newValue = prevValue.ExpDecay(targetValue, decay, Time.deltaTime)
+        /// </summary>
+        /// <param name="a">starting or previous frame position</param>
+        /// <param name="b">target position</param>
+        /// <param name="decay">decay time, useful range approx. 1-25 (slow-fast)</param>
+        /// <param name="deltaTime">time per frame, contingent on usage
+        ///     (Time.deltaTime in Update(), Time.fixedDeltaTime in FixedUpdate()</param>
+        /// <returns>new decayed value</returns>
+        public static float ExpDecay(this float a, float b, float decay, float deltaTime) {
+            return b + (a - b) * Mathf.Exp(-decay * deltaTime);
+        }
+        
+        public static Vector3 ExpDecay(this Vector3 a, Vector3 b, float decay, float deltaTime) {
+            return b + (a - b) * Mathf.Exp(-decay * deltaTime);
+        }
+        
+        public static Color ExpDecay(this Color a, Color b, float decay, float deltaTime) {
+            return b + (a - b) * Mathf.Exp(-decay * deltaTime);
+        }
     }
 }
