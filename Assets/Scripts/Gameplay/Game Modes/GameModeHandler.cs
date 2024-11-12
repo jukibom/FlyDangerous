@@ -310,7 +310,7 @@ namespace Gameplay.Game_Modes {
         }
 
         private bool IsValid() {
-            return !Application.version.Contains("-dev") && Game.Instance.ShipParameters.ToJsonString().Equals(ShipParameters.Defaults.ToJsonString());
+            return !Application.version.Contains("-dev") && Game.Instance.ShipParameters.ToJsonString().Equals(Game.Instance.LoadedLevelData.shipParameters.ToJsonString());
         }
 
         private IEnumerator ShowLevelAndMusicName() {
