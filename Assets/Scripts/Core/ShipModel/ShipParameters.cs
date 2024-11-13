@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 namespace Core.ShipModel
@@ -137,6 +138,22 @@ namespace Core.ShipModel
                 Debug.LogWarning(e.Message);
                 return null;
             }
+        }
+
+        public static string ToHashString(ShipParameters shipParameters)
+        {
+            string hashString = "";
+
+            JObject parameters = JObject.Parse(shipParameters.ToJsonString());
+            JObject defaults = JObject.Parse(ShipParameters.Defaults.ToJsonString());
+
+            foreach (JProperty parameter in defaults.Properties())
+            {
+                if (!JToken.DeepEquals(parameters[parameter.Name], defaults[parameter.Name]))
+                    hashString +=  parameter.Name + parameters[parameter.Name].ToString();
+            }
+
+            return hashString;
         }
     }
 }

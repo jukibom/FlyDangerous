@@ -25,6 +25,7 @@ namespace Core.MapData {
 
         public IEnumerator StartGame(LevelData levelData) {
             LoadedLevelData = levelData;
+            Game.Instance.ShipParameters = levelData.shipParameters;
 
             var locationSceneToLoad = levelData.location.SceneToLoad;
             var environmentSceneToLoad = levelData.environment.SceneToLoad;
@@ -149,6 +150,7 @@ namespace Core.MapData {
                 var startPosition = SerializableVector3.FromVector3(player.AbsoluteWorldPosition);
                 var startRotation = SerializableVector3.FromVector3(player.transform.rotation.eulerAngles);
                 var levelData = track.Serialize();
+                levelData.shipParameters = Game.Instance.ShipParameters;
                 levelData.startPosition = startPosition;
                 levelData.startRotation = startRotation;
                 return levelData;
