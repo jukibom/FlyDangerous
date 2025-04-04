@@ -1,3 +1,4 @@
+using Core.Player;
 using UnityEngine;
 
 namespace Core.ShipModel.Modifiers.Boost {
@@ -34,12 +35,33 @@ namespace Core.ShipModel.Modifiers.Boost {
         }
 
         public void ApplyModifierEffect(Rigidbody shipRigidBody, ref AppliedEffects effects) {
+            //Gets executed every tick the ship spends inside a modifier.
             if (!_boostSound.isPlaying) _boostSound.Play();
 
-            effects.shipForce += transform.forward * shipForceAdd;
-            effects.shipDeltaSpeedCap += shipSpeedAdd;
-            // apply additional thrust if the ship is facing the correct direction
-            if (Vector3.Dot(transform.forward, shipRigidBody.transform.forward) > 0) effects.shipDeltaThrust += shipThrustAdd;
+            var parameters = shipRigidBody.gameObject.GetComponent<ShipPlayer>().ShipPhysics.FlightParameters;
+            if (parameters.useAltBoosters) {
+                var norm =  parameters.mass / ShipParameters.Defaults.mass;
+                effects.shipDeltaSpeedCap += parameters.boosterVelocityMultiplier * shipSpeedAdd;
+                if (Vector3.Dot(transform.forward, shipRigidBody.transform.forward) > 0) effects.shipDeltaThrust += shipThrustAdd * parameters.boosterThrustMultiplier * norm;
+            }
+            else {
+                effects.shipForce += transform.forward * shipForceAdd;
+                effects.shipDeltaSpeedCap += shipSpeedAdd;
+                // apply additional thrust if the ship is facing the correct direction
+                if (Vector3.Dot(transform.forward, shipRigidBody.transform.forward) > 0) effects.shipDeltaThrust += shipThrustAdd;
+            }
+        }
+
+        public void ApplyInitialEffect(Rigidbody shipRigidBody, ref AppliedEffects effects) {
+            var parameters = shipRigidBody.gameObject.GetComponent<ShipPlayer>().ShipPhysics.FlightParameters;
+            if (parameters.useAltBoosters) {
+                var targetSpeed = 2500 * parameters.boosterForceMultiplier;
+                var bleed = 0.95f;
+                var velPara = Mathf.Abs(Vector3.Dot(shipRigidBody.velocity, transform.forward)) * transform.forward;
+                var velPerp = shipRigidBody.velocity - velPara;
+                var speed_dampling = Mathf.Exp(-(velPara.magnitude / targetSpeed + Mathf.Pow(velPara.magnitude / 6250f, 2)/2));
+                effects.shipForce += 28.125f * parameters.mass * (targetSpeed * speed_dampling * transform.forward  - bleed*velPerp);
+            }
         }
     }
 }

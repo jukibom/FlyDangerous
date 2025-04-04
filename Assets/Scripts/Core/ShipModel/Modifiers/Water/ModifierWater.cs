@@ -98,6 +98,8 @@ namespace Core.ShipModel.Modifiers.Water {
             effects.shipDeltaAngularDrag = appliedAngularDrag;
         }
 
+        public void ApplyInitialEffect(Rigidbody ship, ref AppliedEffects effects) {}
+
         public void PlaySubmergedVfx(Vector3 atWorldPosition, Vector3 surfaceImpactVelocity) {
             var localPosition = transform.position + (atWorldPosition - FloatingOrigin.Instance.Origin);
             var localPlanePosition = new Vector3(localPosition.x, 0, localPosition.z);
