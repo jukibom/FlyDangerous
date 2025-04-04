@@ -59,7 +59,7 @@ namespace Core.ShipModel.Modifiers.Boost {
                 var bleed = 0.95f;
                 var velPara = Mathf.Abs(Vector3.Dot(shipRigidBody.velocity, transform.forward)) * transform.forward;
                 var velPerp = shipRigidBody.velocity - velPara;
-                var speed_dampling = Mathf.Exp(-(velPara.magnitude / targetSpeed + Mathf.Pow(velPara.magnitude / 6250f, 2)/2));
+                var speed_dampling = Mathf.Exp(-velPara.magnitude / targetSpeed);
                 effects.shipForce += 28.125f * parameters.mass * (targetSpeed * speed_dampling * transform.forward  - bleed*velPerp);
             }
         }
