@@ -7,6 +7,13 @@ namespace Core.MapData {
     public class Level : IFdEnum {
         private static int _id;
 
+        // Comunity
+        public static readonly Level BlackDiamond = new("Black Diamond", "black_diamond", GameType.Sprint, false,true);
+        public static readonly Level LimmiterMasteryMkii = new("Limiter Mastery mkII", "limiter_mastery_mkii", GameType.Sprint, false,true);
+        public static readonly Level LooksFamiliar = new("Looks Familiar", "looks_familiar", GameType.Sprint, false,true);
+        public static readonly Level MountainCircle = new("Mountain Circle", "mountain_circle", GameType.Sprint, false,true);
+        public static readonly Level SlipperySnake = new("Slippery Snake", "slippery_snake", GameType.Sprint, false,true);
+        
         // LEGACY MAPS
         public static readonly Level GentleStart = new("A Gentle Start", "a-gentle-start", GameType.Sprint, true);
         public static readonly Level LimiterMastery = new("Limiter Mastery", "limiter-mastery", GameType.Sprint, true);
@@ -60,20 +67,22 @@ namespace Core.MapData {
 
         private readonly string _jsonPath;
 
-        private Level(string name, string jsonPath, GameType gameType, bool isLegacy = false) {
+        private Level(string name, string jsonPath, GameType gameType, bool isLegacy = false,bool isComunity = false) {
             Id = GenerateId;
             Name = name;
             _jsonPath = jsonPath;
             GameType = gameType;
             IsLegacy = isLegacy;
+            IsComunity = isComunity;
         }
 
         private static int GenerateId => _id++;
         public GameType GameType { get; }
-
+        
         public LevelData Data => LevelData.FromJsonString(Resources.Load<TextAsset>($"Levels/{_jsonPath}/level").text);
 
         public bool IsLegacy { get; }
+        public bool IsComunity { get; }
 
         public Sprite Thumbnail => Resources.Load<Sprite>($"Levels/{_jsonPath}/thumbnail");
         public Score Score => Score.ScoreForLevel(Data);
@@ -98,7 +107,12 @@ namespace Core.MapData {
                 AroundTheStationV2, CoastlineCircuit, Slipstream, Speedway, LongHaul,
 
                 // new puzzle
-                DecisionsDecisions, Playground, Highways
+                DecisionsDecisions, Playground, Highways,
+
+                // Comunity
+                BlackDiamond,LimmiterMasteryMkii, LooksFamiliar,MountainCircle,SlipperySnake
+
+
             };
         }
 
