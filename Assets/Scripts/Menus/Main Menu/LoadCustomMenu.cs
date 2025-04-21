@@ -1,6 +1,8 @@
 using System.Linq;
+using System.Collections.Generic;
 using Core;
 using Core.MapData;
+using Core.Replays;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.UI;
@@ -48,6 +50,13 @@ namespace Menus.Main_Menu {
         public void StartMap() {
             startButton.interactable = false;
             var levelData = _levelData ?? new LevelData();
+
+            var replaysForLevel = Replay.ReplaysForLevel(levelData).OrderBy(r => r.ScoreData.raceTime).ToList();
+            Game.Instance.ActiveGameReplays = new List<Replay>();
+            if(replaysForLevel.Count() > 0){
+                Game.Instance.ActiveGameReplays.Add(replaysForLevel.First());
+            }
+                
             FdNetworkManager.Instance.StartGameLoadSequence(SessionType.Singleplayer, levelData);
         }
 

@@ -319,8 +319,6 @@ namespace Core {
             IEnumerator LoadGame() {
                 yield return _levelLoader.ShowLoadingScreen();
 
-                Game.Instance.ActiveGameReplays = Replay.ReplaysForLevel(levelData);
-
                 // Position the active camera to the designated start location so we can be sure to load in anything
                 // important at that location as part of the load sequence
                 yield return FdPlayer.WaitForLoadingPlayer();
