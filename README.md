@@ -59,6 +59,11 @@ Enable it with the option toggle and set OpenTrack to UDP output on 127.0.0.1, p
 
 For webcams, the neuralnet tracker input module is excellent. It is advised you bind a shortcut to recenter in the OpenTrack application.
 
+### TrackHat 
+
+[TrackHat](https://www.trackhat.org) produces a dedicated hardware solution for head tracking, based on opentrack software and leveraging the NeuralNet tracker.
+It uses a faster sensor than most commercially avaialble webcams, and infrared illumination for consistant tracking.  
+
 ### TrackIR
 
 [TrackIR](https://www.trackir.com/) is a proprietary hardware head tracking solution. Fly Dangerous supports direct integration, simply enable the checkbox and go.
