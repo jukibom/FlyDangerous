@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Define the search and replacement strings
+SEARCH="boosterThrustMultiplier"
+REPLACE='        \"boosterThrustMultiplier\": 1.3,'
+
+find . -type f -name "level.json" | while read -r file; do
+    # Replace the whole line if it contains SEARCH
+    sed -i "/$SEARCH/ c\\$REPLACE" "$file"
+    echo "Updated: $file"
+done
