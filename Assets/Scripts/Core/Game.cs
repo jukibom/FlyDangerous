@@ -316,6 +316,14 @@ namespace Core {
                 yield return new WaitUntil(() => FindObjectsOfType<LoadingPlayer>().All(loadingPlayer => loadingPlayer.isLoaded));
             }
 
+            // Set the textfields in the DevPanel to the included parameters from the leveldata so changing the settings wont change
+            // the flight parameters unexpectedly in the case it is already loaded.
+            var optionsMenu = GetComponentInChildren<Menus.Options.OptionsMenu>(true);
+            if(optionsMenu) {
+                var devPanel =  optionsMenu.GetComponentInChildren<DevPanel>(true); 
+                if (devPanel) devPanel.UpdateTextFields(Game.Instance.LoadedLevelData.shipParameters); 
+            }
+
             IEnumerator LoadGame() {
                 yield return _levelLoader.ShowLoadingScreen();
 
@@ -349,6 +357,8 @@ namespace Core {
 
                 // set up graphics settings (e.g. camera FoV)
                 ApplyGameOptions();
+
+                
 
 #if !NO_PAID_ASSETS
                 // gpu instancer VR initialisation (paid asset!)
