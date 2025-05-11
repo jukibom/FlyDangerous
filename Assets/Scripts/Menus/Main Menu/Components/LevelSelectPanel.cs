@@ -47,6 +47,7 @@ namespace Menus.Main_Menu.Components {
         public event OnLevelSelectedAction OnLevelSelectedEvent;
 
         private void OnEnable() {
+            Debug.Log("DADADADADA");
             tabGroup.OnTabSelected += OnLevelGroupTabSelected;
 
             // try to find the first level in the list and select it if already loaded (e.g. returning to this menu)
@@ -59,22 +60,27 @@ namespace Menus.Main_Menu.Components {
         }
 
         private void OnLevelGroupTabSelected(string tabId) {
+            Debug.Log(tabId);
             switch (tabId) {
                 case "sprint":
-                    LoadLevels(Level.List().ToList().FindAll(level => level.GameType == GameType.Sprint && !level.IsLegacy));
+                    LoadLevels(Level.List().ToList().FindAll(level => level.GameType == GameType.Sprint && !level.IsLegacy && !level.IsComunity));
                     footer.text = "FOLLOW THE PATH, HIT EVERY CHECKPOINT, GET TO THE END.\nORDER OF CHECKPOINTS DOESN'T STRICTLY MATTER.";
                     break;
                 case "laps":
-                    LoadLevels(Level.List().ToList().FindAll(level => level.GameType == GameType.Laps && !level.IsLegacy));
+                    LoadLevels(Level.List().ToList().FindAll(level => level.GameType == GameType.Laps && !level.IsLegacy && !level.IsComunity));
                     footer.text = "FOLLOW THE CIRCUIT, HIT EVERY CHECKPOINT, COMPLETE ALL LAPS.\nORDER OF CHECKPOINTS DOESN'T STRICTLY MATTER.";
                     break;
                 case "puzzle":
-                    LoadLevels(Level.List().ToList().FindAll(level => level.GameType == GameType.Puzzle && !level.IsLegacy));
+                    LoadLevels(Level.List().ToList().FindAll(level => level.GameType == GameType.Puzzle && !level.IsLegacy && !level.IsComunity));
                     footer.text = "NO DEFINED PATH AND NO DEFINED END, FIND THE FASTEST ROUTE.";
                     break;
                 case "legacy":
-                    LoadLevels(Level.List().ToList().FindAll(level => level.GameType == GameType.Sprint && level.IsLegacy));
+                    LoadLevels(Level.List().ToList().FindAll(level => level.GameType == GameType.Sprint && level.IsLegacy && !level.IsComunity));
                     footer.text = "THESE ARE OLD SPRINT MAPS AND MAY BE IMPOSSIBLE TO BEAT THE LEADERBOARD!\nHERE FOR POSTERITY.";
+                    break;
+                case "comunity":
+                    LoadLevels(Level.List().ToList().FindAll(level =>level.IsComunity));
+                    footer.text = "MAPS CREATED BY COMUNITY MEMBERS.";
                     break;
             }
         }
@@ -92,7 +98,7 @@ namespace Menus.Main_Menu.Components {
             // Load level panels one at a time then select the first one
             IEnumerator AddLevelPanels() {
                 foreach (var level in levels) {
-                    Debug.Log($"Loaded level {level.Name}: {level.Data.LevelHash()}");
+                    //Debug.Log($"Loaded level {level.Name}: {level.Data.LevelHash()}");
                     var levelButton = Instantiate(levelUIElementPrefab, levelPrefabContainer);
                     levelButton.Level = level;
                     levelButton.gameObject.GetComponent<UIButton>().OnButtonSubmitEvent += OnLevelSelected;
