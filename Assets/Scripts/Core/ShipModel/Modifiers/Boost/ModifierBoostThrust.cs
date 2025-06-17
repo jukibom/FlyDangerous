@@ -1,3 +1,4 @@
+using Core.Player;
 using UnityEngine;
 
 namespace Core.ShipModel.Modifiers.Boost {
@@ -34,12 +35,30 @@ namespace Core.ShipModel.Modifiers.Boost {
         }
 
         public void ApplyModifierEffect(Rigidbody shipRigidBody, ref AppliedEffects effects) {
+            //Gets executed every tick the ship spends inside a modifier.
             if (!_boostSound.isPlaying) _boostSound.Play();
 
-            effects.shipForce += transform.forward * shipForceAdd;
-            effects.shipDeltaSpeedCap += shipSpeedAdd;
+            var parameters = shipRigidBody.gameObject.GetComponent<ShipPlayer>().ShipPhysics.FlightParameters;
+            var massNorm =  parameters.mass / ShipParameters.Defaults.mass;
+            effects.shipDeltaSpeedCap += parameters.boosterVelocityMultiplier * shipSpeedAdd;
+            
             // apply additional thrust if the ship is facing the correct direction
-            if (Vector3.Dot(transform.forward, shipRigidBody.transform.forward) > 0) effects.shipDeltaThrust += shipThrustAdd;
+            if (Vector3.Dot(transform.forward, shipRigidBody.transform.forward) > 0) effects.shipDeltaThrust += shipThrustAdd * parameters.boosterThrustMultiplier * massNorm;
+            // when using old boost moddel, force is applied every tick
+            if (!parameters.useAltBoosters) effects.shipForce += transform.forward * shipForceAdd;
+        }
+
+        public void ApplyInitialEffect(Rigidbody shipRigidBody, ref AppliedEffects effects) {
+            var parameters = shipRigidBody.gameObject.GetComponent<ShipPlayer>().ShipPhysics.FlightParameters;
+            // when using balistic boost bodel force is applied once
+            if (parameters.useAltBoosters) {
+                var targetSpeed = 2600 * parameters.boosterForceMultiplier;
+                var revectorEfficiency = 0.85f;
+                var velPara = Mathf.Abs(Vector3.Dot(shipRigidBody.velocity, transform.forward)) * transform.forward;
+                var velPerp = shipRigidBody.velocity - velPara;
+                var speed_dampling = Mathf.Exp(-(velPara.magnitude / targetSpeed));
+                effects.shipForce += 28.125f * parameters.mass * (targetSpeed * speed_dampling * transform.forward  - revectorEfficiency*velPerp);
+            }
         }
     }
 }
