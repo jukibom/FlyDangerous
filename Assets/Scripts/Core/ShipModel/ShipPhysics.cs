@@ -725,7 +725,8 @@ namespace Core.ShipModel {
             if (ShipActive) {
                 var rayHits = VelocityBoxCast(out var raycastHitCount, 1 << _modifierLayerMask);
 
-                _prevActiveModifiers = new List<Component>(_activeModifiers);
+                _prevActiveModifiers.Clear();
+                _prevActiveModifiers.AddRange(_activeModifiers);
                 _activeModifiers.Clear();
 
                 for (var i = 0; i < raycastHitCount; i++) {

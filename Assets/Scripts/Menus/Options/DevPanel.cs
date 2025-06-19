@@ -181,7 +181,7 @@ public class DevPanel : MonoBehaviour {
     }
 
     public ShipParameters GetFlightParams() {
-        if (!_initialised) return ShipParameters.Defaults;
+        if (!_initialised) return Game.Instance.ShipParameters;
 
         return new ShipParameters {
             mass =
