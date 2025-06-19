@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using UnityEngine;
 
 namespace Core.ShipModel.Modifiers {
@@ -58,6 +58,10 @@ namespace Core.ShipModel.Modifiers {
 
         public void ApplyModifier(Rigidbody shipRigidBody, IModifier modifier) {
             modifier.ApplyModifierEffect(shipRigidBody, ref appliedEffects);
+        }
+
+        public void ApplyInitial(Rigidbody shipRigidBody, IModifier modifier) {
+            modifier.ApplyInitialEffect(shipRigidBody, ref appliedEffects);
         }
 
         public void SetDirect(Vector3 shipForce, float shipDeltaSpeedCap, float shipDeltaThrust, float shipDrag, float shipAngularDrag) {

@@ -1,3 +1,4 @@
+using Core.Player;
 using UnityEngine;
 using UnityEngine.VFX;
 
@@ -41,14 +42,20 @@ namespace Core.ShipModel.Modifiers.Boost {
             var shipPosition = shipRigidBody.transform.position;
             var distance = streamPosition - shipPosition;
             var effectOverDistanceNormalised = 1 - distance.magnitude / (lengthMeters - streamCapsuleEndCapRadius);
-            effects.shipForce += Vector3.Lerp(Vector3.zero, streamTransform.forward * shipForceAdd, effectOverDistanceNormalised);
+
+            var parameters = shipRigidBody.gameObject.GetComponent<ShipPlayer>().ShipPhysics.FlightParameters;
+            var massNorm = parameters.mass / ShipParameters.Defaults.mass;
+
+            effects.shipForce += Vector3.Lerp(Vector3.zero, massNorm * shipForceAdd * streamTransform.forward, effectOverDistanceNormalised);
 
             // apply additional thrust and max speed if the ship vector is facing the correct direction
             if (Vector3.Dot(transform.forward, shipRigidBody.velocity) > 0) {
-                effects.shipDeltaSpeedCap += Mathf.Lerp(0, shipSpeedAdd, effectOverDistanceNormalised);
-                effects.shipDeltaThrust += Mathf.Lerp(0, shipThrustAdd, effectOverDistanceNormalised);
+                effects.shipDeltaSpeedCap += Mathf.Lerp(0, shipSpeedAdd * parameters.boosterVelocityMultiplier, effectOverDistanceNormalised);
+                effects.shipDeltaThrust += Mathf.Lerp(0, shipThrustAdd * parameters.boosterThrustMultiplier * massNorm, effectOverDistanceNormalised);
             }
         }
+
+        public void ApplyInitialEffect(Rigidbody ship, ref AppliedEffects effects) {}
 
         // for some reason the unity editor insists on resetting the vfx which makes building levels a PITA
         public void OnGUI() {

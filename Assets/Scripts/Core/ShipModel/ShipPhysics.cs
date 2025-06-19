@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Core.Player;
 using Core.ShipModel.Feedback;
@@ -58,6 +59,8 @@ namespace Core.ShipModel {
 
         private float _gForce;
         private ModifierEngine _modifierEngine;
+        private List<Component> _activeModifiers = new();
+        private List<Component> _prevActiveModifiers = new();
         private int _modifierLayerMask;
 
         private Vector3 _prevVelocity;
@@ -722,10 +725,23 @@ namespace Core.ShipModel {
             if (ShipActive) {
                 var rayHits = VelocityBoxCast(out var raycastHitCount, 1 << _modifierLayerMask);
 
+                _prevActiveModifiers.Clear();
+                _prevActiveModifiers.AddRange(_activeModifiers);
+                _activeModifiers.Clear();
+
                 for (var i = 0; i < raycastHitCount; i++) {
                     var raycastHit = rayHits[i];
                     var modifier = raycastHit.collider.GetComponentInParent(typeof(IModifier));
-                    if (modifier) _modifierEngine.ApplyModifier(targetRigidbody, modifier as IModifier);
+                    if (modifier) {
+                        _activeModifiers.Add(modifier);
+                    }
+                }
+
+                for (var i = 0; i < _activeModifiers.Count; i++) {
+                    if (!_prevActiveModifiers.Contains(_activeModifiers[i])) {
+                        _modifierEngine.ApplyInitial(targetRigidbody, _activeModifiers[i] as IModifier);
+                    }
+                    _modifierEngine.ApplyModifier(targetRigidbody, _activeModifiers[i] as IModifier);
                 }
             }
         }

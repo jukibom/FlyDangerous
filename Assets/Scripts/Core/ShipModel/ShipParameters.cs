@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.ComponentModel;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
@@ -41,6 +41,10 @@ namespace Core.ShipModel
             public const float BoostCapacityPercentChargeRate = 10f;
             public const float BoostMaxDivertablePower = 0.4f;
             public const float MinUserLimitedVelocity = 250f;
+            public const bool UseAltBoosters = false;
+            public const float BoosterForceMultiplier = 1f;
+            public const float BoosterVelocityMultiplier = 1f;
+            public const float BoosterThrustMultiplier = 1f;
         }
         
         [JsonProperty(Order = 1), DefaultValue(DefaultValues.Mass)]
@@ -121,6 +125,17 @@ namespace Core.ShipModel
         [JsonProperty(Order = 26), DefaultValue(DefaultValues.MinUserLimitedVelocity)]
         public float minUserLimitedVelocity = DefaultValues.MinUserLimitedVelocity;
 
+        [JsonProperty(Order = 27), DefaultValue(DefaultValues.UseAltBoosters)]
+        public bool useAltBoosters = DefaultValues.UseAltBoosters;
+
+        [JsonProperty(Order = 28), DefaultValue(DefaultValues.BoosterForceMultiplier)]
+        public float boosterForceMultiplier = DefaultValues.BoosterForceMultiplier;
+
+        [JsonProperty(Order = 29), DefaultValue(DefaultValues.BoosterVelocityMultiplier)]
+        public float boosterVelocityMultiplier = DefaultValues.BoosterVelocityMultiplier;
+
+        [JsonProperty(Order = 30), DefaultValue(DefaultValues.BoosterThrustMultiplier)]
+        public float boosterThrustMultiplier = DefaultValues.BoosterThrustMultiplier;
         public string ToJsonString()
         {
             return JsonConvert.SerializeObject(this, Formatting.Indented);
