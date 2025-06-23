@@ -65,8 +65,8 @@ namespace Core.MapData {
 
         private readonly string _jsonPath;
 
-        public LevelData Data; // => LevelData.FromJsonString(Resources.Load<TextAsset>($"Levels/{_jsonPath}/level").text);
-        public Sprite Thumbnail; //=> Resources.Load<Sprite>($"Levels/{_jsonPath}/thumbnail");
+        public LevelData Data;
+        public Sprite Thumbnail;
 
         private Level(string name, string jsonPath, GameType gameType, bool isLegacy = false) {
             Id = GenerateId;
@@ -118,7 +118,7 @@ namespace Core.MapData {
             };
         }
 
-        private static List<Level> _custom_levels = new();
+        private static List<Level> _customLevels = new();
         public static void LoadCustomLevels()
         {
             _customLevels.Clear();
