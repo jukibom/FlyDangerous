@@ -121,7 +121,7 @@ namespace Core.MapData {
         private static List<Level> _custom_levels = new();
         public static void LoadCustomLevels()
         {
-            _custom_levels.Clear();
+            _customLevels.Clear();
             string customPath = Application.persistentDataPath + $"/CustomLevels/";
             if (!Directory.Exists(customPath))
             {
@@ -131,7 +131,7 @@ namespace Core.MapData {
             var fileinfo = dirinfo.GetFiles();
             foreach (FileInfo f in fileinfo)
             {
-                try { _custom_levels.Add(loadFromZip(f.FullName)); }
+                try { _customLevels.Add(loadFromZip(f.FullName)); }
                 catch {}
             }
         }
