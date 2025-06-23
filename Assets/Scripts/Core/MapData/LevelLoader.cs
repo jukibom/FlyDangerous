@@ -214,7 +214,7 @@ namespace Core.MapData {
 #endif
 
                 // absolutely nuke everything, we have very little control of lifecycle with respect to scene loading and what's already going on
-                foreach (var terrainTile in mapMagic.tiles.All()) terrainTile.Stop();
+                foreach (var terrainTile in mapMagic.tiles.All()) terrainTile.StopGenerate();
 
                 // our terrain gen may start disabled to prevent painful threading fun so enable it now
                 mapMagic.enabled = true;

@@ -496,7 +496,7 @@ namespace Core {
             MenuFirstRun = false;
             var mapMagic = FindObjectOfType<MapMagicObject>();
             if (mapMagic) {
-                foreach (var terrainTile in mapMagic.tiles.All()) terrainTile.Stop();
+                foreach (var terrainTile in mapMagic.tiles.All()) terrainTile.StopGenerate();
                 mapMagic.enabled = false;
             }
 
