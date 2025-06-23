@@ -3,11 +3,14 @@ using FdUI;
 using Menus.Main_Menu.Components;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using System.IO;
+// using UnityEditor.EditorUtility;
 
 namespace Menus.Main_Menu {
     public class TimeTrialMenu : MenuBase {
         [SerializeField] private UIButton startButton;
         [SerializeField] private UIButton backButton;
+        [SerializeField] private UIButton customLevelsButton;
 
         [SerializeField] private LevelSelectPanel levelSelectPanel;
 
@@ -16,6 +19,7 @@ namespace Menus.Main_Menu {
             startButton.OnButtonSubmitEvent += OnStartSelected;
             backButton.OnButtonSubmitEvent += OnBackSelected;
             startButton.button.gameObject.SetActive(false);
+            customLevelsButton.OnButtonSubmitEvent += OnCustomLevelsSelected;
             backButton.label.text = "CANCEL";
         }
 
@@ -42,7 +46,19 @@ namespace Menus.Main_Menu {
             NavBack();
         }
 
-        private void StartTimeTrial() {
+        private void OnCustomLevelsSelected(UIButton button)
+        {
+            string customPath = Application.persistentDataPath + $"/CustomLevels/";
+            if (!Directory.Exists(customPath))
+            {
+                Directory.CreateDirectory(customPath);
+            }
+
+            Application.OpenURL(@"file://" + customPath);
+        }
+
+        private void StartTimeTrial()
+        {
             Game.Instance.loadedMainLevel = levelSelectPanel.SelectedLevel;
             Game.Instance.ActiveGameReplays = levelSelectPanel.SelectedReplays;
             FdNetworkManager.Instance.StartGameLoadSequence(SessionType.Singleplayer, levelSelectPanel.SelectedLevel.Data);
