@@ -1,4 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.IO;
+using System.IO.Compression;
 using Core.Scores;
 using Misc;
 using UnityEngine;
@@ -60,22 +64,42 @@ namespace Core.MapData {
 
         private readonly string _jsonPath;
 
+        public LevelData Data; // => LevelData.FromJsonString(Resources.Load<TextAsset>($"Levels/{_jsonPath}/level").text);
+        public Sprite Thumbnail; //=> Resources.Load<Sprite>($"Levels/{_jsonPath}/thumbnail");
+
         private Level(string name, string jsonPath, GameType gameType, bool isLegacy = false) {
             Id = GenerateId;
             Name = name;
             _jsonPath = jsonPath;
             GameType = gameType;
             IsLegacy = isLegacy;
+            Data = LevelData.FromJsonString(Resources.Load<TextAsset>($"Levels/{_jsonPath}/level").text);
+            Thumbnail = Resources.Load<Sprite>($"Levels/{_jsonPath}/thumbnail");
+        }
+
+        private Level(string name, LevelData data, Sprite thumbnail, GameType gameType, bool isLegacy = false) {
+            Id = GenerateId;
+            Name = name;
+            GameType = gameType;
+            IsLegacy = isLegacy;
+            Data = data;
+
+            if (thumbnail == null)
+            {
+                Texture2D texture2D = new Texture2D(6, 4);
+                Thumbnail = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
+            }
+            else
+            {
+                Thumbnail = thumbnail;
+            }
         }
 
         private static int GenerateId => _id++;
         public GameType GameType { get; }
 
-        public LevelData Data => LevelData.FromJsonString(Resources.Load<TextAsset>($"Levels/{_jsonPath}/level").text);
-
         public bool IsLegacy { get; }
 
-        public Sprite Thumbnail => Resources.Load<Sprite>($"Levels/{_jsonPath}/thumbnail");
         public Score Score => Score.ScoreForLevel(Data);
 
         public int Id { get; }
@@ -102,7 +126,72 @@ namespace Core.MapData {
             };
         }
 
-        public static Level FromString(string locationString) {
+        private static List<Level> _custom_levels = new();
+        public static void LoadCustomLevels()
+        {
+            _custom_levels.Clear();
+            string customPath = Application.persistentDataPath + $"/CustomLevels/";
+            Debug.Log(customPath);
+            var dirinfo = new DirectoryInfo(customPath);
+            var fileinfo = dirinfo.GetFiles();
+            foreach (FileInfo f in fileinfo)
+            {
+                try
+                {
+                    Level level = loadFromZip(f.FullName);
+                    _custom_levels.Add(level);
+                }
+                catch
+                {}
+            }
+        }
+
+        private static Level loadFromZip(string path)
+        {
+            var archive = ZipFile.Open(path, ZipArchiveMode.Read);
+
+            if (archive == null) throw new DataException("Level path invalid");
+
+            var readArchiveEntry = new Func<ZipArchive, string, string>((fromArchive, filename) =>
+            {
+                var entry = fromArchive.GetEntry(filename);
+                if (entry != null)
+                {
+                    var stream = entry.Open();
+                    using var reader = new StreamReader(stream);
+                    return reader.ReadToEnd();
+                }
+
+                throw new DataException("Level data is invalid");
+            });
+
+            var levelData = LevelData.FromJsonString(readArchiveEntry(archive, "level.json"));
+            Texture2D Tex2D = new Texture2D(2, 2);
+            var thumbnailEntry = archive.GetEntry("thumbnail.png");
+            if (thumbnailEntry != null)
+            {
+                using (Stream thumbnailStream = thumbnailEntry.Open())
+                {
+                    byte[] thumbnailBytes = new byte[thumbnailEntry.Length];
+                    thumbnailStream.Read(thumbnailBytes, 0, (int)thumbnailEntry.Length);
+                    Tex2D.LoadImage(thumbnailBytes);
+                }
+                Sprite thumbnail = Sprite.Create(Tex2D, new Rect(0, 0, Tex2D.width, Tex2D.height), new UnityEngine.Vector2(0.5f, 0.5f));
+                return new Level(levelData.name, levelData, thumbnail, GameType.FreeRoam, false);
+            }
+
+            // set as free roam for now
+            return new Level(levelData.name, levelData, null, GameType.FreeRoam, false);
+       }
+
+        public static List<Level> ListCustom()
+        {
+            LoadCustomLevels();
+            return _custom_levels;
+        }
+
+        public static Level FromString(string locationString)
+        {
             return FdEnum.FromString(List(), locationString);
         }
 

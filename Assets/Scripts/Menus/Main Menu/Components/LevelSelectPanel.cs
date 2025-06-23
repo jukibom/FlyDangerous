@@ -76,6 +76,10 @@ namespace Menus.Main_Menu.Components {
                     LoadLevels(Level.List().ToList().FindAll(level => level.GameType == GameType.Sprint && level.IsLegacy));
                     footer.text = "THESE ARE OLD SPRINT MAPS AND MAY BE IMPOSSIBLE TO BEAT THE LEADERBOARD!\nHERE FOR POSTERITY.";
                     break;
+                case "custom":
+                    LoadLevels(Level.ListCustom());
+                    footer.text = "CUSTOM MAPS";
+                    break;
             }
         }
 
