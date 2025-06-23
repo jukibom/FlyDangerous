@@ -48,7 +48,7 @@ namespace Menus.Main_Menu {
 
         private void OnCustomLevelsSelected(UIButton button)
         {
-            string customPath = Application.persistentDataPath + $"/CustomLevels/";
+            string customPath = System.IO.Path.Combine(Application.persistentDataPath, "CustomLevels");
             if (!Directory.Exists(customPath))
             {
                 Directory.CreateDirectory(customPath);

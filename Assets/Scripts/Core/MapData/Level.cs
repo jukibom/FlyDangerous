@@ -122,7 +122,7 @@ namespace Core.MapData {
         public static void LoadCustomLevels()
         {
             _customLevels.Clear();
-            string customPath = Application.persistentDataPath + $"/CustomLevels/";
+            string customPath = System.IO.Path.Combine(Application.persistentDataPath, "CustomLevels");
             if (!Directory.Exists(customPath))
             {
                 Directory.CreateDirectory(customPath);
