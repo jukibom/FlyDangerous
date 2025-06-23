@@ -123,6 +123,10 @@ namespace Core.MapData {
         {
             _custom_levels.Clear();
             string customPath = Application.persistentDataPath + $"/CustomLevels/";
+            if (!Directory.Exists(customPath))
+            {
+                Directory.CreateDirectory(customPath);
+            }
             var dirinfo = new DirectoryInfo(customPath);
             var fileinfo = dirinfo.GetFiles();
             foreach (FileInfo f in fileinfo)
