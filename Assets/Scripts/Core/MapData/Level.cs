@@ -176,7 +176,7 @@ namespace Core.MapData {
         public static List<Level> ListCustom()
         {
             LoadCustomLevels();
-            return _custom_levels;
+            return _customLevels;
         }
 
         public static Level FromString(string locationString)
