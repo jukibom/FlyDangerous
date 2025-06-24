@@ -22,6 +22,8 @@ namespace Menus.Main_Menu.Components {
         [SerializeField] private RectTransform levelPrefabContainer;
 
         [SerializeField] private Text levelName;
+        [SerializeField] private Text authorName;
+
         [SerializeField] private Image levelThumbnail;
 
         [SerializeField] private Text personalBest;
@@ -132,6 +134,7 @@ namespace Menus.Main_Menu.Components {
         private void HighlightSelectedLevel(Level level) {
             if (level != null && SelectedLevel == null) {
                 levelName.text = level.Name.ToUpper();
+                authorName.text = level.Data.author;
                 levelThumbnail.sprite = level.Thumbnail;
 
                 var score = level.Score;
