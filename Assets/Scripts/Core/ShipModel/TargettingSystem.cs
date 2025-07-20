@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Cinemachine;
+using Unity.Cinemachine;
 using Core.Player;
 using Core.Replays;
 using GameUI.Components;

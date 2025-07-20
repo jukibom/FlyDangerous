@@ -1,9 +1,9 @@
-﻿using Cinemachine;
+﻿using Unity.Cinemachine;
 using FdUI;
 using UnityEngine;
 
 namespace Gameplay {
-    [RequireComponent(typeof(CinemachineVirtualCamera))]
+    [RequireComponent(typeof(CinemachineCamera))]
     public class ShipFreeCamera : MonoBehaviour {
         private float _ascendMotion;
         private CinemachineHardLookAt _hardLookAt;
@@ -12,13 +12,13 @@ namespace Gameplay {
 
         private float _motionMultiplier = 25;
         private Vector2 _rotation;
-        private CinemachineTransposer _transposer;
-        private CinemachineVirtualCamera _virtualCamera;
+        private CinemachineFollow _transposer;
+        private CinemachineCamera _virtualCamera;
         private float _zoom;
         public ShipCamera ShipCamera { get; private set; }
 
         private void Update() {
-            _transposer.m_FollowOffset += _transposer.LookAtTarget.transform.InverseTransformDirection(transform.TransformDirection(new Vector3(
+            _transposer.FollowOffset += _transposer.LookAtTarget.transform.InverseTransformDirection(transform.TransformDirection(new Vector3(
                 _motion.x * Time.unscaledDeltaTime * _motionMultiplier,
                 _ascendMotion * Time.unscaledDeltaTime * _motionMultiplier,
                 _motion.y * Time.unscaledDeltaTime * _motionMultiplier
@@ -30,19 +30,19 @@ namespace Gameplay {
                 0
             ));
 
-            _virtualCamera.m_Lens.FieldOfView += _zoom * Time.unscaledDeltaTime;
+            _virtualCamera.Lens.FieldOfView += _zoom * Time.unscaledDeltaTime;
         }
 
         private void OnEnable() {
-            _virtualCamera = GetComponent<CinemachineVirtualCamera>();
-            _transposer = _virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
-            _hardLookAt = _virtualCamera.GetCinemachineComponent<CinemachineHardLookAt>();
+            _virtualCamera = GetComponent<CinemachineCamera>();
+            _transposer = _virtualCamera.GetComponent<CinemachineFollow>();
+            _hardLookAt = _virtualCamera.GetComponent<CinemachineHardLookAt>();
             ShipCamera = GetComponent<ShipCamera>();
             InitPosition(new Vector3(10, 0, 0));
         }
 
         public void InitPosition(Vector3 position) {
-            _transposer.m_FollowOffset = position;
+            _transposer.FollowOffset = position;
             if (_hardLookAt != null) _hardLookAt.enabled = false;
         }
 

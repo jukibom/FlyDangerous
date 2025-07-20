@@ -1,5 +1,5 @@
 using System.Collections;
-using Cinemachine;
+using Unity.Cinemachine;
 using Core;
 using Misc;
 using UnityEngine;
@@ -11,7 +11,7 @@ namespace Gameplay {
         FreeCam
     }
 
-    [RequireComponent(typeof(CinemachineVirtualCamera))]
+    [RequireComponent(typeof(CinemachineVirtualCameraBase))]
     [RequireComponent(typeof(AudioListener))]
     public class ShipCamera : MonoBehaviour {
         [SerializeField] private string cameraName;
@@ -25,7 +25,7 @@ namespace Gameplay {
         private AudioListener _audioListener;
         private float _baseFov;
 
-        private CinemachineVirtualCamera _camera;
+        private CinemachineCamera _camera;
         private Vector3 _currentMaxOffset = Vector3.one;
         private CinemachineBasicMultiChannelPerlin _noise;
         private Vector3 _offset = Vector3.zero;
@@ -47,24 +47,24 @@ namespace Gameplay {
             }
         }
 
-        public CinemachineVirtualCamera Camera {
+        public CinemachineCamera Camera {
             get {
-                if (_camera == null) _camera = GetComponent<CinemachineVirtualCamera>();
+                if (_camera == null) _camera = GetComponent<CinemachineCamera>();
                 return _camera;
             }
         }
 
         public void Awake() {
             BaseLocalPosition = transform.localPosition;
-            var rotationComponent = Camera.GetCinemachineComponent<CinemachineSameAsFollowTarget>();
-            if (rotationComponent != null) _cameraRotationDampingOnAwake = rotationComponent.m_Damping;
+            var rotationComponent = Camera.GetComponent<CinemachineRotateWithFollowTarget>();
+            if (rotationComponent != null) _cameraRotationDampingOnAwake = rotationComponent.Damping;
         }
 
         public void Reset() {
             // Kinda gross but the fastest way to override the cinemachine brain is to just disable damping,
             // snap the camera, wait a frame for the "animation" (of nothing) to happen and re-enable damping.
             IEnumerator ResetPosition() {
-                var rotationComponent = Camera.GetCinemachineComponent<CinemachineSameAsFollowTarget>();
+                var rotationComponent = Camera.GetComponent<CinemachineRotateWithFollowTarget>();
 
                 if (rotationComponent) {
                     // reset position
@@ -76,9 +76,9 @@ namespace Gameplay {
                     cameraTransform.localRotation = Quaternion.identity;
 
                     // handle damping animation
-                    rotationComponent.m_Damping = 0;
+                    rotationComponent.Damping = 0;
                     yield return YieldExtensions.WaitForFixedFrames(10);
-                    rotationComponent.m_Damping = _cameraRotationDampingOnAwake;
+                    rotationComponent.Damping = _cameraRotationDampingOnAwake;
                 }
             }
 
@@ -90,7 +90,7 @@ namespace Gameplay {
 
         public void OnEnable() {
             Game.OnGameSettingsApplied += SetBaseFov;
-            _noise = Camera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+            _noise = Camera.GetComponent<CinemachineBasicMultiChannelPerlin>();
             SetBaseFov();
             _currentMaxOffset = maxOffset;
         }
@@ -112,11 +112,11 @@ namespace Gameplay {
 
         public void UpdateVelocityFov(Vector3 velocity, float maxVelocity, bool lerp = true) {
             var velocityNormalised = velocity.z / maxVelocity;
-            var fov = Mathf.Lerp(Camera.m_Lens.FieldOfView,
+            var fov = Mathf.Lerp(Camera.Lens.FieldOfView,
                 velocityNormalised.Remap(0, 1, _baseFov, _baseFov + 10),
                 lerp ? smoothSpeed : 1
             );
-            Camera.m_Lens.FieldOfView = fov;
+            Camera.Lens.FieldOfView = fov;
         }
 
         public Vector3 GetCameraOffset(Vector3 force, float maxForce, bool lerp = true) {
@@ -132,7 +132,7 @@ namespace Gameplay {
         }
 
         public void SetShakeEffect(float amount) {
-            if (_noise) _noise.m_FrequencyGain = amount;
+            if (_noise) _noise.FrequencyGain = amount;
 
             _currentMaxOffset.x = amount.Remap(0, 1, maxOffset.x, maxBoostOffset.x);
             _currentMaxOffset.y = amount.Remap(0, 1, maxOffset.y, maxBoostOffset.y);
@@ -143,7 +143,7 @@ namespace Gameplay {
             _baseFov = cameraType == CameraType.FirstPerson
                 ? Preferences.Instance.GetFloat("graphics-field-of-view")
                 : Preferences.Instance.GetFloat("graphics-field-of-view-ext");
-            Camera.m_Lens.FieldOfView = _baseFov;
+            Camera.Lens.FieldOfView = _baseFov;
         }
     }
 }

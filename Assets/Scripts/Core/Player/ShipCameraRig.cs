@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Cinemachine;
+using Unity.Cinemachine;
 using Core.Player.HeadTracking;
 using Gameplay;
 using JetBrains.Annotations;

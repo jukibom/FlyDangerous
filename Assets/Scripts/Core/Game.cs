@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Audio;
-using Cinemachine;
+using Unity.Cinemachine;
 using Core.MapData;
 using Core.MapData.Serializable;
 using Core.Player;

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Audio;
-using Cinemachine;
+using Unity.Cinemachine;
 using Core.MapData.Serializable;
 using Core.Player;
 using Den.Tools;
