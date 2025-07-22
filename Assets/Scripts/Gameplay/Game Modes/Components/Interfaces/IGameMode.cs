@@ -3,7 +3,7 @@
 namespace Gameplay.Game_Modes.Components.Interfaces {
     public interface IGameMode {
         // Initialisation
-        public GameModeUIHandler GameModeUIHandler { set; }
+        public GameModeUIHandler GameModeUIHandler { get; set; }
         public IGameModeLifecycle GameModeLifecycle { set; }
 
         /**

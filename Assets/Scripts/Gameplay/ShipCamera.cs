@@ -101,7 +101,7 @@ namespace Gameplay {
 
         public void SetCameraActive(bool active) {
             if (active) {
-                Camera.MoveToTopOfPrioritySubqueue();
+                Camera.Prioritize();
                 _offset = Vector3.zero;
                 _targetOffset = Vector3.zero;
             }

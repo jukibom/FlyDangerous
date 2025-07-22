@@ -11,22 +11,26 @@ using Core.Scores;
 using JetBrains.Annotations;
 using Menus.Main_Menu.Components;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace GameUI.GameModes {
-    public class RaceResultsScreen : MonoBehaviour {
+    public class RaceResultsScreen : MonoBehaviour, ICancelHandler {
         [SerializeField] private Image resultsScreenBackground;
         [SerializeField] private MedalsScreen medalsScreen;
         [SerializeField] private GameObject uploadScreen;
         [SerializeField] private LevelCompetitionPanel competitionPanel;
         [SerializeField] private GameObject uiButtons;
         [SerializeField] private Button quitButton;
+        [SerializeField] private Button backButton;
         [SerializeField] private Button startButton;
         [SerializeField] private Button retryButton;
         [SerializeField] private Button nextLevelButton;
         [SerializeField] private AudioListener temporaryAudioListener;
 
         private Action _onStart;
+        private Action _onRestart;
+        private Action _onBack;
         
         [CanBeNull] private Level CurrentLevel => Game.Instance.loadedMainLevel;
         private Level NextLevel => Level.FromId(CurrentLevel?.Id + 1 ?? 0);
@@ -49,7 +53,7 @@ namespace GameUI.GameModes {
         }
 
         public void RunLevelComplete(Score score, Score previousBest, bool isValid, string replayFilename, string replayFilepath) {
-            startButton.gameObject.SetActive(false);
+            HideAllButtons();
             quitButton.gameObject.SetActive(true);
             retryButton.gameObject.SetActive(true);
             
@@ -57,14 +61,28 @@ namespace GameUI.GameModes {
             StartCoroutine(ShowEndResultsScreen(score, previousBest, isValid, replayFilename, replayFilepath));
         }
 
-        public void ShowCompetitionPanel(Action onStart) {
-            _onStart = onStart;
+        public void ShowCompetitionPanel(Action onStart = null, Action onRestart = null, Action onBack = null) {
+
+            HideAllButtons();
             
-            startButton.gameObject.SetActive(true);
-            quitButton.gameObject.SetActive(false);
-            retryButton.gameObject.SetActive(false);
-            nextLevelButton.gameObject.SetActive(false);
-            startButton.Select();
+            if (onStart != null) {
+                startButton.gameObject.SetActive(true);
+                _onStart = onStart;
+            
+                startButton.Select();
+            }
+
+            if (onRestart != null) {
+                retryButton.gameObject.SetActive(true);
+                _onRestart = onRestart;
+            }
+            
+            if (onBack != null) {
+                backButton.gameObject.SetActive(true);
+                _onBack = onBack;
+                
+                backButton.Select();
+            }
             ShowCompetitionPanelInternal();
         }
 
@@ -151,10 +169,18 @@ namespace GameUI.GameModes {
         public void QuitToMenu() {
             Game.Instance.QuitToMenu();
         }
+        
+        public void Back() {
+            _onBack?.Invoke();
+            _onBack = null;
+            Hide();
+        }
 
         public void Retry() {
             SetReplaysAndHideCursor();
             Game.Instance.RestartSession();
+            _onRestart?.Invoke();
+            _onRestart = null;
         }
 
         public void StartGame() {
@@ -162,6 +188,7 @@ namespace GameUI.GameModes {
             player?.User.DisableUIInput();
             SetReplaysAndHideCursor();
             _onStart?.Invoke();
+            _onStart = null;
             Hide();
         }
 
@@ -201,6 +228,22 @@ namespace GameUI.GameModes {
             }
             else {
                 QuitToMenu();
+            }
+        }
+
+        private void HideAllButtons() {
+            quitButton.gameObject.SetActive(false);
+            retryButton.gameObject.SetActive(false);
+            startButton.gameObject.SetActive(false);
+            backButton.gameObject.SetActive(false);
+            nextLevelButton.gameObject.SetActive(false);
+        }
+
+        public void OnCancel(BaseEventData eventData) {
+            if (_onBack != null) {
+                _onBack?.Invoke();
+                _onBack = null;
+                Hide();
             }
         }
     }

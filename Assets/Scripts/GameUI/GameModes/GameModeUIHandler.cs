@@ -40,7 +40,7 @@ namespace GameUI.GameModes {
             HoldBoostButtonText.Reset();
         }
 
-        public void ShowCompetitionPanel(Action onStart) {
+        public void ShowCompetitionPanel(Action onStart = null, Action onRestart = null, Action onBack = null) {
             var player = FdPlayer.FindLocalShipPlayer;
             if (player) {
                 player.User.DisableGameInput();
@@ -48,7 +48,7 @@ namespace GameUI.GameModes {
             }
 
             raceResultsScreen.gameObject.SetActive(true);
-            raceResultsScreen.ShowCompetitionPanel(onStart);
+            raceResultsScreen.ShowCompetitionPanel(onStart, onRestart, onBack);
         }
 
         // Show and hide whatever game mode result screen there is
