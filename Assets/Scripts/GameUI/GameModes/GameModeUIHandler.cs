@@ -1,3 +1,4 @@
+using System;
 using Core;
 using Core.Player;
 using Core.Scores;
@@ -24,6 +25,7 @@ namespace GameUI.GameModes {
 
         private void Awake() {
             HideResultsScreen();
+            LevelDetailsCanvasGroup.alpha = 0;
         }
 
         private void OnEnable() {
@@ -38,20 +40,30 @@ namespace GameUI.GameModes {
             HoldBoostButtonText.Reset();
         }
 
+        public void ShowCompetitionPanel(Action onStart) {
+            var player = FdPlayer.FindLocalShipPlayer;
+            if (player) {
+                player.User.DisableGameInput();
+                player.User.pauseMenuEnabled = false;
+            }
+
+            raceResultsScreen.gameObject.SetActive(true);
+            raceResultsScreen.ShowCompetitionPanel(onStart);
+        }
+
         // Show and hide whatever game mode result screen there is
         public void ShowResultsScreen(Score score, Score previousBest, bool isValid, string replayFilename, string replayFilepath) {
             var player = FdPlayer.FindLocalShipPlayer;
             if (player) {
                 player.User.ShipCameraRig.SwitchToEndScreenCamera();
 
-                // TODO: what the fuck does this have to do with UI?!
                 player.User.DisableGameInput();
                 player.User.pauseMenuEnabled = false;
                 player.ShipPhysics.BringToStop();
             }
 
             raceResultsScreen.gameObject.SetActive(true);
-            raceResultsScreen.Show(score, previousBest, isValid, replayFilename, replayFilepath);
+            raceResultsScreen.RunLevelComplete(score, previousBest, isValid, replayFilename, replayFilepath);
         }
 
         public void HideResultsScreen() {

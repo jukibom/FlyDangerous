@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,10 +20,14 @@ namespace GameUI.GameModes {
         [SerializeField] private GameObject uploadScreen;
         [SerializeField] private LevelCompetitionPanel competitionPanel;
         [SerializeField] private GameObject uiButtons;
-        [SerializeField] private Button defaultSelectedButton;
+        [SerializeField] private Button quitButton;
+        [SerializeField] private Button startButton;
+        [SerializeField] private Button retryButton;
         [SerializeField] private Button nextLevelButton;
         [SerializeField] private AudioListener temporaryAudioListener;
 
+        private Action _onStart;
+        
         [CanBeNull] private Level CurrentLevel => Game.Instance.loadedMainLevel;
         private Level NextLevel => Level.FromId(CurrentLevel?.Id + 1 ?? 0);
         private bool IsNextLevelValid => NextLevel.Id > (CurrentLevel?.Id ?? 0) && NextLevel.GameType == CurrentLevel?.GameType;
@@ -43,10 +48,41 @@ namespace GameUI.GameModes {
             uiButtons.gameObject.SetActive(false);
         }
 
-        public void Show(Score score, Score previousBest, bool isValid, string replayFilename, string replayFilepath) {
+        public void RunLevelComplete(Score score, Score previousBest, bool isValid, string replayFilename, string replayFilepath) {
+            startButton.gameObject.SetActive(false);
+            quitButton.gameObject.SetActive(true);
+            retryButton.gameObject.SetActive(true);
+            
             resultsScreenBackground.enabled = true;
-            nextLevelButton.gameObject.SetActive(IsNextLevelValid);
             StartCoroutine(ShowEndResultsScreen(score, previousBest, isValid, replayFilename, replayFilepath));
+        }
+
+        public void ShowCompetitionPanel(Action onStart) {
+            _onStart = onStart;
+            
+            startButton.gameObject.SetActive(true);
+            quitButton.gameObject.SetActive(false);
+            retryButton.gameObject.SetActive(false);
+            nextLevelButton.gameObject.SetActive(false);
+            startButton.Select();
+            ShowCompetitionPanelInternal();
+        }
+
+        private void ShowCompetitionPanelInternal() {
+            var player = FdPlayer.FindLocalShipPlayer;
+            if (player) {
+                FindObjectOfType<InGameUI>()?.OnPauseToggle(true);
+                Game.Instance.FreeCursor();
+                player.User.EnableUIInput();
+                player.User.ResetMouseToCentre();
+                player.User.restartEnabled = true;
+            }
+            
+            var levelData = Game.Instance.LoadedLevelData;
+            competitionPanel.gameObject.SetActive(true);
+            uiButtons.gameObject.SetActive(true);
+            
+            competitionPanel.Populate(levelData);
         }
 
         private IEnumerator ShowEndResultsScreen(Score score, Score previousBest, bool isValid, string replayFileName, string replayFilePath) {
@@ -61,20 +97,8 @@ namespace GameUI.GameModes {
                 replayFilePath);
             yield return new WaitUntil(() => uploadTask.IsCompleted);
 
-            var player = FdPlayer.FindLocalShipPlayer;
-            if (player) {
-                FindObjectOfType<InGameUI>()?.OnPauseToggle(true);
-                Game.Instance.FreeCursor();
-                player.User.EnableUIInput();
-                player.User.ResetMouseToCentre();
-                player.User.restartEnabled = true;
-            }
-
-            competitionPanel.gameObject.SetActive(true);
-            uiButtons.gameObject.SetActive(true);
-            defaultSelectedButton.Select();
-
-            competitionPanel.Populate(levelData);
+            ShowCompetitionPanelInternal();
+            nextLevelButton.gameObject.SetActive(IsNextLevelValid);
         }
 
         private IEnumerator ShowMedalScreen(Score score, Score previousBest, bool isValid) {
@@ -131,6 +155,14 @@ namespace GameUI.GameModes {
         public void Retry() {
             SetReplaysAndHideCursor();
             Game.Instance.RestartSession();
+        }
+
+        public void StartGame() {
+            var player = FdPlayer.FindLocalShipPlayer;
+            player?.User.DisableUIInput();
+            SetReplaysAndHideCursor();
+            _onStart?.Invoke();
+            Hide();
         }
 
         // hide the mouse and do all the things that normally happens when un-pausing

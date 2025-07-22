@@ -113,9 +113,6 @@ namespace Gameplay.Game_Modes {
             if (_gameModeWithTimer != null) _gameModeWithTimer.GameModeTimer = _gameModeTimer;
 
             _gameMode.OnInitialise();
-
-            if (_showLevelAndMusicName != null) StopCoroutine(_showLevelAndMusicName);
-            _showLevelAndMusicName = StartCoroutine(ShowLevelAndMusicName());
         }
 
         public void StartGame() {
@@ -125,7 +122,10 @@ namespace Gameplay.Game_Modes {
             _startPosition = LocalPlayer.AbsoluteWorldPosition;
             _startRotation = LocalPlayer.transform.rotation;
 
-            HandleStartSequence();
+            if (_gameMode.SupportsReplays) {
+                _inGameUI.GameModeUIHandler.ShowCompetitionPanel(HandleStartSequence);
+            }
+            else HandleStartSequence();
         }
 
         private void Restart() {
@@ -201,7 +201,10 @@ namespace Gameplay.Game_Modes {
 
         private void HandleStartSequence() {
             if (_startSequenceCoroutine != null) StopCoroutine(_startSequenceCoroutine);
-
+            
+            if (_showLevelAndMusicName != null) StopCoroutine(_showLevelAndMusicName);
+            _showLevelAndMusicName = StartCoroutine(ShowLevelAndMusicName());
+            
             // reset this flag on start, it's checked at the end of any game mode
             _isValid = IsValid();
             _gameModeLifecycle.DisableAllShipInput();
