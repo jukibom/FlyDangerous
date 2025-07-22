@@ -85,7 +85,7 @@ The game supports raw telemetry output in the form of a binary byte or json fire
 
 ## Building
 
-Unity editor version: `2022.3.4f1 LTS`
+Unity editor version: `2022.3.62f1 LTS`
 
 The release build is reliant on some paid assets (follow instructions underneath to build without for dev purposes!):
 
