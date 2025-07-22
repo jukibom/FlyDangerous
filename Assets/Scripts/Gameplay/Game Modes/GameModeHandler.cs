@@ -123,8 +123,15 @@ namespace Gameplay.Game_Modes {
             _startPosition = LocalPlayer.AbsoluteWorldPosition;
             _startRotation = LocalPlayer.transform.rotation;
 
+            if (_showLevelAndMusicName != null) StopCoroutine(_showLevelAndMusicName);
+            _showLevelAndMusicName = StartCoroutine(ShowLevelAndMusicName());
+            
             if (_gameMode.SupportsReplays) {
-                _inGameUI.GameModeUIHandler.ShowCompetitionPanel(HandleStartSequence);
+                // TODO: swap this for a starting panel showing current medal / best time etc
+                _inGameUI.GameModeUIHandler.ShowCompetitionPanel(() => {
+                    LocalPlayer.User.ShipCameraRig.StopCameraDolly();
+                    HandleStartSequence();
+                });
             }
             else HandleStartSequence();
         }
@@ -202,9 +209,6 @@ namespace Gameplay.Game_Modes {
 
         private void HandleStartSequence() {
             if (_startSequenceCoroutine != null) StopCoroutine(_startSequenceCoroutine);
-            
-            if (_showLevelAndMusicName != null) StopCoroutine(_showLevelAndMusicName);
-            _showLevelAndMusicName = StartCoroutine(ShowLevelAndMusicName());
             
             // reset this flag on start, it's checked at the end of any game mode
             _isValid = IsValid();

@@ -5,7 +5,9 @@ using Unity.Cinemachine;
 using Core.Player.HeadTracking;
 using Gameplay;
 using JetBrains.Annotations;
+using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.Serialization;
 using CameraType = Gameplay.CameraType;
 
 namespace Core.Player {
@@ -23,11 +25,17 @@ namespace Core.Player {
         [SerializeField] private ShipCamera endScreenCamera2;
         [SerializeField] private ShipFreeCamera freeCamera;
         [SerializeField] private Transform cameraTarget;
+        [SerializeField, Foldout("Dolly Camera Settings")] private List<CinemachineSplineDolly> dollyCameras;
+        [SerializeField, Foldout("Dolly Camera Settings"), MinMaxRangeSlider(1,20)] private Vector2 dollyTimeRangeSeconds = new(10, 12);
+        
         private Vector3 _cameraOffset;
         private Vector2 _currentRotation;
         private Coroutine _endScreenCameraTransition;
         private HeadTransform _headTransform;
         private Transform _transform;
+
+        private bool _dollyActive;
+        private Coroutine _dollyCoroutine;
 
         private Vector3 prevVelocity;
         private float prevMaxVelocity;
@@ -234,6 +242,45 @@ namespace Core.Player {
             }
 
             _endScreenCameraTransition = StartCoroutine(TransitionToSecondCamera());
+        }
+
+        [Button]
+        public void StartCameraDolly() {
+            _dollyActive = true;
+            if (_dollyCoroutine != null) StopCoroutine(_dollyCoroutine);
+
+            IEnumerator DollyCamera(CinemachineSplineDolly dollyCamera) {
+                dollyCamera.VirtualCamera.Prioritize();
+                var dollyTimeSeconds = Random.Range(dollyTimeRangeSeconds.x, dollyTimeRangeSeconds.y);
+                var forward = Random.value > 0.5f;
+                var timer = forward ? 0f : dollyTimeSeconds;
+                while (_dollyActive && forward ? timer < dollyTimeSeconds : timer > 0f) {
+                    timer += (forward ? 1f : -1f) * Time.deltaTime; 
+                    dollyCamera.CameraPosition = timer / dollyTimeSeconds;
+                    yield return null;
+                }
+            }
+
+            IEnumerator DoDolly() {
+                CinemachineSplineDolly lastCamera = null;
+                while (_dollyActive) {
+                    var randomCamera = dollyCameras[Random.Range(0, dollyCameras.Count)];
+                    
+                    if (lastCamera == randomCamera) continue;
+                    lastCamera = randomCamera;
+                    
+                    yield return DollyCamera(randomCamera);
+                }
+            }
+
+            _dollyCoroutine = StartCoroutine(DoDolly());
+        }
+
+        [Button]
+        public void StopCameraDolly() {
+            _dollyActive = false;
+            if (_dollyCoroutine != null) StopCoroutine(_dollyCoroutine);
+            ActiveCamera?.Camera.Prioritize();
         }
     }
 }

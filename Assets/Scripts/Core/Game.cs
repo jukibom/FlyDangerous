@@ -422,6 +422,11 @@ namespace Core {
                 }
 
                 FadeFromBlack();
+
+                if (GameModeHandler.GameMode.SupportsReplays) {
+                    ship.User.ShipCameraRig.StartCameraDolly();
+                }
+
                 yield return new WaitForSeconds(0.7f);
 
                 // if there's a track in the game world, start it
