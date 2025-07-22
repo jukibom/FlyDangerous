@@ -96,7 +96,7 @@ public partial class @FlyDangerousActions: IInputActionCollection2, IDisposable
                     ""name"": ""Reset HMD View"",
                     ""type"": ""Button"",
                     ""id"": ""0ac8ccd5-c4f5-414f-86f8-2717d1c497dd"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -3138,7 +3138,7 @@ public partial class @FlyDangerousActions: IInputActionCollection2, IDisposable
                     ""type"": ""PassThrough"",
                     ""id"": ""4228771a-3eee-4250-bb1b-1186f85c0c5d"",
                     ""expectedControlType"": ""Vector2"",
-                    ""processors"": ""NormalizeMouseScroll"",
+                    ""processors"": ""NormalizeMouseScroll(scrollScale=6)"",
                     ""interactions"": """",
                     ""initialStateCheck"": false
                 },
