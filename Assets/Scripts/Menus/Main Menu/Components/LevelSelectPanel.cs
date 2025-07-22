@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Audio;
 using Core.MapData;
@@ -80,7 +81,7 @@ namespace Menus.Main_Menu.Components {
                     break;
                 case "custom":
                     LoadLevels(Level.ListCustom());
-                    footer.text = "CUSTOM MAPS";
+                    footer.text = $"CUSTOM MAPS LOADED FROM {Path.Combine(Application.persistentDataPath, "CustomLevels")}.";
                     break;
             }
         }
