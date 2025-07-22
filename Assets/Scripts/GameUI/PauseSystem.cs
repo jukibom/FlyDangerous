@@ -57,7 +57,7 @@ namespace GameUI {
 
         public void Leaderboard(Action onBack = null) {
             menuContainer.SetActive(false);
-            Game.Instance.GameModeHandler.GameMode.GameModeUIHandler.ShowCompetitionPanel(null, () => { },
+            Game.Instance.GameModeHandler.GameMode.GameModeUIHandler.ShowLeaderboards(null, () => { },
                 () => {
                     menuContainer.SetActive(true); 
                     onBack?.Invoke();

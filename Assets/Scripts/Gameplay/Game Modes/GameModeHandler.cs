@@ -127,8 +127,7 @@ namespace Gameplay.Game_Modes {
             _showLevelAndMusicName = StartCoroutine(ShowLevelAndMusicName());
             
             if (_gameMode.SupportsReplays) {
-                // TODO: swap this for a starting panel showing current medal / best time etc
-                _inGameUI.GameModeUIHandler.ShowCompetitionPanel(() => {
+                _inGameUI.GameModeUIHandler.StartPanel.Show(Game.Instance.loadedMainLevel, () => {
                     LocalPlayer.User.ShipCameraRig.StopCameraDolly();
                     HandleStartSequence();
                 });

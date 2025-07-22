@@ -21,19 +21,8 @@ namespace Menus.Main_Menu.Components {
         [SerializeField] private Text footer;
         [SerializeField] private LevelUIElement levelUIElementPrefab;
         [SerializeField] private RectTransform levelPrefabContainer;
-
-        [SerializeField] private Text levelName;
-        [SerializeField] private Text authorName;
-
-        [SerializeField] private Image levelThumbnail;
-
-        [SerializeField] private Text personalBest;
-        [SerializeField] private Text platinumTarget;
-        [SerializeField] private Text goldTarget;
-        [SerializeField] private Text silverTarget;
-        [SerializeField] private Text bronzeTarget;
-        [SerializeField] private GameObject platinumMedalContainer;
-
+        [SerializeField] private LevelDetails levelDetails;
+        
         [SerializeField] private LayoutElement levelGridLayoutElement;
         [SerializeField] private LayoutElement summaryScreenGridLayoutElement;
         [SerializeField] private LevelCompetitionPanel competitionPanel;
@@ -134,26 +123,7 @@ namespace Menus.Main_Menu.Components {
 
         private void HighlightSelectedLevel(Level level) {
             if (level != null && SelectedLevel == null) {
-                levelName.text = level.Name.ToUpper();
-                authorName.text = level.Data.author;
-                levelThumbnail.sprite = level.Thumbnail;
-
-                var score = level.Score;
-                var bestTime = score.PersonalBestScore;
-                personalBest.text = bestTime > 0 ? TimeExtensions.TimeSecondsToStringWithMilliseconds(bestTime) : "NONE";
-
-                var platinumTargetTime = level.Data.authorTimeTarget;
-                var goldTargetTime = Score.GoldTimeTarget(level.Data);
-                var silverTargetTime = Score.SilverTimeTarget(level.Data);
-                var bronzeTargetTime = Score.BronzeTimeTarget(level.Data);
-
-                platinumTarget.text = TimeExtensions.TimeSecondsToStringWithMilliseconds(platinumTargetTime);
-                goldTarget.text = TimeExtensions.TimeSecondsToStringWithMilliseconds(goldTargetTime);
-                silverTarget.text = TimeExtensions.TimeSecondsToStringWithMilliseconds(silverTargetTime);
-                bronzeTarget.text = TimeExtensions.TimeSecondsToStringWithMilliseconds(bronzeTargetTime);
-
-                // if user hasn't beaten author time, hide it!
-                platinumMedalContainer.gameObject.SetActive(score.HasPlayedPreviously && bestTime <= platinumTargetTime);
+                levelDetails.Populate(level);
             }
         }
 

@@ -11,6 +11,7 @@ namespace GameUI.GameModes {
         [FormerlySerializedAs("screenText")] [SerializeField]
         private GameModeUIText gameModeUIText;
 
+        [SerializeField] private StartPanel startPanel;
         [SerializeField] private HoldBoostButtonText holdBoostButtonText;
         [SerializeField] private RaceResultsScreen raceResultsScreen;
         [SerializeField] private CanvasGroup levelDetailsCanvasGroup;
@@ -18,6 +19,7 @@ namespace GameUI.GameModes {
         [SerializeField] private Text musicNameText;
         public GameModeUIText GameModeUIText => gameModeUIText;
         public HoldBoostButtonText HoldBoostButtonText => holdBoostButtonText;
+        public StartPanel StartPanel => startPanel;
         public RaceResultsScreen RaceResultsScreen => raceResultsScreen;
         public CanvasGroup LevelDetailsCanvasGroup => levelDetailsCanvasGroup;
         public Text LevelNameText => levelNameText;
@@ -25,6 +27,7 @@ namespace GameUI.GameModes {
 
         private void Awake() {
             HideResultsScreen();
+            StartPanel.gameObject.SetActive(false);
             LevelDetailsCanvasGroup.alpha = 0;
         }
 
@@ -39,8 +42,8 @@ namespace GameUI.GameModes {
         private void OnReset() {
             HoldBoostButtonText.Reset();
         }
-
-        public void ShowCompetitionPanel(Action onStart = null, Action onRestart = null, Action onBack = null) {
+        
+        public void ShowLeaderboards(Action onStart = null, Action onRestart = null, Action onBack = null) {
             var player = FdPlayer.FindLocalShipPlayer;
             if (player) {
                 player.User.DisableGameInput();
