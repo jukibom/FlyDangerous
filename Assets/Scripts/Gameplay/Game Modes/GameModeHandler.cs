@@ -127,10 +127,19 @@ namespace Gameplay.Game_Modes {
             _showLevelAndMusicName = StartCoroutine(ShowLevelAndMusicName());
             
             if (_gameMode.SupportsReplays) {
-                _inGameUI.GameModeUIHandler.StartPanel.Show(Game.Instance.loadedMainLevel, () => {
-                    LocalPlayer.User.ShipCameraRig.StopCameraDolly();
-                    HandleStartSequence();
-                });
+
+                // only set the thumbnail if a main level is loaded and it matches the loaded data (could have been a json load)
+                var thumbnail =
+                    Game.Instance.LoadedMainLevel != null && Game.Instance.LoadedMainLevel.Data.LevelHash() ==
+                    Game.Instance.LoadedLevelData.LevelHash()
+                        ? Game.Instance.LoadedMainLevel.Thumbnail
+                        : null;
+
+                _inGameUI.GameModeUIHandler.StartPanel.Show(Game.Instance.LoadedLevelData,
+                    thumbnail, () => {
+                        LocalPlayer.User.ShipCameraRig.StopCameraDolly();
+                        HandleStartSequence();
+                    });
             }
             else HandleStartSequence();
         }

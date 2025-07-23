@@ -18,19 +18,27 @@ namespace Menus.Main_Menu.Components {
         [SerializeField] private Text bronzeTarget;
         [SerializeField] private GameObject platinumMedalContainer;
 
-        public void Populate(Level level) {
-            levelName.text = level.Name.ToUpper();
-            authorName.text = level.Data.author;
-            levelThumbnail.sprite = level.Thumbnail;
-
-            var score = level.Score;
+        /// <summary>
+        /// Populate with raw level data, typically from json - thumbnail optional. 
+        /// </summary>
+        public void Populate(LevelData levelData, Sprite thumbnailImage = null) {
+            levelThumbnail.gameObject.SetActive(false);
+            if (thumbnailImage != null) {
+                levelThumbnail.sprite = thumbnailImage;
+                levelThumbnail.gameObject.SetActive(true);
+            }
+            
+            levelName.text = levelData.name.ToUpper();
+            authorName.text = levelData.author;
+            var score = Score.ScoreForLevel(levelData);
+            
             var bestTime = score.PersonalBestScore;
             personalBest.text = bestTime > 0 ? TimeExtensions.TimeSecondsToStringWithMilliseconds(bestTime) : "NONE";
 
-            var platinumTargetTime = level.Data.authorTimeTarget;
-            var goldTargetTime = Score.GoldTimeTarget(level.Data);
-            var silverTargetTime = Score.SilverTimeTarget(level.Data);
-            var bronzeTargetTime = Score.BronzeTimeTarget(level.Data);
+            var platinumTargetTime = levelData.authorTimeTarget;
+            var goldTargetTime = Score.GoldTimeTarget(levelData);
+            var silverTargetTime = Score.SilverTimeTarget(levelData);
+            var bronzeTargetTime = Score.BronzeTimeTarget(levelData);
 
             platinumTarget.text = TimeExtensions.TimeSecondsToStringWithMilliseconds(platinumTargetTime);
             goldTarget.text = TimeExtensions.TimeSecondsToStringWithMilliseconds(goldTargetTime);
@@ -39,6 +47,14 @@ namespace Menus.Main_Menu.Components {
 
             // if user hasn't beaten author time, hide it!
             platinumMedalContainer.gameObject.SetActive(score.HasPlayedPreviously && bestTime <= platinumTargetTime);
+        }
+        
+        /// <summary>
+        /// Populate from canonical level data, packaged with a thumbnail.
+        /// </summary>
+        /// <param name="level"></param>
+        public void Populate(Level level) {
+            Populate(level.Data, level.Thumbnail);
         }
     }
 }

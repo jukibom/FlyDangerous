@@ -32,7 +32,7 @@ namespace GameUI.GameModes {
         private Action _onRestart;
         private Action _onBack;
         
-        [CanBeNull] private Level CurrentLevel => Game.Instance.loadedMainLevel;
+        [CanBeNull] private Level CurrentLevel => Game.Instance.LoadedMainLevel;
         private Level NextLevel => Level.FromId(CurrentLevel?.Id + 1 ?? 0);
         private bool IsNextLevelValid => NextLevel.Id > (CurrentLevel?.Id ?? 0) && NextLevel.GameType == CurrentLevel?.GameType;
 
@@ -216,7 +216,7 @@ namespace GameUI.GameModes {
                 if (replaysForNextLevel.Count > 0) Game.Instance.ActiveGameReplays.Add(replaysForNextLevel.First());
 
                 FdNetworkManager.Instance.StartGameLoadSequence(SessionType.Singleplayer, NextLevel.Data);
-                Game.Instance.loadedMainLevel = NextLevel;
+                Game.Instance.LoadedMainLevel = NextLevel;
 
                 // TODO: probably something better than this hot bullshit but I am very much at the end of my tether (esp. the audio listener)
                 // continue to play music while killing the ship and destroying the world (yeet ourselves off the ship! world will die taking this with it)

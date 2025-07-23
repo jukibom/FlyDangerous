@@ -12,10 +12,11 @@ namespace GameUI.GameModes {
         [SerializeField] private GameModeUIHandler gameModeUIHandler;
         [SerializeField] private Button defaultButton;
         [SerializeField] private LevelDetails levelDetails;
-        private Level _level;
+        private LevelData _levelData;
+        private Sprite _thumbnail;
         private Action _onStart;
         
-        public void Show(Level level, Action onStart) {
+        public void Show(LevelData levelData, Sprite thumbnail = null, Action onStart = null) {
             var player = FdPlayer.FindLocalShipPlayer;
             if (player) {
                 player.User.DisableGameInput();
@@ -29,11 +30,12 @@ namespace GameUI.GameModes {
             
             gameObject.SetActive(true);
             
-            _level = level;
+            _levelData = levelData;
+            _thumbnail = thumbnail;
             _onStart = onStart;
             
             defaultButton.Select();
-            levelDetails.Populate(level);
+            levelDetails.Populate(levelData, thumbnail);
         }
 
         public void Hide() {
@@ -51,7 +53,7 @@ namespace GameUI.GameModes {
         }
 
         public void ShowLeaderboard() {
-            gameModeUIHandler.ShowLeaderboards(_onStart, null, () => Show(_level, _onStart));
+            gameModeUIHandler.ShowLeaderboards(_onStart, null, () => Show(_levelData, _thumbnail, _onStart));
             Hide();
         }
     }

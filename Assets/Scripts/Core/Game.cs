@@ -81,7 +81,7 @@ namespace Core {
         private Coroutine _sessionRestartCoroutine;
         private ShipParameters _shipParameters;
 
-        [CanBeNull] public Level loadedMainLevel;
+        [CanBeNull] public Level LoadedMainLevel;
 
         public CinemachineBrain CinemachineBrain { get; private set; }
 
