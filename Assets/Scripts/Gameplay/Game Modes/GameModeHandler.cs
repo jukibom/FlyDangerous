@@ -246,6 +246,7 @@ namespace Gameplay.Game_Modes {
                 StartGhostsIfSupported();
                 _gameModeScore.Reset();
                 _gameMode.OnBegin();
+                Game.Instance.GameModeStart();
                 _inGameUI.GameModeUIHandler.GameModeUIText.ShowGameUIText();
 
                 yield return StartCountdownIfRequired();

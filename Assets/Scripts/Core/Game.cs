@@ -62,6 +62,7 @@ namespace Core {
 
         public delegate void PlayerLeaveAction();
 
+        public delegate void StartLevelAction();
         public delegate void RestartLevelAction();
 
         public delegate void WaterTransition(bool isSubmerged, Vector3 force);
@@ -178,6 +179,7 @@ namespace Core {
         public static event PlayerLeaveAction OnPlayerLeave;
         public static event GhostAddedAction OnGhostAdded;
         public static event GhostRemovedAction OnGhostRemoved;
+        public static event RestartLevelAction OnGameModeStart;
         public static event RestartLevelAction OnRestart;
         public static event GameSettingsApplyAction OnGameSettingsApplied;
         public static event CameraChangedAction OnCameraChanged;
@@ -446,6 +448,10 @@ namespace Core {
             }
 
             _loadingRoutine = StartCoroutine(LoadGame());
+        }
+
+        public void GameModeStart() {
+            OnGameModeStart?.Invoke();
         }
 
         public void RestartSession() {
