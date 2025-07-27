@@ -20,6 +20,7 @@ namespace Core.MapData {
         public static readonly Environment PlanetOrbitTop = new("Blue Planet", "Planet_Orbit_Top", 1.8f);
         public static readonly Environment RedBlueNebula = new("Red / Blue Nebula", "Red_Blue_Nebula", 2.8f);
         public static readonly Environment YellowGreenNebula = new("Yellow / Green Nebula", "Yellow_Green_Nebula", 3);
+        public static readonly Environment RedPlanet = new("Red World", "Red_Planet", 1.5f);
 
         private Environment(string name, string sceneToLoad, float nightVisionAmbientLight) {
             Id = GenerateId;
@@ -37,9 +38,9 @@ namespace Core.MapData {
 
         public static IEnumerable<Environment> List() {
             return new[] {
-                SunriseClear, SunriseHazy, NoonClear, NoonCloudy, NoonStormy, SunsetClear, SunsetCloudy, SunsetStormy, NightClear, NightCloudy,
-                ClearLowAtmosphere,
-                PlanetOrbitBottom, PlanetOrbitTop, RedBlueNebula, YellowGreenNebula
+                SunriseClear, SunriseHazy, NoonClear, NoonCloudy, NoonStormy, SunsetClear, SunsetCloudy, SunsetStormy,
+                NightClear, NightCloudy, ClearLowAtmosphere,
+                PlanetOrbitBottom, PlanetOrbitTop, RedBlueNebula, YellowGreenNebula, RedPlanet
             };
         }
 
