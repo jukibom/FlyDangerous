@@ -93,9 +93,14 @@ namespace Core.ShipModel {
             var targetPosition = targetTransform.position;
 
             var player = FdPlayer.FindLocalShipPlayer;
+            
+            var isSpectating = ReplayPrioritizer.Instance.IsSpectating;
+            var currentSpectatedShip = ReplayPrioritizer.Instance.ActiveSpectatedShip;
+            var isActiveSpectatedShip = isSpectating && targetTransform == currentSpectatedShip?.Transform; 
+
             if (player) {
                 var origin = player.User.UserCameraTransform;
-                var shipPosition = player.transform.position;
+                var shipPosition = player.User.TargetTransform.position;
 
                 var distanceToShip = Vector3.Distance(shipPosition, targetPosition);
                 var direction = (targetPosition - origin.position).normalized;
@@ -109,16 +114,18 @@ namespace Core.ShipModel {
 
                 var targetIndicatorTransform = target.transform;
                 var lookAtTransform = Game.IsVREnabled
-                    ? player.transform
+                    ? player.User.TargetTransform
                     : origin;
 
                 targetIndicatorTransform.position = Vector3.MoveTowards(origin.position, targetPosition + direction * minDistance, maxDistance);
                 targetIndicatorTransform.LookAt(origin.transform, lookAtTransform.up);
 
-                target.Opacity = distanceToShip.Remap(5, minDistance, 0, 1);
+                target.Opacity = isActiveSpectatedShip ? 1 : distanceToShip.Remap(5, minDistance, 0, 1);
                 target.Update3dIndicatorFromOrientation(targetTransform, lookAtTransform);
 
-                target.Toggle3dIndicator(target == _activeTarget);
+                target.Toggle3dIndicator(target == _activeTarget && !isSpectating);
+
+                target.IsSpectatorTarget = !isActiveSpectatedShip;
             }
         }
 

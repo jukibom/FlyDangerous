@@ -65,6 +65,14 @@ namespace Core.Player {
                 var shipPhysics = value.GetComponentInChildren<ShipPhysics>();
                 if (shipPhysics != null) {
                     spaceDust.ActiveShipPhysics = shipPhysics;
+                    
+                    var previousShipPhysics = _targetTransform.GetComponentInChildren<ShipPhysics>();
+                    if (previousShipPhysics) {
+                        UnregisterIntegrations(previousShipPhysics);
+                    }
+                    RegisterIntegrations(shipPhysics);
+                }
+                
                 _targetTransform = value;
             }
         }

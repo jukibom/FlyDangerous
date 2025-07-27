@@ -34,6 +34,8 @@ namespace GameUI.Components {
             }
         }
 
+        public bool IsSpectatorTarget { get; set; } = true;
+
         [CanBeNull]
         public Sprite Icon {
             get => icon.sprite;
@@ -88,6 +90,9 @@ namespace GameUI.Components {
 
             _facingForwardNormalized = Mathf.Lerp(_facingForwardNormalized, indicator3dFacingNormalised, 0.9f);
             Indicator3D.SetFacingValueNormalized(_facingForwardNormalized);
+
+            targetDistanceText.enabled = IsSpectatorTarget;
+            outline.enabled = IsSpectatorTarget;
         }
 
         public void SetColor(Color color) {
