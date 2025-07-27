@@ -622,7 +622,7 @@ namespace Core {
                 if (shipGhost != null) {
 
                     if (shipGhost.SpectatorActive) {
-                        shipGhost.StopSpectating();
+                        ReplayPrioritizer.Instance.StopSpectating();
                     }
                     
                     shipGhost.ReplayTimeline.Stop();

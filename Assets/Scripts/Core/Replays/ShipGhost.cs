@@ -17,7 +17,7 @@ namespace Core.Replays {
         public Transform Transform { get; private set; }
         public Rigidbody Rigidbody { get; private set; }
         public ShipPhysics ShipPhysics => shipPhysics;
-        public bool SpectatorActive { get; private set; }
+        public bool SpectatorActive { get; set; }
         
         private void Awake() {
             Transform = transform;
@@ -60,51 +60,10 @@ namespace Core.Replays {
             }
         }
 
-        /// <summary>
-        /// Move the camera from wherever it is to this ghost. This works from the player or another spectated ghost. 
-        /// </summary>
-        [Button]
-        public void Spectate() {
-            SpectatorActive = true;
-
-        public Rigidbody Rigidbody { get; private set; }
-
-        public ShipPhysics ShipPhysics => shipPhysics;
-            var player = FdPlayer.FindLocalShipPlayer;
-            if (player) {
-                player.User.TargetTransform = transform;
-            }
-            else {
-                Debug.LogWarning("Failed to set ghost spectator, player does not exist!");
-            }
-        }
-
-        /// <summary>
-        /// Stop spectating the ghost and return control to the player. This does not need to be called first in order
-        /// to switch to a different ghost, just call Spectate on that ghost.
-        /// </summary>
-        [Button]
-        public void StopSpectating() {
-            SpectatorActive = false;
-            var player = FdPlayer.FindLocalShipPlayer;
-            if (player) {
-                player.User.TargetTransform = player.transform;
-            }
-            else {
-                Debug.LogWarning("Failed to restore player logic from ghost spectator, player does not exist!");
-            }
-        }
-
         public void SetAbsolutePosition(Vector3 ghostFloatingOrigin, Vector3 offset) {
-            if (!SpectatorActive) {
-                var currentOffset = ghostFloatingOrigin - FloatingOrigin.Instance.Origin;
-                transform.position = currentOffset + offset;
-            }
-            else {
-                FloatingOrigin.Instance.SetAbsoluteWorldPosition(transform, ghostFloatingOrigin + offset);
-                FloatingOrigin.Instance.CheckNeedsUpdate();
-                Rigidbody.MovePosition(transform.position);
-            }
+            FloatingOrigin.Instance.SetAbsoluteWorldPosition(transform, ghostFloatingOrigin + offset);
+            if (SpectatorActive) FloatingOrigin.Instance.CheckNeedsUpdate();
+            Rigidbody.MovePosition(transform.position);
         }
 
         public void LoadReplay(Replay replay) {
@@ -124,6 +83,16 @@ namespace Core.Replays {
 
         private void CancelBoost() {
             ShipPhysics.ShipModel?.BoostCancel();
+        }
+        
+        [Button]
+        private void TestSpectate() {
+            ReplayPrioritizer.Instance.SpectateGhost(this);
+        }
+
+        [Button]
+        private void TestStopSpectating() {
+            ReplayPrioritizer.Instance.StopSpectating();
         }
     }
 }
