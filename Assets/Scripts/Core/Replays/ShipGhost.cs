@@ -54,8 +54,8 @@ namespace Core.Replays {
         private void FixedUpdate() {
             var player = FdPlayer.FindLocalShipPlayer;
             if (player) {
-                var distance = Vector3.Distance(transform.position, player.transform.position);
-                var shouldShow = distance > 8;
+                var distance = Vector3.Distance(transform.position, player.User.transform.position);
+                var shouldShow = distance > 8 || SpectatorActive;
                 if (shipPhysics.ShipModel != null) shipPhysics.ShipModel.SetVisible(shouldShow);
             }
         }

@@ -27,6 +27,10 @@ namespace Core {
         }
 
         public void SpectateGhost(ShipGhost ghost) {
+            if (ActiveSpectatedShip != null) {
+                ActiveSpectatedShip.ShipPhysics.ShipModel?.SetVisible(false);
+            }
+            
             foreach (var replayTimeline in _replays) {
                 if (replayTimeline.ShipReplayObject == null) 
                     continue;
@@ -34,11 +38,11 @@ namespace Core {
             }
             
             ghost.SpectatorActive = true;
+            ghost.ShipPhysics.ShipModel?.SetVisible(true);
             
             var player = FdPlayer.FindLocalShipPlayer;
             if (player) {
-                // TODO: disable input, hide the player etc etc
-                
+                player.ShipPhysics.ShipModel?.SetVisible(false);
                 player.User.TargetTransform = ghost.transform;
             }
             else {
@@ -56,6 +60,7 @@ namespace Core {
             
             var player = FdPlayer.FindLocalShipPlayer;
             if (player) {
+                player.ShipPhysics.ShipModel?.SetVisible(true);
                 player.User.TargetTransform = player.transform;
             }
             else {
