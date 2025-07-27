@@ -1,18 +1,18 @@
 using System.Linq;
 using Audio;
 using Core.Player.HeadTracking;
+using Core.ShipModel;
 using FdUI;
-using Gameplay.Game_Modes.Components;
 using GameUI;
 using JetBrains.Annotations;
 using Misc;
-using NaughtyAttributes;
 using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.InputSystem.Users;
+using VFX;
 
 namespace Core.Player {
     [RequireComponent(typeof(MouseShipInput))]
@@ -60,7 +60,6 @@ namespace Core.Player {
         public Transform TargetTransform {
             get => _targetTransform;
             set {
-                _targetTransform = value;
                 FloatingOrigin.Instance.SwapFocalTransform(value);
                 var shipPhysics = value.GetComponentInChildren<ShipPhysics>();
                 if (shipPhysics != null) {
@@ -676,6 +675,18 @@ namespace Core.Player {
             var playerInput = GetComponent<PlayerInput>();
             if (change == InputDeviceChange.Added) InputUser.PerformPairingWithDevice(device, playerInput.user);
             if (change == InputDeviceChange.Removed) playerInput.user.UnpairDevice(device);
+        }
+
+        public void RegisterIntegrations(ShipPhysics shipPhysics) {
+            shipPhysics.FeedbackEngine.SubscribeFeedbackObject(InGameUI.ShipStats);
+            shipPhysics.FeedbackEngine.SubscribeFeedbackObject(InGameUI.IndicatorSystem);
+            foreach (var integration in Engine.Instance.Integrations) shipPhysics.FeedbackEngine.SubscribeFeedbackObject(integration);
+        }
+
+        public void UnregisterIntegrations(ShipPhysics shipPhysics) {
+            shipPhysics.FeedbackEngine.RemoveFeedbackObject(InGameUI.ShipStats);
+            shipPhysics.FeedbackEngine.RemoveFeedbackObject(InGameUI.IndicatorSystem);
+            foreach (var integration in Engine.Instance.Integrations) shipPhysics.FeedbackEngine.RemoveFeedbackObject(integration);
         }
 
         private void LateUpdate() {

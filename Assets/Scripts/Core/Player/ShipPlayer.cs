@@ -147,15 +147,10 @@ namespace Core.Player {
             playerLogic.transform.parent = null;
             DontDestroyOnLoad(playerLogic);
 
+            user.RegisterIntegrations(shipPhysics);
+            
             // register self as floating origin focus
             FloatingOrigin.Instance.SwapFocalTransform(transform);
-
-            // register local player UI 
-            ShipPhysics.FeedbackEngine.SubscribeFeedbackObject(user.InGameUI.ShipStats);
-            ShipPhysics.FeedbackEngine.SubscribeFeedbackObject(user.InGameUI.IndicatorSystem);
-
-            // register integrations
-            foreach (var integration in Engine.Instance.Integrations) ShipPhysics.FeedbackEngine.SubscribeFeedbackObject(integration);
 
             SetFlightAssistFromDefaults();
 

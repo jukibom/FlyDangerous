@@ -120,14 +120,19 @@ namespace Core.ShipModel {
         private void UpdateTVIs() {
             var player = FdPlayer.FindLocalShipPlayer;
             if (player && _mainCamera) {
-                var shipTransform = player.transform;
 
-                var velocity = player.ShipPhysics.Velocity;
+                var shipPhysics = ReplayPrioritizer.Instance.IsSpectating
+                    ? ReplayPrioritizer.Instance.ActiveSpectatedShip?.ShipPhysics ?? player.ShipPhysics
+                    : player.ShipPhysics;
+                
+                var shipTransform = shipPhysics.transform;
+
+                var velocity = shipPhysics.Velocity;
                 var shipDirectionVector = shipTransform.InverseTransformDirection(velocity.normalized);
 
                 // dirty cludge for flight assist 
                 var positionVector = shipDirectionVector;
-                if (player.ShipPhysics.VectorFlightAssistActive)
+                if (shipPhysics.VectorFlightAssistActive)
                     positionVector = Vector3.Lerp(_stationaryDirectionVector, shipDirectionVector, velocity.magnitude.Remap(0, 100, 0, 1));
 
                 _targetTVIForwardPosition = positionVector * indicatorDistance;
