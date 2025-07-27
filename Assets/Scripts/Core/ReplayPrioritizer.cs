@@ -13,6 +13,8 @@ namespace Core {
     public class ReplayPrioritizer : Singleton<ReplayPrioritizer> {
         private readonly List<ReplayTimeline> _replays = new();
         
+        public List<ReplayTimeline> Replays => _replays;
+        
         public bool IsSpectating => _replays.Any(replay => replay.ShipReplayObject is { SpectatorActive: true });
         [CanBeNull] public IReplayShip ActiveSpectatedShip => _replays.FirstOrDefault(replay => replay.ShipReplayObject is { SpectatorActive: true })?.ShipReplayObject;
         

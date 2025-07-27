@@ -28,6 +28,8 @@ namespace Menus.Pause_Menu {
 
         [SerializeField] private Button quitButton;
 
+        [SerializeField] private LiveGhostPanel liveGhostPanel;
+        
         [SerializeField] private Image headerImage;
         [SerializeField] private Sprite flyDangerousAFLogo;
 
@@ -38,6 +40,10 @@ namespace Menus.Pause_Menu {
             if (Game.IsAprilFools) headerImage.sprite = flyDangerousAFLogo;
 
             leaderboardButton.gameObject.SetActive(Game.Instance.GameModeHandler.GameMode.SupportsReplays);
+            var showGhostPanel = Game.Instance.GameModeHandler.GameMode.SupportsReplays &&
+                                 ReplayPrioritizer.Instance.Replays.Count > 0;
+            liveGhostPanel.gameObject.SetActive(showGhostPanel);
+            if (showGhostPanel) liveGhostPanel.Refresh();
             
             // multiplayer specific UI changes
             var player = FdPlayer.FindLocalShipPlayer;
