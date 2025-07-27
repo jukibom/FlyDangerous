@@ -1,13 +1,14 @@
-﻿0.6.4-dev [unreleased]
+﻿0.6.4
 New:
-    * New spectate functionality - when the game is running with active ghosts, a panel in the pause menu allows the camera to swap to a ghost.
+    * New spectate functionality - when the game is running with active ghosts, a panel in the pause menu allows the camera to swap to a ghost
     * Added current score + medals panel with leaderboard button to start of map
     * Added leaderboard button to pause menu 
-    * Debug flag for input inspection
+    * Added a red planet environment and updated Fresh Hell to use it  
     * Added the amount of redirect-able thrust to the dev flight parameters menu
     * Ghost flight parameters are now correctly loaded (thank you Carda!) 
     * External level loading support (Thank you, 74oshua! PR #267)
     * "Ballistic booster support", a non-default mode of booster operation which allows for un-capped or otherwise absurd ship physics configurations (Thank you Carda and 74oshua! PR #264) 
+    * Debug flag for input inspection
     
 Changed: 
     * Cockpit HUD elements now have an emissive glow 
@@ -17,6 +18,7 @@ Fixed:
     * Incorrectly loaded the last-used ghosts from regular maps when loading a community map (Thank you Carda! PR #259)
     * Binding issue caused by clearing bindings
     * Oh god Apple Silicon fixes, why does Apple hate me so much
+    * Fixed station rotation being exploitable (started turning before manually-triggered countdown)
     * Incorrect UI span on results screen / leaderboard panel on ultra-wide displays etc.
     * Camera offset stutter during CPU-intensive (e.g. terrain gen) moments
     * Fixed non-standard level thumbnails from over-drawing the medal info (Thank you 74oshua! PR #269)
