@@ -327,6 +327,8 @@ namespace Core {
             IEnumerator LoadGame() {
                 yield return _levelLoader.ShowLoadingScreen();
 
+                FloatingOrigin.Instance.ResetOrigin();
+
                 // Position the active camera to the designated start location so we can be sure to load in anything
                 // important at that location as part of the load sequence
                 yield return FdPlayer.WaitForLoadingPlayer();
@@ -514,6 +516,7 @@ namespace Core {
             FadeToBlack();
             MusicManager.Instance.StopMusic(true);
             yield return new WaitForSeconds(0.5f);
+            FloatingOrigin.Instance.ResetOrigin();
             yield return SceneManager.LoadSceneAsync("Main Menu");
             yield return new WaitForEndOfFrame();
             NotifyVRStatus();
@@ -617,6 +620,11 @@ namespace Core {
             // we have to wait a frame for all deletions to occur before firing any events
             IEnumerator DestroyGhost() {
                 if (shipGhost != null) {
+
+                    if (shipGhost.SpectatorActive) {
+                        shipGhost.StopSpectating();
+                    }
+                    
                     shipGhost.ReplayTimeline.Stop();
                     var replayObject = shipGhost.ReplayTimeline.ShipReplayObject;
                     if (replayObject != null && replayObject.Transform != null) Destroy(replayObject.Transform.gameObject);

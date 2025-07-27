@@ -25,6 +25,7 @@ namespace Core.Player {
         [SerializeField] private ShipCamera endScreenCamera2;
         [SerializeField] private ShipFreeCamera freeCamera;
         [SerializeField] private Transform cameraTarget;
+        [SerializeField, Foldout("Dolly Camera Settings")] private Transform dollyCameraContainer;
         [SerializeField, Foldout("Dolly Camera Settings")] private List<CinemachineSplineDolly> dollyCameras;
         [SerializeField, Foldout("Dolly Camera Settings"), MinMaxRangeSlider(1,20)] private Vector2 dollyTimeRangeSeconds = new(10, 12);
         
@@ -63,6 +64,9 @@ namespace Core.Player {
             cameraTarget.localPosition = BaseTargetPosition;
             cameraTarget.transform.rotation = _transform.rotation;
             SetShakeEffect(0);
+            
+            endScreenCamera1.gameObject.SetActive(false);
+            endScreenCamera2.gameObject.SetActive(false);
         }
 
         private void Start() {
@@ -229,6 +233,7 @@ namespace Core.Player {
         }
 
         public void SwitchToEndScreenCamera() {
+            endScreenCamera1.gameObject.SetActive(true);
             SetActiveCamera(endScreenCamera1);
 
             IEnumerator TransitionToSecondCamera() {
@@ -237,6 +242,7 @@ namespace Core.Player {
                 if (cinemachine) {
                     var switchNextTime = cinemachine.ActiveBlend?.Duration ?? 2;
                     yield return new WaitForSeconds(switchNextTime);
+                    endScreenCamera2.gameObject.SetActive(true);
                     SetActiveCamera(endScreenCamera2);
                 }
             }
@@ -246,6 +252,7 @@ namespace Core.Player {
 
         [Button]
         public void StartCameraDolly() {
+            dollyCameraContainer.gameObject.SetActive(true);
             _dollyActive = true;
             if (_dollyCoroutine != null) StopCoroutine(_dollyCoroutine);
 
@@ -278,6 +285,7 @@ namespace Core.Player {
 
         [Button]
         public void StopCameraDolly() {
+            dollyCameraContainer.gameObject.SetActive(false);
             _dollyActive = false;
             if (_dollyCoroutine != null) StopCoroutine(_dollyCoroutine);
             ActiveCamera?.Camera.Prioritize();

@@ -56,8 +56,7 @@ namespace Core.Player {
         /// and rotation based on this instance's transform.
         /// </summary>
         public void SetFloatingOrigin() {
-            FloatingOrigin.Instance.FocalTransform = transform;
-            FloatingOrigin.Instance.ForceUpdate();
+            FloatingOrigin.Instance.SwapFocalTransform(transform);
         }
 
         /// <summary>

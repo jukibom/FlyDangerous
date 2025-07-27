@@ -2,9 +2,11 @@ using System.Linq;
 using Audio;
 using Core.Player.HeadTracking;
 using FdUI;
+using Gameplay.Game_Modes.Components;
 using GameUI;
 using JetBrains.Annotations;
 using Misc;
+using NaughtyAttributes;
 using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -52,6 +54,16 @@ namespace Core.Player {
         private float _throttle;
         private float _yaw;
 
+        private Transform _targetTransform;
+
+        public Transform TargetTransform {
+            get => _targetTransform;
+            set {
+                _targetTransform = value;
+                FloatingOrigin.Instance.SwapFocalTransform(value);
+            }
+        }
+
         public InGameUI InGameUI => inGameUI;
 
         [CanBeNull]
@@ -69,6 +81,7 @@ namespace Core.Player {
             DisableGameInput();
             DisableUIInput();
             ResetMouseToCentre();
+            TargetTransform = shipPlayer.transform;
         }
 
         public void Update() {
@@ -650,6 +663,10 @@ namespace Core.Player {
             var playerInput = GetComponent<PlayerInput>();
             if (change == InputDeviceChange.Added) InputUser.PerformPairingWithDevice(device, playerInput.user);
             if (change == InputDeviceChange.Removed) playerInput.user.UnpairDevice(device);
+        }
+
+        private void LateUpdate() {
+            transform.SetPositionAndRotation(_targetTransform.position, _targetTransform.rotation);
         }
     }
 }
