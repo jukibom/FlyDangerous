@@ -1,5 +1,6 @@
 ﻿using Core.Player;
 using Core.ShipModel;
+using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -9,8 +10,15 @@ namespace Core.Replays {
     public class ShipGhost : MonoBehaviour, IReplayShip {
         [SerializeField] private ShipPhysics shipPhysics;
         [SerializeField] private AudioMixerGroup ghostAudioMixer;
+        
         public ReplayTimeline ReplayTimeline { get; private set; }
-
+        public string PlayerName { get; set; }
+        public Flag PlayerFlag { get; set; }
+        public Transform Transform { get; private set; }
+        public Rigidbody Rigidbody { get; private set; }
+        public ShipPhysics ShipPhysics => shipPhysics;
+        public bool SpectatorActive { get; set; }
+        
         private void Awake() {
             Transform = transform;
             Rigidbody = GetComponent<Rigidbody>();
@@ -23,23 +31,14 @@ namespace Core.Replays {
             foreach (var audioSource in GetComponentsInChildren<AudioSource>(true)) audioSource.outputAudioMixerGroup = ghostAudioMixer;
         }
 
-        private void FixedUpdate() {
-            var player = FdPlayer.FindLocalShipPlayer;
-            if (player) {
-                var distance = Vector3.Distance(transform.position, player.transform.position);
-                var shouldShow = distance > 8;
-                if (shipPhysics.ShipModel != null) shipPhysics.ShipModel.SetVisible(shouldShow);
-            }
-        }
-
         private void OnEnable() {
-            FloatingOrigin.OnFloatingOriginCorrection += PerformCorrection;
+            FloatingOrigin.OnFloatingOriginCorrection += OnFloatingOriginCorrection;
             ShipPhysics.OnBoost += ShowBoost;
             ShipPhysics.OnBoostCancel += CancelBoost;
         }
 
         private void OnDisable() {
-            FloatingOrigin.OnFloatingOriginCorrection -= PerformCorrection;
+            FloatingOrigin.OnFloatingOriginCorrection -= OnFloatingOriginCorrection;
             ShipPhysics.OnBoost -= ShowBoost;
             ShipPhysics.OnBoostCancel -= CancelBoost;
         }
@@ -52,26 +51,30 @@ namespace Core.Replays {
             ShipPhysics.OnCollision(collisionInfo, false);
         }
 
-        public string PlayerName { get; set; }
-        public Flag PlayerFlag { get; set; }
+        private void FixedUpdate() {
+            var player = FdPlayer.FindLocalShipPlayer;
+            if (player) {
+                var distance = Vector3.Distance(transform.position, player.User.transform.position);
+                var shouldShow = distance > 8 || SpectatorActive;
+                if (shipPhysics.ShipModel != null) shipPhysics.ShipModel.SetVisible(shouldShow);
+            }
+        }
 
-        public Transform Transform { get; private set; }
-
-        public Rigidbody Rigidbody { get; private set; }
-
-        public ShipPhysics ShipPhysics => shipPhysics;
-
-        public void SetAbsolutePosition(Vector3 ghostFloatingOrigin, Vector3 position) {
-            var offset = ghostFloatingOrigin - FloatingOrigin.Instance.Origin;
-            transform.position = offset + position;
+        public void SetAbsolutePosition(Vector3 ghostFloatingOrigin, Vector3 offset) {
+            FloatingOrigin.Instance.SetAbsoluteWorldPosition(transform, ghostFloatingOrigin + offset);
+            if (SpectatorActive) FloatingOrigin.Instance.CheckNeedsUpdate();
+            Rigidbody.MovePosition(transform.position);
         }
 
         public void LoadReplay(Replay replay) {
             ReplayTimeline.LoadReplay(this, replay);
         }
 
-        private void PerformCorrection(Vector3 offset) {
+        private void OnFloatingOriginCorrection(Vector3 offset) {
+            if (SpectatorActive) return;
+            
             transform.position -= offset;
+            Rigidbody.MovePosition(transform.position);
         }
 
         private void ShowBoost(float spoolTime, float boostTime) {
@@ -80,6 +83,16 @@ namespace Core.Replays {
 
         private void CancelBoost() {
             ShipPhysics.ShipModel?.BoostCancel();
+        }
+        
+        [Button]
+        private void TestSpectate() {
+            ReplayPrioritizer.Instance.SpectateGhost(this);
+        }
+
+        [Button]
+        private void TestStopSpectating() {
+            ReplayPrioritizer.Instance.StopSpectating();
         }
     }
 }

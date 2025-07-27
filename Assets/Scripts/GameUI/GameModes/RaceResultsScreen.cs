@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,20 +11,28 @@ using Core.Scores;
 using JetBrains.Annotations;
 using Menus.Main_Menu.Components;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace GameUI.GameModes {
-    public class RaceResultsScreen : MonoBehaviour {
+    public class RaceResultsScreen : MonoBehaviour, ICancelHandler {
         [SerializeField] private Image resultsScreenBackground;
         [SerializeField] private MedalsScreen medalsScreen;
         [SerializeField] private GameObject uploadScreen;
         [SerializeField] private LevelCompetitionPanel competitionPanel;
         [SerializeField] private GameObject uiButtons;
-        [SerializeField] private Button defaultSelectedButton;
+        [SerializeField] private Button quitButton;
+        [SerializeField] private Button backButton;
+        [SerializeField] private Button startButton;
+        [SerializeField] private Button retryButton;
         [SerializeField] private Button nextLevelButton;
         [SerializeField] private AudioListener temporaryAudioListener;
 
-        [CanBeNull] private Level CurrentLevel => Game.Instance.loadedMainLevel;
+        private Action _onStart;
+        private Action _onRestart;
+        private Action _onBack;
+        
+        [CanBeNull] private Level CurrentLevel => Game.Instance.LoadedMainLevel;
         private Level NextLevel => Level.FromId(CurrentLevel?.Id + 1 ?? 0);
         private bool IsNextLevelValid => NextLevel.Id > (CurrentLevel?.Id ?? 0) && NextLevel.GameType == CurrentLevel?.GameType;
 
@@ -43,10 +52,55 @@ namespace GameUI.GameModes {
             uiButtons.gameObject.SetActive(false);
         }
 
-        public void Show(Score score, Score previousBest, bool isValid, string replayFilename, string replayFilepath) {
+        public void RunLevelComplete(Score score, Score previousBest, bool isValid, string replayFilename, string replayFilepath) {
+            HideAllButtons();
+            quitButton.gameObject.SetActive(true);
+            retryButton.gameObject.SetActive(true);
+            
             resultsScreenBackground.enabled = true;
-            nextLevelButton.gameObject.SetActive(IsNextLevelValid);
             StartCoroutine(ShowEndResultsScreen(score, previousBest, isValid, replayFilename, replayFilepath));
+        }
+
+        public void ShowCompetitionPanel(Action onStart = null, Action onRestart = null, Action onBack = null) {
+
+            HideAllButtons();
+            
+            if (onStart != null) {
+                startButton.gameObject.SetActive(true);
+                _onStart = onStart;
+            
+                startButton.Select();
+            }
+
+            if (onRestart != null) {
+                retryButton.gameObject.SetActive(true);
+                _onRestart = onRestart;
+            }
+            
+            if (onBack != null) {
+                backButton.gameObject.SetActive(true);
+                _onBack = onBack;
+                
+                backButton.Select();
+            }
+            ShowCompetitionPanelInternal();
+        }
+
+        private void ShowCompetitionPanelInternal() {
+            var player = FdPlayer.FindLocalShipPlayer;
+            if (player) {
+                FindObjectOfType<InGameUI>()?.OnPauseToggle(true);
+                Game.Instance.FreeCursor();
+                player.User.EnableUIInput();
+                player.User.ResetMouseToCentre();
+                player.User.restartEnabled = true;
+            }
+            
+            var levelData = Game.Instance.LoadedLevelData;
+            competitionPanel.gameObject.SetActive(true);
+            uiButtons.gameObject.SetActive(true);
+            
+            competitionPanel.Populate(levelData);
         }
 
         private IEnumerator ShowEndResultsScreen(Score score, Score previousBest, bool isValid, string replayFileName, string replayFilePath) {
@@ -61,20 +115,8 @@ namespace GameUI.GameModes {
                 replayFilePath);
             yield return new WaitUntil(() => uploadTask.IsCompleted);
 
-            var player = FdPlayer.FindLocalShipPlayer;
-            if (player) {
-                FindObjectOfType<InGameUI>()?.OnPauseToggle(true);
-                Game.Instance.FreeCursor();
-                player.User.EnableUIInput();
-                player.User.ResetMouseToCentre();
-                player.User.restartEnabled = true;
-            }
-
-            competitionPanel.gameObject.SetActive(true);
-            uiButtons.gameObject.SetActive(true);
-            defaultSelectedButton.Select();
-
-            competitionPanel.Populate(levelData);
+            ShowCompetitionPanelInternal();
+            nextLevelButton.gameObject.SetActive(IsNextLevelValid);
         }
 
         private IEnumerator ShowMedalScreen(Score score, Score previousBest, bool isValid) {
@@ -127,10 +169,27 @@ namespace GameUI.GameModes {
         public void QuitToMenu() {
             Game.Instance.QuitToMenu();
         }
+        
+        public void Back() {
+            _onBack?.Invoke();
+            _onBack = null;
+            Hide();
+        }
 
         public void Retry() {
             SetReplaysAndHideCursor();
             Game.Instance.RestartSession();
+            _onRestart?.Invoke();
+            _onRestart = null;
+        }
+
+        public void StartGame() {
+            var player = FdPlayer.FindLocalShipPlayer;
+            player?.User.DisableUIInput();
+            SetReplaysAndHideCursor();
+            _onStart?.Invoke();
+            _onStart = null;
+            Hide();
         }
 
         // hide the mouse and do all the things that normally happens when un-pausing
@@ -157,7 +216,7 @@ namespace GameUI.GameModes {
                 if (replaysForNextLevel.Count > 0) Game.Instance.ActiveGameReplays.Add(replaysForNextLevel.First());
 
                 FdNetworkManager.Instance.StartGameLoadSequence(SessionType.Singleplayer, NextLevel.Data);
-                Game.Instance.loadedMainLevel = NextLevel;
+                Game.Instance.LoadedMainLevel = NextLevel;
 
                 // TODO: probably something better than this hot bullshit but I am very much at the end of my tether (esp. the audio listener)
                 // continue to play music while killing the ship and destroying the world (yeet ourselves off the ship! world will die taking this with it)
@@ -169,6 +228,22 @@ namespace GameUI.GameModes {
             }
             else {
                 QuitToMenu();
+            }
+        }
+
+        private void HideAllButtons() {
+            quitButton.gameObject.SetActive(false);
+            retryButton.gameObject.SetActive(false);
+            startButton.gameObject.SetActive(false);
+            backButton.gameObject.SetActive(false);
+            nextLevelButton.gameObject.SetActive(false);
+        }
+
+        public void OnCancel(BaseEventData eventData) {
+            if (_onBack != null) {
+                _onBack?.Invoke();
+                _onBack = null;
+                Hide();
             }
         }
     }

@@ -207,7 +207,7 @@ namespace Menus.Main_Menu {
             MusicManager.Instance.PlayMusic(MusicTrack.RockYourBody, FirstRun, false, false, true);
             Game.Instance.SetFlatScreenCameraControllerActive(false);
 
-            FloatingOrigin.Instance.FocalTransform = transform;
+            FloatingOrigin.Instance.SwapFocalTransform(transform);
 
             // enable input and forcefully pair ALL devices (I have no idea why we have to do this)
             playerInput.enabled = true;

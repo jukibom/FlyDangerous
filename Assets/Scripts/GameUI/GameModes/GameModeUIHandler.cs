@@ -1,3 +1,4 @@
+using System;
 using Core;
 using Core.Player;
 using Core.Scores;
@@ -10,6 +11,7 @@ namespace GameUI.GameModes {
         [FormerlySerializedAs("screenText")] [SerializeField]
         private GameModeUIText gameModeUIText;
 
+        [SerializeField] private StartPanel startPanel;
         [SerializeField] private HoldBoostButtonText holdBoostButtonText;
         [SerializeField] private RaceResultsScreen raceResultsScreen;
         [SerializeField] private CanvasGroup levelDetailsCanvasGroup;
@@ -17,6 +19,7 @@ namespace GameUI.GameModes {
         [SerializeField] private Text musicNameText;
         public GameModeUIText GameModeUIText => gameModeUIText;
         public HoldBoostButtonText HoldBoostButtonText => holdBoostButtonText;
+        public StartPanel StartPanel => startPanel;
         public RaceResultsScreen RaceResultsScreen => raceResultsScreen;
         public CanvasGroup LevelDetailsCanvasGroup => levelDetailsCanvasGroup;
         public Text LevelNameText => levelNameText;
@@ -24,6 +27,8 @@ namespace GameUI.GameModes {
 
         private void Awake() {
             HideResultsScreen();
+            StartPanel.gameObject.SetActive(false);
+            LevelDetailsCanvasGroup.alpha = 0;
         }
 
         private void OnEnable() {
@@ -37,6 +42,17 @@ namespace GameUI.GameModes {
         private void OnReset() {
             HoldBoostButtonText.Reset();
         }
+        
+        public void ShowLeaderboards(Action onStart = null, Action onRestart = null, Action onBack = null) {
+            var player = FdPlayer.FindLocalShipPlayer;
+            if (player) {
+                player.User.DisableGameInput();
+                player.User.pauseMenuEnabled = false;
+            }
+
+            raceResultsScreen.gameObject.SetActive(true);
+            raceResultsScreen.ShowCompetitionPanel(onStart, onRestart, onBack);
+        }
 
         // Show and hide whatever game mode result screen there is
         public void ShowResultsScreen(Score score, Score previousBest, bool isValid, string replayFilename, string replayFilepath) {
@@ -44,14 +60,13 @@ namespace GameUI.GameModes {
             if (player) {
                 player.User.ShipCameraRig.SwitchToEndScreenCamera();
 
-                // TODO: what the fuck does this have to do with UI?!
                 player.User.DisableGameInput();
                 player.User.pauseMenuEnabled = false;
                 player.ShipPhysics.BringToStop();
             }
 
             raceResultsScreen.gameObject.SetActive(true);
-            raceResultsScreen.Show(score, previousBest, isValid, replayFilename, replayFilepath);
+            raceResultsScreen.RunLevelComplete(score, previousBest, isValid, replayFilename, replayFilepath);
         }
 
         public void HideResultsScreen() {

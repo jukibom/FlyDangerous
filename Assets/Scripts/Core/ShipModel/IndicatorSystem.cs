@@ -107,11 +107,16 @@ namespace Core.ShipModel {
 
             var player = FdPlayer.FindLocalShipPlayer;
             if (player && _mainCamera) {
+                
+                var shipPhysics = ReplayPrioritizer.Instance.IsSpectating
+                    ? ReplayPrioritizer.Instance.ActiveSpectatedShip?.ShipPhysics ?? player.ShipPhysics
+                    : player.ShipPhysics;
+                
                 // update pitch indicator to face the player but always orient with the world
-                var shipTransform = player.transform;
+                var shipTransform = shipPhysics.transform;
                 var shipForward = shipTransform.forward;
                 orientationIndicator.PitchValueNormalized = (Vector3.Angle(Vector3.up, shipForward) - 90) * -1 / 90;
-                orientationIndicator.YawValueNormalized = player.transform.rotation.eulerAngles.y.Remap(0, 360, 0, 1);
+                orientationIndicator.YawValueNormalized = shipPhysics.transform.rotation.eulerAngles.y.Remap(0, 360, 0, 1);
                 orientationIndicator.PitchIndicator.LookAt(player.User.transform, Vector3.up);
                 orientationIndicator.PitchIndicator.transform.Rotate(Vector3.up, 180);
             }
@@ -120,14 +125,19 @@ namespace Core.ShipModel {
         private void UpdateTVIs() {
             var player = FdPlayer.FindLocalShipPlayer;
             if (player && _mainCamera) {
-                var shipTransform = player.transform;
 
-                var velocity = player.ShipPhysics.Velocity;
+                var shipPhysics = ReplayPrioritizer.Instance.IsSpectating
+                    ? ReplayPrioritizer.Instance.ActiveSpectatedShip?.ShipPhysics ?? player.ShipPhysics
+                    : player.ShipPhysics;
+                
+                var shipTransform = shipPhysics.transform;
+
+                var velocity = shipPhysics.Velocity;
                 var shipDirectionVector = shipTransform.InverseTransformDirection(velocity.normalized);
 
                 // dirty cludge for flight assist 
                 var positionVector = shipDirectionVector;
-                if (player.ShipPhysics.VectorFlightAssistActive)
+                if (shipPhysics.VectorFlightAssistActive)
                     positionVector = Vector3.Lerp(_stationaryDirectionVector, shipDirectionVector, velocity.magnitude.Remap(0, 100, 0, 1));
 
                 _targetTVIForwardPosition = positionVector * indicatorDistance;

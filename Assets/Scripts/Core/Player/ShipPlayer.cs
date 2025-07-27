@@ -88,12 +88,14 @@ namespace Core.Player {
 
         // Set the position and rotation of the ship to a relative / local position with respect to itself 
         public void SetTransformLocal(Vector3 position, Quaternion rotation) {
-            GetComponent<Rigidbody>().Move(position, rotation);
+            Rigidbody.Move(position, rotation);
         }
 
         // Set the position and rotation of the ship to a world location, taking into account floating origin
         public void SetTransformWorld(Vector3 position, Quaternion rotation) {
-            SetTransformLocal(FloatingOrigin.Instance.FocalTransform == transform ? position - FloatingOrigin.Instance.Origin : position, rotation);
+            FloatingOrigin.Instance.SetAbsoluteWorldPosition(transform, position);
+            FloatingOrigin.Instance.CheckNeedsUpdate();
+            Rigidbody.Move(transform.position, rotation);
         }
 
         #endregion
@@ -109,13 +111,17 @@ namespace Core.Player {
             ReflectionProbe.gameObject.SetActive(false);
         }
 
+        private void OnDestroy() {
+            Destroy(playerLogic);
+        }
+
         public void Start() {
             DontDestroyOnLoad(this);
         }
 
         private void OnEnable() {
             // perform positional correction on non-local client player objects like anything else in the world
-            FloatingOrigin.OnFloatingOriginCorrection += NonLocalPlayerPositionCorrection;
+            FloatingOrigin.OnFloatingOriginCorrection += OnFloatingOriginCorrection;
             ShipPhysics.OnBoost += OnBoost;
             ShipPhysics.OnBoostCancel += OnBoostCancel;
             ShipPhysics.OnWaterSubmerged += OnWaterSubmerged;
@@ -123,7 +129,7 @@ namespace Core.Player {
         }
 
         private void OnDisable() {
-            FloatingOrigin.OnFloatingOriginCorrection -= NonLocalPlayerPositionCorrection;
+            FloatingOrigin.OnFloatingOriginCorrection -= OnFloatingOriginCorrection;
             ShipPhysics.OnBoost -= OnBoost;
             ShipPhysics.OnBoostCancel -= OnBoostCancel;
             ShipPhysics.OnWaterSubmerged -= OnWaterSubmerged;
@@ -136,19 +142,15 @@ namespace Core.Player {
 
             // enable input, camera, effects etc
             playerLogic.SetActive(true);
+            
+            // move the player logic out into root space due to floating origin
+            playerLogic.transform.parent = null;
+            DontDestroyOnLoad(playerLogic);
 
+            user.RegisterIntegrations(shipPhysics);
+            
             // register self as floating origin focus
-            if (FloatingOrigin.Instance.FocalTransform != null)
-                FloatingOrigin.Instance.SwapFocalTransform(transform);
-            else
-                FloatingOrigin.Instance.FocalTransform = transform;
-
-            // register local player UI 
-            ShipPhysics.FeedbackEngine.SubscribeFeedbackObject(user.InGameUI.ShipStats);
-            ShipPhysics.FeedbackEngine.SubscribeFeedbackObject(user.InGameUI.IndicatorSystem);
-
-            // register integrations
-            foreach (var integration in Engine.Instance.Integrations) ShipPhysics.FeedbackEngine.SubscribeFeedbackObject(integration);
+            FloatingOrigin.Instance.SwapFocalTransform(transform);
 
             SetFlightAssistFromDefaults();
 
@@ -231,6 +233,7 @@ namespace Core.Player {
             ShipPhysics.ResetPhysics();
 
             User.ShipCameraRig.Reset();
+            User.TargetTransform = transform;
         }
 
         public void SetFlightAssistFromDefaults() {
@@ -485,8 +488,13 @@ namespace Core.Player {
             ShipPhysics.ShipModel?.SetNightVision(active);
         }
 
-        private void NonLocalPlayerPositionCorrection(Vector3 offset) {
-            if (!isLocalPlayer) _transform.position -= offset;
+        private void OnFloatingOriginCorrection(Vector3 offset) {
+            // if the player is not the local one OR the user is not attached to the player
+            if (!isLocalPlayer || FloatingOrigin.Instance.FocalTransform != transform) {
+                var position = transform.position - offset;
+                Rigidbody.MovePosition(position);
+                transform.position = position;
+            }
         }
 
         [Command]

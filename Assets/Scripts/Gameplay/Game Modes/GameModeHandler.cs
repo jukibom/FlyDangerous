@@ -52,6 +52,7 @@ namespace Gameplay.Game_Modes {
         private ShipPlayer LocalPlayer { get; set; }
         public bool ShipActive => LocalPlayer != null && LocalPlayer.ShipPhysics.ShipActive;
         public bool HasStarted => ShipActive && _gameStarted;
+        public IGameMode GameMode => _gameMode;
 
         private void OnEnable() {
             _replayRecorder = GetComponent<ReplayRecorder>();
@@ -113,9 +114,6 @@ namespace Gameplay.Game_Modes {
             if (_gameModeWithTimer != null) _gameModeWithTimer.GameModeTimer = _gameModeTimer;
 
             _gameMode.OnInitialise();
-
-            if (_showLevelAndMusicName != null) StopCoroutine(_showLevelAndMusicName);
-            _showLevelAndMusicName = StartCoroutine(ShowLevelAndMusicName());
         }
 
         public void StartGame() {
@@ -125,7 +123,25 @@ namespace Gameplay.Game_Modes {
             _startPosition = LocalPlayer.AbsoluteWorldPosition;
             _startRotation = LocalPlayer.transform.rotation;
 
-            HandleStartSequence();
+            if (_showLevelAndMusicName != null) StopCoroutine(_showLevelAndMusicName);
+            _showLevelAndMusicName = StartCoroutine(ShowLevelAndMusicName());
+            
+            if (_gameMode.SupportsReplays) {
+
+                // only set the thumbnail if a main level is loaded and it matches the loaded data (could have been a json load)
+                var thumbnail =
+                    Game.Instance.LoadedMainLevel != null && Game.Instance.LoadedMainLevel.Data.LevelHash() ==
+                    Game.Instance.LoadedLevelData.LevelHash()
+                        ? Game.Instance.LoadedMainLevel.Thumbnail
+                        : null;
+
+                _inGameUI.GameModeUIHandler.StartPanel.Show(Game.Instance.LoadedLevelData,
+                    thumbnail, () => {
+                        LocalPlayer.User.ShipCameraRig.StopCameraDolly();
+                        HandleStartSequence();
+                    });
+            }
+            else HandleStartSequence();
         }
 
         private void Restart() {
@@ -201,7 +217,7 @@ namespace Gameplay.Game_Modes {
 
         private void HandleStartSequence() {
             if (_startSequenceCoroutine != null) StopCoroutine(_startSequenceCoroutine);
-
+            
             // reset this flag on start, it's checked at the end of any game mode
             _isValid = IsValid();
             _gameModeLifecycle.DisableAllShipInput();
@@ -230,6 +246,7 @@ namespace Gameplay.Game_Modes {
                 StartGhostsIfSupported();
                 _gameModeScore.Reset();
                 _gameMode.OnBegin();
+                Game.Instance.GameModeStart();
                 _inGameUI.GameModeUIHandler.GameModeUIText.ShowGameUIText();
 
                 yield return StartCountdownIfRequired();

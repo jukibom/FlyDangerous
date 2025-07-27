@@ -71,7 +71,8 @@ namespace FdUI {
         }
 
         public void Clear() {
-            logEntry.text = "";
+            if (logEntry != null) 
+                logEntry.text = "";
         }
     }
 }

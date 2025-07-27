@@ -1,6 +1,7 @@
 using System.Linq;
 using Audio;
 using Core.Player.HeadTracking;
+using Core.ShipModel;
 using FdUI;
 using GameUI;
 using JetBrains.Annotations;
@@ -11,6 +12,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.InputSystem.Users;
+using VFX;
 
 namespace Core.Player {
     [RequireComponent(typeof(MouseShipInput))]
@@ -22,6 +24,7 @@ namespace Core.Player {
         [SerializeField] private InputSystemUIInputModule pauseUIInputModule;
         [SerializeField] private InGameUI inGameUI;
         [SerializeField] private HeadTrackingManager headTracking;
+        [SerializeField] private SpaceDust spaceDust;
 
         [SerializeField] public bool movementEnabled;
         [SerializeField] public bool restartEnabled = true;
@@ -52,6 +55,27 @@ namespace Core.Player {
         private float _throttle;
         private float _yaw;
 
+        private Transform _targetTransform;
+
+        public Transform TargetTransform {
+            get => _targetTransform;
+            set {
+                FloatingOrigin.Instance.SwapFocalTransform(value);
+                var shipPhysics = value.GetComponentInChildren<ShipPhysics>();
+                if (shipPhysics != null) {
+                    spaceDust.ActiveShipPhysics = shipPhysics;
+                    
+                    var previousShipPhysics = _targetTransform.GetComponentInChildren<ShipPhysics>();
+                    if (previousShipPhysics) {
+                        UnregisterIntegrations(previousShipPhysics);
+                    }
+                    RegisterIntegrations(shipPhysics);
+                }
+                
+                _targetTransform = value;
+            }
+        }
+
         public InGameUI InGameUI => inGameUI;
 
         [CanBeNull]
@@ -69,6 +93,7 @@ namespace Core.Player {
             DisableGameInput();
             DisableUIInput();
             ResetMouseToCentre();
+            TargetTransform = shipPlayer.transform;
         }
 
         public void Update() {
@@ -650,6 +675,22 @@ namespace Core.Player {
             var playerInput = GetComponent<PlayerInput>();
             if (change == InputDeviceChange.Added) InputUser.PerformPairingWithDevice(device, playerInput.user);
             if (change == InputDeviceChange.Removed) playerInput.user.UnpairDevice(device);
+        }
+
+        public void RegisterIntegrations(ShipPhysics shipPhysics) {
+            shipPhysics.FeedbackEngine.SubscribeFeedbackObject(InGameUI.ShipStats);
+            shipPhysics.FeedbackEngine.SubscribeFeedbackObject(InGameUI.IndicatorSystem);
+            foreach (var integration in Engine.Instance.Integrations) shipPhysics.FeedbackEngine.SubscribeFeedbackObject(integration);
+        }
+
+        public void UnregisterIntegrations(ShipPhysics shipPhysics) {
+            shipPhysics.FeedbackEngine.RemoveFeedbackObject(InGameUI.ShipStats);
+            shipPhysics.FeedbackEngine.RemoveFeedbackObject(InGameUI.IndicatorSystem);
+            foreach (var integration in Engine.Instance.Integrations) shipPhysics.FeedbackEngine.RemoveFeedbackObject(integration);
+        }
+
+        private void LateUpdate() {
+            transform.SetPositionAndRotation(_targetTransform.position, _targetTransform.rotation);
         }
     }
 }

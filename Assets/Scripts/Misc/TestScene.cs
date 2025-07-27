@@ -1,6 +1,6 @@
 using System.Collections;
 using System.IO;
-using Cinemachine;
+using Unity.Cinemachine;
 using Core;
 using Core.MapData;
 using Core.MapData.Serializable;

@@ -7,24 +7,40 @@ public class SpaceStation : MonoBehaviour {
 
     private Quaternion _initialRotation;
 
-    private void Start() {
-        _initialRotation = centralSection.rotation;
-    }
+    private bool _hasStarted;
 
     private void FixedUpdate() {
+        if (!_hasStarted) return;
+        
         var deltaRotation = Quaternion.Euler(new Vector3(0, 0, rotationAmountDegrees));
         centralSection.MoveRotation(centralSection.rotation * deltaRotation);
     }
 
     private void OnEnable() {
-        Game.OnRestart += ResetStation;
+        Game.OnGameModeStart += OnGameModeStart;
+        Game.OnRestart += OnRestart;
     }
 
     private void OnDisable() {
-        Game.OnRestart -= ResetStation;
+        Game.OnGameModeStart -= OnGameModeStart;
+        Game.OnRestart -= OnRestart;
+    }
+
+    private void OnGameModeStart() {
+        if (!_hasStarted) {
+            _hasStarted = true;
+            _initialRotation = centralSection.rotation;
+        }
+        ResetStation();
+    }
+
+    private void OnRestart() {
+        _hasStarted = false;
+        ResetStation();
     }
 
     private void ResetStation() {
-        centralSection.rotation = _initialRotation;
+        centralSection.MoveRotation(_initialRotation);
+        centralSection.transform.rotation = _initialRotation;
     }
 }

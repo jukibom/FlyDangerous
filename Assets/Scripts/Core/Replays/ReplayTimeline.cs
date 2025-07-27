@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Text;
 using Core.Player;
@@ -13,6 +14,7 @@ namespace Core.Replays {
         Transform Transform { get; }
         Rigidbody Rigidbody { get; }
         ShipPhysics ShipPhysics { get; }
+        public bool SpectatorActive { get; set; }
         public void SetAbsolutePosition(Vector3 ghostFloatingOrigin, Vector3 position);
     }
 
@@ -32,12 +34,20 @@ namespace Core.Replays {
         [CanBeNull] public Replay Replay { get; private set; }
         [CanBeNull] public IReplayShip ShipReplayObject { get; private set; }
 
-        public void FixedUpdate() {
+        public void UpdateReplay() {
             if (_isPlaying)
                 if (Replay != null && ShipReplayObject != null && _inputFrameReader != null && _keyFrameReader != null) {
                     UpdateKeyFrame();
                     UpdateInputFrame();
                 }
+        }
+
+        private void OnEnable() {
+            ReplayPrioritizer.Instance.RegisterReplay(this);
+        }
+
+        private void OnDisable() {
+            ReplayPrioritizer.Instance.UnregisterReplay(this);
         }
 
         private void OnDestroy() {

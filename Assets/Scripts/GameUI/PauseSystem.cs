@@ -1,3 +1,4 @@
+using System;
 using Core;
 using Core.Player;
 using JetBrains.Annotations;
@@ -14,6 +15,15 @@ namespace GameUI {
 
         private void Awake() {
             menuContainer.SetActive(false);
+            Game.OnRestart += OnRestart;
+        }
+
+        private void OnDestroy() {
+            Game.OnRestart -= OnRestart;
+        }
+
+        private void OnRestart() {
+            if (IsPaused) OnGameMenuToggle();
         }
 
         [UsedImplicitly]
@@ -43,6 +53,15 @@ namespace GameUI {
         public void Restart() {
             Resume();
             Game.Instance.RestartSession();
+        }
+
+        public void Leaderboard(Action onBack = null) {
+            menuContainer.SetActive(false);
+            Game.Instance.GameModeHandler.GameMode.GameModeUIHandler.ShowLeaderboards(null, () => { },
+                () => {
+                    menuContainer.SetActive(true); 
+                    onBack?.Invoke();
+                });
         }
 
         public void Quit() {

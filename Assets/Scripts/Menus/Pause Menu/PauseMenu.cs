@@ -5,6 +5,7 @@ using FdUI;
 using GameUI;
 using Menus.Main_Menu;
 using Menus.Options;
+using Misc;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -22,9 +23,13 @@ namespace Menus.Pause_Menu {
         [SerializeField] private Button restartButton;
 
         [SerializeField] private Button optionsButton;
+        
+        [SerializeField] private Button leaderboardButton;
 
         [SerializeField] private Button quitButton;
 
+        [SerializeField] private LiveGhostPanel liveGhostPanel;
+        
         [SerializeField] private Image headerImage;
         [SerializeField] private Sprite flyDangerousAFLogo;
 
@@ -34,6 +39,12 @@ namespace Menus.Pause_Menu {
             // lol
             if (Game.IsAprilFools) headerImage.sprite = flyDangerousAFLogo;
 
+            leaderboardButton.gameObject.SetActive(Game.Instance.GameModeHandler.GameMode.SupportsReplays);
+            var showGhostPanel = Game.Instance.GameModeHandler.GameMode.SupportsReplays &&
+                                 ReplayPrioritizer.Instance.Replays.Count > 0;
+            liveGhostPanel.gameObject.SetActive(showGhostPanel);
+            if (showGhostPanel) liveGhostPanel.Refresh();
+            
             // multiplayer specific UI changes
             var player = FdPlayer.FindLocalShipPlayer;
             if (player && Game.Instance.SessionType == SessionType.Multiplayer) {
@@ -59,6 +70,10 @@ namespace Menus.Pause_Menu {
 
         public void Options() {
             Progress(optionsPanel);
+        }
+
+        public void Leaderboard() {
+            pauseSystem.Leaderboard(() => leaderboardButton.Select());
         }
 
         public void Quit() {

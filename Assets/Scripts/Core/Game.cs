@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Audio;
-using Cinemachine;
+using Unity.Cinemachine;
 using Core.MapData;
 using Core.MapData.Serializable;
 using Core.Player;
@@ -62,6 +62,7 @@ namespace Core {
 
         public delegate void PlayerLeaveAction();
 
+        public delegate void StartLevelAction();
         public delegate void RestartLevelAction();
 
         public delegate void WaterTransition(bool isSubmerged, Vector3 force);
@@ -81,7 +82,7 @@ namespace Core {
         private Coroutine _sessionRestartCoroutine;
         private ShipParameters _shipParameters;
 
-        [CanBeNull] public Level loadedMainLevel;
+        [CanBeNull] public Level LoadedMainLevel;
 
         public CinemachineBrain CinemachineBrain { get; private set; }
 
@@ -178,6 +179,7 @@ namespace Core {
         public static event PlayerLeaveAction OnPlayerLeave;
         public static event GhostAddedAction OnGhostAdded;
         public static event GhostRemovedAction OnGhostRemoved;
+        public static event RestartLevelAction OnGameModeStart;
         public static event RestartLevelAction OnRestart;
         public static event GameSettingsApplyAction OnGameSettingsApplied;
         public static event CameraChangedAction OnCameraChanged;
@@ -327,6 +329,8 @@ namespace Core {
             IEnumerator LoadGame() {
                 yield return _levelLoader.ShowLoadingScreen();
 
+                FloatingOrigin.Instance.ResetOrigin();
+
                 // Position the active camera to the designated start location so we can be sure to load in anything
                 // important at that location as part of the load sequence
                 yield return FdPlayer.WaitForLoadingPlayer();
@@ -422,6 +426,11 @@ namespace Core {
                 }
 
                 FadeFromBlack();
+
+                if (GameModeHandler.GameMode.SupportsReplays) {
+                    ship.User.ShipCameraRig.StartCameraDolly();
+                }
+
                 yield return new WaitForSeconds(0.7f);
 
                 // if there's a track in the game world, start it
@@ -439,6 +448,10 @@ namespace Core {
             }
 
             _loadingRoutine = StartCoroutine(LoadGame());
+        }
+
+        public void GameModeStart() {
+            OnGameModeStart?.Invoke();
         }
 
         public void RestartSession() {
@@ -509,6 +522,7 @@ namespace Core {
             FadeToBlack();
             MusicManager.Instance.StopMusic(true);
             yield return new WaitForSeconds(0.5f);
+            FloatingOrigin.Instance.ResetOrigin();
             yield return SceneManager.LoadSceneAsync("Main Menu");
             yield return new WaitForEndOfFrame();
             NotifyVRStatus();
@@ -612,6 +626,11 @@ namespace Core {
             // we have to wait a frame for all deletions to occur before firing any events
             IEnumerator DestroyGhost() {
                 if (shipGhost != null) {
+
+                    if (shipGhost.SpectatorActive) {
+                        ReplayPrioritizer.Instance.StopSpectating();
+                    }
+                    
                     shipGhost.ReplayTimeline.Stop();
                     var replayObject = shipGhost.ReplayTimeline.ShipReplayObject;
                     if (replayObject != null && replayObject.Transform != null) Destroy(replayObject.Transform.gameObject);

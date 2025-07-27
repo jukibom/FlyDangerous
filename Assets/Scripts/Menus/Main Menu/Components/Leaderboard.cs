@@ -59,7 +59,7 @@ namespace Menus.Main_Menu.Components {
                 leaderboardText.text = newEntries.Count > 0 ? "" : "NO LEADERBOARD ENTRIES FOUND";
 
                 // panel may have closed after entries have been fetched
-                if (newEntries.Count > 0 && gameObject.activeSelf)
+                if (newEntries.Count > 0 && gameObject.activeInHierarchy)
                     _addLeaderboardEntryCoroutine = StartCoroutine(AddEntries(newEntries, () => loadingOverlay.SetActive(false)));
                 else
                     loadingOverlay.SetActive(false);

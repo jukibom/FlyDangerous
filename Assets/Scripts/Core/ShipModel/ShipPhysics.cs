@@ -73,6 +73,7 @@ namespace Core.ShipModel {
         private float _velocityLimitCap;
 
         public bool ShipActive { get; set; }
+        public Rigidbody Rigidbody => targetRigidbody;
 
         public FeedbackEngine FeedbackEngine =>
             _feedbackEngine ? _feedbackEngine : _feedbackEngine = GetComponent<FeedbackEngine>();

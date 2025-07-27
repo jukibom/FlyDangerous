@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Audio;
-using Cinemachine;
+using Unity.Cinemachine;
 using Core.MapData.Serializable;
 using Core.Player;
 using Den.Tools;
@@ -51,8 +51,10 @@ namespace Core.MapData {
                 var mapMagic = FindObjectOfType<MapMagicObject>();
 
                 void DoReset(Vector3 position, Quaternion rotation) {
-                    ship.SetTransformWorld(position, rotation);
                     ship.Reset();
+                    FloatingOrigin.Instance.ResetOrigin();
+                    ship.SetTransformWorld(position, rotation);
+                    FloatingOrigin.Instance.CheckNeedsUpdate();
                     onRestart();
                 }
 
@@ -79,7 +81,9 @@ namespace Core.MapData {
 
                     // unload the loading screen
                     var unload = SceneManager.UnloadSceneAsync("Loading");
-                    while (!unload.isDone) yield return null;
+                    if (unload != null) {
+                        while (!unload.isDone) yield return null;
+                    }
 
                     DoReset(position, rotation);
                     Game.Instance.FadeFromBlack();
