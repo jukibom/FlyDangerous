@@ -35,8 +35,8 @@ namespace Gameplay {
 
         private void OnEnable() {
             _virtualCamera = GetComponent<CinemachineCamera>();
-            _transposer = _virtualCamera.GetComponent<CinemachineFollow>();
-            _hardLookAt = _virtualCamera.GetComponent<CinemachineHardLookAt>();
+            _transposer = GetComponent<CinemachineFollow>();
+            _hardLookAt = GetComponent<CinemachineHardLookAt>();
             ShipCamera = GetComponent<ShipCamera>();
             InitPosition(new Vector3(10, 0, 0));
         }
