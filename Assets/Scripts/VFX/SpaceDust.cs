@@ -1,5 +1,6 @@
 using Core;
 using Core.Player;
+using Core.ShipModel;
 using Misc;
 using UnityEngine;
 using UnityEngine.VFX;
@@ -8,20 +9,19 @@ namespace VFX {
     public class SpaceDust : MonoBehaviour {
         [SerializeField] private bool forceOn;
         [SerializeField] private Vector3 forceVelocity;
-        [SerializeField] private ShipPlayer player;
-
-        private Rigidbody _playerShipRigidbody;
-        private Transform _playerShipTransform;
+        
         private VisualEffect _vfx;
+        
+        public ShipPhysics ActiveShipPhysics { get; set; }
 
         private void Update() {
             if (!forceOn) _vfx.enabled = Preferences.Instance.GetBool("showSpaceDust");
 
-            if (player) {
+            if (ActiveShipPhysics) {
                 _vfx.SetVector3("_playerVelocity",
-                    _playerShipTransform.InverseTransformDirection(_playerShipRigidbody.velocity));
-                _vfx.SetVector3("_playerVelocity", _playerShipRigidbody.velocity);
-                _vfx.SetFloat("_alphaMultiplier", player.ShipPhysics.VelocityNormalised.Remap(0.1f, 1, 0, 0.4f));
+                    ActiveShipPhysics.transform.InverseTransformDirection(ActiveShipPhysics.Rigidbody.velocity));
+                _vfx.SetVector3("_playerVelocity", ActiveShipPhysics.Rigidbody.velocity);
+                _vfx.SetFloat("_alphaMultiplier", ActiveShipPhysics.VelocityNormalised.Remap(0.1f, 1, 0, 0.4f));
             }
 
             if (forceOn && forceVelocity != Vector3.zero) {
@@ -35,10 +35,6 @@ namespace VFX {
 
         private void OnEnable() {
             _vfx = GetComponent<VisualEffect>();
-            if (player) {
-                _playerShipRigidbody = player.GetComponent<Rigidbody>();
-                _playerShipTransform = player.transform;
-            }
         }
     }
 }

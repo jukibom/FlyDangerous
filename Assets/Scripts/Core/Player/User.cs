@@ -24,6 +24,7 @@ namespace Core.Player {
         [SerializeField] private InputSystemUIInputModule pauseUIInputModule;
         [SerializeField] private InGameUI inGameUI;
         [SerializeField] private HeadTrackingManager headTracking;
+        [SerializeField] private SpaceDust spaceDust;
 
         [SerializeField] public bool movementEnabled;
         [SerializeField] public bool restartEnabled = true;
@@ -61,6 +62,10 @@ namespace Core.Player {
             set {
                 _targetTransform = value;
                 FloatingOrigin.Instance.SwapFocalTransform(value);
+                var shipPhysics = value.GetComponentInChildren<ShipPhysics>();
+                if (shipPhysics != null) {
+                    spaceDust.ActiveShipPhysics = shipPhysics;
+                _targetTransform = value;
             }
         }
 
