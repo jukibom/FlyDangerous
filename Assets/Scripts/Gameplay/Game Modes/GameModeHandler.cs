@@ -120,8 +120,18 @@ namespace Gameplay.Game_Modes {
         }
 
         public void Begin() {
+            
             _startPosition = LocalPlayer.AbsoluteWorldPosition;
             _startRotation = LocalPlayer.transform.rotation;
+
+            if (_gameModeWithCheckpoint != null) {
+                // overwrite our start position with the start checkpoint, if it exists. This maintains the legality of the level data hash (start position is otherwise ignored!)
+                var startCheckpoint = _levelData.checkpoints?.Find(c => c.type == CheckpointType.Start);
+                if (startCheckpoint != null) {
+                    _startPosition = startCheckpoint.position.ToVector3();
+                    _startRotation = Quaternion.Euler(startCheckpoint.rotation.ToVector3());
+                }
+            }
 
             if (_showLevelAndMusicName != null) StopCoroutine(_showLevelAndMusicName);
             _showLevelAndMusicName = StartCoroutine(ShowLevelAndMusicName());
@@ -145,6 +155,10 @@ namespace Gameplay.Game_Modes {
         }
 
         private void Restart() {
+            // juuuuuuuuust in case
+            _inGameUI.GameModeUIHandler.StartPanel.Hide();
+            LocalPlayer.User.ShipCameraRig.StopCameraDolly();
+
             StopGhosts();
             LocalPlayer.User.DisableUIInput();
             LocalPlayer.SetNightVisionEnabled(false);
