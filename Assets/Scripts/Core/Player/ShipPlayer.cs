@@ -176,6 +176,8 @@ namespace Core.Player {
 
 
             if (!isLocalPlayer) {
+                shipPhysics.AudioListener.enabled = false;
+                
                 // rigidbody angular momentum constraints 
                 // TODO: Is this needed??
                 Rigidbody.constraints = RigidbodyConstraints.FreezeRotation;

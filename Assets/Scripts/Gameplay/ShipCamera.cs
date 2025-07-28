@@ -12,7 +12,6 @@ namespace Gameplay {
     }
 
     [RequireComponent(typeof(CinemachineVirtualCameraBase))]
-    [RequireComponent(typeof(AudioListener))]
     public class ShipCamera : MonoBehaviour {
         [SerializeField] private string cameraName;
         [SerializeField] public CameraType cameraType;
@@ -22,7 +21,6 @@ namespace Gameplay {
         [SerializeField] public bool showShipDataUI = true;
 
         public float smoothSpeed = 0.1f;
-        private AudioListener _audioListener;
         private float _baseFov;
 
         private CinemachineCamera _camera;
@@ -39,13 +37,6 @@ namespace Gameplay {
         // Use the starting position of the active camera as the pivot otherwise the cinemachine system
         // will FREAK THE FUCK OUT trying to update the position while basing that formula on the position itself
         public Vector3 BaseLocalPosition { get; private set; }
-
-        public AudioListener AudioListener {
-            get {
-                if (_audioListener == null) _audioListener = GetComponent<AudioListener>();
-                return _audioListener;
-            }
-        }
 
         public CinemachineCamera Camera {
             get {
@@ -106,7 +97,6 @@ namespace Gameplay {
                 _targetOffset = Vector3.zero;
             }
 
-            AudioListener.enabled = active;
             foreach (var audioLowPassFilter in FindObjectsOfType<AudioLowPassFilter>()) audioLowPassFilter.enabled = useLowPassAudio && active;
         }
 

@@ -61,14 +61,19 @@ namespace Core.Player {
             get => _targetTransform;
             set {
                 FloatingOrigin.Instance.SwapFocalTransform(value);
-                var shipPhysics = value.GetComponentInChildren<ShipPhysics>();
-                if (shipPhysics != null) {
+                var shipPhysics = value.GetComponentInChildren<ShipPhysics>(true);
+                if (shipPhysics != null && shipPlayer.isLocalPlayer) {
+                    shipPhysics.ActiveCameraRig = shipCameraRig;
                     spaceDust.ActiveShipPhysics = shipPhysics;
-                    
-                    var previousShipPhysics = _targetTransform.GetComponentInChildren<ShipPhysics>();
-                    if (previousShipPhysics) {
-                        UnregisterIntegrations(previousShipPhysics);
+
+                    if (_targetTransform != null) {
+                        var previousShipPhysics = _targetTransform.GetComponentInChildren<ShipPhysics>();
+
+                        if (previousShipPhysics) {
+                            UnregisterIntegrations(previousShipPhysics);
+                        }
                     }
+
                     RegisterIntegrations(shipPhysics);
                 }
                 
@@ -89,11 +94,11 @@ namespace Core.Player {
         public bool BoostButtonHeld { get; private set; }
 
         public void Awake() {
+            TargetTransform = shipPlayer.transform;
             _mouseShipInput = GetComponent<MouseShipInput>();
             DisableGameInput();
             DisableUIInput();
             ResetMouseToCentre();
-            TargetTransform = shipPlayer.transform;
         }
 
         public void Update() {

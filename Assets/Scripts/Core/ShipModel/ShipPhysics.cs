@@ -36,7 +36,7 @@ namespace Core.ShipModel {
         private static readonly Vector3 InitialInertiaTensor = new(5189.9f, 5825.6f, 1471.6f);
 
         [SerializeField] private Rigidbody targetRigidbody;
-
+        [field: SerializeField] public AudioListener AudioListener { get; private set; }
         // ray-casting without per-frame allocation
         private readonly RaycastHit[] _raycastHits = new RaycastHit[10];
         private readonly ShipFeedbackData _shipFeedbackData = new();
@@ -74,6 +74,7 @@ namespace Core.ShipModel {
 
         public bool ShipActive { get; set; }
         public Rigidbody Rigidbody => targetRigidbody;
+        public ShipCameraRig ActiveCameraRig { get; set; }
 
         public FeedbackEngine FeedbackEngine =>
             _feedbackEngine ? _feedbackEngine : _feedbackEngine = GetComponent<FeedbackEngine>();
@@ -198,8 +199,18 @@ namespace Core.ShipModel {
         }
 
         private void FixedUpdate() {
+            // update all subscibers
             _modifierEngine.FixedUpdate();
+            
+            // bring the ship to a stop if needed
             if (_stopShip) UpdateShip(0, 0, 0, 0, 0, 0, false, false, true, true);
+        }
+
+        private void LateUpdate() {
+            // update the audio listener to match the active camera, if set (it needs to be in sync with the audio sources at high speeds!)
+            if (ActiveCameraRig != null && ActiveCameraRig.ActiveCamera != null) {
+                AudioListener.transform.position = ActiveCameraRig.ActiveCamera.transform.position;
+            }
         }
 
         public void ResetPhysics(bool includeBoost = true) {

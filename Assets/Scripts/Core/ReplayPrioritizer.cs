@@ -39,9 +39,11 @@ namespace Core {
             
             ghost.SpectatorActive = true;
             ghost.ShipPhysics.ShipModel?.SetVisible(true);
+            ghost.ShipPhysics.AudioListener.enabled = true;
             
             var player = FdPlayer.FindLocalShipPlayer;
             if (player) {
+                player.ShipPhysics.AudioListener.enabled = false;
                 player.ShipPhysics.ShipModel?.SetVisible(false);
                 player.User.TargetTransform = ghost.transform;
             }
@@ -55,11 +57,14 @@ namespace Core {
             foreach (var replayTimeline in _replays) {
                 if (replayTimeline.ShipReplayObject == null) 
                     continue;
+
+                replayTimeline.ShipReplayObject.ShipPhysics.AudioListener.enabled = false;
                 replayTimeline.ShipReplayObject.SpectatorActive = false;
             }
             
             var player = FdPlayer.FindLocalShipPlayer;
             if (player) {
+                player.ShipPhysics.AudioListener.enabled = true;
                 player.ShipPhysics.ShipModel?.SetVisible(true);
                 player.User.TargetTransform = player.transform;
             }
