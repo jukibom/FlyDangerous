@@ -222,7 +222,7 @@ namespace Core {
                 "8x" => 8,
                 "4x" => 4,
                 "2x" => 2,
-                _ => 0
+                _ => 1
             };
 
             // mip map quality via texture detail (0 = full, 1 = 1/4th, 2 = 1/16th)
