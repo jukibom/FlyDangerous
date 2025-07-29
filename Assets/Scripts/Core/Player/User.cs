@@ -601,7 +601,7 @@ namespace Core.Player {
 
         [UsedImplicitly]
         public void OnResetHMDView(InputValue value) {
-            if (xrOrigin) Game.Instance.ResetHmdView(xrOrigin, transform);
+            if (xrOrigin) Game.Instance.ResetHmdView(xrOrigin, ShipCameraRig.transform);
         }
 
         [UsedImplicitly]

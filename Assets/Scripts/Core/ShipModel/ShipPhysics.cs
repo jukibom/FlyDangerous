@@ -12,6 +12,7 @@ using Gameplay;
 using JetBrains.Annotations;
 using Misc;
 using UnityEngine;
+using UnityEngine.XR;
 
 namespace Core.ShipModel {
     public enum BoostStatus {
@@ -208,8 +209,23 @@ namespace Core.ShipModel {
 
         private void LateUpdate() {
             // update the audio listener to match the active camera, if set (it needs to be in sync with the audio sources at high speeds!)
-            if (ActiveCameraRig != null && ActiveCameraRig.ActiveCamera != null) {
-                AudioListener.transform.position = ActiveCameraRig.ActiveCamera.transform.position;
+            if (ActiveCameraRig != null) {
+                Vector3 cameraPosition = Vector3.zero;
+                Quaternion cameraRotation = Quaternion.identity;
+                
+                if (Game.IsVREnabled) {
+                    var localHeadPosition = InputTracking.GetLocalPosition(XRNode.Head);
+                    var localHeadRotation = InputTracking.GetLocalRotation(XRNode.Head);
+                    
+                    cameraPosition = transform.position + localHeadPosition;
+                    cameraRotation = transform.rotation * localHeadRotation;
+                }
+                else if (ActiveCameraRig.ActiveCamera != null) {
+                    cameraPosition = ActiveCameraRig.ActiveCamera.transform.position;
+                    cameraRotation = ActiveCameraRig.ActiveCamera.transform.rotation;
+                }
+
+                AudioListener.transform.SetPositionAndRotation(cameraPosition, cameraRotation);
             }
         }
 

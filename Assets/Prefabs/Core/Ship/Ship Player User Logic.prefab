@@ -803,6 +803,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trackIr: {fileID: 6323429781214167749}
+--- !u!1 &8082168385122589499
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7252834610746088589}
+  m_Layer: 6
+  m_Name: Floor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7252834610746088589
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8082168385122589499}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.85, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8165869082400564574}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8165869081141078391
 GameObject:
   m_ObjectHideFlags: 0
@@ -1011,7 +1042,6 @@ GameObject:
   - component: {fileID: 8165869081206140118}
   - component: {fileID: 8165869081206140119}
   - component: {fileID: 8165869081206140112}
-  - component: {fileID: 8946694027964086090}
   m_Layer: 6
   m_Name: HMD Base Camera
   m_TagString: MainCamera
@@ -1149,14 +1179,6 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
---- !u!81 &8946694027964086090
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8165869081206140114}
-  m_Enabled: 1
 --- !u!1 &8165869081692100081
 GameObject:
   m_ObjectHideFlags: 0
@@ -2221,6 +2243,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8165869081692100080}
+  - {fileID: 7252834610746088589}
   m_Father: {fileID: 8165869081144972043}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1770569352624991730
@@ -2237,7 +2260,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Camera: {fileID: 8165869081206140119}
   m_OriginBaseGameObject: {fileID: 8165869082400564575}
-  m_CameraFloorOffsetObject: {fileID: 0}
+  m_CameraFloorOffsetObject: {fileID: 8082168385122589499}
   m_RequestedTrackingOriginMode: 1
   m_CameraYOffset: 0
 --- !u!1001 &2445158389939116336
@@ -2812,27 +2835,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 134761586016920296, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 134761586016920296, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 134761586016920296, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 420
-      objectReference: {fileID: 0}
-    - target: {fileID: 134761586016920296, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
-      propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 134761586016920296, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 134761586016920296, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 134761586016920296, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 262.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 134761586016920296, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 230
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 134761586016920296, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -193.87473
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 134761586051085840, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_AnchorMax.y
@@ -3632,7 +3655,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1109677225912089210, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: D-Pad/up  |  Gamepad
+      value: D-Pad/Up  |  Gamepad
       objectReference: {fileID: 0}
     - target: {fileID: 1109677226352176022, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Layer
@@ -5092,7 +5115,7 @@ PrefabInstance:
       objectReference: {fileID: 942617901624676127}
     - target: {fileID: 2826849801954195960, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_SizeDelta.x
-      value: -529.39844
+      value: -475.94336
       objectReference: {fileID: 0}
     - target: {fileID: 2837865428075492289, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Layer
@@ -7076,7 +7099,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4467300059311423299, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: D-Pad/down  |  Gamepad
+      value: D-Pad/Down  |  Gamepad
       objectReference: {fileID: 0}
     - target: {fileID: 4467300060027857417, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Layer
@@ -7604,7 +7627,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5164200437655996610, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: D-Pad/right  |  Gamepad
+      value: D-Pad/Right  |  Gamepad
       objectReference: {fileID: 0}
     - target: {fileID: 5164200437789345698, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Layer
@@ -7768,7 +7791,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5340426720983136300, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_SizeDelta.x
-      value: -329.39844
+      value: -275.94336
       objectReference: {fileID: 0}
     - target: {fileID: 5361033891775468834, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Layer
@@ -8844,7 +8867,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6816143450148099111, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -29970
+      value: -31824
       objectReference: {fileID: 0}
     - target: {fileID: 6816143450731046810, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_AnchorMax.x
@@ -9840,7 +9863,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8445296986363858427, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: D-Pad/left  |  Gamepad
+      value: D-Pad/Left  |  Gamepad
       objectReference: {fileID: 0}
     - target: {fileID: 8445296986436819991, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Layer
