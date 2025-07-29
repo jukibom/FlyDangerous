@@ -1,4 +1,3 @@
-using System;
 using Core;
 using Misc;
 using UnityEngine;
@@ -27,6 +26,7 @@ namespace Menus.Pause_Menu {
                 if (instanceReplay.Replay != null) {
                     entry.playerName.text = instanceReplay.Replay.ShipProfile.playerName;
                     entry.score.text = TimeExtensions.TimeSecondsToStringWithMilliseconds(instanceReplay.Replay.ScoreData.raceTime);
+                    entry.spectateButton.onClick.AddListener(() => _stopSpectatingButton.interactable = true);
                 }
                 entry.ReplayTimeline = instanceReplay;
             }
