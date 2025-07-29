@@ -42,7 +42,7 @@ namespace Core.ShipModel {
             CinemachineCore.CameraUpdatedEvent.RemoveListener(OnCinemachineUpdate);
         }
 
-        private void Update() {
+        private void LateUpdate() {
             if (Game.IsVREnabled) CustomUpdate();
         }
 
