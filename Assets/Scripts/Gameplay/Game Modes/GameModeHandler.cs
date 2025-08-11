@@ -7,7 +7,6 @@ using Core.MapData;
 using Core.Player;
 using Core.Replays;
 using Core.Scores;
-using Core.ShipModel;
 using CustomWebSocketSharp;
 using Gameplay.Game_Modes.Components;
 using Gameplay.Game_Modes.Components.Interfaces;
@@ -123,15 +122,6 @@ namespace Gameplay.Game_Modes {
             
             _startPosition = LocalPlayer.AbsoluteWorldPosition;
             _startRotation = LocalPlayer.transform.rotation;
-
-            if (_gameModeWithCheckpoint != null) {
-                // overwrite our start position with the start checkpoint, if it exists. This maintains the legality of the level data hash (start position is otherwise ignored!)
-                var startCheckpoint = _levelData.checkpoints?.Find(c => c.type == CheckpointType.Start);
-                if (startCheckpoint != null) {
-                    _startPosition = startCheckpoint.position.ToVector3();
-                    _startRotation = Quaternion.Euler(startCheckpoint.rotation.ToVector3());
-                }
-            }
 
             if (_showLevelAndMusicName != null) StopCoroutine(_showLevelAndMusicName);
             _showLevelAndMusicName = StartCoroutine(ShowLevelAndMusicName());
