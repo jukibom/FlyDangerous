@@ -214,11 +214,19 @@ namespace Core.ShipModel {
                 Quaternion cameraRotation = Quaternion.identity;
                 
                 if (Game.IsVREnabled) {
-                    var localHeadPosition = InputTracking.GetLocalPosition(XRNode.Head);
-                    var localHeadRotation = InputTracking.GetLocalRotation(XRNode.Head);
+                    var localHeadPosition = transform.position;
+                    var localHeadRotation = transform.rotation;
                     
-                    cameraPosition = transform.position + localHeadPosition;
-                    cameraRotation = transform.rotation * localHeadRotation;
+                    InputDevice headDevice = InputDevices.GetDeviceAtXRNode(XRNode.Head);
+                    if (headDevice.TryGetFeatureValue(CommonUsages.devicePosition, out var devicePosition)) {
+                        localHeadPosition += devicePosition;
+                    }
+                    if (headDevice.TryGetFeatureValue(CommonUsages.deviceRotation, out var deviceRotation)) {
+                        localHeadRotation *= deviceRotation;
+                    }
+                    
+                    cameraPosition = localHeadPosition;
+                    cameraRotation = localHeadRotation;
                 }
                 else if (ActiveCameraRig.ActiveCamera != null) {
                     cameraPosition = ActiveCameraRig.ActiveCamera.transform.position;
