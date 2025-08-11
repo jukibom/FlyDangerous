@@ -131,34 +131,29 @@ namespace Core.MapData {
             }
             var fileNames = Directory.GetFiles(customPath);
 
-            // We want to remove indexes from the list, but we also want to itterate over it, we cant do both at once, so we copy it
-            var customNameList = new List<string>(_customNameList);
-            int i = 0;
-            foreach ( var f in customNameList) {
-                if(!fileNames.Contains(f)) {
+            for (int i = _customNameList.Count - 1; i >= 0; i--) {
+                if (!fileNames.Contains(_customNameList[i])){ 
                     _customNameList.RemoveAt(i);
                     _customLevels.RemoveAt(i);
                 }
-                else {
-                    i++;
-                }
             }
-            i = 0;
+
+            int j = 0;
             foreach ( string f in fileNames)
             {
                 if (!_customNameList.Contains(f))
                 {
                     try {
                         // the thing that might fail first so the lists stay aligned
-                        _customLevels.Insert(i,loadFromZip(f)); 
-                        _customNameList.Insert(i,f);
+                        _customLevels.Insert(j,loadFromZip(f)); 
+                        _customNameList.Insert(j,f);
                     }
                     catch {
                         // shift back the index so it is as if the impropper file never was included in fileNames
-                        i--; 
+                        j--; 
                     }
                 }
-                i++;
+                j++;
             }
         }
 
