@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using Audio;
 using Core.MapData.Serializable;
 using Core.ShipModel;
@@ -61,6 +62,12 @@ namespace Core.MapData {
             modifiers?.ConvertAll(SerializableModifier.ToHashString)
                 .ForEach(modifierString => modifierText += modifierString);
 
+            var startCordinatesText = startPosition.ToString() +startRotation.ToString();
+
+            var gravityText = "";
+            if (gravity != null)
+                gravityText = gravity.ToString();
+
             var shipParametersText = ShipParameters.ToHashString(shipParameters);
 
             // TODO: geometry v_v
@@ -69,7 +76,7 @@ namespace Core.MapData {
             //     .ForEach(geometryString => geometryText += geometryString);
 
             var hash = HashGenerator.ComputeSha256Hash(
-                checkpointText + billboardsText + modifierText + shipParametersText + geometryText + location.Name);
+                checkpointText + billboardsText + modifierText + shipParametersText + startCordinatesText + gravityText + geometryText + location.Name);
 
             // Map lookup for old hash algorithm
             return LevelDataHelper.OldMapLookup.TryGetValue(hash, out var oldHash) ? oldHash : hash;
