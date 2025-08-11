@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Numerics;
 using Core.Scores;
 using Misc;
+using NaughtyAttributes;
 using UnityEngine;
 
 namespace Core.MapData {
@@ -119,20 +121,39 @@ namespace Core.MapData {
         }
 
         private static List<Level> _customLevels = new();
+        private static List<string> _customNameList = new();
         public static void LoadCustomLevels()
         {
-            _customLevels.Clear();
             string customPath = System.IO.Path.Combine(Application.persistentDataPath, "CustomLevels");
             if (!Directory.Exists(customPath))
             {
                 Directory.CreateDirectory(customPath);
             }
-            var dirinfo = new DirectoryInfo(customPath);
-            var fileinfo = dirinfo.GetFiles();
-            foreach (FileInfo f in fileinfo)
+            var fileNames = Directory.GetFiles(customPath);
+
+            for (int i = _customNameList.Count - 1; i >= 0; i--) {
+                if (!fileNames.Contains(_customNameList[i])){ 
+                    _customNameList.RemoveAt(i);
+                    _customLevels.RemoveAt(i);
+                }
+            }
+
+            int j = 0;
+            foreach ( string f in fileNames)
             {
-                try { _customLevels.Add(loadFromZip(f.FullName)); }
-                catch {}
+                if (!_customNameList.Contains(f))
+                {
+                    try {
+                        // the thing that might fail first so the lists stay aligned
+                        _customLevels.Insert(j,loadFromZip(f)); 
+                        _customNameList.Insert(j,f);
+                    }
+                    catch {
+                        // shift back the index so it is as if the impropper file never was included in fileNames
+                        j--; 
+                    }
+                }
+                j++;
             }
         }
 
@@ -157,7 +178,10 @@ namespace Core.MapData {
 
             var levelData = LevelData.FromJsonString(readArchiveEntry(archive, "level.json"));
             Texture2D Tex2D = new Texture2D(4, 3);
-            var thumbnailEntry = archive.GetEntry("thumbnail.png");
+            var thumbnailEntry  = archive.GetEntry("thumbnail.png")
+                ?? archive.GetEntry("thumbnail.jpg")
+                ?? archive.GetEntry("thumbnail.jpeg");
+
             if (thumbnailEntry != null)
             {
                 using (Stream thumbnailStream = thumbnailEntry.Open())
