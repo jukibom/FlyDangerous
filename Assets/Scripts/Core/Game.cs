@@ -143,6 +143,10 @@ namespace Core {
             // bootstrap for various game mode types
             GameModeHandler = GetComponent<GameModeHandler>();
 
+            // load levels before start so they dont stutter the game in the menu
+            Level.LoadCustomLevels();
+            Level.List();
+
             // if there's a user object when the game starts, enable input (usually in the editor!)
             FindObjectOfType<ShipPlayer>()?.User.EnableGameInput();
             LoadBindings();
