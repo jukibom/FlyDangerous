@@ -16,10 +16,11 @@ namespace Menus.Main_Menu.Components {
 
         [CanBeNull] private ILeaderboard _leaderboard;
 
-        public void LoadLeaderboard(ILeaderboard leaderboard) {
+        public void LoadLeaderboard(ILeaderboard leaderboard, LeaderboardFetchType fetchType = LeaderboardFetchType.Me) {
             _leaderboard = leaderboard;
-            ClearEntries();
-            ShowMe();
+            if (fetchType == LeaderboardFetchType.Top) ShowTop20();
+            else if (fetchType == LeaderboardFetchType.Me) ShowMe();
+            else if (fetchType == LeaderboardFetchType.Friends) ShowFriends();
         }
 
         public void ClearEntries() {

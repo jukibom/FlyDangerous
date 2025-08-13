@@ -70,7 +70,7 @@ namespace Menus.Main_Menu.Components {
                     break;
                 case "custom":
                     LoadLevels(Level.ListCustom());
-                    footer.text = $"CUSTOM MAPS LOADED FROM {Path.Combine(Application.persistentDataPath, "CustomLevels")}.";
+                    footer.text = $"CUSTOM MAPS LOADED FROM {Path.Combine(Application.persistentDataPath, "CustomLevels").Replace("\\", "/")}.";
                     break;
             }
         }

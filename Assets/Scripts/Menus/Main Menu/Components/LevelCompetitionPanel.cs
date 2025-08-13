@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using Core;
 using Core.MapData;
+using Core.OnlineServices;
 using Core.Replays;
 using Core.Scores;
 using JetBrains.Annotations;
@@ -102,7 +103,11 @@ namespace Menus.Main_Menu.Components {
 
             try {
                 var leaderboardData = await FdNetworkManager.Instance.OnlineService!.Leaderboard!.FindOrCreateLeaderboard(_levelData.LevelHash());
-                leaderboard.LoadLeaderboard(leaderboardData);
+                leaderboard.LoadLeaderboard(leaderboardData,
+                    Score.ScoreForLevel(_levelData).HasPlayedPreviously
+                        ? LeaderboardFetchType.Me
+                        : LeaderboardFetchType.Top);
+
             }
             catch {
                 var text = "Failed to connect to online services.";
