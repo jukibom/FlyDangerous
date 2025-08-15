@@ -283,7 +283,16 @@ namespace Gameplay.Game_Modes {
         private IEnumerator WaitForBoostButtonIfNeeded() {
             // handle boost button if required
             if (_gameMode.RequireBoostHeldToStart) {
+                yield return new WaitForEndOfFrame();
+                
+                // if the boost button is held at the very start, wait for it to be released (or 1 sec to pass)
                 float timeSeconds = 0;
+                while (LocalPlayer.User.BoostButtonHeld && timeSeconds < 1) {
+                    yield return new WaitForEndOfFrame();
+                    timeSeconds += Time.deltaTime;
+                }
+
+                timeSeconds = 0;
                 var showText = false;
                 while (!LocalPlayer.User.BoostButtonHeld) {
                     // wait 2 seconds before showing boost text
