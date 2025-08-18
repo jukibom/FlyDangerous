@@ -19,6 +19,7 @@ namespace Core.ShipModel {
         [SerializeField] private AudioSource shieldActivateAudioSource;
         [SerializeField] private AudioSource collisionAudioSource;
         [SerializeField] private List<AudioClip> collisionAudioClips;
+        [SerializeField] private List<AudioClip> yamiksModeCollisionAudioClips;
         [SerializeField] private float minTurbulenceOffset = 0.2f;
         [SerializeField] private float maxTurbulenceOffset = 1.5f;
         [SerializeField] private float minShieldAlpha = 0.1f;
@@ -96,10 +97,13 @@ namespace Core.ShipModel {
             shieldActivateAudioSource.pitch = pitch;
             shieldActivateAudioSource.Play();
 
+            var useSqueaks = Game.IsAprilFools || Game.YamiksMode;
+            var audioClipsArray = useSqueaks ? yamiksModeCollisionAudioClips : collisionAudioClips;
             collisionAudioSource.transform.localPosition = _targetDirection;
-            collisionAudioSource.volume = impactForceNormalised * 2;
-            collisionAudioSource.clip = collisionAudioClips[random.Next(collisionAudioClips.Count)];
-            collisionAudioSource.pitch = pitch;
+            collisionAudioSource.volume = useSqueaks ? 1 : impactForceNormalised * 2;
+            collisionAudioSource.clip = audioClipsArray[random.Next(audioClipsArray.Count)];
+            collisionAudioSource.pitch = useSqueaks ? 1 : pitch;
+            collisionAudioSource.spatialBlend = useSqueaks ? 0 : 1;
             collisionAudioSource.Play();
         }
 

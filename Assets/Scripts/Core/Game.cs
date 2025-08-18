@@ -101,6 +101,7 @@ namespace Core {
         public static bool IsVREnabled { get; private set; }
         public static bool IsUnderWater { get; private set; }
         public static bool IsAprilFools => DateTime.Now is { Day: 1, Month: 4 };
+        public static bool YamiksMode { get; private set; }
 
         public bool IsGameHotJoinable => LoadedLevelData.gameType.GameMode.IsHotJoinable;
 
@@ -197,6 +198,7 @@ namespace Core {
         }
 
         public void ApplyGameOptions() {
+            YamiksMode = Preferences.Instance.GetBool("yamiksModeEnabled");
             ApplyGraphicsOptions();
             OnGameSettingsApplied?.Invoke();
         }

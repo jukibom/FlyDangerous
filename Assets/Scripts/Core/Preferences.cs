@@ -80,6 +80,7 @@ namespace Core {
                 case "openTrackEnabled":
                 case "trackIrEnabled":
                 case "autoTrackEnabled":
+                case "yamiksModeEnabled":
                     return false;
 
                 default:
