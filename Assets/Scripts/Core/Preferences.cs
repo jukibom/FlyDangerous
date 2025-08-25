@@ -80,11 +80,15 @@ namespace Core {
                 case "openTrackEnabled":
                 case "trackIrEnabled":
                 case "autoTrackEnabled":
+                case "enableInputOverlay":
+                case "enableInputOverlayAsRaw":
                 case "yamiksModeEnabled":
                     return false;
 
                 default:
+#if UNITY_EDITOR
                     Debug.LogWarning("Attempted to get preference " + key + " with no default specified");
+#endif
                     return false;
             }
         }
@@ -150,7 +154,9 @@ namespace Core {
                 case "flightOrientationIndicatorScale":
                     return 1f;
                 default:
+#if UNITY_EDITOR
                     Debug.LogWarning("Attempted to get preference " + key + " with no default specified");
+#endif
                     return 0;
             }
         }
@@ -239,7 +245,9 @@ namespace Core {
                 case "simRacingStudioOutputAddress":
                     return "127.0.0.1";
                 default:
+#if UNITY_EDITOR
                     Debug.LogWarning("Attempted to get preference " + key + " with no default specified");
+#endif
                     return "";
             }
         }
@@ -251,7 +259,9 @@ namespace Core {
                 case "hmdRotation":
                     return Vector3.zero;
                 default:
+#if UNITY_EDITOR
                     Debug.LogWarning("Attempted to get preference " + key + " with no default specified");
+#endif
                     return Vector3.zero;
             }
         }
