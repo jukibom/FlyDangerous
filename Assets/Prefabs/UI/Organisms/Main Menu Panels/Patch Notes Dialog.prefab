@@ -444,7 +444,11 @@ MonoBehaviour:
     * HOTFIX-2: Faster loading / caching / live-reloading (exit + re-enter the menu)
     of custom levels from the folder\r\n    * HOTFIX-2: Fixed leaderboards missing
     for levels the player has not yet set a time on (defaulted to \"Me\" which returned
-    0 results, now uses Top 20 in that instance)"
+    0 results, now uses Top 20 in that instance)\n    * HOTFIX-3: Prevent countdown
+    from triggering immediately on start if boost is bound to the same button as
+    menu selection (when initiating from start screen or pause menu > restart)\r\n   
+    * HOTFIX-3: Fixed dumb log spam on missing input pref (ouch)\r\n    * HOTFIX-3:
+    Fixed missing audio event on water emerge with Calidris ship"
 --- !u!114 &8950175144818485321
 MonoBehaviour:
   m_ObjectHideFlags: 0
