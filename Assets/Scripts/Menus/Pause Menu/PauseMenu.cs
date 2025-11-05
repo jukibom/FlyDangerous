@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Text;
 using Core;
 using Core.Player;
 using FdUI;
@@ -83,7 +84,34 @@ namespace Menus.Pause_Menu {
 
         public void CopyLocationToClipboard() {
             PlayApplySound();
-            GUIUtility.systemCopyBuffer = Game.Instance.LevelDataAtCurrentPosition.ToJsonString();
+
+            string savedString =  Game.Instance.LevelDataAtCurrentPosition.ToJsonString();
+            bool inList  = false;
+            bool inText = false;
+            int treeDepth = 0;
+            
+            StringBuilder compactJson = new StringBuilder();
+
+            foreach (char charicter in savedString)
+            {
+                if(charicter == char.Parse("[")){ inList = true ;}
+                if(charicter == char.Parse("]")){ inList = false ;}
+                if(charicter == '\"'){ inText = !inText;}
+
+                if(inList&&!inText){
+                    if (charicter == char.Parse("{")) { treeDepth++; }
+                    else if (charicter == char.Parse("}")) { treeDepth--; } 
+                }
+
+                if (treeDepth>=1&&!inText)
+                {
+                    if (charicter != ' ' && charicter != '\n' && charicter != '\r')
+                    { compactJson.Append(charicter); }
+                }
+                else {compactJson.Append(charicter); }
+            }
+
+            GUIUtility.systemCopyBuffer = compactJson.ToString();
             var copyConfirmTransform = copyConfirmationText.transform;
             copyConfirmTransform.localPosition = new Vector3(copyConfirmTransform.localPosition.x, 55, copyConfirmTransform.position.z);
             copyConfirmationText.color = new Color(1f, 1f, 1f, 1f);
