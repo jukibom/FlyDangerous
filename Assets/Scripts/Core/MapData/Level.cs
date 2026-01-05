@@ -182,6 +182,7 @@ namespace Core.MapData {
                 ?? archive.GetEntry("thumbnail.jpg")
                 ?? archive.GetEntry("thumbnail.jpeg");
 
+            Sprite thumbnail = null;
             if (thumbnailEntry != null)
             {
                 using (Stream thumbnailStream = thumbnailEntry.Open())
@@ -190,8 +191,11 @@ namespace Core.MapData {
                     thumbnailStream.Read(thumbnailBytes, 0, (int)thumbnailEntry.Length);
                     Tex2D.LoadImage(thumbnailBytes);
                 }
+                thumbnail = Sprite.Create(Tex2D, new Rect(0, 0, Tex2D.width, Tex2D.height), new UnityEngine.Vector2(0.5f, 0.5f));
             }
-            Sprite thumbnail = Sprite.Create(Tex2D, new Rect(0, 0, Tex2D.width, Tex2D.height), new UnityEngine.Vector2(0.5f, 0.5f));
+            else {
+                thumbnail = Resources.Load<Sprite>("Levels/fallback-thumbnail");
+            }
 
             // set as free roam for now
             return new Level(levelData.name, levelData, thumbnail, GameType.FreeRoam, false);
