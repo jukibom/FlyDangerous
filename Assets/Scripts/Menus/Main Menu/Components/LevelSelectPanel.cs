@@ -40,10 +40,7 @@ namespace Menus.Main_Menu.Components {
 
         private void OnEnable() {
             tabGroup.OnTabSelected += OnLevelGroupTabSelected;
-
-            // try to find the first level in the list and select it if already loaded (e.g. returning to this menu)
-            var firstLevel = levelPrefabContainer.GetComponentsInChildren<LevelUIElement>().First();
-            if (firstLevel != null) firstLevel.GetComponent<Button>().Select();
+            SelectFirstLevelElement();
         }
 
         private void OnDisable() {
@@ -87,6 +84,10 @@ namespace Menus.Main_Menu.Components {
 
             // Load level panels one at a time then select the first one
             IEnumerator AddLevelPanels() {
+                
+                // wait for all-clear
+                yield return new WaitForEndOfFrame();
+                
                 foreach (var level in levels) {
                     Debug.Log($"Loaded level {level.Name}: {level.Data.LevelHash()}");
                     var levelButton = Instantiate(levelUIElementPrefab, levelPrefabContainer);
@@ -99,8 +100,7 @@ namespace Menus.Main_Menu.Components {
                     yield return new WaitForEndOfFrame();
                 }
 
-                var firstLevel = levelPrefabContainer.GetComponentsInChildren<LevelUIElement>().First();
-                if (firstLevel != null) firstLevel.GetComponent<Button>().Select();
+                SelectFirstLevelElement();
             }
 
             StartCoroutine(AddLevelPanels());
@@ -194,6 +194,11 @@ namespace Menus.Main_Menu.Components {
             }
 
             onComplete?.Invoke();
+        }
+
+        private void SelectFirstLevelElement() {
+            var levelElements = levelPrefabContainer.GetComponentsInChildren<LevelUIElement>();
+            if (levelElements.Length > 0) levelElements.First().GetComponent<Button>().Select();
         }
     }
 }
