@@ -9,6 +9,7 @@ using Core.Replays;
 using Core.Scores;
 using Core.ShipModel;
 using Gameplay;
+using Gameplay.Game_Modes;
 using MapMagic.Core;
 using Mirror;
 using UnityEngine;
@@ -42,12 +43,6 @@ namespace Misc {
                 // allow game state to initialise
                 yield return new WaitForFixedUpdate();
 
-#if !NO_PAID_ASSETS
-                // gpu instancer fun (paid asset!)
-                var cam = FindObjectOfType<CinemachineBrain>().gameObject.GetComponent<Camera>();
-                GPUInstancerAPI.SetCamera(cam);
-#endif
-
                 // instruct the server to create a ship player immediately on start
                 Game.Instance.SessionStatus = SessionStatus.Development;
 
@@ -68,6 +63,23 @@ namespace Misc {
                 if (player) {
                     player.User.EnableGameInput();
                     player.SetTransformWorld(pos, rot);
+                    
+#if !NO_PAID_ASSETS
+                    // gpu instancer fun (paid asset!)
+                    var cam = FindObjectOfType<CinemachineBrain>().gameObject.GetComponent<Camera>();
+                    GPUInstancerAPI.SetCamera(cam);
+
+                    var gpuPrefabManager = FindObjectOfType<GPUInstancerPrefabManager>();
+                    if (gpuPrefabManager != null) {
+                        var gpuInstancePhysicsHandler = new GameObject("GPU Instancer Handler");
+                        gpuInstancePhysicsHandler.transform.SetParent(player.User.transform);
+                        gpuInstancePhysicsHandler.transform.localPosition = Vector3.zero;
+                        var sphereCollider = gpuInstancePhysicsHandler.AddComponent<SphereCollider>();
+                        sphereCollider.radius = 100;
+                        sphereCollider.isTrigger = true;
+                        gpuInstancePhysicsHandler.AddComponent<GPUInstancerModificationCollider>();
+                    }
+#endif
                 }
 
                 // if there's a map magic object going on here, enable it
@@ -121,7 +133,12 @@ namespace Misc {
                 yield return new WaitForSeconds(0.7f);
 
                 // Start
-                Game.Instance.GameModeHandler.Begin();
+                if (player) {
+                    Game.Instance.GameModeHandler.InitialiseGameMode(player, Game.Instance.LoadedLevelData,
+                        new FreeRoam(),
+                        player.User.InGameUI, FindObjectOfType<Track>());
+                    Game.Instance.GameModeHandler.Begin();
+                }
             }
 
             StartCoroutine(StartGame());
