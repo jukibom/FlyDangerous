@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Misc;
@@ -58,6 +58,7 @@ namespace Core {
                 case "graphics-vsync":
                 case "autoTrackSnapForward":
                 case "mouseRelativeReturnOnlyOnNoInput":
+                case "playFlightAssistSound":
                     return true;
 
                 case "showFlightOrientationIndicatorsInSpace":

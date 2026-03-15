@@ -133,8 +133,10 @@ namespace Core.ShipModel {
         }
 
         public virtual void SetAssist(AssistToggleType assistToggleType, bool active) {
-            if (active) assistActivateAudioSource.Play();
-            else assistDeactivateAudioSource.Play();
+            if (Preferences.Instance.GetBool("playFlightAssistSound")) {
+                if (active) assistActivateAudioSource.Play();
+                else assistDeactivateAudioSource.Play();
+            }
         }
 
         public virtual void SetVelocityLimiter(bool active) {
