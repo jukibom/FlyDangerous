@@ -339,6 +339,7 @@ namespace Menus.Options {
                 .WithCancelingThrough("<Keyboard>/escape")
                 .WithControlsExcluding("<keyboard>/anyKey")
                 .WithControlsExcluding("/Mouse/press")
+                .WithExpectedControlType("") // Scary!, allows any controll type to be bound
                 .OnComputeScore((control, _) => {
                     // default behaviour first (although we can't actually get at the magnitude because this callback is awful)
                     float score = 0;
@@ -370,30 +371,39 @@ namespace Menus.Options {
                         operation.Cancel();
                         return;
                     }
+                    // The unspecified "Stick" control must not be selectable or it will compete with stick axis controls 
+                    if (operation.selectedControl.layout is "Stick") {
+                        operation.RemoveCandidate(operation.selectedControl);
+                    }
 
                     var deviceName = operation.selectedControl.device.displayName;
                     var bindName = operation.selectedControl.displayName;
+                    var expectedControlType = action.expectedControlType;
+                    var selectedControl = operation.selectedControl.layout;
+                    // On linux this Analog control type may be apear as the Type instead of Axis. 
+                    if (selectedControl == "Analog") 
+                        selectedControl = "Axis";
 
                     //validity check time
                     invalid = false;
 
                     // prevent button binds on full range axis
-                    if (!inputBinding.isPartOfComposite && operation.expectedControlType == "Axis" && operation.selectedControl.layout != "Axis") {
+                    if (!inputBinding.isPartOfComposite && expectedControlType == "Axis" && selectedControl != "Axis") {
                         invalid = true;
 
                         m_RebindText.color = Color.red;
                         m_RebindText.text =
-                            $"{deviceName}\n\n{bindName}\n\n\nCannot bind to full range axis!";
+                            $"{deviceName}\n\n{bindName}\n\n\nCannot bind to full range axis!\nExpected control type: {expectedControlType}\nFound control type: {selectedControl}";
                     }
 
                     // prevent inputs which only match full range axis on split or button inputs
-                    if ((operation.expectedControlType != "Axis" || (inputBinding.isPartOfComposite && operation.expectedControlType == "Axis")) &&
-                        operation.selectedControl.layout == "Axis") {
+                    if ((expectedControlType != "Axis" || (inputBinding.isPartOfComposite && expectedControlType == "Axis")) &&
+                        selectedControl == "Axis") {
                         invalid = true;
 
                         m_RebindText.color = Color.red;
                         m_RebindText.text =
-                            $"{deviceName}\n\n{bindName}\n\n\nCannot bind full range axis to this action!";
+                            $"{deviceName}\n\n{bindName}\n\n\nCannot bind to full range axis!\nExpected control type: {expectedControlType}\nFound control type: {selectedControl}";
                     }
 
                     if (invalid) {
