@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -197,9 +197,8 @@ namespace Core.MapData {
                 thumbnail = Resources.Load<Sprite>("Levels/fallback-thumbnail");
             }
 
-            // set as free roam for now
-            return new Level(levelData.name, levelData, thumbnail, GameType.FreeRoam, false);
-       }
+            return new Level(levelData.name, levelData, thumbnail, levelData.gameType, false);
+        }
 
         public static List<Level> ListCustom()
         {
@@ -209,11 +208,11 @@ namespace Core.MapData {
 
         public static Level FromString(string locationString)
         {
-            return FdEnum.FromString(List(), locationString);
+            return FdEnum.FromString(List().Concat(_customLevels), locationString);
         }
 
         public static Level FromId(int id) {
-            return FdEnum.FromId(List(), id);
+            return FdEnum.FromId(List().Concat(_customLevels), id);
         }
     }
 }
