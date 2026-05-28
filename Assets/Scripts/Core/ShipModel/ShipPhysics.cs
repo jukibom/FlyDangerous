@@ -45,10 +45,8 @@ namespace Core.ShipModel {
         private readonly ShipMotionData _shipMotionData = new();
         private int _billboardLayerMask;
         private float _boostCapacitorPercent = 100f;
-        [CanBeNull] private Coroutine _boostCoroutine;
         private float _boostedMaxSpeedDelta;
-        private int _boostProgressTicks;
-        [CanBeNull] private Coroutine _boostRechargeCoroutine;
+        private int _boostProgressTicks = -2;
         private bool _boostRecharging;
 
         private BoostStatus _boostStatus;
@@ -243,12 +241,11 @@ namespace Core.ShipModel {
             targetRigidbody.angularVelocity = Vector3.zero;
             _prevVelocity = Vector3.zero;
             _stopShip = false;
+            _boostedMaxSpeedDelta = 0;
             if (includeBoost) {
                 _boostStatus = BoostStatus.Inactive;
                 _boostRecharging = false;
                 _boostCapacitorPercent = 100f;
-                if (_boostCoroutine != null) StopCoroutine(_boostCoroutine);
-                if (_boostRechargeCoroutine != null) StopCoroutine(_boostRechargeCoroutine);
             }
         }
 
@@ -324,39 +321,28 @@ namespace Core.ShipModel {
         }
 
         private void AttemptBoost() {
-            if (BoostReady) {
+            if (BoostReady && BoostButtonHeld) {
                 OnBoost?.Invoke(FlightParameters.boostSpoolUpTime, FlightParameters.totalBoostTime);
-
-                IEnumerator DoBoost() {
-                    _boostCapacitorPercent -= FlightParameters.boostCapacitorPercentCost;
-                    _boostProgressTicks = -1;
-                    _boostStatus = BoostStatus.Spooling;
-
-                    yield return YieldExtensions.WaitForFixedFrames(
-                        YieldExtensions.SecondsToFixedFrames(FlightParameters.boostSpoolUpTime));
-
+                _boostCapacitorPercent -= FlightParameters.boostCapacitorPercentCost;
+                _boostProgressTicks = -1;
+                _boostStatus = BoostStatus.Spooling;
+                _boostRecharging = true;
+            }
+            if (_boostProgressTicks +1 == YieldExtensions.SecondsToFixedFrames(FlightParameters.boostSpoolUpTime)) {
                     _boostStatus = BoostStatus.Active;
                     _currentBoostTime = 0f;
                     _boostedMaxSpeedDelta = FlightParameters.maxBoostSpeed - FlightParameters.maxSpeed;
-                }
-
-                // wait for spool-up + recharge time
-                IEnumerator BoostRecharge() {
-                    _boostRecharging = true;
-                    yield return YieldExtensions.WaitForFixedFrames(
-                        YieldExtensions.SecondsToFixedFrames(FlightParameters.boostSpoolUpTime +
-                                                             FlightParameters.boostRechargeTime));
-                    _boostRecharging = false;
-                }
-
-                _boostCoroutine = StartCoroutine(DoBoost());
-                _boostRechargeCoroutine = StartCoroutine(BoostRecharge());
+                Debug.Log("New Boost Start");
+            }
+            if (_boostProgressTicks +1 == YieldExtensions.SecondsToFixedFrames(FlightParameters.boostSpoolUpTime+
+                                                             FlightParameters.boostRechargeTime)) {
+                _boostRecharging = false;
+                Debug.Log("New Boost Recharge");
             }
         }
 
         private void CancelBoost() {
             if (_boostStatus != BoostStatus.Inactive) {
-                if (_boostCoroutine != null) StopCoroutine(_boostCoroutine);
                 _currentBoostTime = 0f;
                 _boostedMaxSpeedDelta = 0;
                 _boostStatus = BoostStatus.Inactive;
@@ -415,10 +401,10 @@ namespace Core.ShipModel {
                 if (tBoostVelocityMax < 0) _boostedMaxSpeedDelta = 0;
             }
 
-            _boostProgressTicks++;
+            if (_boostProgressTicks != -2)_boostProgressTicks++;
             if (_boostStatus == BoostStatus.Active && _currentBoostTime > FlightParameters.totalBoostRotationalTime) {
                 _boostStatus = BoostStatus.Inactive;
-                _boostProgressTicks = -1;
+                _boostProgressTicks = -2;
             }
         }
 
@@ -439,6 +425,9 @@ namespace Core.ShipModel {
             VectorFlightAssistActive = vectorFlightAssistActive;
             RotationalFlightAssistActive = rotationalFlightAssistActive;
 
+            AttemptBoost();
+            UpdateBoostStatus();
+
             /* FLIGHT ASSISTS */
             var maxSpeedWithBoost = FlightParameters.maxSpeed + CurrentBoostedMaxSpeedDelta +
                                     _modifierEngine.AppliedEffects.shipDeltaSpeedCap;
@@ -447,8 +436,6 @@ namespace Core.ShipModel {
 
             OnShipPhysicsUpdated?.Invoke();
 
-            if (boostButtonHeld) AttemptBoost();
-            UpdateBoostStatus();
             ApplyFlightForces();
             UpdateInstrumentData();
             UpdateMotionData(Velocity, CurrentFrameThrust, CurrentFrameTorque);
@@ -808,6 +795,83 @@ namespace Core.ShipModel {
             return _raycastHits;
         }
 
+        public struct ShipSnapShot
+        {
+            public Vector3 floatingOrigin;
+            public Vector3 position;
+            public Quaternion rotation;
+            public Vector3 velocity;
+            public Vector3 angularVelocity;
+            public float boostCappacity;
+            public float currentBoostTime;
+            public int boostProgressTicks;
+            public BoostStatus boostStatus;
+            public float boostedMaxSpeedDelta;
+            public Vector3 modifierShipForce;
+            public float modifierShipDeltaSpeedCap;
+            public float modifierShipDeltaThrust;
+            public float modifierShipDrag;
+            public float modifierShipAngularDrag;
+            public List<Component> activeModifiers;
+            public List<Component> prevactiveModifiers;
+            public uint tick;
+
+            public bool boostRecharging;
+            public Vector3 previousVelocity;
+        }
+
+        public ShipSnapShot GenerateShipSnapShot()
+        {
+            return new ShipSnapShot
+            {
+                floatingOrigin = FloatingOrigin.Instance.Origin,
+                position = Rigidbody.position,
+                rotation = Rigidbody.rotation,
+                velocity = Rigidbody.velocity,
+                angularVelocity = Rigidbody.angularVelocity,
+
+                boostCappacity = _boostCapacitorPercent,
+                currentBoostTime = _currentBoostTime,
+                boostProgressTicks = _boostProgressTicks,
+                boostStatus = _boostStatus,
+                boostedMaxSpeedDelta = _boostedMaxSpeedDelta,
+
+                modifierShipForce = AppliedEffects.shipForce,
+                modifierShipDeltaSpeedCap = AppliedEffects.shipDeltaSpeedCap,
+                modifierShipDeltaThrust = AppliedEffects.shipDeltaThrust,
+                modifierShipDrag = AppliedEffects.shipDeltaDrag,
+                modifierShipAngularDrag = AppliedEffects.shipDeltaAngularDrag,
+
+                activeModifiers = new List<Component>(_activeModifiers),
+                prevactiveModifiers = new List<Component>(_prevActiveModifiers),
+
+                tick = Game.Instance.GameModeHandler.currentReplayTick,
+
+                boostRecharging =_boostRecharging,
+                previousVelocity = _prevVelocity,
+            };
+        }
+
+        public void ApplyShipSnapShotPhysics(ShipSnapShot shipSnapShot) {
+            //Position is handled outside this function
+
+            _boostCapacitorPercent = shipSnapShot.boostCappacity;
+            _currentBoostTime = shipSnapShot.currentBoostTime;
+            _boostProgressTicks =  shipSnapShot.boostProgressTicks;
+            _boostStatus = shipSnapShot.boostStatus;
+            _boostedMaxSpeedDelta = shipSnapShot.boostedMaxSpeedDelta;
+
+            _modifierEngine.SetDirect(shipSnapShot.modifierShipForce, shipSnapShot.modifierShipDeltaSpeedCap, shipSnapShot.modifierShipDeltaThrust, shipSnapShot.modifierShipDrag, 
+                                      shipSnapShot.modifierShipAngularDrag);
+
+            _activeModifiers = shipSnapShot.activeModifiers;
+            _prevActiveModifiers = shipSnapShot.prevactiveModifiers;
+ 
+            _boostRecharging = shipSnapShot.boostRecharging;
+            _prevVelocity = shipSnapShot.previousVelocity;
+
+        }
+        
         #endregion
     }
 }
