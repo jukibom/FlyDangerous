@@ -81,6 +81,30 @@ namespace Core.Player {
             }
         }
 
+    public void PrecicelySwapFocalObject(
+    Transform newTransform, Vector3 newOrigin,Vector3 position) {
+
+        FloatingOrigin.Instance.DoFloatingOriginCorrection(newOrigin,newOrigin-FloatingOrigin.Instance.Origin,position);
+
+        var shipPhysics = newTransform.GetComponentInChildren<ShipPhysics>(true);
+            if (shipPhysics != null && shipPlayer.isLocalPlayer) {
+                shipPhysics.ActiveCameraRig = shipCameraRig;
+                spaceDust.ActiveShipPhysics = shipPhysics;
+
+                if (_targetTransform != null) {
+                    var previousShipPhysics = _targetTransform.GetComponentInChildren<ShipPhysics>();
+
+                    if (previousShipPhysics) {
+                        UnregisterIntegrations(previousShipPhysics);
+                    }
+                }
+
+                RegisterIntegrations(shipPhysics);
+            }
+                
+            _targetTransform = newTransform;
+        }
+
         public InGameUI InGameUI => inGameUI;
 
         [CanBeNull]
@@ -353,7 +377,7 @@ namespace Core.Player {
 
         [UsedImplicitly]
         public void OnRestartFromLastCheckpoint() {
-            if (movementEnabled) Debug.Log("lol no");
+            if (movementEnabled) Game.Instance.GameModeHandler.RestartFromCheckpoint();
         }
 
         [UsedImplicitly]

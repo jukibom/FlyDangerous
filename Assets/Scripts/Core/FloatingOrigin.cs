@@ -28,15 +28,14 @@ namespace Core {
             // if we have a focal object, perform the floating origin fix
             if (FocalTransform && FocalTransform.position.magnitude > correctionDistance) {
                 var offset = FocalTransform.position;
-                DoFloatingOriginCorrection(Origin + offset, offset);
+                DoFloatingOriginCorrection(Origin + offset, offset, Vector3.zero);
             }
         }
 
-        public void DoFloatingOriginCorrection(Vector3 newOrigin, Vector3 offset) {
+        public void DoFloatingOriginCorrection(Vector3 newOrigin, Vector3 offset, Vector3 newFocalPosition) {
             origin = newOrigin;
 
-            // reset the focal object (local player) to 0,0,0
-            FocalTransform.position = Vector3.zero;
+            FocalTransform.position = newFocalPosition;
 
             OnFloatingOriginCorrection?.Invoke(offset);
         }
@@ -69,7 +68,7 @@ namespace Core {
             var delta = newTransform.position;
             focalTransform = newTransform;
             
-            DoFloatingOriginCorrection(Origin + delta, delta);
+            DoFloatingOriginCorrection(Origin + delta, delta, Vector3.zero);
             
             if (focalTransform.TryGetComponent<Rigidbody>(out var rb)) {
                 rb.MovePosition(focalTransform.position);

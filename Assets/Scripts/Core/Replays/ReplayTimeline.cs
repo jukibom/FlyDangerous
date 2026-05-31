@@ -23,11 +23,9 @@ namespace Core.Replays {
 
         [CanBeNull] private BinaryReader _inputFrameReader;
 
-        private uint _inputTicks;
         private bool _isPlaying;
         private byte[] _keyFrameByteBuffer;
         [CanBeNull] private BinaryReader _keyFrameReader;
-        private uint _keyFrameTicks;
 
         // private float _playSpeed = 1f;
 
@@ -54,6 +52,7 @@ namespace Core.Replays {
             Stop();
         }
 
+        public uint inputTicks;
         public void LoadReplay(IReplayShip ship, Replay replay) {
             Replay = replay;
             ShipReplayObject = ship;
@@ -71,8 +70,7 @@ namespace Core.Replays {
             _inputFrameByteBuffer = new byte[replay.ReplayMeta.InputFrameBufferSizeBytes];
             _keyFrameByteBuffer = new byte[replay.ReplayMeta.KeyFrameBufferSizeBytes];
 
-            _inputTicks = 0;
-            _keyFrameTicks = 0;
+            inputTicks = 0;
         }
 
         public void Play() {
@@ -84,14 +82,14 @@ namespace Core.Replays {
         }
 
         public void Stop() {
-            _inputTicks = 0;
+            inputTicks = 0;
             _isPlaying = false;
             ShipReplayObject?.ShipPhysics.BringToStop();
         }
 
         private void UpdateKeyFrame() {
-            if (Replay != null && _inputTicks % Replay.ReplayMeta.KeyFrameIntervalTicks == 0 && ShipReplayObject != null) {
-                _keyFrameReader?.BaseStream.Seek(_keyFrameTicks * Replay.ReplayMeta.KeyFrameBufferSizeBytes, SeekOrigin.Begin);
+            if (Replay != null && inputTicks % Replay.ReplayMeta.KeyFrameIntervalTicks == 0 && ShipReplayObject != null) {
+                _keyFrameReader?.BaseStream.Seek(inputTicks/this.Replay.ReplayMeta.KeyFrameIntervalTicks * Replay.ReplayMeta.KeyFrameBufferSizeBytes, SeekOrigin.Begin);
                 _keyFrameReader?.Read(_keyFrameByteBuffer, 0, Replay.ReplayMeta.KeyFrameBufferSizeBytes);
 
                 var keyFrame = MessagePackSerializer.Deserialize<KeyFrame>(_keyFrameByteBuffer);
@@ -100,18 +98,15 @@ namespace Core.Replays {
                 ShipReplayObject.Transform.rotation = keyFrame.rotation;
                 ShipReplayObject.Rigidbody.velocity = keyFrame.velocity;
                 ShipReplayObject.Rigidbody.angularVelocity = keyFrame.angularVelocity;
-
-
-                _keyFrameTicks++;
             }
         }
 
         private void UpdateInputFrame() {
             if (Replay != null) {
                 // Check for end of file
-                var maxRead = _inputTicks * Replay.ReplayMeta.InputFrameBufferSizeBytes + Replay.ReplayMeta.InputFrameBufferSizeBytes;
+                var maxRead = inputTicks * Replay.ReplayMeta.InputFrameBufferSizeBytes + Replay.ReplayMeta.InputFrameBufferSizeBytes;
                 if (maxRead < _inputFrameReader?.BaseStream.Length) {
-                    _inputFrameReader.BaseStream.Seek(_inputTicks * Replay.ReplayMeta.InputFrameBufferSizeBytes, SeekOrigin.Begin);
+                    _inputFrameReader.BaseStream.Seek(inputTicks * Replay.ReplayMeta.InputFrameBufferSizeBytes, SeekOrigin.Begin);
                     _inputFrameReader.Read(_inputFrameByteBuffer, 0, Replay.ReplayMeta.InputFrameBufferSizeBytes);
 
                     var inputFrame = InputFrameV110.Deserialize(Replay.Version, ref _inputFrameByteBuffer);
@@ -125,7 +120,7 @@ namespace Core.Replays {
                     ShipReplayObject?.ShipPhysics.OverwriteModifiers(inputFrame.modifierShipForce, inputFrame.modifierShipDeltaSpeedCap,
                         inputFrame.modifierShipDeltaThrust, inputFrame.modifierShipDrag, inputFrame.modifierShipAngularDrag);
 
-                    _inputTicks++;
+                    inputTicks++;
                 }
                 else {
                     Debug.Log("Replay finished");

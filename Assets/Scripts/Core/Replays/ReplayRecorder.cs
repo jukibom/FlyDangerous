@@ -15,6 +15,7 @@ namespace Core.Replays {
         private uint _ticks;
 
         [CanBeNull] public Replay Replay { get; private set; }
+        public uint CurrentTick => _ticks;
 
         private void OnDestroy() {
             CancelRecording();

@@ -50,7 +50,11 @@ namespace Gameplay.Game_Modes {
         public virtual void OnFixedUpdate() {
             // display 00:00:00 until it starts
             var timerDisplay = Math.Max(0, GameModeTimer.CurrentSessionTimeSeconds);
-            GameModeUIHandler.GameModeUIText.TopHeader.text = TimeExtensions.TimeSecondsToStringWithMillisecondTenths(Mathf.Abs(timerDisplay));
+            if(Game.Instance.GameModeHandler.restartsFromCheckpoint == 0)
+                GameModeUIHandler.GameModeUIText.TopHeader.text = TimeExtensions.TimeSecondsToStringWithMillisecondTenths(Mathf.Abs(timerDisplay));
+            else
+                GameModeUIHandler.GameModeUIText.TopHeader.text = TimeExtensions.TimeSecondsToStringWithMillisecondTenths(Mathf.Abs(timerDisplay)) +"    " + TimeExtensions.TimeSecondsToStringWithMillisecondTenths(Mathf.Abs(timerDisplay - Game.Instance.GameModeHandler.snapShotTicks*Game.Instance.GameModeHandler.restartsFromCheckpoint*Time.fixedDeltaTime));
+            
         }
 
         public virtual void OnRestart() {
@@ -90,6 +94,8 @@ namespace Gameplay.Game_Modes {
 
         public virtual void OnCheckpointHit(Checkpoint checkpoint, float hitTimeSeconds) {
             _lastCheckpointHitTimeSeconds = hitTimeSeconds;
+
+            Game.Instance.GameModeHandler.checkPointHit = true;
 
             // store split 
             _splits.Add(_lastCheckpointHitTimeSeconds);

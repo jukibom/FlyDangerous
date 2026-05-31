@@ -334,14 +334,17 @@ namespace Core.ShipModel {
         }
 
         private IEnumerator IgnitionSequenceFlicker() {
-            shield.Fizzle(20);
-            ignitionAudioSource.Play();
-            float timeSeconds = 0;
-            uint intervalFrames = 3;
-            while (timeSeconds < 0.75f) {
-                timeSeconds += Time.fixedDeltaTime * intervalFrames;
-                indicatorCanvas.alpha = Random.Range(0f, 1f);
-                yield return YieldExtensions.WaitForFixedFrames(intervalFrames);
+            if (!Game.Instance.GameModeHandler._replayRunning) {
+                shield.Fizzle(20);
+                ignitionAudioSource.Play();
+
+                float timeSeconds = 0;
+                uint intervalFrames = 3;
+                while (timeSeconds < 0.75f) {
+                    timeSeconds += Time.fixedDeltaTime * intervalFrames;
+                    indicatorCanvas.alpha = Random.Range(0f, 1f);
+                    yield return YieldExtensions.WaitForFixedFrames(intervalFrames);
+                }
             }
 
             indicatorCanvas.alpha = 1;
