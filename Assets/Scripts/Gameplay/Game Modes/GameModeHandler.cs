@@ -99,7 +99,7 @@ namespace Gameplay.Game_Modes {
                 player.Freeze = false;
                 _gameModeLifecycle.EnableShipInput();
 
-                SetAbsolutePosition(player.ShipPhysics,_shipSnapshotBuffer.checkpointSnapshot);
+                SetPrecisePosisionAndSwapFocal(player.ShipPhysics,_shipSnapshotBuffer.checkpointSnapshot);
                 ReplayPrioritizer.Instance.UnregisterReplay(replayGhost.ReplayTimeline);
                 Destroy(replayGhost.gameObject);
             }
@@ -226,12 +226,12 @@ namespace Gameplay.Game_Modes {
                 player.ShipPhysics.AudioListener.enabled = false;
                 player.ShipPhysics.ShipModel?.SetVisible(false);
                 _gameModeLifecycle.DisableAllShipInput();
-                SetAbsolutePosition(replayGhost.ShipPhysics,_shipSnapshotBuffer.ghostSnapshot);
+                SetPrecisePosisionAndSwapFocal(replayGhost.ShipPhysics,_shipSnapshotBuffer.ghostSnapshot);
                 player.Freeze = true;
             }
         }
         
-        public void SetAbsolutePosition(ShipPhysics shipPhysics, ShipPhysics.ShipSnapShot shipSnapshot) {
+        public void SetPrecisePosisionAndSwapFocal(ShipPhysics shipPhysics, ShipPhysics.ShipSnapShot shipSnapshot) {
             player.User.PrecicelySwapFocalObject(shipPhysics.transform,shipSnapshot.floatingOrigin,shipSnapshot.position);
             shipPhysics.Rigidbody.position = shipSnapshot.position;
             shipPhysics.Rigidbody.rotation = shipSnapshot.rotation;
