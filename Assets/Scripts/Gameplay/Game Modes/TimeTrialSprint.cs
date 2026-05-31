@@ -53,7 +53,7 @@ namespace Gameplay.Game_Modes {
             if(Game.Instance.GameModeHandler.restartsFromCheckpoint == 0)
                 GameModeUIHandler.GameModeUIText.TopHeader.text = TimeExtensions.TimeSecondsToStringWithMillisecondTenths(Mathf.Abs(timerDisplay));
             else
-                GameModeUIHandler.GameModeUIText.TopHeader.text = TimeExtensions.TimeSecondsToStringWithMillisecondTenths(Mathf.Abs(timerDisplay)) +"    " + TimeExtensions.TimeSecondsToStringWithMillisecondTenths(Mathf.Abs(timerDisplay - Game.Instance.GameModeHandler.snapShotTicks*Game.Instance.GameModeHandler.restartsFromCheckpoint*Time.fixedDeltaTime));
+                GameModeUIHandler.GameModeUIText.TopHeader.text = TimeExtensions.TimeSecondsToStringWithMillisecondTenths(Mathf.Abs(timerDisplay)) +"    " + TimeExtensions.TimeSecondsToStringWithMillisecondTenths(Mathf.Abs(timerDisplay - Game.Instance.GameModeHandler.restartFromCheckpointTimeSeconds));
             
         }
 

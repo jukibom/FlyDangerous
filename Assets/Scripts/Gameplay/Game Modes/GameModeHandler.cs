@@ -54,6 +54,7 @@ namespace Gameplay.Game_Modes {
         private ShipPlayer LocalPlayer { get; set; }
         private int replayTicks=-1;
         private ShipPlayer player => FdPlayer.FindLocalShipPlayer;
+        private int SnapShotTicks => (int)(restartFromCheckpointTimeSeconds/Time.fixedDeltaTime);
         public bool _replayRunning = false;
         public bool ShipActive => LocalPlayer != null && LocalPlayer.ShipPhysics.ShipActive;
         public bool HasStarted => ShipActive && _gameStarted;
@@ -61,7 +62,7 @@ namespace Gameplay.Game_Modes {
         public bool checkPointHit;
         public uint CurrentReplayTick => _replayRecorder.CurrentTick;
         public Replay CurrentReplay => _replayRecorder.Replay.GetCopy();
-        public int snapShotTicks = 75;
+        public float restartFromCheckpointTimeSeconds = 1.5f;
         public int restartsFromCheckpoint;
         [CanBeNull] public Replay lastCheckpointReplay;
         public ShipSnapShotBuffer<ShipPhysics.ShipSnapShot> _shipSnapshotBuffer;
@@ -90,7 +91,7 @@ namespace Gameplay.Game_Modes {
                     lastCheckpointReplay = Game.Instance.GameModeHandler.CurrentReplay;
                 }
             }
-            if (replayTicks == snapShotTicks && _replayRunning) {
+            if (replayTicks == SnapShotTicks && _replayRunning) {
                 _replayRunning = false;
 
                 player.ShipPhysics.ShipModel?.SetVisible(true);
@@ -219,7 +220,7 @@ namespace Gameplay.Game_Modes {
                 restartsFromCheckpoint++;
 
                 replayGhost = Game.Instance.LoadGhost(CurrentReplay);
-                replayGhost.ReplayTimeline._inputTicks = _shipSnapshotBuffer.ghostSnapshot.tick;
+                replayGhost.ReplayTimeline.inputTicks = _shipSnapshotBuffer.ghostSnapshot.tick;
                 replayGhost.ShipPhysics.AudioListener.enabled = true;
                 replayGhost.SpectatorActive = true;
                 player.ShipPhysics.AudioListener.enabled = false;
@@ -305,7 +306,7 @@ namespace Gameplay.Game_Modes {
             _gameModeLifecycle.DisableAllShipInput();
             LocalPlayer.ShipPhysics.ShipActive = false;
 
-            _shipSnapshotBuffer = new ShipSnapShotBuffer<ShipPhysics.ShipSnapShot>(snapShotTicks +1);
+            _shipSnapshotBuffer = new ShipSnapShotBuffer<ShipPhysics.ShipSnapShot>(SnapShotTicks +1);
             restartsFromCheckpoint = 0;
 
             IEnumerator StartSequence() {
@@ -361,7 +362,7 @@ namespace Gameplay.Game_Modes {
             _gameStarted = true;
         }
         private IEnumerator FastCountDown() {
-            yield return _gameModeCountdown.CountdownWithSound(2f, timeRemaining => {if (timeRemaining <= 0) _gameModeWithCountdown.CountdownComplete(); },2f/(snapShotTicks*Time.fixedDeltaTime));//1f/0.75f);
+            yield return _gameModeCountdown.CountdownWithSound(2f, timeRemaining => {if (timeRemaining <= 0) _gameModeWithCountdown.CountdownComplete(); },2f/(restartFromCheckpointTimeSeconds));
         }
 
         private IEnumerator WaitForBoostButtonIfNeeded() {
