@@ -189,7 +189,7 @@ namespace Core.Replays {
             Directory.CreateDirectory(tmpSaveDirectory);
 
             // V2 replay data
-            var replayMeta = ReplayMeta.Version110(levelData);
+            var replayMeta = ReplayMeta.Version111(levelData);
 
             if (File.Exists(tmpInputDataSaveLoc)) File.Delete(tmpInputDataSaveLoc);
             var inputFileStream = new FileStream(tmpInputDataSaveLoc, FileMode.Append, FileAccess.Write, FileShare.Read);

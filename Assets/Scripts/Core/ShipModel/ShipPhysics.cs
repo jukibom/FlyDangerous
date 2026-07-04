@@ -44,15 +44,15 @@ namespace Core.ShipModel {
         private readonly ShipInstrumentData _shipInstrumentData = new();
         private readonly ShipMotionData _shipMotionData = new();
         private int _billboardLayerMask;
-        private float _boostCapacitorPercent = 100f;
+        public float _boostCapacitorPercent = 100f;
         private float _boostedMaxSpeedDelta;
-        private int _boostProgressTicks = -2;
+        public int _boostProgressTicks = -2;
         private bool _boostRecharging;
 
-        private BoostStatus _boostStatus;
+        public BoostStatus _boostStatus;
         private int _checkpointLayerMask;
         private bool _collisionStartedThisFrame;
-        private float _currentBoostTime;
+        public float _currentBoostTime;
         [CanBeNull] private Collision _currentFrameCollision;
         private FeedbackEngine _feedbackEngine;
 
@@ -290,6 +290,9 @@ namespace Core.ShipModel {
             ModifierCollisionCheck();
             BillboardCollisionCheck();
         }
+        public void ghostCollisionChecks() {
+            CheckpointCollisionCheck();
+        }
 
         public void GeometryCollisionCheck() {
             // we want to know up to 5 seconds before a collision happens
@@ -402,7 +405,6 @@ namespace Core.ShipModel {
             if (_boostProgressTicks != -2)_boostProgressTicks++;
             if (_boostStatus == BoostStatus.Active && _currentBoostTime > FlightParameters.totalBoostRotationalTime) {
                 _boostStatus = BoostStatus.Inactive;
-                //_boostProgressTicks = -2;
             }
         }
 
@@ -425,7 +427,6 @@ namespace Core.ShipModel {
 
             AttemptBoost();
             UpdateBoostStatus();
-            Debug.Log($"boost={_boostStatus} time={_currentBoostTime} rotTime={FlightParameters.totalBoostRotationalTime}");
 
             /* FLIGHT ASSISTS */
             var maxSpeedWithBoost = FlightParameters.maxSpeed + CurrentBoostedMaxSpeedDelta +
@@ -811,16 +812,13 @@ namespace Core.ShipModel {
             public float modifierShipDeltaThrust;
             public float modifierShipDrag;
             public float modifierShipAngularDrag;
-            public List<Component> activeModifiers;
-            public List<Component> prevactiveModifiers;
             public uint tick;
 
             public bool boostRecharging;
             public Vector3 previousVelocity;
         }
 
-        public ShipSnapShot GenerateShipSnapShot()
-        {
+        public ShipSnapShot GenerateShipSnapShot() {
             return new ShipSnapShot
             {
                 floatingOrigin = FloatingOrigin.Instance.Origin,
@@ -841,9 +839,6 @@ namespace Core.ShipModel {
                 modifierShipDrag = AppliedEffects.shipDeltaDrag,
                 modifierShipAngularDrag = AppliedEffects.shipDeltaAngularDrag,
 
-                activeModifiers = new List<Component>(_activeModifiers),
-                prevactiveModifiers = new List<Component>(_prevActiveModifiers),
-
                 tick = Game.Instance.GameModeHandler.CurrentReplayTick,
 
                 boostRecharging =_boostRecharging,
@@ -863,12 +858,8 @@ namespace Core.ShipModel {
             _modifierEngine.SetDirect(shipSnapShot.modifierShipForce, shipSnapShot.modifierShipDeltaSpeedCap, shipSnapShot.modifierShipDeltaThrust, shipSnapShot.modifierShipDrag, 
                                       shipSnapShot.modifierShipAngularDrag);
 
-            _activeModifiers = shipSnapShot.activeModifiers;
-            _prevActiveModifiers = shipSnapShot.prevactiveModifiers;
- 
             _boostRecharging = shipSnapShot.boostRecharging;
             _prevVelocity = shipSnapShot.previousVelocity;
-
         }
         
         #endregion

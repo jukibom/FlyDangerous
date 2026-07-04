@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using Core.Player;
 using Core.ShipModel;
+using Gameplay.Game_Modes;
 using JetBrains.Annotations;
 using MessagePack;
 using UnityEngine;
@@ -86,18 +87,26 @@ namespace Core.Replays {
             _isPlaying = false;
             ShipReplayObject?.ShipPhysics.BringToStop();
         }
-
+        private ShipPlayer ShipPlayer => ShipPlayer.FindLocalShipPlayer;
         private void UpdateKeyFrame() {
             if (Replay != null && inputTicks % Replay.ReplayMeta.KeyFrameIntervalTicks == 0 && ShipReplayObject != null) {
                 _keyFrameReader?.BaseStream.Seek(inputTicks/this.Replay.ReplayMeta.KeyFrameIntervalTicks * Replay.ReplayMeta.KeyFrameBufferSizeBytes, SeekOrigin.Begin);
                 _keyFrameReader?.Read(_keyFrameByteBuffer, 0, Replay.ReplayMeta.KeyFrameBufferSizeBytes);
 
-                var keyFrame = MessagePackSerializer.Deserialize<KeyFrame>(_keyFrameByteBuffer);
+                //var keyFrame = MessagePackSerializer.Deserialize<KeyFrame>(_keyFrameByteBuffer);
+                var keyFrame = KeyFrameV2.Deserialize(Replay.ReplayMeta.Version, ref _keyFrameByteBuffer);
 
                 ShipReplayObject.SetAbsolutePosition(keyFrame.replayFloatingOrigin, keyFrame.position);
                 ShipReplayObject.Transform.rotation = keyFrame.rotation;
                 ShipReplayObject.Rigidbody.velocity = keyFrame.velocity;
                 ShipReplayObject.Rigidbody.angularVelocity = keyFrame.angularVelocity;
+
+                if (Replay.ReplayMeta.Version == "1.1.1") {
+                    ShipReplayObject.ShipPhysics._boostStatus = keyFrame.boostStatus;
+                    ShipReplayObject.ShipPhysics._boostProgressTicks = (int)keyFrame.boostProgressTicks;
+                    ShipReplayObject.ShipPhysics._currentBoostTime = keyFrame.boostTime;
+                    ShipReplayObject.ShipPhysics._boostCapacitorPercent = keyFrame.boostCapacitorPercent;
+                }
             }
         }
 
@@ -111,14 +120,21 @@ namespace Core.Replays {
 
                     var inputFrame = InputFrameV110.Deserialize(Replay.Version, ref _inputFrameByteBuffer);
 
+                    ShipReplayObject?.ShipPhysics.OverwriteModifiers(inputFrame.modifierShipForce, inputFrame.modifierShipDeltaSpeedCap,
+                        inputFrame.modifierShipDeltaThrust, inputFrame.modifierShipDrag, inputFrame.modifierShipAngularDrag);
+
                     ShipReplayObject?.ShipPhysics.UpdateShip(inputFrame.pitch, inputFrame.roll, inputFrame.yaw, inputFrame.throttle, inputFrame.lateralH,
                         inputFrame.lateralV, inputFrame.boostHeld, inputFrame.limiterHeld, false, false);
 
+                    if (ShipReplayObject != null && ShipReplayObject.SpectatorActive) {
+                        //This helps 
+                        ShipReplayObject.ShipPhysics.ghostCollisionChecks();
+                        Game.Instance.GameModeHandler.ReplayRecorder.WriteFrame(ShipReplayObject.ShipPhysics);
+                        Game.Instance.GameModeHandler._shipSnapshotBuffer.Add(ShipReplayObject.ShipPhysics.GenerateShipSnapShot());
+                    }
+
                     if (ShipReplayObject?.ShipPhysics.IsNightVisionActive != inputFrame.shipLightsEnabled)
                         ShipReplayObject?.ShipPhysics.NightVisionToggle(inputFrame.shipLightsEnabled, _ => { });
-
-                    ShipReplayObject?.ShipPhysics.OverwriteModifiers(inputFrame.modifierShipForce, inputFrame.modifierShipDeltaSpeedCap,
-                        inputFrame.modifierShipDeltaThrust, inputFrame.modifierShipDrag, inputFrame.modifierShipAngularDrag);
 
                     inputTicks++;
                 }

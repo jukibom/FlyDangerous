@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -32,6 +33,7 @@ namespace Gameplay.Game_Modes {
         private LevelData _levelData;
         [CanBeNull] private ShipGhost replayGhost;
         private bool _isValid = true;
+        private string _invalidReason;
 
         // Handler refs
         [CanBeNull] private IGameModeWithScore _gameModeWithScore;
@@ -59,13 +61,13 @@ namespace Gameplay.Game_Modes {
         public bool ShipActive => LocalPlayer != null && LocalPlayer.ShipPhysics.ShipActive;
         public bool HasStarted => ShipActive && _gameStarted;
         public IGameMode GameMode => _gameMode;
-        public bool checkPointHit;
         public uint CurrentReplayTick => _replayRecorder.CurrentTick;
         public Replay CurrentReplay => _replayRecorder.Replay.GetCopy();
         public float restartFromCheckpointTimeSeconds = 1.5f;
         public int restartsFromCheckpoint;
         [CanBeNull] public Replay lastCheckpointReplay;
         public ShipSnapShotBuffer<ShipPhysics.ShipSnapShot> _shipSnapshotBuffer;
+        public ReplayRecorder ReplayRecorder => _replayRecorder;
 
         private void OnEnable() {
             _replayRecorder = GetComponent<ReplayRecorder>();
@@ -78,32 +80,54 @@ namespace Gameplay.Game_Modes {
             Game.OnGameSettingsApplied -= OnGameSettingsApplied;
             Game.OnRestart -= Restart;
         }
+        public void StartReplay() {
+            _replayRunning = true;
+            replayTicks = 0;
+            restartsFromCheckpoint++;
+            _fastCountDown = StartCoroutine( FastCountDown());
+
+            replayGhost = Game.Instance.LoadGhost(CurrentReplay);
+            replayGhost.ReplayTimeline.inputTicks = _shipSnapshotBuffer.ghostSnapshot.tick;
+            replayGhost.ShipPhysics.AudioListener.enabled = true;
+            replayGhost.SpectatorActive = true;
+            replayGhost.EnableReflections();
+            player.ShipPhysics.AudioListener.enabled = false;
+            player.ShipPhysics.ShipModel?.SetVisible(false);
+            player.Spectating = true;
+            player.DisableReflections();
+            _gameModeLifecycle.DisableAllShipInput();
+            SetPrecisePosisionAndSwapFocal(replayGhost.ShipPhysics,_shipSnapshotBuffer.ghostSnapshot);
+        }
+        private void CleanUpReplay() {
+            _gameModeLifecycle.EnableShipInput();
+            SetPrecisePosisionAndSwapFocal(player.ShipPhysics,_shipSnapshotBuffer.checkpointSnapshot);
+
+            _replayRunning = false;
+            if (_fastCountDown != null) StopCoroutine(_fastCountDown);
+            replayGhost.ShipPhysics.AudioListener.enabled = false;
+            //replayGhost.SpectatorActive = false;
+
+            replayGhost.DisableReflections();
+            
+            player.ShipPhysics.ShipModel?.SetVisible(true);
+            player.ShipPhysics.AudioListener.enabled = true;
+            player.Spectating = false;
+            player.EnableReflections();
+            ReplayPrioritizer.Instance.UnregisterReplay(replayGhost.ReplayTimeline);
+            
+            //Debug.LogWarning($" rigidbody {player.Rigidbody.position  - replayGhost.ShipPhysics.Rigidbody.position} {player.Rigidbody.position == replayGhost.ShipPhysics.Rigidbody.position}");
+            //Debug.LogWarning($" transform {player.transform.position - replayGhost.ShipPhysics.transform.position} {player.transform.position == replayGhost.ShipPhysics.transform.position}");
+            Destroy(replayGhost.gameObject);
+        }
 
         private void FixedUpdate() {
             if (ShipActive) {
                 _gameModeTimer.Tick(Time.fixedDeltaTime);
-                Game.Instance.GameModeHandler._shipSnapshotBuffer.Add(player.ShipPhysics.GenerateShipSnapShot());
+                if (!player.Spectating) Game.Instance.GameModeHandler._shipSnapshotBuffer.Add(player.ShipPhysics.GenerateShipSnapShot());
                 _gameMode.OnFixedUpdate();
-
-                if (checkPointHit) {
-                    checkPointHit = false;
-                    _shipSnapshotBuffer.OnCheckPointHit();
-                    lastCheckpointReplay = Game.Instance.GameModeHandler.CurrentReplay;
-                }
             }
-            if (replayTicks == SnapShotTicks && _replayRunning) {
-                _replayRunning = false;
-
-                player.ShipPhysics.ShipModel?.SetVisible(true);
-                player.ShipPhysics.AudioListener.enabled = true;
-                player.Freeze = false;
-                _gameModeLifecycle.EnableShipInput();
-
-                SetPrecisePosisionAndSwapFocal(player.ShipPhysics,_shipSnapshotBuffer.checkpointSnapshot);
-                ReplayPrioritizer.Instance.UnregisterReplay(replayGhost.ReplayTimeline);
-                Destroy(replayGhost.gameObject);
-            }
-            if (!(replayTicks ==-1)) replayTicks++;
+            if (replayTicks == SnapShotTicks && _replayRunning) CleanUpReplay();
+            replayTicks++;
         }
         public void InitialiseGameMode(ShipPlayer localPlayer, LevelData levelData, IGameMode gameMode, InGameUI inGameUI, Track track) {
             CheckValidity();
@@ -147,6 +171,10 @@ namespace Gameplay.Game_Modes {
 
             _gameMode.OnInitialise();
         }
+        public void Invalidate(String reason) {
+            _isValid = false;
+            _invalidReason = reason;
+        }
 
         public void StartGame() {
         }
@@ -179,15 +207,8 @@ namespace Gameplay.Game_Modes {
 
         private void Restart() {
             if (_replayRunning) {
-                _replayRunning = false;
-                if (_fastCountDown != null) StopCoroutine(_fastCountDown);
-                player.ShipPhysics.ShipModel?.SetVisible(true);
-                player.ShipPhysics.AudioListener.enabled = true;
-                player.Freeze = false;
-                ReplayPrioritizer.Instance.UnregisterReplay(replayGhost.ReplayTimeline);
-                FloatingOrigin.Instance.SwapFocalTransform(player.transform);
-                Destroy(replayGhost.gameObject);
-                replayGhost = null;
+                player.User.TargetTransform = player.transform;
+                CleanUpReplay();
             }
 
             // juuuuuuuuust in case
@@ -213,22 +234,7 @@ namespace Gameplay.Game_Modes {
                 return;
             }
 
-            if (!_replayRunning) {
-                _fastCountDown = StartCoroutine( FastCountDown());
-                _replayRunning = true;
-                replayTicks = 0;
-                restartsFromCheckpoint++;
-
-                replayGhost = Game.Instance.LoadGhost(CurrentReplay);
-                replayGhost.ReplayTimeline.inputTicks = _shipSnapshotBuffer.ghostSnapshot.tick;
-                replayGhost.ShipPhysics.AudioListener.enabled = true;
-                replayGhost.SpectatorActive = true;
-                player.ShipPhysics.AudioListener.enabled = false;
-                player.ShipPhysics.ShipModel?.SetVisible(false);
-                _gameModeLifecycle.DisableAllShipInput();
-                SetPrecisePosisionAndSwapFocal(replayGhost.ShipPhysics,_shipSnapshotBuffer.ghostSnapshot);
-                player.Freeze = true;
-            }
+            if (!_replayRunning) StartReplay();
         }
         
         public void SetPrecisePosisionAndSwapFocal(ShipPhysics shipPhysics, ShipPhysics.ShipSnapShot shipSnapshot) {
@@ -266,7 +272,7 @@ namespace Gameplay.Game_Modes {
                         }
                     }
 
-                _inGameUI.GameModeUIHandler.ShowResultsScreen(score, previousScore, _isValid, replayFileName, replayFilePath);
+                _inGameUI.GameModeUIHandler.ShowResultsScreen(score, previousScore, _isValid,_invalidReason, replayFileName, replayFilePath);
             }
         }
 
@@ -425,7 +431,12 @@ namespace Gameplay.Game_Modes {
         }
 
         private bool IsValid() {
-            return !Application.version.Contains("-dev") && Game.Instance.ShipParameters.ToJsonString().Equals(Game.Instance.LoadedLevelData.shipParameters.ToJsonString());
+            bool validBuild = !Application.version.Contains("-dev");
+            bool validParameters = Game.Instance.ShipParameters.ToJsonString().Equals(Game.Instance.LoadedLevelData.shipParameters.ToJsonString());
+            if (_isValid && !validBuild) _invalidReason = "RESULT NOT VALID - BETA/DEV BUILD";
+            if (_isValid && !validParameters) _invalidReason = "RESULT NOT VALID - MODIFIED SHIP";
+
+            return validBuild && validParameters;
         }
 
         private IEnumerator ShowLevelAndMusicName() {
@@ -467,12 +478,16 @@ namespace Gameplay.Game_Modes {
             public ShipSnapShotBuffer(int capacity) {
                 _buffer = new ShipSnapShot[capacity];
             }
+            public void SoftResetBuffer() {
+                _count = 0;
+                _head = 0;
+            }
             public void Add(ShipSnapShot shapShot) {
-                _buffer[_head] = shapShot;
-                _head = (_head + 1) % Capacity;
+                    _buffer[_head] = shapShot;
+                    _head = (_head + 1) % Capacity;
 
-                if (_count < Capacity)
-                    _count++;
+                    if (_count < Capacity)
+                        _count++;
             }
             public void OnCheckPointHit() {
                 if (_count == Capacity) {

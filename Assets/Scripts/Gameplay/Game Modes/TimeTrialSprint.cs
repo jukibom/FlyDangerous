@@ -95,7 +95,8 @@ namespace Gameplay.Game_Modes {
         public virtual void OnCheckpointHit(Checkpoint checkpoint, float hitTimeSeconds) {
             _lastCheckpointHitTimeSeconds = hitTimeSeconds;
 
-            Game.Instance.GameModeHandler.checkPointHit = true;
+            Game.Instance.GameModeHandler._shipSnapshotBuffer.OnCheckPointHit();
+            Game.Instance.GameModeHandler.lastCheckpointReplay = Game.Instance.GameModeHandler.CurrentReplay;
 
             // store split 
             _splits.Add(_lastCheckpointHitTimeSeconds);
