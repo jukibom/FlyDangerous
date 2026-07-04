@@ -1,4 +1,5 @@
-﻿using System.Collections;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Audio;
@@ -7,6 +8,7 @@ using Core.MapData;
 using Core.Player;
 using Core.Replays;
 using Core.Scores;
+using Core.ShipModel;
 using CustomWebSocketSharp;
 using Gameplay.Game_Modes.Components;
 using Gameplay.Game_Modes.Components.Interfaces;
@@ -29,7 +31,9 @@ namespace Gameplay.Game_Modes {
         private InGameUI _inGameUI;
         private Track _track;
         private LevelData _levelData;
+        [CanBeNull] private ShipGhost replayGhost;
         private bool _isValid = true;
+        private string _invalidReason;
 
         // Handler refs
         [CanBeNull] private IGameModeWithScore _gameModeWithScore;
@@ -46,12 +50,24 @@ namespace Gameplay.Game_Modes {
         // lifecycle
         private Coroutine _startSequenceCoroutine;
         private Coroutine _showLevelAndMusicName;
+        private Coroutine _fastCountDown;
         private bool _gameStarted;
 
         private ShipPlayer LocalPlayer { get; set; }
+        private int replayTicks=-1;
+        private ShipPlayer player => FdPlayer.FindLocalShipPlayer;
+        private int SnapShotTicks => (int)(restartFromCheckpointTimeSeconds/Time.fixedDeltaTime);
+        public bool _replayRunning = false;
         public bool ShipActive => LocalPlayer != null && LocalPlayer.ShipPhysics.ShipActive;
         public bool HasStarted => ShipActive && _gameStarted;
         public IGameMode GameMode => _gameMode;
+        public uint CurrentReplayTick => _replayRecorder.CurrentTick;
+        public Replay CurrentReplay => _replayRecorder.Replay.GetCopy();
+        public float restartFromCheckpointTimeSeconds = 1.5f;
+        public int restartsFromCheckpoint;
+        [CanBeNull] public Replay lastCheckpointReplay;
+        public ShipSnapShotBuffer<ShipPhysics.ShipSnapShot> _shipSnapshotBuffer;
+        public ReplayRecorder ReplayRecorder => _replayRecorder;
 
         private void OnEnable() {
             _replayRecorder = GetComponent<ReplayRecorder>();
@@ -64,14 +80,55 @@ namespace Gameplay.Game_Modes {
             Game.OnGameSettingsApplied -= OnGameSettingsApplied;
             Game.OnRestart -= Restart;
         }
+        public void StartReplay() {
+            _replayRunning = true;
+            replayTicks = 0;
+            restartsFromCheckpoint++;
+            _fastCountDown = StartCoroutine( FastCountDown());
+
+            replayGhost = Game.Instance.LoadGhost(CurrentReplay);
+            replayGhost.ReplayTimeline.inputTicks = _shipSnapshotBuffer.ghostSnapshot.tick;
+            replayGhost.ShipPhysics.AudioListener.enabled = true;
+            replayGhost.SpectatorActive = true;
+            replayGhost.EnableReflections();
+            player.ShipPhysics.AudioListener.enabled = false;
+            player.ShipPhysics.ShipModel?.SetVisible(false);
+            player.Spectating = true;
+            player.DisableReflections();
+            _gameModeLifecycle.DisableAllShipInput();
+            SetPrecisePosisionAndSwapFocal(replayGhost.ShipPhysics,_shipSnapshotBuffer.ghostSnapshot);
+        }
+        private void CleanUpReplay() {
+            _gameModeLifecycle.EnableShipInput();
+            SetPrecisePosisionAndSwapFocal(player.ShipPhysics,_shipSnapshotBuffer.checkpointSnapshot);
+
+            _replayRunning = false;
+            if (_fastCountDown != null) StopCoroutine(_fastCountDown);
+            replayGhost.ShipPhysics.AudioListener.enabled = false;
+            //replayGhost.SpectatorActive = false;
+
+            replayGhost.DisableReflections();
+            
+            player.ShipPhysics.ShipModel?.SetVisible(true);
+            player.ShipPhysics.AudioListener.enabled = true;
+            player.Spectating = false;
+            player.EnableReflections();
+            ReplayPrioritizer.Instance.UnregisterReplay(replayGhost.ReplayTimeline);
+            
+            //Debug.LogWarning($" rigidbody {player.Rigidbody.position  - replayGhost.ShipPhysics.Rigidbody.position} {player.Rigidbody.position == replayGhost.ShipPhysics.Rigidbody.position}");
+            //Debug.LogWarning($" transform {player.transform.position - replayGhost.ShipPhysics.transform.position} {player.transform.position == replayGhost.ShipPhysics.transform.position}");
+            Destroy(replayGhost.gameObject);
+        }
 
         private void FixedUpdate() {
             if (ShipActive) {
                 _gameModeTimer.Tick(Time.fixedDeltaTime);
+                if (!player.Spectating) Game.Instance.GameModeHandler._shipSnapshotBuffer.Add(player.ShipPhysics.GenerateShipSnapShot());
                 _gameMode.OnFixedUpdate();
             }
+            if (replayTicks == SnapShotTicks && _replayRunning) CleanUpReplay();
+            replayTicks++;
         }
-
         public void InitialiseGameMode(ShipPlayer localPlayer, LevelData levelData, IGameMode gameMode, InGameUI inGameUI, Track track) {
             CheckValidity();
 
@@ -114,6 +171,10 @@ namespace Gameplay.Game_Modes {
 
             _gameMode.OnInitialise();
         }
+        public void Invalidate(String reason) {
+            _isValid = false;
+            _invalidReason = reason;
+        }
 
         public void StartGame() {
         }
@@ -145,6 +206,11 @@ namespace Gameplay.Game_Modes {
         }
 
         private void Restart() {
+            if (_replayRunning) {
+                player.User.TargetTransform = player.transform;
+                CleanUpReplay();
+            }
+
             // juuuuuuuuust in case
             _inGameUI.GameModeUIHandler.StartPanel.Hide();
             LocalPlayer.User.ShipCameraRig.StopCameraDolly();
@@ -160,6 +226,24 @@ namespace Gameplay.Game_Modes {
             _gameModeTimer.Reset();
             _gameMode.OnRestart();
             HandleStartSequence();
+        }
+
+        public void RestartFromCheckpoint() {
+            if (!_shipSnapshotBuffer.snapShotValid) {
+                Game.Instance.RestartSession();
+                return;
+            }
+
+            if (!_replayRunning) StartReplay();
+        }
+        
+        public void SetPrecisePosisionAndSwapFocal(ShipPhysics shipPhysics, ShipPhysics.ShipSnapShot shipSnapshot) {
+            player.User.PrecicelySwapFocalObject(shipPhysics.transform,shipSnapshot.floatingOrigin,shipSnapshot.position);
+            shipPhysics.Rigidbody.position = shipSnapshot.position;
+            shipPhysics.Rigidbody.rotation = shipSnapshot.rotation;
+            shipPhysics.Rigidbody.velocity = shipSnapshot.velocity;
+            shipPhysics.Rigidbody.angularVelocity = shipSnapshot.angularVelocity;
+            shipPhysics.ApplyShipSnapShotPhysics(shipSnapshot);
         }
 
         public void Complete() {
@@ -188,7 +272,7 @@ namespace Gameplay.Game_Modes {
                         }
                     }
 
-                _inGameUI.GameModeUIHandler.ShowResultsScreen(score, previousScore, _isValid, replayFileName, replayFilePath);
+                _inGameUI.GameModeUIHandler.ShowResultsScreen(score, previousScore, _isValid,_invalidReason, replayFileName, replayFilePath);
             }
         }
 
@@ -196,6 +280,7 @@ namespace Gameplay.Game_Modes {
             // premature quit out
             if (_startSequenceCoroutine != null) StopCoroutine(_startSequenceCoroutine);
             if (_showLevelAndMusicName != null) StopCoroutine(_showLevelAndMusicName);
+            if (_fastCountDown != null) StopCoroutine(_fastCountDown);
 
             // nuke all ghosts and references
             StopGhosts();
@@ -226,6 +311,9 @@ namespace Gameplay.Game_Modes {
             _isValid = IsValid();
             _gameModeLifecycle.DisableAllShipInput();
             LocalPlayer.ShipPhysics.ShipActive = false;
+
+            _shipSnapshotBuffer = new ShipSnapShotBuffer<ShipPhysics.ShipSnapShot>(SnapShotTicks +1);
+            restartsFromCheckpoint = 0;
 
             IEnumerator StartSequence() {
                 _gameModeLifecycle.EnableGameInput();
@@ -278,6 +366,9 @@ namespace Gameplay.Game_Modes {
             }
 
             _gameStarted = true;
+        }
+        private IEnumerator FastCountDown() {
+            yield return _gameModeCountdown.CountdownWithSound(2f, timeRemaining => {if (timeRemaining <= 0) _gameModeWithCountdown.CountdownComplete(); },2f/(restartFromCheckpointTimeSeconds));
         }
 
         private IEnumerator WaitForBoostButtonIfNeeded() {
@@ -340,7 +431,12 @@ namespace Gameplay.Game_Modes {
         }
 
         private bool IsValid() {
-            return !Application.version.Contains("-dev") && Game.Instance.ShipParameters.ToJsonString().Equals(Game.Instance.LoadedLevelData.shipParameters.ToJsonString());
+            bool validBuild = !Application.version.Contains("-dev");
+            bool validParameters = Game.Instance.ShipParameters.ToJsonString().Equals(Game.Instance.LoadedLevelData.shipParameters.ToJsonString());
+            if (_isValid && !validBuild) _invalidReason = "RESULT NOT VALID - BETA/DEV BUILD";
+            if (_isValid && !validParameters) _invalidReason = "RESULT NOT VALID - MODIFIED SHIP";
+
+            return validBuild && validParameters;
         }
 
         private IEnumerator ShowLevelAndMusicName() {
@@ -369,6 +465,37 @@ namespace Gameplay.Game_Modes {
             }
 
             bottomCanvasGroup.alpha = 0;
+        }
+        public class ShipSnapShotBuffer<ShipSnapShot> {
+            private readonly ShipSnapShot[] _buffer;
+            private int _head = 0;
+            private int _count = 0;
+            public int Capacity => _buffer.Length;
+            public bool snapShotValid = false;
+            public ShipSnapShot checkpointSnapshot;
+            public ShipSnapShot ghostSnapshot;
+            
+            public ShipSnapShotBuffer(int capacity) {
+                _buffer = new ShipSnapShot[capacity];
+            }
+            public void SoftResetBuffer() {
+                _count = 0;
+                _head = 0;
+            }
+            public void Add(ShipSnapShot shapShot) {
+                    _buffer[_head] = shapShot;
+                    _head = (_head + 1) % Capacity;
+
+                    if (_count < Capacity)
+                        _count++;
+            }
+            public void OnCheckPointHit() {
+                if (_count == Capacity) {
+                    ghostSnapshot = _buffer[_head];
+                    checkpointSnapshot = _buffer[(Capacity + _head - 1) % Capacity];
+                    snapShotValid = true;
+                }
+            }
         }
     }
 }

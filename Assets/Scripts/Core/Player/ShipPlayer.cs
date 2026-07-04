@@ -67,6 +67,7 @@ namespace Core.Player {
         [SyncVar] private string _headLightsColor;
         public Flag PlayerFlag { get; private set; }
         public ReflectionProbe ReflectionProbe => reflectionProbe;
+        public bool Spectating = false;
 
         private bool IsReady => _transform && _serverReady;
 
@@ -262,7 +263,7 @@ namespace Core.Player {
 
         // Apply all physics updates in fixed intervals (WRITE)
         private void FixedUpdate() {
-            if (isLocalPlayer && IsReady) {
+            if (isLocalPlayer && IsReady && !Game.Instance.GameModeHandler._replayRunning && !Spectating) {
                 ShipPhysics.UpdateShip(_pitchInput, _rollInput, _yawInput, _throttleInput, _latHInput, _latVInput, _boostButtonHeld, _velocityLimiterActive,
                     IsVectorFlightAssistActive, IsRotationalFlightAssistActive);
 
@@ -278,6 +279,12 @@ namespace Core.Player {
                 ShipPhysics.LocalPlayerTriggerCollisionChecks();
                 ShipPhysics.GeometryCollisionCheck();
             }
+        }
+        public void EnableReflections() {
+            reflectionProbe.gameObject.SetActive(Game.Instance.reflectionSetting != "off");
+        }
+        public void DisableReflections() {
+            reflectionProbe.gameObject.SetActive(false);
         }
 
         private void OnCollisionEnter(Collision collisionInfo) {

@@ -52,13 +52,13 @@ namespace GameUI.GameModes {
             uiButtons.gameObject.SetActive(false);
         }
 
-        public void RunLevelComplete(Score score, Score previousBest, bool isValid, string replayFilename, string replayFilepath) {
+        public void RunLevelComplete(Score score, Score previousBest, bool isValid, string invalidReason, string replayFilename, string replayFilepath) {
             HideAllButtons();
             quitButton.gameObject.SetActive(true);
             retryButton.gameObject.SetActive(true);
             
             resultsScreenBackground.enabled = true;
-            StartCoroutine(ShowEndResultsScreen(score, previousBest, isValid, replayFilename, replayFilepath));
+            StartCoroutine(ShowEndResultsScreen(score, previousBest, isValid, invalidReason, replayFilename, replayFilepath));
         }
 
         public void ShowCompetitionPanel(Action onStart = null, Action onRestart = null, Action onBack = null) {
@@ -103,11 +103,11 @@ namespace GameUI.GameModes {
             competitionPanel.Populate(levelData);
         }
 
-        private IEnumerator ShowEndResultsScreen(Score score, Score previousBest, bool isValid, string replayFileName, string replayFilePath) {
+        private IEnumerator ShowEndResultsScreen(Score score, Score previousBest, bool isValid, string invalidReason, string replayFileName, string replayFilePath) {
             var levelData = Game.Instance.LoadedLevelData;
 
             yield return new WaitForSeconds(1f);
-            yield return ShowMedalScreen(score, previousBest, isValid);
+            yield return ShowMedalScreen(score, previousBest, isValid, invalidReason);
             yield return new WaitForSecondsRealtime(1);
             medalsScreen.gameObject.SetActive(false);
 
@@ -119,7 +119,7 @@ namespace GameUI.GameModes {
             nextLevelButton.gameObject.SetActive(IsNextLevelValid);
         }
 
-        private IEnumerator ShowMedalScreen(Score score, Score previousBest, bool isValid) {
+        private IEnumerator ShowMedalScreen(Score score, Score previousBest, bool isValid, string invalidReason) {
             medalsScreen.gameObject.SetActive(true);
 
             var result = score.PersonalBestScore;
@@ -142,7 +142,7 @@ namespace GameUI.GameModes {
             if (result < authorTargetTime)
                 medalCount++;
 
-            yield return medalsScreen.ShowAnimation(medalCount, isNewPersonalBest, result, previousPersonalBest, isValid);
+            yield return medalsScreen.ShowAnimation(medalCount, isNewPersonalBest, result, previousPersonalBest, isValid, invalidReason);
         }
 
         private async Task UploadLeaderboardResultIfValid(float timeSeconds, string levelHash, string replayFileName, string replayFilePath) {

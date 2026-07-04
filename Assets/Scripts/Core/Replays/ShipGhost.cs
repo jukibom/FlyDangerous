@@ -1,8 +1,10 @@
-﻿using Core.Player;
+using Core.Player;
 using Core.ShipModel;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Audio;
+
+using UnityEngine.Rendering;
 
 namespace Core.Replays {
     [RequireComponent(typeof(Rigidbody))]
@@ -10,7 +12,7 @@ namespace Core.Replays {
     public class ShipGhost : MonoBehaviour, IReplayShip {
         [SerializeField] private ShipPhysics shipPhysics;
         [SerializeField] private AudioMixerGroup ghostAudioMixer;
-        
+        [SerializeField] private ReflectionProbe reflectionProbe;
         public ReplayTimeline ReplayTimeline { get; private set; }
         public string PlayerName { get; set; }
         public Flag PlayerFlag { get; set; }
@@ -24,8 +26,21 @@ namespace Core.Replays {
             Rigidbody = GetComponent<Rigidbody>();
             ReplayTimeline = GetComponent<ReplayTimeline>();
             shipPhysics.ShipActive = true;
-        }
+            var reflectionSetting = Game.Instance.reflectionSetting;
 
+            reflectionProbe.gameObject.SetActive(false);
+            reflectionProbe.resolution = reflectionSetting switch {
+                "ultra" => 512,
+                "high" => 512,
+                "medium" => 256,
+                _ => 128
+            };
+            reflectionProbe.timeSlicingMode = reflectionSetting switch {
+                "ultra" => ReflectionProbeTimeSlicingMode.NoTimeSlicing,
+                "high" => ReflectionProbeTimeSlicingMode.AllFacesAtOnce,
+                _ => ReflectionProbeTimeSlicingMode.IndividualFaces
+            };
+        }
         private void Start() {
             // handle binding all sounds to the ghost mixer
             foreach (var audioSource in GetComponentsInChildren<AudioSource>(true)) audioSource.outputAudioMixerGroup = ghostAudioMixer;
@@ -64,6 +79,13 @@ namespace Core.Replays {
             FloatingOrigin.Instance.SetAbsoluteWorldPosition(transform, ghostFloatingOrigin + offset);
             if (SpectatorActive) FloatingOrigin.Instance.CheckNeedsUpdate();
             Rigidbody.MovePosition(transform.position);
+        }
+
+        public void EnableReflections() {
+            reflectionProbe.gameObject.SetActive(Game.Instance.reflectionSetting != "off");
+        }
+        public void DisableReflections() {
+            reflectionProbe.gameObject.SetActive(false);
         }
 
         public void LoadReplay(Replay replay) {
