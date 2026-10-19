@@ -165,6 +165,11 @@ namespace Core.Player {
             Engine.Instance.NightVision.SetNightVisionActive(false);
 
             RefreshShipModel();
+            
+            // disable all local doppler effects (the frame of reference should be locked, there's no reason for it!)
+            foreach (var audioSource in GetComponentsInChildren<AudioSource>(true)) {
+                audioSource.dopplerLevel = 0;
+            }
         }
 
         // When a client connects, update all other ships on that local client
@@ -496,6 +501,7 @@ namespace Core.Player {
                 var position = transform.position - offset;
                 Rigidbody.MovePosition(position);
                 transform.position = position;
+                
             }
         }
 
