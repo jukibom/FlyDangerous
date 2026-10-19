@@ -89,9 +89,37 @@
                 #endif
             }
             
+            float3 GetCameraForward()
+                {
+                    #if defined(USING_STEREO_MATRICES)
+                        return -unity_StereoMatrixV[unity_StereoEyeIndex]._m20_m21_m22;
+                    #else
+                        return -UNITY_MATRIX_V._m20_m21_m22;
+                    #endif
+                }
+
+                float3 GetSkyDirection(float2 uv)
+                {
+                    float4x4 invViewProjection = GetInverseViewProjectionMatrix();
+
+                    #if UNITY_REVERSED_Z
+                        float farDepth = 0.0;
+                    #else
+                        float farDepth = 1.0;
+                    #endif
+
+                    float3 farWorldPos = ComputeWorldSpacePosition(
+                        uv,
+                        farDepth,
+                        invViewProjection
+                    );
+
+                    return normalize(farWorldPos - GetCameraWorldPosition());
+                }
+            
             float3 RotateAroundYInDegrees(float3 direction, float degrees)
             {
-                float radians = degrees * PI / 180.0;
+                float radians = degrees * PI / -180.0;
                 float s = sin(radians);
                 float c = cos(radians);
 
@@ -114,33 +142,30 @@
                     uv
                 );
 
-                float rawDepth = SampleSceneDepth(uv);
+               float rawDepth = SampleSceneDepth(uv);
 
-                // Do not fog pixels that are already the skybox/background.
+                // do not fog pixels that are already the skybox/background.
                 #if UNITY_REVERSED_Z
-                    if (rawDepth <= 0.000001)
+                    if (rawDepth <= 0.0)
                         return sceneColor;
                 #else
-                    if (rawDepth >= 0.999999)
+                    if (rawDepth >= 1.0)
                         return sceneColor;
                 #endif
 
-                float3 worldPos = ComputeWorldSpacePosition(
-                    uv,
-                    rawDepth,
-                    GetInverseViewProjectionMatrix()
-                );
+                float linearEyeDepth = LinearEyeDepth(rawDepth, _ZBufferParams);
+            
+                float3 skyDirection = GetSkyDirection(uv);
+                float3 cameraForward = normalize(GetCameraForward());
 
-                float3 cameraPos = GetCameraWorldPosition();
-
-                float3 cameraToPixel = worldPos - cameraPos;
-                float radialDistance = length(cameraToPixel);
+                float forwardAmount = max(dot(skyDirection, cameraForward), 0.0001);
+                float radialDistance = linearEyeDepth / forwardAmount;
 
                 float fogFactor = smoothstep(_FogStart, _FogEnd, radialDistance);
                 fogFactor *= _FogIntensity;
 
-                float3 skyDirection = RotateAroundYInDegrees(normalize(cameraToPixel), _SkyRotation);
-                
+                skyDirection = RotateAroundYInDegrees(skyDirection, _SkyRotation);
+            
                 half3 skyColor = SAMPLE_TEXTURECUBE(
                     _SkyCubemap,
                     sampler_SkyCubemap,

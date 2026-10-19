@@ -147,8 +147,8 @@ namespace VFX {
                     passData.Source = source;
                     passData.Material = _material;
 
-                    builder.UseTexture(source, AccessFlags.Read);
-                    builder.SetRenderAttachment(destination, 0, AccessFlags.Write);
+                    builder.UseTexture(source);
+                    builder.SetRenderAttachment(destination, 0);
                     builder.AllowGlobalStateModification(true);
                     builder.AllowPassCulling(false);
 
