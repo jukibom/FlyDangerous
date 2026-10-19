@@ -10,9 +10,12 @@ namespace VFX {
         [Serializable]
         public sealed class Settings {
             public RenderPassEvent renderPassEvent = RenderPassEvent.AfterRenderingTransparents;
-
+            
             [Tooltip("Shader used for the fullscreen fog pass.")]
             public Shader shader;
+
+            [Tooltip("Show in the scene view for debugging")]
+            public bool showInSceneView;
 
             [Min(0f)] public float fogStart = 100f;
 
@@ -76,11 +79,13 @@ namespace VFX {
             if (_material == null || _pass == null)
                 return;
 
-            if (renderingData.cameraData.cameraType != CameraType.Game)
-                return;
-
-            _pass.UpdateSettings();
-            renderer.EnqueuePass(_pass);
+            var cameraType = renderingData.cameraData.cameraType;
+            if (cameraType == CameraType.Game ||
+                (settings.showInSceneView && cameraType == CameraType.SceneView)) 
+            {
+                _pass.UpdateSettings();
+                renderer.EnqueuePass(_pass);
+            }
         }
 
         protected override void Dispose(bool disposing) {
