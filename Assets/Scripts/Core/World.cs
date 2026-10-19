@@ -24,7 +24,7 @@ namespace Core {
         [CanBeNull]
         private GPUInstancerTreeManager GPUInstancerTreeManager {
             get {
-                if (_gpuInstancerTreeManager == null) _gpuInstancerTreeManager = FindObjectOfType<GPUInstancerTreeManager>();
+                if (_gpuInstancerTreeManager == null) _gpuInstancerTreeManager = FindFirstObjectByType<GPUInstancerTreeManager>();
 
                 return _gpuInstancerTreeManager;
             }
@@ -35,7 +35,7 @@ namespace Core {
         [CanBeNull]
         private MapMagicObject MapMagicObject {
             get {
-                if (_mapMagicObject == null) _mapMagicObject = FindObjectOfType<MapMagicObject>();
+                if (_mapMagicObject == null) _mapMagicObject = FindFirstObjectByType<MapMagicObject>();
 
                 return _mapMagicObject;
             }
@@ -48,7 +48,8 @@ namespace Core {
 #if NO_PAID_ASSETS
         }
 #else
-            StartCoroutine(HandleGPUCulling());
+            // TODO: Handle GPU objects more sanely when we need to (we don't actually use this, and it's a HUGE bloody cpu hog when it doesn't exist, because FindObjectOfType is cancer!)
+            // StartCoroutine(HandleGPUCulling());
         }
 
         /**

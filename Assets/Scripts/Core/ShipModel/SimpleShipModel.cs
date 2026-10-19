@@ -55,7 +55,7 @@ namespace Core.ShipModel {
 
 #if !NO_PAID_ASSETS
             // Init GPU Instance removal colliders
-            if (FindObjectOfType<GPUInstancerDetailManager>()) {
+            if (FindFirstObjectByType<GPUInstancerDetailManager>()) {
                 var grassInstanceRemover = foliageCollider.gameObject.AddComponent<GPUInstancerInstanceRemover>();
                 grassInstanceRemover.selectedColliders = new List<Collider> { foliageCollider };
                 grassInstanceRemover.removeFromDetailManagers = true;
@@ -66,7 +66,7 @@ namespace Core.ShipModel {
                 grassInstanceRemover.useBounds = true;
             }
 
-            if (FindObjectOfType<GPUInstancerTreeManager>()) {
+            if (FindFirstObjectByType<GPUInstancerTreeManager>()) {
                 var treeInstanceRemover = foliageCollider.gameObject.AddComponent<GPUInstancerInstanceRemover>();
                 treeInstanceRemover.selectedColliders = new List<Collider> { foliageCollider };
                 treeInstanceRemover.removeFromDetailManagers = false;

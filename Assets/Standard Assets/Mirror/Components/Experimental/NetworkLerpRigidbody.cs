@@ -49,7 +49,7 @@ namespace Mirror.Experimental
 
         void SyncToClients()
         {
-            targetVelocity = target.velocity;
+            targetVelocity = target.linearVelocity;
             targetPosition = target.position;
         }
 
@@ -59,14 +59,14 @@ namespace Mirror.Experimental
             if (now > nextSyncTime)
             {
                 nextSyncTime = now + syncInterval;
-                CmdSendState(target.velocity, target.position);
+                CmdSendState(target.linearVelocity, target.position);
             }
         }
 
         [Command]
         void CmdSendState(Vector3 velocity, Vector3 position)
         {
-            target.velocity = velocity;
+            target.linearVelocity = velocity;
             target.position = position;
             targetVelocity = velocity;
             targetPosition = position;
@@ -76,10 +76,10 @@ namespace Mirror.Experimental
         {
             if (IgnoreSync) { return; }
 
-            target.velocity = Vector3.Lerp(target.velocity, targetVelocity, lerpVelocityAmount);
+            target.linearVelocity = Vector3.Lerp(target.linearVelocity, targetVelocity, lerpVelocityAmount);
             target.position = Vector3.Lerp(target.position, targetPosition, lerpPositionAmount);
             // add velocity to position as position would have moved on server at that velocity
-            target.position += target.velocity * Time.fixedDeltaTime;
+            target.position += target.linearVelocity * Time.fixedDeltaTime;
 
             // TODO does this also need to sync acceleration so and update velocity?
         }

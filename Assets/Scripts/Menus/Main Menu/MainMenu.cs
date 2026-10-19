@@ -81,7 +81,7 @@ namespace Menus.Main_Menu {
             InputSystem.onDeviceChange += OnDeviceChange;
 
             // load engine if not already 
-            if (!FindObjectOfType<Engine>()) SceneManager.LoadScene("Engine", LoadSceneMode.Additive);
+            if (!FindFirstObjectByType<Engine>()) SceneManager.LoadScene("Engine", LoadSceneMode.Additive);
 
             StartCoroutine(MenuLoad());
         }
@@ -120,7 +120,7 @@ namespace Menus.Main_Menu {
         // TODO: show time trial with previous level selected
 
         public void ShowLobby() {
-            var lobby = FindObjectOfType<LobbyMenu>(true);
+            var lobby = FindFirstObjectByType<LobbyMenu>(FindObjectsInactive.Include);
             if (lobby) {
                 topMenu.Hide();
                 lobby.Open(topMenu);

@@ -133,13 +133,13 @@ namespace Core {
 
         public void Start() {
             // must be a cinemachine controller in the scene
-            CinemachineBrain = FindObjectOfType<CinemachineBrain>();
+            CinemachineBrain = FindFirstObjectByType<CinemachineBrain>();
 
             // handle cinemachine nonsense
             CinemachineCore.CameraUpdatedEvent.AddListener(OnCinemachineUpdate);
 
             // must be a level loader in the scene
-            _levelLoader = FindObjectOfType<LevelLoader>();
+            _levelLoader = FindFirstObjectByType<LevelLoader>();
 
             // bootstrap for various game mode types
             GameModeHandler = GetComponent<GameModeHandler>();
@@ -149,7 +149,7 @@ namespace Core {
             Level.List();
 
             // if there's a user object when the game starts, enable input (usually in the editor!)
-            FindObjectOfType<ShipPlayer>()?.User.EnableGameInput();
+            FindFirstObjectByType<ShipPlayer>()?.User.EnableGameInput();
             LoadBindings();
             ApplyGameOptions();
 
@@ -291,7 +291,7 @@ namespace Core {
             IsUnderWater = submerged;
             var player = FdPlayer.FindLocalShipPlayer;
             var velocity = Vector3.zero;
-            if (player != null) velocity = player.Rigidbody.velocity;
+            if (player != null) velocity = player.Rigidbody.linearVelocity;
 
             OnWaterTransition?.Invoke(IsUnderWater, velocity);
         }
@@ -321,7 +321,7 @@ namespace Core {
             LockCursor();
 
             IEnumerator WaitForAllPlayersLoaded() {
-                yield return new WaitUntil(() => FindObjectsOfType<LoadingPlayer>().All(loadingPlayer => loadingPlayer.isLoaded));
+                yield return new WaitUntil(() => FindObjectsByType<LoadingPlayer>(FindObjectsSortMode.None).All(loadingPlayer => loadingPlayer.isLoaded));
             }
 
             // Set the textfields in the DevPanel to the included parameters from the leveldata so changing the settings wont change
@@ -349,7 +349,7 @@ namespace Core {
 
                 // wait for all known currently loading players to have finished loading
                 loadingPlayer.SetLoaded();
-                var loadingRoom = FindObjectOfType<LoadingRoom>();
+                var loadingRoom = FindFirstObjectByType<LoadingRoom>();
                 loadingRoom.CenterLoadingText = "Waiting for all players to load ...";
                 yield return WaitForAllPlayersLoaded();
 
@@ -373,29 +373,29 @@ namespace Core {
 #if !NO_PAID_ASSETS
                 // gpu instancer VR initialisation (paid asset!)
                 if (IsVREnabled) {
-                    var cam = FindObjectOfType<XROrigin>(true).Camera;
+                    var cam = FindFirstObjectByType<XROrigin>(FindObjectsInactive.Include).Camera;
 
-                    var gpuInstancer = FindObjectOfType<GPUInstancerMapMagic2Integration>();
-                    var mapMagic = FindObjectOfType<MapMagicObject>();
+                    var gpuInstancer = FindFirstObjectByType<GPUInstancerMapMagic2Integration>();
+                    var mapMagic = FindFirstObjectByType<MapMagicObject>();
                     if (mapMagic && gpuInstancer) {
                         gpuInstancer.floatingOriginTransform = mapMagic.transform;
                         GPUInstancerAPI.SetCamera(cam);
                         gpuInstancer.SetCamera(cam);
-                        FindObjectsOfType<GPUInstancerDetailManager>(true).ToList().ForEach(manager => manager.SetCamera(cam));
-                        FindObjectOfType<GPUInstancerTreeManager>(true)?.SetCamera(cam);
+                        FindObjectsByType<GPUInstancerDetailManager>(FindObjectsInactive.Include, FindObjectsSortMode.None).ToList().ForEach(manager => manager.SetCamera(cam));
+                        FindFirstObjectByType<GPUInstancerTreeManager>(FindObjectsInactive.Include)?.SetCamera(cam);
                     }
                 }
 
                 // pull out GPU instancer tree manager object before loading screen is destroyed 
-                var treeManager = FindObjectOfType<GPUInstancerTreeManager>();
-                var instancer = FindObjectOfType<GPUInstancerMapMagic2Integration>();
+                var treeManager = FindFirstObjectByType<GPUInstancerTreeManager>();
+                var instancer = FindFirstObjectByType<GPUInstancerMapMagic2Integration>();
                 if (treeManager && instancer) treeManager.transform.parent = instancer.transform;
 #endif
 
                 // if we have water in the world, toggle it on and off because some weird URP issue which doesn't handle the lighting properly on load
                 // same for reflection probes because ?!?!?!?!
                 // TODO: figure out why this jank happens, don't have time right now
-                var water = FindObjectOfType<ModifierWater>();
+                var water = FindFirstObjectByType<ModifierWater>();
                 if (water != null) {
                     water.gameObject.SetActive(false);
                     var shouldShowReflectionProbes = ship.ReflectionProbe.gameObject.activeSelf;
@@ -422,7 +422,7 @@ namespace Core {
                 FdConsole.Instance.LogMessage("Loaded level " + levelData.LevelHash());
 
                 // if there's a track, initialise it
-                var track = FindObjectOfType<Track>();
+                var track = FindFirstObjectByType<Track>();
                 if (track) {
                     var gameMode = levelData.gameType.GameMode;
                     GameModeHandler.InitialiseGameMode(ship, levelData, gameMode, ship.User.InGameUI, track);
@@ -479,7 +479,7 @@ namespace Core {
         public void QuitToLobby() {
             IEnumerator ReturnPlayersToLobby() {
                 yield return LoadMainMenu();
-                var mainMenu = FindObjectOfType<MainMenu>();
+                var mainMenu = FindFirstObjectByType<MainMenu>();
                 mainMenu.ShowLobby();
             }
 
@@ -498,7 +498,7 @@ namespace Core {
             GameModeHandler.Quit();
             AudioMixer.Instance.Reset();
 
-            if (!FindObjectOfType<MainMenu>()) {
+            if (!FindFirstObjectByType<MainMenu>()) {
                 IEnumerator QuitAndShutdownNetwork() {
                     yield return LoadMainMenu(withDisconnectionReason);
                     SessionStatus = SessionStatus.Offline;
@@ -513,7 +513,7 @@ namespace Core {
             if (_loadingRoutine != null) StopCoroutine(_loadingRoutine);
 
             MenuFirstRun = false;
-            var mapMagic = FindObjectOfType<MapMagicObject>();
+            var mapMagic = FindFirstObjectByType<MapMagicObject>();
             if (mapMagic) {
                 foreach (var terrainTile in mapMagic.tiles.All()) terrainTile.Stop();
                 mapMagic.enabled = false;
@@ -537,7 +537,7 @@ namespace Core {
             ApplyGameOptions();
             FreeCursor();
 
-            var mainMenu = FindObjectOfType<MainMenu>();
+            var mainMenu = FindFirstObjectByType<MainMenu>();
             if (mainMenu && withDisconnectionReason != null) mainMenu.ShowDisconnectedDialog(withDisconnectionReason);
         }
 
@@ -593,7 +593,7 @@ namespace Core {
                 IEnumerator ResetHmdPosition() {
                     // allow xr rigs to be initialised before resetting hmd position
                     yield return new WaitForEndOfFrame();
-                    var xrOrigin = FindObjectOfType<XROrigin>(true);
+                    var xrOrigin = FindFirstObjectByType<XROrigin>(FindObjectsInactive.Include);
 
                     if (xrOrigin) {
                         // Whenever VR is enabled on a new version in any capacity (e.g. through option menu). perform auto-calibration.

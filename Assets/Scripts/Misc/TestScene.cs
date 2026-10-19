@@ -34,7 +34,7 @@ namespace Misc {
         private void Start() {
             IEnumerator StartGame() {
                 // load engine scene if not already 
-                if (!FindObjectOfType<Engine>())
+                if (!FindFirstObjectByType<Engine>())
                     yield return SceneManager.LoadSceneAsync("Engine", LoadSceneMode.Additive);
 
                 // remove the spawn object
@@ -66,10 +66,10 @@ namespace Misc {
                     
 #if !NO_PAID_ASSETS
                     // gpu instancer fun (paid asset!)
-                    var cam = FindObjectOfType<CinemachineBrain>().gameObject.GetComponent<Camera>();
+                    var cam = FindFirstObjectByType<CinemachineBrain>().gameObject.GetComponent<Camera>();
                     GPUInstancerAPI.SetCamera(cam);
 
-                    var gpuPrefabManager = FindObjectOfType<GPUInstancerPrefabManager>();
+                    var gpuPrefabManager = FindFirstObjectByType<GPUInstancerPrefabManager>();
                     if (gpuPrefabManager != null) {
                         var gpuInstancePhysicsHandler = new GameObject("GPU Instancer Handler");
                         gpuInstancePhysicsHandler.transform.SetParent(player.User.transform);
@@ -83,7 +83,7 @@ namespace Misc {
                 }
 
                 // if there's a map magic object going on here, enable it
-                var mapMagic = FindObjectOfType<MapMagicObject>();
+                var mapMagic = FindFirstObjectByType<MapMagicObject>();
                 if (mapMagic) {
                     Game.Instance.LoadedLevelData.location = Location.TerrainV1;
                     mapMagic.enabled = true;
@@ -93,7 +93,7 @@ namespace Misc {
                 Game.Instance.ApplyGameOptions();
 
                 // init game mode handlers for free roam
-                var track = FindObjectOfType<Track>();
+                var track = FindFirstObjectByType<Track>();
                 if (player && track) {
                     Game.Instance.LoadedLevelData.gameType = GameType.FreeRoam;
                     Game.Instance.GameModeHandler.InitialiseGameMode(player, Game.Instance.LoadedLevelData,
@@ -136,7 +136,7 @@ namespace Misc {
                 if (player) {
                     Game.Instance.GameModeHandler.InitialiseGameMode(player, Game.Instance.LoadedLevelData,
                         new FreeRoam(),
-                        player.User.InGameUI, FindObjectOfType<Track>());
+                        player.User.InGameUI, FindFirstObjectByType<Track>());
                     Game.Instance.GameModeHandler.Begin();
                 }
             }
@@ -157,7 +157,7 @@ namespace Misc {
             if (player) {
                 Instantiate(shipGhostPrefab, player.transform.position + new Vector3(0, 0, 10),
                     player.transform.rotation);
-                var targettingSystem = FindObjectOfType<TargettingSystem>();
+                var targettingSystem = FindFirstObjectByType<TargettingSystem>();
                 if (targettingSystem) targettingSystem.ResetTargets();
             }
         }

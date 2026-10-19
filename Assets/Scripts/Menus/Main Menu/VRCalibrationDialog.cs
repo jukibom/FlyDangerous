@@ -20,7 +20,7 @@ namespace Menus.Main_Menu {
         }
 
         public void OnCalibrate() {
-            var xrOrigin = FindObjectOfType<XROrigin>();
+            var xrOrigin = FindFirstObjectByType<XROrigin>();
             if (xrOrigin) Game.Instance.ResetHmdView(xrOrigin, xrOrigin.transform.parent);
         }
 

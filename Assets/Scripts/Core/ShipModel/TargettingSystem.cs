@@ -176,7 +176,7 @@ namespace Core.ShipModel {
                     _players.Add(shipPlayer, target);
                 }
 
-            foreach (var replayShip in FindObjectsOfType<ShipGhost>()) {
+            foreach (var replayShip in FindObjectsByType<ShipGhost>(FindObjectsSortMode.None)) {
                 var target = Instantiate(targetPrefab, transform);
                 target.SetColor(targetColor);
                 _ghosts.Add(replayShip, target);

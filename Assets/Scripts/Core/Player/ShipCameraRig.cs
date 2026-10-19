@@ -238,7 +238,7 @@ namespace Core.Player {
 
             IEnumerator TransitionToSecondCamera() {
                 yield return new WaitForFixedUpdate();
-                var cinemachine = FindObjectOfType<CinemachineBrain>();
+                var cinemachine = FindFirstObjectByType<CinemachineBrain>();
                 if (cinemachine) {
                     var switchNextTime = cinemachine.ActiveBlend?.Duration ?? 2;
                     yield return new WaitForSeconds(switchNextTime);

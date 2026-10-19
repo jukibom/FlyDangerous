@@ -14,7 +14,7 @@ namespace Misc {
                 lock (_lock) {
                     if (_instance == null) {
                         // Search for existing instance.
-                        _instance = (T)FindObjectOfType(typeof(T));
+                        _instance = (T)FindFirstObjectByType(typeof(T));
 
                         // Create new instance if one doesn't already exist.
                         if (_instance == null) {

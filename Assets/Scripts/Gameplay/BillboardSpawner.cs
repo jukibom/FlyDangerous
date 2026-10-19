@@ -42,7 +42,7 @@ namespace Gameplay {
                 billboardType = BillboardType.FromString(_billboardData.Name).Name;
 
                 // if we have water in the scene, use fallback dithering to avoid z-buffer bullshit (otherwise use glorious alpha)
-                billboard.UseDithering = FindObjectOfType<ModifierWater>() != null;
+                billboard.UseDithering = FindFirstObjectByType<ModifierWater>() != null;
 
                 if (_billboardData is BillboardWithMessageData messageBillboard) billboard.CustomMessage = messageBillboard.Message;
                 if (_billboardData is BillboardWithTextureData messageTexture) billboard.TextureResource = messageTexture.TextureResourceName;

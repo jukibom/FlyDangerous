@@ -32,7 +32,7 @@ namespace Editor {
         }
 
         private void Refresh() {
-            _track = FindObjectOfType<Track>();
+            _track = FindFirstObjectByType<Track>();
             if (_track != null) {
                 var levelData = _track.Serialize();
                 _selectedEnvironmentIndex = Environment.List().ToList().IndexOf(levelData.environment);

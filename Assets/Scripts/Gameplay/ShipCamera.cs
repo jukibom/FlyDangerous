@@ -97,7 +97,7 @@ namespace Gameplay {
                 _targetOffset = Vector3.zero;
             }
 
-            foreach (var audioLowPassFilter in FindObjectsOfType<AudioLowPassFilter>()) audioLowPassFilter.enabled = useLowPassAudio && active;
+            foreach (var audioLowPassFilter in FindObjectsByType<AudioLowPassFilter>(FindObjectsSortMode.None)) audioLowPassFilter.enabled = useLowPassAudio && active;
         }
 
         public void UpdateVelocityFov(Vector3 velocity, float maxVelocity, bool lerp = true) {

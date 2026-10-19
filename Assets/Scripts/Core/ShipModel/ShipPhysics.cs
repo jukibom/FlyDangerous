@@ -92,8 +92,8 @@ namespace Core.ShipModel {
 
                 // handle rigidbody params
                 targetRigidbody.mass = value.mass;
-                targetRigidbody.drag = value.drag;
-                targetRigidbody.angularDrag = value.angularDrag;
+                targetRigidbody.linearDamping = value.drag;
+                targetRigidbody.angularDamping = value.angularDrag;
                 targetRigidbody.maxAngularVelocity = value.maxAngularVelocity;
 
                 // setup angular momentum for collisions (higher multiplier = less spin)
@@ -112,11 +112,11 @@ namespace Core.ShipModel {
 
         public Vector3 Position => transform.position;
         public Quaternion Rotation => transform.rotation;
-        public Vector3 Velocity => targetRigidbody.velocity;
+        public Vector3 Velocity => targetRigidbody.linearVelocity;
         public Vector3 AngularVelocity => targetRigidbody.angularVelocity;
-        public float VelocityMagnitude => Mathf.Round(targetRigidbody.velocity.magnitude);
+        public float VelocityMagnitude => Mathf.Round(targetRigidbody.linearVelocity.magnitude);
 
-        public float VelocityNormalised => targetRigidbody.velocity.sqrMagnitude /
+        public float VelocityNormalised => targetRigidbody.linearVelocity.sqrMagnitude /
                                            (FlightParameters.maxBoostSpeed * FlightParameters.maxBoostSpeed);
 
         private bool BoostReady =>
@@ -239,7 +239,7 @@ namespace Core.ShipModel {
 
         public void ResetPhysics(bool includeBoost = true) {
             _modifierEngine.Reset();
-            targetRigidbody.velocity = Vector3.zero;
+            targetRigidbody.linearVelocity = Vector3.zero;
             targetRigidbody.angularVelocity = Vector3.zero;
             _prevVelocity = Vector3.zero;
             _stopShip = false;
@@ -296,7 +296,7 @@ namespace Core.ShipModel {
 
         public void GeometryCollisionCheck() {
             // we want to know up to 5 seconds before a collision happens
-            var velocity = targetRigidbody.velocity;
+            var velocity = targetRigidbody.linearVelocity;
             var origin = targetRigidbody.transform.position;
             var length = velocity.magnitude * 5;
             var direction = velocity.normalized;
@@ -371,11 +371,11 @@ namespace Core.ShipModel {
             // clamp max speed if user is holding the velocity limiter button down
             if (velocityLimiterActive) {
                 _velocityLimitCap = Math.Max(_prevVelocity.magnitude, FlightParameters.minUserLimitedVelocity);
-                targetRigidbody.velocity = Vector3.ClampMagnitude(targetRigidbody.velocity, _velocityLimitCap);
+                targetRigidbody.linearVelocity = Vector3.ClampMagnitude(targetRigidbody.linearVelocity, _velocityLimitCap);
             }
 
             // clamp max speed in general including boost variance (max boost speed minus max speed) and applied effects
-            targetRigidbody.velocity = Vector3.ClampMagnitude(targetRigidbody.velocity,
+            targetRigidbody.linearVelocity = Vector3.ClampMagnitude(targetRigidbody.linearVelocity,
                 FlightParameters.maxSpeed + CurrentBoostedMaxSpeedDelta +
                 _modifierEngine.AppliedEffects.shipDeltaSpeedCap);
 
@@ -631,8 +631,8 @@ namespace Core.ShipModel {
             );
 
             /* DRAG */
-            targetRigidbody.drag = FlightParameters.drag + _modifierEngine.AppliedEffects.shipDeltaDrag;
-            targetRigidbody.angularDrag =
+            targetRigidbody.linearDamping = FlightParameters.drag + _modifierEngine.AppliedEffects.shipDeltaDrag;
+            targetRigidbody.angularDamping =
                 FlightParameters.angularDrag + _modifierEngine.AppliedEffects.shipDeltaAngularDrag;
 
             /* THRUST */
@@ -663,7 +663,7 @@ namespace Core.ShipModel {
 
         private void CalculateVectorControlFlightAssist(float maxSpeedWithBoost) {
             // TODO: Correctly calculate gravity for FA (need the actual velocity from acceleration caused in the previous frame)
-            var localVelocity = transform.InverseTransformDirection(targetRigidbody.velocity);
+            var localVelocity = transform.InverseTransformDirection(targetRigidbody.linearVelocity);
 
             LatH = CalculateAssistedAxis(LatH, localVelocity.x, 0.1f, maxSpeedWithBoost);
             LatV = CalculateAssistedAxis(LatV, localVelocity.y, 0.1f, maxSpeedWithBoost);
@@ -749,7 +749,7 @@ namespace Core.ShipModel {
             }
 
             if (checkpointFound != null) {
-                var frameVelocity = targetRigidbody.velocity * Time.fixedDeltaTime;
+                var frameVelocity = targetRigidbody.linearVelocity * Time.fixedDeltaTime;
                 var excessTimeToHit = checkpointDistance / frameVelocity.magnitude * Time.fixedDeltaTime;
                 // Debug.Log("DISTANCE " + distance + $"   Time to hit: {excessTimeToHit}");
                 checkpointFound.Hit(excessTimeToHit);
@@ -789,7 +789,7 @@ namespace Core.ShipModel {
 
         // standard OnTriggerEnter doesn't cut the mustard at these speeds so we need to do something a bit more precise
         private RaycastHit[] VelocityBoxCast(out int rayHits, int layerMask) {
-            var frameVelocity = targetRigidbody.velocity * Time.fixedDeltaTime;
+            var frameVelocity = targetRigidbody.linearVelocity * Time.fixedDeltaTime;
             rayHits = 0;
             if (frameVelocity == Vector3.zero) return _raycastHits;
 

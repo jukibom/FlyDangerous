@@ -62,7 +62,7 @@ namespace Core.ShipModel.Modifiers.Water {
 
 
         private void OnGameSettingsApplied() {
-            var mapMagic = FindObjectOfType<MapMagicObject>();
+            var mapMagic = FindFirstObjectByType<MapMagicObject>();
             if (mapMagic) {
                 var tileChunkCount = Preferences.Instance.GetFloat("graphics-terrain-chunks") + 1; // include drafts
                 var tileSize = mapMagic.tileSize.x;

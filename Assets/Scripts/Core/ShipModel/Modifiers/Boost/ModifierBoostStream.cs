@@ -49,7 +49,7 @@ namespace Core.ShipModel.Modifiers.Boost {
             effects.shipForce += Vector3.Lerp(Vector3.zero, massNorm * shipForceAdd * streamTransform.forward, effectOverDistanceNormalised);
 
             // apply additional thrust and max speed if the ship vector is facing the correct direction
-            if (Vector3.Dot(transform.forward, shipRigidBody.velocity) > 0) {
+            if (Vector3.Dot(transform.forward, shipRigidBody.linearVelocity) > 0) {
                 effects.shipDeltaSpeedCap += Mathf.Lerp(0, shipSpeedAdd * parameters.boosterVelocityMultiplier, effectOverDistanceNormalised);
                 effects.shipDeltaThrust += Mathf.Lerp(0, shipThrustAdd * parameters.boosterThrustMultiplier * massNorm, effectOverDistanceNormalised);
             }

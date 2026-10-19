@@ -48,7 +48,7 @@ namespace Core.MapData {
             var ship = FdPlayer.FindLocalShipPlayer;
             if (ship) {
                 // first let's check if this is a terrain world and handle that appropriately
-                var mapMagic = FindObjectOfType<MapMagicObject>();
+                var mapMagic = FindFirstObjectByType<MapMagicObject>();
 
                 void DoReset(Vector3 position, Quaternion rotation) {
                     ship.Reset();
@@ -66,7 +66,7 @@ namespace Core.MapData {
                     yield return new WaitForSeconds(0.1f);
 
                     // wait for fully loaded local terrain
-                    var loadingRoom = FindObjectOfType<LoadingRoom>();
+                    var loadingRoom = FindFirstObjectByType<LoadingRoom>();
                     while (mapMagic.IsGenerating()) {
                         try {
                             var progressPercent = Mathf.Min(100, Mathf.Floor(mapMagic.GetProgress() * 100));
@@ -95,7 +95,7 @@ namespace Core.MapData {
 
                 // if multiplayer free-roam and not the host, warp to the host
                 if (Game.Instance.SessionType == SessionType.Multiplayer && LoadedLevelData.gameType.GameMode.CanWarpToHost && !ship.isHost)
-                    FindObjectsOfType<ShipPlayer>().ToList().ForEach(otherShipPlayer => {
+                    FindObjectsByType<ShipPlayer>(FindObjectsSortMode.None).ToList().ForEach(otherShipPlayer => {
                         if (otherShipPlayer.isHost) {
                             var emptyPosition = PositionalHelpers.FindClosestEmptyPosition(otherShipPlayer.AbsoluteWorldPosition, 10);
                             rotationToWarpTo = otherShipPlayer.transform.rotation;
@@ -148,7 +148,7 @@ namespace Core.MapData {
 
         // Return a new level data object hydrated with all the information of the current game state
         private LevelData GenerateLevelData() {
-            var track = FindObjectOfType<Track>();
+            var track = FindFirstObjectByType<Track>();
             var player = FdPlayer.LocalShipPlayer;
             if (track && player) {
                 var startPosition = SerializableVector3.FromVector3(player.AbsoluteWorldPosition);
@@ -170,7 +170,7 @@ namespace Core.MapData {
             Time.timeScale = 0;
 
             // grab the load text to draw to
-            var loadingRoom = FindObjectOfType<LoadingRoom>();
+            var loadingRoom = FindFirstObjectByType<LoadingRoom>();
 
             float progress = 0;
             for (var i = 0; i < _scenesLoading.Count; ++i)
@@ -196,7 +196,7 @@ namespace Core.MapData {
                 while (!_scenesLoading[i].isDone) yield return null;
             }
 
-            var track = FindObjectOfType<Track>();
+            var track = FindFirstObjectByType<Track>();
             if (track) track.Deserialize(LoadedLevelData);
 
             // set floating origin on loading player now to force world components to update position
@@ -204,12 +204,12 @@ namespace Core.MapData {
             if (loadingPlayer) loadingPlayer.SetFloatingOrigin();
 
             // if terrain needs to generate, toggle special logic and wait for it to load all primary tiles
-            var mapMagic = FindObjectOfType<MapMagicObject>();
+            var mapMagic = FindFirstObjectByType<MapMagicObject>();
             if (mapMagic && LoadedLevelData.terrainSeed != null) {
 #if !NO_PAID_ASSETS
                 // gpu instancer initialisation (paid asset!)
-                var cam = FindObjectOfType<CinemachineBrain>(true).gameObject.GetComponent<Camera>();
-                var gpuInstancer = FindObjectOfType<GPUInstancerMapMagic2Integration>();
+                var cam = FindFirstObjectByType<CinemachineBrain>(FindObjectsInactive.Include).gameObject.GetComponent<Camera>();
+                var gpuInstancer = FindFirstObjectByType<GPUInstancerMapMagic2Integration>();
                 if (gpuInstancer) {
                     gpuInstancer.floatingOriginTransform = mapMagic.transform;
                     GPUInstancerAPI.SetCamera(cam);

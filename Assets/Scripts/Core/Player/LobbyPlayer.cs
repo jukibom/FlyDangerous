@@ -23,7 +23,7 @@ namespace Core.Player {
 
         private LobbyMenu LobbyUI {
             get {
-                if (_lobby == null) _lobby = FindObjectOfType<LobbyMenu>();
+                if (_lobby == null) _lobby = FindFirstObjectByType<LobbyMenu>();
 
                 return _lobby;
             }
@@ -138,7 +138,7 @@ namespace Core.Player {
         [ClientRpc]
         private void RpcUpdateLobby(LevelData lobbyLevelData, short maxPlayers) {
             if (!NetworkClient.activeHost) {
-                var configPanel = FindObjectOfType<LobbyConfigurationPanel>();
+                var configPanel = FindFirstObjectByType<LobbyConfigurationPanel>();
                 if (configPanel) {
                     configPanel.maxPlayers = maxPlayers;
                     configPanel.LobbyLevelData = lobbyLevelData;

@@ -183,7 +183,7 @@ namespace Core.Player {
 
             if (boostButtonForceEnabled) shipPlayer.Boost(BoostButtonHeld);
 
-            headTracking.SetShipVelocityVector(shipPlayer.Rigidbody.velocity);
+            headTracking.SetShipVelocityVector(shipPlayer.Rigidbody.linearVelocity);
             shipCameraRig.SetHeadTransform(ref headTracking.HeadTransform);
 
             inGameUI.MouseWidget.ShouldShowWidget =

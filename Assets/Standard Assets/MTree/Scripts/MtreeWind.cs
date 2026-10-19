@@ -21,7 +21,7 @@ public class MtreeWind : MonoBehaviour {
     // Updatecheck values
     float m_windStrength, m_windDirection, m_windPulse, m_windTurbulence;
     void Awake(){
-        windZone = (WindZone)FindObjectOfType(typeof(WindZone));
+        windZone = (WindZone)FindFirstObjectByType(typeof(WindZone));
         if(!windZone){
 			windZone = (WindZone)gameObject.AddComponent (typeof(WindZone));
         }

@@ -124,7 +124,7 @@ namespace Menus.Main_Menu {
             Preferences.Instance.Save();
 
             // grab the main menu and update the ship if available
-            var mainMenu = FindObjectOfType<MainMenu>();
+            var mainMenu = FindFirstObjectByType<MainMenu>();
             mainMenu.SetShipFromPreferences();
 
             // we're going backward but with a positive apply sound so don't set the call chain in the previous menu

@@ -89,7 +89,7 @@ namespace GameUI.GameModes {
         private void ShowCompetitionPanelInternal() {
             var player = FdPlayer.FindLocalShipPlayer;
             if (player) {
-                FindObjectOfType<InGameUI>()?.OnPauseToggle(true);
+                FindFirstObjectByType<InGameUI>()?.OnPauseToggle(true);
                 Game.Instance.FreeCursor();
                 player.User.EnableUIInput();
                 player.User.ResetMouseToCentre();
@@ -195,7 +195,7 @@ namespace GameUI.GameModes {
         // hide the mouse and do all the things that normally happens when un-pausing
         private void SetReplaysAndHideCursor() {
             SetReplaysFromPanel();
-            FindObjectOfType<InGameUI>()?.OnPauseToggle(false);
+            FindFirstObjectByType<InGameUI>()?.OnPauseToggle(false);
         }
 
         public void SetReplaysFromPanel() {
@@ -220,7 +220,7 @@ namespace GameUI.GameModes {
 
                 // TODO: probably something better than this hot bullshit but I am very much at the end of my tether (esp. the audio listener)
                 // continue to play music while killing the ship and destroying the world (yeet ourselves off the ship! world will die taking this with it)
-                var lastBastionOfHope = FindObjectOfType<World>();
+                var lastBastionOfHope = FindFirstObjectByType<World>();
                 if (lastBastionOfHope) {
                     transform.parent = lastBastionOfHope.transform;
                     temporaryAudioListener.enabled = true;
