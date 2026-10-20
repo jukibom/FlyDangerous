@@ -79,6 +79,9 @@ namespace Menus.Main_Menu {
             Game.OnVRStatus += OnVRStatus;
             Game.OnGameSettingsApplied += OnGameSettingsApplied;
             InputSystem.onDeviceChange += OnDeviceChange;
+            
+            // make sure we always have baseline audio (no underwater etc)
+            AudioMixer.Instance.Reset();
 
             // load engine if not already 
             if (!FindFirstObjectByType<Engine>()) SceneManager.LoadScene("Engine", LoadSceneMode.Additive);
