@@ -85,13 +85,12 @@ The game supports raw telemetry output in the form of a binary byte or json fire
 
 ## Building
 
-Unity editor version: `2022.3.62f1 LTS`
+Unity editor version: `6000.3.26f1 LTS`
 
 The release build is reliant on some paid assets (follow instructions underneath to build without for dev purposes!):
 
 * Map Magic 2 Bundle 2.1.9 - https://assetstore.unity.com/packages/tools/terrain/mapmagic-2-bundle-178682 
 * AllSky 5.1.0 - https://assetstore.unity.com/packages/2d/textures-materials/sky/allsky-200-sky-skybox-set-10109
-* SC Post Effects 2.1.9 - https://assetstore.unity.com/packages/vfx/shaders/fullscreen-camera-effects/sc-post-effects-pack-108753
 * GPU Instancer 1.7.2 - https://assetstore.unity.com/packages/tools/utilities/gpu-instancer-117566
 
 **IF YOU DO NOT HAVE THESE ASSETS** (and, why would you?) and do not wish to buy them, follow these instructions to build:
@@ -109,8 +108,6 @@ The release build is reliant on some paid assets (follow instructions underneath
 ![image](https://user-images.githubusercontent.com/5649179/221643540-58c737fa-9846-4097-9a73-8355a409f277.png)
 
 Once it's imported, move it into the `Standard Assets` folder so that it'll be ignored by git. If there's already a folder in there, just delete it first.
-
-* **Optional**: If you do happen to have SC Post Effects, got to `Assets/Settings/UniversalRP-HighQuality` and swap out the `ForwardRendererNoFog` for `ForwardRenderer` (this is what is used in builds).
 
 ### Building for Linux and Apple (Silicon)
 
