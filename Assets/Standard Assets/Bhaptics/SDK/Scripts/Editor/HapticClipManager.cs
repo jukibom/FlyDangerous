@@ -192,7 +192,7 @@ namespace Bhaptics.Tact.Unity
 
                 foreach (var ins in allInstances)
                 {
-                    var path = saveAsPath + @"\" + Path.GetDirectoryName(AssetDatabase.GetAssetPath(ins.GetInstanceID()));
+                    var path = saveAsPath + @"\" + Path.GetDirectoryName(AssetDatabase.GetAssetPath(ins.GetEntityId()));
                     path = path.Replace("Assets/", "");
 
                     if (!Directory.Exists(path))

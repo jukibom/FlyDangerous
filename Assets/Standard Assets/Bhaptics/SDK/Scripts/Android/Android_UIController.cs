@@ -176,7 +176,7 @@ namespace Bhaptics.Tact.Unity
                         controllers[i].gameObject.SetActive(false);
                     }
                 }
-                catch (System.Exception e)
+                catch
                 {
                     controllers[i].gameObject.SetActive(false);
                 }

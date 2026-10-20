@@ -282,7 +282,9 @@ namespace Bhaptics.Tact.Unity
                 case PositionType.FootL:
                 case PositionType.HandL:
                 case PositionType.ForearmL:
+#pragma warning disable CS0618 // Type or member is obsolete
                 case PositionType.Left:
+#pragma warning restore CS0618 // Type or member is obsolete
                     return true;
 
             }
@@ -296,7 +298,9 @@ namespace Bhaptics.Tact.Unity
                 case PositionType.FootR:
                 case PositionType.HandR:
                 case PositionType.ForearmR:
+#pragma warning disable CS0618 // Type or member is obsolete
                 case PositionType.Right:
+#pragma warning restore CS0618 // Type or member is obsolete
                     return true;
 
             }
