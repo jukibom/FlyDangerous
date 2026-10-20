@@ -1,3 +1,4 @@
+using System;
 using Core;
 using MapMagic.Core;
 using UnityEngine;
@@ -7,22 +8,32 @@ using UnityEngine.Rendering;
 
 namespace VFX {
     [RequireComponent(typeof(Volume))]
+    [ExecuteAlways]
     public class ScreenSpaceFog : MonoBehaviour {
-        private Volume _volume;
-
-        public void Awake() {
-            _volume = GetComponent<Volume>();
-        }
 
         public void OnEnable() {
-            Game.OnGameSettingsApplied += OnGameSettingsApplied;
+            if (SkyboxDepthFogRendererFeature.Instance != null) 
+                SkyboxDepthFogRendererFeature.Instance.IsActive = true;
+            
+            if (Application.isPlaying)
+                Game.OnGameSettingsApplied += OnGameSettingsApplied;
+            else 
+                Refresh();
         }
 
         public void OnDisable() {
-            Game.OnGameSettingsApplied -= OnGameSettingsApplied;
+            if (SkyboxDepthFogRendererFeature.Instance != null) 
+                SkyboxDepthFogRendererFeature.Instance.IsActive = false;
+            
+            if (Application.isPlaying)
+                Game.OnGameSettingsApplied -= OnGameSettingsApplied;
         }
 
         private void OnGameSettingsApplied() {
+            Refresh();
+        }
+
+        private void Refresh() {
 #if !NO_PAID_ASSETS
             if (SkyboxDepthFogRendererFeature.Instance != null) {
                 var fogIntensity = 0f;

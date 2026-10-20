@@ -9,6 +9,8 @@ namespace VFX {
 
         [Serializable]
         public sealed class Settings {
+            public bool isActive;
+            
             public RenderPassEvent renderPassEvent = RenderPassEvent.AfterRenderingTransparents;
             
             [Tooltip("Shader used for the fullscreen fog pass.")]
@@ -50,6 +52,12 @@ namespace VFX {
         private static readonly int Rotation = Shader.PropertyToID("_Rotation");
         private static readonly int SourceTextureId = Shader.PropertyToID("_SkyboxDepthFogSource");
 
+        public bool IsActive { get => settings.isActive; set => settings.isActive = value; }
+
+        public SkyboxDepthFogRendererFeature() {
+            Instance = this;
+        }
+        
         public void SetFogDistances(float fogStart, float fogEnd) {
             settings.fogStart = Mathf.Max(0f, fogStart);
             settings.fogEnd = Mathf.Max(settings.fogStart + 0.001f, fogEnd);
@@ -64,8 +72,6 @@ namespace VFX {
         }
         
         public override void Create() {
-            Instance = this;
-            
             if (settings.shader == null)
                 return;
 
@@ -76,6 +82,8 @@ namespace VFX {
         }
 
         public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData) {
+            if (!IsActive) return;
+            
             if (_material == null || _pass == null)
                 return;
 
