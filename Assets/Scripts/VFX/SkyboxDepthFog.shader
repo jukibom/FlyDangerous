@@ -161,9 +161,19 @@
                 float forwardAmount = max(dot(skyDirection, cameraForward), 0.0001);
                 float radialDistance = linearEyeDepth / forwardAmount;
 
-                float fogFactor = smoothstep(_FogStart, _FogEnd, radialDistance);
-                fogFactor *= _FogIntensity;
+                
+                // LINEAR fog (unused)
+                // float fogFactor = smoothstep(_FogStart, _FogEnd, radialDistance);
+                // fogFactor *= _FogIntensity;
+                
+                // EXPONENTIAL fog
+                float fogRange = max(_FogEnd - _FogStart, 0.0001);
+                float fogDistance = max(radialDistance - _FogStart, 0.0);
+                float normalizedDistance = fogDistance / fogRange;
+                float fogFactor = 1.0 - exp(-normalizedDistance);
+                fogFactor = saturate(fogFactor * _FogIntensity);
 
+                
                 skyDirection = RotateAroundYInDegrees(skyDirection, _SkyRotation);
             
                 half3 skyColor = SAMPLE_TEXTURECUBE(
