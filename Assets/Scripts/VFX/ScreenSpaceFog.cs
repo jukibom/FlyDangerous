@@ -1,6 +1,7 @@
 using System;
 using Core;
 using MapMagic.Core;
+using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Rendering;
 #if !NO_PAID_ASSETS
@@ -11,9 +12,12 @@ namespace VFX {
     [ExecuteAlways]
     public class ScreenSpaceFog : MonoBehaviour {
 
+        [SerializeField] private bool fogEnabled = true;
+        [SerializeField, EnableIf("fogEnabled")] private bool fogEnabledInSceneView = true;
+        
         public void OnEnable() {
             if (SkyboxDepthFogRendererFeature.Instance != null) 
-                SkyboxDepthFogRendererFeature.Instance.IsActive = true;
+                SkyboxDepthFogRendererFeature.Instance.IsActive = fogEnabled;
             
             if (Application.isPlaying)
                 Game.OnGameSettingsApplied += OnGameSettingsApplied;
@@ -31,6 +35,16 @@ namespace VFX {
 
         private void OnGameSettingsApplied() {
             Refresh();
+        }
+
+        private void Update() {
+            // editor only, just tie the fog render feature directly to this bool
+            if (!Application.isPlaying) {
+                if (SkyboxDepthFogRendererFeature.Instance != null) {
+                    SkyboxDepthFogRendererFeature.Instance.IsActive = fogEnabled;
+                    SkyboxDepthFogRendererFeature.Instance.IsActiveInSceneView = fogEnabledInSceneView;
+                }
+            } 
         }
 
         private void Refresh() {

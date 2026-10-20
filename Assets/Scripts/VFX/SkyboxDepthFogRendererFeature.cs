@@ -53,6 +53,7 @@ namespace VFX {
         private static readonly int SourceTextureId = Shader.PropertyToID("_SkyboxDepthFogSource");
 
         public bool IsActive { get => settings.isActive; set => settings.isActive = value; }
+        public bool IsActiveInSceneView { get => settings.showInSceneView; set => settings.showInSceneView = value; }
 
         public SkyboxDepthFogRendererFeature() {
             Instance = this;
