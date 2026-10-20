@@ -266,11 +266,6 @@ namespace Core {
 
         public void EnableVR() {
             IEnumerator StartVR() {
-                // Ludicrous workaround for dumb shit a unity update broke
-                // TODO: try not starting it twice in some magical future time
-                yield return StartXR();
-                StopXR();
-                yield return new WaitForFixedUpdate();
                 yield return StartXR();
                 IsVREnabled = true;
                 NotifyVRStatus();
