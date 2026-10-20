@@ -12,6 +12,14 @@ namespace VFX {
     [ExecuteAlways]
     public class ScreenSpaceFog : MonoBehaviour {
 
+        public struct ScreenSpaceFogUpdate {
+            public bool fogEnabled;
+            public float fogStartDistance;
+            public float fogEndDistance;
+        }
+        
+        public static event Action<ScreenSpaceFogUpdate> OnFogUpdate;
+
         [SerializeField] private bool fogEnabled = true;
         [SerializeField, EnableIf("fogEnabled")] private bool fogEnabledInSceneView = true;
         
@@ -50,12 +58,10 @@ namespace VFX {
         private void Refresh() {
 #if !NO_PAID_ASSETS
             if (SkyboxDepthFogRendererFeature.Instance != null) {
-                var fogIntensity = 0f;
                 var fogStartDistance = 0f;
                 var fogEndDistance = 1000f;
                 var mapMagic = FindFirstObjectByType<MapMagicObject>();
                 if (mapMagic) {
-                    fogIntensity = 1;
                     
                     var tileChunkCount = Preferences.Instance.GetFloat("graphics-terrain-chunks") + 1; // include drafts
                     var tileSize = mapMagic.tileSize.x;
@@ -65,7 +71,9 @@ namespace VFX {
                     fogStartDistance = Mathf.Max(fogEndDistance / 2, fogEndDistance - tileSize);
                 }
 
-                SkyboxDepthFogRendererFeature.Instance.SetFog(fogStartDistance, fogEndDistance, fogIntensity);
+                SkyboxDepthFogRendererFeature.Instance.SetFogDistances(fogStartDistance, fogEndDistance);
+                OnFogUpdate?.Invoke(new ScreenSpaceFogUpdate
+                    { fogEnabled = fogEnabled, fogStartDistance = fogStartDistance, fogEndDistance = fogEndDistance });
             }
 #endif
         }

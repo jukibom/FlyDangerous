@@ -9,11 +9,19 @@ using GPUInstancer;
 
 namespace Core {
     public class World : MonoBehaviour {
+        public static World Instance;
+
+        [field: SerializeField] public SkyboxFetcher SkyboxFetcher { get; private set; }
+        
         private void OnEnable() {
+            if (Instance != null) 
+                Debug.LogWarning("World already created! There should absolutely only ever be one world loaded at once.");
+            Instance = this;
             FloatingOrigin.OnFloatingOriginCorrection += PerformCorrection;
         }
 
         private void OnDisable() {
+            Instance = null;
             FloatingOrigin.OnFloatingOriginCorrection -= PerformCorrection;
         }
 

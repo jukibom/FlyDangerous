@@ -1,4 +1,5 @@
 ﻿using System;
+using Core;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.RenderGraphModule;
@@ -73,6 +74,7 @@ namespace VFX {
         }
         
         public override void Create() {
+            Instance = this;
             if (settings.shader == null)
                 return;
 
@@ -201,6 +203,10 @@ namespace VFX {
                         if (texture != null)
                             return texture;
                     }
+                }
+
+                if (World.Instance != null) {
+                    return World.Instance.SkyboxFetcher.RenderedSkyboxCubemap;
                 }
 
                 return _settings.fallbackSkyCubemap;
