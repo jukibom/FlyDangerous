@@ -8,7 +8,6 @@ using UnityEngine.Rendering;
 #endif
 
 namespace VFX {
-    [RequireComponent(typeof(Volume))]
     [ExecuteAlways]
     public class ScreenSpaceFog : MonoBehaviour {
 

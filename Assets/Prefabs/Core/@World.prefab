@@ -46,8 +46,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6daee9b57f2a6f41af376e6e62ec7bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.SkyboxFetcher
-  skyboxRenderCamera: {fileID: 5524432323684695309}
+  updateMode: 0
+  updateInterval: 0.25
   renderSize: 512
+  skyboxRenderCamera: {fileID: 5524432323684695309}
 --- !u!20 &5524432323684695309
 Camera:
   m_ObjectHideFlags: 0
@@ -524,6 +526,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8633925944269625092}
   - component: {fileID: 1606988131587069986}
+  - component: {fileID: 195149550030259839}
   m_Layer: 0
   m_Name: '@World'
   m_TagString: Untagged
@@ -561,3 +564,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <SkyboxFetcher>k__BackingField: {fileID: 2420379730202738629}
+--- !u!114 &195149550030259839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8633925944269625099}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b5e21a30dccf8d478e4a324c671880e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fogEnabled: 0
+  fogEnabledInSceneView: 1

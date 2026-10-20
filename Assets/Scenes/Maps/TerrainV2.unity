@@ -13,7 +13,7 @@ OcclusionCullingSettings:
 --- !u!104 &2
 RenderSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 9
+  serializedVersion: 10
   m_Fog: 0
   m_FogColor: {r: 0.32156864, g: 0.078431375, b: 0.027450982, a: 1}
   m_FogMode: 2
@@ -38,13 +38,12 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 12
-  m_GIWorkflowMode: 1
+  serializedVersion: 13
+  m_BakeOnSceneLoad: 0
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -67,9 +66,6 @@ LightmapSettings:
     m_LightmapParameters: {fileID: 0}
     m_LightmapsBakeMode: 1
     m_TextureCompression: 1
-    m_FinalGather: 0
-    m_FinalGatherFiltering: 1
-    m_FinalGatherRayCount: 256
     m_ReflectionCompression: 2
     m_MixedBakeMode: 2
     m_BakeBackend: 1
@@ -104,7 +100,7 @@ NavMeshSettings:
   serializedVersion: 2
   m_ObjectHideFlags: 0
   m_BuildSettings:
-    serializedVersion: 2
+    serializedVersion: 3
     agentTypeID: 0
     agentRadius: 0.5
     agentHeight: 2
@@ -117,46 +113,12 @@ NavMeshSettings:
     cellSize: 0.16666667
     manualTileSize: 0
     tileSize: 256
-    accuratePlacement: 0
+    buildHeightMesh: 0
     maxJobWorkers: 0
     preserveTilesOutsideBounds: 0
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &791061050 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8633925944269625099, guid: 5e80df0e00ec3e0468d6a14676cdc347, type: 3}
-  m_PrefabInstance: {fileID: 860146728000433849}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &791061051
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 791061050}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IsGlobal: 1
-  priority: 0
-  blendDistance: 0
-  weight: 1
-  sharedProfile: {fileID: 11400000, guid: 622173bdb5a109b4ba40720c441e3011, type: 2}
---- !u!114 &791061052
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 791061050}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b5e21a30dccf8d478e4a324c671880e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2080666915
 GameObject:
   m_ObjectHideFlags: 0
@@ -192,12 +154,20 @@ MonoBehaviour:
   guiTiles: 1
   tiles:
     allowMove: 1
+    generateLimited: 1
+    generateCenter:
+      x: 0
+      z: 0
     generateInfinite: 1
     generateRange: 2
     retainMargin: 1
     genAroundMainCam: 0
     genAroundObjsTag: 1
     genAroundTag: Terrain Gen Marker
+    genAroundCoordinate: 0
+    genCoordinate:
+      x: 0
+      z: 0
     serializedTiles: []
     serializedCoords: []
     customTiles: []
@@ -220,6 +190,7 @@ MonoBehaviour:
   guiInfiniteTerrains: 1
   hideFarTerrains: 1
   mainRange: 1
+  clearOnNodeRemove: 1
   terrainSettings:
     allowAutoConnect: 1
     groupingID: 0
@@ -243,6 +214,7 @@ MonoBehaviour:
     treeLODBiasMultiplier: 1
     bakeLightProbesForTrees: 1
     deringLightProbesForTrees: 1
+    preserveTreePrototypeLayers: 0
     windSpeed: 0.5
     windSize: 0.5
     windBending: 0.5
@@ -258,7 +230,9 @@ MonoBehaviour:
     heightDraftApply: 2
     grassResDownscale: 1
     grassResPerPatch: 16
+    grassScatterMode: 1
     objectsNumPerFrame: 500
+    holesRes: 64
     customControlTextureNames:
     - _ControlTexture1
     ctsProfile: {fileID: 0}
@@ -267,6 +241,7 @@ MonoBehaviour:
     microSplatApplyType: 0
     useCustomControlTextures: 0
     microSplatNormals: 0
+    microSplatTexArrConfig: {fileID: 0}
     megaSplatTexList: {fileID: 0}
     vegetationPackage: {fileID: 0}
     assignComponent: 0
@@ -302,13 +277,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2080666915}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8952600816780736957}
-  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2080666918
 MonoBehaviour:
@@ -327,8 +302,13 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 195149550030259839, guid: 5e80df0e00ec3e0468d6a14676cdc347, type: 3}
+      propertyPath: fogEnabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8633925944269625092, guid: 5e80df0e00ec3e0468d6a14676cdc347, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -378,6 +358,15 @@ PrefabInstance:
       value: World
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 8633925944269625092, guid: 5e80df0e00ec3e0468d6a14676cdc347, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8952600818633475031}
+    - targetCorrespondingSourceObject: {fileID: 8633925944269625092, guid: 5e80df0e00ec3e0468d6a14676cdc347, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2080666917}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5e80df0e00ec3e0468d6a14676cdc347, type: 3}
 --- !u!4 &8952600816780736957 stripped
 Transform:
@@ -409,6 +398,11 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -430,9 +424,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &8952600818633475028
 GameObject:
@@ -461,9 +457,17 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8952600818633475028}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 4
+  serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
@@ -474,11 +478,16 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8952600818633475028}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: -2400.5483, z: 0}
   m_LocalScale: {x: 100000, y: 1, z: 100000}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8952600816780736957}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1660057539 &9223372036854775807
+SceneRoots:
+  m_ObjectHideFlags: 0
+  m_Roots:
+  - {fileID: 860146728000433849}
