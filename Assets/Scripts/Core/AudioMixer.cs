@@ -1,3 +1,4 @@
+using System;
 using Misc;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -13,13 +14,16 @@ namespace Core {
             Game.OnGameSettingsApplied += OnSettingsApplied;
             Game.OnPauseToggle += OnPauseToggle;
             Game.OnWaterTransition += OnWaterTransition;
-            OnSettingsApplied();
         }
 
         private void OnDisable() {
             Game.OnGameSettingsApplied -= OnSettingsApplied;
             Game.OnPauseToggle -= OnPauseToggle;
             Game.OnWaterTransition -= OnWaterTransition;
+        }
+
+        private void Start() {
+            RefreshAudio();
         }
 
         public void Reset() {
@@ -29,6 +33,10 @@ namespace Core {
         }
 
         private void OnSettingsApplied() {
+            RefreshAudio();
+        }
+        
+        private void RefreshAudio() {
             var audioConfiguration = AudioSettings.GetConfiguration();
             var currentSpeakerMode = audioConfiguration.speakerMode;
             switch (Preferences.Instance.GetString("audioMode")) {

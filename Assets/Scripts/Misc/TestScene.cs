@@ -33,10 +33,6 @@ namespace Misc {
 
         private void Start() {
             IEnumerator StartGame() {
-                // load engine scene if not already 
-                if (!FindFirstObjectByType<Engine>())
-                    yield return SceneManager.LoadSceneAsync("Engine", LoadSceneMode.Additive);
-
                 // remove the spawn object
                 spawnLocation.gameObject.SetActive(false);
 
