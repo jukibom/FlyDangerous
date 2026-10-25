@@ -527,6 +527,7 @@ GameObject:
   - component: {fileID: 8633925944269625092}
   - component: {fileID: 1606988131587069986}
   - component: {fileID: 195149550030259839}
+  - component: {fileID: 1677397952410307272}
   m_Layer: 0
   m_Name: '@World'
   m_TagString: Untagged
@@ -564,6 +565,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <SkyboxFetcher>k__BackingField: {fileID: 2420379730202738629}
+  reflectionProbe: {fileID: 1677397952410307272}
 --- !u!114 &195149550030259839
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -578,3 +580,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fogEnabled: 0
   fogEnabledInSceneView: 1
+--- !u!215 &1677397952410307272
+ReflectionProbe:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8633925944269625099}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Type: 0
+  m_Mode: 1
+  m_RefreshMode: 0
+  m_TimeSlicingMode: 0
+  m_Resolution: 512
+  m_UpdateFrequency: 0
+  m_BoxSize: {x: 20000, y: 20000, z: 20000}
+  m_BoxOffset: {x: 0, y: 0, z: 0}
+  m_NearClip: 0.3
+  m_FarClip: 1000
+  m_ShadowDistance: 100
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 0
+  m_IntensityMultiplier: 1
+  m_BlendDistance: 1
+  m_HDR: 1
+  m_BoxProjection: 0
+  m_RenderDynamicObjects: 0
+  m_UseOcclusionCulling: 1
+  m_Importance: 1
+  m_CustomBakedTexture: {fileID: 0}

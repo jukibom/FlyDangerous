@@ -12,6 +12,7 @@ namespace Core {
         public static World Instance;
 
         [field: SerializeField] public SkyboxFetcher SkyboxFetcher { get; private set; }
+        [SerializeField] private ReflectionProbe reflectionProbe;
         
         private void OnEnable() {
             if (Instance != null) 
@@ -49,6 +50,11 @@ namespace Core {
             }
         }
 #endif
+
+        public void NotifyEnvironmentLoaded() {
+            reflectionProbe.RenderProbe();
+            SkyboxFetcher.NotifyEnvironmentLoaded();
+        }
 
         private void PerformCorrection(Vector3 offset) {
             foreach (Transform child in transform) child.position -= offset;

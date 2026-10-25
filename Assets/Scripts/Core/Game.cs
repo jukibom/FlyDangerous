@@ -426,7 +426,7 @@ namespace Core {
                     Debug.LogWarning("No track in the world! Cannot initialise game mode");
                 }
                 
-                World.Instance.SkyboxFetcher.NotifyEnvironmentLoaded();
+                World.Instance.NotifyEnvironmentLoaded();
 
                 FadeFromBlack();
 
