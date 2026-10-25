@@ -523,7 +523,6 @@ namespace Core {
             FadeToBlack();
             MusicManager.Instance.StopMusic(true);
             yield return new WaitForSeconds(0.5f);
-            FloatingOrigin.Instance.ResetOrigin();
             yield return SceneManager.LoadSceneAsync("Main Menu");
             yield return new WaitForEndOfFrame();
             NotifyVRStatus();
