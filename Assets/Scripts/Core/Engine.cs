@@ -1,7 +1,6 @@
 using Misc;
 using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
 
 namespace Core {
     public class Engine : Singleton<Engine> {
@@ -13,6 +12,12 @@ namespace Core {
         protected override void Awake() {
             base.Awake();
             DontDestroyOnLoad(this);
+        }
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        public static void LoadEngine() {
+            Debug.Log("Loading Engine");
+            SceneManager.LoadScene("Engine", LoadSceneMode.Additive);
         }
     }
 }

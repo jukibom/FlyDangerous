@@ -1,6 +1,116 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-5680039294500272552
+--- !u!114 &-3629627064703190445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f62c9c65cf3354c93be831c8bc075510, type: 3}
+  m_Name: ScreenSpaceAmbientOcclusion
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.ScreenSpaceAmbientOcclusion
+  m_Active: 0
+  m_Settings:
+    AOMethod: 1
+    Downsample: 0
+    AfterOpaque: 0
+    Source: 1
+    NormalSamples: 1
+    Intensity: 3
+    DirectLightingStrength: 0.5
+    Radius: 0.03
+    Samples: 2
+    BlurQuality: 0
+    Falloff: 100
+    SampleCount: -1
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de640fe3d0db1804a85f9fc8f5cadab6, type: 3}
+  m_Name: ForwardRenderer
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalRendererData
+  debugShaders:
+    debugReplacementPS: {fileID: 4800000, guid: cf852408f2e174538bcd9b7fda1c5ae7, type: 3}
+    hdrDebugViewPS: {fileID: 4800000, guid: 573620ae32aec764abd4d728906d2587, type: 3}
+    probeVolumeSamplingDebugComputeShader: {fileID: 7200000, guid: 53626a513ea68ce47b59dc1299fe3959, type: 3}
+  probeVolumeResources:
+    probeVolumeDebugShader: {fileID: 0}
+    probeVolumeFragmentationDebugShader: {fileID: 0}
+    probeVolumeOffsetDebugShader: {fileID: 0}
+    probeVolumeSamplingDebugShader: {fileID: 0}
+    probeSamplingDebugMesh: {fileID: 0}
+    probeSamplingDebugTexture: {fileID: 0}
+    probeVolumeBlendStatesCS: {fileID: 0}
+  m_RendererFeatures:
+  - {fileID: -3629627064703190445}
+  - {fileID: 204799234065652735}
+  - {fileID: 976133624798274618}
+  m_RendererFeatureMap: 53fa384d6af9a0cdff5bc17cd197d7023a646a275cec8b0d
+  m_UseNativeRenderPass: 0
+  xrSystemData: {fileID: 0}
+  postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
+  m_AssetVersion: 3
+  m_PrepassLayerMask:
+    serializedVersion: 2
+    m_Bits: 32471
+  m_OpaqueLayerMask:
+    serializedVersion: 2
+    m_Bits: 32471
+  m_TransparentLayerMask:
+    serializedVersion: 2
+    m_Bits: 32471
+  m_DefaultStencilState:
+    overrideStencilState: 0
+    stencilReference: 0
+    stencilCompareFunction: 8
+    passOperation: 2
+    failOperation: 0
+    zFailOperation: 0
+  m_ShadowTransparentReceive: 1
+  m_RenderingMode: 2
+  m_DepthPrimingMode: 0
+  m_CopyDepthMode: 2
+  m_DepthAttachmentFormat: 0
+  m_DepthTextureFormat: 0
+  m_AccurateGbufferNormals: 0
+  m_IntermediateTextureMode: 1
+--- !u!114 &204799234065652735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4709810309b247e18fac01ad41e52b49, type: 3}
+  m_Name: SkyboxDepthFogRendererFeature
+  m_EditorClassIdentifier: Assembly-CSharp::VFX.SkyboxDepthFogRendererFeature
+  m_Active: 1
+  settings:
+    isActive: 0
+    renderPassEvent: 400
+    shader: {fileID: 4800000, guid: 713b726226e9426fbc0d550306b1d6c6, type: 3}
+    showInSceneView: 1
+    fogStart: 100
+    fogEnd: 1000
+    fogIntensity: 1
+    fallbackSkyCubemap: {fileID: 0}
+    skyboxTexturePropertyNames:
+    - _Tex
+    - _Cubemap
+    - _Skybox
+    - _MainTex
+--- !u!114 &976133624798274618
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,152 +152,3 @@ MonoBehaviour:
       restoreCamera: 1
       offset: {x: 0, y: 0, z: 0, w: 0}
       cameraFieldOfView: 60
---- !u!114 &-1268650755192372586
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4709810309b247e18fac01ad41e52b49, type: 3}
-  m_Name: SkyboxDepthFogRendererFeature
-  m_EditorClassIdentifier: Assembly-CSharp::VFX.SkyboxDepthFogRendererFeature
-  m_Active: 1
-  settings:
-    isActive: 0
-    renderPassEvent: 400
-    shader: {fileID: 4800000, guid: 713b726226e9426fbc0d550306b1d6c6, type: 3}
-    showInSceneView: 1
-    fogStart: 16865.88
-    fogEnd: 27105.88
-    fogIntensity: 1
-    fallbackSkyCubemap: {fileID: 0}
-    skyboxTexturePropertyNames:
-    - _Tex
-    - _Cubemap
-    - _Skybox
-    - _MainTex
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de640fe3d0db1804a85f9fc8f5cadab6, type: 3}
-  m_Name: ForwardRenderer
-  m_EditorClassIdentifier: 
-  debugShaders:
-    debugReplacementPS: {fileID: 4800000, guid: cf852408f2e174538bcd9b7fda1c5ae7, type: 3}
-    hdrDebugViewPS: {fileID: 4800000, guid: 573620ae32aec764abd4d728906d2587, type: 3}
-    probeVolumeSamplingDebugComputeShader: {fileID: 7200000, guid: 53626a513ea68ce47b59dc1299fe3959, type: 3}
-  probeVolumeResources:
-    probeVolumeDebugShader: {fileID: 0}
-    probeVolumeFragmentationDebugShader: {fileID: 0}
-    probeVolumeOffsetDebugShader: {fileID: 0}
-    probeVolumeSamplingDebugShader: {fileID: 0}
-    probeSamplingDebugMesh: {fileID: 0}
-    probeSamplingDebugTexture: {fileID: 0}
-    probeVolumeBlendStatesCS: {fileID: 0}
-  m_RendererFeatures:
-  - {fileID: 5161890783807516584}
-  - {fileID: -1268650755192372586}
-  - {fileID: -5680039294500272552}
-  m_RendererFeatureMap: a8af35aa51b8a2479642ba18dcd864ee58060d155b722cb1
-  m_UseNativeRenderPass: 0
-  xrSystemData: {fileID: 0}
-  postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
-  m_AssetVersion: 3
-  m_PrepassLayerMask:
-    serializedVersion: 2
-    m_Bits: 32471
-  m_OpaqueLayerMask:
-    serializedVersion: 2
-    m_Bits: 32471
-  m_TransparentLayerMask:
-    serializedVersion: 2
-    m_Bits: 32727
-  m_DefaultStencilState:
-    overrideStencilState: 0
-    stencilReference: 15
-    stencilCompareFunction: 8
-    passOperation: 4
-    failOperation: 1
-    zFailOperation: 1
-  m_ShadowTransparentReceive: 1
-  m_RenderingMode: 2
-  m_DepthPrimingMode: 0
-  m_CopyDepthMode: 2
-  m_DepthAttachmentFormat: 0
-  m_DepthTextureFormat: 0
-  m_AccurateGbufferNormals: 0
-  m_IntermediateTextureMode: 1
---- !u!114 &5161890783807516584
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f62c9c65cf3354c93be831c8bc075510, type: 3}
-  m_Name: ScreenSpaceAmbientOcclusion
-  m_EditorClassIdentifier: 
-  m_Active: 0
-  m_Settings:
-    AOMethod: 1
-    Downsample: 0
-    AfterOpaque: 0
-    Source: 1
-    NormalSamples: 1
-    Intensity: 3
-    DirectLightingStrength: 0.5
-    Radius: 0.03
-    Samples: 2
-    BlurQuality: 0
-    Falloff: 100
-    SampleCount: -1
---- !u!114 &5748824053371312092
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7b05fc1dfd54667b40ffd24df20506c, type: 3}
-  m_Name: '[SCPE] CausticsRenderer'
-  m_EditorClassIdentifier: 
-  m_Active: 1
-  settings:
-    injectionPoint: 550
-    alwaysEnable: 0
-    allowInSceneView: 1
-    allowedCameraTypes: 0
-    skipTransparents: 0
---- !u!114 &8516901034684235656
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f58c0e0fb1b4c7549b2b50948300b0e5, type: 3}
-  m_Name: Screen Space Fog
-  m_EditorClassIdentifier: 
-  m_Active: 1
-  testing: 0
-  settings:
-    injectionPoint: 550
-    alwaysEnable: 0
-    allowInSceneView: 0
-    allowedCameraTypes: 2
-    skipTransparents: 1
