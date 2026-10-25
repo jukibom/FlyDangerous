@@ -90,7 +90,6 @@ Unity editor version: `6000.3.26f1 LTS`
 The release build is reliant on some paid assets (follow instructions underneath to build without for dev purposes!):
 
 * Map Magic 2 Bundle 2.1.9 - https://assetstore.unity.com/packages/tools/terrain/mapmagic-2-bundle-178682 
-* AllSky 5.1.0 - https://assetstore.unity.com/packages/2d/textures-materials/sky/allsky-200-sky-skybox-set-10109
 * GPU Instancer 1.7.2 - https://assetstore.unity.com/packages/tools/utilities/gpu-instancer-117566
 
 **IF YOU DO NOT HAVE THESE ASSETS** (and, why would you?) and do not wish to buy them, follow these instructions to build:

@@ -3,11 +3,12 @@ Added:
     * Updated to Unity 6.3
     * Upgraded VR to use Single Pass Instanced rendering, resolving a number of eye-difference rendering issues and greatly improving performance
     * Ability to toggle the SFX of flight assist switching in the audio panel
-:     * Water environmental reflections now respects shadows
+    * Water environmental reflections now respects shadows
     * Water depth and color now respect direct + ambient light
     
 Changed:
     * Lighting pass on all environments to remove workarounds and introduce ambient lighting to make each environment more unique
+    * Optimisations across reflections and lighting; max one light per environment, better handling of static vs realtime reflections
     
 Fixed:
     * Water no longer overbright in dark scenes (low light angle)
