@@ -9,11 +9,20 @@ using GPUInstancer;
 
 namespace Core {
     public class World : MonoBehaviour {
+        public static World Instance;
+
+        [field: SerializeField] public SkyboxFetcher SkyboxFetcher { get; private set; }
+        [SerializeField] private ReflectionProbe reflectionProbe;
+        
         private void OnEnable() {
+            if (Instance != null) 
+                Debug.LogWarning("World already created! There should absolutely only ever be one world loaded at once.");
+            Instance = this;
             FloatingOrigin.OnFloatingOriginCorrection += PerformCorrection;
         }
 
         private void OnDisable() {
+            Instance = null;
             FloatingOrigin.OnFloatingOriginCorrection -= PerformCorrection;
         }
 
@@ -24,7 +33,7 @@ namespace Core {
         [CanBeNull]
         private GPUInstancerTreeManager GPUInstancerTreeManager {
             get {
-                if (_gpuInstancerTreeManager == null) _gpuInstancerTreeManager = FindObjectOfType<GPUInstancerTreeManager>();
+                if (_gpuInstancerTreeManager == null) _gpuInstancerTreeManager = FindFirstObjectByType<GPUInstancerTreeManager>();
 
                 return _gpuInstancerTreeManager;
             }
@@ -35,12 +44,17 @@ namespace Core {
         [CanBeNull]
         private MapMagicObject MapMagicObject {
             get {
-                if (_mapMagicObject == null) _mapMagicObject = FindObjectOfType<MapMagicObject>();
+                if (_mapMagicObject == null) _mapMagicObject = FindFirstObjectByType<MapMagicObject>();
 
                 return _mapMagicObject;
             }
         }
 #endif
+
+        public void NotifyEnvironmentLoaded() {
+            reflectionProbe.RenderProbe();
+            SkyboxFetcher.NotifyEnvironmentLoaded();
+        }
 
         private void PerformCorrection(Vector3 offset) {
             foreach (Transform child in transform) child.position -= offset;
@@ -48,7 +62,8 @@ namespace Core {
 #if NO_PAID_ASSETS
         }
 #else
-            StartCoroutine(HandleGPUCulling());
+            // TODO: Handle GPU objects more sanely when we need to (we don't actually use this, and it's a HUGE bloody cpu hog when it doesn't exist, because FindObjectOfType is cancer!)
+            // StartCoroutine(HandleGPUCulling());
         }
 
         /**

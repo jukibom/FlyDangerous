@@ -120,7 +120,7 @@ namespace Core {
 
                     case SessionStatus.LobbyMenu:
                         // Fetch host lobby config to send to client instead of game state loaded level data
-                        var hostLobbyConfigurationPanel = FindObjectOfType<LobbyConfigurationPanel>();
+                        var hostLobbyConfigurationPanel = FindFirstObjectByType<LobbyConfigurationPanel>();
                         if (hostLobbyConfigurationPanel) levelData = hostLobbyConfigurationPanel.LobbyLevelData;
 
                         var lobbyPlayer = AddPlayerFromPrefab(conn, lobbyPlayerPrefab);
@@ -426,9 +426,9 @@ namespace Core {
 
         public void UpdatePlayerLists() {
             // player added, refresh all our internal lists
-            LobbyPlayers = FindObjectsOfType<LobbyPlayer>().ToList();
-            LoadingPlayers = FindObjectsOfType<LoadingPlayer>().ToList();
-            ShipPlayers = FindObjectsOfType<ShipPlayer>().ToList().FindAll(shipPlayer => shipPlayer.netIdentity.isActiveAndEnabled);
+            LobbyPlayers = FindObjectsByType<LobbyPlayer>(FindObjectsSortMode.None).ToList();
+            LoadingPlayers = FindObjectsByType<LoadingPlayer>(FindObjectsSortMode.None).ToList();
+            ShipPlayers = FindObjectsByType<ShipPlayer>(FindObjectsSortMode.None).ToList().FindAll(shipPlayer => shipPlayer.netIdentity.isActiveAndEnabled);
         }
 
         private LobbyPlayer TransitionToLobbyPlayer<T>(T previousPlayer) where T : NetworkBehaviour {

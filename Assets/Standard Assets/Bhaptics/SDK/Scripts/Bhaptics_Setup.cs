@@ -28,7 +28,7 @@ public class Bhaptics_Setup : MonoBehaviour
 
         Initialize();
 
-        DontDestroyOnLoad(this);
+        // DontDestroyOnLoad(this);
     }
 
     void Start()

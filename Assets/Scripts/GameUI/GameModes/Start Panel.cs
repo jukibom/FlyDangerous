@@ -21,7 +21,7 @@ namespace GameUI.GameModes {
             if (player) {
                 player.User.DisableGameInput();
                 player.User.pauseMenuEnabled = false;
-                FindObjectOfType<InGameUI>()?.OnPauseToggle(true);
+                FindFirstObjectByType<InGameUI>()?.OnPauseToggle(true);
                 Game.Instance.FreeCursor();
                 player.User.EnableUIInput();
                 player.User.ResetMouseToCentre();
@@ -45,7 +45,7 @@ namespace GameUI.GameModes {
         public void OnStart() {
             var player = FdPlayer.FindLocalShipPlayer;
             player?.User.DisableUIInput();
-            FindObjectOfType<InGameUI>()?.OnPauseToggle(false);
+            FindFirstObjectByType<InGameUI>()?.OnPauseToggle(false);
             _onStart?.Invoke();
             _onStart = null;
             Hide();

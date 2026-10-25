@@ -50,7 +50,7 @@ public class MaterialPropertyOverrideAssetEditor : Editor
         {
             Selection.activeObject = null;
             var objs = new List<GameObject>();
-            foreach (var mpo in GameObject.FindObjectsOfType<MaterialPropertyOverride>())
+            foreach (var mpo in FindObjectsByType<MaterialPropertyOverride>(FindObjectsSortMode.None))
             {
                 foreach (var o in mpo.materialOverrides)
                 {
@@ -69,7 +69,7 @@ public class MaterialPropertyOverrideAssetEditor : Editor
         if (changed)
         {
             // Refresh all objects in scene that uses our override.
-            foreach (var mpo in GameObject.FindObjectsOfType<MaterialPropertyOverride>())
+            foreach (var mpo in GameObject.FindObjectsByType<MaterialPropertyOverride>(FindObjectsSortMode.None))
             {
                 foreach (var o in mpo.materialOverrides)
                 {

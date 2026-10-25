@@ -1,8 +1,8 @@
+using System;
 using System.Collections;
 using System.Linq;
 using Audio;
 using Core;
-using Core.MapData;
 using Core.ShipModel;
 using CustomWebSocketSharp;
 using JetBrains.Annotations;
@@ -12,6 +12,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Users;
 using UnityEngine.SceneManagement;
+using Environment = Core.MapData.Environment;
+using Random = UnityEngine.Random;
 
 namespace Menus.Main_Menu {
     public class MainMenu : MonoBehaviour {
@@ -39,6 +41,10 @@ namespace Menus.Main_Menu {
         private static bool FirstRun => Game.Instance.MenuFirstRun;
 
         private string _menuLoadErrorMessage;
+
+        private void Awake() {
+            FloatingOrigin.Instance.ResetOrigin();
+        }
 
         private void Start() {
             topMenu.Hide();
@@ -79,9 +85,9 @@ namespace Menus.Main_Menu {
             Game.OnVRStatus += OnVRStatus;
             Game.OnGameSettingsApplied += OnGameSettingsApplied;
             InputSystem.onDeviceChange += OnDeviceChange;
-
+            
             // load engine if not already 
-            if (!FindObjectOfType<Engine>()) SceneManager.LoadScene("Engine", LoadSceneMode.Additive);
+            // if (!FindFirstObjectByType<Engine>()) SceneManager.LoadScene("Engine", LoadSceneMode.Additive);
 
             StartCoroutine(MenuLoad());
         }
@@ -120,7 +126,7 @@ namespace Menus.Main_Menu {
         // TODO: show time trial with previous level selected
 
         public void ShowLobby() {
-            var lobby = FindObjectOfType<LobbyMenu>(true);
+            var lobby = FindFirstObjectByType<LobbyMenu>(FindObjectsInactive.Include);
             if (lobby) {
                 topMenu.Hide();
                 lobby.Open(topMenu);
@@ -166,6 +172,7 @@ namespace Menus.Main_Menu {
         }
 
         private IEnumerator MenuLoad() {
+            
             // input jank - disable and re-enable
             var playerInput = GetComponent<PlayerInput>();
             playerInput.user.ActivateControlScheme("Everything");
@@ -173,8 +180,10 @@ namespace Menus.Main_Menu {
 
             // allow one frame for the engine to load
             yield return new WaitForFixedUpdate();
-
-            Engine.Instance.NightVision.SetNightVisionActive(false);
+            
+            // make sure we always have baseline audio (no underwater etc)
+            AudioMixer.Instance?.Reset();
+            Engine.Instance?.NightVision.SetNightVisionActive(false);
 
             var sceneEnvironment = Environment.PlanetOrbitTop;
 

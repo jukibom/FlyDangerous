@@ -26,7 +26,7 @@ namespace Core.ShipModel.Modifiers.Boost {
         }
 
         private void OnEnable() {
-            modifierBoostThrust.UseDistortion = FindObjectOfType<ModifierWater>() == null;
+            modifierBoostThrust.UseDistortion = FindFirstObjectByType<ModifierWater>() == null;
         }
 
         private void BoostLengthChanged() {

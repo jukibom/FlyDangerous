@@ -76,7 +76,7 @@ namespace Mirror.Experimental
             if (IgnoreSync)
                 return;
 
-            target.velocity = newValue;
+            target.linearVelocity = newValue;
         }
 
         void OnAngularVelocityChanged(Vector3 _, Vector3 newValue)
@@ -108,7 +108,7 @@ namespace Mirror.Experimental
             if (IgnoreSync)
                 return;
 
-            target.drag = newValue;
+            target.linearDamping = newValue;
         }
 
         void OnAngularDragChanged(float _, float newValue)
@@ -116,7 +116,7 @@ namespace Mirror.Experimental
             if (IgnoreSync)
                 return;
 
-            target.angularDrag = newValue;
+            target.angularDamping = newValue;
         }
 
         #endregion
@@ -135,7 +135,7 @@ namespace Mirror.Experimental
                 target.angularVelocity = Vector3.zero;
 
             if (clearVelocity && !syncVelocity)
-                target.velocity = Vector3.zero;
+                target.linearVelocity = Vector3.zero;
         }
 
         /// <summary>
@@ -146,7 +146,7 @@ namespace Mirror.Experimental
         {
             // only update if they have changed more than Sensitivity
 
-            Vector3 currentVelocity = syncVelocity ? target.velocity : default;
+            Vector3 currentVelocity = syncVelocity ? target.linearVelocity : default;
             Vector3 currentAngularVelocity = syncAngularVelocity ? target.angularVelocity : default;
 
             bool velocityChanged = syncVelocity && ((previousValue.velocity - currentVelocity).sqrMagnitude > velocitySensitivity * velocitySensitivity);
@@ -167,8 +167,8 @@ namespace Mirror.Experimental
             // other rigidbody settings
             isKinematic = target.isKinematic;
             useGravity = target.useGravity;
-            drag = target.drag;
-            angularDrag = target.angularDrag;
+            drag = target.linearDamping;
+            angularDrag = target.angularDamping;
         }
 
         /// <summary>
@@ -194,7 +194,7 @@ namespace Mirror.Experimental
             if (now < previousValue.nextSyncTime)
                 return;
 
-            Vector3 currentVelocity = syncVelocity ? target.velocity : default;
+            Vector3 currentVelocity = syncVelocity ? target.linearVelocity : default;
             Vector3 currentAngularVelocity = syncAngularVelocity ? target.angularVelocity : default;
 
             bool velocityChanged = syncVelocity && ((previousValue.velocity - currentVelocity).sqrMagnitude > velocitySensitivity * velocitySensitivity);
@@ -234,15 +234,15 @@ namespace Mirror.Experimental
                 CmdSendUseGravity(target.useGravity);
                 previousValue.useGravity = target.useGravity;
             }
-            if (previousValue.drag != target.drag)
+            if (previousValue.drag != target.linearDamping)
             {
-                CmdSendDrag(target.drag);
-                previousValue.drag = target.drag;
+                CmdSendDrag(target.linearDamping);
+                previousValue.drag = target.linearDamping;
             }
-            if (previousValue.angularDrag != target.angularDrag)
+            if (previousValue.angularDrag != target.angularDamping)
             {
-                CmdSendAngularDrag(target.angularDrag);
-                previousValue.angularDrag = target.angularDrag;
+                CmdSendAngularDrag(target.angularDamping);
+                previousValue.angularDrag = target.angularDamping;
             }
         }
 
@@ -257,7 +257,7 @@ namespace Mirror.Experimental
                 return;
 
             this.velocity = velocity;
-            target.velocity = velocity;
+            target.linearVelocity = velocity;
         }
 
         /// <summary>
@@ -273,7 +273,7 @@ namespace Mirror.Experimental
             if (syncVelocity)
             {
                 this.velocity = velocity;
-                target.velocity = velocity;
+                target.linearVelocity = velocity;
             }
 
             this.angularVelocity = angularVelocity;
@@ -310,7 +310,7 @@ namespace Mirror.Experimental
                 return;
 
             this.drag = drag;
-            target.drag = drag;
+            target.linearDamping = drag;
         }
 
         [Command]
@@ -321,7 +321,7 @@ namespace Mirror.Experimental
                 return;
 
             this.angularDrag = angularDrag;
-            target.angularDrag = angularDrag;
+            target.angularDamping = angularDrag;
         }
 
         /// <summary>

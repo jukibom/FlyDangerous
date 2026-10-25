@@ -24,7 +24,7 @@ namespace Bhaptics.Tact.Unity
 
             if (isAutoPlay)
             {
-                targetScript.Play();
+                targetScript?.Play();
             }
         }
 
@@ -70,7 +70,7 @@ namespace Bhaptics.Tact.Unity
         [OnOpenAsset(1)]
         public static bool OnOpenTactClip(int instanceID, int line)
         {
-            var obj = EditorUtility.InstanceIDToObject(instanceID);
+            var obj = EditorUtility.EntityIdToObject(instanceID);
             if (obj is FileHapticClip)
             {
                 (obj as FileHapticClip).Play();

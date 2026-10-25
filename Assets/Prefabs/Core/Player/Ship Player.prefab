@@ -84,10 +84,10 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1767139775458680011}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Mass: 550
-  m_Drag: 0
-  m_AngularDrag: 0
+  m_LinearDamping: 0
+  m_AngularDamping: 0
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -133,13 +133,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 3088657456355926392}
-  - {fileID: 4086934272341797387}
-  - {fileID: 5481914750347639444}
-  - {fileID: 8598159568984316616}
-  - {fileID: 8522713421488004228}
-  - {fileID: 4266747408820688864}
+  m_Children: []
   m_Father: {fileID: 1767139775458680010}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!215 &4290896911516300295
@@ -166,78 +160,13 @@ ReflectionProbe:
   m_BackGroundColor: {r: 1, g: 1, b: 1, a: 0}
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 13975
+    m_Bits: 30359
   m_IntensityMultiplier: 1
   m_BlendDistance: 10
   m_HDR: 1
   m_BoxProjection: 0
   m_RenderDynamicObjects: 0
   m_UseOcclusionCulling: 1
-  m_Importance: 1
-  m_CustomBakedTexture: {fileID: 0}
---- !u!1 &2958734081501774720
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4086934272341797387}
-  - component: {fileID: 7408541038180036299}
-  m_Layer: 6
-  m_Name: skybox probe
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4086934272341797387
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2958734081501774720}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -15, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4987990158456630488}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!215 &7408541038180036299
-ReflectionProbe:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2958734081501774720}
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Type: 0
-  m_Mode: 1
-  m_RefreshMode: 0
-  m_TimeSlicingMode: 0
-  m_Resolution: 512
-  m_UpdateFrequency: 0
-  m_BoxSize: {x: 1, y: 1, z: 1}
-  m_BoxOffset: {x: 0, y: 0, z: 0}
-  m_NearClip: 0.3
-  m_FarClip: 1
-  m_ShadowDistance: 100
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 0
-  m_IntensityMultiplier: 1
-  m_BlendDistance: 1
-  m_HDR: 1
-  m_BoxProjection: 0
-  m_RenderDynamicObjects: 0
-  m_UseOcclusionCulling: 0
   m_Importance: 2
   m_CustomBakedTexture: {fileID: 0}
 --- !u!1 &6310156129962088363
@@ -280,331 +209,6 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6310156129962088363}
   m_Enabled: 1
---- !u!1 &6500697322174734651
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4266747408820688864}
-  - component: {fileID: 7181177837831850309}
-  m_Layer: 6
-  m_Name: skybox probe
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4266747408820688864
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6500697322174734651}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -15, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4987990158456630488}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!215 &7181177837831850309
-ReflectionProbe:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6500697322174734651}
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Type: 0
-  m_Mode: 1
-  m_RefreshMode: 0
-  m_TimeSlicingMode: 0
-  m_Resolution: 512
-  m_UpdateFrequency: 0
-  m_BoxSize: {x: 1, y: 1, z: 1}
-  m_BoxOffset: {x: 0, y: 0, z: 0}
-  m_NearClip: 0.3
-  m_FarClip: 1
-  m_ShadowDistance: 100
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 0
-  m_IntensityMultiplier: 1
-  m_BlendDistance: 1
-  m_HDR: 1
-  m_BoxProjection: 0
-  m_RenderDynamicObjects: 0
-  m_UseOcclusionCulling: 0
-  m_Importance: 2
-  m_CustomBakedTexture: {fileID: 0}
---- !u!1 &7261269874642721308
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3088657456355926392}
-  - component: {fileID: 6579586683182518709}
-  m_Layer: 6
-  m_Name: skybox probe
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3088657456355926392
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7261269874642721308}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 15, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4987990158456630488}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!215 &6579586683182518709
-ReflectionProbe:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7261269874642721308}
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Type: 0
-  m_Mode: 1
-  m_RefreshMode: 0
-  m_TimeSlicingMode: 0
-  m_Resolution: 512
-  m_UpdateFrequency: 0
-  m_BoxSize: {x: 1, y: 1, z: 1}
-  m_BoxOffset: {x: 0, y: 0, z: 0}
-  m_NearClip: 0.3
-  m_FarClip: 1
-  m_ShadowDistance: 100
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 0
-  m_IntensityMultiplier: 1
-  m_BlendDistance: 1
-  m_HDR: 1
-  m_BoxProjection: 0
-  m_RenderDynamicObjects: 0
-  m_UseOcclusionCulling: 0
-  m_Importance: 2
-  m_CustomBakedTexture: {fileID: 0}
---- !u!1 &7488438737366529128
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8598159568984316616}
-  - component: {fileID: 3079554917170185514}
-  m_Layer: 6
-  m_Name: skybox probe
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8598159568984316616
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7488438737366529128}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -15}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4987990158456630488}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!215 &3079554917170185514
-ReflectionProbe:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7488438737366529128}
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Type: 0
-  m_Mode: 1
-  m_RefreshMode: 0
-  m_TimeSlicingMode: 0
-  m_Resolution: 512
-  m_UpdateFrequency: 0
-  m_BoxSize: {x: 1, y: 1, z: 1}
-  m_BoxOffset: {x: 0, y: 0, z: 0}
-  m_NearClip: 0.3
-  m_FarClip: 1
-  m_ShadowDistance: 100
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 0
-  m_IntensityMultiplier: 1
-  m_BlendDistance: 1
-  m_HDR: 1
-  m_BoxProjection: 0
-  m_RenderDynamicObjects: 0
-  m_UseOcclusionCulling: 0
-  m_Importance: 2
-  m_CustomBakedTexture: {fileID: 0}
---- !u!1 &7632474247549522124
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8522713421488004228}
-  - component: {fileID: 3176715343379044216}
-  m_Layer: 6
-  m_Name: skybox probe
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8522713421488004228
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7632474247549522124}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 15, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4987990158456630488}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!215 &3176715343379044216
-ReflectionProbe:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7632474247549522124}
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Type: 0
-  m_Mode: 1
-  m_RefreshMode: 0
-  m_TimeSlicingMode: 0
-  m_Resolution: 512
-  m_UpdateFrequency: 0
-  m_BoxSize: {x: 1, y: 1, z: 1}
-  m_BoxOffset: {x: 0, y: 0, z: 0}
-  m_NearClip: 0.3
-  m_FarClip: 1
-  m_ShadowDistance: 100
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 0
-  m_IntensityMultiplier: 1
-  m_BlendDistance: 1
-  m_HDR: 1
-  m_BoxProjection: 0
-  m_RenderDynamicObjects: 0
-  m_UseOcclusionCulling: 0
-  m_Importance: 2
-  m_CustomBakedTexture: {fileID: 0}
---- !u!1 &8180158102360875901
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5481914750347639444}
-  - component: {fileID: 1781198308795864333}
-  m_Layer: 6
-  m_Name: skybox probe
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5481914750347639444
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8180158102360875901}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 15}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4987990158456630488}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!215 &1781198308795864333
-ReflectionProbe:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8180158102360875901}
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Type: 0
-  m_Mode: 1
-  m_RefreshMode: 0
-  m_TimeSlicingMode: 0
-  m_Resolution: 512
-  m_UpdateFrequency: 0
-  m_BoxSize: {x: 1, y: 1, z: 1}
-  m_BoxOffset: {x: 0, y: 0, z: 0}
-  m_NearClip: 0.3
-  m_FarClip: 1
-  m_ShadowDistance: 100
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 0
-  m_IntensityMultiplier: 1
-  m_BlendDistance: 1
-  m_HDR: 1
-  m_BoxProjection: 0
-  m_RenderDynamicObjects: 0
-  m_UseOcclusionCulling: 0
-  m_Importance: 2
-  m_CustomBakedTexture: {fileID: 0}
 --- !u!1001 &4448799792450387586
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -794,19 +398,51 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 54487937050516791, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: Button 16  |  L-VPCMongoosT50CM3Throttle
+      value: button16  |  VIRPIL Controls 20250313 L-VPCMongoosT50CM3Throttle
+      objectReference: {fileID: 0}
+    - target: {fileID: 208530328177076741, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1415.2776
+      objectReference: {fileID: 0}
+    - target: {fileID: 208530328177076741, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -558.28204
+      objectReference: {fileID: 0}
+    - target: {fileID: 208530328177076741, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 3205.529
+      objectReference: {fileID: 0}
+    - target: {fileID: 208530328177076741, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9484328
+      objectReference: {fileID: 0}
+    - target: {fileID: 208530328177076741, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.24642967
+      objectReference: {fileID: 0}
+    - target: {fileID: 208530328177076741, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.19296083
+      objectReference: {fileID: 0}
+    - target: {fileID: 208530328177076741, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.05013668
+      objectReference: {fileID: 0}
+    - target: {fileID: 255256867811558178, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_StreamingVersion
+      value: 20241001
       objectReference: {fileID: 0}
     - target: {fileID: 298010094061794878, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: Button 16  |  R-VPCConstellationAlpha
+      value: button16  |  VIRPIL Controls 20250313 R-VPCConstellationAlpha
       objectReference: {fileID: 0}
     - target: {fileID: 400044719367880781, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: Right Stick Press  |  Xbox Controller
+      value: rightStickPress  |  XInputControllerWindows
       objectReference: {fileID: 0}
     - target: {fileID: 400044719866565027, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: Button 6  |  R-VPCConstellationAlpha
+      value: button6  |  VIRPIL Controls 20250313 R-VPCConstellationAlpha
       objectReference: {fileID: 0}
     - target: {fileID: 564716383997419596, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_AnchorMax.y
@@ -832,9 +468,21 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 565787782913656813, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1331.8495
+      objectReference: {fileID: 0}
+    - target: {fileID: 565787782913656813, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1486.9246
+      objectReference: {fileID: 0}
+    - target: {fileID: 565787782913656813, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1513.1495
+      objectReference: {fileID: 0}
     - target: {fileID: 580464264963623507, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: Rx  |  L-VPCMongoosT50CM3Throttle
+      value: rx  |  VIRPIL Controls 20250313 L-VPCMongoosT50CM3Throttle
       objectReference: {fileID: 0}
     - target: {fileID: 648461283661118733, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_AnchorMax.x
@@ -882,7 +530,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 648461285071390830, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Size
-      value: 0.9999999
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 648461285071390830, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Value
@@ -908,9 +556,13 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 754944418886374115, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_StreamingVersion
+      value: 20241001
+      objectReference: {fileID: 0}
     - target: {fileID: 841025487404939562, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: Button 44  |  L-VPCMongoosT50CM3Throttle
+      value: button44  |  VIRPIL Controls 20250313 L-VPCMongoosT50CM3Throttle
       objectReference: {fileID: 0}
     - target: {fileID: 841025487442110660, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
@@ -942,7 +594,39 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 989826594790369715, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: Stick Y  |  R-VPCConstellationAlpha
+      value: stick/y  |  VIRPIL Controls 20250313 R-VPCConstellationAlpha
+      objectReference: {fileID: 0}
+    - target: {fileID: 1094226552547988868, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -2907.1099
+      objectReference: {fileID: 0}
+    - target: {fileID: 1094226552547988868, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -121.8552
+      objectReference: {fileID: 0}
+    - target: {fileID: 1094226552547988868, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 2071.9866
+      objectReference: {fileID: 0}
+    - target: {fileID: 1094226552547988868, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.8758974
+      objectReference: {fileID: 0}
+    - target: {fileID: 1094226552547988868, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.060480658
+      objectReference: {fileID: 0}
+    - target: {fileID: 1094226552547988868, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.4775547
+      objectReference: {fileID: 0}
+    - target: {fileID: 1094226552547988868, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.032975122
+      objectReference: {fileID: 0}
+    - target: {fileID: 1126467439941257328, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_StreamingVersion
+      value: 20241001
       objectReference: {fileID: 0}
     - target: {fileID: 1209719297370680575, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_AnchorMax.y
@@ -986,7 +670,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1279847679693427285, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: D-Pad Right  |  Xbox Controller
+      value: D-Pad/right  |  Gamepad
       objectReference: {fileID: 0}
     - target: {fileID: 1542701730742749996, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1010,11 +694,39 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1583571443160406451, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: Button 37  |  L-VPCMongoosT50CM3Throttle
+      value: button37  |  VIRPIL Controls 20250313 L-VPCMongoosT50CM3Throttle
       objectReference: {fileID: 0}
     - target: {fileID: 1587553083868574907, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Name
       value: Local Player Logic
+      objectReference: {fileID: 0}
+    - target: {fileID: 1588256702271728903, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 843.37366
+      objectReference: {fileID: 0}
+    - target: {fileID: 1588256702271728903, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1037.4386
+      objectReference: {fileID: 0}
+    - target: {fileID: 1588256702271728903, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -3338.359
+      objectReference: {fileID: 0}
+    - target: {fileID: 1588256702271728903, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.000000043607557
+      objectReference: {fileID: 0}
+    - target: {fileID: 1588256702271728903, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.000000003011099
+      objectReference: {fileID: 0}
+    - target: {fileID: 1588256702271728903, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.9976246
+      objectReference: {fileID: 0}
+    - target: {fileID: 1588256702271728903, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.068885915
       objectReference: {fileID: 0}
     - target: {fileID: 1590842465516763640, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1038,7 +750,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2050549113840149179, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_SizeDelta.x
-      value: -275.94336
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2396164945313066821, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_AnchorMax.x
@@ -1122,7 +834,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2547835201963038572, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: D-Pad Left  |  Xbox Controller
+      value: D-Pad/left  |  Gamepad
       objectReference: {fileID: 0}
     - target: {fileID: 2554619344449368793, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1144,6 +856,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3033037403083458160, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_StreamingVersion
+      value: 20241001
+      objectReference: {fileID: 0}
     - target: {fileID: 3129093078453609846, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1163,6 +879,10 @@ PrefabInstance:
     - target: {fileID: 3129093078453609846, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3154592465536074858, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_StreamingVersion
+      value: 20241001
       objectReference: {fileID: 0}
     - target: {fileID: 3257334712192428528, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1184,13 +904,21 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3330303389365219369, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_StreamingVersion
+      value: 20241001
+      objectReference: {fileID: 0}
+    - target: {fileID: 3544040911128711303, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_StreamingVersion
+      value: 20241001
+      objectReference: {fileID: 0}
     - target: {fileID: 3573613417281202769, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: Right Stick X  |  Xbox Controller
+      value: rightStick/x  |  XInputControllerWindows
       objectReference: {fileID: 0}
     - target: {fileID: 3573613418421097298, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: Rx  |  R-VPCConstellationAlpha
+      value: rx  |  VIRPIL Controls 20250313 R-VPCConstellationAlpha
       objectReference: {fileID: 0}
     - target: {fileID: 3575059791232522875, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1242,7 +970,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4442027097803649118, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: Button 7  |  R-VPCConstellationAlpha
+      value: button7  |  VIRPIL Controls 20250313 R-VPCConstellationAlpha
       objectReference: {fileID: 0}
     - target: {fileID: 4531037015474000602, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1263,6 +991,38 @@ PrefabInstance:
     - target: {fileID: 4531037015474000602, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4888344947125223384, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1955.13
+      objectReference: {fileID: 0}
+    - target: {fileID: 4888344947125223384, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 5380.0195
+      objectReference: {fileID: 0}
+    - target: {fileID: 4888344947125223384, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 14901.914
+      objectReference: {fileID: 0}
+    - target: {fileID: 4888344947125223384, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7660445
+      objectReference: {fileID: 0}
+    - target: {fileID: 4888344947125223384, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.64278764
+      objectReference: {fileID: 0}
+    - target: {fileID: 4888344947125223384, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4888344947125223384, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4966565938932984725, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_StreamingVersion
+      value: 20241001
       objectReference: {fileID: 0}
     - target: {fileID: 5048666087122958998, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1327,6 +1087,10 @@ PrefabInstance:
     - target: {fileID: 5168972265097780342, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5396067077255425258, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_StreamingVersion
+      value: 20241001
       objectReference: {fileID: 0}
     - target: {fileID: 5408597082557055301, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1350,7 +1114,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5661076544222040665, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: Button 32  |  R-VPCConstellationAlpha
+      value: button32  |  VIRPIL Controls 20250313 R-VPCConstellationAlpha
       objectReference: {fileID: 0}
     - target: {fileID: 5730277539670157778, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: shipTransform
@@ -1358,7 +1122,11 @@ PrefabInstance:
       objectReference: {fileID: 8739839919785845685}
     - target: {fileID: 5847699359095334045, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: Button 32  |  L-VPCMongoosT50CM3Throttle
+      value: button32  |  VIRPIL Controls 20250313 L-VPCMongoosT50CM3Throttle
+      objectReference: {fileID: 0}
+    - target: {fileID: 5953107476760367141, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_StreamingVersion
+      value: 20241001
       objectReference: {fileID: 0}
     - target: {fileID: 6133412330555986360, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1402,7 +1170,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6196124230622849577, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: Button 48  |  L-VPCMongoosT50CM3Throttle
+      value: button48  |  VIRPIL Controls 20250313 L-VPCMongoosT50CM3Throttle
       objectReference: {fileID: 0}
     - target: {fileID: 6320457594870328455, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1490,27 +1258,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6320457595374221439, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6320457595374221439, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6320457595374221439, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 420
-      objectReference: {fileID: 0}
-    - target: {fileID: 6320457595374221439, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
-      propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6320457595374221439, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6320457595374221439, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6320457595374221439, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 262.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6320457595374221439, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 230
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6320457595374221439, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -193.87473
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6320457595561771055, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1810,7 +1578,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6362337237917132287, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: Button 46  |  L-VPCMongoosT50CM3Throttle
+      value: button46  |  VIRPIL Controls 20250313 L-VPCMongoosT50CM3Throttle
       objectReference: {fileID: 0}
     - target: {fileID: 6380630573389386311, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1834,7 +1602,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6417171857686896877, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: D-Pad Up  |  Xbox Controller
+      value: D-Pad/up  |  Gamepad
       objectReference: {fileID: 0}
     - target: {fileID: 6558559909165685066, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1856,6 +1624,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6706219347873318845, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_StreamingVersion
+      value: 20241001
+      objectReference: {fileID: 0}
     - target: {fileID: 6795117216562766697, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1875,26 +1647,62 @@ PrefabInstance:
     - target: {fileID: 6795117216562766697, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6940101064602287996, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_StreamingVersion
+      value: 20241001
       objectReference: {fileID: 0}
     - target: {fileID: 7186368688116065840, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: Stick Y  |  L-VPCMongoosT50CM3Throttle
+      value: stick/y  |  VIRPIL Controls 20250313 L-VPCMongoosT50CM3Throttle
+      objectReference: {fileID: 0}
+    - target: {fileID: 7245881960369222047, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_StreamingVersion
+      value: 20241001
       objectReference: {fileID: 0}
     - target: {fileID: 7288408164428714945, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: Button 13  |  R-VPCConstellationAlpha
+      value: button13  |  VIRPIL Controls 20250313 R-VPCConstellationAlpha
+      objectReference: {fileID: 0}
+    - target: {fileID: 7411744417732092631, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -3253.4006
+      objectReference: {fileID: 0}
+    - target: {fileID: 7411744417732092631, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1792.031
+      objectReference: {fileID: 0}
+    - target: {fileID: 7411744417732092631, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1011.8431
+      objectReference: {fileID: 0}
+    - target: {fileID: 7411744417732092631, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.93037677
+      objectReference: {fileID: 0}
+    - target: {fileID: 7411744417732092631, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.2826701
+      objectReference: {fileID: 0}
+    - target: {fileID: 7411744417732092631, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.22336371
+      objectReference: {fileID: 0}
+    - target: {fileID: 7411744417732092631, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.067863084
       objectReference: {fileID: 0}
     - target: {fileID: 7567652150240473924, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: Button 15  |  R-VPCConstellationAlpha
+      value: button15  |  VIRPIL Controls 20250313 R-VPCConstellationAlpha
       objectReference: {fileID: 0}
     - target: {fileID: 7712688317769595332, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: Button 18  |  R-VPCConstellationAlpha
+      value: button18  |  VIRPIL Controls 20250313 R-VPCConstellationAlpha
       objectReference: {fileID: 0}
     - target: {fileID: 7752678464352527828, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: D-Pad Down  |  Xbox Controller
+      value: D-Pad/down  |  Gamepad
       objectReference: {fileID: 0}
     - target: {fileID: 7768985877392143691, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1920,13 +1728,49 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7866551956439654054, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_StreamingVersion
+      value: 20241001
+      objectReference: {fileID: 0}
     - target: {fileID: 8011305384498033345, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: Button 17  |  R-VPCConstellationAlpha
+      value: button17  |  VIRPIL Controls 20250313 R-VPCConstellationAlpha
+      objectReference: {fileID: 0}
+    - target: {fileID: 8018081210016932949, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -28364.158
+      objectReference: {fileID: 0}
+    - target: {fileID: 8018081210016932949, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 971.93024
+      objectReference: {fileID: 0}
+    - target: {fileID: 8018081210016932949, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1931.4667
+      objectReference: {fileID: 0}
+    - target: {fileID: 8018081210016932949, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.4916769
+      objectReference: {fileID: 0}
+    - target: {fileID: 8018081210016932949, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.16546758
+      objectReference: {fileID: 0}
+    - target: {fileID: 8018081210016932949, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.81025845
+      objectReference: {fileID: 0}
+    - target: {fileID: 8018081210016932949, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.2726821
+      objectReference: {fileID: 0}
+    - target: {fileID: 8063582502015543389, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_StreamingVersion
+      value: 20241001
       objectReference: {fileID: 0}
     - target: {fileID: 8067606316203671705, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: Button 21  |  L-VPCMongoosT50CM3Throttle
+      value: button21  |  VIRPIL Controls 20250313 L-VPCMongoosT50CM3Throttle
       objectReference: {fileID: 0}
     - target: {fileID: 8165869081141078393, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: player
@@ -1934,7 +1778,7 @@ PrefabInstance:
       objectReference: {fileID: 1767139775458680005}
     - target: {fileID: 8165869081397289839, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_SizeDelta.x
-      value: -475.94336
+      value: -160
       objectReference: {fileID: 0}
     - target: {fileID: 8165869081685738890, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_SizeDelta.y
@@ -1960,9 +1804,13 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8184528238564281989, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_StreamingVersion
+      value: 20241001
+      objectReference: {fileID: 0}
     - target: {fileID: 8310413164080758455, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: Stick X  |  L-VPCMongoosT50CM3Throttle
+      value: stick/x  |  VIRPIL Controls 20250313 L-VPCMongoosT50CM3Throttle
       objectReference: {fileID: 0}
     - target: {fileID: 8457847748842535062, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1986,11 +1834,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8493707114942466966, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: Z  |  R-VPCConstellationAlpha
+      value: z  |  VIRPIL Controls 20250313 R-VPCConstellationAlpha
       objectReference: {fileID: 0}
     - target: {fileID: 8678893456361615911, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: Button 33  |  L-VPCMongoosT50CM3Throttle
+      value: button33  |  VIRPIL Controls 20250313 L-VPCMongoosT50CM3Throttle
       objectReference: {fileID: 0}
     - target: {fileID: 8678893456669418441, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
@@ -2082,11 +1930,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8742814094755502313, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: Right Stick Y  |  Xbox Controller
+      value: rightStick/y  |  XInputControllerWindows
       objectReference: {fileID: 0}
     - target: {fileID: 8742814096702611946, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: Ry  |  R-VPCConstellationAlpha
+      value: ry  |  VIRPIL Controls 20250313 R-VPCConstellationAlpha
+      objectReference: {fileID: 0}
+    - target: {fileID: 8764610854147234595, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1651.8947
+      objectReference: {fileID: 0}
+    - target: {fileID: 8764610854147234595, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -15023.434
+      objectReference: {fileID: 0}
+    - target: {fileID: 8764610854147234595, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -19781.867
       objectReference: {fileID: 0}
     - target: {fileID: 8818402044291247082, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_AnchorMax.y
@@ -2130,7 +1990,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9221722727303944112, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
-      value: Stick X  |  R-VPCConstellationAlpha
+      value: stick/x  |  VIRPIL Controls 20250313 R-VPCConstellationAlpha
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -26,17 +26,16 @@ public class MatPropsOverrideEditor : Editor
             return shaderProps[s.GetInstanceID()];
 
         var res = new List<ShaderPropertyInfo>();
-        var pc = ShaderUtil.GetPropertyCount(s);
+        var pc = s.GetPropertyCount();
         for (var i = 0; i < pc; i++)
         {
             var sp = new ShaderPropertyInfo();
-            sp.property = ShaderUtil.GetPropertyName(s, i);
-            sp.type = (ShaderPropertyType)ShaderUtil.GetPropertyType(s, i);
-            sp.description = ShaderUtil.GetPropertyDescription(s, i);
-            if (sp.type == ShaderPropertyType.Range)
-            {
-                sp.rangeMin = ShaderUtil.GetRangeLimits(s, i, 1);
-                sp.rangeMax = ShaderUtil.GetRangeLimits(s, i, 2);
+            sp.property = s.GetPropertyName(i);
+            sp.type = (ShaderPropertyType)s.GetPropertyType(i);
+            sp.description = s.GetPropertyDescription(i);
+            if (sp.type == ShaderPropertyType.Range) {
+                sp.rangeMin = Mathf.Max(1, s.GetPropertyRangeLimits(i).x);
+                sp.rangeMax = Mathf.Min(s.GetPropertyRangeLimits(i).y, 2);
             }
             res.Add(sp);
         }
@@ -46,6 +45,7 @@ public class MatPropsOverrideEditor : Editor
     public override void OnInspectorGUI()
     {
         var myMatProps = target as MaterialPropertyOverride;
+        if (myMatProps == null) return;
 
         EditorGUILayout.Space();
 
@@ -91,7 +91,7 @@ public class MatPropsOverrideEditor : Editor
         }
         GUILayout.FlexibleSpace();
         GUILayout.EndHorizontal();
-
+        
         if (myMatProps.m_Renderers.Count == 0)
         {
             EditorGUILayout.HelpBox("No renderers affected!. This component makes no sense without renderers to affect.", MessageType.Error);
@@ -181,7 +181,6 @@ public class MatPropsOverrideEditor : Editor
             }
         }
 
-
         if (changed)
         {
             myMatProps.Clear();
@@ -193,7 +192,7 @@ public class MatPropsOverrideEditor : Editor
         Shader shader,
         List<MaterialPropertyOverride.ShaderPropertyValue> propertyOverrides,
         bool showAll,
-        UnityEngine.Object target)
+        Object target)
     {
         var headStyle = new GUIStyle("ShurikenModuleTitle");
         headStyle.fixedHeight = 20.0f;

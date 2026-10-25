@@ -26,7 +26,7 @@ namespace Bhaptics.Tact.Unity
 
             if (Bhaptics_Setup.instance == null)
             {
-                var findObjectOfType = FindObjectOfType<Bhaptics_Setup>();
+                var findObjectOfType = FindFirstObjectByType<Bhaptics_Setup>();
                 if (findObjectOfType == null)
                 {
                     var go = new GameObject("[bhaptics]");

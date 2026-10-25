@@ -3,6 +3,7 @@ using JetBrains.Annotations;
 using MapMagic.Core;
 using UnityEngine;
 using UnityEngine.VFX;
+using VFX;
 
 namespace Core.ShipModel.Modifiers.Water {
     public enum WaterTransition {
@@ -33,7 +34,7 @@ namespace Core.ShipModel.Modifiers.Water {
         private void OnEnable() {
             if (Instance != null) Debug.LogError("Multiple water modifiers in the scene! This is not allowed, expect nightmares");
             Instance = this;
-            Game.OnGameSettingsApplied += OnGameSettingsApplied;
+            ScreenSpaceFog.OnFogUpdate += OnFogUpdated;
             FloatingOrigin.OnFloatingOriginCorrection += OnFloatingOriginCorrection;
             _meshRenderer = GetComponent<MeshRenderer>();
 
@@ -43,7 +44,7 @@ namespace Core.ShipModel.Modifiers.Water {
 
         private void OnDisable() {
             Instance = null;
-            Game.OnGameSettingsApplied -= OnGameSettingsApplied;
+            ScreenSpaceFog.OnFogUpdate -= OnFogUpdated;
             FloatingOrigin.OnFloatingOriginCorrection -= OnFloatingOriginCorrection;
         }
 
@@ -61,19 +62,9 @@ namespace Core.ShipModel.Modifiers.Water {
         }
 
 
-        private void OnGameSettingsApplied() {
-            var mapMagic = FindObjectOfType<MapMagicObject>();
-            if (mapMagic) {
-                var tileChunkCount = Preferences.Instance.GetFloat("graphics-terrain-chunks") + 1; // include drafts
-                var tileSize = mapMagic.tileSize.x;
-                var tileGenBuffer = 1.7f; // a little leeway for time to generate tiles in the distance
-
-                var fogEndDistance = (tileSize * tileChunkCount - tileSize / 2) / tileGenBuffer;
-                var fogStartDistance = Mathf.Max(fogEndDistance / 2, fogEndDistance - tileSize);
-
-                _meshRenderer.material.SetFloat(WaterFadeDistantStart, fogStartDistance);
-                _meshRenderer.material.SetFloat(WaterFadeDistantEnd, fogEndDistance);
-            }
+        private void OnFogUpdated(ScreenSpaceFog.ScreenSpaceFogUpdate updateMsg) {
+            _meshRenderer.material.SetFloat(WaterFadeDistantStart, updateMsg.fogStartDistance);
+            _meshRenderer.material.SetFloat(WaterFadeDistantEnd, updateMsg.fogEndDistance);
         }
 
         private void OnFloatingOriginCorrection(Vector3 offset) {

@@ -47,7 +47,7 @@ namespace Core.Player {
         /// </summary>
         public void ShowLoadingRoom() {
             // show the loading camera, geo etc. This should only apply to local client instance!
-            var loadingRoom = FindObjectOfType<LoadingRoom>();
+            var loadingRoom = FindFirstObjectByType<LoadingRoom>();
             if (loadingRoom) loadingRoom.transform.SetParent(transform, false);
         }
 

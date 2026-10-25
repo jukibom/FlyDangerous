@@ -165,12 +165,17 @@ namespace Core.Player {
             Engine.Instance.NightVision.SetNightVisionActive(false);
 
             RefreshShipModel();
+            
+            // disable all local doppler effects (the frame of reference should be locked, there's no reason for it!)
+            foreach (var audioSource in GetComponentsInChildren<AudioSource>(true)) {
+                audioSource.dopplerLevel = 0;
+            }
         }
 
         // When a client connects, update all other ships on that local client
         public override void OnStartClient() {
             base.OnStartClient();
-            foreach (var shipPlayer in FindObjectsOfType<ShipPlayer>())
+            foreach (var shipPlayer in FindObjectsByType<ShipPlayer>(FindObjectsSortMode.None))
                 if (!shipPlayer.isLocalPlayer)
                     shipPlayer.RefreshShipModel();
 
@@ -413,7 +418,7 @@ namespace Core.Player {
                 var offset = remoteOrigin - localOffset;
                 var localPosition = offset + position;
 
-                Rigidbody.velocity = Vector3.Lerp(Rigidbody.velocity, velocity, 0.1f);
+                Rigidbody.linearVelocity = Vector3.Lerp(Rigidbody.linearVelocity, velocity, 0.1f);
                 Rigidbody.angularVelocity = angularVelocity;
                 _transform.localPosition = Vector3.Lerp(_transform.localPosition, localPosition, 0.5f);
                 _transform.localRotation = Quaternion.Lerp(_transform.localRotation, rotation, 0.5f);
@@ -496,6 +501,7 @@ namespace Core.Player {
                 var position = transform.position - offset;
                 Rigidbody.MovePosition(position);
                 transform.position = position;
+                
             }
         }
 

@@ -52,7 +52,7 @@ namespace GameUI {
         }
 
         private void Start() {
-            var cameras = FindObjectsOfType<Camera>(true).ToList();
+            var cameras = FindObjectsByType<Camera>(FindObjectsInactive.Include, FindObjectsSortMode.None).ToList();
             uiCamera = cameras.Find(c => c.CompareTag("UICamera"));
         }
 

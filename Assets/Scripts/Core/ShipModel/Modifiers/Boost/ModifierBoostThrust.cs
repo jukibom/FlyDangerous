@@ -50,12 +50,12 @@ namespace Core.ShipModel.Modifiers.Boost {
 
         public void ApplyInitialEffect(Rigidbody shipRigidBody, ref AppliedEffects effects) {
             var parameters = shipRigidBody.gameObject.GetComponent<ShipPlayer>().ShipPhysics.FlightParameters;
-            // when using balistic boost bodel force is applied once
+            // when using ballistic boost, bodel force is applied once
             if (parameters.useAltBoosters) {
                 var targetSpeed = 2600 * parameters.boosterForceMultiplier;
                 var revectorEfficiency = 0.85f;
-                var velPara = Mathf.Abs(Vector3.Dot(shipRigidBody.velocity, transform.forward)) * transform.forward;
-                var velPerp = shipRigidBody.velocity - velPara;
+                var velPara = Mathf.Abs(Vector3.Dot(shipRigidBody.linearVelocity, transform.forward)) * transform.forward;
+                var velPerp = shipRigidBody.linearVelocity - velPara;
                 var speed_dampling = Mathf.Exp(-(velPara.magnitude / targetSpeed));
                 effects.shipForce += 28.125f * parameters.mass * (targetSpeed * speed_dampling * transform.forward  - revectorEfficiency*velPerp);
             }

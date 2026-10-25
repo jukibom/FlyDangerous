@@ -98,7 +98,7 @@ namespace Core.Replays {
 
                 ShipReplayObject.SetAbsolutePosition(keyFrame.replayFloatingOrigin, keyFrame.position);
                 ShipReplayObject.Transform.rotation = keyFrame.rotation;
-                ShipReplayObject.Rigidbody.velocity = keyFrame.velocity;
+                ShipReplayObject.Rigidbody.linearVelocity = keyFrame.velocity;
                 ShipReplayObject.Rigidbody.angularVelocity = keyFrame.angularVelocity;
 
 
