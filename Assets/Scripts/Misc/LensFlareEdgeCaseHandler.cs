@@ -39,10 +39,6 @@ namespace Misc {
         private void HandleVisibility(bool vrEnabled) {
             var shouldShow = true;
 
-            // TODO: remove this when #199 fixed (MSAA breaks lens flares!)
-            var urp = (UniversalRenderPipelineAsset)GraphicsSettings.currentRenderPipeline;
-            if (urp.msaaSampleCount != 0) shouldShow = false;
-
             // TODO: remove this when #200 fixed (lens flare broken in VR!)
             if (vrEnabled) shouldShow = false;
 
