@@ -1,3 +1,4 @@
+using System;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -26,7 +27,7 @@ namespace Core {
         public RenderTexture RenderedSkyboxCubemap { get; private set; }
 
         private bool HasUpdateInterval => updateMode == UpdateMode.RealtimeThrottled;
-
+        
         private void Awake() {
             InitRenderTexture();
             if (updateMode == UpdateMode.OnAwake) RenderSkybox();
@@ -49,7 +50,11 @@ namespace Core {
             if (updateMode == UpdateMode.Realtime) RenderSkybox();
         }
 
-        void InitRenderTexture() {
+        public void NotifyEnvironmentLoaded() {
+            if (updateMode != UpdateMode.Realtime) RenderSkybox();
+        }
+
+        private void InitRenderTexture() {
             _currentRenderSize = renderSize;
             RenderedSkyboxCubemap = new RenderTexture(_currentRenderSize, renderSize, 16, RenderTextureFormat.ARGBHalf) {
                 name = "_SkyboxDepthFogRenderedSkyboxCubemap",
