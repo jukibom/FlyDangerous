@@ -14,9 +14,10 @@ namespace Core {
             DontDestroyOnLoad(this);
         }
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static void LoadEngine() {
             Debug.Log("Loading Engine");
+
             SceneManager.LoadScene("Engine", LoadSceneMode.Additive);
         }
     }

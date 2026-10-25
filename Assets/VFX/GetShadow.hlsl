@@ -1,14 +1,10 @@
 ﻿#ifndef SHADERGRAPH_PREVIEW
-#pragma multi_compile _ _MAIN_LIGHT_SHADOWS
-#pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
-#pragma multi_compile_fragment _SHADOWS_SOFT _SHADOWS_SOFT_LOW _SHADOWS_SOFT_MEDIUM _SHADOWS_SOFT_HIGH
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 #endif
 
-void SampleMainLightShadow_float(in float3 WorldPos, out float Shadow) // WorldNormal might not be needed if not used elsewhere
+void SampleMainLightShadow_float(in float3 WorldPos, out float Shadow)
 {
-
     #ifdef SHADERGRAPH_PREVIEW
     Shadow = 1.0;
     #else
@@ -16,7 +12,7 @@ void SampleMainLightShadow_float(in float3 WorldPos, out float Shadow) // WorldN
     float4 shadowCoord;
 
     // Calculate shadow coordinates
-    #if SHADOWS_SCREEN
+    #if defined(_MAIN_LIGHT_SHADOWS_SCREEN)
     float4 positionCS = TransformWorldToHClip(WorldPos);
     shadowCoord = ComputeScreenPos(positionCS);
     #else
