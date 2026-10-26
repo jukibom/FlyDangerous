@@ -53,6 +53,7 @@ namespace Core.Player {
         public bool IsRotationalFlightAssistActive => !IsAutoRotateDriftEnabled &&
                                                       (_flightAssistRotationalControl || Preferences.Instance.GetBool("autoShipRotation") ||
                                                        Preferences.Instance.GetString("controlSchemeType") == "arcade");
+        public bool spectating = false;
 
         [SyncVar] private bool _serverReady;
         [SyncVar] public string playerName;
@@ -271,10 +272,13 @@ namespace Core.Player {
                 ShipPhysics.UpdateShip(_pitchInput, _rollInput, _yawInput, _throttleInput, _latHInput, _latVInput, _boostButtonHeld, _velocityLimiterActive,
                     IsVectorFlightAssistActive, IsRotationalFlightAssistActive);
 
+
                 // update camera offset if not frozen
-                var velocity = Freeze ? Vector3.zero : transform.InverseTransformDirection(ShipPhysics.Velocity);
-                var frameThrust = Freeze ? Vector3.zero : ShipPhysics.CurrentFrameThrust;
-                User.ShipCameraRig.UpdateCameras(velocity, ShipPhysics.FlightParameters.maxSpeed, frameThrust, ShipPhysics.FlightParameters.maxThrust);
+                if (!spectating) {
+                    var velocity = Freeze ? Vector3.zero : transform.InverseTransformDirection(ShipPhysics.Velocity);
+                    var frameThrust = Freeze ? Vector3.zero : ShipPhysics.CurrentFrameThrust;
+                    User.ShipCameraRig.UpdateCameras(velocity, ShipPhysics.FlightParameters.maxSpeed, frameThrust, ShipPhysics.FlightParameters.maxThrust);
+                } 
 
                 // Send the current floating origin along with the new position and rotation to the server
                 CmdUpdate(FloatingOrigin.Instance.Origin, _transform.localPosition, _transform.rotation, ShipPhysics.Velocity, ShipPhysics.AngularVelocity,

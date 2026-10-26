@@ -43,6 +43,7 @@ namespace Core {
             
             var player = FdPlayer.FindLocalShipPlayer;
             if (player) {
+                player.spectating = true;
                 player.DisableReflections();
                 ghost.EnableReflections();
                 player.ShipPhysics.AudioListener.enabled = false;
@@ -67,6 +68,7 @@ namespace Core {
             
             var player = FdPlayer.FindLocalShipPlayer;
             if (player) {
+                player.spectating = false;
                 player.EnableReflections();
                 player.ShipPhysics.AudioListener.enabled = true;
                 player.ShipPhysics.ShipModel?.SetVisible(true);

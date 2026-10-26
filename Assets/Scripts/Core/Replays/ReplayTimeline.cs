@@ -126,6 +126,15 @@ namespace Core.Replays {
                     if (ShipReplayObject?.ShipPhysics.IsNightVisionActive != inputFrame.shipLightsEnabled)
                         ShipReplayObject?.ShipPhysics.NightVisionToggle(inputFrame.shipLightsEnabled, _ => { });
 
+
+                    if (ShipReplayObject?.SpectatorActive == true ) {
+                        var ShipPhysics = ShipReplayObject.ShipPhysics;
+
+                        var velocity = transform.InverseTransformDirection(ShipPhysics.Velocity);
+                        var frameThrust = ShipPhysics.CurrentFrameThrust;
+                        FdPlayer.FindLocalShipPlayer.User.ShipCameraRig.UpdateCameras(velocity, ShipPhysics.FlightParameters.maxSpeed, frameThrust, ShipPhysics.FlightParameters.maxThrust);
+                    }
+
                     _inputTicks++;
                 }
                 else {
