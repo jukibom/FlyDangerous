@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Audio;
@@ -30,6 +31,7 @@ namespace Gameplay.Game_Modes {
         private Track _track;
         private LevelData _levelData;
         private bool _isValid = true;
+        private string _invalidReason;
 
         // Handler refs
         [CanBeNull] private IGameModeWithScore _gameModeWithScore;
@@ -115,6 +117,11 @@ namespace Gameplay.Game_Modes {
             _gameMode.OnInitialise();
         }
 
+        public void Invalidate(String reason) {
+            _isValid = false;
+            _invalidReason = reason;
+        }
+
         public void StartGame() {
         }
 
@@ -188,7 +195,7 @@ namespace Gameplay.Game_Modes {
                         }
                     }
 
-                _inGameUI.GameModeUIHandler.ShowResultsScreen(score, previousScore, _isValid, replayFileName, replayFilePath);
+                _inGameUI.GameModeUIHandler.ShowResultsScreen(score, previousScore, _isValid,_invalidReason, replayFileName, replayFilePath);
             }
         }
 
@@ -340,7 +347,12 @@ namespace Gameplay.Game_Modes {
         }
 
         private bool IsValid() {
-            return !Application.version.Contains("-dev") && Game.Instance.ShipParameters.ToJsonString().Equals(Game.Instance.LoadedLevelData.shipParameters.ToJsonString());
+            bool validBuild = !Application.version.Contains("-dev");
+            bool validParameters = Game.Instance.ShipParameters.ToJsonString().Equals(Game.Instance.LoadedLevelData.shipParameters.ToJsonString());
+            if (_isValid && !validBuild) _invalidReason = "RESULT NOT VALID - BETA/DEV BUILD";
+            if (_isValid && !validParameters) _invalidReason = "RESULT NOT VALID - MODIFIED SHIP";
+
+            return validBuild && validParameters;
         }
 
         private IEnumerator ShowLevelAndMusicName() {
