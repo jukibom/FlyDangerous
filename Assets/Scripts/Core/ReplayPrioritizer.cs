@@ -43,6 +43,8 @@ namespace Core {
             
             var player = FdPlayer.FindLocalShipPlayer;
             if (player) {
+                player.DisableReflections();
+                ghost.EnableReflections();
                 player.ShipPhysics.AudioListener.enabled = false;
                 player.ShipPhysics.ShipModel?.SetVisible(false);
                 player.User.TargetTransform = ghost.transform;
@@ -60,10 +62,12 @@ namespace Core {
 
                 replayTimeline.ShipReplayObject.ShipPhysics.AudioListener.enabled = false;
                 replayTimeline.ShipReplayObject.SpectatorActive = false;
+                replayTimeline.ShipReplayObject.DisableReflections();
             }
             
             var player = FdPlayer.FindLocalShipPlayer;
             if (player) {
+                player.EnableReflections();
                 player.ShipPhysics.AudioListener.enabled = true;
                 player.ShipPhysics.ShipModel?.SetVisible(true);
                 player.User.TargetTransform = player.transform;

@@ -284,6 +284,12 @@ namespace Core.Player {
                 ShipPhysics.GeometryCollisionCheck();
             }
         }
+        public void EnableReflections() {
+            reflectionProbe.gameObject.SetActive(Game.Instance.reflectionSetting != "off");
+        }
+        public void DisableReflections() {
+            reflectionProbe.gameObject.SetActive(false);
+        }
 
         private void OnCollisionEnter(Collision collisionInfo) {
             ShipPhysics.OnCollision(collisionInfo, true);

@@ -16,6 +16,7 @@ namespace Core.Replays {
         ShipPhysics ShipPhysics { get; }
         public bool SpectatorActive { get; set; }
         public void SetAbsolutePosition(Vector3 ghostFloatingOrigin, Vector3 position);
+        public void DisableReflections();
     }
 
     public class ReplayTimeline : MonoBehaviour {
