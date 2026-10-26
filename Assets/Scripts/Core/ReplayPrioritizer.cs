@@ -27,6 +27,8 @@ namespace Core {
         }
 
         public void SpectateGhost(ShipGhost ghost) {
+            Game.Instance.GameModeHandler.Invalidate("RESULT NOT VALID - Started Spectating"); 
+
             if (ActiveSpectatedShip != null) {
                 ActiveSpectatedShip.ShipPhysics.ShipModel?.SetVisible(false);
             }

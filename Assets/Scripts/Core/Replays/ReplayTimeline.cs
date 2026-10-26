@@ -129,6 +129,7 @@ namespace Core.Replays {
 
                     if (ShipReplayObject?.SpectatorActive == true ) {
                         var ShipPhysics = ShipReplayObject.ShipPhysics;
+                        ShipPhysics.GhostCollisionChecks();
 
                         var velocity = transform.InverseTransformDirection(ShipPhysics.Velocity);
                         var frameThrust = ShipPhysics.CurrentFrameThrust;
@@ -139,6 +140,11 @@ namespace Core.Replays {
                 }
                 else {
                     Debug.Log("Replay finished");
+
+                    // last collition check to see if it hit the final checkpoint
+                    if (ShipReplayObject?.SpectatorActive == true )
+                        ShipReplayObject.ShipPhysics.GhostCollisionChecks();
+
                     Stop();
                 }
             }

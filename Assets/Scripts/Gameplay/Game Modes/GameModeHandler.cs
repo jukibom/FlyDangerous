@@ -195,7 +195,7 @@ namespace Gameplay.Game_Modes {
                         }
                     }
 
-                _inGameUI.GameModeUIHandler.ShowResultsScreen(score, previousScore, _isValid,_invalidReason, replayFileName, replayFilePath);
+                _inGameUI.GameModeUIHandler.ShowResultsScreen(score, previousScore, _isValid, _invalidReason, replayFileName, replayFilePath);
             }
         }
 
