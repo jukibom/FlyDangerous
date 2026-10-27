@@ -193,7 +193,10 @@ namespace Core.ShipModel.Feedback.ogsa {
             var port = (int)Preferences.Instance.GetFloat("ogsaTelemetryPort");
 
             // restart if the endpoint changed while running
-            if (_isEnabled && (address != _multicastAddress || port != _multicastPort)) StopServer();
+            if (_isEnabled && (address != _multicastAddress || port != _multicastPort)) {
+                FdConsole.Instance.LogMessage("Parameters changed, restarting OGSA-TS Telemetry Server ...");
+                StopServer();
+            }
 
             _multicastAddress = address;
             _multicastPort = port;
