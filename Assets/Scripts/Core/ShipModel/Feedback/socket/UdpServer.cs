@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Sockets;
 using Audio;
 using Core.MapData.Serializable;
@@ -140,6 +141,8 @@ namespace Core.ShipModel.Feedback.socket {
 
         [Button("Start Server")]
         private void StartServer() {
+            if (_isEnabled) return;
+            
             FdConsole.Instance.LogMessage($"Starting {broadcastFormat} Telemetry UDP Server ({_broadcastIpAddress}:{_broadcastPort}) ... ");
             _socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             _ipEndPoint = new IPEndPoint(_broadcastIpAddress, _broadcastPort);
@@ -148,6 +151,8 @@ namespace Core.ShipModel.Feedback.socket {
 
         [Button("Stop Server")]
         private void StopServer() {
+            if (!_isEnabled) return;
+            
             FdConsole.Instance.LogMessage($"Shutting down {broadcastFormat} Telemetry UDP Server");
             _packetId = 0;
             _socket?.Close();
@@ -156,28 +161,43 @@ namespace Core.ShipModel.Feedback.socket {
         }
 
         private void OnGameSettingsApplied() {
-            _isEnabled = Preferences.Instance.GetBool("telemetryEnabled");
+            var isEnabled = Preferences.Instance.GetBool("telemetryEnabled");
             var mode = Preferences.Instance.GetString("telemetryOutputMode");
-            _broadcastIpAddress = IPAddress.Parse(Preferences.Instance.GetString("telemetryOutputAddress"));
-            _broadcastPort = (int)Preferences.Instance.GetFloat("telemetryOutputPort");
+            var broadcastIpAddress = IPAddress.Parse(Preferences.Instance.GetString("telemetryOutputAddress"));
+            var broadcastPort = (int)Preferences.Instance.GetFloat("telemetryOutputPort");
 
-            switch (mode) {
-                case "bytes":
-                    broadcastFormat = BroadcastFormat.Bytes;
-                    break;
-                case "json":
-                    broadcastFormat = BroadcastFormat.Json;
-                    break;
-                default:
-                    Debug.LogWarning("Telemetry enabled but 'telemetryOutputMode' setting is not recognised.");
-                    _isEnabled = false;
-                    return;
+            BroadcastFormat format;
+            try {
+                format = GetBroadcastFormat(mode);
             }
+            catch (ArgumentOutOfRangeException e) {
+                FdConsole.Instance.LogMessage(e.Message);
+                return;
+            }
+
+            if (_isEnabled && (!broadcastIpAddress.Equals(_broadcastIpAddress) || broadcastPort != _broadcastPort ||
+                               format != broadcastFormat)) {
+                FdConsole.Instance.LogMessage("Parameters changed, restarting Telemetry UDP Server ...");
+                StopServer();
+            }
+
+            _broadcastIpAddress = broadcastIpAddress;
+            _broadcastPort = broadcastPort;
+            broadcastFormat = format;
 
             _emitTimer = Preferences.Instance.GetFloat("telemetryEmitIntervalSeconds");
 
-            if (_isEnabled) StartServer();
+            if (isEnabled) StartServer();
             else StopServer();
+        }
+
+        private BroadcastFormat GetBroadcastFormat(string mode) {
+            return mode switch {
+                "bytes" => BroadcastFormat.Bytes,
+                "json" => BroadcastFormat.Json,
+                _ => throw new ArgumentOutOfRangeException(mode,
+                    "Telemetry enabled but 'telemetryOutputMode' setting is not recognised. Valid values are 'json' and 'bytes'.")
+            };
         }
     }
 }

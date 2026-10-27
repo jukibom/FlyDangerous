@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using Core.Player;
 using Core.ShipModel.Feedback.interfaces;
 using Core.ShipModel.ShipIndicator;
+using FdUI;
 using JetBrains.Annotations;
 using Misc;
 using NaughtyAttributes;
@@ -68,6 +69,8 @@ namespace Core.ShipModel.Feedback.simRacingStudio {
         [Button("Start Server")]
         [UsedImplicitly]
         private void StartServer() {
+            if (_isEnabled) return;
+            
             Debug.Log($"Starting Sim Racing Studio Server ({_broadcastIpAddress}:{_broadcastPort}) ... ");
             _socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             _ipEndPoint = new IPEndPoint(_broadcastIpAddress, _broadcastPort);
@@ -77,6 +80,8 @@ namespace Core.ShipModel.Feedback.simRacingStudio {
         [Button("Stop Server")]
         [UsedImplicitly]
         private void StopServer() {
+            if (!_isEnabled) return;
+            
             Debug.Log("Shutting down UDP Server");
             _socket?.Close();
             _socket = null;
@@ -84,11 +89,20 @@ namespace Core.ShipModel.Feedback.simRacingStudio {
         }
 
         private void OnGameSettingsApplied() {
-            _isEnabled = Preferences.Instance.GetBool("simRacingStudioEnabled");
-            _broadcastIpAddress = IPAddress.Parse(Preferences.Instance.GetString("simRacingStudioOutputAddress"));
-            _broadcastPort = (int)Preferences.Instance.GetFloat("simRacingStudioOutputPort");
+            var isEnabled = Preferences.Instance.GetBool("simRacingStudioEnabled");
+            var broadcastIpAddress = IPAddress.Parse(Preferences.Instance.GetString("simRacingStudioOutputAddress"));
+            var broadcastPort = (int)Preferences.Instance.GetFloat("simRacingStudioOutputPort");
 
-            if (_isEnabled) StartServer();
+            // if these change, we need a restart
+            if (_isEnabled && (!broadcastIpAddress.Equals(_broadcastIpAddress) || broadcastPort != _broadcastPort)) {
+                FdConsole.Instance.LogMessage("Parameters changed, restarting Sim Racing Studio Server ...");
+                StopServer();
+            }
+
+            _broadcastIpAddress = broadcastIpAddress;
+            _broadcastPort = broadcastPort;
+            
+            if (isEnabled) StartServer();
             else StopServer();
         }
     }

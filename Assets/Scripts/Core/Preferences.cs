@@ -77,6 +77,7 @@ namespace Core {
                 case "autoShipRoll":
                 case "bHapticsEnabled":
                 case "telemetryEnabled":
+                case "ogsaTelemetryEnabled":
                 case "simRacingStudioEnabled":
                 case "openTrackEnabled":
                 case "trackIrEnabled":
@@ -138,6 +139,8 @@ namespace Core {
                     return 0.02f;
                 case "telemetryOutputPort":
                     return 11000;
+                case "ogsaTelemetryPort":
+                    return 40123;
                 case "simRacingStudioOutputPort":
                     return 33001;
                 case "autoTrackAmount":
@@ -243,6 +246,8 @@ namespace Core {
                     return "json";
                 case "telemetryOutputAddress":
                     return "127.0.0.1";
+                case "ogsaTelemetryMulticastAddress":
+                    return "239.255.17.17";
                 case "simRacingStudioOutputAddress":
                     return "127.0.0.1";
                 default:
