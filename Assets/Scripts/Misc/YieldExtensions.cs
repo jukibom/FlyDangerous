@@ -4,11 +4,15 @@ using UnityEngine;
 
 namespace Misc {
     public static class YieldExtensions {
+
+        public static readonly WaitForFixedUpdate WaitForFixedUpdate = new WaitForFixedUpdate();
+        public static readonly WaitForEndOfFrame WaitForEndOfFrame = new WaitForEndOfFrame();
+        
         public static IEnumerator WaitForFixedFrames(uint frames) {
             var frame = 0;
             while (frames > frame) {
                 frame++;
-                yield return new WaitForFixedUpdate();
+                yield return WaitForFixedUpdate;
             }
         }
 
@@ -22,7 +26,7 @@ namespace Misc {
             while (timer < animationTimeSeconds) {
                 timer += Time.deltaTime;
                 action(timer / animationTimeSeconds);
-                yield return new WaitForEndOfFrame();
+                yield return WaitForEndOfFrame;
             }
 
             onComplete?.Invoke();

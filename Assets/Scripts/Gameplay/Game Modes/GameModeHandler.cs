@@ -290,12 +290,12 @@ namespace Gameplay.Game_Modes {
         private IEnumerator WaitForBoostButtonIfNeeded() {
             // handle boost button if required
             if (_gameMode.RequireBoostHeldToStart) {
-                yield return new WaitForEndOfFrame();
+                yield return YieldExtensions.WaitForEndOfFrame;
                 
                 // if the boost button is held at the very start, wait for it to be released (or 1 sec to pass)
                 float timeSeconds = 0;
                 while (LocalPlayer.User.BoostButtonHeld && timeSeconds < 1) {
-                    yield return new WaitForEndOfFrame();
+                    yield return YieldExtensions.WaitForEndOfFrame;
                     timeSeconds += Time.deltaTime;
                 }
 
@@ -306,10 +306,10 @@ namespace Gameplay.Game_Modes {
                     while (timeSeconds < 2) {
                         timeSeconds += Time.deltaTime;
                         if (LocalPlayer.User.BoostButtonHeld) break;
-                        yield return new WaitForEndOfFrame();
+                        yield return YieldExtensions.WaitForEndOfFrame;
                     }
 
-                    yield return new WaitForFixedUpdate();
+                    yield return YieldExtensions.WaitForFixedUpdate;
 
                     // show the text once and only once if after 2 seconds the user still isn't holding the button
                     if (!showText && !LocalPlayer.User.BoostButtonHeld) {

@@ -15,7 +15,16 @@ namespace Core {
         
         public List<ReplayTimeline> Replays => _replays;
         
-        public bool IsSpectating => _replays.Any(replay => replay.ShipReplayObject is { SpectatorActive: true });
+        public bool IsSpectating {
+            get {
+                foreach (var replayTimeline in _replays) {
+                    if (replayTimeline.ShipReplayObject is { SpectatorActive: true })
+                        return true;
+                }
+                return false;
+            }
+        }
+
         [CanBeNull] public IReplayShip ActiveSpectatedShip => _replays.FirstOrDefault(replay => replay.ShipReplayObject is { SpectatorActive: true })?.ShipReplayObject;
         
         public void RegisterReplay(ReplayTimeline replay) {

@@ -31,8 +31,8 @@ namespace Core.ShipModel {
         public float addTargetThrustToForwardThrusters;
 
         private void FixedUpdate() {
-            forwardThrusters.ForEach(thruster => {
-                var thrusterTransform = thruster.ThrusterMesh.transform;
+            foreach (var forwardThruster in forwardThrusters) {
+                var thrusterTransform = forwardThruster.ThrusterMesh.transform;
                 var localScale = thrusterTransform.localScale;
                 localScale = new Vector3(
                     localScale.x,
@@ -40,7 +40,7 @@ namespace Core.ShipModel {
                     Mathf.Lerp(localScale.z, baseForwardThrustScaleZ, 0.01f)
                 );
                 thrusterTransform.localScale = localScale;
-            });
+            }
         }
 
         public void AnimateBoostThrusters() {
@@ -76,15 +76,21 @@ namespace Core.ShipModel {
             DistributeThrust(rollLeftThrusters, rollRightThrusters, targetRollThrust);
             DistributeThrust(yawRightThrusters, yawLeftThrusters, targetYawThrust);
 
-            forwardThrusters.ForEach(thruster => thruster.TargetThrust += addTargetThrustToForwardThrusters);
+            foreach (var forwardThruster in forwardThrusters) {
+                forwardThruster.TargetThrust += addTargetThrustToForwardThrusters;
+            }
         }
 
         private void DistributeThrust(List<Thruster> positiveThrusters, List<Thruster> negativeThrusters,
             float thrust) {
             if (thrust > 0)
-                positiveThrusters.ForEach(thruster => thruster.TargetThrust += thrust);
+                foreach (var positiveThruster in positiveThrusters) {
+                    positiveThruster.TargetThrust += thrust;
+                }
             else
-                negativeThrusters.ForEach(thruster => thruster.TargetThrust += Math.Abs(thrust));
+                foreach (var negativeThruster in negativeThrusters) {
+                    negativeThruster.TargetThrust += Math.Abs(thrust);
+                }
         }
 
         private void ForEachThruster(Action<Thruster> action) {

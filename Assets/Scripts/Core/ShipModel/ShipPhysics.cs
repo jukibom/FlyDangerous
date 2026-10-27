@@ -510,7 +510,7 @@ namespace Core.ShipModel {
         private void UpdateInstrumentData() {
             var shipPosition = targetRigidbody.position;
             var absoluteShipPosition = FloatingOrigin.Instance.GetAbsoluteWorldPosition(targetRigidbody.transform);
-            var nearestTerrain = PositionalHelpers.GetClosestCurrentTerrain(shipPosition);
+            var nearestTerrain = Game.Instance.IsTerrainMap ? PositionalHelpers.GetClosestCurrentTerrain(shipPosition) : null;
             var water = ModifierWater.Instance;
 
             _shipInstrumentData.ShipActive = ShipActive;

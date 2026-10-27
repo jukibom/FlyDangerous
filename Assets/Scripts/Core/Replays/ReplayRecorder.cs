@@ -15,6 +15,9 @@ namespace Core.Replays {
         private uint _ticks;
 
         [CanBeNull] public Replay Replay { get; private set; }
+        
+        private BinaryWriter inputReplayWriter;
+        private BinaryWriter keyframeReplayWriter;
 
         private void OnDestroy() {
             CancelRecording();
@@ -25,7 +28,11 @@ namespace Core.Replays {
             _recording = true;
             _ticks = 0;
             _targetShip.OnShipPhysicsUpdated += RecordFrame;
-            Replay = Replay.CreateNewWritable(Game.Instance.ShipParameters, Game.Instance.LoadedLevelData, ShipProfile.FromPreferences());
+            
+            var replay = Replay.CreateNewWritable(Game.Instance.ShipParameters, Game.Instance.LoadedLevelData, ShipProfile.FromPreferences());
+            inputReplayWriter = new BinaryWriter(replay.InputFrameStream, Encoding.UTF8, true);
+            keyframeReplayWriter = new BinaryWriter(replay.KeyFrameStream, Encoding.UTF8, true);
+            Replay = replay;
         }
 
         public void CancelRecording() {
@@ -41,6 +48,13 @@ namespace Core.Replays {
 
         public void StopRecording() {
             if (_targetShip != null) _targetShip.OnShipPhysicsUpdated -= RecordFrame;
+            
+            inputReplayWriter?.Close();
+            keyframeReplayWriter?.Close();
+            
+            inputReplayWriter?.Dispose();
+            keyframeReplayWriter?.Dispose();
+            
             _recording = false;
             _ticks = 0;
         }
@@ -84,16 +98,14 @@ namespace Core.Replays {
         private void RecordInputFrame(InputFrameV110 inputFrame) {
             if (Replay is { CanWrite: true }) {
                 var inputFrameBytes = MessagePackSerializer.Serialize(inputFrame);
-                using var bw = new BinaryWriter(Replay.InputFrameStream, Encoding.UTF8, true);
-                bw.Write(inputFrameBytes);
+                inputReplayWriter.Write(inputFrameBytes);
             }
         }
 
         private void RecordKeyFrame(KeyFrame keyFrame) {
             if (Replay is { CanWrite: true }) {
                 var keyFrameBytes = MessagePackSerializer.Serialize(keyFrame);
-                using var bw = new BinaryWriter(Replay.KeyFrameStream, Encoding.UTF8, true);
-                bw.Write(keyFrameBytes);
+                keyframeReplayWriter.Write(keyFrameBytes);
             }
         }
     }
