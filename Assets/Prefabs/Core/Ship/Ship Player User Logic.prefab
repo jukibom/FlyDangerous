@@ -386,6 +386,7 @@ MonoBehaviour:
   inGameUI: {fileID: 4109853613154166522}
   headTracking: {fileID: 3982430373260285006}
   spaceDust: {fileID: 8165869081141078393}
+  reflectionProbe: {fileID: 143719351284919848}
   movementEnabled: 1
   restartEnabled: 1
   pauseMenuEnabled: 1
@@ -433,6 +434,71 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inGameUI: {fileID: 4109853613154166522}
+--- !u!1 &1778400743567020091
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9172184702317213431}
+  - component: {fileID: 143719351284919848}
+  m_Layer: 6
+  m_Name: Reflection Probe
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9172184702317213431
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1778400743567020091}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.15357, y: -0.3666, z: 2.10817}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8165869081144972043}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!215 &143719351284919848
+ReflectionProbe:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1778400743567020091}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Type: 0
+  m_Mode: 1
+  m_RefreshMode: 1
+  m_TimeSlicingMode: 0
+  m_Resolution: 512
+  m_UpdateFrequency: 0
+  m_BoxSize: {x: 10, y: 5, z: 10}
+  m_BoxOffset: {x: 0, y: 0, z: 0}
+  m_NearClip: 0.3
+  m_FarClip: 10000
+  m_ShadowDistance: 100
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 1, g: 1, b: 1, a: 0}
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 30359
+  m_IntensityMultiplier: 1
+  m_BlendDistance: 1.3
+  m_HDR: 1
+  m_BoxProjection: 0
+  m_RenderDynamicObjects: 0
+  m_UseOcclusionCulling: 1
+  m_Importance: 2
+  m_CustomBakedTexture: {fileID: 0}
 --- !u!1 &2188060851464290670
 GameObject:
   m_ObjectHideFlags: 0
@@ -913,7 +979,7 @@ VisualEffect:
       m_Array: []
     m_Vector3f:
       m_Array:
-      - m_Value: {x: 0, y: 0.3666, z: -0.984}
+      - m_Value: {x: 0.15357, y: 0.3666, z: -2.10817}
         m_Name: Camera_position
         m_Overridden: 1
     m_Vector4f:
@@ -1057,6 +1123,7 @@ Transform:
   - {fileID: 8165869082400564574}
   - {fileID: 246730074575786089}
   - {fileID: 318899975679245348}
+  - {fileID: 9172184702317213431}
   m_Father: {fileID: 6133412330555986360}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8165869081206140114
@@ -3736,7 +3803,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 258126194856964286, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: button48  |  VIRPIL Controls 20250313 L-VPCMongoosT50CM3Throttle
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 259773947319006498, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Layer
@@ -3976,7 +4043,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 526694474436525578, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: button32  |  VIRPIL Controls 20250313 L-VPCMongoosT50CM3Throttle
+      value: Button West  |  Gamepad
       objectReference: {fileID: 0}
     - target: {fileID: 530464543852595686, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Layer
@@ -4288,7 +4355,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1018818756883873640, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: button46  |  VIRPIL Controls 20250313 L-VPCMongoosT50CM3Throttle
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 1018818756883873642, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Layer
@@ -4300,7 +4367,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1018818756963085958, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: 2  |  Keyboard
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 1032327609597272297, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Layer
@@ -4864,7 +4931,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1799237938278402254, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: button32  |  VIRPIL Controls 20250313 R-VPCConstellationAlpha
+      value: Button East  |  Gamepad
       objectReference: {fileID: 0}
     - target: {fileID: 1799237938734094626, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Layer
@@ -5440,7 +5507,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2573727877342269697, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: z  |  VIRPIL Controls 20250313 R-VPCConstellationAlpha
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 2573727877342269698, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Layer
@@ -5584,7 +5651,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2683167907044156448, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: stick/x  |  VIRPIL Controls 20250313 L-VPCMongoosT50CM3Throttle
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 2683167907044156451, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Layer
@@ -5984,7 +6051,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2995493771543711015, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: stick/x  |  VIRPIL Controls 20250313 R-VPCConstellationAlpha
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 2995493771592633526, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Layer
@@ -6260,11 +6327,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3321859774452414814, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: F  |  Keyboard
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 3321859774626031792, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: button33  |  VIRPIL Controls 20250313 L-VPCMongoosT50CM3Throttle
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 3321859774626031794, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Layer
@@ -6356,7 +6423,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3403794815109282685, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: ry  |  VIRPIL Controls 20250313 R-VPCConstellationAlpha
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 3403794815322871879, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Layer
@@ -6384,7 +6451,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3403794815848350334, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: rightStick/y  |  XInputControllerWindows
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 3403794816064863394, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Layer
@@ -6808,7 +6875,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3696789938995431766, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: button13  |  VIRPIL Controls 20250313 R-VPCConstellationAlpha
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 3700293330472911287, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Layer
@@ -7200,7 +7267,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3878477238697393319, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: stick/y  |  VIRPIL Controls 20250313 L-VPCMongoosT50CM3Throttle
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 3878477238740483382, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Layer
@@ -7424,7 +7491,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4126948235509426262, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: button17  |  VIRPIL Controls 20250313 R-VPCConstellationAlpha
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 4127659319208977931, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Layer
@@ -7460,7 +7527,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4151728914909075982, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: button21  |  VIRPIL Controls 20250313 L-VPCMongoosT50CM3Throttle
+      value: Button South  |  Gamepad
       objectReference: {fileID: 0}
     - target: {fileID: 4151728915112840162, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Layer
@@ -7708,7 +7775,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4422811264651961171, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: button18  |  VIRPIL Controls 20250313 R-VPCConstellationAlpha
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 4422811265151693503, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Layer
@@ -7888,7 +7955,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4570504677037631955, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: button15  |  VIRPIL Controls 20250313 R-VPCConstellationAlpha
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 4570504677368379455, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Layer
@@ -8144,7 +8211,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4868949296845439780, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: button37  |  VIRPIL Controls 20250313 L-VPCMongoosT50CM3Throttle
+      value: Left Stick Press  |  Gamepad
       objectReference: {fileID: 0}
     - target: {fileID: 4868949296845439782, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Layer
@@ -8848,7 +8915,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5929759507462991017, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: button16  |  VIRPIL Controls 20250313 R-VPCConstellationAlpha
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 5929759507462991019, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Layer
@@ -8896,7 +8963,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6045304927259052852, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: button6  |  VIRPIL Controls 20250313 R-VPCConstellationAlpha
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 6045304927259052854, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Layer
@@ -8908,7 +8975,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6045304927355050714, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: rightStickPress  |  XInputControllerWindows
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 6045304927756244410, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Layer
@@ -9048,7 +9115,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6244687549842556832, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: button16  |  VIRPIL Controls 20250313 L-VPCMongoosT50CM3Throttle
+      value: Select  |  Gamepad
       objectReference: {fileID: 0}
     - target: {fileID: 6244687549842556834, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Layer
@@ -9340,7 +9407,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6617072408512557860, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: stick/y  |  VIRPIL Controls 20250313 R-VPCConstellationAlpha
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 6617072408512557863, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Layer
@@ -9408,11 +9475,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6756506070582194771, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: 1  |  Keyboard
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 6756506071021986749, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: button44  |  VIRPIL Controls 20250313 L-VPCMongoosT50CM3Throttle
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 6756506071021986751, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Layer
@@ -9492,7 +9559,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6802189625389224132, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: rx  |  VIRPIL Controls 20250313 L-VPCMongoosT50CM3Throttle
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 6802189625389224135, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Layer
@@ -9984,7 +10051,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7489490821840112069, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: rx  |  VIRPIL Controls 20250313 R-VPCConstellationAlpha
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 7489490822256669015, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Layer
@@ -9996,7 +10063,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7489490822308999366, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: rightStick/x  |  XInputControllerWindows
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 7489490822409655055, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Layer
@@ -10188,7 +10255,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7767937897854266057, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Text
-      value: button7  |  VIRPIL Controls 20250313 R-VPCConstellationAlpha
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 7767937897854266059, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_Layer
@@ -10733,6 +10800,10 @@ PrefabInstance:
     - target: {fileID: 8586360157964533902, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_SizeDelta.x
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8586360157964533937, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
+      propertyPath: m_Size
+      value: 0.9999999
       objectReference: {fileID: 0}
     - target: {fileID: 8586360158441698770, guid: 974ffa99ad2fb0e45896edea7f7ffd34, type: 3}
       propertyPath: m_AnchorMax.x

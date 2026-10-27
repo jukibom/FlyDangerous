@@ -12,7 +12,6 @@ namespace Core.Player {
         [SerializeField] private GameObject playerLogic;
         [SerializeField] private User user;
         [SerializeField] private ShipPhysics shipPhysics;
-        [SerializeField] private ReflectionProbe reflectionProbe;
 
         public User User => user;
         public ShipPhysics ShipPhysics => shipPhysics;
@@ -67,7 +66,6 @@ namespace Core.Player {
         [SyncVar] private string _trailColor;
         [SyncVar] private string _headLightsColor;
         public Flag PlayerFlag { get; private set; }
-        public ReflectionProbe ReflectionProbe => reflectionProbe;
 
         private bool IsReady => _transform && _serverReady;
 
@@ -107,9 +105,6 @@ namespace Core.Player {
             playerLogic.SetActive(false);
             _transform = transform;
             Rigidbody = GetComponent<Rigidbody>();
-
-            // always disable reflections until explicitly enabled by settings on the local client
-            ReflectionProbe.gameObject.SetActive(false);
         }
 
         private void OnDestroy() {
@@ -147,7 +142,7 @@ namespace Core.Player {
             // move the player logic out into root space due to floating origin
             playerLogic.transform.parent = null;
             DontDestroyOnLoad(playerLogic);
-
+            user.gameObject.SetActive(true);
             user.RegisterIntegrations(shipPhysics);
             
             // register self as floating origin focus

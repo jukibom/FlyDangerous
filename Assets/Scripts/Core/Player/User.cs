@@ -25,6 +25,7 @@ namespace Core.Player {
         [SerializeField] private InGameUI inGameUI;
         [SerializeField] private HeadTrackingManager headTracking;
         [SerializeField] private SpaceDust spaceDust;
+        [SerializeField] private ReflectionProbe reflectionProbe;
 
         [SerializeField] public bool movementEnabled;
         [SerializeField] public bool restartEnabled = true;
@@ -82,6 +83,8 @@ namespace Core.Player {
         }
 
         public InGameUI InGameUI => inGameUI;
+        
+        public ReflectionProbe ReflectionProbe => reflectionProbe;
 
         [CanBeNull]
         public Transform UserCameraTransform =>

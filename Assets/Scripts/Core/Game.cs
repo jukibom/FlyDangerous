@@ -244,7 +244,7 @@ namespace Core {
             var shipPlayer = FdPlayer.FindLocalShipPlayer;
             if (shipPlayer != null) {
                 var reflectionSetting = Preferences.Instance.GetString("graphics-reflections");
-                var reflectionProbe = shipPlayer.ReflectionProbe;
+                var reflectionProbe = shipPlayer.User.ReflectionProbe;
                 reflectionProbe.gameObject.SetActive(reflectionSetting != "off");
                 reflectionProbe.resolution = reflectionSetting switch {
                     "ultra" => 512,
@@ -393,13 +393,13 @@ namespace Core {
                 var water = FindFirstObjectByType<ModifierWater>();
                 if (water != null) {
                     water.gameObject.SetActive(false);
-                    var shouldShowReflectionProbes = ship.ReflectionProbe.gameObject.activeSelf;
-                    ship.ReflectionProbe.gameObject.SetActive(false);
+                    var shouldShowReflectionProbes = ship.User.ReflectionProbe.gameObject.activeSelf;
+                    ship.User.ReflectionProbe.gameObject.SetActive(false);
 
                     yield return new WaitForEndOfFrame();
 
                     water.gameObject.SetActive(true);
-                    ship.ReflectionProbe.gameObject.SetActive(shouldShowReflectionProbes);
+                    ship.User.ReflectionProbe.gameObject.SetActive(shouldShowReflectionProbes);
                 }
 
                 yield return _levelLoader.HideLoadingScreen();
