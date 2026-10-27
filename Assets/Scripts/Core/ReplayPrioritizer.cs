@@ -45,9 +45,10 @@ namespace Core {
             
             var player = FdPlayer.FindLocalShipPlayer;
             if (player) {
+<<<<<<< HEAD
                 player.spectating = true;
-                player.DisableReflections();
-                ghost.EnableReflections();
+=======
+>>>>>>> parent of 5954f29f (Ghost reflections)
                 player.ShipPhysics.AudioListener.enabled = false;
                 player.ShipPhysics.ShipModel?.SetVisible(false);
                 player.User.TargetTransform = ghost.transform;
@@ -65,13 +66,14 @@ namespace Core {
 
                 replayTimeline.ShipReplayObject.ShipPhysics.AudioListener.enabled = false;
                 replayTimeline.ShipReplayObject.SpectatorActive = false;
-                replayTimeline.ShipReplayObject.DisableReflections();
             }
             
             var player = FdPlayer.FindLocalShipPlayer;
             if (player) {
+<<<<<<< HEAD
                 player.spectating = false;
-                player.EnableReflections();
+=======
+>>>>>>> parent of 5954f29f (Ghost reflections)
                 player.ShipPhysics.AudioListener.enabled = true;
                 player.ShipPhysics.ShipModel?.SetVisible(true);
                 player.User.TargetTransform = player.transform;

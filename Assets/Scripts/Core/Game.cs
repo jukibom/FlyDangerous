@@ -128,8 +128,6 @@ namespace Core {
 
         public string Seed => _levelLoader.LoadedLevelData.terrainSeed;
 
-        public string reflectionSetting;
-
         // show certain things if first time hitting the menu
         public bool MenuFirstRun { get; private set; } = true;
 
@@ -245,7 +243,7 @@ namespace Core {
             // reflections
             var shipPlayer = FdPlayer.FindLocalShipPlayer;
             if (shipPlayer != null) {
-                reflectionSetting = Preferences.Instance.GetString("graphics-reflections");
+                var reflectionSetting = Preferences.Instance.GetString("graphics-reflections");
                 var reflectionProbe = shipPlayer.ReflectionProbe;
                 reflectionProbe.gameObject.SetActive(reflectionSetting != "off");
                 reflectionProbe.resolution = reflectionSetting switch {
