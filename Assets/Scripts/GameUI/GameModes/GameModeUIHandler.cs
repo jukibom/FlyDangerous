@@ -55,7 +55,7 @@ namespace GameUI.GameModes {
         }
 
         // Show and hide whatever game mode result screen there is
-        public void ShowResultsScreen(Score score, Score previousBest, bool isValid, string replayFilename, string replayFilepath) {
+        public void ShowResultsScreen(Score score, Score previousBest, bool isValid, string invalidReason, string replayFilename, string replayFilepath) {
             var player = FdPlayer.FindLocalShipPlayer;
             if (player) {
                 player.User.ShipCameraRig.SwitchToEndScreenCamera();
@@ -66,7 +66,7 @@ namespace GameUI.GameModes {
             }
 
             raceResultsScreen.gameObject.SetActive(true);
-            raceResultsScreen.RunLevelComplete(score, previousBest, isValid, replayFilename, replayFilepath);
+            raceResultsScreen.RunLevelComplete(score, previousBest, isValid, invalidReason, replayFilename, replayFilepath);
         }
 
         public void HideResultsScreen() {

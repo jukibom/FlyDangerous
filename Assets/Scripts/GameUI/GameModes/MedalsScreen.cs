@@ -19,6 +19,7 @@ namespace GameUI.GameModes {
         [SerializeField] private GameObject authorMedal;
         [SerializeField] private Text resultDeltaText;
         [SerializeField] private Text resultText;
+        [SerializeField] private Text invallidReasonText;
         [SerializeField] private AudioSource medalDingAudio;
         [SerializeField] private AudioSource medalThudAudio;
         [SerializeField] private AudioSource medalAuthorAudio;
@@ -35,6 +36,7 @@ namespace GameUI.GameModes {
             ClearMedalScreen();
             resultText.text = "";
             resultDeltaText.text = "";
+            invallidReasonText.text = "";
         }
 
         private void ClearMedalScreen() {
@@ -50,10 +52,10 @@ namespace GameUI.GameModes {
         [Button("Test Animation")]
         [UsedImplicitly]
         private void TestAnimation() {
-            StartCoroutine(ShowAnimation(4, true, 32.23f, 30, true));
+            StartCoroutine(ShowAnimation(4, true, 32.23f, 30, true, ""));
         }
 
-        public IEnumerator ShowAnimation(uint medalCount, bool personalBest, float result, float previousResult, bool isValid) {
+        public IEnumerator ShowAnimation(uint medalCount, bool personalBest, float result, float previousResult, bool isValid, string invalidReason) {
             ClearMedalScreen();
 
             if (!isValid) {
@@ -104,6 +106,7 @@ namespace GameUI.GameModes {
 
             if (!isValid) {
                 resultNotValid.SetActive(true);
+                invallidReasonText.text = invalidReason;
                 yield return new WaitForSeconds(1.5f);
             }
         }

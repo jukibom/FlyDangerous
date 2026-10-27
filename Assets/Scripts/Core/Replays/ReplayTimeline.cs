@@ -116,19 +116,34 @@ namespace Core.Replays {
 
                     var inputFrame = InputFrameV110.Deserialize(Replay.Version, ref _inputFrameByteBuffer);
 
+                    ShipReplayObject?.ShipPhysics.OverwriteModifiers(inputFrame.modifierShipForce, inputFrame.modifierShipDeltaSpeedCap,
+                        inputFrame.modifierShipDeltaThrust, inputFrame.modifierShipDrag, inputFrame.modifierShipAngularDrag);
+
                     ShipReplayObject?.ShipPhysics.UpdateShip(inputFrame.pitch, inputFrame.roll, inputFrame.yaw, inputFrame.throttle, inputFrame.lateralH,
                         inputFrame.lateralV, inputFrame.boostHeld, inputFrame.limiterHeld, false, false);
 
                     if (ShipReplayObject?.ShipPhysics.IsNightVisionActive != inputFrame.shipLightsEnabled)
                         ShipReplayObject?.ShipPhysics.NightVisionToggle(inputFrame.shipLightsEnabled, _ => { });
 
-                    ShipReplayObject?.ShipPhysics.OverwriteModifiers(inputFrame.modifierShipForce, inputFrame.modifierShipDeltaSpeedCap,
-                        inputFrame.modifierShipDeltaThrust, inputFrame.modifierShipDrag, inputFrame.modifierShipAngularDrag);
+
+                    if (ShipReplayObject?.SpectatorActive == true ) {
+                        var ShipPhysics = ShipReplayObject.ShipPhysics;
+                        ShipPhysics.GhostCollisionChecks();
+
+                        var velocity = transform.InverseTransformDirection(ShipPhysics.Velocity);
+                        var frameThrust = ShipPhysics.CurrentFrameThrust;
+                        FdPlayer.FindLocalShipPlayer.User.ShipCameraRig.UpdateCameras(velocity, ShipPhysics.FlightParameters.maxSpeed, frameThrust, ShipPhysics.FlightParameters.maxThrust);
+                    }
 
                     _inputTicks++;
                 }
                 else {
                     Debug.Log("Replay finished");
+
+                    // last collition check to see if it hit the final checkpoint
+                    if (ShipReplayObject?.SpectatorActive == true )
+                        ShipReplayObject.ShipPhysics.GhostCollisionChecks();
+
                     Stop();
                 }
             }

@@ -27,6 +27,8 @@ namespace Core {
         }
 
         public void SpectateGhost(ShipGhost ghost) {
+            Game.Instance.GameModeHandler.Invalidate("RESULT NOT VALID - Started Spectating"); 
+
             if (ActiveSpectatedShip != null) {
                 ActiveSpectatedShip.ShipPhysics.ShipModel?.SetVisible(false);
             }
@@ -43,6 +45,7 @@ namespace Core {
             
             var player = FdPlayer.FindLocalShipPlayer;
             if (player) {
+                player.spectating = true;
                 player.ShipPhysics.AudioListener.enabled = false;
                 player.ShipPhysics.ShipModel?.SetVisible(false);
                 player.User.TargetTransform = ghost.transform;
@@ -64,6 +67,7 @@ namespace Core {
             
             var player = FdPlayer.FindLocalShipPlayer;
             if (player) {
+                player.spectating = false;
                 player.ShipPhysics.AudioListener.enabled = true;
                 player.ShipPhysics.ShipModel?.SetVisible(true);
                 player.User.TargetTransform = player.transform;
