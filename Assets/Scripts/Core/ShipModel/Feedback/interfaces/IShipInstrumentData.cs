@@ -8,6 +8,9 @@ namespace Core.ShipModel.Feedback.interfaces {
         // The ship is ready to fly
         public bool ShipActive { get; }
 
+        // The ship is not a player (local or remote)
+        public bool IsGhost { get; }
+
         // The world position coordinates from the world origin
         public Vector3 WorldPosition { get; }
 

@@ -43,6 +43,11 @@ namespace Core.ShipModel {
             _shieldMaterial = shieldMesh.material;
             _shieldImpactMaterial = shieldImpactMesh.material;
             ResetShield();
+            Game.OnRestart += ResetShield;
+        }
+
+        private void OnDestroy() {
+            Game.OnRestart -= ResetShield;
         }
 
         private void FixedUpdate() {
@@ -62,14 +67,6 @@ namespace Core.ShipModel {
             _shieldImpactMaterial.SetFloat(ShieldOffset, _targetTurbulenceOffset);
             _shieldMaterial.SetFloat(ShieldFresnel, _targetFresnel);
             _shieldImpactMaterial.SetVector(ImpactCenter, new Vector4(_targetDirection.x, _targetDirection.y, _targetDirection.z, 0));
-        }
-
-        private void OnEnable() {
-            Game.OnRestart += ResetShield;
-        }
-
-        private void OnDisable() {
-            Game.OnRestart -= ResetShield;
         }
 
         private void ResetShield() {

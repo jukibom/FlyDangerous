@@ -24,6 +24,7 @@ namespace Core.Replays {
             Rigidbody = GetComponent<Rigidbody>();
             ReplayTimeline = GetComponent<ReplayTimeline>();
             shipPhysics.ShipActive = true;
+            shipPhysics.IsGhost = true;
         }
 
         private void Start() {

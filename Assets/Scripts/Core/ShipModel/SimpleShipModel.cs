@@ -7,6 +7,7 @@ using JetBrains.Annotations;
 using Misc;
 using UnityEngine;
 using VFX;
+using Random = UnityEngine.Random;
 #if !NO_PAID_ASSETS
 using GPUInstancer;
 #endif
@@ -216,8 +217,10 @@ namespace Core.ShipModel {
             if (_shipActive != shipInstrumentData.ShipActive) {
                 _shipActive = shipInstrumentData.ShipActive;
 
-                if (_shipActive)
+                if (_shipActive && !shipInstrumentData.IsGhost)
                     this.StopAndStartCoroutine(ref _ignitionSequenceFlickerCoroutine, IgnitionSequenceFlicker());
+                else if (shipInstrumentData.IsGhost)
+                    indicatorCanvas.alpha = 1;
                 else
                     indicatorCanvas.alpha = 0;
             }

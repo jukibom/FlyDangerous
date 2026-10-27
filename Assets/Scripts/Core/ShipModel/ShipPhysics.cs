@@ -74,6 +74,8 @@ namespace Core.ShipModel {
         private float _velocityLimitCap;
 
         public bool ShipActive { get; set; }
+        public bool IsGhost { get; set; }
+        
         public Rigidbody Rigidbody => targetRigidbody;
         public ShipCameraRig ActiveCameraRig { get; set; }
 
@@ -512,6 +514,7 @@ namespace Core.ShipModel {
             var water = ModifierWater.Instance;
 
             _shipInstrumentData.ShipActive = ShipActive;
+            _shipInstrumentData.IsGhost = IsGhost;
             _shipInstrumentData.WorldPosition = absoluteShipPosition;
             _shipInstrumentData.ShipHeightFromGround = Game.Instance.IsTerrainMap && nearestTerrain != null
                 ? absoluteShipPosition.y - nearestTerrain.SampleHeight(shipPosition)
