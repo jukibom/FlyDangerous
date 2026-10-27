@@ -166,7 +166,7 @@ namespace Core.ShipModel.Feedback.ogsa {
                     "body.impact",
                     shipFeedbackData.CollisionImpactNormalised,
                     0.1f,
-                    shipFeedbackData.CollisionDirection);
+                    shipFeedbackData.CollisionDirection.ToNumerics());
 
             if (shipFeedbackData.BoostSpoolStartThisFrame)
                 _publisher.FireEvent("boost.spool", 1f, shipFeedbackData.BoostSpoolTotalDurationSeconds);
