@@ -2,9 +2,13 @@
 
 namespace Misc {
     public static class TransformExtensions {
-        public static void SetLayer(this Transform trans, int layer) {
-            trans.gameObject.layer = layer;
-            foreach (Transform child in trans) child.SetLayer(layer);
+        public static void SetLayer(this Transform t, int layer) {
+            t.gameObject.layer = layer;
+            foreach (Transform child in t) child.SetLayer(layer);
+        }
+
+        public static Transform RootTransform(this Transform t) {
+            return t.parent != null ? RootTransform(t.parent) : t;
         }
     }
 }

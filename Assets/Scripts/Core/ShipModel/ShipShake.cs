@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Core.Player;
+using Misc;
 using UnityEngine;
 
 namespace Core.ShipModel {
@@ -18,15 +19,11 @@ namespace Core.ShipModel {
         private readonly float _cameraShakeMultiplier = 50;
         private readonly Vector3 _originalPos;
         private readonly List<Shake> _shakes = new();
-        private readonly ShipCameraRig _shipCameraRig;
-
         private readonly Transform _shipTransform;
 
-        public ShipShake(Transform shipTransform, ShipCameraRig shipCameraRig) {
+        public ShipShake(Transform shipTransform) {
             _shipTransform = shipTransform;
             _originalPos = _shipTransform.localPosition;
-
-            _shipCameraRig = shipCameraRig;
         }
 
         public float CurrentShakeAmount { get; private set; }
@@ -66,7 +63,8 @@ namespace Core.ShipModel {
 
             // apply shakes
             _shipTransform.localPosition = _originalPos + Random.insideUnitSphere * Mathf.Min(_maxShake, CurrentShakeAmount);
-            _shipCameraRig.SetShakeEffect(Mathf.Min(_maxCameraShake, CurrentCameraShakeAmount));
+            if (FdPlayer.LocalShipPlayer.User.TargetTransform == _shipTransform.RootTransform()) 
+                ShipCameraRig.Instance?.SetShakeEffect(Mathf.Min(_maxCameraShake, CurrentCameraShakeAmount));
 
             // clear defunct shakes
             _shakes.RemoveAll(shake => shake.timer <= 0);

@@ -7,8 +7,8 @@ using Gameplay;
 using JetBrains.Annotations;
 using NaughtyAttributes;
 using UnityEngine;
-using UnityEngine.Serialization;
 using CameraType = Gameplay.CameraType;
+using Random = UnityEngine.Random;
 
 namespace Core.Player {
     public enum CameraPositionUpdate {
@@ -17,6 +17,8 @@ namespace Core.Player {
     }
 
     public class ShipCameraRig : MonoBehaviour {
+        public static ShipCameraRig Instance { get; private set; }
+        
         private static readonly Vector3 BaseTargetPosition = new(0, 0, 20);
 
         [SerializeField] private User user;
@@ -67,6 +69,10 @@ namespace Core.Player {
             
             endScreenCamera1.gameObject.SetActive(false);
             endScreenCamera2.gameObject.SetActive(false);
+        }
+
+        private void Awake() {
+            Instance = this;
         }
 
         private void Start() {

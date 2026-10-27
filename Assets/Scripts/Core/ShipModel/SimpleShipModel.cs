@@ -102,6 +102,10 @@ namespace Core.ShipModel {
             return this;
         }
 
+        private void Awake() {
+            ShipShake = new ShipShake(transform);
+        }
+
         public void SetVisible(bool visible) {
             drawableContainer.SetActive(visible);
         }
@@ -115,7 +119,6 @@ namespace Core.ShipModel {
             assistDeactivateAudioSource.priority = isLocalPlayer ? 1 : 128;
             velocityLimitActivateAudioSource.priority = isLocalPlayer ? 1 : 128;
             velocityLimitDeactivateAudioSource.priority = isLocalPlayer ? 1 : 128;
-            if (isLocalPlayer) ShipShake = new ShipShake(transform, ShipCameraRig);
         }
 
         #region IShip Basic Functions
