@@ -49,13 +49,13 @@ namespace FdUI {
         }
 
         public void LogMessage(string message) {
+            Debug.Log(message);
             if (logEntry == null) return;
 
             logEntry.text = "";
             _logQueue.Enqueue(message);
             if (_logQueue.Count > maxLineHistory) _logQueue.Dequeue();
             foreach (var logLine in _logQueue) logEntry.text += logLine + "\n";
-            Debug.Log(message);
 
             ScrollToBottom();
         }
