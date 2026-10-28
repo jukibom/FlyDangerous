@@ -17,9 +17,9 @@ namespace GameUI.GameModes {
         [SerializeField] private GameObject silverMedal;
         [SerializeField] private GameObject goldMedal;
         [SerializeField] private GameObject authorMedal;
-        [SerializeField] private Text resultDeltaText;
-        [SerializeField] private Text resultText;
-        [SerializeField] private Text invallidReasonText;
+        [SerializeField] private TMPro.TMP_Text resultDeltaText;
+        [SerializeField] private TMPro.TMP_Text resultText;
+        [SerializeField] private TMPro.TMP_Text invallidReasonText;
         [SerializeField] private AudioSource medalDingAudio;
         [SerializeField] private AudioSource medalThudAudio;
         [SerializeField] private AudioSource medalAuthorAudio;

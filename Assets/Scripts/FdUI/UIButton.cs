@@ -13,7 +13,7 @@ namespace FdUI {
         public delegate void OnButtonUnHighlightedAction(UIButton caller);
 
         [SerializeField] public Button button;
-        [SerializeField] public Text label;
+        [SerializeField] public TMPro.TMP_Text label;
 
         public void OnDeselect(BaseEventData eventData) {
             OnButtonUnHighlightedEvent?.Invoke(this);

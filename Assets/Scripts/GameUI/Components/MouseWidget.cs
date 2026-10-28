@@ -12,9 +12,9 @@ namespace Game_UI {
         [SerializeField] private GameObject deadzone;
         [SerializeField] private GameObject extents;
         [SerializeField] private GameObject inputText;
-        [SerializeField] private Text xText;
-        [SerializeField] private Text yText;
-        [SerializeField] private Text magText;
+        [SerializeField] private TMPro.TMP_Text xText;
+        [SerializeField] private TMPro.TMP_Text yText;
+        [SerializeField] private TMPro.TMP_Text magText;
 
         [FormerlySerializedAs("mousePositionNormalised")]
         public Vector2 widgetPositionNormalized = Vector2.zero;

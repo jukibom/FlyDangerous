@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace FdUI {
     public class FdSlider : MonoBehaviour, IMoveHandler {
-        [SerializeField] private InputField numberTextBox;
+        [SerializeField] private TMPro.TMP_InputField numberTextBox;
         [SerializeField] private Slider slider;
         [SerializeField] private float minValue;
         [SerializeField] private float maxValue;

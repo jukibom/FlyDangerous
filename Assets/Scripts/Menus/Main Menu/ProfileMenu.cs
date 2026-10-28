@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Core;
@@ -16,14 +16,14 @@ namespace Menus.Main_Menu {
     public class ProfileMenu : MenuBase {
         [SerializeField] private SpriteAtlas flagSpriteAtlas;
 
-        [SerializeField] private InputField playerNameTextField;
-        [SerializeField] private Dropdown countryDropdown;
+        [SerializeField] private TMPro.TMP_InputField playerNameTextField;
+        [SerializeField] private TMPro.TMP_Dropdown countryDropdown;
 
         [SerializeField] private ShipSelectionRenderer shipSelectionRenderer;
-        [SerializeField] private Text shipName;
-        [SerializeField] private Text shipDescription;
+        [SerializeField] private TMPro.TMP_Text shipName;
+        [SerializeField] private TMPro.TMP_Text shipDescription;
 
-        [SerializeField] private Text shipCounter;
+        [SerializeField] private TMPro.TMP_Text shipCounter;
         [SerializeField] private UIButton nextButton;
         [SerializeField] private UIButton prevButton;
 

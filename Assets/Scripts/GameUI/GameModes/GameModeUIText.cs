@@ -15,15 +15,15 @@ namespace GameUI.GameModes {
         [SerializeField] private CanvasGroup centralCanvasGroup;
         [SerializeField] private CanvasGroup centralNotificationCanvasGroup;
 
-        [SerializeField] private Text topHeader;
-        [SerializeField] private Text topSubHeader;
-        [SerializeField] private Text topLeftHeader;
-        [SerializeField] private Text topLeftContent;
-        [SerializeField] private Text topRightHeader;
-        [SerializeField] private Text topRightContent;
-        [SerializeField] private Text centralHeader;
-        [SerializeField] private Text centralContent;
-        [SerializeField] private Text centralNotification;
+        [SerializeField] private TMPro.TMP_Text topHeader;
+        [SerializeField] private TMPro.TMP_Text topSubHeader;
+        [SerializeField] private TMPro.TMP_Text topLeftHeader;
+        [SerializeField] private TMPro.TMP_Text topLeftContent;
+        [SerializeField] private TMPro.TMP_Text topRightHeader;
+        [SerializeField] private TMPro.TMP_Text topRightContent;
+        [SerializeField] private TMPro.TMP_Text centralHeader;
+        [SerializeField] private TMPro.TMP_Text centralContent;
+        [SerializeField] private TMPro.TMP_Text centralNotification;
 
         private CanvasGroup _canvasGroup;
 
@@ -33,15 +33,15 @@ namespace GameUI.GameModes {
         public CanvasGroup CentralCanvasGroup => centralCanvasGroup;
         public CanvasGroup CentralNotificationCanvasGroup => centralNotificationCanvasGroup;
 
-        public Text TopHeader => topHeader;
-        public Text TopSubHeader => topSubHeader;
-        public Text TopLeftHeader => topLeftHeader;
-        public Text TopLeftContent => topLeftContent;
-        public Text TopRightHeader => topRightHeader;
-        public Text TopRightContent => topRightContent;
-        public Text CentralHeader => centralHeader;
-        public Text CentralContent => centralContent;
-        public Text CentralNotification => centralNotification;
+        public TMPro.TMP_Text TopHeader => topHeader;
+        public TMPro.TMP_Text TopSubHeader => topSubHeader;
+        public TMPro.TMP_Text TopLeftHeader => topLeftHeader;
+        public TMPro.TMP_Text TopLeftContent => topLeftContent;
+        public TMPro.TMP_Text TopRightHeader => topRightHeader;
+        public TMPro.TMP_Text TopRightContent => topRightContent;
+        public TMPro.TMP_Text CentralHeader => centralHeader;
+        public TMPro.TMP_Text CentralContent => centralContent;
+        public TMPro.TMP_Text CentralNotification => centralNotification;
 
         private void OnEnable() {
             _canvasGroup = GetComponent<CanvasGroup>();

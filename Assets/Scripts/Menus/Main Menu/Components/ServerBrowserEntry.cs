@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Audio;
 using Core;
 using Core.OnlineServices;
@@ -8,9 +8,9 @@ using UnityEngine.UI;
 namespace Menus.Main_Menu.Components {
     public class ServerBrowserEntry : MonoBehaviour {
         [SerializeField] private LoadingSpinner loadingSpinner;
-        [SerializeField] private Text serverName;
-        [SerializeField] private Text gameMode;
-        [SerializeField] private Text players;
+        [SerializeField] private TMPro.TMP_Text serverName;
+        [SerializeField] private TMPro.TMP_Text gameMode;
+        [SerializeField] private TMPro.TMP_Text players;
         [SerializeField] private Button joinButton;
         private LobbyInfo _lobbyInfo;
 

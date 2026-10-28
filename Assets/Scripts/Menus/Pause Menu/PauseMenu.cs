@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using Core;
 using Core.Player;
 using FdUI;
@@ -13,8 +13,8 @@ using UnityEngine.UI;
 namespace Menus.Pause_Menu {
     public class PauseMenu : MenuBase {
         [SerializeField] private OptionsMenu optionsPanel;
-        [SerializeField] private Text copyConfirmationText;
-        [SerializeField] private Text seedText;
+        [SerializeField] private TMPro.TMP_Text copyConfirmationText;
+        [SerializeField] private TMPro.TMP_Text seedText;
 
         [SerializeField] private PauseSystem pauseSystem;
 

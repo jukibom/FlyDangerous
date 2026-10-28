@@ -40,15 +40,15 @@ namespace Misc {
 
         public static void PopulateDropDown<T>(
             IEnumerable<T> enums,
-            Dropdown dropdown,
+            TMPro.TMP_Dropdown dropdown,
             Func<T, string>? textTransform = null,
             Func<T, Sprite>? useIcon = null
         ) where T : IFdEnum {
-            var newOptions = new List<Dropdown.OptionData>();
+            var newOptions = new List<TMPro.TMP_Dropdown.OptionData>();
 
             foreach (var option in enums) {
                 var dropDownOption = textTransform != null ? textTransform(option) : option.Name;
-                var data = new Dropdown.OptionData(dropDownOption);
+                var data = new TMPro.TMP_Dropdown.OptionData(dropDownOption);
 
                 if (useIcon != null) {
                     var icon = useIcon(option);

@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using Core.ShipModel.Feedback.interfaces;
 using Misc;
 using UnityEngine;
@@ -6,9 +6,9 @@ using UnityEngine.UI;
 
 namespace Core.ShipModel {
     public class PuffinShipModel : SimpleShipModel {
-        [SerializeField] private Text velocityIndicator;
+        [SerializeField] private TMPro.TMP_Text velocityIndicator;
         [SerializeField] private Image accelerationBar;
-        [SerializeField] private Text boostIndicator;
+        [SerializeField] private TMPro.TMP_Text boostIndicator;
         [SerializeField] private Image boostCapacitorBar;
 
         public override void OnShipInstrumentUpdate(IShipInstrumentData shipInstrumentData) {

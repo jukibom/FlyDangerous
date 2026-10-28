@@ -18,7 +18,7 @@ namespace Menus.Main_Menu.Components {
         public delegate void OnLevelSelectedAction();
 
         [SerializeField] private TabGroup tabGroup;
-        [SerializeField] private Text footer;
+        [SerializeField] private TMPro.TMP_Text footer;
         [SerializeField] private LevelUIElement levelUIElementPrefab;
         [SerializeField] private RectTransform levelPrefabContainer;
         [SerializeField] private LevelDetails levelDetails;

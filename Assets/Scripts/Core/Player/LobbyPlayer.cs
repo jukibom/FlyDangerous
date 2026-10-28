@@ -15,8 +15,8 @@ namespace Core.Player {
         [SyncVar(hook = nameof(OnReadyStatusChanged))]
         public bool isReady;
 
-        [SerializeField] private Text playerNameLabel;
-        [SerializeField] private InputField playerNameTextEntry;
+        [SerializeField] private TMPro.TMP_Text playerNameLabel;
+        [SerializeField] private TMPro.TMP_InputField playerNameTextEntry;
         [SerializeField] private RawImage readyStatus;
 
         private LobbyMenu _lobby;

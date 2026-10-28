@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using Core.ShipModel.Feedback.interfaces;
 using Misc;
 using UnityEngine;
@@ -10,31 +10,31 @@ namespace Core.ShipModel {
 
         [SerializeField] private GameObject overchargeWarningLight;
         [SerializeField] private GameObject overchargeWarning;
-        [SerializeField] private Text overchargeAmountText;
+        [SerializeField] private TMPro.TMP_Text overchargeAmountText;
 
         [SerializeField] private Light proximityWarningLight;
         [SerializeField] private GameObject proximityWarning;
 
-        [SerializeField] private Text velocityIndicatorText;
+        [SerializeField] private TMPro.TMP_Text velocityIndicatorText;
         [SerializeField] private Image accelerationBar;
 
-        [SerializeField] private Text boostIndicatorText;
+        [SerializeField] private TMPro.TMP_Text boostIndicatorText;
         [SerializeField] private Image boostCapacitorBar;
 
-        [SerializeField] private Text boostChargeText;
+        [SerializeField] private TMPro.TMP_Text boostChargeText;
         [SerializeField] private Image boostReadyIcon;
 
         [SerializeField] private Image vectorAssistIcon;
-        [SerializeField] private Text vectorAssistText;
+        [SerializeField] private TMPro.TMP_Text vectorAssistText;
 
         [SerializeField] private Image rotationalAssistIcon;
-        [SerializeField] private Text rotationAssistText;
+        [SerializeField] private TMPro.TMP_Text rotationAssistText;
 
         [SerializeField] private Image velocityLimiterIcon;
-        [SerializeField] private Text velocityLimiterText;
+        [SerializeField] private TMPro.TMP_Text velocityLimiterText;
 
         [SerializeField] private Image shipLightIcon;
-        [SerializeField] private Text gForceNumberText;
+        [SerializeField] private TMPro.TMP_Text gForceNumberText;
 
         private readonly Color32 _activeColor = new(0, 153, 225, 255);
         private readonly Color32 _disabledColor = new(39, 72, 91, 255);

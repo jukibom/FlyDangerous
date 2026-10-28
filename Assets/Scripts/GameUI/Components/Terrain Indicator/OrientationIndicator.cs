@@ -20,13 +20,13 @@ namespace GameUI.Components.Terrain_Indicator {
         private Transform yawElementsRight;
 
         [Tooltip("Text field for pitch (left side)")] [SerializeField]
-        private Text pitchTextLeft;
+        private TMPro.TMP_Text pitchTextLeft;
 
         [Tooltip("Text field for pitch (right side)")] [SerializeField]
-        private Text pitchTextRight;
+        private TMPro.TMP_Text pitchTextRight;
 
         [Tooltip("Text field for yaw")] [SerializeField]
-        private Text yawText;
+        private TMPro.TMP_Text yawText;
 
         [Tooltip("List of all UI Image elements to NOT override the color with (i.e. mask images)")] [SerializeField]
         private List<Image> excludedUIColorImages;
@@ -109,7 +109,7 @@ namespace GameUI.Components.Terrain_Indicator {
                     image.color = color;
                 }
 
-            foreach (var text in GetComponentsInChildren<Text>(true)) text.color = uiColor;
+            foreach (var text in GetComponentsInChildren<TMPro.TMP_Text>(true)) text.color = uiColor;
         }
     }
 }

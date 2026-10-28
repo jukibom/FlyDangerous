@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace FdUI {
     public class LevelUIElement : MonoBehaviour {
-        [SerializeField] private Text levelName;
+        [SerializeField] private TMPro.TMP_Text levelName;
         [SerializeField] private Image thumbnail;
         [SerializeField] private Image bronzeMedal;
         [SerializeField] private Image silverMedal;

@@ -9,11 +9,11 @@ namespace Menus.Main_Menu {
         [SerializeField] private ConnectingDialog connectingDialog;
 
         [Header("Input Fields")] [SerializeField]
-        private InputField playerName;
+        private TMPro.TMP_InputField playerName;
 
-        [SerializeField] private InputField serverIPAddress;
-        [SerializeField] private InputField serverPort;
-        [SerializeField] private InputField serverPassword;
+        [SerializeField] private TMPro.TMP_InputField serverIPAddress;
+        [SerializeField] private TMPro.TMP_InputField serverPort;
+        [SerializeField] private TMPro.TMP_InputField serverPassword;
 
         private void OnEnable() {
             playerName.interactable = !Player.IsUsingOnlineName;
@@ -42,8 +42,8 @@ namespace Menus.Main_Menu {
             OnTextEntryChange();
             Progress(connectingDialog);
 
-            var hostAddress = serverIPAddress.text.Length > 0 ? serverIPAddress.text : serverIPAddress.placeholder.GetComponent<Text>().text;
-            var port = serverPort.text.Length > 0 ? serverPort.text : serverPort.placeholder.GetComponent<Text>().text;
+            var hostAddress = serverIPAddress.text.Length > 0 ? serverIPAddress.text : serverIPAddress.placeholder.GetComponent<TMPro.TMP_Text>().text;
+            var port = serverPort.text.Length > 0 ? serverPort.text : serverPort.placeholder.GetComponent<TMPro.TMP_Text>().text;
             Debug.Log("Connecting to " + hostAddress + ":" + port);
             connectingDialog.Connect(lobbyMenu, hostAddress, port, serverPassword.text);
         }

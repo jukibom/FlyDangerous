@@ -4,8 +4,8 @@ using UnityEngine.UI;
 namespace Core {
     public class LoadingRoom : MonoBehaviour {
         [SerializeField] private Canvas loadingCanvas;
-        [SerializeField] private Text centreDynamicLoadingText;
-        [SerializeField] private Text footerDynamicLoadingText;
+        [SerializeField] private TMPro.TMP_Text centreDynamicLoadingText;
+        [SerializeField] private TMPro.TMP_Text footerDynamicLoadingText;
 
         public string CenterLoadingText {
             get => centreDynamicLoadingText.text;

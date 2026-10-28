@@ -9,9 +9,9 @@ using UnityEngine.UI;
 
 namespace Menus.Main_Menu {
     public class LoadCustomMenu : MenuBase {
-        [SerializeField] private InputField mapInfo;
-        [SerializeField] private InputField saveInput;
-        [SerializeField] private Text saveWarning;
+        [SerializeField] private TMPro.TMP_InputField mapInfo;
+        [SerializeField] private TMPro.TMP_InputField saveInput;
+        [SerializeField] private TMPro.TMP_Text saveWarning;
         [SerializeField] private Button startButton;
         [CanBeNull] private LevelData _levelData;
 

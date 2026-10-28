@@ -10,10 +10,10 @@ using UnityEngine.UI;
 
 namespace Menus.Main_Menu.Components {
     public class LeaderboardEntry : MonoBehaviour {
-        [SerializeField] private Text rank;
-        [SerializeField] private Text playerName;
+        [SerializeField] private TMPro.TMP_Text rank;
+        [SerializeField] private TMPro.TMP_Text playerName;
         [SerializeField] private FlagIcon flagIcon;
-        [SerializeField] private Text score;
+        [SerializeField] private TMPro.TMP_Text score;
         [SerializeField] private Button downloadButton;
 
         [CanBeNull] private ILeaderboardEntry _entry;

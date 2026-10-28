@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace FdUI {
-    [RequireComponent(typeof(Text))]
+    [RequireComponent(typeof(TMPro.TMP_Text))]
     public class TextFlash : MonoBehaviour {
         [SerializeField] private Color color1 = Color.black;
         [SerializeField] private Color color2 = Color.white;
@@ -13,7 +13,7 @@ namespace FdUI {
 
         private readonly int _direction = 1;
 
-        private Text _text;
+        private TMPro.TMP_Text _text;
         private float _timeCurrent;
 
         private void Update() {
@@ -23,7 +23,7 @@ namespace FdUI {
         }
 
         private void OnEnable() {
-            _text = GetComponent<Text>();
+            _text = GetComponent<TMPro.TMP_Text>();
         }
     }
 }

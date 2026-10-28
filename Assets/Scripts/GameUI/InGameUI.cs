@@ -34,7 +34,7 @@ namespace GameUI {
         private List<Image> colourTintImages;
 
         [Tooltip("All text in the UI which respect the users' UI color preference")] [SerializeField]
-        private List<Text> colourTintTextElements;
+        private List<TMPro.TMP_Text> colourTintTextElements;
 
         private Camera uiCamera;
 

@@ -6,35 +6,35 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class DevPanel : MonoBehaviour {
-    [SerializeField] private InputField massTextField;
-    [SerializeField] private InputField maxSpeedTextField;
-    [SerializeField] private InputField maxBoostSpeedTextField;
-    [SerializeField] private InputField maxThrustTextField;
-    [SerializeField] private InputField maxAngularVelocityTextField;
-    [SerializeField] private InputField dragTextField;
-    [SerializeField] private InputField angularDragTextField;
-    [SerializeField] private InputField torqueThrustMultiplierTextField;
-    [SerializeField] private InputField throttleMultiplierTextField;
-    [SerializeField] private InputField latHMultiplierTextField;
-    [SerializeField] private InputField latVMultiplierTextField;
-    [SerializeField] private InputField pitchMultiplierTextField;
-    [SerializeField] private InputField rollMultiplierTextField;
-    [SerializeField] private InputField yawMultiplierTextField;
-    [SerializeField] private InputField thrustBoostMultiplierTextField;
-    [SerializeField] private InputField torqueBoostMultiplierTextField;
-    [SerializeField] private InputField totalBoostTimeTextField;
-    [SerializeField] private InputField totalBoostRotationalTimeTextField;
-    [SerializeField] private InputField boostMaxSpeedDropOffTimeTextField;
-    [SerializeField] private InputField boostRechargeTimeTextField;
-    [SerializeField] private InputField boostCapacitorCostTextField;
-    [SerializeField] private InputField boostCapacitorRechargeRateTextField;
-    [SerializeField] private InputField boostMaxDivertablePowerTextField;
-    [SerializeField] private InputField intertialTensorMultiplierTextField;
-    [SerializeField] private InputField minUserLimitedVelocityTextField;
+    [SerializeField] private TMPro.TMP_InputField massTextField;
+    [SerializeField] private TMPro.TMP_InputField maxSpeedTextField;
+    [SerializeField] private TMPro.TMP_InputField maxBoostSpeedTextField;
+    [SerializeField] private TMPro.TMP_InputField maxThrustTextField;
+    [SerializeField] private TMPro.TMP_InputField maxAngularVelocityTextField;
+    [SerializeField] private TMPro.TMP_InputField dragTextField;
+    [SerializeField] private TMPro.TMP_InputField angularDragTextField;
+    [SerializeField] private TMPro.TMP_InputField torqueThrustMultiplierTextField;
+    [SerializeField] private TMPro.TMP_InputField throttleMultiplierTextField;
+    [SerializeField] private TMPro.TMP_InputField latHMultiplierTextField;
+    [SerializeField] private TMPro.TMP_InputField latVMultiplierTextField;
+    [SerializeField] private TMPro.TMP_InputField pitchMultiplierTextField;
+    [SerializeField] private TMPro.TMP_InputField rollMultiplierTextField;
+    [SerializeField] private TMPro.TMP_InputField yawMultiplierTextField;
+    [SerializeField] private TMPro.TMP_InputField thrustBoostMultiplierTextField;
+    [SerializeField] private TMPro.TMP_InputField torqueBoostMultiplierTextField;
+    [SerializeField] private TMPro.TMP_InputField totalBoostTimeTextField;
+    [SerializeField] private TMPro.TMP_InputField totalBoostRotationalTimeTextField;
+    [SerializeField] private TMPro.TMP_InputField boostMaxSpeedDropOffTimeTextField;
+    [SerializeField] private TMPro.TMP_InputField boostRechargeTimeTextField;
+    [SerializeField] private TMPro.TMP_InputField boostCapacitorCostTextField;
+    [SerializeField] private TMPro.TMP_InputField boostCapacitorRechargeRateTextField;
+    [SerializeField] private TMPro.TMP_InputField boostMaxDivertablePowerTextField;
+    [SerializeField] private TMPro.TMP_InputField intertialTensorMultiplierTextField;
+    [SerializeField] private TMPro.TMP_InputField minUserLimitedVelocityTextField;
     [SerializeField] private Checkbox useAltBoostersCheckbox;
-    [SerializeField] private InputField boosterForceMultiplierTextField;
-    [SerializeField] private InputField boosterVelocityMultiplierTextField;
-    [SerializeField] private InputField boosterThrustMultiplierTextField;
+    [SerializeField] private TMPro.TMP_InputField boosterForceMultiplierTextField;
+    [SerializeField] private TMPro.TMP_InputField boosterVelocityMultiplierTextField;
+    [SerializeField] private TMPro.TMP_InputField boosterThrustMultiplierTextField;
 
     private bool _initialised;
 
@@ -42,62 +42,62 @@ public class DevPanel : MonoBehaviour {
     private void Start() {
         var defaults = ShipParameters.Defaults;
 
-        massTextField.placeholder.GetComponent<Text>().text =
+        massTextField.placeholder.GetComponent<TMPro.TMP_Text>().text =
             defaults.mass.ToString(CultureInfo.InvariantCulture);
-        maxSpeedTextField.placeholder.GetComponent<Text>().text =
+        maxSpeedTextField.placeholder.GetComponent<TMPro.TMP_Text>().text =
             defaults.maxSpeed.ToString(CultureInfo.InvariantCulture);
-        maxBoostSpeedTextField.placeholder.GetComponent<Text>().text =
+        maxBoostSpeedTextField.placeholder.GetComponent<TMPro.TMP_Text>().text =
             defaults.maxBoostSpeed.ToString(CultureInfo.InvariantCulture);
-        maxThrustTextField.placeholder.GetComponent<Text>().text =
+        maxThrustTextField.placeholder.GetComponent<TMPro.TMP_Text>().text =
             defaults.maxThrust.ToString(CultureInfo.InvariantCulture);
-        maxAngularVelocityTextField.placeholder.GetComponent<Text>().text =
+        maxAngularVelocityTextField.placeholder.GetComponent<TMPro.TMP_Text>().text =
             defaults.maxAngularVelocity.ToString(CultureInfo.InvariantCulture);
-        dragTextField.placeholder.GetComponent<Text>().text =
+        dragTextField.placeholder.GetComponent<TMPro.TMP_Text>().text =
             defaults.drag.ToString(CultureInfo.InvariantCulture);
-        angularDragTextField.placeholder.GetComponent<Text>().text =
+        angularDragTextField.placeholder.GetComponent<TMPro.TMP_Text>().text =
             defaults.angularDrag.ToString(CultureInfo.InvariantCulture);
-        torqueThrustMultiplierTextField.placeholder.GetComponent<Text>().text =
+        torqueThrustMultiplierTextField.placeholder.GetComponent<TMPro.TMP_Text>().text =
             defaults.torqueThrustMultiplier.ToString(CultureInfo.InvariantCulture);
-        throttleMultiplierTextField.placeholder.GetComponent<Text>().text =
+        throttleMultiplierTextField.placeholder.GetComponent<TMPro.TMP_Text>().text =
             defaults.throttleMultiplier.ToString(CultureInfo.InvariantCulture);
-        latHMultiplierTextField.placeholder.GetComponent<Text>().text =
+        latHMultiplierTextField.placeholder.GetComponent<TMPro.TMP_Text>().text =
             defaults.latHMultiplier.ToString(CultureInfo.InvariantCulture);
-        latVMultiplierTextField.placeholder.GetComponent<Text>().text =
+        latVMultiplierTextField.placeholder.GetComponent<TMPro.TMP_Text>().text =
             defaults.latVMultiplier.ToString(CultureInfo.InvariantCulture);
-        pitchMultiplierTextField.placeholder.GetComponent<Text>().text =
+        pitchMultiplierTextField.placeholder.GetComponent<TMPro.TMP_Text>().text =
             defaults.pitchMultiplier.ToString(CultureInfo.InvariantCulture);
-        rollMultiplierTextField.placeholder.GetComponent<Text>().text =
+        rollMultiplierTextField.placeholder.GetComponent<TMPro.TMP_Text>().text =
             defaults.rollMultiplier.ToString(CultureInfo.InvariantCulture);
-        yawMultiplierTextField.placeholder.GetComponent<Text>().text =
+        yawMultiplierTextField.placeholder.GetComponent<TMPro.TMP_Text>().text =
             defaults.yawMultiplier.ToString(CultureInfo.InvariantCulture);
-        thrustBoostMultiplierTextField.placeholder.GetComponent<Text>().text =
+        thrustBoostMultiplierTextField.placeholder.GetComponent<TMPro.TMP_Text>().text =
             defaults.thrustBoostMultiplier.ToString(CultureInfo.InvariantCulture);
-        torqueBoostMultiplierTextField.placeholder.GetComponent<Text>().text =
+        torqueBoostMultiplierTextField.placeholder.GetComponent<TMPro.TMP_Text>().text =
             defaults.torqueBoostMultiplier.ToString(CultureInfo.InvariantCulture);
-        totalBoostTimeTextField.placeholder.GetComponent<Text>().text =
+        totalBoostTimeTextField.placeholder.GetComponent<TMPro.TMP_Text>().text =
             defaults.totalBoostTime.ToString(CultureInfo.InvariantCulture);
-        totalBoostRotationalTimeTextField.placeholder.GetComponent<Text>().text =
+        totalBoostRotationalTimeTextField.placeholder.GetComponent<TMPro.TMP_Text>().text =
             defaults.totalBoostRotationalTime.ToString(CultureInfo.InvariantCulture);
-        boostMaxSpeedDropOffTimeTextField.placeholder.GetComponent<Text>().text =
+        boostMaxSpeedDropOffTimeTextField.placeholder.GetComponent<TMPro.TMP_Text>().text =
             defaults.boostMaxSpeedDropOffTime.ToString(CultureInfo.InvariantCulture);
-        boostMaxDivertablePowerTextField.placeholder.GetComponent<Text>().text =
+        boostMaxDivertablePowerTextField.placeholder.GetComponent<TMPro.TMP_Text>().text =
             defaults.boostMaxDivertablePower.ToString(CultureInfo.InvariantCulture);
-        boostRechargeTimeTextField.placeholder.GetComponent<Text>().text =
+        boostRechargeTimeTextField.placeholder.GetComponent<TMPro.TMP_Text>().text =
             defaults.boostRechargeTime.ToString(CultureInfo.InvariantCulture);
-        boostCapacitorCostTextField.placeholder.GetComponent<Text>().text =
+        boostCapacitorCostTextField.placeholder.GetComponent<TMPro.TMP_Text>().text =
             defaults.boostCapacitorPercentCost.ToString(CultureInfo.InvariantCulture);
-        boostCapacitorRechargeRateTextField.placeholder.GetComponent<Text>().text =
+        boostCapacitorRechargeRateTextField.placeholder.GetComponent<TMPro.TMP_Text>().text =
             defaults.boostCapacityPercentChargeRate.ToString(CultureInfo.InvariantCulture);
-        intertialTensorMultiplierTextField.placeholder.GetComponent<Text>().text =
+        intertialTensorMultiplierTextField.placeholder.GetComponent<TMPro.TMP_Text>().text =
             defaults.inertiaTensorMultiplier.ToString(CultureInfo.InvariantCulture);
-        minUserLimitedVelocityTextField.placeholder.GetComponent<Text>().text =
+        minUserLimitedVelocityTextField.placeholder.GetComponent<TMPro.TMP_Text>().text =
             defaults.minUserLimitedVelocity.ToString(CultureInfo.InvariantCulture);
         useAltBoostersCheckbox.isChecked = defaults.useAltBoosters;
-        boosterForceMultiplierTextField.placeholder.GetComponent<Text>().text =
+        boosterForceMultiplierTextField.placeholder.GetComponent<TMPro.TMP_Text>().text =
             defaults.boosterForceMultiplier.ToString(CultureInfo.InvariantCulture);
-        boosterVelocityMultiplierTextField.placeholder.GetComponent<Text>().text =
+        boosterVelocityMultiplierTextField.placeholder.GetComponent<TMPro.TMP_Text>().text =
             defaults.boosterVelocityMultiplier.ToString(CultureInfo.InvariantCulture);
-        boosterThrustMultiplierTextField.placeholder.GetComponent<Text>().text =
+        boosterThrustMultiplierTextField.placeholder.GetComponent<TMPro.TMP_Text>().text =
             defaults.boosterThrustMultiplier.ToString(CultureInfo.InvariantCulture);
 
         UpdateTextFields(Game.Instance.ShipParameters);

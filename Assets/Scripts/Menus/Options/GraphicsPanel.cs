@@ -4,8 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class GraphicsPanel : MonoBehaviour {
-    [SerializeField] private Dropdown resolutionDropdown;
-    [SerializeField] private Dropdown screenModeDropdown;
+    [SerializeField] private TMPro.TMP_Dropdown resolutionDropdown;
+    [SerializeField] private TMPro.TMP_Dropdown screenModeDropdown;
 
     private Resolution[] _resolutions;
     private FullScreenMode _screenMode;

@@ -11,7 +11,7 @@ namespace Menus.Options {
     public class ExpandingLine : MonoBehaviour {
         [SerializeField] private float animatePercentPerFrame = 0.01f;
         [SerializeField] private bool isOpen;
-        public Text icon;
+        public TMPro.TMP_Text icon;
 
         // Primary Container (should have a canvas group for opacity)
         public GameObject container;

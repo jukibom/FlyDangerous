@@ -16,13 +16,13 @@ namespace Menus.Main_Menu {
         [Header("UI")] [SerializeField] private MainMenu mainMenu;
 
         [SerializeField] private UIButton startButton;
-        [SerializeField] private Text headerText;
+        [SerializeField] private TMPro.TMP_Text headerText;
 
         [SerializeField] private Button loadCustomButton;
         [SerializeField] private LobbyConfigurationPanel lobbyConfigurationPanel;
 
-        [SerializeField] private InputField chatSendMessageInput;
-        [SerializeField] private Text chatMessageBox;
+        [SerializeField] private TMPro.TMP_InputField chatSendMessageInput;
+        [SerializeField] private TMPro.TMP_Text chatMessageBox;
         [SerializeField] private ScrollRect chatScrollRect;
 
         public UIButton StartButton => startButton;

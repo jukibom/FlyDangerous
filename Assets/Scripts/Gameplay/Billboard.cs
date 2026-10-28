@@ -11,7 +11,7 @@ namespace Gameplay {
         private static readonly int TintProperty = Shader.PropertyToID("_Tint");
         private static readonly int ScrollSpeedProperty = Shader.PropertyToID("_ScrollSpeed");
 
-        [SerializeField] private Text billboardText;
+        [SerializeField] private TMPro.TMP_Text billboardText;
         [SerializeField] private Camera renderTextureCamera;
         [SerializeField] private MeshRenderer screen;
         [SerializeField] private Material billboardScreenTransparent;
@@ -28,8 +28,9 @@ namespace Gameplay {
         private RenderTexture TextRenderTexture {
             get {
                 if (_renderTexture == null) {
-                    _renderTexture = new RenderTexture(720, 360, 0, GraphicsFormat.R8G8B8A8_UNorm);
-                    _renderTexture.wrapMode = TextureWrapMode.Repeat;
+                    _renderTexture = new RenderTexture(720, 360, 24, GraphicsFormat.R8G8B8A8_UNorm) {
+                        wrapMode = TextureWrapMode.Repeat
+                    };
                 }
 
                 return _renderTexture;

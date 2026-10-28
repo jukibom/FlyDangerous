@@ -35,10 +35,10 @@ public class FlexibleColorPicker : MonoBehaviour {
     public Picker[] pickers;
 
     [Tooltip("Connection to the FCP's hexadecimal input field.")]
-    public InputField hexInput;
+    public TMPro.TMP_InputField hexInput;
 
     [Tooltip("Connection to the FCP's mode dropdown menu.")]
-    public Dropdown modeDropdown;
+    public TMPro.TMP_Dropdown modeDropdown;
 
     [Tooltip("The (starting) 2D picking mode, i.e. the 2 color values that can be picked with the large square picker.")]
     public MainPickingMode mode;
