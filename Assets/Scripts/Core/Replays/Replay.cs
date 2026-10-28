@@ -200,6 +200,37 @@ namespace Core.Replays {
             return new Replay(replayMeta, shipParameters, levelData, shipProfile, new ScoreData(), inputFileStream, keyFrameFileStream, null);
         }
 
+        public Replay GetCopy() {
+            var inputMemoryStream = new MemoryStream();
+            var keyFrameMemoryStream = new MemoryStream();
+            var shipProfile = new ShipProfile(this.ShipProfile.playerName,this.ShipProfile.playerFlagFilename,this.ShipProfile.shipModel,this.ShipProfile.primaryColor,this.ShipProfile.accentColor,this.ShipProfile.thrusterColor,this.ShipProfile.trailColor,this.ShipProfile.headLightsColor);
+
+            if (this.InputFrameStream is FileStream) {
+                this.InputFrameStream.Flush();
+                this.KeyFrameStream.Flush();
+
+                var inputFrameEntry = new FileStream(tmpInputDataSaveLoc, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                var keyFrameEntry = new FileStream(tmpKeyFrameDataSaveLoc, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+
+                inputFrameEntry.CopyTo(inputMemoryStream);
+                keyFrameEntry.CopyTo(keyFrameMemoryStream);
+                inputFrameEntry.Close();
+                keyFrameEntry.Close();
+            }
+            else if (this.InputFrameStream is MemoryStream) {
+                this.InputFrameStream.Position = 0;
+                KeyFrameStream.Position = 0;
+
+                this.InputFrameStream.CopyTo(inputMemoryStream);
+                KeyFrameStream.CopyTo(keyFrameMemoryStream);
+            }
+
+            inputMemoryStream.Position = 0;
+            keyFrameMemoryStream.Position = 0;
+
+            return new Replay(this.ReplayMeta, this.ShipParameters, this.LevelData, shipProfile, this.ScoreData, inputMemoryStream, keyFrameMemoryStream, null);
+        }
+
         /**
          * Fetch all replays on the file system for the specified level
          */
