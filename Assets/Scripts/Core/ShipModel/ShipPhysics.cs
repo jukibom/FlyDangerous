@@ -797,6 +797,83 @@ namespace Core.ShipModel {
 
             return _raycastHits;
         }
+
+        public struct ShipSnapShot
+        {
+            public Vector3 floatingOrigin;
+            public Vector3 position;
+            public Quaternion rotation;
+            public Vector3 velocity;
+            public Vector3 angularVelocity;
+            public float boostCappacity;
+            public float currentBoostTime;
+            public int boostProgressTicks;
+            public BoostStatus boostStatus;
+            public float boostedMaxSpeedDelta;
+            public Vector3 modifierShipForce;
+            public float modifierShipDeltaSpeedCap;
+            public float modifierShipDeltaThrust;
+            public float modifierShipDrag;
+            public float modifierShipAngularDrag;
+            public List<Component> activeModifiers;
+            public List<Component> prevactiveModifiers;
+            public uint tick;
+
+            public bool boostRecharging;
+            public Vector3 previousVelocity;
+        }
+
+        public ShipSnapShot GenerateShipSnapShot()
+        {
+            return new ShipSnapShot
+            {
+                floatingOrigin = FloatingOrigin.Instance.Origin,
+                position = Rigidbody.position,
+                rotation = Rigidbody.rotation,
+                velocity = Rigidbody.linearVelocity,
+                angularVelocity = Rigidbody.angularVelocity,
+
+                boostCappacity = _boostCapacitorPercent,
+                currentBoostTime = _currentBoostTime,
+                boostProgressTicks = _boostProgressTicks,
+                boostStatus = _boostStatus,
+                boostedMaxSpeedDelta = _boostedMaxSpeedDelta,
+
+                modifierShipForce = AppliedEffects.shipForce,
+                modifierShipDeltaSpeedCap = AppliedEffects.shipDeltaSpeedCap,
+                modifierShipDeltaThrust = AppliedEffects.shipDeltaThrust,
+                modifierShipDrag = AppliedEffects.shipDeltaDrag,
+                modifierShipAngularDrag = AppliedEffects.shipDeltaAngularDrag,
+
+                activeModifiers = new List<Component>(_activeModifiers),
+                prevactiveModifiers = new List<Component>(_prevActiveModifiers),
+
+                tick = Game.Instance.GameModeHandler.CurrentReplayTick,
+
+                boostRecharging =_boostRecharging,
+                previousVelocity = _prevVelocity,
+            };
+        }
+
+        public void ApplyShipSnapShotPhysics(ShipSnapShot shipSnapShot) {
+            //Position is handled outside this function
+
+            _boostCapacitorPercent = shipSnapShot.boostCappacity;
+            _currentBoostTime = shipSnapShot.currentBoostTime;
+            _boostProgressTicks =  shipSnapShot.boostProgressTicks;
+            _boostStatus = shipSnapShot.boostStatus;
+            _boostedMaxSpeedDelta = shipSnapShot.boostedMaxSpeedDelta;
+
+            _modifierEngine.SetDirect(shipSnapShot.modifierShipForce, shipSnapShot.modifierShipDeltaSpeedCap, shipSnapShot.modifierShipDeltaThrust, shipSnapShot.modifierShipDrag, 
+                                      shipSnapShot.modifierShipAngularDrag);
+
+            _activeModifiers = shipSnapShot.activeModifiers;
+            _prevActiveModifiers = shipSnapShot.prevactiveModifiers;
+ 
+            _boostRecharging = shipSnapShot.boostRecharging;
+            _prevVelocity = shipSnapShot.previousVelocity;
+
+        }
         
         #endregion
     }

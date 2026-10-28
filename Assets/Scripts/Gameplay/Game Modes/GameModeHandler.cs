@@ -54,6 +54,7 @@ namespace Gameplay.Game_Modes {
         public bool ShipActive => LocalPlayer != null && LocalPlayer.ShipPhysics.ShipActive;
         public bool HasStarted => ShipActive && _gameStarted;
         public IGameMode GameMode => _gameMode;
+        public uint CurrentReplayTick => _replayRecorder.CurrentTick;
 
         private void OnEnable() {
             _replayRecorder = GetComponent<ReplayRecorder>();
