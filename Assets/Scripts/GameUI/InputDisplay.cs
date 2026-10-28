@@ -1,15 +1,15 @@
-﻿using System.Globalization;
+using System.Globalization;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace GameUI {
     public class InputDisplay : MonoBehaviour {
-        [SerializeField] private Text pitch;
-        [SerializeField] private Text roll;
-        [SerializeField] private Text yaw;
-        [SerializeField] private Text throttle;
-        [SerializeField] private Text vertical;
-        [SerializeField] private Text lateral;
+        [SerializeField] private TMPro.TMP_Text pitch;
+        [SerializeField] private TMPro.TMP_Text roll;
+        [SerializeField] private TMPro.TMP_Text yaw;
+        [SerializeField] private TMPro.TMP_Text throttle;
+        [SerializeField] private TMPro.TMP_Text vertical;
+        [SerializeField] private TMPro.TMP_Text lateral;
 
         public void UpdateAxisDisplay(
             float pitchVal,

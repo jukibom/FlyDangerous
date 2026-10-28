@@ -15,15 +15,15 @@ namespace GameUI.GameModes {
         [SerializeField] private HoldBoostButtonText holdBoostButtonText;
         [SerializeField] private RaceResultsScreen raceResultsScreen;
         [SerializeField] private CanvasGroup levelDetailsCanvasGroup;
-        [SerializeField] private Text levelNameText;
-        [SerializeField] private Text musicNameText;
+        [SerializeField] private TMPro.TMP_Text levelNameText;
+        [SerializeField] private TMPro.TMP_Text musicNameText;
         public GameModeUIText GameModeUIText => gameModeUIText;
         public HoldBoostButtonText HoldBoostButtonText => holdBoostButtonText;
         public StartPanel StartPanel => startPanel;
         public RaceResultsScreen RaceResultsScreen => raceResultsScreen;
         public CanvasGroup LevelDetailsCanvasGroup => levelDetailsCanvasGroup;
-        public Text LevelNameText => levelNameText;
-        public Text MusicNameText => musicNameText;
+        public TMPro.TMP_Text LevelNameText => levelNameText;
+        public TMPro.TMP_Text MusicNameText => musicNameText;
 
         private void Awake() {
             HideResultsScreen();

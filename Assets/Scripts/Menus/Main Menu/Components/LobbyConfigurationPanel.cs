@@ -11,18 +11,18 @@ using Environment = Core.MapData.Environment;
 namespace Menus.Main_Menu.Components {
     public class LobbyConfigurationPanel : MonoBehaviour {
         [SerializeField] private Button loadCustomButton;
-        [SerializeField] private Dropdown gameModeDropdown;
-        [SerializeField] private Dropdown environmentDropdown;
-        [SerializeField] private Dropdown locationDropdown;
-        [SerializeField] private InputField maxPlayersInputField;
-        [SerializeField] private Text passwordLabel;
-        [SerializeField] private InputField passwordInputField;
+        [SerializeField] private TMPro.TMP_Dropdown gameModeDropdown;
+        [SerializeField] private TMPro.TMP_Dropdown environmentDropdown;
+        [SerializeField] private TMPro.TMP_Dropdown locationDropdown;
+        [SerializeField] private TMPro.TMP_InputField maxPlayersInputField;
+        [SerializeField] private TMPro.TMP_Text passwordLabel;
+        [SerializeField] private TMPro.TMP_InputField passwordInputField;
 
         // clients see labels
-        [SerializeField] private Text gameModeClientLabel;
-        [SerializeField] private Text environmentClientLabel;
-        [SerializeField] private Text locationClientLabel;
-        [SerializeField] private Text maxPlayersLabel;
+        [SerializeField] private TMPro.TMP_Text gameModeClientLabel;
+        [SerializeField] private TMPro.TMP_Text environmentClientLabel;
+        [SerializeField] private TMPro.TMP_Text locationClientLabel;
+        [SerializeField] private TMPro.TMP_Text maxPlayersLabel;
 
         public short maxPlayers;
 

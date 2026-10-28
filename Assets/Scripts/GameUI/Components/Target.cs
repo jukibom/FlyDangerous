@@ -7,8 +7,8 @@ using UnityEngine.UI;
 namespace GameUI.Components {
     [RequireComponent(typeof(CanvasGroup))]
     public class Target : MonoBehaviour {
-        [SerializeField] private Text targetNameText;
-        [SerializeField] private Text targetDistanceText;
+        [SerializeField] private TMPro.TMP_Text targetNameText;
+        [SerializeField] private TMPro.TMP_Text targetDistanceText;
         [SerializeField] private Image icon;
         [SerializeField] private Image outline;
         [SerializeField] private GameObject targetIndicator2d;
@@ -41,7 +41,7 @@ namespace GameUI.Components {
             get => icon.sprite;
             set {
                 icon.gameObject.SetActive(value != null);
-                targetNameText.alignment = value != null ? TextAnchor.MiddleLeft : TextAnchor.MiddleCenter;
+                targetNameText.alignment = value != null ? TMPro.TextAlignmentOptions.Left : TMPro.TextAlignmentOptions.Center;
                 icon.sprite = value;
             }
         }

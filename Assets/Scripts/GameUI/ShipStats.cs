@@ -9,13 +9,13 @@ namespace GameUI {
     public class ShipStats : MonoBehaviour, IShipInstruments {
         // indicator UI
         // TODO: move this somewhere 
-        [SerializeField] private Text velocityIndicatorText;
+        [SerializeField] private TMPro.TMP_Text velocityIndicatorText;
         [SerializeField] private Image accelerationBar;
 
-        [SerializeField] private Text boostIndicatorText;
+        [SerializeField] private TMPro.TMP_Text boostIndicatorText;
         [SerializeField] private Image boostCapacitorBar;
 
-        [SerializeField] private Text boostChargeText;
+        [SerializeField] private TMPro.TMP_Text boostChargeText;
         [SerializeField] private Image boostReadyIcon;
 
         private readonly Color32 _activeColor = new(0, 153, 225, 255);

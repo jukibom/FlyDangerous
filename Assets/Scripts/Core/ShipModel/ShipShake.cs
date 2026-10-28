@@ -62,9 +62,12 @@ namespace Core.ShipModel {
                 }
 
             // apply shakes
-            _shipTransform.localPosition = _originalPos + Random.insideUnitSphere * Mathf.Min(_maxShake, CurrentShakeAmount);
-            if (FdPlayer.LocalShipPlayer.User.TargetTransform == _shipTransform.RootTransform()) 
+            _shipTransform.localPosition =
+                _originalPos + Random.insideUnitSphere * Mathf.Min(_maxShake, CurrentShakeAmount);
+            if (Game.Instance.SessionStatus == SessionStatus.InGame &&
+                FdPlayer.LocalShipPlayer.User.TargetTransform == _shipTransform.RootTransform()) {
                 ShipCameraRig.Instance?.SetShakeEffect(Mathf.Min(_maxCameraShake, CurrentCameraShakeAmount));
+            }
 
             // clear defunct shakes
             _shakes.RemoveAll(shake => shake.timer <= 0);

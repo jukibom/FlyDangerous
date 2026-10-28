@@ -9,11 +9,11 @@ namespace GameUI.Components.Terrain_Indicator {
         [SerializeField] private float position2500m;
         [SerializeField] private float position2000m;
         [SerializeField] private float positionFloor;
-        [SerializeField] private Text heightLabel;
+        [SerializeField] private TMPro.TMP_Text heightLabel;
         [SerializeField] private bool allowNegatives;
 
-        [SerializeField] private Text label2km;
-        [SerializeField] private Text labelBottom;
+        [SerializeField] private TMPro.TMP_Text label2km;
+        [SerializeField] private TMPro.TMP_Text labelBottom;
 
         private Vector3 label2kmPositivePosition;
         private Vector3 labelBottomPositivePosition;

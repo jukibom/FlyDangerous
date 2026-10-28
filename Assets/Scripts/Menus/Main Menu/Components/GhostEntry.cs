@@ -5,9 +5,9 @@ using UnityEngine.UI;
 
 namespace Menus.Main_Menu.Components {
     public class GhostEntry : MonoBehaviour {
-        [SerializeField] public Text playerName;
-        [SerializeField] public Text entryDate;
-        [SerializeField] public Text score;
+        [SerializeField] public TMPro.TMP_Text playerName;
+        [SerializeField] public TMPro.TMP_Text entryDate;
+        [SerializeField] public TMPro.TMP_Text score;
         [SerializeField] public Checkbox checkbox;
         [SerializeField] public Button deleteButton;
         public Replay replay;

@@ -10,7 +10,7 @@ namespace Menus.Main_Menu.Components {
     public class Leaderboard : MonoBehaviour {
         [SerializeField] private RectTransform container;
         [SerializeField] private LeaderboardEntry leaderboardEntryPrefab;
-        [SerializeField] private Text leaderboardText;
+        [SerializeField] private TMPro.TMP_Text leaderboardText;
         [SerializeField] private GameObject loadingOverlay;
         [CanBeNull] private Coroutine _addLeaderboardEntryCoroutine;
 

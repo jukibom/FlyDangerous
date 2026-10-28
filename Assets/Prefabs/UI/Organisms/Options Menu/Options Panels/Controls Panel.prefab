@@ -102,7 +102,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8027640668383768274}
   - component: {fileID: 8027640668383768272}
-  - component: {fileID: 8027640668383768275}
+  - component: {fileID: 3728036245603686257}
   m_Layer: 0
   m_Name: Text
   m_TagString: Untagged
@@ -137,7 +137,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8027640668383768277}
   m_CullTransparentMesh: 1
---- !u!114 &8027640668383768275
+--- !u!114 &3728036245603686257
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -146,9 +146,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 8027640668383768277}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -157,20 +157,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_FontData:
-    m_Font: {fileID: 12800000, guid: 681cf67cafbb74d44a306c29b14ca1f2, type: 3}
-    m_FontSize: 30
-    m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 3
-    m_MaxSize: 40
-    m_Alignment: 4
-    m_AlignByGeometry: 0
-    m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
-    m_LineSpacing: 1
-  m_Text: 'Waiting for input ...
+  m_text: 'Waiting for input ...
 
 
     -------------------------------------------
@@ -180,6 +167,77 @@ MonoBehaviour:
     to cancel
 
     DEL to unbind'
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 28af95dfea6320f45b94179138c98ccc, type: 2}
+  m_sharedMaterial: {fileID: -4331034647893445511, guid: 28af95dfea6320f45b94179138c98ccc, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: 0
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 30
+  m_fontSizeBase: 30
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 3
+  m_fontSizeMax: 40
+  m_fontStyle: 0
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_characterHorizontalScale: 1
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 3
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 00000000
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 0
+  m_isOrthographic: 0
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1001 &1618375099932588143
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -343,6 +401,22 @@ PrefabInstance:
     - target: {fileID: 609786914283039947, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5942345338091113656, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_text
+      value: INPUT OPTIONS
+      objectReference: {fileID: 0}
+    - target: {fileID: 5942345338091113656, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_fontSize
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5942345338091113656, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 5942345338091113656, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -572,6 +646,10 @@ PrefabInstance:
     - target: {fileID: 5796789094438783719, guid: 1bb5c2e785888c241b72d0db4f46383e, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6270090006397715596, guid: 1bb5c2e785888c241b72d0db4f46383e, type: 3}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 6845809420401424494, guid: 1bb5c2e785888c241b72d0db4f46383e, type: 3}
       propertyPath: defaultTab
@@ -887,6 +965,14 @@ PrefabInstance:
     - target: {fileID: 609786914283039947, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5942345338091113656, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_text
+      value: REBIND KEYS
+      objectReference: {fileID: 0}
+    - target: {fileID: 5942345338091113656, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_fontSize
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1232,10 +1318,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 66874396697361042, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 66874396697361042, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -1259,10 +1341,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -40
       objectReference: {fileID: 0}
-    - target: {fileID: 94535409087414908, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: rebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 94535409087414908, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: rebindOverlay
       value: 
@@ -1372,13 +1450,13 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 135288078561036104, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 135288078561036104, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
+    - target: {fileID: 145361526163598965, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
+      propertyPath: m_text
+      value: D-Pad/left  |  Gamepad
+      objectReference: {fileID: 0}
     - target: {fileID: 147060105722294360, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -1644,10 +1722,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 166637959845091527, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 166637959845091527, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -1707,10 +1781,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 190526813876857603, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 190526813876857603, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
@@ -1859,10 +1929,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 279085689214685441, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 279085689214685441, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
@@ -2388,10 +2454,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 489737955859421594, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 489737955859421594, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -2435,10 +2497,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -10
       objectReference: {fileID: 0}
-    - target: {fileID: 567822555439500581, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: rebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 567822555439500581, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: rebindOverlay
       value: 
@@ -2716,10 +2774,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 681843396559009382, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: rebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 681843396559009382, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: rebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -2912,17 +2966,9 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 817749747347141101, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 817749747347141101, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
-    - target: {fileID: 822554666802454106, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: rebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 822554666802454106, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: rebindOverlay
       value: 
@@ -3276,17 +3322,9 @@ PrefabInstance:
       value: -40
       objectReference: {fileID: 0}
     - target: {fileID: 1000217189703248763, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: rebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 1000217189703248763, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: rebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
-    - target: {fileID: 1037669662562302503, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 1037669662562302503, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
@@ -3796,10 +3834,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1229761898195403711, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 1229761898195403711, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -3864,10 +3898,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1350970857367732288, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 1350970857367732288, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -3951,10 +3981,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1355372531001134076, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 1355372531001134076, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
@@ -3979,10 +4005,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1407393519548297345, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 1407393519548297345, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
@@ -4095,10 +4117,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1455979855225484641, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 1455979855225484641, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
@@ -4280,10 +4298,6 @@ PrefabInstance:
       value: Button South  |  Gamepad
       objectReference: {fileID: 0}
     - target: {fileID: 1588930716790116363, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 1588930716790116363, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -4348,10 +4362,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1596671335266196829, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 1596671335266196829, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -4415,10 +4425,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1598917612773448806, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 1598917612773448806, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
@@ -4531,10 +4537,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1622538977548645395, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 1622538977548645395, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
@@ -4900,10 +4902,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1738492419212179982, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 1738492419212179982, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -4947,10 +4945,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -360
       objectReference: {fileID: 0}
-    - target: {fileID: 1783336878496441886, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 1783336878496441886, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
@@ -5516,17 +5510,9 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1835544309414364248, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 1835544309414364248, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
-    - target: {fileID: 1843387289695793825, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: rebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 1843387289695793825, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: rebindOverlay
       value: 
@@ -5547,10 +5533,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1886189127953690766, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 1886189127953690766, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
@@ -5728,10 +5710,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2019155525136167179, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 2019155525136167179, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -6008,10 +5986,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2054030790110886458, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: rebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 2054030790110886458, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: rebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -6035,26 +6009,18 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2079890891394990931, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 2079890891394990931, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
-    - target: {fileID: 2093862377834869756, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: rebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
+    - target: {fileID: 2088147437905348935, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
+      propertyPath: m_text
+      value: button7  |  VIRPIL Controls 20250313 R-VPCConstellationAlpha
+      objectReference: {fileID: 0}
     - target: {fileID: 2093862377834869756, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: rebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
-    - target: {fileID: 2160043141164318776, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: rebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 2160043141164318776, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: rebindOverlay
       value: 
@@ -6099,10 +6065,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2166578447421630791, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 2166578447421630791, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
@@ -6396,10 +6358,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2316759942906578297, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 2316759942906578297, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -6443,14 +6401,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2422447768790623278, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
+      propertyPath: m_text
+      value: button16  |  VIRPIL Controls 20250313 L-VPCMongoosT50CM3Throttle
+      objectReference: {fileID: 0}
     - target: {fileID: 2447414501237934973, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 2454346451477063511, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 2454346451477063511, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
@@ -6720,10 +6678,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2644123344782563428, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 2644123344782563428, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -6766,6 +6720,14 @@ PrefabInstance:
     - target: {fileID: 2644123345288860684, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2653439977269164372, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
+      propertyPath: m_text
+      value: rightStickPress  |  XInputControllerWindows
+      objectReference: {fileID: 0}
+    - target: {fileID: 2653439977306302650, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
+      propertyPath: m_text
+      value: button6  |  VIRPIL Controls 20250313 R-VPCConstellationAlpha
       objectReference: {fileID: 0}
     - target: {fileID: 2660742600697878644, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
@@ -6854,6 +6816,10 @@ PrefabInstance:
     - target: {fileID: 2672170225238900151, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2701431411336531751, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
+      propertyPath: m_text
+      value: button16  |  VIRPIL Controls 20250313 R-VPCConstellationAlpha
       objectReference: {fileID: 0}
     - target: {fileID: 2702444355285527885, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
@@ -7012,10 +6978,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2787158365213880408, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 2787158365213880408, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -7039,10 +7001,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2798330370844060131, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 2798330370844060131, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
@@ -7440,10 +7398,6 @@ PrefabInstance:
       value: -40
       objectReference: {fileID: 0}
     - target: {fileID: 3037391266844271399, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 3037391266844271399, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -7511,6 +7465,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3095163911625850931, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
+      propertyPath: m_text
+      value: button44  |  VIRPIL Controls 20250313 L-VPCMongoosT50CM3Throttle
+      objectReference: {fileID: 0}
+    - target: {fileID: 3095163912124502493, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
+      propertyPath: m_text
+      value: 1  |  Keyboard
+      objectReference: {fileID: 0}
     - target: {fileID: 3107871252360525336, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -7527,10 +7489,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3126400357784462901, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 3126400357784462901, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
@@ -7572,10 +7530,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3181537031204677962, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: rebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 3181537031204677962, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: rebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -7599,10 +7553,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3208937521259441278, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 3208937521259441278, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
@@ -7968,10 +7918,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3476135776424767034, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 3476135776424767034, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -7995,6 +7941,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3503019561685314380, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
+      propertyPath: m_text
+      value: D-Pad/right  |  Gamepad
+      objectReference: {fileID: 0}
     - target: {fileID: 3515429381129084401, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -8015,10 +7965,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3515429381129084414, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 3515429381129084414, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
@@ -8103,10 +8049,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3550761503496557624, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 3550761503496557624, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
@@ -8148,10 +8090,6 @@ PrefabInstance:
       value: -30
       objectReference: {fileID: 0}
     - target: {fileID: 3621491669290121669, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 3621491669290121669, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -8192,10 +8130,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3683464715733046003, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 3683464715733046003, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -8215,10 +8149,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3709268415282397809, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 3709268415282397809, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
@@ -8320,10 +8250,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3770271695173377187, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 3770271695173377187, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -8386,6 +8312,10 @@ PrefabInstance:
     - target: {fileID: 3770271697045100576, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3793771147666137258, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
+      propertyPath: m_text
+      value: button37  |  VIRPIL Controls 20250313 L-VPCMongoosT50CM3Throttle
       objectReference: {fileID: 0}
     - target: {fileID: 3856918658285930933, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
@@ -8659,10 +8589,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4030919969957157413, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 4030919969957157413, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
@@ -9076,10 +9002,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4274785478130968731, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 4274785478130968731, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -9296,10 +9218,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4447458092024156563, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 4447458092024156563, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -9432,10 +9350,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4565606290184494017, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 4565606290184494017, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -9479,10 +9393,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4613003788494374854, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 4613003788494374854, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
@@ -9887,6 +9797,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -780
       objectReference: {fileID: 0}
+    - target: {fileID: 4934387769600895704, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
+      propertyPath: m_text
+      value: button13  |  VIRPIL Controls 20250313 R-VPCConstellationAlpha
+      objectReference: {fileID: 0}
     - target: {fileID: 4982932013809662363, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -10044,10 +9958,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5042399432737075969, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 5042399432737075969, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -10071,10 +9981,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5091946574788561055, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 5091946574788561055, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
@@ -10232,10 +10138,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5146696059410082521, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 5146696059410082521, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -10304,13 +10206,13 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5205335442479608796, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 5205335442479608796, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
+    - target: {fileID: 5213590145635093085, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
+      propertyPath: m_text
+      value: button15  |  VIRPIL Controls 20250313 R-VPCConstellationAlpha
+      objectReference: {fileID: 0}
     - target: {fileID: 5263143319353815986, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -10416,10 +10318,6 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5341613210292100064, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 5341613210292100064, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -10468,10 +10366,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5351556473515492093, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 5351556473515492093, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -10495,6 +10389,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5356801121815183581, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
+      propertyPath: m_text
+      value: button18  |  VIRPIL Controls 20250313 R-VPCConstellationAlpha
+      objectReference: {fileID: 0}
     - target: {fileID: 5368436778414360205, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -10555,10 +10453,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5368436780285952526, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 5368436780285952526, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
@@ -10787,6 +10681,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5388799845963062477, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
+      propertyPath: m_text
+      value: D-Pad/down  |  Gamepad
+      objectReference: {fileID: 0}
     - target: {fileID: 5439319928184259782, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -10831,10 +10729,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5524238653819678401, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 5524238653819678401, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
@@ -10959,14 +10853,18 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 5660431622106854292, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
+    - target: {fileID: 5652590212080896984, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
+      propertyPath: m_text
+      value: button17  |  VIRPIL Controls 20250313 R-VPCConstellationAlpha
+      objectReference: {fileID: 0}
     - target: {fileID: 5660431622106854292, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
+    - target: {fileID: 5668398224432953728, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
+      propertyPath: m_text
+      value: button21  |  VIRPIL Controls 20250313 L-VPCMongoosT50CM3Throttle
+      objectReference: {fileID: 0}
     - target: {fileID: 5688999617758810433, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -11035,10 +10933,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5705496652825935773, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: rebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 5705496652825935773, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: rebindOverlay
       value: 
@@ -11143,10 +11037,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -40
       objectReference: {fileID: 0}
-    - target: {fileID: 5797010201019274406, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 5797010201019274406, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
@@ -11896,10 +11786,6 @@ PrefabInstance:
       value: 397
       objectReference: {fileID: 0}
     - target: {fileID: 6355243344092004834, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: rebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 6355243344092004834, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: rebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -11960,10 +11846,6 @@ PrefabInstance:
       value: -40
       objectReference: {fileID: 0}
     - target: {fileID: 6403682216822355739, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 6403682216822355739, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -11986,6 +11868,14 @@ PrefabInstance:
     - target: {fileID: 6417092138103150871, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6426153475446803262, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
+      propertyPath: m_text
+      value: button33  |  VIRPIL Controls 20250313 L-VPCMongoosT50CM3Throttle
+      objectReference: {fileID: 0}
+    - target: {fileID: 6426153475679017680, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
+      propertyPath: m_text
+      value: F  |  Keyboard
       objectReference: {fileID: 0}
     - target: {fileID: 6427866289544625694, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
@@ -12144,10 +12034,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6592273107903934877, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 6592273107903934877, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -12171,10 +12057,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6648880164421891654, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 6648880164421891654, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
@@ -12244,10 +12126,6 @@ PrefabInstance:
       value: -500
       objectReference: {fileID: 0}
     - target: {fileID: 6679249737561490818, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 6679249737561490818, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -12291,10 +12169,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6720271035865287726, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 6720271035865287726, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
@@ -12536,10 +12410,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6758240491451531136, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 6758240491451531136, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -12811,10 +12681,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6831642126870680189, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 6831642126870680189, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
@@ -13067,10 +12933,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -280
       objectReference: {fileID: 0}
-    - target: {fileID: 7127590873018388895, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 7127590873018388895, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
@@ -13380,10 +13242,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7312298908787838426, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 7312298908787838426, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -13447,10 +13305,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7312298909026670662, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 7312298909026670662, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
@@ -13504,17 +13358,9 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7312298909042641769, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 7312298909042641769, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
-    - target: {fileID: 7312298909159116308, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 7312298909159116308, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
@@ -13564,10 +13410,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7312298909355673767, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 7312298909355673767, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -13595,10 +13437,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7312298909356761075, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 7312298909356761075, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
@@ -13732,10 +13570,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7312298909628419855, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 7312298909628419855, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -13864,10 +13698,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7312298910001791626, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 7312298910001791626, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -13932,10 +13762,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7312298910171326055, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 7312298910171326055, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -13988,10 +13814,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7312298910241087275, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 7312298910241087275, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -14020,17 +13842,9 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7312298910310259820, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 7312298910310259820, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
-    - target: {fileID: 7312298910322068530, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 7312298910322068530, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
@@ -14139,10 +13953,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7312298910571287907, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 7312298910571287907, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
@@ -14292,10 +14102,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7408805510682024569, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 7408805510682024569, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -14395,10 +14201,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7630541720387286180, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 7630541720387286180, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
@@ -14668,10 +14470,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7806860638641887044, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 7806860638641887044, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -14715,10 +14513,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7808708500369061492, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 7808708500369061492, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
@@ -15404,10 +15198,6 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7884785794803805424, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 7884785794803805424, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -15635,6 +15425,14 @@ PrefabInstance:
       propertyPath: m_Text
       value: --- SHIP CONTROLS ---
       objectReference: {fileID: 0}
+    - target: {fileID: 8056930988231879488, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
+      propertyPath: m_text
+      value: button32  |  VIRPIL Controls 20250313 R-VPCConstellationAlpha
+      objectReference: {fileID: 0}
+    - target: {fileID: 8104478775945420164, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
+      propertyPath: m_text
+      value: button32  |  VIRPIL Controls 20250313 L-VPCMongoosT50CM3Throttle
+      objectReference: {fileID: 0}
     - target: {fileID: 8139461670099791648, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_Text
       value: unbound primary
@@ -15739,10 +15537,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8289273726817926271, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: rebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 8289273726817926271, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: rebindOverlay
       value: 
@@ -16048,10 +15842,6 @@ PrefabInstance:
       value: -20
       objectReference: {fileID: 0}
     - target: {fileID: 8352260794848599805, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 8352260794848599805, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -16070,6 +15860,10 @@ PrefabInstance:
     - target: {fileID: 8354931145819744356, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8404518708691882800, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
+      propertyPath: m_text
+      value: button48  |  VIRPIL Controls 20250313 L-VPCMongoosT50CM3Throttle
       objectReference: {fileID: 0}
     - target: {fileID: 8441297894470027279, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_Text
@@ -16240,10 +16034,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8499956052597960672, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 8499956052597960672, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -16324,10 +16114,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8549408792962286471, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 8549408792962286471, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -16399,10 +16185,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -40
       objectReference: {fileID: 0}
-    - target: {fileID: 8555644872247484319, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: rebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 8555644872247484319, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: rebindOverlay
       value: 
@@ -16640,10 +16422,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8577697129121150452, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 8577697129121150452, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -16663,10 +16441,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8683864445236935392, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
+    - target: {fileID: 8669861229122869748, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
+      propertyPath: m_text
+      value: D-Pad/up  |  Gamepad
+      objectReference: {fileID: 0}
     - target: {fileID: 8683864445236935392, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
@@ -16686,6 +16464,14 @@ PrefabInstance:
     - target: {fileID: 8719666206142937721, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -30
+      objectReference: {fileID: 0}
+    - target: {fileID: 8724676539806010632, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
+      propertyPath: m_text
+      value: 2  |  Keyboard
+      objectReference: {fileID: 0}
+    - target: {fileID: 8724676539859934438, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
+      propertyPath: m_text
+      value: button46  |  VIRPIL Controls 20250313 L-VPCMongoosT50CM3Throttle
       objectReference: {fileID: 0}
     - target: {fileID: 8777120279214634187, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_AnchorMax.y
@@ -16815,10 +16601,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 9030814847275732001, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 9030814847275732001, guid: 422239c8c849d184b8ea43956e3654c3, type: 3}
       propertyPath: m_RebindOverlay
       value: 
@@ -17338,6 +17120,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 312110431447778530, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 771751935
+      objectReference: {fileID: 0}
+    - target: {fileID: 312110431447778530, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
     - target: {fileID: 423838100230143697, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -17520,11 +17310,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 910805568801294764, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_Size
-      value: 0.5307692
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 910805568801294764, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_Value
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 910805568801294770, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_IsActive
@@ -17556,27 +17346,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 914330925128965005, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 914330925128965005, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 914330925128965005, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 285
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 914330925128965005, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 40
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 914330925128965005, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 202.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 914330925128965005, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -20
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 995317443972759963, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_AnchorMax.y
@@ -17656,27 +17446,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1720929778151487142, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1720929778151487142, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1720929778151487142, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 45
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1720929778151487142, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 40
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1720929778151487142, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 387.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1720929778151487142, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -20
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1763870290075847378, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_AnchorMax.y
@@ -18442,6 +18232,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5420837310220955104, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 5451965721894194983, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -18574,6 +18368,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5608404131378323755, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 771751935
+      objectReference: {fileID: 0}
+    - target: {fileID: 5608404131378323755, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
     - target: {fileID: 5865081536548044304, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -18613,6 +18415,14 @@ PrefabInstance:
     - target: {fileID: 5902373732491167665, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5983706939660812669, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 5983706939660812669, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
       objectReference: {fileID: 0}
     - target: {fileID: 5984031077734412419, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_AnchorMax.y
@@ -19006,6 +18816,14 @@ PrefabInstance:
       propertyPath: m_Padding.m_Left
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: 8101515616285022258, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294484784
+      objectReference: {fileID: 0}
+    - target: {fileID: 8101515616285022258, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
     - target: {fileID: 8157162717228114918, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -19084,27 +18902,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8483358461698217792, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8483358461698217792, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8483358461698217792, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 45
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8483358461698217792, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 30
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8483358461698217792, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 22.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8483358461698217792, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -20
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8596919950161026993, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_AnchorMax.x
@@ -19190,6 +19008,22 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8786889076172880324, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 8786889076172880324, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
+    - target: {fileID: 8797866903685469329, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 8797866903685469329, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
     - target: {fileID: 8865611486168320844, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -19198,10 +19032,6 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 9008194236125530063, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 9008194236125530063, guid: e1bd5b77a394dd448a27980a3d3c624c, type: 3}
       propertyPath: m_RebindOverlay
       value: 
@@ -19482,6 +19312,14 @@ PrefabInstance:
     - target: {fileID: 609786914283039947, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5942345338091113656, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_text
+      value: MOUSE OPTIONS
+      objectReference: {fileID: 0}
+    - target: {fileID: 5942345338091113656, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_fontSize
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -20505,10 +20343,6 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4914919277336834133, guid: da48186fe855c3741bbe2d8d65101e3a, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
-    - target: {fileID: 4914919277336834133, guid: da48186fe855c3741bbe2d8d65101e3a, type: 3}
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8027640667370791029}
@@ -20616,10 +20450,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -520
       objectReference: {fileID: 0}
-    - target: {fileID: 5555961298154499354, guid: da48186fe855c3741bbe2d8d65101e3a, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 5555961298154499354, guid: da48186fe855c3741bbe2d8d65101e3a, type: 3}
       propertyPath: m_RebindOverlay
       value: 
@@ -21383,6 +21213,22 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5942345338091113656, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_text
+      value: CONTROLS LAYOUT
+      objectReference: {fileID: 0}
+    - target: {fileID: 5942345338091113656, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_fontSize
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5942345338091113656, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 5942345338091113656, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -21588,10 +21434,6 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 7939430498342528509, guid: f2bea03a9a0f6d64aba4c533dc93e5bf, type: 3}
-      propertyPath: m_RebindText
-      value: 
-      objectReference: {fileID: 8027640668383768275}
     - target: {fileID: 7939430498342528509, guid: f2bea03a9a0f6d64aba4c533dc93e5bf, type: 3}
       propertyPath: m_RebindOverlay
       value: 

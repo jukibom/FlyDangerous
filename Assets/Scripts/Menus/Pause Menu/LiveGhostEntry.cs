@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 namespace Menus.Pause_Menu {
     public class LiveGhostEntry : MonoBehaviour {
-        [SerializeField] public Text playerName;
-        [SerializeField] public Text score;
+        [SerializeField] public TMPro.TMP_Text playerName;
+        [SerializeField] public TMPro.TMP_Text score;
         [SerializeField] public Button spectateButton;
         public ReplayTimeline ReplayTimeline { get; set; }
 

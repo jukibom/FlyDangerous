@@ -14,13 +14,13 @@ using Environment = Core.MapData.Environment;
 namespace Menus.Main_Menu {
     public class FreeRoamMenu : MenuBase {
         [SerializeField] private SinglePlayerMenu singlePlayerMenu;
-        [SerializeField] private InputField seedInput;
+        [SerializeField] private TMPro.TMP_InputField seedInput;
         [SerializeField] private Button startButton;
-        [SerializeField] private Dropdown locationDropdown;
-        [SerializeField] private Dropdown environmentDropdown;
-        [SerializeField] private Dropdown musicDropdown;
-        [SerializeField] private Text locationDescriptionHeader;
-        [SerializeField] private Text locationDescription;
+        [SerializeField] private TMPro.TMP_Dropdown locationDropdown;
+        [SerializeField] private TMPro.TMP_Dropdown environmentDropdown;
+        [SerializeField] private TMPro.TMP_Dropdown musicDropdown;
+        [SerializeField] private TMPro.TMP_Text locationDescriptionHeader;
+        [SerializeField] private TMPro.TMP_Text locationDescription;
 
         [CanBeNull] private LevelData _levelData;
         private Scene _currentActiveScene;

@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f37258020facf641985dd03a0a54531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numberTextBox: {fileID: 1348031353609850475}
+  numberTextBox: {fileID: 5881706310289671160}
   slider: {fileID: 2589702243156230612}
   minValue: 0
   maxValue: 1
@@ -333,7 +333,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f37258020facf641985dd03a0a54531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numberTextBox: {fileID: 1348031353609850475}
+  numberTextBox: {fileID: 5881706310289671160}
   slider: {fileID: 2589702243156230612}
   minValue: 0
   maxValue: 0.5
@@ -597,6 +597,34 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3564839357901728737}
     m_Modifications:
+    - target: {fileID: 581555406289658707, guid: 7979c4c410718cc4a8e1307f7cf5175b, type: 3}
+      propertyPath: m_Text
+      value: 0.00
+      objectReference: {fileID: 0}
+    - target: {fileID: 581555406289658707, guid: 7979c4c410718cc4a8e1307f7cf5175b, type: 3}
+      propertyPath: m_ContentType
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 581555406289658707, guid: 7979c4c410718cc4a8e1307f7cf5175b, type: 3}
+      propertyPath: m_KeyboardType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 581555406289658707, guid: 7979c4c410718cc4a8e1307f7cf5175b, type: 3}
+      propertyPath: m_CharacterLimit
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 581555406289658707, guid: 7979c4c410718cc4a8e1307f7cf5175b, type: 3}
+      propertyPath: m_CharacterValidation
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1529151178332944695, guid: 7979c4c410718cc4a8e1307f7cf5175b, type: 3}
+      propertyPath: m_text
+      value: "0.00\u200B"
+      objectReference: {fileID: 0}
+    - target: {fileID: 1529151178332944695, guid: 7979c4c410718cc4a8e1307f7cf5175b, type: 3}
+      propertyPath: m_overflowMode
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 2222857714052348781, guid: 7979c4c410718cc4a8e1307f7cf5175b, type: 3}
       propertyPath: m_EffectColor.a
       value: 1
@@ -700,6 +728,10 @@ PrefabInstance:
     - target: {fileID: 4068688186266893996, guid: 7979c4c410718cc4a8e1307f7cf5175b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4772745317693766462, guid: 7979c4c410718cc4a8e1307f7cf5175b, type: 3}
+      propertyPath: m_text
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 5206325769710279172, guid: 7979c4c410718cc4a8e1307f7cf5175b, type: 3}
       propertyPath: m_Text
@@ -824,18 +856,21 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4046174603634908570, guid: 7979c4c410718cc4a8e1307f7cf5175b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6584471059964187973}
+    - targetCorrespondingSourceObject: {fileID: 4046174603634908570, guid: 7979c4c410718cc4a8e1307f7cf5175b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -3209423501045311510}
   m_SourcePrefab: {fileID: 100100000, guid: 7979c4c410718cc4a8e1307f7cf5175b, type: 3}
---- !u!114 &1348031353609850475 stripped
+--- !u!114 &5881706310289671160 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5406349707295731392, guid: 7979c4c410718cc4a8e1307f7cf5175b, type: 3}
+  m_CorrespondingSourceObject: {fileID: 581555406289658707, guid: 7979c4c410718cc4a8e1307f7cf5175b, type: 3}
   m_PrefabInstance: {fileID: 6463260531131621547}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7031521346022194481}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d199490a83bb2b844b9695cbf13b01ef, type: 3}
+  m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TMP_InputField
 --- !u!1 &7031521346022194481 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4046174603634908570, guid: 7979c4c410718cc4a8e1307f7cf5175b, type: 3}
@@ -861,6 +896,33 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &-3209423501045311510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7031521346022194481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5fa576cf7fecbb469dfc7253dcdd024, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: TextToTMP.Runtime::TextToTMPNamespace.TMP_InputFieldOnSubmitEvent
+  onSubmit:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5355700035838458099}
+        m_TargetAssemblyTypeName: UI.FdSlider, Assembly-CSharp
+        m_MethodName: OnTextEntryChanged
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!224 &7045036559332220423 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4068688186266893996, guid: 7979c4c410718cc4a8e1307f7cf5175b, type: 3}

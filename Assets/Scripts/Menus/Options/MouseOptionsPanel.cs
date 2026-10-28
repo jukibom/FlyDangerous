@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace Menus.Options {
     public class MouseOptionsPanel : MonoBehaviour {
-        [SerializeField] private Dropdown mouseInputDropdown;
+        [SerializeField] private TMPro.TMP_Dropdown mouseInputDropdown;
         [SerializeField] private Checkbox mouseRelativeForceCheckbox;
         [SerializeField] private Checkbox mouseRelativeSeparateSensitivityCheckbox;
 

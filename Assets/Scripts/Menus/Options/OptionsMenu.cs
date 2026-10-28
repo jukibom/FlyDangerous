@@ -1,4 +1,4 @@
-﻿using Core;
+using Core;
 using Core.Player;
 using CustomWebSocketSharp;
 using FdUI;
@@ -98,7 +98,7 @@ namespace Menus.Options {
             Progress(caller, false, false);
         }
 
-        public void OnFlightAssistDefaultsChange(Dropdown dropdown) {
+        public void OnFlightAssistDefaultsChange(TMPro.TMP_Dropdown dropdown) {
             _flightAssistDefaultsChanged = Preferences.Instance.GetString("flightAssistDefault") != GetFlightAssistDefaultPreference(dropdown.value);
         }
 

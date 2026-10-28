@@ -20,10 +20,10 @@ namespace Core.ShipModel {
         [SerializeField] private HeightDeltaIndicator heightDeltaIndicator;
         [SerializeField] private HeightMarker heightIndicator;
         [SerializeField] private HeightMarker altitudeIndicator;
-        [SerializeField] private Text xCoord;
-        [SerializeField] private Text yCoord;
-        [SerializeField] private Text zCoord;
-        [SerializeField] private Text gravity;
+        [SerializeField] private TMPro.TMP_Text xCoord;
+        [SerializeField] private TMPro.TMP_Text yCoord;
+        [SerializeField] private TMPro.TMP_Text zCoord;
+        [SerializeField] private TMPro.TMP_Text gravity;
 
         private bool _userShouldShow = true;
         private bool _cameraShouldShowOrientationIndicators = true;

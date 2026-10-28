@@ -9,7 +9,7 @@ namespace FdUI {
         [SerializeField] private float maxLineHistory = 150;
         [SerializeField] private ScrollRect logEntryScrollRect;
 
-        [SerializeField] private Text logEntry;
+        [SerializeField] private TMPro.TMP_Text logEntry;
 
         private readonly Queue<string> _logQueue = new();
 

@@ -6,16 +6,16 @@ using UnityEngine.UI;
 
 namespace Menus.Main_Menu.Components {
     public class LevelDetails : MonoBehaviour {
-        [SerializeField] private Text levelName;
-        [SerializeField] private Text authorName;
+        [SerializeField] private TMPro.TMP_Text levelName;
+        [SerializeField] private TMPro.TMP_Text authorName;
 
         [SerializeField] private Image levelThumbnail;
 
-        [SerializeField] private Text personalBest;
-        [SerializeField] private Text platinumTarget;
-        [SerializeField] private Text goldTarget;
-        [SerializeField] private Text silverTarget;
-        [SerializeField] private Text bronzeTarget;
+        [SerializeField] private TMPro.TMP_Text personalBest;
+        [SerializeField] private TMPro.TMP_Text platinumTarget;
+        [SerializeField] private TMPro.TMP_Text goldTarget;
+        [SerializeField] private TMPro.TMP_Text silverTarget;
+        [SerializeField] private TMPro.TMP_Text bronzeTarget;
         [SerializeField] private GameObject platinumMedalContainer;
 
         /// <summary>
