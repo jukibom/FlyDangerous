@@ -5,34 +5,34 @@ using FdUI;
 using JetBrains.Annotations;
 using Misc;
 using NaughtyAttributes;
-using Ogsa.Telemetry;
+using Ogs.Telemetry;
 using UnityEngine;
 using CoreVector3 = System.Numerics.Vector3;
 using CoreQuaternion = System.Numerics.Quaternion;
 
-namespace Core.ShipModel.Feedback.ogsa {
+namespace Core.ShipModel.Feedback.ogs {
     /**
-     * OGSA Telemetry Standard (OGSA-TS) broadcaster - https://github.com/Open-Game-Standards-Alliance/OGSA-Telemetry-Standard
+     * OGS Telemetry Standard (OGS-TS) broadcaster - https://github.com/Open-Game-Standards/OGS-Telemetry-Standard
      *
      * Sends the ship pose, body dynamics and a self-describing channel set over UDP multicast
      * (default group 239.255.17.17:40123, TTL 1 - local subnet only) as an OMT1 envelope carrying
-     * canonical Cap'n Proto Discovery/Motion/Event frames, so any number of OGSA-TS receivers
+     * canonical Cap'n Proto Discovery/Motion/Event frames, so any number of OGS-TS receivers
      * (motion platforms, haptics, dashboards, loggers) can consume the stream at once.
      *
      * Lives under the Integrations object like the raw UDP socket / Sim Racing Studio outputs and is fed
      * by the FeedbackEngine the same way (IShipMotion / IShipInstruments / IShipFeedback).
      *
-     * Enabled via preferences: "ogsaTelemetryEnabled" (options menu toggle), endpoint configurable in the
-     * config file via "ogsaTelemetryMulticastAddress" / "ogsaTelemetryPort".
+     * Enabled via preferences: "ogsTelemetryEnabled" (options menu toggle), endpoint configurable in the
+     * config file via "ogsTelemetryMulticastAddress" / "ogsTelemetryPort".
      *
-     * The sender core comes from the com.ogsa.telemetry.unity package (MIT).
+     * The sender core comes from the com.ogs.telemetry.unity package (MIT).
      *
      * Pause (standard CONVENTIONS C-11): the single-player pause sets Time.timeScale = 0, which
      * stops FixedUpdate, so frames are published from LateUpdate on real time. The stream keeps
      * flowing through a pause with session.paused set, and receivers bring rigs to rest instead
      * of freezing mid-manoeuvre or dropping the session.
      */
-    public class OgsaTelemetryServer : Singleton<OgsaTelemetryServer>, IShipMotion, IShipInstruments, IShipFeedback {
+    public class OgsTelemetryServer : Singleton<OgsTelemetryServer>, IShipMotion, IShipInstruments, IShipFeedback {
         private const float AccelFilterTau = 0.1f;
         private const double MaxSampleGapSeconds = 0.1;
 
@@ -92,7 +92,7 @@ namespace Core.ShipModel.Feedback.ogsa {
                 terrain ? 1.225f : 0f,
                 20f,
                 terrain ? 101325f : 0f, // Pa
-                terrain ? Ogsa.Telemetry.Schema.ContactMedium.Air : Ogsa.Telemetry.Schema.ContactMedium.Vacuum);
+                terrain ? Ogs.Telemetry.Schema.ContactMedium.Air : Ogs.Telemetry.Schema.ContactMedium.Vacuum);
 
             var paused = Time.timeScale == 0f;
             if (paused != _publisher.Paused) _publisher.SetPaused(paused);
@@ -188,13 +188,13 @@ namespace Core.ShipModel.Feedback.ogsa {
         }
 
         private void OnGameSettingsApplied() {
-            var enable = Preferences.Instance.GetBool("ogsaTelemetryEnabled");
-            var address = Preferences.Instance.GetString("ogsaTelemetryMulticastAddress");
-            var port = (int)Preferences.Instance.GetFloat("ogsaTelemetryPort");
+            var enable = Preferences.Instance.GetBool("ogsTelemetryEnabled");
+            var address = Preferences.Instance.GetString("ogsTelemetryMulticastAddress");
+            var port = (int)Preferences.Instance.GetFloat("ogsTelemetryPort");
 
             // restart if the endpoint changed while running
             if (_isEnabled && (address != _multicastAddress || port != _multicastPort)) {
-                FdConsole.Instance.LogMessage("Parameters changed, restarting OGSA-TS Telemetry Server ...");
+                FdConsole.Instance.LogMessage("Parameters changed, restarting OGS-TS Telemetry Server ...");
                 StopServer();
             }
 
@@ -212,12 +212,12 @@ namespace Core.ShipModel.Feedback.ogsa {
 
             // manual (inspector) start before any settings apply: fall back to stored preferences
             if (string.IsNullOrEmpty(_multicastAddress)) {
-                _multicastAddress = Preferences.Instance.GetString("ogsaTelemetryMulticastAddress");
-                _multicastPort = (int)Preferences.Instance.GetFloat("ogsaTelemetryPort");
+                _multicastAddress = Preferences.Instance.GetString("ogsTelemetryMulticastAddress");
+                _multicastPort = (int)Preferences.Instance.GetFloat("ogsTelemetryPort");
             }
 
             FdConsole.Instance.LogMessage(
-                $"Starting OGSA-TS Telemetry Server (udp multicast {_multicastAddress}:{_multicastPort}) ... ");
+                $"Starting OGS-TS Telemetry Server (udp multicast {_multicastAddress}:{_multicastPort}) ... ");
 
             try {
                 _sender = new TelemetrySender(_multicastAddress, _multicastPort);
@@ -226,7 +226,7 @@ namespace Core.ShipModel.Feedback.ogsa {
                 _isEnabled = true;
             }
             catch (Exception e) {
-                Debug.LogError($"Failed to start OGSA-TS telemetry server: {e.Message}");
+                Debug.LogError($"Failed to start OGS-TS telemetry server: {e.Message}");
                 _publisher?.Dispose();
                 _publisher = null;
                 _sender?.Dispose();
@@ -239,7 +239,7 @@ namespace Core.ShipModel.Feedback.ogsa {
         private void StopServer() {
             if (!_isEnabled && _publisher == null) return;
 
-            FdConsole.Instance.LogMessage("Shutting down OGSA-TS Telemetry Server");
+            FdConsole.Instance.LogMessage("Shutting down OGS-TS Telemetry Server");
             _isEnabled = false;
             _publisher?.Dispose();
             _publisher = null;
@@ -264,7 +264,7 @@ namespace Core.ShipModel.Feedback.ogsa {
             _publisher.DeclarePause();
 
             // pose: absolute world position + orientation. Unity's world frame (left-handed,
-            // Z-forward, Y-up) is the OGSA-TS frame - values pass through unmapped.
+            // Z-forward, Y-up) is the OGS-TS frame - values pass through unmapped.
             _publisher.BindPose(
                 () => ToCore(_instrumentData.WorldPosition),
                 () => ToCore(Quaternion.Euler(_motionData.WorldRotationEuler)));
