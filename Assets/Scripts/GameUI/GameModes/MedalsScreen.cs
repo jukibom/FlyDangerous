@@ -63,7 +63,7 @@ namespace GameUI.GameModes {
                 medalCount = 0;
             }
 
-            resultText.text = TimeExtensions.TimeSecondsToStringWithMilliseconds(result);
+            resultText.SetText(TimeExtensions.TimeSecondsToStringWithMilliseconds(result));
 
             noMedalAwarded.SetActive(medalCount == 0);
 
@@ -98,7 +98,7 @@ namespace GameUI.GameModes {
 
             if (previousResult > 0) {
                 var delta = result - previousResult;
-                resultDeltaText.text = TimeExtensions.TimeSecondsToStringWithMilliseconds(delta);
+                resultDeltaText.SetText(TimeExtensions.TimeSecondsToStringWithMilliseconds(delta));
                 resultDeltaText.color = delta > 0 ? Color.red : Color.green;
             }
 

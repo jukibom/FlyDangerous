@@ -79,7 +79,7 @@ namespace Core.ShipModel {
 
             #region Velocity
 
-            velocityIndicatorText.text = shipInstrumentData.Speed.ToString(CultureInfo.InvariantCulture);
+            velocityIndicatorText.SetText("{0:0}", shipInstrumentData.Speed);
 
             // special use-case for acceleration bar depending on flight assist (switch to throttle input)
             var accelerationBarAmount = shipInstrumentData.VectorFlightAssistActive
@@ -116,7 +116,7 @@ namespace Core.ShipModel {
 
             #region Boost
 
-            boostIndicatorText.text = ((int)shipInstrumentData.BoostCapacitorPercent).ToString(CultureInfo.InvariantCulture) + "%";
+            boostIndicatorText.SetText("{0:0}%", shipInstrumentData.BoostCapacitorPercent);
             boostCapacitorBar.fillAmount = Mathf.Lerp(
                 boostCapacitorBar.fillAmount,
                 shipInstrumentData.BoostCapacitorPercent.Remap(0, 100, 0, 0.755f),
@@ -145,7 +145,7 @@ namespace Core.ShipModel {
 
             var gForce = Mathf.Lerp(_previousGForce, shipInstrumentData.GForce, 0.05f);
             _previousGForce = gForce;
-            gForceNumberText.text = $"{gForce:0.0}";
+            gForceNumberText.SetText("{0:0}", gForce);
 
             #endregion
 
@@ -159,7 +159,7 @@ namespace Core.ShipModel {
             }
 
             // show overcharge text to nearest 10%
-            overchargeAmountText.text = $"+{Mathf.Round(shipInstrumentData.ThrustOverchargeNormalized * 10) * 10}%";
+            overchargeAmountText.SetText("{0:0}%", Mathf.Round(shipInstrumentData.ThrustOverchargeNormalized * 10) * 10);
 
             #endregion
 

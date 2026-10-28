@@ -41,9 +41,13 @@ namespace GameUI.Components.Terrain_Indicator {
                 : heightAboveSurface.Remap(0, 2500, positionFloor, position2500m);
 
             transform.localPosition = new Vector3(currentPosition.x, indicatorPosition, currentPosition.z);
-            heightLabel.text = heightAboveSurface < 1000
-                ? Mathf.Round(heightAboveSurface) + "m"
-                : Mathf.Round(heightAboveSurface / 100) / 10 + "km";
+            if (float.IsInfinity(heightAboveSurface))
+                heightLabel.SetText("Inf.");
+            else if (heightAboveSurface < 1000)
+                heightLabel.SetText("{0:0}m", Mathf.Round(heightAboveSurface));
+            else {
+                heightLabel.SetText("{0:0.0}km", Mathf.Round(heightAboveSurface / 100) / 10);
+            }
 
             // swap labels when under 0
             if (allowNegatives && Application.IsPlaying(this)) {

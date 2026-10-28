@@ -104,9 +104,9 @@ namespace Game_UI {
             _deadzoneImage.color = deadzoneImageColor;
             _extentsImage.color = extentsImageColor;
 
-            xText.text = $"{inputActualNormalized.x.ToString("F2", CultureInfo.CurrentCulture)}x";
-            yText.text = $"{inputActualNormalized.y.ToString("F2", CultureInfo.CurrentCulture)}y";
-            magText.text = $"{mappedInput.magnitude.ToString("F2", CultureInfo.CurrentCulture)}tot";
+            xText.SetText("{0:0.00}x", inputActualNormalized.x);
+            yText.SetText("{0:0.00}y", inputActualNormalized.y);
+            magText.SetText("{0:0.00}tot", mappedInput.magnitude);
         }
 
         public void UpdateWidgetSprites(Vector2 mousePosNormalised, Vector2 mouseActualInput) {

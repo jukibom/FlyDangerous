@@ -86,13 +86,13 @@ namespace GameUI.Components.Terrain_Indicator {
             yawElementsRight.transform.localPosition = new Vector3(flipHalfXPos, 0, 0);
 
             // text labels
-            var pitchText = Mathf.Round(pitchValueNormalized * 90).ToString(CultureInfo.InvariantCulture);
-            pitchTextLeft.text = pitchText;
-            pitchTextRight.text = pitchText;
+            var pitchText = Mathf.Round(pitchValueNormalized * 90);
+            pitchTextLeft.SetText("{0:0}", pitchText);
+            pitchTextRight.SetText("{0:0}", pitchText);
 
-            var yawDegreesText = Mathf.Round(yawValueNormalized * 360).ToString(CultureInfo.InvariantCulture);
+            var yawDegreesText = Mathf.Round(yawValueNormalized * 360);
             // make damn sure we never round to 360 because the indicator only ever shows 359 then 0
-            yawText.text = yawDegreesText.Equals("360") ? "0" : yawDegreesText;
+            yawText.SetText("{0:0}", yawDegreesText.Equals(360) ? 0 : yawDegreesText);
         }
 
         private void OnGameSettingsApplied() {

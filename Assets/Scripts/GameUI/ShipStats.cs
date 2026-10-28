@@ -47,7 +47,7 @@ namespace GameUI {
         public void OnShipInstrumentUpdate(IShipInstrumentData shipInstrumentData) {
             #region Velocity
 
-            velocityIndicatorText.text = shipInstrumentData.Speed.ToString(CultureInfo.InvariantCulture);
+            velocityIndicatorText.SetText("{0:0}", shipInstrumentData.Speed);
 
             // special use-case for acceleration bar depending on flight assist (switch to throttle input)
             var accelerationBarAmount = shipInstrumentData.VectorFlightAssistActive
@@ -84,7 +84,7 @@ namespace GameUI {
 
             #region Boost
 
-            boostIndicatorText.text = ((int)shipInstrumentData.BoostCapacitorPercent).ToString(CultureInfo.InvariantCulture) + "%";
+            boostIndicatorText.SetText("{0:0}%", shipInstrumentData.BoostCapacitorPercent);
             boostCapacitorBar.fillAmount = Mathf.Lerp(
                 boostCapacitorBar.fillAmount,
                 shipInstrumentData.BoostCapacitorPercent.Remap(0, 100, 0, 0.755f),

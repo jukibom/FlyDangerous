@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,12 +21,12 @@ namespace GameUI {
             bool useDecimals
         ) {
             var multiplier = useDecimals ? 100 : 1;
-            pitch.text = (Mathf.Round(pitchVal * multiplier) / multiplier).ToString(CultureInfo.CurrentCulture);
-            roll.text = (Mathf.Round(rollVal * multiplier) / multiplier).ToString(CultureInfo.CurrentCulture);
-            yaw.text = (Mathf.Round(yawVal * multiplier) / multiplier).ToString(CultureInfo.CurrentCulture);
-            throttle.text = (Mathf.Round(throttleVal * multiplier) / multiplier).ToString(CultureInfo.CurrentCulture);
-            vertical.text = (Mathf.Round(verticalVal * multiplier) / multiplier).ToString(CultureInfo.CurrentCulture);
-            lateral.text = (Mathf.Round(lateralVal * multiplier) / multiplier).ToString(CultureInfo.CurrentCulture);
+            pitch.SetText("{0:0.00}", Mathf.Round(pitchVal * multiplier) / multiplier);
+            roll.SetText("{0:0.00}", Mathf.Round(rollVal * multiplier) / multiplier);
+            yaw.SetText("{0:0.00}", Mathf.Round(yawVal * multiplier) / multiplier);
+            throttle.SetText("{0:0.00}", Mathf.Round(throttleVal * multiplier) / multiplier);
+            vertical.SetText("{0:0.00}", Mathf.Round(verticalVal * multiplier) / multiplier);
+            lateral.SetText("{0:0.00}", Mathf.Round(lateralVal * multiplier) / multiplier);
         }
     }
 }

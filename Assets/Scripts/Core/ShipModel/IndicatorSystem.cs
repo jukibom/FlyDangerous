@@ -153,10 +153,10 @@ namespace Core.ShipModel {
         private void UpdateHeightIndicators() {
             altitudeIndicator.HeightAboveSurface = _shipInstrumentData.Altitude;
             heightIndicator.HeightAboveSurface = _shipInstrumentData.ShipHeightFromGround;
-            xCoord.text = Mathf.Round(_shipInstrumentData.WorldPosition.x) + "x";
-            yCoord.text = Mathf.Round(_shipInstrumentData.WorldPosition.y) + "y";
-            zCoord.text = Mathf.Round(_shipInstrumentData.WorldPosition.z) + "z";
-            gravity.text = Mathf.Round(_shipInstrumentData.Gravity / 9.8f * 100) / 100 + "G";
+            xCoord.SetText("{0:0}x", Mathf.Round(_shipInstrumentData.WorldPosition.x));
+            xCoord.SetText("{0:0}y", Mathf.Round(_shipInstrumentData.WorldPosition.y));
+            xCoord.SetText("{0:0}z", Mathf.Round(_shipInstrumentData.WorldPosition.z));
+            gravity.SetText("{0:0}G", Mathf.Round(_shipInstrumentData.Gravity / 9.8f * 100) / 100);
         }
 
         private void UpdateHeightDeltaIndicator() {

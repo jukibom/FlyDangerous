@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using Core.ShipModel.Feedback.interfaces;
 using Misc;
 using UnityEngine;
@@ -14,14 +14,16 @@ namespace Core.ShipModel {
         public override void OnShipInstrumentUpdate(IShipInstrumentData shipInstrumentData) {
             base.OnShipInstrumentUpdate(shipInstrumentData);
 
-            if (velocityIndicator != null) velocityIndicator.text = shipInstrumentData.Speed.ToString(CultureInfo.InvariantCulture);
+            if (velocityIndicator != null) 
+                velocityIndicator.SetText("{0:0}", shipInstrumentData.Speed);
 
             if (accelerationBar != null) {
                 accelerationBar.fillAmount = shipInstrumentData.AccelerationMagnitudeNormalised.Remap(0, 1, 0, 0.755f);
                 accelerationBar.color = Color.Lerp(Color.green, Color.red, shipInstrumentData.AccelerationMagnitudeNormalised);
             }
 
-            if (boostIndicator != null) boostIndicator.text = ((int)shipInstrumentData.BoostCapacitorPercent).ToString(CultureInfo.InvariantCulture) + "%";
+            if (boostIndicator != null) 
+                boostIndicator.SetText("{0:0}%", shipInstrumentData.BoostCapacitorPercent);
 
             if (boostCapacitorBar != null) {
                 boostCapacitorBar.fillAmount = shipInstrumentData.BoostCapacitorPercent.Remap(0, 100, 0, 0.775f);
