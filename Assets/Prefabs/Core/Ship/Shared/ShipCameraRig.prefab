@@ -129,7 +129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90eebaab98e4b44b0ba8c79821e554e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SplineSettings:
+  m_SplineSettings:
     Spline: {fileID: 7756809968780125452}
     Position: 0
     Units: 1
@@ -164,6 +164,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ReferenceFrame: 0
+  RecenterTarget: 0
   PanAxis:
     Value: 27
     Center: 0
@@ -354,7 +355,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90eebaab98e4b44b0ba8c79821e554e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SplineSettings:
+  m_SplineSettings:
     Spline: {fileID: 4786026749139294509}
     Position: 0
     Units: 1
@@ -389,6 +390,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ReferenceFrame: 0
+  RecenterTarget: 0
   PanAxis:
     Value: 0
     Center: 0
@@ -547,6 +549,11 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -568,9 +575,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &988362123652185810
 GameObject:
@@ -662,7 +671,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90eebaab98e4b44b0ba8c79821e554e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SplineSettings:
+  m_SplineSettings:
     Spline: {fileID: 2235384388402858234}
     Position: 1
     Units: 1
@@ -697,6 +706,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ReferenceFrame: 0
+  RecenterTarget: 0
   PanAxis:
     Value: -57.199997
     Center: 0
@@ -1028,13 +1038,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b617507da6d07e749b7efdb34e1173e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FollowOffset: {x: 1.99, y: 0.57, z: 6.6000004}
   TrackerSettings:
     BindingMode: 3
     PositionDamping: {x: 0, y: 0, z: 0}
     AngularDampingMode: 0
     RotationDamping: {x: 0, y: 0, z: 0}
     QuaternionDamping: 0
+  FollowOffset: {x: 1.99, y: 0.57, z: 6.6000004}
 --- !u!114 &7946955472994409085
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1157,7 +1167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90eebaab98e4b44b0ba8c79821e554e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SplineSettings:
+  m_SplineSettings:
     Spline: {fileID: 2627227759454913724}
     Position: 1
     Units: 1
@@ -1192,6 +1202,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ReferenceFrame: 0
+  RecenterTarget: 0
   PanAxis:
     Value: 0
     Center: 0
@@ -1382,7 +1393,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90eebaab98e4b44b0ba8c79821e554e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SplineSettings:
+  m_SplineSettings:
     Spline: {fileID: 338704000042457528}
     Position: 1
     Units: 1
@@ -1417,6 +1428,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ReferenceFrame: 0
+  RecenterTarget: 0
   PanAxis:
     Value: -117.5
     Center: 0
@@ -1607,7 +1619,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90eebaab98e4b44b0ba8c79821e554e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SplineSettings:
+  m_SplineSettings:
     Spline: {fileID: 5415401783866659286}
     Position: 1
     Units: 1
@@ -1642,6 +1654,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ReferenceFrame: 0
+  RecenterTarget: 0
   PanAxis:
     Value: 0
     Center: 0
@@ -1832,7 +1845,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90eebaab98e4b44b0ba8c79821e554e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SplineSettings:
+  m_SplineSettings:
     Spline: {fileID: 3381480783191598936}
     Position: 1
     Units: 1
@@ -1867,6 +1880,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ReferenceFrame: 0
+  RecenterTarget: 0
   PanAxis:
     Value: -180
     Center: 0
@@ -2025,6 +2039,11 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -2046,9 +2065,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &5227323905924148687
 GameObject:
@@ -2423,13 +2444,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b617507da6d07e749b7efdb34e1173e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FollowOffset: {x: 0, y: 0, z: 0}
   TrackerSettings:
     BindingMode: 4
     PositionDamping: {x: 0, y: 0, z: 0}
     AngularDampingMode: 0
     RotationDamping: {x: 1, y: 1, z: 1}
     QuaternionDamping: 1
+  FollowOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &7554921066354299522
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2614,7 +2635,7 @@ MonoBehaviour:
   PivotOffset: {x: 0, y: 0, z: 0}
   AmplitudeGain: 1
   FrequencyGain: 0
-  mNoiseOffsets: {x: -744.24194, y: -941.2832, z: 487.15424}
+  m_NoiseOffsets: {x: -744.24194, y: -941.2832, z: 487.15424}
 --- !u!114 &3081616600077473386
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2813,7 +2834,7 @@ MonoBehaviour:
   PivotOffset: {x: 0, y: 0, z: 0}
   AmplitudeGain: 1
   FrequencyGain: 0
-  mNoiseOffsets: {x: 674.1708, y: -841.65405, z: 504.92664}
+  m_NoiseOffsets: {x: 674.1708, y: -841.65405, z: 504.92664}
 --- !u!114 &7955175266960112450
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3002,7 +3023,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90eebaab98e4b44b0ba8c79821e554e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SplineSettings:
+  m_SplineSettings:
     Spline: {fileID: 6500336010814497365}
     Position: 1
     Units: 1
@@ -3037,6 +3058,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ReferenceFrame: 0
+  RecenterTarget: 0
   PanAxis:
     Value: 23
     Center: 0
@@ -3296,13 +3318,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b617507da6d07e749b7efdb34e1173e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FollowOffset: {x: 2, y: 1.7, z: -6.64}
   TrackerSettings:
     BindingMode: 3
     PositionDamping: {x: 0, y: 0, z: 0}
     AngularDampingMode: 0
     RotationDamping: {x: 0, y: 0, z: 0}
     QuaternionDamping: 0
+  FollowOffset: {x: 2, y: 1.7, z: -6.64}
 --- !u!114 &7908594540527267410
 MonoBehaviour:
   m_ObjectHideFlags: 0

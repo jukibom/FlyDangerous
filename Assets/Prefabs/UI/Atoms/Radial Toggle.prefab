@@ -31,7 +31,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2617484781514620796}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -113,7 +112,6 @@ RectTransform:
   - {fileID: 1205135974097427779}
   - {fileID: 2258549370043378154}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -133,6 +131,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   value: some-string-value
+  onToggle:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &128593862895011154
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -198,6 +199,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2617484781514620796}
     m_Modifications:
     - target: {fileID: 469566584718474989, guid: ac81661dda6bf2b46bd02f617bd68229, type: 3}
@@ -332,6 +334,9 @@ PrefabInstance:
     - {fileID: 469566584718474989, guid: ac81661dda6bf2b46bd02f617bd68229, type: 3}
     - {fileID: 4148057626619002209, guid: ac81661dda6bf2b46bd02f617bd68229, type: 3}
     - {fileID: 2703848293997447053, guid: ac81661dda6bf2b46bd02f617bd68229, type: 3}
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ac81661dda6bf2b46bd02f617bd68229, type: 3}
 --- !u!114 &1205135974097427778 stripped
 MonoBehaviour:
