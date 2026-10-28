@@ -12,21 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bc43e142692db4e92eef81e1903ca4, type: 3}
   m_Name: Terrain Mild Grassy
   m_EditorClassIdentifier: 
-  changeVersion: 14621
   serializedVersion: 0
-  instanceId: 34360
   guiShowDependent: 0
   guiShowShared: 0
   guiShowExposed: 0
   guiShowDebug: 0
   guiMiniPos: {x: 20, y: 20}
   guiMiniAnchor: {x: 0, y: 0}
-  debugGenerate: 1
-  debugGenInfo: 0
-  debugGraphBackground: 1
-  debugGraphBackColor: 0.5
-  debugGraphFps: 1
-  drawInSceneView: 0
   serializer200beta:
     serializedData:
     - refId: 0
@@ -79,11 +71,11 @@ MonoBehaviour:
       - t: 4
         v: 4
       - t: 4
-        v: 12
+        v: 19
       - t: 1
-        v: 201588994
+        v: 319029506
       - t: 6
-        v: 201588994
+        v: 319029506
       special: 
       uniObj: {fileID: 0}
     - refId: 2
@@ -168,8 +160,6 @@ MonoBehaviour:
       - enabled
       - id
       - version
-      - draftTime
-      - mainTime
       - guiPosition
       - guiSize
       - guiPreview
@@ -188,10 +178,6 @@ MonoBehaviour:
         v: 1673362139475083269
       - t: 11
         v: 114
-      - t: 9
-        v: 4595718055588583073
-      - t: 9
-        v: 4633624726988421018
       - t: 255
         v: 24
       - t: 255
@@ -586,8 +572,6 @@ MonoBehaviour:
       - enabled
       - id
       - version
-      - draftTime
-      - mainTime
       - guiPosition
       - guiSize
       - guiPreview
@@ -602,10 +586,6 @@ MonoBehaviour:
         v: 1949981672837480457
       - t: 11
         v: 4
-      - t: 9
-        v: 4562715677519212079
-      - t: 9
-        v: 4563176846121054817
       - t: 255
         v: 28
       - t: 255
@@ -660,11 +640,10 @@ MonoBehaviour:
         Culture=neutral, PublicKeyToken=null
       fields:
       - enter
+      - enterId
       - enabled
       - id
       - version
-      - draftTime
-      - mainTime
       - guiPosition
       - guiSize
       - guiPreview
@@ -672,17 +651,15 @@ MonoBehaviour:
       - guiDebug
       values:
       - t: 255
-        v: 26
+        v: 4294967295
+      - t: 11
+        v: 1949981672837480457
       - t: 3
         v: 1
       - t: 11
         v: 1986024763507605515
       - t: 11
         v: 3
-      - t: 9
-        v: 4563638014722897556
-      - t: 9
-        v: 4565021520528425773
       - t: 255
         v: 31
       - t: 255
@@ -722,8 +699,6 @@ MonoBehaviour:
       - enabled
       - id
       - version
-      - draftTime
-      - mainTime
       - guiPosition
       - guiSize
       - guiPreview
@@ -744,10 +719,6 @@ MonoBehaviour:
         v: 1918376211097059337
       - t: 11
         v: 0
-      - t: 9
-        v: 4581018306404845774
-      - t: 9
-        v: 4627448645270682311
       - t: 255
         v: 33
       - t: 255
@@ -798,11 +769,12 @@ MonoBehaviour:
       - units
       - from
       - to
+      - tFrom
+      - tTo
+      - tTransition
       - enabled
       - id
       - version
-      - draftTime
-      - mainTime
       - guiPosition
       - guiSize
       - guiPreview
@@ -817,16 +789,18 @@ MonoBehaviour:
         v: 38
       - t: 255
         v: 39
+      - t: 2
+        v: 1053609165
+      - t: 2
+        v: 1058642330
+      - t: 2
+        v: 1036831949
       - t: 3
         v: 1
       - t: 11
         v: 2042826633710141450
       - t: 11
         v: 8
-      - t: 9
-        v: 4572184045375795809
-      - t: 9
-        v: 4613886702385302497
       - t: 255
         v: 40
       - t: 255
@@ -927,11 +901,12 @@ MonoBehaviour:
       - units
       - from
       - to
+      - tFrom
+      - tTo
+      - tTransition
       - enabled
       - id
       - version
-      - draftTime
-      - mainTime
       - guiPosition
       - guiSize
       - guiPreview
@@ -946,16 +921,18 @@ MonoBehaviour:
         v: 43
       - t: 255
         v: 44
+      - t: 2
+        v: 1053609165
+      - t: 2
+        v: 1058642330
+      - t: 2
+        v: 1036831949
       - t: 3
         v: 1
       - t: 11
         v: 2340191752465416204
       - t: 11
         v: 0
-      - t: 9
-        v: 4575765307799480828
-      - t: 9
-        v: 4619336395704392850
       - t: 255
         v: 45
       - t: 255
@@ -1022,8 +999,6 @@ MonoBehaviour:
       - enabled
       - id
       - version
-      - draftTime
-      - mainTime
       - guiPosition
       - guiSize
       - guiPreview
@@ -1042,10 +1017,6 @@ MonoBehaviour:
         v: 6077476855252779010
       - t: 11
         v: 0
-      - t: 9
-        v: 4583439441564520153
-      - t: 9
-        v: 4625516488440549684
       - t: 255
         v: 47
       - t: 255
@@ -1102,8 +1073,6 @@ MonoBehaviour:
       - enabled
       - id
       - version
-      - draftTime
-      - mainTime
       - guiPosition
       - guiSize
       - guiPreview
@@ -1130,10 +1099,6 @@ MonoBehaviour:
         v: 5413300363820269570
       - t: 11
         v: 17
-      - t: 9
-        v: 4600711646855411479
-      - t: 9
-        v: 4629399632776756881
       - t: 255
         v: 52
       - t: 255
@@ -1208,8 +1173,6 @@ MonoBehaviour:
       - enabled
       - id
       - version
-      - draftTime
-      - mainTime
       - guiPosition
       - guiSize
       - guiPreview
@@ -1224,10 +1187,6 @@ MonoBehaviour:
         v: 5437983300352212995
       - t: 11
         v: 0
-      - t: 9
-        v: 4554169646866313825
-      - t: 9
-        v: 4562254508917369340
       - t: 255
         v: 56
       - t: 255
@@ -1272,8 +1231,6 @@ MonoBehaviour:
       - enabled
       - id
       - version
-      - draftTime
-      - mainTime
       - guiPosition
       - guiSize
       - guiPreview
@@ -1290,10 +1247,6 @@ MonoBehaviour:
         v: 5457376486442926084
       - t: 11
         v: 4
-      - t: 9
-        v: 4582142404871837450
-      - t: 9
-        v: 4596175621310723916
       - t: 255
         v: 58
       - t: 255
@@ -1350,8 +1303,6 @@ MonoBehaviour:
       - enabled
       - id
       - version
-      - draftTime
-      - mainTime
       - guiPosition
       - guiSize
       - guiPreview
@@ -1378,10 +1329,6 @@ MonoBehaviour:
         v: 5483222706277056517
       - t: 11
         v: 15
-      - t: 9
-        v: 4598921015643568970
-      - t: 9
-        v: 4626709069769375062
       - t: 255
         v: 62
       - t: 255
@@ -1429,8 +1376,6 @@ MonoBehaviour:
       - enabled
       - id
       - version
-      - draftTime
-      - mainTime
       - guiPosition
       - guiSize
       - guiPreview
@@ -1445,10 +1390,6 @@ MonoBehaviour:
         v: 5496771988066140166
       - t: 11
         v: 16
-      - t: 9
-        v: 4582805334736986387
-      - t: 9
-        v: 4603102157537619739
       - t: 255
         v: 74
       - t: 255
@@ -1666,11 +1607,10 @@ MonoBehaviour:
         Culture=neutral, PublicKeyToken=null
       fields:
       - enter
+      - enterId
       - enabled
       - id
       - version
-      - draftTime
-      - mainTime
       - guiPosition
       - guiSize
       - guiPreview
@@ -1678,17 +1618,15 @@ MonoBehaviour:
       - guiDebug
       values:
       - t: 255
-        v: 54
+        v: 4294967295
+      - t: 11
+        v: 5437983300352212995
       - t: 3
         v: 1
       - t: 11
         v: 5507420758181150729
       - t: 11
         v: 0
-      - t: 9
-        v: 4564560351926583034
-      - t: 9
-        v: 4564560351926583034
       - t: 255
         v: 77
       - t: 255
@@ -1725,8 +1663,6 @@ MonoBehaviour:
       - enabled
       - id
       - version
-      - draftTime
-      - mainTime
       - guiPosition
       - guiSize
       - guiPreview
@@ -1741,10 +1677,6 @@ MonoBehaviour:
         v: 5532047619620077579
       - t: 11
         v: 38
-      - t: 9
-        v: 4603824534917849966
-      - t: 9
-        v: 4603176016571508615
       - t: 255
         v: 90
       - t: 255
@@ -1994,11 +1926,10 @@ MonoBehaviour:
         Culture=neutral, PublicKeyToken=null
       fields:
       - enter
+      - enterId
       - enabled
       - id
       - version
-      - draftTime
-      - mainTime
       - guiPosition
       - guiSize
       - guiPreview
@@ -2006,17 +1937,15 @@ MonoBehaviour:
       - guiDebug
       values:
       - t: 255
-        v: 54
+        v: 4294967295
+      - t: 11
+        v: 5437983300352212995
       - t: 3
         v: 1
       - t: 11
         v: 5551493582268923918
       - t: 11
         v: 0
-      - t: 9
-        v: 4559595583697369799
-      - t: 9
-        v: 4561440258104740754
       - t: 255
         v: 93
       - t: 255
@@ -2058,8 +1987,6 @@ MonoBehaviour:
       - enabled
       - id
       - version
-      - draftTime
-      - mainTime
       - guiPosition
       - guiSize
       - guiPreview
@@ -2084,10 +2011,6 @@ MonoBehaviour:
         v: 5573524496754671631
       - t: 11
         v: 47
-      - t: 9
-        v: 4617082344090893917
-      - t: 9
-        v: 4640217191120770590
       - t: 255
         v: 95
       - t: 255
@@ -2130,8 +2053,6 @@ MonoBehaviour:
       - enabled
       - id
       - version
-      - draftTime
-      - mainTime
       - guiPosition
       - guiSize
       - guiPreview
@@ -2158,10 +2079,6 @@ MonoBehaviour:
         v: 5935349584199942161
       - t: 11
         v: 0
-      - t: 9
-        v: 4605975454099882115
-      - t: 9
-        v: 4632976968624516786
       - t: 255
         v: 98
       - t: 255
@@ -2209,8 +2126,6 @@ MonoBehaviour:
       - enabled
       - id
       - version
-      - draftTime
-      - mainTime
       - guiPosition
       - guiSize
       - guiPreview
@@ -2225,10 +2140,6 @@ MonoBehaviour:
         v: 6517587170595700737
       - t: 11
         v: 56
-      - t: 9
-        v: 4589023905102459568
-      - t: 9
-        v: 4603014787704848751
       - t: 255
         v: 109
       - t: 255
@@ -2925,8 +2836,6 @@ MonoBehaviour:
       - enabled
       - id
       - version
-      - draftTime
-      - mainTime
       - guiPosition
       - guiSize
       - guiPreview
@@ -2943,10 +2852,6 @@ MonoBehaviour:
         v: -5952301854476992496
       - t: 11
         v: 10
-      - t: 9
-        v: 4566988692845661205
-      - t: 9
-        v: 4571261708172110332
       - t: 255
         v: 112
       - t: 255
@@ -2997,8 +2902,6 @@ MonoBehaviour:
       - enabled
       - id
       - version
-      - draftTime
-      - mainTime
       - guiPosition
       - guiSize
       - guiPreview
@@ -3013,10 +2916,6 @@ MonoBehaviour:
         v: -5633798624677724140
       - t: 11
         v: 83
-      - t: 9
-        v: 4586487477792324505
-      - t: 9
-        v: 4598886788286400954
       - t: 255
         v: 126
       - t: 255
@@ -3261,8 +3160,6 @@ MonoBehaviour:
       - enabled
       - id
       - version
-      - draftTime
-      - mainTime
       - guiPosition
       - guiSize
       - guiPreview
@@ -3289,10 +3186,6 @@ MonoBehaviour:
         v: 114182083521282056
       - t: 11
         v: 49
-      - t: 9
-        v: 4604388385591196752
-      - t: 9
-        v: 4631143750248697954
       - t: 255
         v: 128
       - t: 255
@@ -3330,8 +3223,6 @@ MonoBehaviour:
       - enabled
       - id
       - version
-      - draftTime
-      - mainTime
       - guiPosition
       - guiSize
       - guiPreview
@@ -3348,10 +3239,6 @@ MonoBehaviour:
         v: 307417953568030729
       - t: 11
         v: 46
-      - t: 9
-        v: 4581162421592921630
-      - t: 9
-        v: 4596467454566577524
       - t: 255
         v: 130
       - t: 255
@@ -3388,11 +3275,12 @@ MonoBehaviour:
       - units
       - from
       - to
+      - tFrom
+      - tTo
+      - tTransition
       - enabled
       - id
       - version
-      - draftTime
-      - mainTime
       - guiPosition
       - guiSize
       - guiPreview
@@ -3407,16 +3295,18 @@ MonoBehaviour:
         v: 132
       - t: 255
         v: 133
+      - t: 2
+        v: 1053609165
+      - t: 2
+        v: 1058642330
+      - t: 2
+        v: 1036831949
       - t: 3
         v: 1
       - t: 11
         v: -5345198812619079671
       - t: 11
         v: 5
-      - t: 9
-        v: 4573221674729941972
-      - t: 9
-        v: 4599474057677810067
       - t: 255
         v: 134
       - t: 255
@@ -3502,8 +3392,6 @@ MonoBehaviour:
       - enabled
       - id
       - version
-      - draftTime
-      - mainTime
       - guiPosition
       - guiSize
       - guiPreview
@@ -3532,10 +3420,6 @@ MonoBehaviour:
         v: -5169196687826092018
       - t: 11
         v: 199
-      - t: 9
-        v: 4601632182619246009
-      - t: 9
-        v: 4619706141233799968
       - t: 255
         v: 138
       - t: 255
@@ -3609,8 +3493,6 @@ MonoBehaviour:
       - enabled
       - id
       - version
-      - draftTime
-      - mainTime
       - guiPosition
       - guiSize
       - guiPreview
@@ -3629,10 +3511,6 @@ MonoBehaviour:
         v: -5033669785074794480
       - t: 11
         v: 5
-      - t: 9
-        v: 4583208857263598784
-      - t: 9
-        v: 4626208550965788174
       - t: 255
         v: 141
       - t: 255
@@ -3685,8 +3563,6 @@ MonoBehaviour:
       - enabled
       - id
       - version
-      - draftTime
-      - mainTime
       - guiPosition
       - guiSize
       - guiPreview
@@ -3705,10 +3581,6 @@ MonoBehaviour:
         v: -4895672279695884269
       - t: 11
         v: 4
-      - t: 9
-        v: 4581998289683761594
-      - t: 9
-        v: 4617581230339615883
       - t: 255
         v: 144
       - t: 255
@@ -3751,8 +3623,6 @@ MonoBehaviour:
       - enabled
       - id
       - version
-      - draftTime
-      - mainTime
       - guiPosition
       - guiSize
       - guiPreview
@@ -3779,10 +3649,6 @@ MonoBehaviour:
         v: -4616351246264041447
       - t: 11
         v: 221
-      - t: 9
-        v: 4632700588344884593
-      - t: 9
-        v: 4631007727466202530
       - t: 255
         v: 148
       - t: 255
@@ -3869,8 +3735,6 @@ MonoBehaviour:
       - enabled
       - id
       - version
-      - draftTime
-      - mainTime
       - guiPosition
       - guiSize
       - guiPreview
@@ -3885,10 +3749,6 @@ MonoBehaviour:
         v: -4151170966296199140
       - t: 11
         v: 2
-      - t: 9
-        v: 4554169646866313825
-      - t: 9
-        v: 4566405026333953989
       - t: 255
         v: 152
       - t: 255
@@ -3929,11 +3789,10 @@ MonoBehaviour:
         Culture=neutral, PublicKeyToken=null
       fields:
       - enter
+      - enterId
       - enabled
       - id
       - version
-      - draftTime
-      - mainTime
       - guiPosition
       - guiSize
       - guiPreview
@@ -3941,17 +3800,15 @@ MonoBehaviour:
       - guiDebug
       values:
       - t: 255
-        v: 150
+        v: 4294967295
+      - t: 11
+        v: -4151170966296199140
       - t: 3
         v: 1
       - t: 11
         v: -4135730524507340771
       - t: 11
         v: 0
-      - t: 9
-        v: 4560517920901055277
-      - t: 9
-        v: 4571492292473031701
       - t: 255
         v: 154
       - t: 255
@@ -3994,8 +3851,6 @@ MonoBehaviour:
       - enabled
       - id
       - version
-      - draftTime
-      - mainTime
       - guiPosition
       - guiSize
       - guiPreview
@@ -4022,10 +3877,6 @@ MonoBehaviour:
         v: -2965540090274643934
       - t: 11
         v: 2
-      - t: 9
-        v: 4598665211184734326
-      - t: 9
-        v: 4625833119641851501
       - t: 255
         v: 156
       - t: 255
@@ -4077,8 +3928,6 @@ MonoBehaviour:
       - enabled
       - id
       - version
-      - draftTime
-      - mainTime
       - guiPosition
       - guiSize
       - guiPreview
@@ -4095,10 +3944,6 @@ MonoBehaviour:
         v: -2949417951276564445
       - t: 11
         v: 7
-      - t: 9
-        v: 4595775701663813416
-      - t: 9
-        v: 4596676421589287515
       - t: 255
         v: 159
       - t: 255
