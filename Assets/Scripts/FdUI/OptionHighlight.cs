@@ -39,7 +39,7 @@ namespace FdUI {
 
         public void OnPointerClick(PointerEventData eventData) {
             // Only activate if the click originated outside the element to activate but within this boundary
-            if (eventData.pointerPress != interactionObject.gameObject)
+            if (eventData.pointerPress != interactionObject?.gameObject)
                 ActivateElement();
         }
 
@@ -71,11 +71,13 @@ namespace FdUI {
 
         private void ActivateElement() {
             if (highlightOnlyOnSubmit) {
-                interactionObject.Select();
+                interactionObject?.Select();
             }
             else {
-                var ped = new PointerEventData(EventSystem.current);
-                ExecuteEvents.Execute(interactionObject.gameObject, ped, ExecuteEvents.submitHandler);
+                if (interactionObject != null) {
+                    var ped = new PointerEventData(EventSystem.current);
+                    ExecuteEvents.Execute(interactionObject.gameObject, ped, ExecuteEvents.submitHandler);
+                }
             }
         }
 

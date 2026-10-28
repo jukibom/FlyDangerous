@@ -30,15 +30,15 @@ namespace Menus.Options {
         private GameObject rebindOverlay;
 
         [Tooltip("The text value to manipulate while binding action is in progress")] [SerializeField]
-        private Text rebindText;
+        private TMPro.TMP_Text rebindText;
 
         [Header("Internal Components - Don't touch")] [SerializeField]
-        private Text fullAxisLabel;
+        private TMPro.TMP_Text fullAxisLabel;
 
-        [SerializeField] private Text fullAxisInvertLabel;
-        [SerializeField] private Text fullAxisDeadzoneLabel;
-        [SerializeField] private Text positiveAxisLabel;
-        [SerializeField] private Text negativeAxisLabel;
+        [SerializeField] private TMPro.TMP_Text fullAxisInvertLabel;
+        [SerializeField] private TMPro.TMP_Text fullAxisDeadzoneLabel;
+        [SerializeField] private TMPro.TMP_Text positiveAxisLabel;
+        [SerializeField] private TMPro.TMP_Text negativeAxisLabel;
 
         [SerializeField] private RebindAction fullAxisRebindActionComponent;
         [SerializeField] private RebindAction positiveAxisRebindActionComponent;
@@ -58,11 +58,12 @@ namespace Menus.Options {
         }
 
         private void OnValidate() {
-            fullAxisLabel.text = $"{axisBindingLabel.ToUpper()} FULL AXIS";
-            fullAxisInvertLabel.text = $"INVERT {axisBindingLabel.ToUpper()} AXIS";
-            fullAxisDeadzoneLabel.text = $"{axisBindingLabel.ToUpper()} AXIS DEADZONE";
-            positiveAxisLabel.text = $"{axisBindingLabel.ToUpper()} {(axisBindingOrientation == AxisBindingOrientation.UpDown ? "UP" : "RIGHT")}";
-            negativeAxisLabel.text = $"{axisBindingLabel.ToUpper()} {(axisBindingOrientation == AxisBindingOrientation.UpDown ? "DOWN" : "LEFT")}";
+            if (action == null) return;
+            fullAxisLabel.text = $"{axisBindingLabel} Full Axis";
+            fullAxisInvertLabel.text = $"Invert {axisBindingLabel} Axis";
+            fullAxisDeadzoneLabel.text = $"{axisBindingLabel} Axis Deadzone";
+            positiveAxisLabel.text = $"{axisBindingLabel} {(axisBindingOrientation == AxisBindingOrientation.UpDown ? "Up" : "Right")}";
+            negativeAxisLabel.text = $"{axisBindingLabel} {(axisBindingOrientation == AxisBindingOrientation.UpDown ? "Down" : "Left")}";
 
             fullAxisRebindActionComponent.actionReference = action;
             positiveAxisRebindActionComponent.actionReference = action;

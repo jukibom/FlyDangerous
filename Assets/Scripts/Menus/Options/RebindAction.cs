@@ -21,13 +21,13 @@ namespace Menus.Options {
         [SerializeField] private string m_SecondaryBindingId;
         [SerializeField] private InputBinding.DisplayStringOptions m_DisplayStringOptions;
 
-        [SerializeField] private Text m_ActionLabel;
+        [SerializeField] private TMPro.TMP_Text m_ActionLabel;
         [SerializeField] private Button m_PrimaryBindingButton;
-        [SerializeField] private Text m_PrimaryBindingText;
-        [SerializeField] private Text m_SecondaryBindingText;
+        [SerializeField] private TMPro.TMP_Text m_PrimaryBindingText;
+        [SerializeField] private TMPro.TMP_Text m_SecondaryBindingText;
         [SerializeField] private bool m_Protected;
         [SerializeField] private GameObject m_RebindOverlay;
-        [SerializeField] private Text m_RebindText;
+        [SerializeField] private TMPro.TMP_Text m_RebindText;
         [SerializeField] private UpdateBindingUIEvent m_UpdateBindingUIEvent;
         [SerializeField] private InteractiveRebindEvent m_RebindStartEvent;
         [SerializeField] private InteractiveRebindEvent m_RebindStopEvent;
@@ -85,7 +85,7 @@ namespace Menus.Options {
             }
         }
 
-        public Text actionLabel {
+        public TMPro.TMP_Text actionLabel {
             get => m_ActionLabel;
             set {
                 m_ActionLabel = value;
@@ -93,7 +93,7 @@ namespace Menus.Options {
             }
         }
 
-        public Text primaryBindingText {
+        public TMPro.TMP_Text primaryBindingText {
             get => m_PrimaryBindingText;
             set {
                 m_PrimaryBindingText = value;
@@ -101,7 +101,7 @@ namespace Menus.Options {
             }
         }
 
-        public Text secondaryBindingText {
+        public TMPro.TMP_Text secondaryBindingText {
             get => m_SecondaryBindingText;
             set {
                 m_SecondaryBindingText = value;
@@ -109,7 +109,7 @@ namespace Menus.Options {
             }
         }
 
-        public Text rebindPrompt {
+        public TMPro.TMP_Text rebindPrompt {
             get => m_RebindText;
             set => m_RebindText = value;
         }
@@ -119,7 +119,7 @@ namespace Menus.Options {
             set => m_RebindOverlay = value;
         }
 
-        public Text rebindText {
+        public TMPro.TMP_Text rebindText {
             get => m_RebindText;
             set => m_RebindText = value;
         }
@@ -315,7 +315,7 @@ namespace Menus.Options {
             }
         }
 
-        private void PerformInteractiveRebind(Text bindingText, InputAction action, int bindingIndex, BindingType bindingType, bool allCompositeParts = false) {
+        private void PerformInteractiveRebind(TMPro.TMP_Text bindingText, InputAction action, int bindingIndex, BindingType bindingType, bool allCompositeParts = false) {
             ongoingRebind?.Cancel(); // Will null out m_RebindOperation.
 
             var shouldReEnable = action.enabled;
