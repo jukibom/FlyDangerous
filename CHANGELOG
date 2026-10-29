@@ -1,23 +1,24 @@
 ﻿0.7.0
 Added:
-    * Updated to Unity 6.3
-    * Upgraded VR to use Single Pass Instanced rendering, resolving a number of eye-difference rendering issues and greatly improving performance
-    * OGS Telemetry Standard (OGS-TS) telemetry output - a standardised, self-describing UDP multicast stream (default group 239.255.17.17:40123, local network only) for motion rigs, haptic hardware, dashboards and loggers. Enable it in Options > Integrations; endpoint configurable in the config file ("ogsTelemetryMulticastAddress" / "ogsTelemetryPort")
-    * Ability to toggle the SFX of flight assist switching in the audio panel
-    * Water environmental reflections now respects shadows
-    * Water depth and color now respect direct + ambient light
+    * Updated to Unity 6.3 LTS.
+    * Upgraded VR to use Single Pass Instanced rendering, resolving a number of eye-difference rendering issues and greatly improving performance.
+    * OGS Telemetry Standard (OGS-TS) telemetry output - a standardised, self-describing UDP multicast stream (default group 239.255.17.17:40123, local network only) for motion rigs, haptic hardware, dashboards and loggers. Enable it in Options > Integrations; endpoint configurable in the config file ("ogsTelemetryMulticastAddress" / "ogsTelemetryPort").
+    * Ability to toggle the SFX of flight assist switching in the audio panel.
+    * Water environmental reflections now respects shadows.
+    * Water depth and color now respect direct + ambient light.
     
 Changed:
-    * Lighting pass on all environments to remove workarounds and introduce ambient lighting to make each environment more unique
-    * Optimisations across reflections and lighting; max one light per environment, better handling of static vs realtime reflections
+    * Lighting pass on all environments to remove workarounds and introduce ambient lighting to make each environment more unique.
+    * Optimisations across reflections and lighting; max one light per environment, better handling of static vs realtime reflections.
     * Large amount of general performance optimisations covering memory allocation, UI drawing, rendering etc.
-    * Upgraded all Text to TextMeshPro (if you know anything about unity, you know it was foolish to not use this from the start, and that this was a nightmare)
+    * Upgraded all Text to TextMeshPro (if you know anything about unity, you know it was foolish to not use this from the start, and that this was a nightmare).
         * All fonts are lovely and crisp now! Includes a minor UX pass on Options panel.
     
 Fixed:
-    * Water no longer overbright in dark scenes (low light angle)
-    * No longer possible to have music play on main menu with low pass filter (underwater effect)
-    * MSAA no longer disables lens flares
+    * Water no longer overbright in dark scenes (low light angle).
+    * No longer possible to have music play on main menu with low pass filter (underwater effect).
+    * MSAA no longer disables lens flares.
+    * Pitch indicator now correctly indicates the pitch. I know, right
 
 0.6.4-hotfix.3
 Fixed:
