@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿#if UNITY_EDITOR
+using UnityEditor;
 
 namespace Misc {
     public static class EditorExtensions {
@@ -12,5 +13,4 @@ namespace Misc {
         }
     }
 }
-
-
+#endif
