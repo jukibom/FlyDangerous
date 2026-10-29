@@ -31,6 +31,7 @@ namespace Gameplay {
                     _renderTexture = new RenderTexture(720, 360, 24, GraphicsFormat.R8G8B8A8_UNorm) {
                         wrapMode = TextureWrapMode.Repeat
                     };
+                    _renderTexture.Create();
                 }
 
                 return _renderTexture;
