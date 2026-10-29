@@ -50,6 +50,7 @@ namespace Gameplay.Game_Modes {
         // lifecycle
         private Coroutine _startSequenceCoroutine;
         private Coroutine _showLevelAndMusicName;
+        private Coroutine _fastCountDown;
         private bool _gameStarted;
 
         private ShipPlayer LocalPlayer { get; set; }
@@ -172,6 +173,7 @@ namespace Gameplay.Game_Modes {
         private void Restart() {
             if (replayRunning) {
                 replayRunning = false;
+                if (_fastCountDown != null) StopCoroutine(_fastCountDown);
                 ReplayPrioritizer.Instance.UnregisterReplay(playerReplayTimeline);
                 player.User.EnableInput();
             }
@@ -200,9 +202,10 @@ namespace Gameplay.Game_Modes {
             }
 
             if (!replayRunning) {
+                _fastCountDown = StartCoroutine( FastCountDown());
                 replayRunning = true;
                 replayTicks = 0;
-                //player.User.DisableInput();
+                player.User.DisableInput();
                 playerReplayTimeline = GetComponent<ReplayTimeline>();
                 playerReplayTimeline.LoadPlayerReplay(lastCheckpointReplay, _shipSnapshotBuffer.ghostSnapshot.tick);
                 playerReplayTimeline.Play();
@@ -252,6 +255,7 @@ namespace Gameplay.Game_Modes {
             // premature quit out
             if (_startSequenceCoroutine != null) StopCoroutine(_startSequenceCoroutine);
             if (_showLevelAndMusicName != null) StopCoroutine(_showLevelAndMusicName);
+            if (_fastCountDown != null) StopCoroutine(_fastCountDown);
 
             // nuke all ghosts and references
             StopGhosts();
@@ -338,6 +342,10 @@ namespace Gameplay.Game_Modes {
             }
 
             _gameStarted = true;
+        }
+
+        private IEnumerator FastCountDown() {
+            yield return _gameModeCountdown.CountdownWithSound(2f, timeRemaining => {if (timeRemaining <= 0) _gameModeWithCountdown.CountdownComplete(); },2f/(SnapShotTicks*Time.fixedDeltaTime));
         }
 
         private IEnumerator WaitForBoostButtonIfNeeded() {
