@@ -21,7 +21,6 @@ namespace Core.Player {
         
         private static readonly Vector3 BaseTargetPosition = new(0, 0, 20);
 
-        [SerializeField] private User user;
         [SerializeField] private List<ShipCamera> cameras;
         [SerializeField] private ShipCamera endScreenCamera1;
         [SerializeField] private ShipCamera endScreenCamera2;
@@ -267,8 +266,8 @@ namespace Core.Player {
                 var dollyTimeSeconds = Random.Range(dollyTimeRangeSeconds.x, dollyTimeRangeSeconds.y);
                 var forward = Random.value > 0.5f;
                 var timer = forward ? 0f : dollyTimeSeconds;
-                while (_dollyActive && forward ? timer < dollyTimeSeconds : timer > 0f) {
-                    timer += (forward ? 1f : -1f) * Time.deltaTime; 
+                while (_dollyActive && (forward ? timer < dollyTimeSeconds : timer > 0f)) {
+                    timer += (forward ? 1f : -1f) * Time.deltaTime;
                     dollyCamera.CameraPosition = timer / dollyTimeSeconds;
                     yield return null;
                 }
