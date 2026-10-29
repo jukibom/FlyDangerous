@@ -264,8 +264,9 @@ namespace Core.Player {
         // Apply all physics updates in fixed intervals (WRITE)
         private void FixedUpdate() {
             if (isLocalPlayer && IsReady) {
-                ShipPhysics.UpdateShip(_pitchInput, _rollInput, _yawInput, _throttleInput, _latHInput, _latVInput, _boostButtonHeld, _velocityLimiterActive,
-                    IsVectorFlightAssistActive, IsRotationalFlightAssistActive);
+                if (!Game.Instance.GameModeHandler.replayRunning)
+                    ShipPhysics.UpdateShip(_pitchInput, _rollInput, _yawInput, _throttleInput, _latHInput, _latVInput, _boostButtonHeld, _velocityLimiterActive,
+                        IsVectorFlightAssistActive, IsRotationalFlightAssistActive);
 
 
                 // update camera offset if not frozen
