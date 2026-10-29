@@ -10,6 +10,9 @@ Added:
 Changed:
     * Lighting pass on all environments to remove workarounds and introduce ambient lighting to make each environment more unique
     * Optimisations across reflections and lighting; max one light per environment, better handling of static vs realtime reflections
+    * Large amount of general performance optimisations covering memory allocation, UI drawing, rendering etc.
+    * Upgraded all Text to TextMeshPro (if you know anything about unity, you know it was foolish to not use this from the start, and that this was a nightmare)
+        * All fonts are lovely and crisp now! Includes a minor UX pass on Options panel.
     
 Fixed:
     * Water no longer overbright in dark scenes (low light angle)
