@@ -204,6 +204,8 @@ namespace GameUI.GameModes {
         }
 
         public void LoadNextLevel() {
+            if (FdPlayer.FindLocalShipPlayer.spectating) ReplayPrioritizer.Instance.StopSpectating();
+
             // if we've wrapped around or the game types don't match, yeet to main menu
             if (!IsNextLevelValid) {
                 QuitToMenu();
