@@ -109,15 +109,24 @@ namespace Core.Replays {
                 _keyFrameReader?.BaseStream.Seek(_inputTicks/this.Replay.ReplayMeta.KeyFrameIntervalTicks * Replay.ReplayMeta.KeyFrameBufferSizeBytes, SeekOrigin.Begin);
                 _keyFrameReader?.Read(_keyFrameByteBuffer, 0, Replay.ReplayMeta.KeyFrameBufferSizeBytes);
 
-                var keyFrame = MessagePackSerializer.Deserialize<KeyFrame>(_keyFrameByteBuffer);
+                var keyFrame = KeyFrameV2.Deserialize(Replay.ReplayMeta.Version, ref _keyFrameByteBuffer);
 
-                if(_isPlayer)
+                if(_isPlayer) {
                     FdPlayer.FindLocalShipPlayer.SetTransformWorld(keyFrame.position+keyFrame.replayFloatingOrigin, keyFrame.rotation);
-                else
+                    FdPlayer.FindLocalShipPlayer.transform.rotation = keyFrame.rotation;
+                    }
+                else {
                     ShipReplayObject.SetAbsolutePosition(keyFrame.replayFloatingOrigin, keyFrame.position);
-                shipPhysics.transform.rotation = keyFrame.rotation;
+                    ShipReplayObject.Transform.rotation = keyFrame.rotation;
+                }
                 shipPhysics.Rigidbody.linearVelocity = keyFrame.velocity;
                 shipPhysics.Rigidbody.angularVelocity = keyFrame.angularVelocity;
+                if (Replay.ReplayMeta.Version == "1.1.1") {
+                    shipPhysics.BoostStatus = keyFrame.boostStatus;
+                    shipPhysics.BoostProgressTicks = (int)keyFrame.boostProgressTicks;
+                    shipPhysics.CurrentBoostTime = keyFrame.boostTime;
+                    shipPhysics.BoostCapacitorPercent = keyFrame.boostCapacitorPercent;
+                }
             }
         }
 
@@ -139,7 +148,6 @@ namespace Core.Replays {
 
                     if (shipPhysics.IsNightVisionActive != inputFrame.shipLightsEnabled)
                         shipPhysics.NightVisionToggle(inputFrame.shipLightsEnabled, _ => { });
-
 
                     if (!_isPlayer && ShipReplayObject?.SpectatorActive == true ) {
                         shipPhysics.GhostCollisionChecks();

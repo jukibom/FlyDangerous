@@ -59,7 +59,7 @@ namespace Core.Replays {
                 };
             }
 
-            if (version == "1.1.0")
+            if (version == "1.1.0" || version == "1.1.1")
                 return MessagePackSerializer.Deserialize<InputFrameV110>(bytes);
 
             throw new Exception("Unrecognised replay version, cannot deserialize input frame");

@@ -114,6 +114,23 @@ namespace Core.ShipModel {
         public Quaternion Rotation => transform.rotation;
         public Vector3 Velocity => targetRigidbody.linearVelocity;
         public Vector3 AngularVelocity => targetRigidbody.angularVelocity;
+        public BoostStatus BoostStatus {
+            get => _boostStatus;
+            set => _boostStatus = value;
+        }
+        public int BoostProgressTicks {
+            get => _boostProgressTicks;
+            set => _boostProgressTicks = value;
+        }
+        public float CurrentBoostTime {
+            get => _currentBoostTime;
+            set => _currentBoostTime = value;
+        }
+        public float BoostCapacitorPercent {
+            get => _boostCapacitorPercent;
+            set => _boostCapacitorPercent = value;
+        }
+        
         public float VelocityMagnitude => Mathf.Round(targetRigidbody.linearVelocity.magnitude);
 
         public float VelocityNormalised => targetRigidbody.linearVelocity.sqrMagnitude /
