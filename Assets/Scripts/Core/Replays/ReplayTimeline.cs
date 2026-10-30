@@ -43,10 +43,6 @@ namespace Core.Replays {
                 }
         }
 
-        private void OnEnable() {
-            ReplayPrioritizer.Instance.RegisterReplay(this);
-        }
-
         private void OnDisable() {
             ReplayPrioritizer.Instance.UnregisterReplay(this);
         }
@@ -92,6 +88,7 @@ namespace Core.Replays {
 
         public void Play() {
             _isPlaying = true;
+            ReplayPrioritizer.Instance.RegisterReplay(this);
         }
 
         public void Pause() {

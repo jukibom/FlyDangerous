@@ -19,7 +19,6 @@ using UnityEngine;
 
 namespace Gameplay.Game_Modes {
     [RequireComponent(typeof(ReplayRecorder))]
-    [RequireComponent(typeof(ReplayTimeline))]
     public class GameModeHandler : MonoBehaviour {
         private ReplayRecorder _replayRecorder;
         private List<ShipGhost> ActiveGhosts { get; set; } = new();
@@ -88,8 +87,9 @@ namespace Gameplay.Game_Modes {
             }
             if (replayTicks == SnapShotTicks && replayRunning) {
                 replayRunning = false;
-                player.User.EnableInput();
                 ReplayPrioritizer.Instance.UnregisterReplay(playerReplayTimeline);
+                //Destroy(playerReplayTimeline.gameObject);
+                player.User.EnableInput();
             }
             if (!(replayTicks ==-1)) replayTicks++;
         }
@@ -175,6 +175,7 @@ namespace Gameplay.Game_Modes {
                 replayRunning = false;
                 if (_fastCountDown != null) StopCoroutine(_fastCountDown);
                 ReplayPrioritizer.Instance.UnregisterReplay(playerReplayTimeline);
+                //Destroy(playerReplayTimeline.gameObject);
                 player.User.EnableInput();
             }
 
@@ -206,10 +207,9 @@ namespace Gameplay.Game_Modes {
                 replayRunning = true;
                 replayTicks = 0;
                 player.User.DisableInput();
-                playerReplayTimeline = GetComponent<ReplayTimeline>();
+                playerReplayTimeline = gameObject.AddComponent<ReplayTimeline>();
                 playerReplayTimeline.LoadPlayerReplay(lastCheckpointReplay, _shipSnapshotBuffer.ghostSnapshot.tick);
                 playerReplayTimeline.Play();
-                ReplayPrioritizer.Instance.RegisterReplay(playerReplayTimeline);
                 PlayerApplySnapshot(player.ShipPhysics,_shipSnapshotBuffer.ghostSnapshot);
             }
         }

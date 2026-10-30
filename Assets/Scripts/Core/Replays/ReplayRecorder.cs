@@ -40,10 +40,10 @@ namespace Core.Replays {
         public void CancelRecording() {
             StopRecording();
             if (Replay != null) {
-                Replay.InputFrameStream.Close();
-                Replay.KeyFrameStream.Close();
-                Replay.InputFrameStream.Dispose();
-                Replay.KeyFrameStream.Dispose();
+                Replay.InputFrameStream?.Close();
+                Replay.KeyFrameStream?.Close();
+                Replay.InputFrameStream?.Dispose();
+                Replay.KeyFrameStream?.Dispose();
                 Replay = null;
             }
         }
@@ -56,6 +56,9 @@ namespace Core.Replays {
             
             inputReplayWriter?.Dispose();
             keyframeReplayWriter?.Dispose();
+
+            inputReplayWriter = null;
+            keyframeReplayWriter = null;
             
             _recording = false;
             _ticks = 0;
