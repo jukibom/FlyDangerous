@@ -88,7 +88,6 @@ namespace Gameplay.Game_Modes {
             if (replayTicks == SnapShotTicks && replayRunning) {
                 replayRunning = false;
                 ReplayPrioritizer.Instance.UnregisterReplay(playerReplayTimeline);
-                //Destroy(playerReplayTimeline.gameObject);
                 player.User.EnableInput();
             }
             if (!(replayTicks ==-1)) replayTicks++;
@@ -175,7 +174,6 @@ namespace Gameplay.Game_Modes {
                 replayRunning = false;
                 if (_fastCountDown != null) StopCoroutine(_fastCountDown);
                 ReplayPrioritizer.Instance.UnregisterReplay(playerReplayTimeline);
-                //Destroy(playerReplayTimeline.gameObject);
                 player.User.EnableInput();
             }
 
