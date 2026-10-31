@@ -299,6 +299,31 @@ namespace Core.Player {
             FdConsole.Instance.LogMessage("** USER INPUT DISABLED **");
         }
 
+        public void DisableInput() {
+            var playerInput = GetComponent<PlayerInput>();
+
+            // enable multiple input action sets
+            playerInput.actions.FindActionMap("Ship").Disable();
+            playerInput.actions.FindActionMap("ShipArcade").Disable();
+
+            FdConsole.Instance.LogMessage("** CONTROL INPUTS DISABLED **");
+        }
+
+        public void EnableInput() {
+            var playerInput = GetComponent<PlayerInput>();
+            // choose the correct action set depending on advanced control scheme preference
+            if (Preferences.Instance.GetString("controlSchemeType") == "advanced") {
+                var advancedControlActionMap = playerInput.actions.FindActionMap("Ship");
+                playerInput.currentActionMap = advancedControlActionMap ?? playerInput.currentActionMap;
+            }
+            else {
+                var arcadeActionMap = playerInput.actions.FindActionMap("ShipArcade");
+                playerInput.currentActionMap = arcadeActionMap ?? playerInput.currentActionMap;
+            }
+            
+            FdConsole.Instance.LogMessage("** CONTROL INPUTS ENABLED **");
+        }
+
         public void EnableUIInput() {
             pauseUIInputModule.enabled = true;
             FdConsole.Instance.LogMessage("** UI INPUT ENABLED **");
@@ -356,7 +381,7 @@ namespace Core.Player {
 
         [UsedImplicitly]
         public void OnRestartFromLastCheckpoint() {
-            if (movementEnabled) Debug.Log("lol no");
+            if (movementEnabled) Game.Instance.GameModeHandler.RestartFromCheckpoint();
         }
 
         [UsedImplicitly]

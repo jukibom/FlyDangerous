@@ -22,12 +22,13 @@ namespace Core.Replays {
         private byte[] _inputFrameByteBuffer;
 
         [CanBeNull] private BinaryReader _inputFrameReader;
+        private ShipPhysics shipPhysics {get; set; }
 
         private uint _inputTicks;
         private bool _isPlaying;
+        private bool _isPlayer;
         private byte[] _keyFrameByteBuffer;
         [CanBeNull] private BinaryReader _keyFrameReader;
-        private uint _keyFrameTicks;
 
         // private float _playSpeed = 1f;
 
@@ -36,14 +37,10 @@ namespace Core.Replays {
 
         public void UpdateReplay() {
             if (_isPlaying)
-                if (Replay != null && ShipReplayObject != null && _inputFrameReader != null && _keyFrameReader != null) {
+                if (Replay != null && (ShipReplayObject != null || _isPlayer) && _inputFrameReader != null && _keyFrameReader != null) {
                     UpdateKeyFrame();
                     UpdateInputFrame();
                 }
-        }
-
-        private void OnEnable() {
-            ReplayPrioritizer.Instance.RegisterReplay(this);
         }
 
         private void OnDisable() {
@@ -57,11 +54,12 @@ namespace Core.Replays {
         public void LoadReplay(IReplayShip ship, Replay replay) {
             Replay = replay;
             ShipReplayObject = ship;
-            ship.ShipPhysics.ShipProfile = replay.ShipProfile;
-            ship.ShipPhysics.FlightParameters = replay.ShipParameters;
+            shipPhysics = ship.ShipPhysics;
+            shipPhysics.ShipProfile = replay.ShipProfile;
+            shipPhysics.FlightParameters = replay.ShipParameters;
 
             // hide all rendering assets until told to show (e.g. by distance in FixedUpdate)
-            if (ship.ShipPhysics.ShipModel != null) ship.ShipPhysics.ShipModel.SetVisible(false);
+            if (shipPhysics.ShipModel != null) shipPhysics.ShipModel.SetVisible(false);
 
             ship.PlayerName = replay.ShipProfile.playerName;
             ship.PlayerFlag = Flag.FromFilename(replay.ShipProfile.playerFlagFilename);
@@ -71,12 +69,26 @@ namespace Core.Replays {
             _inputFrameByteBuffer = new byte[replay.ReplayMeta.InputFrameBufferSizeBytes];
             _keyFrameByteBuffer = new byte[replay.ReplayMeta.KeyFrameBufferSizeBytes];
 
+            _isPlayer = false;
             _inputTicks = 0;
-            _keyFrameTicks = 0;
+        }
+
+        public void LoadPlayerReplay(Replay replay, uint tick) {
+            Replay = replay;
+            shipPhysics = FdPlayer.FindLocalShipPlayer.ShipPhysics;
+
+            _inputFrameReader = new BinaryReader(replay.InputFrameStream, Encoding.UTF8, true);
+            _keyFrameReader = new BinaryReader(replay.KeyFrameStream, Encoding.UTF8, true);
+            _inputFrameByteBuffer = new byte[replay.ReplayMeta.InputFrameBufferSizeBytes];
+            _keyFrameByteBuffer = new byte[replay.ReplayMeta.KeyFrameBufferSizeBytes];
+
+            _isPlayer = true;
+            _inputTicks = tick;
         }
 
         public void Play() {
             _isPlaying = true;
+            ReplayPrioritizer.Instance.RegisterReplay(this);
         }
 
         public void Pause() {
@@ -91,18 +103,27 @@ namespace Core.Replays {
 
         private void UpdateKeyFrame() {
             if (Replay != null && _inputTicks % Replay.ReplayMeta.KeyFrameIntervalTicks == 0 && ShipReplayObject != null) {
-                _keyFrameReader?.BaseStream.Seek(_keyFrameTicks * Replay.ReplayMeta.KeyFrameBufferSizeBytes, SeekOrigin.Begin);
+                _keyFrameReader?.BaseStream.Seek(_inputTicks/this.Replay.ReplayMeta.KeyFrameIntervalTicks * Replay.ReplayMeta.KeyFrameBufferSizeBytes, SeekOrigin.Begin);
                 _keyFrameReader?.Read(_keyFrameByteBuffer, 0, Replay.ReplayMeta.KeyFrameBufferSizeBytes);
 
-                var keyFrame = MessagePackSerializer.Deserialize<KeyFrame>(_keyFrameByteBuffer);
+                var keyFrame = KeyFrameV2.Deserialize(Replay.ReplayMeta.Version, ref _keyFrameByteBuffer);
 
-                ShipReplayObject.SetAbsolutePosition(keyFrame.replayFloatingOrigin, keyFrame.position);
-                ShipReplayObject.Transform.rotation = keyFrame.rotation;
-                ShipReplayObject.Rigidbody.linearVelocity = keyFrame.velocity;
-                ShipReplayObject.Rigidbody.angularVelocity = keyFrame.angularVelocity;
-
-
-                _keyFrameTicks++;
+                if(_isPlayer) {
+                    FdPlayer.FindLocalShipPlayer.SetTransformWorld(keyFrame.position+keyFrame.replayFloatingOrigin, keyFrame.rotation);
+                    FdPlayer.FindLocalShipPlayer.transform.rotation = keyFrame.rotation;
+                    }
+                else {
+                    ShipReplayObject.SetAbsolutePosition(keyFrame.replayFloatingOrigin, keyFrame.position);
+                    ShipReplayObject.Transform.rotation = keyFrame.rotation;
+                }
+                shipPhysics.Rigidbody.linearVelocity = keyFrame.velocity;
+                shipPhysics.Rigidbody.angularVelocity = keyFrame.angularVelocity;
+                if (Replay.ReplayMeta.Version == "1.1.1") {
+                    shipPhysics.BoostStatus = keyFrame.boostStatus;
+                    shipPhysics.BoostProgressTicks = (int)keyFrame.boostProgressTicks;
+                    shipPhysics.CurrentBoostTime = keyFrame.boostTime;
+                    shipPhysics.BoostCapacitorPercent = keyFrame.boostCapacitorPercent;
+                }
             }
         }
 
@@ -116,23 +137,20 @@ namespace Core.Replays {
 
                     var inputFrame = InputFrameV110.Deserialize(Replay.Version, ref _inputFrameByteBuffer);
 
-                    ShipReplayObject?.ShipPhysics.OverwriteModifiers(inputFrame.modifierShipForce, inputFrame.modifierShipDeltaSpeedCap,
+                    shipPhysics.OverwriteModifiers(inputFrame.modifierShipForce, inputFrame.modifierShipDeltaSpeedCap,
                         inputFrame.modifierShipDeltaThrust, inputFrame.modifierShipDrag, inputFrame.modifierShipAngularDrag);
 
-                    ShipReplayObject?.ShipPhysics.UpdateShip(inputFrame.pitch, inputFrame.roll, inputFrame.yaw, inputFrame.throttle, inputFrame.lateralH,
+                    shipPhysics.UpdateShip(inputFrame.pitch, inputFrame.roll, inputFrame.yaw, inputFrame.throttle, inputFrame.lateralH,
                         inputFrame.lateralV, inputFrame.boostHeld, inputFrame.limiterHeld, false, false);
 
-                    if (ShipReplayObject?.ShipPhysics.IsNightVisionActive != inputFrame.shipLightsEnabled)
-                        ShipReplayObject?.ShipPhysics.NightVisionToggle(inputFrame.shipLightsEnabled, _ => { });
+                    if (shipPhysics.IsNightVisionActive != inputFrame.shipLightsEnabled)
+                        shipPhysics.NightVisionToggle(inputFrame.shipLightsEnabled, _ => { });
 
-
-                    if (ShipReplayObject?.SpectatorActive == true ) {
-                        var ShipPhysics = ShipReplayObject.ShipPhysics;
-                        ShipPhysics.GhostCollisionChecks();
-
-                        var velocity = transform.InverseTransformDirection(ShipPhysics.Velocity);
-                        var frameThrust = ShipPhysics.CurrentFrameThrust;
-                        FdPlayer.FindLocalShipPlayer.User.ShipCameraRig.UpdateCameras(velocity, ShipPhysics.FlightParameters.maxSpeed, frameThrust, ShipPhysics.FlightParameters.maxThrust);
+                    if (!_isPlayer && ShipReplayObject?.SpectatorActive == true ) {
+                        shipPhysics.GhostCollisionChecks();
+                        var velocity = transform.InverseTransformDirection(shipPhysics.Velocity);
+                        var frameThrust = shipPhysics.CurrentFrameThrust;
+                        FdPlayer.FindLocalShipPlayer.User.ShipCameraRig.UpdateCameras(velocity, shipPhysics.FlightParameters.maxSpeed, frameThrust, shipPhysics.FlightParameters.maxThrust);
                     }
 
                     _inputTicks++;
