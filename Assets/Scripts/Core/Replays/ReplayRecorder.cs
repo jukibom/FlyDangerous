@@ -68,40 +68,36 @@ namespace Core.Replays {
         * Record the frame every physics time step
         */
         private void RecordFrame() {
-            WriteFrame(_targetShip);
-        }
-
-        public void WriteFrame( ShipPhysics targetShip) {
             if (_recording && Replay != null) {
                 // record a keyframe every specified amount of ticks
                 if (_ticks % Replay.ReplayMeta.KeyFrameIntervalTicks == 0)
                     RecordKeyFrame(new KeyFrameV2 {
                         replayFloatingOrigin = FloatingOrigin.Instance.Origin,
-                        position = targetShip.Position,
-                        rotation = targetShip.Rotation,
-                        velocity = targetShip.Velocity,
-                        angularVelocity = targetShip.AngularVelocity,
-                        boostStatus = targetShip.BoostStatus,
-                        boostProgressTicks = (float)targetShip.BoostProgressTicks,
-                        boostTime = targetShip.CurrentBoostTime,
-                        boostCapacitorPercent = targetShip.BoostCapacitorPercent,
+                        position = _targetShip.Position,
+                        rotation = _targetShip.Rotation,
+                        velocity = _targetShip.Velocity,
+                        angularVelocity = _targetShip.AngularVelocity,
+                        boostStatus = _targetShip.BoostStatus,
+                        boostProgressTicks = (float)_targetShip.BoostProgressTicks,
+                        boostTime = _targetShip.CurrentBoostTime,
+                        boostCapacitorPercent = _targetShip.BoostCapacitorPercent,
                     });
 
                 RecordInputFrame(new InputFrameV110 {
-                    pitch = targetShip.Pitch,
-                    roll = targetShip.Roll,
-                    yaw = targetShip.Yaw,
-                    throttle = targetShip.Throttle,
-                    lateralH = targetShip.LatH,
-                    lateralV = targetShip.LatV,
-                    boostHeld = targetShip.BoostButtonHeld,
-                    limiterHeld = targetShip.VelocityLimitActive,
-                    shipLightsEnabled = targetShip.IsNightVisionActive,
-                    modifierShipForce = targetShip.AppliedEffects.shipForce,
-                    modifierShipDeltaSpeedCap = targetShip.AppliedEffects.shipDeltaSpeedCap,
-                    modifierShipDeltaThrust = targetShip.AppliedEffects.shipDeltaThrust,
-                    modifierShipDrag = targetShip.AppliedEffects.shipDeltaDrag,
-                    modifierShipAngularDrag = targetShip.AppliedEffects.shipDeltaAngularDrag
+                    pitch = _targetShip.Pitch,
+                    roll = _targetShip.Roll,
+                    yaw = _targetShip.Yaw,
+                    throttle = _targetShip.Throttle,
+                    lateralH = _targetShip.LatH,
+                    lateralV = _targetShip.LatV,
+                    boostHeld = _targetShip.BoostButtonHeld,
+                    limiterHeld = _targetShip.VelocityLimitActive,
+                    shipLightsEnabled = _targetShip.IsNightVisionActive,
+                    modifierShipForce = _targetShip.AppliedEffects.shipForce,
+                    modifierShipDeltaSpeedCap = _targetShip.AppliedEffects.shipDeltaSpeedCap,
+                    modifierShipDeltaThrust = _targetShip.AppliedEffects.shipDeltaThrust,
+                    modifierShipDrag = _targetShip.AppliedEffects.shipDeltaDrag,
+                    modifierShipAngularDrag = _targetShip.AppliedEffects.shipDeltaAngularDrag
                 });
 
                 _ticks++;
