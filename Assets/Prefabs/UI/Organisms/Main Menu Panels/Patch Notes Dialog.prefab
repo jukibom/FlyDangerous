@@ -2029,7 +2029,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4294616114
   m_fontColor: {r: 0.19607843, g: 0.6431373, b: 0.98039216, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -2042,7 +2042,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -3045,18 +3045,37 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "0.7.0\r\nAdded:\r\n    * Updated to Unity 6.3\r\n    * Upgraded VR to
-    use Single Pass Instanced rendering, resolving a number of eye-difference rendering
-    issues and greatly improving performance\r\n    * Ability to toggle the SFX of
-    flight assist switching in the audio panel\r\n    * Water environmental reflections
-    now respects shadows\r\n    * Water depth and color now respect direct + ambient
-    light\r\n    \r\nChanged:\r\n    * Lighting pass on all environments to remove
-    workarounds and introduce ambient lighting to make each environment more unique\r\n   
-    * Optimisations across reflections and lighting; max one light per environment,
-    better handling of static vs realtime reflections\r\n    \r\nFixed:\r\n    *
-    Water no longer overbright in dark scenes (low light angle)\r\n    * No longer
-    possible to have music play on main menu with low pass filter (underwater effect)\r\n   
-    * MSAA no longer disables lens flares"
+  m_text: "0.7.0\r\nAdded:\r\n    * Updated to Unity 6.3 LTS.\r\n    * Added Restart
+    from last Checkpoint (default Tab key) which replays the last 2 seconds before
+    the previous checkpoint before relinquishing control at the same speed and state
+    as before. This is intended to fascilitate practicing maps with difficult maneuvers
+    towards the middle or end - it will not restore your in-game timer. (Thank you
+    CardamomCake! PR #283 + #287)\r\n    * Upgraded VR to use Single Pass Instanced
+    rendering, resolving a number of eye-difference rendering issues and greatly
+    improving performance.\r\n    * OGS Telemetry Standard (OGS-TS) telemetry output
+    - a standardised, self-describing UDP multicast stream (default group 239.255.17.17:40123,
+    local network only) for motion rigs, haptic hardware, dashboards and loggers.
+    Enable it in Options > Integrations; endpoint configurable in the config file
+    (\"ogsTelemetryMulticastAddress\" / \"ogsTelemetryPort\"). (Thank you BrianGilbert!
+    PR #281)\r\n    * Ability to toggle the SFX of flight assist switching in the
+    audio panel.\r\n    * Water environmental reflections now respects shadows.\r\n   
+    * Water depth and color now respect direct + ambient light.\r\n    * Custom Level
+    improvements\r\n        * Level pre-loading to prevent stutters on the time trial
+    screen (Thank you, CardamomCake! PR #272)\r\n        * Ability to click \"Next
+    Map\" on the results screen in a custom map loaded from filesystem (Thank you,
+    CardamomCake! PR #278)\r\n    \r\nChanged:\r\n    * Lighting pass on all environments
+    to remove workarounds and introduce ambient lighting to make each environment
+    more unique.\r\n    * Optimisations across reflections and lighting; max one
+    light per environment, better handling of static vs realtime reflections.\r\n   
+    * Large amount of general performance optimisations covering memory allocation,
+    UI drawing, rendering etc.\r\n    * Upgraded all Text to TextMeshPro (if you
+    know anything about unity, you know it was foolish to not use this from the start,
+    and that this was a nightmare).\r\n        * All fonts are lovely and crisp now!
+    Includes a minor UX pass on Options panel.\r\n    \r\nFixed:\r\n    * Water no
+    longer overbright in dark scenes (low light angle).\r\n    * No longer possible
+    to have music play on main menu with low pass filter (underwater effect).\r\n   
+    * MSAA no longer disables lens flares.\r\n    * Pitch indicator now correctly
+    indicates the pitch. I know, right?"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 28af95dfea6320f45b94179138c98ccc, type: 2}
   m_sharedMaterial: {fileID: -4331034647893445511, guid: 28af95dfea6320f45b94179138c98ccc, type: 2}
@@ -4782,6 +4801,14 @@ PrefabInstance:
       propertyPath: m_text
       value: 0.6.4 - REPLAY VIEWER AND CUSTOM MAP LOADER
       objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
     - target: {fileID: 4061717483152031576, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -5014,6 +5041,14 @@ PrefabInstance:
       propertyPath: m_Text
       value: 0.6.4 - REPLAY VIEWER AND CUSTOM MAP LOADER
       objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -5070,7 +5105,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_text
-      value: 0.7.0 - BETA
+      value: 0.7.0 - PERFORMANCE, STABILITY,  COMMUNITY IMPROVEMENTS
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
       objectReference: {fileID: 0}
     - target: {fileID: 4061717483152031576, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_AnchorMax.y
@@ -5304,6 +5347,14 @@ PrefabInstance:
       propertyPath: m_Text
       value: 0.7.0 - BETA
       objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -5361,6 +5412,14 @@ PrefabInstance:
     - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_text
       value: 0.1.3 - PHYSICS + INPUT
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
       objectReference: {fileID: 0}
     - target: {fileID: 4061717483152031576, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_AnchorMax.y
@@ -5594,6 +5653,14 @@ PrefabInstance:
       propertyPath: m_Text
       value: 0.1.3 - PHYSICS + INPUT
       objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -5620,6 +5687,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3739984000883946967}
     m_Modifications:
+    - target: {fileID: 1209753018605430437, guid: 7f6395d7f158695469e04e970e119e8d, type: 3}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 6291702346574653274, guid: 7f6395d7f158695469e04e970e119e8d, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -6004,6 +6075,14 @@ PrefabInstance:
       propertyPath: m_text
       value: 0.6.2 - INDICATORS AND FIXES
       objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
     - target: {fileID: 4061717483152031576, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -6236,6 +6315,14 @@ PrefabInstance:
       propertyPath: m_Text
       value: 0.6.2 - INDICATORS AND FIXES
       objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -6293,6 +6380,14 @@ PrefabInstance:
     - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_text
       value: 0.3.0 - MULTIPLAYER
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
       objectReference: {fileID: 0}
     - target: {fileID: 4061717483152031576, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_AnchorMax.y
@@ -6526,6 +6621,14 @@ PrefabInstance:
       propertyPath: m_Text
       value: 0.3.0 - MULTIPLAYER
       objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -6583,6 +6686,14 @@ PrefabInstance:
     - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_text
       value: 0.5.5 - BUGFIXES AND TWEAKS
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
       objectReference: {fileID: 0}
     - target: {fileID: 4061717483152031576, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_AnchorMax.y
@@ -6816,6 +6927,14 @@ PrefabInstance:
       propertyPath: m_Text
       value: 0.5.5 - BUGFIXES AND TWEAKS
       objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -6873,6 +6992,14 @@ PrefabInstance:
     - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_text
       value: 0.5.4 - STEAM EARLY ACCESS RELEASE
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
       objectReference: {fileID: 0}
     - target: {fileID: 4061717483152031576, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_AnchorMax.y
@@ -7106,6 +7233,14 @@ PrefabInstance:
       propertyPath: m_Text
       value: 0.5.4 - STEAM EARLY ACCESS RELEASE
       objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -7163,6 +7298,14 @@ PrefabInstance:
     - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_text
       value: 0.1.1 - INITIAL RELEASE
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
       objectReference: {fileID: 0}
     - target: {fileID: 4061717483152031576, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_AnchorMax.y
@@ -7396,6 +7539,14 @@ PrefabInstance:
       propertyPath: m_Text
       value: 0.1.1 - INITIAL RELEASE
       objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -7558,6 +7709,14 @@ PrefabInstance:
       propertyPath: m_text
       value: CLOSE
       objectReference: {fileID: 0}
+    - target: {fileID: 5942345338091113656, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 5942345338091113656, guid: 9b512b068f5eabf4d9fc15ddbf6824d3, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7618,6 +7777,14 @@ PrefabInstance:
     - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_text
       value: 0.5.0 - STEAM
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
       objectReference: {fileID: 0}
     - target: {fileID: 4061717483152031576, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_AnchorMax.y
@@ -7851,6 +8018,14 @@ PrefabInstance:
       propertyPath: m_Text
       value: 0.5.0 - STEAM
       objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -7908,6 +8083,14 @@ PrefabInstance:
     - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_text
       value: 0.6.1 - BUGFIXES AND TWEAKS
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
       objectReference: {fileID: 0}
     - target: {fileID: 4061717483152031576, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_AnchorMax.y
@@ -8141,6 +8324,14 @@ PrefabInstance:
       propertyPath: m_Text
       value: 0.6.1 - BUGFIXES AND TWEAKS
       objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -8198,6 +8389,14 @@ PrefabInstance:
     - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_text
       value: 0.6.3 - MOUSE INPUT FEATURES AND FIXES
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
       objectReference: {fileID: 0}
     - target: {fileID: 4061717483152031576, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_AnchorMax.y
@@ -8431,6 +8630,14 @@ PrefabInstance:
       propertyPath: m_Text
       value: 0.6.3 - MOUSE INPUT FEATURES AND FIXES
       objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -8488,6 +8695,14 @@ PrefabInstance:
     - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_text
       value: 0.3.0 - BUGFIXES
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
       objectReference: {fileID: 0}
     - target: {fileID: 4061717483152031576, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_AnchorMax.y
@@ -8721,6 +8936,14 @@ PrefabInstance:
       propertyPath: m_Text
       value: 0.3.0 - BUGFIXES
       objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -8778,6 +9001,14 @@ PrefabInstance:
     - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_text
       value: 0.5.3 - TIME TRIAL IMPROVEMENTS
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
       objectReference: {fileID: 0}
     - target: {fileID: 4061717483152031576, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_AnchorMax.y
@@ -9011,6 +9242,14 @@ PrefabInstance:
       propertyPath: m_Text
       value: 0.5.3 - TIME TRIAL IMPROVEMENTS
       objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -9068,6 +9307,14 @@ PrefabInstance:
     - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_text
       value: 0.5.1 - BUGFIXES
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
       objectReference: {fileID: 0}
     - target: {fileID: 4061717483152031576, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_AnchorMax.y
@@ -9301,6 +9548,14 @@ PrefabInstance:
       propertyPath: m_Text
       value: 0.5.1 - BUGFIXES
       objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -9358,6 +9613,14 @@ PrefabInstance:
     - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_text
       value: 0.1.4 - ENVIRONMENTS
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
       objectReference: {fileID: 0}
     - target: {fileID: 4061717483152031576, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_AnchorMax.y
@@ -9591,6 +9854,14 @@ PrefabInstance:
       propertyPath: m_Text
       value: 0.1.4 - ENVIRONMENTS
       objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -9648,6 +9919,14 @@ PrefabInstance:
     - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_text
       value: 0.4.0 - EVERYTHING
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
       objectReference: {fileID: 0}
     - target: {fileID: 4061717483152031576, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_AnchorMax.y
@@ -9881,6 +10160,14 @@ PrefabInstance:
       propertyPath: m_Text
       value: 0.4.0 - EVERYTHING
       objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -9938,6 +10225,14 @@ PrefabInstance:
     - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_text
       value: 0.4.1 - BUGFIX
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
       objectReference: {fileID: 0}
     - target: {fileID: 4061717483152031576, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_AnchorMax.y
@@ -10171,6 +10466,14 @@ PrefabInstance:
       propertyPath: m_Text
       value: 0.4.1 - BUGFIX
       objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -10228,6 +10531,14 @@ PrefabInstance:
     - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_text
       value: 0.5.2 - LEVEL TWEAKS + BUGFIX
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
       objectReference: {fileID: 0}
     - target: {fileID: 4061717483152031576, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_AnchorMax.y
@@ -10461,6 +10772,14 @@ PrefabInstance:
       propertyPath: m_Text
       value: 0.5.2 - LEVEL TWEAKS + BUGFIX
       objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -10518,6 +10837,14 @@ PrefabInstance:
     - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_text
       value: 0.2.1 - BUGFIXES
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
       objectReference: {fileID: 0}
     - target: {fileID: 4061717483152031576, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_AnchorMax.y
@@ -10751,6 +11078,14 @@ PrefabInstance:
       propertyPath: m_Text
       value: 0.2.1 - BUGFIXES
       objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -10808,6 +11143,14 @@ PrefabInstance:
     - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_text
       value: 0.2.0 - VR
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
       objectReference: {fileID: 0}
     - target: {fileID: 4061717483152031576, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_AnchorMax.y
@@ -11041,6 +11384,14 @@ PrefabInstance:
       propertyPath: m_Text
       value: 0.2.0 - VR
       objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -11098,6 +11449,14 @@ PrefabInstance:
     - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_text
       value: 0.2.2 - BUGFIXES
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
       objectReference: {fileID: 0}
     - target: {fileID: 4061717483152031576, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_AnchorMax.y
@@ -11331,6 +11690,14 @@ PrefabInstance:
       propertyPath: m_Text
       value: 0.2.2 - BUGFIXES
       objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -11388,6 +11755,14 @@ PrefabInstance:
     - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_text
       value: 0.2.2b - BUGFIXES
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
       objectReference: {fileID: 0}
     - target: {fileID: 4061717483152031576, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_AnchorMax.y
@@ -11621,6 +11996,14 @@ PrefabInstance:
       propertyPath: m_Text
       value: 0.2.2b - BUGFIXES
       objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -11678,6 +12061,14 @@ PrefabInstance:
     - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_text
       value: 0.6.0 - GAMEPLAY UPDATE
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
       objectReference: {fileID: 0}
     - target: {fileID: 4061717483152031576, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_AnchorMax.y
@@ -11911,6 +12302,14 @@ PrefabInstance:
       propertyPath: m_Text
       value: 0.6.0 - GAMEPLAY UPDATE
       objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -11968,6 +12367,14 @@ PrefabInstance:
     - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_text
       value: 0.5.7 - HOTFIXES AND A LEVEL
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
       objectReference: {fileID: 0}
     - target: {fileID: 4061717483152031576, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_AnchorMax.y
@@ -12201,6 +12608,14 @@ PrefabInstance:
       propertyPath: m_Text
       value: 0.5.7 - HOTFIXES AND A LEVEL
       objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -12258,6 +12673,14 @@ PrefabInstance:
     - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_text
       value: 0.5.6 - BUGFIXES AND TWEAKS
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799956319482952974, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
       objectReference: {fileID: 0}
     - target: {fileID: 4061717483152031576, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_AnchorMax.y
@@ -12490,6 +12913,14 @@ PrefabInstance:
     - target: {fileID: 8031816776609342325, guid: affc708ba8599514c80709ef6909f882, type: 3}
       propertyPath: m_Text
       value: 0.5.6 - BUGFIXES AND TWEAKS
+      objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294616114
+      objectReference: {fileID: 0}
+    - target: {fileID: 8604946153534141666, guid: affc708ba8599514c80709ef6909f882, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

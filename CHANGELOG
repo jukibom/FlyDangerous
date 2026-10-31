@@ -1,11 +1,15 @@
 ﻿0.7.0
 Added:
     * Updated to Unity 6.3 LTS.
+    * Added Restart from last Checkpoint (default Tab key) which replays the last 2 seconds before the previous checkpoint before relinquishing control at the same speed and state as before. This is intended to fascilitate practicing maps with difficult maneuvers towards the middle or end - it will not restore your in-game timer. (Thank you CardamomCake! PR #283 + #287)
     * Upgraded VR to use Single Pass Instanced rendering, resolving a number of eye-difference rendering issues and greatly improving performance.
-    * OGS Telemetry Standard (OGS-TS) telemetry output - a standardised, self-describing UDP multicast stream (default group 239.255.17.17:40123, local network only) for motion rigs, haptic hardware, dashboards and loggers. Enable it in Options > Integrations; endpoint configurable in the config file ("ogsTelemetryMulticastAddress" / "ogsTelemetryPort").
+    * OGS Telemetry Standard (OGS-TS) telemetry output - a standardised, self-describing UDP multicast stream (default group 239.255.17.17:40123, local network only) for motion rigs, haptic hardware, dashboards and loggers. Enable it in Options > Integrations; endpoint configurable in the config file ("ogsTelemetryMulticastAddress" / "ogsTelemetryPort"). (Thank you BrianGilbert! PR #281)
     * Ability to toggle the SFX of flight assist switching in the audio panel.
     * Water environmental reflections now respects shadows.
     * Water depth and color now respect direct + ambient light.
+    * Custom Level improvements
+        * Level pre-loading to prevent stutters on the time trial screen (Thank you, CardamomCake! PR #272)
+        * Ability to click "Next Map" on the results screen in a custom map loaded from filesystem (Thank you, CardamomCake! PR #278)
     
 Changed:
     * Lighting pass on all environments to remove workarounds and introduce ambient lighting to make each environment more unique.
