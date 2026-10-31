@@ -45,6 +45,8 @@ namespace Core {
             foreach (var replayTimeline in _replays) {
                 if (replayTimeline.ShipReplayObject == null) 
                     continue;
+                
+                replayTimeline.ShipReplayObject.ShipPhysics.AudioListener.enabled = false;
                 replayTimeline.ShipReplayObject.SpectatorActive = false;
             }
             
@@ -58,6 +60,7 @@ namespace Core {
                 player.ShipPhysics.AudioListener.enabled = false;
                 player.ShipPhysics.ShipModel?.SetVisible(false);
                 player.User.TargetTransform = ghost.transform;
+                player.User.ShipCameraRig.ActiveCamera?.Reset();
             }
             else {
                 Debug.LogWarning("Failed to set ghost spectator, player does not exist!");
@@ -80,6 +83,7 @@ namespace Core {
                 player.ShipPhysics.AudioListener.enabled = true;
                 player.ShipPhysics.ShipModel?.SetVisible(true);
                 player.User.TargetTransform = player.transform;
+                player.User.ShipCameraRig.ActiveCamera?.Reset();
             }
             else {
                 Debug.LogWarning("Failed to restore player logic from ghost spectator, player does not exist!");

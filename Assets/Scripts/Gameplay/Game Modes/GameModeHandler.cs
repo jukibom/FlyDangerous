@@ -209,6 +209,7 @@ namespace Gameplay.Game_Modes {
                 playerReplayTimeline.LoadPlayerReplay(lastCheckpointReplay, _shipSnapshotBuffer.ghostSnapshot.tick);
                 playerReplayTimeline.Play();
                 PlayerApplySnapshot(player.ShipPhysics,_shipSnapshotBuffer.ghostSnapshot);
+                player.User.ShipCameraRig.ActiveCamera?.Reset();
             }
         }
         
