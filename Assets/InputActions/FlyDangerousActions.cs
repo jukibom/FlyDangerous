@@ -141,6 +141,16 @@ public partial class @FlyDangerousActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""initialStateCheck"": false,
                     ""priority"": 0
+                },
+                {
+                    ""name"": ""Restart From Last Checkpoint"",
+                    ""type"": ""Button"",
+                    ""id"": ""fd4d8cc6-857c-47f9-9f1a-c398702fe1fd"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false,
+                    ""priority"": 0
                 }
             ],
             ""bindings"": [
@@ -231,6 +241,28 @@ public partial class @FlyDangerousActions: IInputActionCollection2, IDisposable
                     ""action"": ""Restart Track"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b8b90e1a-e20a-4552-a19a-e7e34146e7aa"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Restart From Last Checkpoint"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""707638bf-54af-47c3-a765-12c0cebe3436"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Restart From Last Checkpoint"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -242,7 +274,7 @@ public partial class @FlyDangerousActions: IInputActionCollection2, IDisposable
                     ""name"": ""Reset HMD View"",
                     ""type"": ""Button"",
                     ""id"": ""40ada5c8-ec47-4851-a112-a0536341bb6e"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false,
@@ -283,6 +315,16 @@ public partial class @FlyDangerousActions: IInputActionCollection2, IDisposable
                     ""type"": ""Button"",
                     ""id"": ""42df12e0-4e49-4e25-b43f-4f21262d4686"",
                     ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false,
+                    ""priority"": 0
+                },
+                {
+                    ""name"": ""Restart From Last Checkpoint"",
+                    ""type"": ""Button"",
+                    ""id"": ""e6a06dc5-fd44-4394-9df4-b6e26217f78b"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false,
@@ -377,6 +419,28 @@ public partial class @FlyDangerousActions: IInputActionCollection2, IDisposable
                     ""action"": ""Restart Track"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2238f2e0-2ae5-40ab-b58f-f569a4ee28c5"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Restart From Last Checkpoint"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8fdeefd2-10ae-4139-bb79-1add0d661d9e"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Everything"",
+                    ""action"": ""Restart From Last Checkpoint"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -384,16 +448,6 @@ public partial class @FlyDangerousActions: IInputActionCollection2, IDisposable
             ""name"": ""Ship"",
             ""id"": ""319c08b3-97e0-4636-a79a-bb6bde0a90f7"",
             ""actions"": [
-                {
-                    ""name"": ""Restart From Last Checkpoint"",
-                    ""type"": ""Button"",
-                    ""id"": ""3993f125-cf34-44e0-9b9f-32a99ebb6c23"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false,
-                    ""priority"": 0
-                },
                 {
                     ""name"": ""Pitch"",
                     ""type"": ""Value"",
@@ -1285,28 +1339,6 @@ public partial class @FlyDangerousActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Everything"",
                     ""action"": ""All Flight Assist Toggle"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""46ee0833-d111-4756-96f7-d158da586e70"",
-                    ""path"": ""<Keyboard>/tab"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Everything"",
-                    ""action"": ""Restart From Last Checkpoint"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""8ea4d440-656d-4da9-9072-b1f9556e3dd3"",
-                    ""path"": """",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Everything"",
-                    ""action"": ""Restart From Last Checkpoint"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -2362,16 +2394,6 @@ public partial class @FlyDangerousActions: IInputActionCollection2, IDisposable
             ""id"": ""ed3ae988-95c1-41dc-8cc9-e43a984e423e"",
             ""actions"": [
                 {
-                    ""name"": ""Restart From Last Checkpoint"",
-                    ""type"": ""Button"",
-                    ""id"": ""268d0ec3-f896-47f7-94e0-4aa3ecf7843f"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false,
-                    ""priority"": 0
-                },
-                {
                     ""name"": ""LateralV"",
                     ""type"": ""Value"",
                     ""id"": ""a5e9f02b-5919-4273-94af-ade7c3fd18ad"",
@@ -2686,28 +2708,6 @@ public partial class @FlyDangerousActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Everything"",
                     ""action"": ""Boost"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""c23950d7-b5db-4e33-92f4-34ee10dfcf09"",
-                    ""path"": ""<Keyboard>/tab"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Everything"",
-                    ""action"": ""Restart From Last Checkpoint"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""3b24c0e1-9440-4125-a234-035360babd71"",
-                    ""path"": """",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Everything"",
-                    ""action"": ""Restart From Last Checkpoint"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -4229,6 +4229,7 @@ public partial class @FlyDangerousActions: IInputActionCollection2, IDisposable
         m_Global_ShowGameMenu = m_Global.FindAction("Show Game Menu", throwIfNotFound: true);
         m_Global_ToggleFreeCam = m_Global.FindAction("Toggle Free Cam", throwIfNotFound: true);
         m_Global_RestartTrack = m_Global.FindAction("Restart Track", throwIfNotFound: true);
+        m_Global_RestartFromLastCheckpoint = m_Global.FindAction("Restart From Last Checkpoint", throwIfNotFound: true);
         // GlobalArcade
         m_GlobalArcade = asset.FindActionMap("GlobalArcade", throwIfNotFound: true);
         m_GlobalArcade_ResetHMDView = m_GlobalArcade.FindAction("Reset HMD View", throwIfNotFound: true);
@@ -4236,9 +4237,9 @@ public partial class @FlyDangerousActions: IInputActionCollection2, IDisposable
         m_GlobalArcade_ShowGameMenu = m_GlobalArcade.FindAction("Show Game Menu", throwIfNotFound: true);
         m_GlobalArcade_ToggleFreeCam = m_GlobalArcade.FindAction("Toggle Free Cam", throwIfNotFound: true);
         m_GlobalArcade_RestartTrack = m_GlobalArcade.FindAction("Restart Track", throwIfNotFound: true);
+        m_GlobalArcade_RestartFromLastCheckpoint = m_GlobalArcade.FindAction("Restart From Last Checkpoint", throwIfNotFound: true);
         // Ship
         m_Ship = asset.FindActionMap("Ship", throwIfNotFound: true);
-        m_Ship_RestartFromLastCheckpoint = m_Ship.FindAction("Restart From Last Checkpoint", throwIfNotFound: true);
         m_Ship_Pitch = m_Ship.FindAction("Pitch", throwIfNotFound: true);
         m_Ship_PitchAlt = m_Ship.FindAction("Pitch Alt", throwIfNotFound: true);
         m_Ship_Roll = m_Ship.FindAction("Roll", throwIfNotFound: true);
@@ -4273,7 +4274,6 @@ public partial class @FlyDangerousActions: IInputActionCollection2, IDisposable
         m_Ship_ToggleIndicatorHUD = m_Ship.FindAction("Toggle Indicator HUD", throwIfNotFound: true);
         // ShipArcade
         m_ShipArcade = asset.FindActionMap("ShipArcade", throwIfNotFound: true);
-        m_ShipArcade_RestartFromLastCheckpoint = m_ShipArcade.FindAction("Restart From Last Checkpoint", throwIfNotFound: true);
         m_ShipArcade_LateralV = m_ShipArcade.FindAction("LateralV", throwIfNotFound: true);
         m_ShipArcade_LateralH = m_ShipArcade.FindAction("LateralH", throwIfNotFound: true);
         m_ShipArcade_Throttle = m_ShipArcade.FindAction("Throttle", throwIfNotFound: true);
@@ -4398,6 +4398,7 @@ public partial class @FlyDangerousActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Global_ShowGameMenu;
     private readonly InputAction m_Global_ToggleFreeCam;
     private readonly InputAction m_Global_RestartTrack;
+    private readonly InputAction m_Global_RestartFromLastCheckpoint;
     /// <summary>
     /// Provides access to input actions defined in input action map "Global".
     /// </summary>
@@ -4429,6 +4430,10 @@ public partial class @FlyDangerousActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Global/RestartTrack".
         /// </summary>
         public InputAction @RestartTrack => m_Wrapper.m_Global_RestartTrack;
+        /// <summary>
+        /// Provides access to the underlying input action "Global/RestartFromLastCheckpoint".
+        /// </summary>
+        public InputAction @RestartFromLastCheckpoint => m_Wrapper.m_Global_RestartFromLastCheckpoint;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -4470,6 +4475,9 @@ public partial class @FlyDangerousActions: IInputActionCollection2, IDisposable
             @RestartTrack.started += instance.OnRestartTrack;
             @RestartTrack.performed += instance.OnRestartTrack;
             @RestartTrack.canceled += instance.OnRestartTrack;
+            @RestartFromLastCheckpoint.started += instance.OnRestartFromLastCheckpoint;
+            @RestartFromLastCheckpoint.performed += instance.OnRestartFromLastCheckpoint;
+            @RestartFromLastCheckpoint.canceled += instance.OnRestartFromLastCheckpoint;
         }
 
         /// <summary>
@@ -4496,6 +4504,9 @@ public partial class @FlyDangerousActions: IInputActionCollection2, IDisposable
             @RestartTrack.started -= instance.OnRestartTrack;
             @RestartTrack.performed -= instance.OnRestartTrack;
             @RestartTrack.canceled -= instance.OnRestartTrack;
+            @RestartFromLastCheckpoint.started -= instance.OnRestartFromLastCheckpoint;
+            @RestartFromLastCheckpoint.performed -= instance.OnRestartFromLastCheckpoint;
+            @RestartFromLastCheckpoint.canceled -= instance.OnRestartFromLastCheckpoint;
         }
 
         /// <summary>
@@ -4538,6 +4549,7 @@ public partial class @FlyDangerousActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_GlobalArcade_ShowGameMenu;
     private readonly InputAction m_GlobalArcade_ToggleFreeCam;
     private readonly InputAction m_GlobalArcade_RestartTrack;
+    private readonly InputAction m_GlobalArcade_RestartFromLastCheckpoint;
     /// <summary>
     /// Provides access to input actions defined in input action map "GlobalArcade".
     /// </summary>
@@ -4569,6 +4581,10 @@ public partial class @FlyDangerousActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "GlobalArcade/RestartTrack".
         /// </summary>
         public InputAction @RestartTrack => m_Wrapper.m_GlobalArcade_RestartTrack;
+        /// <summary>
+        /// Provides access to the underlying input action "GlobalArcade/RestartFromLastCheckpoint".
+        /// </summary>
+        public InputAction @RestartFromLastCheckpoint => m_Wrapper.m_GlobalArcade_RestartFromLastCheckpoint;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -4610,6 +4626,9 @@ public partial class @FlyDangerousActions: IInputActionCollection2, IDisposable
             @RestartTrack.started += instance.OnRestartTrack;
             @RestartTrack.performed += instance.OnRestartTrack;
             @RestartTrack.canceled += instance.OnRestartTrack;
+            @RestartFromLastCheckpoint.started += instance.OnRestartFromLastCheckpoint;
+            @RestartFromLastCheckpoint.performed += instance.OnRestartFromLastCheckpoint;
+            @RestartFromLastCheckpoint.canceled += instance.OnRestartFromLastCheckpoint;
         }
 
         /// <summary>
@@ -4636,6 +4655,9 @@ public partial class @FlyDangerousActions: IInputActionCollection2, IDisposable
             @RestartTrack.started -= instance.OnRestartTrack;
             @RestartTrack.performed -= instance.OnRestartTrack;
             @RestartTrack.canceled -= instance.OnRestartTrack;
+            @RestartFromLastCheckpoint.started -= instance.OnRestartFromLastCheckpoint;
+            @RestartFromLastCheckpoint.performed -= instance.OnRestartFromLastCheckpoint;
+            @RestartFromLastCheckpoint.canceled -= instance.OnRestartFromLastCheckpoint;
         }
 
         /// <summary>
@@ -4673,7 +4695,6 @@ public partial class @FlyDangerousActions: IInputActionCollection2, IDisposable
     // Ship
     private readonly InputActionMap m_Ship;
     private List<IShipActions> m_ShipActionsCallbackInterfaces = new List<IShipActions>();
-    private readonly InputAction m_Ship_RestartFromLastCheckpoint;
     private readonly InputAction m_Ship_Pitch;
     private readonly InputAction m_Ship_PitchAlt;
     private readonly InputAction m_Ship_Roll;
@@ -4717,10 +4738,6 @@ public partial class @FlyDangerousActions: IInputActionCollection2, IDisposable
         /// Construct a new instance of the input action map wrapper class.
         /// </summary>
         public ShipActions(@FlyDangerousActions wrapper) { m_Wrapper = wrapper; }
-        /// <summary>
-        /// Provides access to the underlying input action "Ship/RestartFromLastCheckpoint".
-        /// </summary>
-        public InputAction @RestartFromLastCheckpoint => m_Wrapper.m_Ship_RestartFromLastCheckpoint;
         /// <summary>
         /// Provides access to the underlying input action "Ship/Pitch".
         /// </summary>
@@ -4875,9 +4892,6 @@ public partial class @FlyDangerousActions: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_ShipActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_ShipActionsCallbackInterfaces.Add(instance);
-            @RestartFromLastCheckpoint.started += instance.OnRestartFromLastCheckpoint;
-            @RestartFromLastCheckpoint.performed += instance.OnRestartFromLastCheckpoint;
-            @RestartFromLastCheckpoint.canceled += instance.OnRestartFromLastCheckpoint;
             @Pitch.started += instance.OnPitch;
             @Pitch.performed += instance.OnPitch;
             @Pitch.canceled += instance.OnPitch;
@@ -4985,9 +4999,6 @@ public partial class @FlyDangerousActions: IInputActionCollection2, IDisposable
         /// <seealso cref="ShipActions" />
         private void UnregisterCallbacks(IShipActions instance)
         {
-            @RestartFromLastCheckpoint.started -= instance.OnRestartFromLastCheckpoint;
-            @RestartFromLastCheckpoint.performed -= instance.OnRestartFromLastCheckpoint;
-            @RestartFromLastCheckpoint.canceled -= instance.OnRestartFromLastCheckpoint;
             @Pitch.started -= instance.OnPitch;
             @Pitch.performed -= instance.OnPitch;
             @Pitch.canceled -= instance.OnPitch;
@@ -5121,7 +5132,6 @@ public partial class @FlyDangerousActions: IInputActionCollection2, IDisposable
     // ShipArcade
     private readonly InputActionMap m_ShipArcade;
     private List<IShipArcadeActions> m_ShipArcadeActionsCallbackInterfaces = new List<IShipArcadeActions>();
-    private readonly InputAction m_ShipArcade_RestartFromLastCheckpoint;
     private readonly InputAction m_ShipArcade_LateralV;
     private readonly InputAction m_ShipArcade_LateralH;
     private readonly InputAction m_ShipArcade_Throttle;
@@ -5147,10 +5157,6 @@ public partial class @FlyDangerousActions: IInputActionCollection2, IDisposable
         /// Construct a new instance of the input action map wrapper class.
         /// </summary>
         public ShipArcadeActions(@FlyDangerousActions wrapper) { m_Wrapper = wrapper; }
-        /// <summary>
-        /// Provides access to the underlying input action "ShipArcade/RestartFromLastCheckpoint".
-        /// </summary>
-        public InputAction @RestartFromLastCheckpoint => m_Wrapper.m_ShipArcade_RestartFromLastCheckpoint;
         /// <summary>
         /// Provides access to the underlying input action "ShipArcade/LateralV".
         /// </summary>
@@ -5233,9 +5239,6 @@ public partial class @FlyDangerousActions: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_ShipArcadeActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_ShipArcadeActionsCallbackInterfaces.Add(instance);
-            @RestartFromLastCheckpoint.started += instance.OnRestartFromLastCheckpoint;
-            @RestartFromLastCheckpoint.performed += instance.OnRestartFromLastCheckpoint;
-            @RestartFromLastCheckpoint.canceled += instance.OnRestartFromLastCheckpoint;
             @LateralV.started += instance.OnLateralV;
             @LateralV.performed += instance.OnLateralV;
             @LateralV.canceled += instance.OnLateralV;
@@ -5289,9 +5292,6 @@ public partial class @FlyDangerousActions: IInputActionCollection2, IDisposable
         /// <seealso cref="ShipArcadeActions" />
         private void UnregisterCallbacks(IShipArcadeActions instance)
         {
-            @RestartFromLastCheckpoint.started -= instance.OnRestartFromLastCheckpoint;
-            @RestartFromLastCheckpoint.performed -= instance.OnRestartFromLastCheckpoint;
-            @RestartFromLastCheckpoint.canceled -= instance.OnRestartFromLastCheckpoint;
             @LateralV.started -= instance.OnLateralV;
             @LateralV.performed -= instance.OnLateralV;
             @LateralV.canceled -= instance.OnLateralV;
@@ -5833,6 +5833,13 @@ public partial class @FlyDangerousActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnRestartTrack(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Restart From Last Checkpoint" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnRestartFromLastCheckpoint(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "GlobalArcade" which allows adding and removing callbacks.
@@ -5876,6 +5883,13 @@ public partial class @FlyDangerousActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnRestartTrack(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Restart From Last Checkpoint" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnRestartFromLastCheckpoint(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Ship" which allows adding and removing callbacks.
@@ -5884,13 +5898,6 @@ public partial class @FlyDangerousActions: IInputActionCollection2, IDisposable
     /// <seealso cref="ShipActions.RemoveCallbacks(IShipActions)" />
     public interface IShipActions
     {
-        /// <summary>
-        /// Method invoked when associated input action "Restart From Last Checkpoint" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnRestartFromLastCheckpoint(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "Pitch" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
@@ -6123,13 +6130,6 @@ public partial class @FlyDangerousActions: IInputActionCollection2, IDisposable
     /// <seealso cref="ShipArcadeActions.RemoveCallbacks(IShipArcadeActions)" />
     public interface IShipArcadeActions
     {
-        /// <summary>
-        /// Method invoked when associated input action "Restart From Last Checkpoint" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnRestartFromLastCheckpoint(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "LateralV" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
