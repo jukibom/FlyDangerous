@@ -154,8 +154,8 @@ namespace Core.ShipModel {
             altitudeIndicator.HeightAboveSurface = _shipInstrumentData.Altitude;
             heightIndicator.HeightAboveSurface = _shipInstrumentData.ShipHeightFromGround;
             xCoord.SetText("{0:0}x", Mathf.Round(_shipInstrumentData.WorldPosition.x));
-            xCoord.SetText("{0:0}y", Mathf.Round(_shipInstrumentData.WorldPosition.y));
-            xCoord.SetText("{0:0}z", Mathf.Round(_shipInstrumentData.WorldPosition.z));
+            yCoord.SetText("{0:0}y", Mathf.Round(_shipInstrumentData.WorldPosition.y));
+            zCoord.SetText("{0:0}z", Mathf.Round(_shipInstrumentData.WorldPosition.z));
             gravity.SetText("{0:0}G", Mathf.Round(_shipInstrumentData.Gravity / 9.8f * 100) / 100);
         }
 
