@@ -1,5 +1,6 @@
 using NaughtyAttributes;
 using UnityEngine;
+using Core;
 
 namespace Gameplay {
     public enum CheckpointType {
@@ -62,6 +63,7 @@ namespace Gameplay {
             if (_isActive) {
                 _isActive = false;
                 OnHit?.Invoke(this, excessTimeToHitSeconds);
+                Game.Instance.GameModeHandler.HitCheckpoints.Push(this);
                 checkpointAudioSource.Play();
                 HideOverlay();
             }

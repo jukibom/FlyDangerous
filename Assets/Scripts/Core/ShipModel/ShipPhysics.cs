@@ -20,6 +20,30 @@ namespace Core.ShipModel {
         Spooling,
         Active
     }
+    public struct ShipSnapShot
+        {
+            public Vector3 floatingOrigin;
+            public Vector3 position;
+            public Quaternion rotation;
+            public Vector3 velocity;
+            public Vector3 angularVelocity;
+            public float boostCappacity;
+            public float currentBoostTime;
+            public int boostProgressTicks;
+            public BoostStatus boostStatus;
+            public float boostedMaxSpeedDelta;
+            public Vector3 modifierShipForce;
+            public float modifierShipDeltaSpeedCap;
+            public float modifierShipDeltaThrust;
+            public float modifierShipDrag;
+            public float modifierShipAngularDrag;
+            public List<Component> activeModifiers;
+            public List<Component> prevactiveModifiers;
+            public uint tick;
+
+            public bool boostRecharging;
+            public Vector3 previousVelocity;
+        }
 
     [RequireComponent(typeof(FeedbackEngine))]
     [RequireComponent(typeof(ModifierEngine))]
@@ -60,6 +84,8 @@ namespace Core.ShipModel {
         private ModifierEngine _modifierEngine;
         private List<Component> _activeModifiers = new();
         private List<Component> _prevActiveModifiers = new();
+        private List<int> sphereIdList = new();
+        private List<int> boxIdList = new();
         private int _modifierLayerMask;
 
         private Vector3 _prevVelocity;
@@ -743,22 +769,27 @@ namespace Core.ShipModel {
             var rayHits = VelocityBoxCast(out var raycastHitCount, 1 << _checkpointLayerMask);
 
             var checkpointHitCount = 0;
-            var checkpointDistance = 0f;
+            var checkpointDistance = float.MaxValue;
             Checkpoint checkpointFound = null;
+            sphereIdList.Clear();
+            boxIdList.Clear();
             for (var i = 0; i < raycastHitCount; i++) {
                 var raycastHit = rayHits[i];
                 var checkpoint = raycastHit.collider.GetComponentInParent<Checkpoint>();
+                if (raycastHit.collider.GetType() == typeof(SphereCollider) && !sphereIdList.Contains(checkpoint.gameObject.GetInstanceID())) sphereIdList.Add(checkpoint.gameObject.GetInstanceID());
+                if (raycastHit.collider.GetType() == typeof(BoxCollider) && !boxIdList.Contains(checkpoint.gameObject.GetInstanceID())) boxIdList.Add(checkpoint.gameObject.GetInstanceID());
                 if (checkpoint) {
                     checkpointHitCount++;
-                    checkpointDistance = Mathf.Max(checkpointDistance, raycastHit.distance);
-                    if (checkpointHitCount > 1) checkpointFound = checkpoint;
+                    if (raycastHit.distance < checkpointDistance && boxIdList.Contains(checkpoint.gameObject.GetInstanceID()) && sphereIdList.Contains(checkpoint.gameObject.GetInstanceID())) {
+                        checkpointDistance = raycastHit.distance;
+                        checkpointFound = checkpoint;
+                    }
                 }
             }
 
             if (checkpointFound != null) {
                 var frameVelocity = targetRigidbody.linearVelocity * Time.fixedDeltaTime;
                 var excessTimeToHit = checkpointDistance / frameVelocity.magnitude * Time.fixedDeltaTime;
-                // Debug.Log("DISTANCE " + distance + $"   Time to hit: {excessTimeToHit}");
                 checkpointFound.Hit(excessTimeToHit);
             }
         }
@@ -813,31 +844,6 @@ namespace Core.ShipModel {
             ExtDebug.DrawBoxCastBox(start, halfExtents, orientation, direction, maxDistance, Color.red);
 
             return _raycastHits;
-        }
-
-        public struct ShipSnapShot
-        {
-            public Vector3 floatingOrigin;
-            public Vector3 position;
-            public Quaternion rotation;
-            public Vector3 velocity;
-            public Vector3 angularVelocity;
-            public float boostCappacity;
-            public float currentBoostTime;
-            public int boostProgressTicks;
-            public BoostStatus boostStatus;
-            public float boostedMaxSpeedDelta;
-            public Vector3 modifierShipForce;
-            public float modifierShipDeltaSpeedCap;
-            public float modifierShipDeltaThrust;
-            public float modifierShipDrag;
-            public float modifierShipAngularDrag;
-            public List<Component> activeModifiers;
-            public List<Component> prevactiveModifiers;
-            public uint tick;
-
-            public bool boostRecharging;
-            public Vector3 previousVelocity;
         }
 
         public ShipSnapShot GenerateShipSnapShot()

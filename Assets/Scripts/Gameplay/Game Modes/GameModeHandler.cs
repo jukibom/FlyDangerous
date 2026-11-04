@@ -64,7 +64,8 @@ namespace Gameplay.Game_Modes {
         public Replay CurrentReplay => _replayRecorder.Replay.GetCopy();
         public Replay lastCheckpointReplay;
         public ReplayTimeline playerReplayTimeline {get; set;}
-        public ShipSnapShotBuffer<ShipPhysics.ShipSnapShot> _shipSnapshotBuffer;
+        public ShipSnapShotBuffer<ShipSnapShot> _snapshotBuffer;
+        public Stack<Checkpoint> HitCheckpoints = new();
         public bool replayRunning = false;
 
         private void OnEnable() {
@@ -82,7 +83,7 @@ namespace Gameplay.Game_Modes {
         private void FixedUpdate() {
             if (ShipActive) {
                 _gameModeTimer.Tick(Time.fixedDeltaTime);
-                Game.Instance.GameModeHandler._shipSnapshotBuffer.Add(player.ShipPhysics.GenerateShipSnapShot());
+                Game.Instance.GameModeHandler._snapshotBuffer.Add(player.ShipPhysics.GenerateShipSnapShot());
                 _gameMode.OnFixedUpdate();
             }
             if (replayTicks == SnapShotTicks && replayRunning) {
@@ -180,6 +181,7 @@ namespace Gameplay.Game_Modes {
             // juuuuuuuuust in case
             _inGameUI.GameModeUIHandler.StartPanel.Hide();
             LocalPlayer.User.ShipCameraRig.StopCameraDolly();
+            HitCheckpoints.Clear();
 
             StopGhosts();
             LocalPlayer.User.DisableUIInput();
@@ -194,26 +196,37 @@ namespace Gameplay.Game_Modes {
             HandleStartSequence();
         }
 
+        private void RewindCheckpoints()
+        {
+            var checkpoint = HitCheckpoints.Pop();
+            checkpoint.Reset();
+            if (_gameMode is TimeTrialSprint sprint)
+                sprint.RewindSplits();
+        }
+
         public void RestartFromCheckpoint() {
-            if (!_shipSnapshotBuffer.snapShotValid) {
+            if (!_snapshotBuffer.snapShotValid) {
                 Game.Instance.RestartSession();
                 return;
             }
 
-            if (!replayRunning) {
-                _fastCountDown = StartCoroutine( FastCountDown());
-                replayRunning = true;
-                replayTicks = 0;
-                player.User.DisableInput();
-                playerReplayTimeline = gameObject.AddComponent<ReplayTimeline>();
-                playerReplayTimeline.LoadPlayerReplay(lastCheckpointReplay, _shipSnapshotBuffer.ghostSnapshot.tick);
-                playerReplayTimeline.Play();
-                PlayerApplySnapshot(player.ShipPhysics,_shipSnapshotBuffer.ghostSnapshot);
-                player.User.ShipCameraRig.ActiveCamera?.Reset();
-            }
+            if (_fastCountDown != null) StopCoroutine(_fastCountDown);
+            if (replayRunning) ReplayPrioritizer.Instance.UnregisterReplay(playerReplayTimeline);
+
+            var snapshot = _snapshotBuffer.snapshots.Pop();
+
+            _fastCountDown = StartCoroutine( FastCountDown());
+            replayRunning = true;
+            replayTicks = 0;
+            player.User.DisableInput();
+            playerReplayTimeline = gameObject.AddComponent<ReplayTimeline>();
+            playerReplayTimeline.LoadPlayerReplay(lastCheckpointReplay, snapshot.tick);
+            PlayerApplySnapshot(player.ShipPhysics,snapshot);
+            playerReplayTimeline.Play();
+            RewindCheckpoints();
         }
         
-        private void PlayerApplySnapshot(ShipPhysics shipPhysics, ShipPhysics.ShipSnapShot shipSnapshot) {
+        private void PlayerApplySnapshot(ShipPhysics shipPhysics, ShipSnapShot shipSnapshot) {
             LocalPlayer.SetTransformWorld(shipSnapshot.position+shipSnapshot.floatingOrigin, shipSnapshot.rotation);
             shipPhysics.Rigidbody.linearVelocity = shipSnapshot.velocity;
             shipPhysics.Rigidbody.angularVelocity = shipSnapshot.angularVelocity;
@@ -266,7 +279,7 @@ namespace Gameplay.Game_Modes {
         }
 
         private void OnCheckpointHit(Checkpoint checkpoint, float excessTimeToHitSeconds) {
-            _shipSnapshotBuffer.OnCheckPointHit();
+            _snapshotBuffer.OnCheckPointHit();
             lastCheckpointReplay = Game.Instance.GameModeHandler.CurrentReplay;
 
             var hitTimeSeconds = _gameModeTimer.CurrentSessionTimeSeconds + excessTimeToHitSeconds;
@@ -288,7 +301,7 @@ namespace Gameplay.Game_Modes {
             _isValid = IsValid();
             _gameModeLifecycle.DisableAllShipInput();
             LocalPlayer.ShipPhysics.ShipActive = false;
-            _shipSnapshotBuffer = new ShipSnapShotBuffer<ShipPhysics.ShipSnapShot>(SnapShotTicks +1);
+            _snapshotBuffer = new ShipSnapShotBuffer<ShipSnapShot>(SnapShotTicks +1);
 
             IEnumerator StartSequence() {
                 _gameModeLifecycle.EnableGameInput();
@@ -447,9 +460,8 @@ namespace Gameplay.Game_Modes {
             private int _head = 0;
             private int _count = 0;
             public int Capacity => _buffer.Length;
-            public bool snapShotValid = false;
-            public ShipSnapShot checkpointSnapshot;
-            public ShipSnapShot ghostSnapshot;
+            public bool snapShotValid => snapshots.Count >0;
+            public Stack<ShipSnapShot> snapshots = new Stack<ShipSnapShot>{};
             
             public ShipSnapShotBuffer(int capacity) {
                 _buffer = new ShipSnapShot[capacity];
@@ -463,9 +475,7 @@ namespace Gameplay.Game_Modes {
             }
             public void OnCheckPointHit() {
                 if (_count == Capacity) {
-                    ghostSnapshot = _buffer[_head];
-                    checkpointSnapshot = _buffer[(Capacity + _head - 1) % Capacity];
-                    snapShotValid = true;
+                    snapshots.Push( _buffer[_head]);
                 }
             }
         }
