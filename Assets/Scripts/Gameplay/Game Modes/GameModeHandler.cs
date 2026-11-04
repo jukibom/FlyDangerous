@@ -64,7 +64,8 @@ namespace Gameplay.Game_Modes {
         public Replay CurrentReplay => _replayRecorder.Replay.GetCopy();
         public Replay lastCheckpointReplay;
         public ReplayTimeline playerReplayTimeline {get; set;}
-        public ShipSnapShotBuffer<ShipPhysics.ShipSnapShot> _snapshotBuffer;
+        public ShipSnapShotBuffer<ShipSnapShot> _snapshotBuffer;
+        public Stack<Checkpoint> HitCheckpoints = new();
         public bool replayRunning = false;
 
         private void OnEnable() {
@@ -180,6 +181,7 @@ namespace Gameplay.Game_Modes {
             // juuuuuuuuust in case
             _inGameUI.GameModeUIHandler.StartPanel.Hide();
             LocalPlayer.User.ShipCameraRig.StopCameraDolly();
+            HitCheckpoints.Clear();
 
             StopGhosts();
             LocalPlayer.User.DisableUIInput();
@@ -194,32 +196,37 @@ namespace Gameplay.Game_Modes {
             HandleStartSequence();
         }
 
+        private void RewindCheckpoints()
+        {
+            var checkpoint = HitCheckpoints.Pop();
+            checkpoint.Reset();
+            if (_gameMode is TimeTrialSprint sprint)
+                sprint.RewindSplits();
+        }
+
         public void RestartFromCheckpoint() {
-            if (replayRunning) {
-                _snapshotBuffer.snapshots.RemoveAt(_snapshotBuffer.snapshots.Count-1);
-
-                if (_fastCountDown != null) StopCoroutine(_fastCountDown);
-                ReplayPrioritizer.Instance.UnregisterReplay(playerReplayTimeline);
-            }
-
             if (!_snapshotBuffer.snapShotValid) {
                 Game.Instance.RestartSession();
                 return;
             }
 
-            var snapshot = _snapshotBuffer.snapshots[_snapshotBuffer.snapshots.Count-1];
+            if (_fastCountDown != null) StopCoroutine(_fastCountDown);
+            if (replayRunning) ReplayPrioritizer.Instance.UnregisterReplay(playerReplayTimeline);
+
+            var snapshot = _snapshotBuffer.snapshots.Pop();
+
             _fastCountDown = StartCoroutine( FastCountDown());
             replayRunning = true;
             replayTicks = 0;
             player.User.DisableInput();
             playerReplayTimeline = gameObject.AddComponent<ReplayTimeline>();
             playerReplayTimeline.LoadPlayerReplay(lastCheckpointReplay, snapshot.tick);
-            playerReplayTimeline.Play();
             PlayerApplySnapshot(player.ShipPhysics,snapshot);
-            player.User.ShipCameraRig.ActiveCamera?.Reset();
+            playerReplayTimeline.Play();
+            RewindCheckpoints();
         }
         
-        private void PlayerApplySnapshot(ShipPhysics shipPhysics, ShipPhysics.ShipSnapShot shipSnapshot) {
+        private void PlayerApplySnapshot(ShipPhysics shipPhysics, ShipSnapShot shipSnapshot) {
             LocalPlayer.SetTransformWorld(shipSnapshot.position+shipSnapshot.floatingOrigin, shipSnapshot.rotation);
             shipPhysics.Rigidbody.linearVelocity = shipSnapshot.velocity;
             shipPhysics.Rigidbody.angularVelocity = shipSnapshot.angularVelocity;
@@ -294,7 +301,7 @@ namespace Gameplay.Game_Modes {
             _isValid = IsValid();
             _gameModeLifecycle.DisableAllShipInput();
             LocalPlayer.ShipPhysics.ShipActive = false;
-            _snapshotBuffer = new ShipSnapShotBuffer<ShipPhysics.ShipSnapShot>(SnapShotTicks +1);
+            _snapshotBuffer = new ShipSnapShotBuffer<ShipSnapShot>(SnapShotTicks +1);
 
             IEnumerator StartSequence() {
                 _gameModeLifecycle.EnableGameInput();
@@ -454,7 +461,7 @@ namespace Gameplay.Game_Modes {
             private int _count = 0;
             public int Capacity => _buffer.Length;
             public bool snapShotValid => snapshots.Count >0;
-            public List<ShipSnapShot> snapshots = new List<ShipSnapShot>();
+            public Stack<ShipSnapShot> snapshots = new Stack<ShipSnapShot>{};
             
             public ShipSnapShotBuffer(int capacity) {
                 _buffer = new ShipSnapShot[capacity];
@@ -468,7 +475,7 @@ namespace Gameplay.Game_Modes {
             }
             public void OnCheckPointHit() {
                 if (_count == Capacity) {
-                    snapshots.Add( _buffer[_head]);
+                    snapshots.Push( _buffer[_head]);
                 }
             }
         }

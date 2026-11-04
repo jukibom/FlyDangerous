@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Misc;
+using Core;
 
 namespace Gameplay.Game_Modes {
     // This class is essentially just time trial sprint with some minor alterations:
@@ -90,6 +91,9 @@ namespace Gameplay.Game_Modes {
                 if (_lap < TotalLaps) {
                     GameModeCheckpoints.Reset();
                     _lap++;
+
+                    Game.Instance.GameModeHandler._snapshotBuffer.snapshots.Clear();
+                    Game.Instance.GameModeHandler.HitCheckpoints.Clear();
                 }
                 else {
                     // override last checkpoint hit time for the purpose of storing a final score

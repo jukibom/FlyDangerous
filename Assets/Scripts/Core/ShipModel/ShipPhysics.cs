@@ -20,6 +20,30 @@ namespace Core.ShipModel {
         Spooling,
         Active
     }
+    public struct ShipSnapShot
+        {
+            public Vector3 floatingOrigin;
+            public Vector3 position;
+            public Quaternion rotation;
+            public Vector3 velocity;
+            public Vector3 angularVelocity;
+            public float boostCappacity;
+            public float currentBoostTime;
+            public int boostProgressTicks;
+            public BoostStatus boostStatus;
+            public float boostedMaxSpeedDelta;
+            public Vector3 modifierShipForce;
+            public float modifierShipDeltaSpeedCap;
+            public float modifierShipDeltaThrust;
+            public float modifierShipDrag;
+            public float modifierShipAngularDrag;
+            public List<Component> activeModifiers;
+            public List<Component> prevactiveModifiers;
+            public uint tick;
+
+            public bool boostRecharging;
+            public Vector3 previousVelocity;
+        }
 
     [RequireComponent(typeof(FeedbackEngine))]
     [RequireComponent(typeof(ModifierEngine))]
@@ -761,7 +785,6 @@ namespace Core.ShipModel {
                 var frameVelocity = targetRigidbody.linearVelocity * Time.fixedDeltaTime;
                 var excessTimeToHit = checkpointDistance / frameVelocity.magnitude * Time.fixedDeltaTime;
                 checkpointFound.Hit(excessTimeToHit);
-                Game.Instance.GameModeHandler.HitCheckpoints.Add(checkpointFound);
             }
         }
 
@@ -815,31 +838,6 @@ namespace Core.ShipModel {
             ExtDebug.DrawBoxCastBox(start, halfExtents, orientation, direction, maxDistance, Color.red);
 
             return _raycastHits;
-        }
-
-        public struct ShipSnapShot
-        {
-            public Vector3 floatingOrigin;
-            public Vector3 position;
-            public Quaternion rotation;
-            public Vector3 velocity;
-            public Vector3 angularVelocity;
-            public float boostCappacity;
-            public float currentBoostTime;
-            public int boostProgressTicks;
-            public BoostStatus boostStatus;
-            public float boostedMaxSpeedDelta;
-            public Vector3 modifierShipForce;
-            public float modifierShipDeltaSpeedCap;
-            public float modifierShipDeltaThrust;
-            public float modifierShipDrag;
-            public float modifierShipAngularDrag;
-            public List<Component> activeModifiers;
-            public List<Component> prevactiveModifiers;
-            public uint tick;
-
-            public bool boostRecharging;
-            public Vector3 previousVelocity;
         }
 
         public ShipSnapShot GenerateShipSnapShot()
