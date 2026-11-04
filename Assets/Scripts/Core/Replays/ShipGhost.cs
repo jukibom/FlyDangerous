@@ -72,10 +72,10 @@ namespace Core.Replays {
         }
 
         private void OnFloatingOriginCorrection(Vector3 offset) {
-            if (SpectatorActive) return;
+            if (FloatingOrigin.Instance.FocalTransform == transform) return;
             
             transform.position -= offset;
-            Rigidbody.MovePosition(transform.position);
+            Rigidbody.position = transform.position;
         }
 
         private void ShowBoost(float spoolTime, float boostTime) {

@@ -879,8 +879,7 @@ namespace Core.ShipModel {
         }
 
         public void ApplyShipSnapShotPhysics(ShipSnapShot shipSnapShot) {
-            //Position is handled outside this function
-
+            //Position / rotation is handled elsewhere (See ShipPlayer.SetTransformWorld())
             _boostCapacitorPercent = shipSnapShot.boostCappacity;
             _currentBoostTime = shipSnapShot.currentBoostTime;
             _boostProgressTicks =  shipSnapShot.boostProgressTicks;

@@ -6,6 +6,7 @@ using FdUI;
 using GameUI;
 using JetBrains.Annotations;
 using Misc;
+using NaughtyAttributes;
 using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -62,23 +63,24 @@ namespace Core.Player {
             get => _targetTransform;
             set {
                 FloatingOrigin.Instance.SwapFocalTransform(value);
+                
+                if (_targetTransform != null) {
+                    var previousShipPhysics = _targetTransform.GetComponentInChildren<ShipPhysics>();
+
+                    if (previousShipPhysics) {
+                        UnregisterIntegrations(previousShipPhysics);
+                    }
+                }
+                
                 var shipPhysics = value.GetComponentInChildren<ShipPhysics>(true);
                 if (shipPhysics != null && shipPlayer.isLocalPlayer) {
-                    shipPhysics.ActiveCameraRig = shipCameraRig;
-                    spaceDust.ActiveShipPhysics = shipPhysics;
-
-                    if (_targetTransform != null) {
-                        var previousShipPhysics = _targetTransform.GetComponentInChildren<ShipPhysics>();
-
-                        if (previousShipPhysics) {
-                            UnregisterIntegrations(previousShipPhysics);
-                        }
-                    }
-
                     RegisterIntegrations(shipPhysics);
                 }
                 
                 _targetTransform = value;
+                
+                UpdatePosition();
+                FloatingOrigin.Instance.CheckNeedsUpdate();
             }
         }
 
@@ -711,18 +713,28 @@ namespace Core.Player {
         }
 
         public void RegisterIntegrations(ShipPhysics shipPhysics) {
+            shipPhysics.ActiveCameraRig = shipCameraRig;
+            spaceDust.ActiveShipPhysics = shipPhysics;
+            
             shipPhysics.FeedbackEngine.SubscribeFeedbackObject(InGameUI.ShipStats);
             shipPhysics.FeedbackEngine.SubscribeFeedbackObject(InGameUI.IndicatorSystem);
             foreach (var integration in Engine.Instance.Integrations) shipPhysics.FeedbackEngine.SubscribeFeedbackObject(integration);
         }
 
         public void UnregisterIntegrations(ShipPhysics shipPhysics) {
+            shipPhysics.ActiveCameraRig = null;
+            spaceDust.ActiveShipPhysics = null;
+            
             shipPhysics.FeedbackEngine.RemoveFeedbackObject(InGameUI.ShipStats);
             shipPhysics.FeedbackEngine.RemoveFeedbackObject(InGameUI.IndicatorSystem);
             foreach (var integration in Engine.Instance.Integrations) shipPhysics.FeedbackEngine.RemoveFeedbackObject(integration);
         }
 
         private void LateUpdate() {
+            UpdatePosition();
+        }
+
+        private void UpdatePosition() {
             transform.SetPositionAndRotation(_targetTransform.position, _targetTransform.rotation);
         }
     }

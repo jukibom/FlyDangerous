@@ -87,14 +87,16 @@ namespace Core.Player {
 
         // Set the position and rotation of the ship to a relative / local position with respect to itself 
         public void SetTransformLocal(Vector3 position, Quaternion rotation) {
-            Rigidbody.Move(position, rotation);
+            Rigidbody.position = transform.position;
+            Rigidbody.rotation = rotation;
         }
 
         // Set the position and rotation of the ship to a world location, taking into account floating origin
         public void SetTransformWorld(Vector3 position, Quaternion rotation) {
-            FloatingOrigin.Instance.SetAbsoluteWorldPosition(transform, position);
+            FloatingOrigin.Instance.SetAbsoluteWorldPosition(transform, position, rotation);
             FloatingOrigin.Instance.CheckNeedsUpdate();
-            Rigidbody.Move(transform.position, rotation);
+            Rigidbody.position = transform.position;
+            Rigidbody.rotation = rotation;
         }
 
         #endregion
@@ -499,9 +501,8 @@ namespace Core.Player {
             // if the player is not the local one OR the user is not attached to the player
             if (!isLocalPlayer || FloatingOrigin.Instance.FocalTransform != transform) {
                 var position = transform.position - offset;
-                Rigidbody.MovePosition(position);
+                Rigidbody.position = position;
                 transform.position = position;
-                
             }
         }
 

@@ -72,7 +72,7 @@ namespace Core {
             DoFloatingOriginCorrection(Origin + delta, delta);
             
             if (focalTransform.TryGetComponent<Rigidbody>(out var rb)) {
-                rb.MovePosition(focalTransform.position);
+                rb.position = focalTransform.position;
             }
         }
 

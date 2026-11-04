@@ -92,8 +92,8 @@ namespace Gameplay.Game_Modes {
                     GameModeCheckpoints.Reset();
                     _lap++;
 
-                    Game.Instance.GameModeHandler._snapshotBuffer.snapshots.Clear();
-                    Game.Instance.GameModeHandler.HitCheckpoints.Clear();
+                    Game.Instance.GameModeHandler.snapshotBuffer.snapshots.Clear();
+                    Game.Instance.GameModeHandler.hitCheckpoints.Clear();
                 }
                 else {
                     // override last checkpoint hit time for the purpose of storing a final score

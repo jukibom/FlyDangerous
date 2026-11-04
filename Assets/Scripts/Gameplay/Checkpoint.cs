@@ -63,7 +63,7 @@ namespace Gameplay {
             if (_isActive) {
                 _isActive = false;
                 OnHit?.Invoke(this, excessTimeToHitSeconds);
-                Game.Instance.GameModeHandler.HitCheckpoints.Push(this);
+                Game.Instance.GameModeHandler.hitCheckpoints.Push(this);
                 checkpointAudioSource.Play();
                 HideOverlay();
             }

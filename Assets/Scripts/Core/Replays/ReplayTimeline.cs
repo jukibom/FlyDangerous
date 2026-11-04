@@ -22,7 +22,7 @@ namespace Core.Replays {
         private byte[] _inputFrameByteBuffer;
 
         [CanBeNull] private BinaryReader _inputFrameReader;
-        private ShipPhysics shipPhysics {get; set; }
+        private ShipPhysics ShipPhysics {get; set; }
 
         private uint _inputTicks;
         private bool _isPlaying;
@@ -54,12 +54,12 @@ namespace Core.Replays {
         public void LoadReplay(IReplayShip ship, Replay replay) {
             Replay = replay;
             ShipReplayObject = ship;
-            shipPhysics = ship.ShipPhysics;
-            shipPhysics.ShipProfile = replay.ShipProfile;
-            shipPhysics.FlightParameters = replay.ShipParameters;
+            ShipPhysics = ship.ShipPhysics;
+            ShipPhysics.ShipProfile = replay.ShipProfile;
+            ShipPhysics.FlightParameters = replay.ShipParameters;
 
             // hide all rendering assets until told to show (e.g. by distance in FixedUpdate)
-            if (shipPhysics.ShipModel != null) shipPhysics.ShipModel.SetVisible(false);
+            if (ShipPhysics.ShipModel != null) ShipPhysics.ShipModel.SetVisible(false);
 
             ship.PlayerName = replay.ShipProfile.playerName;
             ship.PlayerFlag = Flag.FromFilename(replay.ShipProfile.playerFlagFilename);
@@ -75,7 +75,7 @@ namespace Core.Replays {
 
         public void LoadPlayerReplay(Replay replay, uint tick) {
             Replay = replay;
-            shipPhysics = FdPlayer.FindLocalShipPlayer.ShipPhysics;
+            ShipPhysics = FdPlayer.FindLocalShipPlayer?.ShipPhysics;
 
             _inputFrameReader = new BinaryReader(replay.InputFrameStream, Encoding.UTF8, true);
             _keyFrameReader = new BinaryReader(replay.KeyFrameStream, Encoding.UTF8, true);
@@ -108,21 +108,22 @@ namespace Core.Replays {
 
                 var keyFrame = KeyFrameV2.Deserialize(Replay.ReplayMeta.Version, ref _keyFrameByteBuffer);
 
-                if(_isPlayer) {
-                    FdPlayer.FindLocalShipPlayer.SetTransformWorld(keyFrame.position+keyFrame.replayFloatingOrigin, keyFrame.rotation);
-                    FdPlayer.FindLocalShipPlayer.transform.rotation = keyFrame.rotation;
-                    }
+                if (_isPlayer) {
+                    FdPlayer.LocalShipPlayer.SetTransformWorld(keyFrame.position + keyFrame.replayFloatingOrigin,
+                        keyFrame.rotation);
+                    FdPlayer.LocalShipPlayer.transform.rotation = keyFrame.rotation;
+                }
                 else {
                     ShipReplayObject.SetAbsolutePosition(keyFrame.replayFloatingOrigin, keyFrame.position);
                     ShipReplayObject.Transform.rotation = keyFrame.rotation;
                 }
-                shipPhysics.Rigidbody.linearVelocity = keyFrame.velocity;
-                shipPhysics.Rigidbody.angularVelocity = keyFrame.angularVelocity;
+                ShipPhysics.Rigidbody.linearVelocity = keyFrame.velocity;
+                ShipPhysics.Rigidbody.angularVelocity = keyFrame.angularVelocity;
                 if (Replay.ReplayMeta.Version == "1.1.1") {
-                    shipPhysics.BoostStatus = keyFrame.boostStatus;
-                    shipPhysics.BoostProgressTicks = (int)keyFrame.boostProgressTicks;
-                    shipPhysics.CurrentBoostTime = keyFrame.boostTime;
-                    shipPhysics.BoostCapacitorPercent = keyFrame.boostCapacitorPercent;
+                    ShipPhysics.BoostStatus = keyFrame.boostStatus;
+                    ShipPhysics.BoostProgressTicks = (int)keyFrame.boostProgressTicks;
+                    ShipPhysics.CurrentBoostTime = keyFrame.boostTime;
+                    ShipPhysics.BoostCapacitorPercent = keyFrame.boostCapacitorPercent;
                 }
             }
         }
@@ -137,20 +138,20 @@ namespace Core.Replays {
 
                     var inputFrame = InputFrameV110.Deserialize(Replay.Version, ref _inputFrameByteBuffer);
 
-                    shipPhysics.OverwriteModifiers(inputFrame.modifierShipForce, inputFrame.modifierShipDeltaSpeedCap,
+                    ShipPhysics.OverwriteModifiers(inputFrame.modifierShipForce, inputFrame.modifierShipDeltaSpeedCap,
                         inputFrame.modifierShipDeltaThrust, inputFrame.modifierShipDrag, inputFrame.modifierShipAngularDrag);
 
-                    shipPhysics.UpdateShip(inputFrame.pitch, inputFrame.roll, inputFrame.yaw, inputFrame.throttle, inputFrame.lateralH,
+                    ShipPhysics.UpdateShip(inputFrame.pitch, inputFrame.roll, inputFrame.yaw, inputFrame.throttle, inputFrame.lateralH,
                         inputFrame.lateralV, inputFrame.boostHeld, inputFrame.limiterHeld, false, false);
 
-                    if (shipPhysics.IsNightVisionActive != inputFrame.shipLightsEnabled)
-                        shipPhysics.NightVisionToggle(inputFrame.shipLightsEnabled, _ => { });
+                    if (ShipPhysics.IsNightVisionActive != inputFrame.shipLightsEnabled)
+                        ShipPhysics.NightVisionToggle(inputFrame.shipLightsEnabled, _ => { });
 
                     if (!_isPlayer && ShipReplayObject?.SpectatorActive == true ) {
-                        shipPhysics.GhostCollisionChecks();
-                        var velocity = transform.InverseTransformDirection(shipPhysics.Velocity);
-                        var frameThrust = shipPhysics.CurrentFrameThrust;
-                        FdPlayer.FindLocalShipPlayer.User.ShipCameraRig.UpdateCameras(velocity, shipPhysics.FlightParameters.maxSpeed, frameThrust, shipPhysics.FlightParameters.maxThrust);
+                        ShipPhysics.GhostCollisionChecks();
+                        var velocity = transform.InverseTransformDirection(ShipPhysics.Velocity);
+                        var frameThrust = ShipPhysics.CurrentFrameThrust;
+                        FdPlayer.LocalShipPlayer.User.ShipCameraRig.UpdateCameras(velocity, ShipPhysics.FlightParameters.maxSpeed, frameThrust, ShipPhysics.FlightParameters.maxThrust);
                     }
 
                     _inputTicks++;
@@ -158,7 +159,7 @@ namespace Core.Replays {
                 else {
                     Debug.Log("Replay finished");
 
-                    // last collition check to see if it hit the final checkpoint
+                    // last collision check to see if it hit the final checkpoint
                     if (ShipReplayObject?.SpectatorActive == true )
                         ShipReplayObject.ShipPhysics.GhostCollisionChecks();
 
