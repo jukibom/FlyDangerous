@@ -145,6 +145,10 @@ namespace Gameplay.Game_Modes {
             );
         }
 
+        public void RewindSplits() {
+                _splits.RemoveAt(_splits.Count-1);
+        }
+
         protected IEnumerator ShowStarterText() {
             while (GameModeTimer.CurrentSessionTimeSeconds < 2.5f) {
                 var time = GameModeTimer.CurrentSessionTimeSeconds;
