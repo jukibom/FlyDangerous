@@ -769,12 +769,16 @@ namespace Core.ShipModel {
             var checkpointHitCount = 0;
             var checkpointDistance = float.MaxValue;
             Checkpoint checkpointFound = null;
+            List<int> sphereIdList = new();
+            List<int> boxIdList = new();
             for (var i = 0; i < raycastHitCount; i++) {
                 var raycastHit = rayHits[i];
                 var checkpoint = raycastHit.collider.GetComponentInParent<Checkpoint>();
+                if (raycastHit.collider.GetType() == typeof(SphereCollider) && !sphereIdList.Contains(checkpoint.gameObject.GetInstanceID())) sphereIdList.Add(checkpoint.gameObject.GetInstanceID());
+                if (raycastHit.collider.GetType() == typeof(BoxCollider) && !boxIdList.Contains(checkpoint.gameObject.GetInstanceID())) boxIdList.Add(checkpoint.gameObject.GetInstanceID());
                 if (checkpoint) {
                     checkpointHitCount++;
-                    if (raycastHit.distance < checkpointDistance && raycastHit.collider.GetType() == typeof(BoxCollider)) {
+                    if (raycastHit.distance < checkpointDistance && boxIdList.Contains(checkpoint.gameObject.GetInstanceID()) && sphereIdList.Contains(checkpoint.gameObject.GetInstanceID())) {
                         checkpointDistance = raycastHit.distance;
                         checkpointFound = checkpoint;
                     }
