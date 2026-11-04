@@ -23,7 +23,11 @@ namespace Core.ShipModel.Feedback.ogs {
      * by the FeedbackEngine the same way (IShipMotion / IShipInstruments / IShipFeedback).
      *
      * Enabled via preferences: "ogsTelemetryEnabled" (options menu toggle), endpoint configurable in the
-     * config file via "ogsTelemetryMulticastAddress" / "ogsTelemetryPort".
+     * config file via "ogsTelemetryMulticastAddress" / "ogsTelemetryPort". The address may also be the
+     * standard's IPv6 group (ff12::4f47:5453) on a network without IPv4.
+     *
+     * Only the local player's own ship is published, never other players' (the standard's
+     * competitive-play rule: other players' state over the network would be a cheat feed).
      *
      * The sender core comes from the com.ogs.telemetry.unity package (MIT).
      *
@@ -222,6 +226,9 @@ namespace Core.ShipModel.Feedback.ogs {
             try {
                 _sender = new TelemetrySender(_multicastAddress, _multicastPort);
                 _publisher = new TelemetryPublisher(_sender, Application.productName, MotionHz);
+                // this machine's host name in discovery, so receivers can pick and remember this
+                // sender and prefer one on their own machine (no instance label: one per machine)
+                _publisher.SetInstance("");
                 DeclareAndBind();
                 _isEnabled = true;
             }
