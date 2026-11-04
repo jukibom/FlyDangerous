@@ -84,6 +84,8 @@ namespace Core.ShipModel {
         private ModifierEngine _modifierEngine;
         private List<Component> _activeModifiers = new();
         private List<Component> _prevActiveModifiers = new();
+        private List<int> sphereIdList = new();
+        private List<int> boxIdList = new();
         private int _modifierLayerMask;
 
         private Vector3 _prevVelocity;
@@ -769,8 +771,8 @@ namespace Core.ShipModel {
             var checkpointHitCount = 0;
             var checkpointDistance = float.MaxValue;
             Checkpoint checkpointFound = null;
-            List<int> sphereIdList = new();
-            List<int> boxIdList = new();
+            sphereIdList.Clear();
+            boxIdList.Clear();
             for (var i = 0; i < raycastHitCount; i++) {
                 var raycastHit = rayHits[i];
                 var checkpoint = raycastHit.collider.GetComponentInParent<Checkpoint>();
