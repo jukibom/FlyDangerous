@@ -743,23 +743,25 @@ namespace Core.ShipModel {
             var rayHits = VelocityBoxCast(out var raycastHitCount, 1 << _checkpointLayerMask);
 
             var checkpointHitCount = 0;
-            var checkpointDistance = 0f;
+            var checkpointDistance = float.MaxValue;
             Checkpoint checkpointFound = null;
             for (var i = 0; i < raycastHitCount; i++) {
                 var raycastHit = rayHits[i];
                 var checkpoint = raycastHit.collider.GetComponentInParent<Checkpoint>();
                 if (checkpoint) {
                     checkpointHitCount++;
-                    checkpointDistance = Mathf.Max(checkpointDistance, raycastHit.distance);
-                    if (checkpointHitCount > 1) checkpointFound = checkpoint;
+                    if (raycastHit.distance < checkpointDistance && raycastHit.collider.GetType() == typeof(BoxCollider)) {
+                        checkpointDistance = raycastHit.distance;
+                        checkpointFound = checkpoint;
+                    }
                 }
             }
 
             if (checkpointFound != null) {
                 var frameVelocity = targetRigidbody.linearVelocity * Time.fixedDeltaTime;
                 var excessTimeToHit = checkpointDistance / frameVelocity.magnitude * Time.fixedDeltaTime;
-                // Debug.Log("DISTANCE " + distance + $"   Time to hit: {excessTimeToHit}");
                 checkpointFound.Hit(excessTimeToHit);
+                Game.Instance.GameModeHandler.HitCheckpoints.Add(checkpointFound);
             }
         }
 
