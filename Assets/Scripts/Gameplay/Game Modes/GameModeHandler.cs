@@ -50,6 +50,7 @@ namespace Gameplay.Game_Modes {
         private Coroutine _startSequenceCoroutine;
         private Coroutine _showLevelAndMusicName;
         private Coroutine _fastCountDown;
+        private Coroutine _checkpointCountdownUI;
         private bool _gameStarted;
 
         private ShipPlayer LocalPlayer { get; set; }
@@ -175,6 +176,7 @@ namespace Gameplay.Game_Modes {
             if (replayRunning) {
                 replayRunning = false;
                 if (_fastCountDown != null) StopCoroutine(_fastCountDown);
+                if (_checkpointCountdownUI != null) StopCoroutine(_checkpointCountdownUI);
                 ReplayPrioritizer.Instance.UnregisterReplay(PlayerReplayTimeline);
                 Player.User.EnableInput();
             }
@@ -211,12 +213,16 @@ namespace Gameplay.Game_Modes {
                 return;
             }
 
-            if (_fastCountDown != null) StopCoroutine(_fastCountDown);
             if (replayRunning) ReplayPrioritizer.Instance.UnregisterReplay(PlayerReplayTimeline);
 
             var snapshot = snapshotBuffer.snapshots.Pop();
 
+            if (_fastCountDown != null) StopCoroutine(_fastCountDown);
             _fastCountDown = StartCoroutine( FastCountDown());
+            
+            if (_checkpointCountdownUI != null) StopCoroutine(_checkpointCountdownUI);
+            _checkpointCountdownUI = StartCoroutine(FastCountDownUI());
+            
             replayRunning = true;
             _replayTicks = 0;
             Player.User.DisableInput();
@@ -226,7 +232,6 @@ namespace Gameplay.Game_Modes {
             PlayerReplayTimeline.Play();
             RewindCheckpoints();
             
-            // ??
             Player.User.TargetTransform = Player.transform;
             Player.User.ShipCameraRig.ActiveCamera?.Reset();
         }
@@ -273,6 +278,7 @@ namespace Gameplay.Game_Modes {
             if (_startSequenceCoroutine != null) StopCoroutine(_startSequenceCoroutine);
             if (_showLevelAndMusicName != null) StopCoroutine(_showLevelAndMusicName);
             if (_fastCountDown != null) StopCoroutine(_fastCountDown);
+            if (_checkpointCountdownUI != null) StopCoroutine(_checkpointCountdownUI);
 
             // nuke all ghosts and references
             StopGhosts();
@@ -365,6 +371,19 @@ namespace Gameplay.Game_Modes {
             yield return _gameModeCountdown.CountdownWithSound(2f, timeRemaining => {
                 if (timeRemaining <= 0) _gameModeWithCountdown?.CountdownComplete();
             }, 2f / (SnapShotTicks * Time.fixedDeltaTime));
+        }
+
+        private IEnumerator FastCountDownUI() {
+            _inGameUI.GameModeUIHandler.GameModeUIText.CentralNotificationCanvasGroup.alpha = 1;
+
+            var t = _restartFromCheckpointTimeSeconds;
+            while (t >= 0) {
+                _inGameUI.GameModeUIHandler.GameModeUIText.CentralNotification.SetText(TimeExtensions.TimeSecondsToStringWithMilliseconds(t));
+                t -= Time.deltaTime;
+                yield return YieldExtensions.WaitForEndOfFrame;
+            }
+            
+            _inGameUI.GameModeUIHandler.GameModeUIText.CentralNotificationCanvasGroup.alpha = 0;
         }
 
         private IEnumerator WaitForBoostButtonIfNeeded() {

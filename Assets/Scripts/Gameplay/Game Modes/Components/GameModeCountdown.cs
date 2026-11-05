@@ -11,7 +11,7 @@ namespace Gameplay.Game_Modes.Components {
         /**
          * Perform a countdown with sound firing a callback whenever a multiple of 1 second remains (and when it hits 0)
          */
-        public IEnumerator CountdownWithSound(float countdownTimeSeconds, Action<float> onSecondsRemaining,float speed = 1f) {
+        public IEnumerator CountdownWithSound(float countdownTimeSeconds, Action<float> onSecondsRemaining, float speed = 1f) {
             var edgeTime = countdownTimeSeconds % 1;
             var remainingSeconds = Mathf.Round(countdownTimeSeconds - edgeTime);
 
