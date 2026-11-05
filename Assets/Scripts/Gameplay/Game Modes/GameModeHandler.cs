@@ -197,12 +197,19 @@ namespace Gameplay.Game_Modes {
             HandleStartSequence();
         }
 
-        private void RewindCheckpoints()
-        {
-            var checkpoint = hitCheckpoints.Pop();
-            checkpoint.Reset();
-            if (_gameMode is TimeTrialSprint sprint)
+        private void RewindCheckpoints() {
+            if (_gameMode is TimeTrialSprint sprint) {
+
+                if (sprint.GameModeCheckpoints.AllCheckpointsHit) {
+                    // enable the end checkpoint
+                    var endCheckpoint = sprint.GameModeCheckpoints.Checkpoints.Find(c => c.Type == CheckpointType.End);
+                    if (endCheckpoint) endCheckpoint.ToggleValidEndMaterial(false);
+                }
+                var checkpoint = hitCheckpoints.Pop();
+                checkpoint.Reset();
+
                 sprint.RewindSplits();
+            }
         }
 
         public void RestartFromCheckpoint() {
