@@ -123,7 +123,7 @@ namespace Gameplay.Game_Modes {
             GameModeUIHandler.GameModeUIText.CentralHeader.text = TimeExtensions.TimeSecondsToStringWithMilliseconds(splitTimeSeconds);
             GameModeUIHandler.GameModeUIText.CentralContent.text = "";
 
-            if (previousSplitTimeSeconds > 0) {
+            if (previousSplitTimeSeconds > 0 && splitTimeSeconds != previousSplitTimeSeconds) {
                 var deltaSplit = splitTimeSeconds - previousSplitTimeSeconds;
                 var deltaSplitText = TimeExtensions.TimeSecondsToStringWithMilliseconds(deltaSplit);
                 GameModeUIHandler.GameModeUIText.CentralContent.color = deltaSplit > 0 ? Color.red : Color.green;
