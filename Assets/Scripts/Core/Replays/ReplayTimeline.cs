@@ -1,11 +1,17 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Core.Player;
 using Core.ShipModel;
+using Gameplay.Game_Modes;
 using JetBrains.Annotations;
 using MessagePack;
+using Mono.Cecil;
+using Unity.XR.CoreUtils;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 namespace Core.Replays {
     public interface IReplayShip {
@@ -28,6 +34,8 @@ namespace Core.Replays {
         private bool _isPlaying;
         private bool _isPlayer;
         private byte[] _keyFrameByteBuffer;
+        private List<float> _replaySplits;
+        private List<float> _playerSplits;
         [CanBeNull] private BinaryReader _keyFrameReader;
 
         // private float _playSpeed = 1f;
@@ -40,6 +48,7 @@ namespace Core.Replays {
                 if (Replay != null && (ShipReplayObject != null || _isPlayer) && _inputFrameReader != null && _keyFrameReader != null) {
                     UpdateKeyFrame();
                     UpdateInputFrame();
+                    CheckSplits();
                 }
         }
 
@@ -71,6 +80,13 @@ namespace Core.Replays {
 
             _isPlayer = false;
             _inputTicks = 0;
+
+            if (Game.Instance.GameModeHandler.GameMode is TimeTrialSprint sprint) {
+                _replaySplits = replay.ScoreData.splits;
+                if(sprint.GameModeScore.CurrentBestSplits.Count != 0)
+                    _playerSplits = sprint.GameModeScore.CurrentBestSplits;
+                else _playerSplits = _playerSplits = Enumerable.Range(0, _replaySplits.Count).Select(i => 0f).ToList();
+            }
         }
 
         public void LoadPlayerReplay(Replay replay, uint tick) {
@@ -99,6 +115,13 @@ namespace Core.Replays {
             _inputTicks = 0;
             _isPlaying = false;
             ShipReplayObject?.ShipPhysics.BringToStop();
+        }
+
+        private void CheckSplits() {
+            if (!_isPlayer && ShipReplayObject.SpectatorActive && Game.Instance.GameModeHandler.GameMode is TimeTrialSprint sprint) 
+                for (int i = 0; i < _replaySplits.Count; i++)
+                    if(_replaySplits[i] >= sprint.GameModeTimer.CurrentSessionTimeSeconds && _replaySplits[i] < sprint.GameModeTimer.CurrentSessionTimeSeconds + Time.deltaTime)
+                        sprint.DisplaySplitTimer(_replaySplits[i],_playerSplits[i]);   
         }
 
         private void UpdateKeyFrame() {
@@ -148,7 +171,6 @@ namespace Core.Replays {
                         ShipPhysics.NightVisionToggle(inputFrame.shipLightsEnabled, _ => { });
 
                     if (!_isPlayer && ShipReplayObject?.SpectatorActive == true ) {
-                        ShipPhysics.GhostCollisionChecks();
                         var velocity = transform.InverseTransformDirection(ShipPhysics.Velocity);
                         var frameThrust = ShipPhysics.CurrentFrameThrust;
                         FdPlayer.LocalShipPlayer.User.ShipCameraRig.UpdateCameras(velocity, ShipPhysics.FlightParameters.maxSpeed, frameThrust, ShipPhysics.FlightParameters.maxThrust);
@@ -158,11 +180,6 @@ namespace Core.Replays {
                 }
                 else {
                     Debug.Log("Replay finished");
-
-                    // last collision check to see if it hit the final checkpoint
-                    if (ShipReplayObject?.SpectatorActive == true )
-                        ShipReplayObject.ShipPhysics.GhostCollisionChecks();
-
                     Stop();
                 }
             }
