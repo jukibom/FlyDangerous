@@ -95,7 +95,7 @@ namespace Gameplay.Game_Modes {
             _splits.Add(_lastCheckpointHitTimeSeconds);
             float previousSplitTimeSeconds = 0;
             if (GameModeScore.CurrentBestSplits.Count >= _splits.Count) previousSplitTimeSeconds = GameModeScore.CurrentBestSplits[_splits.Count - 1];
-            SetSplitTimer(_lastCheckpointHitTimeSeconds, previousSplitTimeSeconds);
+            DisplaySplitTimer(_lastCheckpointHitTimeSeconds, previousSplitTimeSeconds);
 
             // enable last checkpoint and complete
             if (GameModeCheckpoints.AllCheckpointsHit) {
@@ -118,9 +118,11 @@ namespace Gameplay.Game_Modes {
         }
 
 
-        protected void SetSplitTimer(float splitTimeSeconds, float previousSplitTimeSeconds = 0) {
+        public void DisplaySplitTimer(float splitTimeSeconds, float previousSplitTimeSeconds = 0) {
             GameModeUIHandler.GameModeUIText.CentralHeader.color = Color.white;
             GameModeUIHandler.GameModeUIText.CentralHeader.text = TimeExtensions.TimeSecondsToStringWithMilliseconds(splitTimeSeconds);
+            GameModeUIHandler.GameModeUIText.CentralContent.text = "";
+
             if (previousSplitTimeSeconds > 0) {
                 var deltaSplit = splitTimeSeconds - previousSplitTimeSeconds;
                 var deltaSplitText = TimeExtensions.TimeSecondsToStringWithMilliseconds(deltaSplit);

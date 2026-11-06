@@ -335,9 +335,6 @@ namespace Core.ShipModel {
             ModifierCollisionCheck();
             BillboardCollisionCheck();
         }
-        public void GhostCollisionChecks() {
-            CheckpointCollisionCheck();
-        }
 
         public void GeometryCollisionCheck() {
             // we want to know up to 5 seconds before a collision happens
