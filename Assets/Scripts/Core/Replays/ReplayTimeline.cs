@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,11 +6,7 @@ using Core.Player;
 using Core.ShipModel;
 using Gameplay.Game_Modes;
 using JetBrains.Annotations;
-using MessagePack;
-using Mono.Cecil;
-using Unity.XR.CoreUtils;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 
 namespace Core.Replays {
     public interface IReplayShip {
@@ -118,9 +113,10 @@ namespace Core.Replays {
         }
 
         private void CheckSplits() {
-            if (!_isPlayer && ShipReplayObject.SpectatorActive && Game.Instance.GameModeHandler.GameMode is TimeTrialSprint sprint) 
+            // called from fixed update, does a simple check to see if the current time is exactly in the range of current time + one fixed timestep and shows the split if so (without actually triggering the checkpoint)
+            if (!_isPlayer && ShipReplayObject is { SpectatorActive: true } && Game.Instance.GameModeHandler.GameMode is TimeTrialSprint sprint) 
                 for (int i = 0; i < _replaySplits.Count; i++)
-                    if(_replaySplits[i] >= sprint.GameModeTimer.CurrentSessionTimeSeconds && _replaySplits[i] < sprint.GameModeTimer.CurrentSessionTimeSeconds + Time.deltaTime)
+                    if(_replaySplits[i] >= sprint.GameModeTimer.CurrentSessionTimeSeconds && _replaySplits[i] < sprint.GameModeTimer.CurrentSessionTimeSeconds + Time.fixedDeltaTime)
                         sprint.DisplaySplitTimer(_replaySplits[i],_playerSplits[i]);   
         }
 
