@@ -267,7 +267,8 @@ namespace Core.ShipModel.Feedback.ogs {
         private void DeclareAndBind() {
             var shipName = FdPlayer.FindLocalShipPlayer?.ShipPhysics.ShipProfile?.shipModel ?? "";
             _lastTypeLabel = shipName;
-            _publisher.DeclareObject("player", shipName);
+            // a spacecraft, so receivers pick a spaceship cueing profile rather than a ground vehicle
+            _publisher.DeclareObject("player", shipName, Ogs.Telemetry.Schema.ObjectType.Spacecraft);
             _publisher.DeclarePause();
 
             // pose: absolute world position + orientation. Unity's world frame (left-handed,
