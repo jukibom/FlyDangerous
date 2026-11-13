@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Core;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class GraphicsPanel : MonoBehaviour {
     [SerializeField] private TMPro.TMP_Dropdown resolutionDropdown;

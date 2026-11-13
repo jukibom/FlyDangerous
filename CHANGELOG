@@ -2,6 +2,7 @@
 Added:
     * Updated to Unity 6.3 LTS.
     * Added Restart from last Checkpoint (default Tab key) which replays the last 2 seconds before the previous checkpoint before relinquishing control at the same speed and state as before. This is intended to fascilitate practicing maps with difficult maneuvers towards the middle or end - it will not restore your in-game timer. (Thank you CardamomCake! PR #283 + #287)
+    * Spectated replays will now show per checkpoint split timer differences.
     * Upgraded VR to use Single Pass Instanced rendering, resolving a number of eye-difference rendering issues and greatly improving performance.
     * OGS Telemetry Standard (OGS-TS) telemetry output - a standardised, self-describing UDP multicast stream (default group 239.255.17.17:40123, local network only) for motion rigs, haptic hardware, dashboards and loggers. Enable it in Options > Integrations; endpoint configurable in the config file ("ogsTelemetryMulticastAddress" / "ogsTelemetryPort"; the IPv6 group ff12::4f47:5453 also works). (Thank you BrianGilbert! PR #281)
     * Ability to toggle the SFX of flight assist switching in the audio panel.
