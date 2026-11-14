@@ -17,9 +17,6 @@ public class NormalizeMouseScroll : InputProcessor<Vector2> {
 
     public override Vector2 Process(Vector2 value, InputControl control) {
         var normalizedScroll = value.normalized * scrollScale;
-#if UNITY_STANDALONE_LINUX
-            normalizedScroll *= -1;
-#endif
         return normalizedScroll;
     }
 
