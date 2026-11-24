@@ -1,8 +1,10 @@
+using System;
 using System.Linq;
 using Audio;
 using Core.Player.HeadTracking;
 using Core.ShipModel;
 using FdUI;
+using FlyDangerous.LevelEditor;
 using GameUI;
 using JetBrains.Annotations;
 using Misc;
@@ -27,6 +29,7 @@ namespace Core.Player {
         [SerializeField] private HeadTrackingManager headTracking;
         [SerializeField] private SpaceDust spaceDust;
         [SerializeField] private ReflectionProbe reflectionProbe;
+        [SerializeField] private EditorController editorController;
 
         [SerializeField] public bool movementEnabled;
         [SerializeField] public bool restartEnabled = true;
@@ -227,6 +230,11 @@ namespace Core.Player {
         public void OnDisable() {
             Game.OnVRStatus -= SetVRStatus;
             InputSystem.onDeviceChange -= OnDeviceChange;
+        }
+
+        private void OnDestroy() {
+            if (editorController != null)
+                Destroy(editorController.gameObject);
         }
 
         /**
@@ -702,6 +710,17 @@ namespace Core.Player {
             if (input > 0) input = 1;
             if (input < 0) input = -1;
             if (input != 0) ShipCameraRig.ShipFreeCamera.IncrementMotionMultiplier(input);
+        }
+        
+        // TODO: This will need all the inputs adding. At some point. Oh dear.
+        [Button]
+        public void EnableLevelEditor() {
+            editorController.Activate();
+        }
+
+        [Button]
+        public void DisableLevelEditor() {
+            editorController.Deactivate();
         }
 
         private void OnDeviceChange(InputDevice device, InputDeviceChange change) {

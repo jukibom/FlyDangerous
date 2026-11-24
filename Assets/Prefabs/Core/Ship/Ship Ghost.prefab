@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7586192999522902054}
   - component: {fileID: 4115658267721434725}
   - component: {fileID: 6126395509602510548}
+  - component: {fileID: 7763263219853335270}
   m_Layer: 9
   m_Name: Ship Ghost
   m_TagString: Untagged
@@ -89,6 +90,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 354cf3a713234484a08a46ab9dcc1c6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7763263219853335270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4226174690001641905}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1483e6212b3fce54a9cf856bedddcbcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Core.FloatingOriginFocalObject
 --- !u!1 &8428796084635564076
 GameObject:
   m_ObjectHideFlags: 0
@@ -1126,10 +1139,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 7511808018192838095}
     - target: {fileID: 5565656219725239503, guid: 8974c09c235fb5142aa4dace5caec8ad, type: 3}
-      propertyPath: overchargeAmountText
-      value: 
-      objectReference: {fileID: 7336145210293519864}
-    - target: {fileID: 5565656219725239503, guid: 8974c09c235fb5142aa4dace5caec8ad, type: 3}
       propertyPath: velocityIndicatorText
       value: 
       objectReference: {fileID: 3206565270952518953}
@@ -1636,17 +1645,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50c18a17d17acbb40964088ddf6cdb74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &7336145210293519864 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2881577912982235341, guid: 8974c09c235fb5142aa4dace5caec8ad, type: 3}
-  m_PrefabInstance: {fileID: 4769966126619716917}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!114 &7460050269885875566 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2717147053809117275, guid: 8974c09c235fb5142aa4dace5caec8ad, type: 3}

@@ -33,13 +33,11 @@ namespace Core.Replays {
         }
 
         private void OnEnable() {
-            FloatingOrigin.OnFloatingOriginCorrection += OnFloatingOriginCorrection;
             ShipPhysics.OnBoost += ShowBoost;
             ShipPhysics.OnBoostCancel += CancelBoost;
         }
 
         private void OnDisable() {
-            FloatingOrigin.OnFloatingOriginCorrection -= OnFloatingOriginCorrection;
             ShipPhysics.OnBoost -= ShowBoost;
             ShipPhysics.OnBoostCancel -= CancelBoost;
         }
@@ -69,13 +67,6 @@ namespace Core.Replays {
 
         public void LoadReplay(Replay replay) {
             ReplayTimeline.LoadReplay(this, replay);
-        }
-
-        private void OnFloatingOriginCorrection(Vector3 offset) {
-            if (FloatingOrigin.Instance.FocalTransform == transform) return;
-            
-            transform.position -= offset;
-            Rigidbody.position = transform.position;
         }
 
         private void ShowBoost(float spoolTime, float boostTime) {

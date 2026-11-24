@@ -1,5 +1,6 @@
 using System.Collections;
 using Core.ShipModel;
+using Core.Tools;
 using Mirror;
 using Misc;
 using UnityEngine;
@@ -7,9 +8,9 @@ using UnityEngine;
 namespace Core.Player {
     [RequireComponent(typeof(Rigidbody))]
     public class ShipPlayer : FdPlayer {
+        
         #region Attributes + Getters
 
-        [SerializeField] private GameObject playerLogic;
         [SerializeField] private User user;
         [SerializeField] private ShipPhysics shipPhysics;
 
@@ -34,6 +35,7 @@ namespace Core.Player {
         private bool _isDriftEnabled;
 
         public Rigidbody Rigidbody { get; private set; }
+        public static Observable<bool> LocalPlayerLoadedObservable { get; } = new();
 
         public bool IsAutoRotateDriftEnabled {
             get => _isDriftEnabled;
@@ -104,13 +106,14 @@ namespace Core.Player {
         #region Lifecycle + Misc
 
         public void Awake() {
-            playerLogic.SetActive(false);
+            user.gameObject.SetActive(false);
             _transform = transform;
             Rigidbody = GetComponent<Rigidbody>();
         }
 
         private void OnDestroy() {
-            Destroy(playerLogic);
+            if (user != null) 
+                Destroy(user.gameObject);
         }
 
         public void Start() {
@@ -119,7 +122,7 @@ namespace Core.Player {
 
         private void OnEnable() {
             // perform positional correction on non-local client player objects like anything else in the world
-            FloatingOrigin.OnFloatingOriginCorrection += OnFloatingOriginCorrection;
+            // FloatingOrigin.OnFloatingOriginCorrection += OnFloatingOriginCorrection;
             ShipPhysics.OnBoost += OnBoost;
             ShipPhysics.OnBoostCancel += OnBoostCancel;
             ShipPhysics.OnWaterSubmerged += OnWaterSubmerged;
@@ -127,7 +130,7 @@ namespace Core.Player {
         }
 
         private void OnDisable() {
-            FloatingOrigin.OnFloatingOriginCorrection -= OnFloatingOriginCorrection;
+            // FloatingOrigin.OnFloatingOriginCorrection -= OnFloatingOriginCorrection;
             ShipPhysics.OnBoost -= OnBoost;
             ShipPhysics.OnBoostCancel -= OnBoostCancel;
             ShipPhysics.OnWaterSubmerged -= OnWaterSubmerged;
@@ -139,13 +142,10 @@ namespace Core.Player {
             gameObject.tag = "Terrain Gen Marker";
 
             // enable input, camera, effects etc
-            playerLogic.SetActive(true);
-            
-            // move the player logic out into root space due to floating origin
-            playerLogic.transform.parent = null;
-            DontDestroyOnLoad(playerLogic);
             user.gameObject.SetActive(true);
             user.RegisterIntegrations(shipPhysics);
+            
+            LocalPlayerLoadedObservable.Set(true);
             
             // register self as floating origin focus
             FloatingOrigin.Instance.SwapFocalTransform(transform);
@@ -495,15 +495,6 @@ namespace Core.Player {
         [ClientRpc]
         private void RpcSetNightVision(bool active) {
             ShipPhysics.ShipModel?.SetNightVision(active);
-        }
-
-        private void OnFloatingOriginCorrection(Vector3 offset) {
-            // if the player is not the local one OR the user is not attached to the player
-            if (!isLocalPlayer || FloatingOrigin.Instance.FocalTransform != transform) {
-                var position = transform.position - offset;
-                Rigidbody.position = position;
-                transform.position = position;
-            }
         }
 
         [Command]

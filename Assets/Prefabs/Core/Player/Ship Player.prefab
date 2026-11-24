@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1767139775458680010}
   - component: {fileID: 4490570879392219317}
   - component: {fileID: 1767139775458680005}
+  - component: {fileID: 4446290304002789092}
   - component: {fileID: 1767139775458680007}
   m_Layer: 6
   m_Name: Ship Player
@@ -76,6 +77,18 @@ MonoBehaviour:
   playerName: 
   playerFlag: 
   isHost: 0
+--- !u!114 &4446290304002789092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1767139775458680011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1483e6212b3fce54a9cf856bedddcbcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Core.FloatingOriginFocalObject
 --- !u!54 &1767139775458680007
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -336,11 +349,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 165092135936514818, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_text
-      value: button46  |  VIRPIL Controls 20250313 L-VPCMongoosT50CM3Throttle
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 165092136250739436, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_text
-      value: 2  |  Keyboard
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 220475860102225424, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_text
@@ -464,7 +477,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 803371347103619680, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_text
-      value: button32  |  VIRPIL Controls 20250313 L-VPCMongoosT50CM3Throttle
+      value: Button West  |  Gamepad
+      objectReference: {fileID: 0}
+    - target: {fileID: 814749415665480562, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_text
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 841025487404939562, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
@@ -504,7 +521,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1151822296789914836, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_text
-      value: button48  |  VIRPIL Controls 20250313 L-VPCMongoosT50CM3Throttle
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 1209719297370680575, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_AnchorMax.y
@@ -552,7 +569,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1482028913807338660, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_text
-      value: button32  |  VIRPIL Controls 20250313 R-VPCConstellationAlpha
+      value: Button East  |  Gamepad
       objectReference: {fileID: 0}
     - target: {fileID: 1542701730742749996, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_AnchorMax.y
@@ -580,7 +597,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1587553083868574907, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Name
-      value: Local Player Logic
+      value: Local Player Logic (Detaches)
       objectReference: {fileID: 0}
     - target: {fileID: 1587553083868574907, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_IsActive
@@ -605,6 +622,10 @@ PrefabInstance:
     - target: {fileID: 1590842465516763640, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -340
+      objectReference: {fileID: 0}
+    - target: {fileID: 1889252654075703236, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_text
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 2050549113840149179, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_SizeDelta.x
@@ -700,11 +721,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2481635074718604596, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_text
-      value: F  |  Keyboard
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 2481635075194342618, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_text
-      value: button33  |  VIRPIL Controls 20250313 L-VPCMongoosT50CM3Throttle
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 2547835201963038572, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
@@ -750,6 +771,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -110
       objectReference: {fileID: 0}
+    - target: {fileID: 3164533411105370083, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_text
+      value: unbound secondary
+      objectReference: {fileID: 0}
     - target: {fileID: 3257334712192428528, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -774,9 +799,13 @@ PrefabInstance:
       propertyPath: m_StreamingVersion
       value: 20241001
       objectReference: {fileID: 0}
+    - target: {fileID: 3532235499181805882, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_text
+      value: unbound secondary
+      objectReference: {fileID: 0}
     - target: {fileID: 3533618471559006009, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_text
-      value: button18  |  VIRPIL Controls 20250313 R-VPCConstellationAlpha
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 3544040911128711303, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_StreamingVersion
@@ -820,7 +849,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3676245609212497337, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_text
-      value: button15  |  VIRPIL Controls 20250313 R-VPCConstellationAlpha
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 3747832846418618708, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_AnchorMax.y
@@ -844,15 +873,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3831659086325435452, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_text
-      value: button17  |  VIRPIL Controls 20250313 R-VPCConstellationAlpha
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 3887999959688691300, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_text
-      value: button21  |  VIRPIL Controls 20250313 L-VPCMongoosT50CM3Throttle
+      value: Button South  |  Gamepad
+      objectReference: {fileID: 0}
+    - target: {fileID: 4011459975040114275, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_text
+      value: unbound secondary
+      objectReference: {fileID: 0}
+    - target: {fileID: 4252865757969184612, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_text
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 4270636714248441987, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_SizeDelta.y
       value: 420
+      objectReference: {fileID: 0}
+    - target: {fileID: 4435491476359938629, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_text
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 4442027097803649118, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
@@ -880,7 +921,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4549962675528543548, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_text
-      value: button13  |  VIRPIL Controls 20250313 R-VPCConstellationAlpha
+      value: unbound secondary
+      objectReference: {fileID: 0}
+    - target: {fileID: 4638579306813490048, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_text
+      value: unbound secondary
+      objectReference: {fileID: 0}
+    - target: {fileID: 4864489201262985674, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_text
+      value: unbound primary
+      objectReference: {fileID: 0}
+    - target: {fileID: 5038719201550360672, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_text
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 5048666087122958998, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_AnchorMax.y
@@ -984,7 +1037,7 @@ PrefabInstance:
       objectReference: {fileID: 8739839919785845685}
     - target: {fileID: 5762619297192601422, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_text
-      value: button37  |  VIRPIL Controls 20250313 L-VPCMongoosT50CM3Throttle
+      value: Left Stick Press  |  Gamepad
       objectReference: {fileID: 0}
     - target: {fileID: 5847699359095334045, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
@@ -992,11 +1045,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5884791118590629433, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_text
-      value: 1  |  Keyboard
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 5884791118795409367, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_text
-      value: button44  |  VIRPIL Controls 20250313 L-VPCMongoosT50CM3Throttle
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 5953107476760367141, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_StreamingVersion
@@ -1480,7 +1533,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6539369677302145994, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_text
-      value: button16  |  VIRPIL Controls 20250313 L-VPCMongoosT50CM3Throttle
+      value: Select  |  Gamepad
       objectReference: {fileID: 0}
     - target: {fileID: 6558559909165685066, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1508,7 +1561,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6783451231805638851, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_text
-      value: button16  |  VIRPIL Controls 20250313 R-VPCConstellationAlpha
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 6795117216562766697, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1532,11 +1585,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6884922889642209118, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_text
-      value: button6  |  VIRPIL Controls 20250313 R-VPCConstellationAlpha
+      value: unbound primary
       objectReference: {fileID: 0}
     - target: {fileID: 6884922889973218992, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_text
-      value: rightStickPress  |  XInputControllerWindows
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 7186368688116065840, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
@@ -1548,7 +1601,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7468189130615180963, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_text
-      value: button7  |  VIRPIL Controls 20250313 R-VPCConstellationAlpha
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 7567652150240473924, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_Text
@@ -1777,6 +1830,10 @@ PrefabInstance:
     - target: {fileID: 8744491788414265745, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_text
       value: D-Pad/left  |  Gamepad
+      objectReference: {fileID: 0}
+    - target: {fileID: 8775743371956331394, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
+      propertyPath: m_text
+      value: unbound secondary
       objectReference: {fileID: 0}
     - target: {fileID: 8818402044291247082, guid: 002b0b7cbe816dc4db8ed488b0ed4f4e, type: 3}
       propertyPath: m_AnchorMax.y
